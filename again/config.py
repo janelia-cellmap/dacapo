@@ -11,19 +11,19 @@ import os
 
 class ConfigWrapper:
 
-    def __init__(self, config_file, default_section, name=None):
+    def __init__(self, config_file, default_section, id_=None):
 
         self.config_file = config_file
         self._config = parse_config_file(config_file)
         self._default_section = default_section
-        if name:
-            self.name = name
+        if id_:
+            self.id = id_
         else:
-            self.name = name_from_config_file(config_file)
+            self.id = name_from_config_file(config_file)
 
     def to_dict(self):
 
-        d = {'name': self.name}
+        d = {'id': self.id}
 
         for key, item in self._config[self._default_section].items():
 
@@ -56,10 +56,10 @@ class ConfigWrapper:
             return ConfigWrapper(
                 self.config_file,
                 attr,
-                name=self.name + '::' + attr)
+                id_=self.id + '::' + attr)
         else:
             raise AttributeError(
-                f"configuration {self.name} is missing a value for {attr}")
+                f"configuration {self.id} is missing a value for {attr}")
 
     def __getstate__(self):
         return vars(self)
@@ -68,14 +68,14 @@ class ConfigWrapper:
         vars(self).update(state)
 
     def __repr__(self):
-        return self.name
+        return self.id
 
 
 class Data(ConfigWrapper):
 
     def __init__(self, config_file):
         super(Data, self).__init__(config_file, 'data')
-        self.filename = Path(self.name).parent / self.filename
+        self.filename = Path(self.id).parent / self.filename
 
 class Task(ConfigWrapper):
 
@@ -110,18 +110,18 @@ class Run:
         self.optimizer = optimizer
 
         run_hash = hashlib.md5()
-        run_hash.update(self.task.name.encode())
-        run_hash.update(self.model.name.encode())
-        run_hash.update(self.optimizer.name.encode())
-        self.name = run_hash.hexdigest()
+        run_hash.update(self.task.id.encode())
+        run_hash.update(self.model.id.encode())
+        run_hash.update(self.optimizer.id.encode())
+        self.id = run_hash.hexdigest()
 
     def to_dict(self):
 
         return {
-            'name': self.name,
-            'task': self.task.name,
-            'model': self.model.name,
-            'optimizer': self.optimizer.name
+            'id': self.id,
+            'task': self.task.id,
+            'model': self.model.id,
+            'optimizer': self.optimizer.id
         }
 
     def __repr__(self):

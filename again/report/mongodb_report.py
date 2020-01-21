@@ -26,13 +26,13 @@ class MongoDbReport:
     def add_model_size(self, num_params):
 
         self.models.update_one(
-            {'name': self.run_config.model.name},
+            {'id': self.run_config.model.id},
             {'$set': {'num_params': num_params}})
 
     def add_training_iteration(self, iteration, loss, time):
 
         self._iterations.append({
-            'run': self.run_config.name,
+            'run': self.run_config.id,
             'iteration': iteration,
             'loss': float(loss),
             'time': time})
@@ -64,7 +64,7 @@ class MongoDbReport:
 
         existing = list(
             collection.find(
-                {'name': data['name']}, {'_id': False}))
+                {'id': data['id']}, {'_id': False}))
 
         if len(existing) > 0:
 
@@ -77,7 +77,7 @@ class MongoDbReport:
 
             if not self.__same_doc(existing[0], data):
                 raise RuntimeError(
-                    f"Data for {data['name']} does not match already stored "
+                    f"Data for {data['id']} does not match already stored "
                     f"entry. Found\n\n{existing[0]}\n\nin DB, but was "
                     f"given\n\n{data}")
         else:
@@ -99,35 +99,30 @@ class MongoDbReport:
             ],
             name='id',
             unique=True)
-        self.runs.create_index(
-            [
-                ('name', ASCENDING)
-            ],
-            name='name',
-            unique=True)
         self.tasks.create_index(
             [
-                ('name', ASCENDING)
+                ('id', ASCENDING)
             ],
-            name='name',
+            name='id',
             unique=True)
         self.models.create_index(
             [
-                ('name', ASCENDING)
+                ('id', ASCENDING)
             ],
-            name='name',
+            name='id',
             unique=True)
         self.optimizers.create_index(
             [
-                ('name', ASCENDING)
+                ('id', ASCENDING)
             ],
-            name='name',
+            name='id',
             unique=True)
         self.train.create_index(
             [
+                ('run', ASCENDING)
                 ('iteration', ASCENDING)
             ],
-            name='name',
+            name='id',
             unique=True)
 
     def __connect(self):
