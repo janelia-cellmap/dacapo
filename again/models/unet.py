@@ -1,8 +1,9 @@
 import torch
 import funlib.learn.torch as ft
+from .model import Model
 
 
-class UNet(torch.nn.Module):
+class UNet(Model):
 
     def __init__(
             self,
@@ -37,6 +38,3 @@ class UNet(torch.nn.Module):
 
     def forward(self, x):
         return self.sequence(x)
-
-    def num_parameters(self):
-        return sum(p.numel() for p in self.parameters() if p.requires_grad)

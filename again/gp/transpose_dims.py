@@ -2,10 +2,11 @@ import gunpowder as gp
 
 class TransposeDims(gp.BatchFilter):
 
-    def __init__(self, permutation):
+    def __init__(self, array, permutation):
+        self.array = array
         self.permutation = permutation
 
     def process(self, batch, request):
 
-        for key, array in batch.arrays.items():
-            array.data = array.data.transpose(self.permutation)
+        batch.arrays[self.array].data = \
+            batch.arrays[self.array].data.transpose(self.permutation)

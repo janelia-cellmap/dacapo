@@ -4,6 +4,8 @@ from again.optimizers import create_optimizer
 from again.prediction_types import Affinities
 from again.report import MongoDbReport
 from again.train import create_train_pipeline
+from again.validate import validate
+from tqdm import tqdm
 import configargparse
 import funlib.run
 import gunpowder as gp
@@ -43,6 +45,7 @@ def run_local(run_config):
 
     pipeline, request = create_train_pipeline(
         run_config.task,
+        run_config.model,
         run_config.optimizer,
         model,
         loss,
@@ -54,8 +57,12 @@ def run_local(run_config):
     report = MongoDbReport(options.mongo_db_host, 'again_v01', run_config)
     report.add_model_size(model.num_parameters())
 
+    validation_interval = 500
+
     with gp.build(pipeline):
-        for i in range(run_config.optimizer.num_iterations):
+        for i in tqdm(
+                range(run_config.optimizer.num_iterations),
+                desc="train"):
 
             batch = pipeline.request_batch(request)
 
@@ -64,9 +71,13 @@ def run_local(run_config):
                 'process').times[-1]
             report.add_training_iteration(i, batch.loss, train_time)
 
-            # TODO:
-            # periodic valiation
-            # early stopping
+            if i % validation_interval == 0 and i > 0:
+                scores = validate(
+                    run_config.task,
+                    run_config.model,
+                    model,
+                    store_results='validate.zarr')
+                report.add_validation_scores(i, scores)
 
     # TODO:
     # testing

@@ -5,18 +5,12 @@ import gunpowder as gp
 import gunpowder.torch as gp_torch
 import os
 import torch
-
-
-def get_output_size(model, channels, input_size):
-
-    # (b=1, c=channels, [d, ] w, h)
-    dummy_data = torch.zeros((1, channels) + input_size)
-    out = model(dummy_data)
-    return out.shape[2:]
+import zarr
 
 
 def create_train_pipeline(
         task_config,
+        model_config,
         optimizer_config,
         model,
         loss,
@@ -34,8 +28,8 @@ def create_train_pipeline(
 
     channels = task_config.data.channels
     filename = task_config.data.filename
-    input_size = optimizer_config.input_size
-    output_size = get_output_size(model, channels, input_size)
+    input_size = model_config.input_size
+    output_size = model.output_size(channels, input_size)
     batch_size = optimizer_config.batch_size
 
     raw = gp.ArrayKey('RAW')
@@ -43,12 +37,25 @@ def create_train_pipeline(
     affs = gp.ArrayKey('AFFS')
     affs_predicted = gp.ArrayKey('AFFS_PREDICTED')
 
+    dataset_shape = zarr.open(str(filename))['train/raw'].shape
+    num_samples = dataset_shape[0]
+    sample_size = dataset_shape[1:]
+
     pipeline = (
         gp.ZarrSource(
             str(filename),
             {
                 raw: 'train/raw',
                 labels: 'train/gt'
+            },
+            # treat samples as z dimension
+            array_specs={
+                raw: gp.ArraySpec(
+                    roi=gp.Roi((0, 0, 0), (num_samples,) + sample_size),
+                    voxel_size=(1, 1, 1)),
+                labels: gp.ArraySpec(
+                    roi=gp.Roi((0, 0, 0), (num_samples,) + sample_size),
+                    voxel_size=(1, 1, 1))
             }) +
         # raw: (d=1, h, w)
         # labels: (d=1, h, w)
@@ -83,7 +90,9 @@ def create_train_pipeline(
         # raw: (b=10, c=1, h, w)
         # affs: (b=10, c=2, h, w)
         # affs_predicted: (b=10, c=2, h, w)
-        TransposeDims((1, 0, 2, 3)) +
+        TransposeDims(raw, (1, 0, 2, 3)) +
+        TransposeDims(affs, (1, 0, 2, 3)) +
+        TransposeDims(affs_predicted, (1, 0, 2, 3)) +
         # raw: (c=1, b=10, h, w)
         # affs: (c=2, b=10, h, w)
         # affs_predicted: (c=2, b=10, h, w)

@@ -43,6 +43,16 @@ class MongoDbReport:
             self.train.insert_many(self._iterations)
             self._iterations = []
 
+    def add_validation_scores(self, iteration, scores):
+
+        doc = dict(scores)
+        doc.update({
+            'run': self.run_config.id,
+            'repetition': self.run_repetition,
+            'iteration': iteration
+        })
+        self.validate.insert(doc)
+
     def __store_task(self):
 
         self.__save_insert(self.tasks, self.run_config.task.to_dict())
@@ -142,6 +152,14 @@ class MongoDbReport:
             ],
             name='run_it_rep',
             unique=True)
+        self.validate.create_index(
+            [
+                ('run', ASCENDING),
+                ('iteration', ASCENDING),
+                ('repetition', ASCENDING)
+            ],
+            name='run_it_rep',
+            unique=True)
 
     def __connect(self):
         """Init the MongDb client."""
@@ -161,6 +179,7 @@ class MongoDbReport:
         self.models = self.database['models']
         self.optimizers = self.database['optimizers']
         self.train = self.database['train']
+        self.validate = self.database['validate']
 
     def __disconnect(self):
         """Closes the mongo client and removes references to all collections

@@ -1,8 +1,9 @@
 import torch
 import funlib.learn.torch as ft
+from .model import Model
 
 
-class ShallowLearnerChain(torch.nn.Module):
+class ShallowLearnerChain(Model):
 
     def __init__(
             self,
@@ -52,6 +53,3 @@ class ShallowLearnerChain(torch.nn.Module):
             y = self.learners[i](x)
             x = self.crop(x, y.size()) + y
         return self.head(x)
-
-    def num_parameters(self):
-        return sum(p.numel() for p in self.parameters() if p.requires_grad)

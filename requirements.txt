@@ -3,4 +3,5 @@ funlib.learn.torch
 gunpowder
 pymongo
 torch
+tqdm
 zarr
