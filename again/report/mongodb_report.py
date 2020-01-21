@@ -1,5 +1,5 @@
 import json
-from pymongo import MongoClient, ASCENDING, UpdateOne
+from pymongo import MongoClient, ASCENDING
 
 
 class MongoDbReport:
@@ -25,10 +25,9 @@ class MongoDbReport:
 
     def add_model_size(self, num_params):
 
-        self.models.write(
-            UpdateOne(
-                {'name': self.model.name},
-                {'$set': {'num_params': num_params}}))
+        self.models.update_one(
+            {'name': self.run_config.model.name},
+            {'$set': {'num_params': num_params}})
 
     def add_training_iteration(self, iteration, loss, time):
 
@@ -48,7 +47,10 @@ class MongoDbReport:
 
     def __store_model(self):
 
-        self.__save_insert(self.models, self.run_config.model.to_dict())
+        self.__save_insert(
+            self.models,
+            self.run_config.model.to_dict(),
+            ignore='num_params')
 
     def __store_optimizer(self):
 
@@ -58,13 +60,21 @@ class MongoDbReport:
 
         self.__save_insert(self.runs, self.run_config.to_dict())
 
-    def __save_insert(self, collection, data):
+    def __save_insert(self, collection, data, ignore=None):
 
         existing = list(
             collection.find(
                 {'name': data['name']}, {'_id': False}))
 
         if len(existing) > 0:
+
+            if ignore:
+                if ignore in existing[0]:
+                    del existing[0][ignore]
+                if ignore in data:
+                    data = dict(data)
+                    del data[ignore]
+
             if not self.__same_doc(existing[0], data):
                 raise RuntimeError(
                     f"Data for {data['name']} does not match already stored "

@@ -52,6 +52,7 @@ def run_local(run_config):
     print(f"Using data {run_config.task.data.filename}")
 
     report = MongoDbReport(options.mongo_db_host, 'again_v01', run_config)
+    report.add_model_size(model.num_parameters())
 
     with gp.build(pipeline):
         for i in range(run_config.optimizer.num_iterations):
