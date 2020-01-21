@@ -59,8 +59,10 @@ def run_local(run_config):
 
             batch = pipeline.request_batch(request)
 
-            # TODO: add timing
-            report.add_training_iteration(i, batch.loss, 1.0)
+            train_time = batch.profiling_stats.get_timing_summary(
+                'Train',
+                'process').times[-1]
+            report.add_training_iteration(i, batch.loss, train_time)
 
             # TODO:
             # periodic valiation
