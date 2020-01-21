@@ -5,6 +5,7 @@ from .prediction_types import *  # noqa
 from .task_types import *  # noqa
 from pathlib import Path
 import configparser
+import hashlib
 import os
 
 
@@ -19,6 +20,34 @@ class ConfigWrapper:
             self.name = name
         else:
             self.name = name_from_config_file(config_file)
+
+    def to_dict(self):
+
+        d = {'name': self.name}
+
+        for key, item in self._config[self._default_section].items():
+
+            item = eval(item)
+            if type(item) == type:
+                d[key] = item.__name__
+            else:
+                d[key] = item
+
+        for section in self._config:
+
+            if section in [self._default_section, 'DEFAULT']:
+                continue
+
+            d[section] = {}
+            for key, item in self._config[section].items():
+
+                item = eval(item)
+                if type(item) == type:
+                    d[section][key] = item.__name__
+                else:
+                    d[section][key] = item
+
+        return d
 
     def __getattr__(self, attr):
         if attr in self._config[self._default_section]:
@@ -79,6 +108,21 @@ class Run:
         self.task = task
         self.model = model
         self.optimizer = optimizer
+
+        run_hash = hashlib.md5()
+        run_hash.update(self.task.name.encode())
+        run_hash.update(self.model.name.encode())
+        run_hash.update(self.optimizer.name.encode())
+        self.name = run_hash.hexdigest()
+
+    def to_dict(self):
+
+        return {
+            'name': self.name,
+            'task': self.task.name,
+            'model': self.model.name,
+            'optimizer': self.optimizer.name
+        }
 
     def __repr__(self):
         return f"{self.task} with {self.model}, using {self.optimizer}"

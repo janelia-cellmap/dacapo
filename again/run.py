@@ -2,15 +2,27 @@ from again.config import Task, Model, Optimizer, Run
 from again.models import create_model
 from again.optimizers import create_optimizer
 from again.prediction_types import Affinities
+from again.report import MongoDbReport
 from again.train import create_train_pipeline
 import configargparse
 import funlib.run
 import gunpowder as gp
 
-parser = configargparse.ArgParser()
-parser.add('-t', '--task', required=True, help="The task to run.")
-parser.add('-m', '--model', required=True, help="The model to use.")
-parser.add('-o', '--optimizer', required=True, help="The optimizer to use.")
+parser = configargparse.ArgParser(
+    default_config_files=['~/.config/again', './again.conf'])
+parser.add(
+    '-c', '--config',
+    is_config_file=True,
+    help="The config file to use.")
+parser.add(
+    '-t', '--task',
+    help="The task to run.")
+parser.add(
+    '-m', '--model',
+    help="The model to use.")
+parser.add(
+    '-o', '--optimizer',
+    help="The optimizer to use.")
 
 
 def run_local(run_config):
@@ -39,12 +51,17 @@ def run_local(run_config):
     print(f"Training model with {model.num_parameters()} parameters")
     print(f"Using data {run_config.task.data.filename}")
 
+    report = MongoDbReport(options.mongo_db_host, 'again_v01', run_config)
+
     with gp.build(pipeline):
         for i in range(run_config.optimizer.num_iterations):
-            pipeline.request_batch(request)
+
+            batch = pipeline.request_batch(request)
+
+            # TODO: add timing
+            report.add_training_iteration(i, batch.loss, 1.0)
 
             # TODO:
-            # logging
             # periodic valiation
             # early stopping
 

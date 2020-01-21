@@ -1,5 +1,6 @@
 configargparse
 funlib.learn.torch
 gunpowder
+pymongo
 torch
 zarr
