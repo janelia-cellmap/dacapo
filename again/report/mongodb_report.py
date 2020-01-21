@@ -11,6 +11,7 @@ class MongoDbReport:
         self.db_host = db_host
         self.db_name = db_name
         self.run_config = run_config
+        self.run_repetition = None
         self._iterations = []
 
         self.__connect()
@@ -33,6 +34,7 @@ class MongoDbReport:
 
         self._iterations.append({
             'run': self.run_config.id,
+            'repetition': self.run_repetition,
             'iteration': iteration,
             'loss': float(loss),
             'time': time})
@@ -54,11 +56,25 @@ class MongoDbReport:
 
     def __store_optimizer(self):
 
-        self.__save_insert(self.optimizers, self.run_config.optimizer.to_dict())
+        self.__save_insert(
+            self.optimizers,
+            self.run_config.optimizer.to_dict())
 
     def __store_run(self):
 
-        self.__save_insert(self.runs, self.run_config.to_dict())
+        existing = list(
+            self.runs.find(
+                {'id': self.run_config.id}, {'_id': False}))
+        max_repetition = 0
+        if existing:
+            for doc in existing:
+                max_repetition = max(max_repetition, doc['repetition'])
+
+        self.run_repetition = max_repetition + 1
+        run_doc = self.run_config.to_dict()
+        run_doc['repetition'] = self.run_repetition
+
+        self.runs.insert(run_doc)
 
     def __save_insert(self, collection, data, ignore=None):
 
@@ -95,9 +111,10 @@ class MongoDbReport:
 
         self.runs.create_index(
             [
-                ('id', ASCENDING)
+                ('id', ASCENDING),
+                ('repetition', ASCENDING)
             ],
-            name='id',
+            name='id_rep',
             unique=True)
         self.tasks.create_index(
             [
@@ -119,10 +136,11 @@ class MongoDbReport:
             unique=True)
         self.train.create_index(
             [
-                ('run', ASCENDING)
-                ('iteration', ASCENDING)
+                ('run', ASCENDING),
+                ('iteration', ASCENDING),
+                ('repetition', ASCENDING)
             ],
-            name='id',
+            name='run_it_rep',
             unique=True)
 
     def __connect(self):
