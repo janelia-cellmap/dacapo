@@ -86,7 +86,8 @@ def create_train_pipeline(
             optimizer=optimizer,
             inputs={'x': raw},
             target=affs,
-            output=affs_predicted) +
+            output=affs_predicted,
+            save_every=1e6) +
         # raw: (b=10, c=1, h, w)
         # affs: (b=10, c=2, h, w)
         # affs_predicted: (b=10, c=2, h, w)
