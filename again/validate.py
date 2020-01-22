@@ -94,5 +94,5 @@ def validate(task_config, model_config, model, store_results=None):
         if store_results:
             f = zarr.open(store_results)
             f['raw'] = batch[raw].data
-            f['affs'] = batch[affs_predicted].data
+            f['affs'] = batch[affs_predicted].data.transpose((1, 0, 2, 3))
         return scores

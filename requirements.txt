@@ -1,7 +1,9 @@
 configargparse
 funlib.learn.torch
 gunpowder
+mahotas
 pymongo
+scipy
 torch
 tqdm
 zarr
