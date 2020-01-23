@@ -101,15 +101,15 @@ def create_train_pipeline(
         # raw: (b=10, h, w)
         # affs: (c=2, b=10, h, w)
         # affs_predicted: (c=2, b=10, h, w)
-        gp.Snapshot(
-            dataset_names={
-                raw: 'raw',
-                labels: 'labels',
-                affs: 'affs',
-                affs_predicted: 'affs_predicted'
-            },
-            every=snapshot_every,
-            output_filename=os.path.join(outdir, "{iteration}.hdf")) +
+        # gp.Snapshot(
+            # dataset_names={
+                # raw: 'raw',
+                # labels: 'labels',
+                # affs: 'affs',
+                # affs_predicted: 'affs_predicted'
+            # },
+            # every=snapshot_every,
+            # output_filename=os.path.join(outdir, "{iteration}.hdf")) +
         gp.PrintProfilingStats(every=100)
     )
 
