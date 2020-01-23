@@ -10,8 +10,9 @@ from tqdm import tqdm
 import configargparse
 import funlib.run
 import gunpowder as gp
-import time
 import hashlib
+import os
+import time
 
 
 parser = configargparse.ArgParser(
@@ -109,7 +110,7 @@ class Run:
                         self.task_config,
                         self.model_config,
                         model,
-                        store_results='validate.zarr')
+                        store_results=os.path.join(run.id, 'validate.zarr'))
                     self.validation_scores.add_validation_iteration(
                         i,
                         scores)
