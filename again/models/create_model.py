@@ -1,15 +1,28 @@
 from .shallow_learner_chain import ShallowLearnerChain
 from .unet import UNet
+from again.prediction_types import Affinities
 
 
-def create_model(model_config, fmaps_in, fmaps_out):
+def create_model(task_config, model_config, fmaps_in=None, fmaps_out=None):
+
+    if fmaps_in is None:
+        fmaps_in = task_config.data.channels
+
+    if fmaps_out is None:
+        fmaps_out = {
+            Affinities: task_config.data.dims
+        }[task_config.predict]
 
     if model_config.type == ShallowLearnerChain:
 
         base_model_config = model_config.base_model
 
         def create_shallow_learner(fmaps_in, fmaps_out):
-            return create_model(base_model_config, fmaps_in, fmaps_out)
+            return create_model(
+                task_config,
+                base_model_config,
+                fmaps_in,
+                fmaps_out)
 
         model = ShallowLearnerChain(
             fmaps_in, fmaps_out,

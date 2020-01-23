@@ -5,7 +5,6 @@ from .prediction_types import *  # noqa
 from .task_types import *  # noqa
 from pathlib import Path
 import configparser
-import hashlib
 import os
 
 
@@ -71,83 +70,53 @@ class ConfigWrapper:
         return self.id
 
 
-class Data(ConfigWrapper):
+class DataConfig(ConfigWrapper):
 
     def __init__(self, config_file):
-        super(Data, self).__init__(config_file, 'data')
+        super(DataConfig, self).__init__(config_file, 'data')
         self.filename = Path(self.id).parent / self.filename
 
-class Task(ConfigWrapper):
+
+class TaskConfig(ConfigWrapper):
 
     def __init__(self, config_file):
-        super(Task, self).__init__(config_file, 'task')
+        super(TaskConfig, self).__init__(config_file, 'task')
         try:
-            self.data = Data(self.data + '.conf')
+            self.data = DataConfig(self.data + '.conf')
         except IOError:
             raise IOError(
                 f"Config file {self.data + '.conf'} does not exist "
                 f"(referenced in task {self})")
 
 
-class Model(ConfigWrapper):
+class ModelConfig(ConfigWrapper):
 
     def __init__(self, config_file):
-        super(Model, self).__init__(config_file, 'model')
-
-
-class Optimizer(ConfigWrapper):
-
-    def __init__(self, config_file):
-        super(Optimizer, self).__init__(config_file, 'optimizer')
-
-
-class Run:
-
-    def __init__(self, task, model, optimizer):
-
-        self.task = task
-        self.model = model
-        self.optimizer = optimizer
-
-        run_hash = hashlib.md5()
-        run_hash.update(self.task.id.encode())
-        run_hash.update(self.model.id.encode())
-        run_hash.update(self.optimizer.id.encode())
-        self.id = run_hash.hexdigest()
+        super(ModelConfig, self).__init__(config_file, 'model')
+        self.num_parameters = None
 
     def to_dict(self):
-
-        return {
-            'id': self.id,
-            'task': self.task.id,
-            'model': self.model.id,
-            'optimizer': self.optimizer.id
-        }
-
-    def __repr__(self):
-        return f"{self.task} with {self.model}, using {self.optimizer}"
+        d = super(ModelConfig, self).to_dict()
+        d.update({'num_parameters': self.num_parameters})
+        return d
 
 
-def find_tasks(basedir):
-    return [Task(f) for f in find_configs(basedir)]
+class OptimizerConfig(ConfigWrapper):
+
+    def __init__(self, config_file):
+        super(OptimizerConfig, self).__init__(config_file, 'optimizer')
 
 
-def find_models(basedir):
-    return [Model(f) for f in find_configs(basedir)]
+def find_task_configs(basedir):
+    return [TaskConfig(f) for f in find_configs(basedir)]
 
 
-def find_optimizers(basedir):
-    return [Optimizer(f) for f in find_configs(basedir)]
+def find_model_configs(basedir):
+    return [ModelConfig(f) for f in find_configs(basedir)]
 
 
-def enumerate(tasks, models, optimizers):
-
-    configs = []
-    for task in tasks:
-        for model in models:
-            for optimizer in optimizers:
-                configs.append(Run(task, model, optimizer))
-    return configs
+def find_optimizer_configs(basedir):
+    return [OptimizerConfig(f) for f in find_configs(basedir)]
 
 
 def find_configs(basedir):

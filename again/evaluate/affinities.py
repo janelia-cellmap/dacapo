@@ -139,7 +139,12 @@ def evaluate_affs(affs, labels, dims, store_results=None):
                 gt=l,
                 fragments=f):
             segmentations.append(segmentation)
-            scores[f'sample_{i}'] = metrics
+            scores[f'sample_{i}'] = {
+                'voi_split': metrics['V_Info_split'],
+                'voi_merge': metrics['V_Info_merge'],
+                'rand_split': metrics['V_Rand_split'],
+                'rand_merge': metrics['V_Rand_merge']
+            }
 
     if store_results:
 

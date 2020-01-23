@@ -1,14 +1,18 @@
-from again.config import Task, Model, Optimizer, Run
+from again.config import TaskConfig, ModelConfig, OptimizerConfig
 from again.models import create_model
 from again.optimizers import create_optimizer
-from again.prediction_types import Affinities
-from again.report import MongoDbReport
+from again.store import MongoDbStore
 from again.train import create_train_pipeline
+from again.training_stats import TrainingStats
 from again.validate import validate
+from again.validation_scores import ValidationScores
 from tqdm import tqdm
 import configargparse
 import funlib.run
 import gunpowder as gp
+import time
+import hashlib
+
 
 parser = configargparse.ArgParser(
     default_config_files=['~/.config/again', './again.conf'])
@@ -25,102 +29,204 @@ parser.add(
 parser.add(
     '-o', '--optimizer',
     help="The optimizer to use.")
+parser.add(
+    '-r', '--repetition',
+    help="Which repetition to run.")
 
 
-def run_local(run_config):
+class Run:
+
+    def __init__(
+            self,
+            task_config,
+            model_config,
+            optimizer_config,
+            repetition):
+
+        self.task_config = task_config
+        self.model_config = model_config
+        self.optimizer_config = optimizer_config
+        self.repetition = repetition
+
+        self.training_stats = TrainingStats()
+        self.validation_scores = ValidationScores()
+        self.started = None
+        self.stopped = None
+
+        run_hash = hashlib.md5()
+        run_hash.update(self.task_config.id.encode())
+        run_hash.update(self.model_config.id.encode())
+        run_hash.update(self.optimizer_config.id.encode())
+        run_hash.update(str(self.repetition).encode())
+        self.id = run_hash.hexdigest()
+
+        self.store = MongoDbStore()
+
+    def start(self):
+
+        self.sync_run()
+
+        if self.stopped is not None:
+            print(f"SKIP: Run {self} was already completed earlier.")
+            return
+
+        self.started = time.time()
+
+        model = create_model(
+            self.task_config,
+            self.model_config)
+        loss = self.task_config.loss()
+        optimizer = create_optimizer(self.optimizer_config, model)
+
+        self.model_config.num_parameters = model.num_parameters()
+        pipeline, request = create_train_pipeline(
+            self.task_config,
+            self.model_config,
+            self.optimizer_config,
+            model,
+            loss,
+            optimizer)
+
+        validation_interval = 500
+
+        with gp.build(pipeline):
+
+            for i in tqdm(
+                    range(self.optimizer_config.num_iterations),
+                    desc="train"):
+
+                batch = pipeline.request_batch(request)
+
+                train_time = batch.profiling_stats.get_timing_summary(
+                    'Train',
+                    'process').times[-1]
+                self.training_stats.add_training_iteration(
+                    i,
+                    batch.loss,
+                    train_time)
+
+                if i % validation_interval == 0 and i > 0:
+                    scores = validate(
+                        self.task_config,
+                        self.model_config,
+                        model,
+                        store_results='validate.zarr')
+                    self.validation_scores.add_validation_iteration(
+                        i,
+                        scores)
+                    self.store_validation_scores()
+
+                if i % 100 == 0 and i > 0:
+                    self.store_training_stats()
+
+        self.store_training_stats()
+        self.stopped = time.time()
+        self.sync_run()
+
+        # TODO:
+        # testing
+
+    def sync_run(self):
+        self.store.sync_run(self)
+
+    def store_training_stats(self):
+        self.store.store_training_stats(self)
+
+    def read_training_stats(self):
+        self.store.read_training_stats(self)
+
+    def store_validation_scores(self):
+        self.store.store_validation_scores(self)
+
+    def read_validation_scores(self):
+        self.store.read_validation_scores(self)
+
+    def to_dict(self):
+
+        return {
+            'task_config': self.task_config.id,
+            'model_config': self.model_config.id,
+            'optimizer_config': self.optimizer_config.id,
+            'repetition': self.repetition,
+            'started': self.started,
+            'stopped': self.stopped,
+            'id': self.id
+        }
+
+    def __repr__(self):
+        return f"{self.task_config} with {self.model_config}, " \
+            f"using {self.optimizer_config}, repetition {self.repetition}"
+
+
+def enumerate_runs(
+        task_configs,
+        model_configs,
+        optimizer_configs,
+        repetitions=1):
+
+    runs = []
+    for task_config in task_configs:
+        for model_config in model_configs:
+            for optimizer_config in optimizer_configs:
+                for repetition in range(repetitions):
+                    runs.append(Run(
+                        task_config,
+                        model_config,
+                        optimizer_config,
+                        repetition))
+    return runs
+
+
+def run_local(run):
 
     print(
-        f"Running task {run_config.task} "
-        f"with mode {run_config.model}, "
-        f"using optimizer {run_config.optimizer}")
+        f"Running task {run.task_config} "
+        f"with mode {run.model_config}, "
+        f"using optimizer {run.optimizer_config}")
 
-    fmaps_in = run_config.task.data.channels
-    fmaps_out = {
-        Affinities: run_config.task.data.dims
-    }[run_config.task.predict]
-
-    model = create_model(run_config.model, fmaps_in, fmaps_out)
-    loss = run_config.task.loss()
-    optimizer = create_optimizer(run_config.optimizer, model)
-
-    pipeline, request = create_train_pipeline(
-        run_config.task,
-        run_config.model,
-        run_config.optimizer,
-        model,
-        loss,
-        optimizer)
-
-    print(f"Training model with {model.num_parameters()} parameters")
-    print(f"Using data {run_config.task.data.filename}")
-
-    report = MongoDbReport(options.mongo_db_host, 'again_v01', run_config)
-    report.add_model_size(model.num_parameters())
-
-    validation_interval = 500
-
-    with gp.build(pipeline):
-        for i in tqdm(
-                range(run_config.optimizer.num_iterations),
-                desc="train"):
-
-            batch = pipeline.request_batch(request)
-
-            train_time = batch.profiling_stats.get_timing_summary(
-                'Train',
-                'process').times[-1]
-            report.add_training_iteration(i, batch.loss, train_time)
-
-            if i % validation_interval == 0 and i > 0:
-                scores = validate(
-                    run_config.task,
-                    run_config.model,
-                    model,
-                    store_results='validate.zarr')
-                report.add_validation_scores(i, scores)
-
-    # TODO:
-    # testing
+    run.start()
 
 
-def run_remote(run_config):
+def run_remote(run):
 
     funlib.run.run(
         command=f'python {__file__} '
-                f'-t {run_config.task.config_file} '
-                f'-m {run_config.model.config_file} '
-                f'-o {run_config.optimizer.config_file}',
+                f'-t {run.task_config.config_file} '
+                f'-m {run.model_config.config_file} '
+                f'-o {run.optimizer_config.config_file} '
+                f'-r {run.repetition}',
         num_cpus=2,
         num_gpus=1,
         queue='slowpoke',
         execute=True)
 
 
-def run_all(run_configs, num_workers=1):
+def run_all(runs, num_workers=1):
 
-    print(f"Running {len(run_configs)} configs:")
-    for run_config in run_configs[:10]:
-        print(f"\t{run_config}")
-    if len(run_configs) > 10:
-        print(f"(and {len(run_configs) - 10} more...)")
+    print(f"Running {len(runs)} configs:")
+    for run in runs[:10]:
+        print(f"\t{run}")
+    if len(runs) > 10:
+        print(f"(and {len(runs) - 10} more...)")
 
     if num_workers > 1:
 
         from multiprocessing import Pool
         with Pool(num_workers) as pool:
-            pool.map(run_remote, run_configs)
+            pool.map(run_remote, runs)
 
     else:
 
-        for run_config in run_configs:
-            run_local(run_config)
+        for run in runs:
+            run_local(run)
 
 
 if __name__ == "__main__":
 
     options = parser.parse()
-    run_config = Run(
-        Task(options.task),
-        Model(options.model),
-        Optimizer(options.optimizer))
-    run_local(run_config)
+    run = Run(
+        TaskConfig(options.task),
+        ModelConfig(options.model),
+        OptimizerConfig(options.optimizer),
+        int(options.repetition))
+    run_local(run)
