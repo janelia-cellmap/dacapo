@@ -60,11 +60,10 @@ class Run:
         run_hash.update(str(self.repetition).encode())
         self.id = run_hash.hexdigest()
 
-        self.store = MongoDbStore()
-
     def start(self):
 
-        self.sync_run()
+        store = MongoDbStore()
+        store.sync_run(self)
 
         if self.stopped is not None:
             print(f"SKIP: Run {self} was already completed earlier.")
@@ -114,32 +113,17 @@ class Run:
                     self.validation_scores.add_validation_iteration(
                         i,
                         scores)
-                    self.store_validation_scores()
+                    store.store_validation_scores(self)
 
                 if i % 100 == 0 and i > 0:
-                    self.store_training_stats()
+                    store.store_training_stats(self)
 
-        self.store_training_stats()
+        store.store_training_stats(self)
         self.stopped = time.time()
-        self.sync_run()
+        store.sync_run(self)
 
         # TODO:
         # testing
-
-    def sync_run(self):
-        self.store.sync_run(self)
-
-    def store_training_stats(self):
-        self.store.store_training_stats(self)
-
-    def read_training_stats(self):
-        self.store.read_training_stats(self)
-
-    def store_validation_scores(self):
-        self.store.store_validation_scores(self)
-
-    def read_validation_scores(self):
-        self.store.read_validation_scores(self)
 
     def to_dict(self):
 
@@ -223,7 +207,7 @@ def run_all(runs, num_workers=1):
 
 if __name__ == "__main__":
 
-    options = parser.parse()
+    options = parser.parse_known_args()[0]
     run = Run(
         TaskConfig(options.task),
         ModelConfig(options.model),

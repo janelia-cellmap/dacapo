@@ -1,3 +1,4 @@
+from . import analyze  # noqa
 from . import config  # noqa
 from . import evaluate  # noqa
 from . import models  # noqa

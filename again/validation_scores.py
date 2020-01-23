@@ -24,8 +24,8 @@ class ValidationScores:
         """Get the average scores over all samples."""
 
         averages = {}
-        for sample, scores in self.sample_scores:
-            for score, values in scores:
+        for sample, scores in self.sample_scores.items():
+            for score, values in scores.items():
                 if score not in averages:
                     averages[score] = np.array(values)
                 else:
@@ -36,6 +36,13 @@ class ValidationScores:
             averages[score] /= num_samples
 
         return averages
+
+    def get_score_names(self):
+
+        for sample, scores in self.sample_scores.items():
+            return scores.keys()
+
+        raise RuntimeError("No scores were added, yet")
 
     def validated_until(self):
         """The number of iterations trained for (the maximum iteration plus
