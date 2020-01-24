@@ -25,20 +25,36 @@ def plot_runs(runs, smooth=100):
     max_iteration = max([run.training_stats.trained_until() for run in runs])
 
     colors = itertools.cycle(palette[20])
+    loss_tooltips = [
+        ("task", "@task"),
+        ("model", "@model"),
+        ("optimizer", "@optimizer"),
+        ("iteration", "@iteration"),
+        ("loss", "@loss")
+    ]
+    validation_tooltips = [
+        ("task", "@task"),
+        ("model", "@model"),
+        ("optimizer", "@optimizer"),
+        ("iteration", "@iteration"),
+        ("voi_split", "@voi_split"),
+        ("voi_merge", "@voi_merge"),
+        ("voi_sum", "@voi_sum")
+    ]
     loss_figure = bokeh.plotting.figure(
         tools="pan, wheel_zoom, reset, save, hover",
         x_axis_label='iterations',
+        tooltips=loss_tooltips,
         plot_width=2048)
     loss_figure.background_fill_color = '#efefef'
+
 
     validation_figure = bokeh.plotting.figure(
         tools="pan, wheel_zoom, reset, save, hover",
         x_axis_label='iterations',
+        tooltips=validation_tooltips,
         plot_width=2048)
     validation_figure.background_fill_color = '#efefef'
-
-    # losses
-
 
     for run, color in zip(runs, colors):
 
@@ -55,9 +71,17 @@ def plot_runs(runs, smooth=100):
                 run.training_stats.losses,
                 smooth,
                 stride=smooth)
+            source = bokeh.plotting.ColumnDataSource({
+                'iteration': x,
+                'loss': y,
+                'task': [run.task_config.id]*len(x),
+                'model': [run.model_config.id]*len(x),
+                'optimizer': [run.optimizer_config.id]*len(x)
+            })
             loss_figure.line(
-                x, y,
+                'iteration', 'loss',
                 legend_label=name,
+                source=source,
                 color=color,
                 alpha=0.7)
 
@@ -78,10 +102,20 @@ def plot_runs(runs, smooth=100):
                     validation_averages['voi_split'] +
                     validation_averages['voi_merge'])
 
+                x = run.validation_scores.iterations
+                source = bokeh.plotting.ColumnDataSource({
+                    'iteration': x,
+                    'voi_sum': voi_sum,
+                    'task': [run.task_config.id]*len(x),
+                    'model': [run.model_config.id]*len(x),
+                    'optimizer': [run.optimizer_config.id]*len(x),
+                    'voi_split': validation_averages['voi_split'],
+                    'voi_merge': validation_averages['voi_merge']
+                })
                 validation_figure.line(
-                    run.validation_scores.iterations,
-                    voi_sum,
+                    'iteration', 'voi_sum',
                     legend_label=name + " VOI sum",
+                    source=source,
                     color=color,
                     alpha=0.7)
 
