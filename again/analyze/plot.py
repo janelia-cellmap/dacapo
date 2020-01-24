@@ -5,13 +5,17 @@ import itertools
 import numpy as np
 
 
-def smooth_values(y, n):
+def smooth_values(y, n, stride=1):
 
     y_split = np.array([y[i:-(n - 1) + i] if i < n -1 else y[i:] for i in range(n)])
     # mean
     m = np.mean(y_split, axis=0)
     # stddev
     s = np.mean((y_split - m)**2, axis=0)
+
+    if stride > 1:
+        m = m[::stride]
+        s = s[::stride]
 
     return m, s
 
@@ -45,10 +49,12 @@ def plot_runs(runs, smooth=100):
 
             x, _ = smooth_values(
                 run.training_stats.iterations,
-                smooth)
+                smooth,
+                stride=smooth)
             y, s = smooth_values(
                 run.training_stats.losses,
-                smooth)
+                smooth,
+                stride=smooth)
             loss_figure.line(
                 x, y,
                 legend_label=name,
