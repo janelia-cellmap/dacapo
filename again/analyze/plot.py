@@ -5,13 +5,22 @@ import itertools
 import numpy as np
 
 
-def smooth_values(y, n, stride=1):
+def smooth_values(a, n, stride=1):
 
-    y_split = np.array([y[i:-(n - 1) + i] if i < n -1 else y[i:] for i in range(n)])
+    a = np.array(a)
+
     # mean
-    m = np.mean(y_split, axis=0)
+    m = np.cumsum(a)
+    m[n:] = m[n:] - m[:-n]
+    m = m[n-1:]/n
+
+    # mean of squared values
+    m2 = np.cumsum(a**2)
+    m2[n:] = m2[n:] - m2[:-n]
+    m2 = m2[n-1:]/n
+
     # stddev
-    s = np.mean((y_split - m)**2, axis=0)
+    s = m2 - m**2
 
     if stride > 1:
         m = m[::stride]
