@@ -79,6 +79,7 @@ class Run:
         optimizer = create_optimizer(self.optimizer_config, model)
 
         self.model_config.num_parameters = model.num_parameters()
+        store.sync_run(self)
         pipeline, request = create_train_pipeline(
             self.task_config,
             self.model_config,
@@ -110,7 +111,7 @@ class Run:
                         self.task_config,
                         self.model_config,
                         model,
-                        store_results=os.path.join(run.id, 'validate.zarr'))
+                        store_results=os.path.join('runs', self.id, 'validate.zarr'))
                     self.validation_scores.add_validation_iteration(
                         i,
                         scores)
