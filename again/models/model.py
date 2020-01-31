@@ -21,3 +21,19 @@ class Model(torch.nn.Module):
             device=device)
         out = self.forward(dummy_data)
         return tuple(out.shape[2:])
+
+    def save(self, checkpoint_name, optimizer):
+
+        state = {
+            'model_state_dict': self.state_dict(),
+        }
+        if optimizer:
+            state['optimizer_state_dict'] = optimizer.state_dict()
+        torch.save(state, checkpoint_name)
+
+    def load(self, checkpoint_name, optimizer=None):
+
+        checkpoint = torch.load(checkpoint_name)
+        self.load_state_dict(checkpoint['model_state_dict'])
+        if optimizer:
+            optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
