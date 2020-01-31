@@ -3,8 +3,6 @@ from .prediction_types import Affinities
 from .task_types import InstanceSegmentation
 import gunpowder as gp
 import gunpowder.torch as gp_torch
-import os
-import torch
 import zarr
 
 
@@ -35,87 +33,100 @@ def create_train_pipeline(
     raw = gp.ArrayKey('RAW')
     labels = gp.ArrayKey('LABELS')
     affs = gp.ArrayKey('AFFS')
+    weights = gp.ArrayKey('WEIGHTS')
     affs_predicted = gp.ArrayKey('AFFS_PREDICTED')
 
     dataset_shape = zarr.open(str(filename))['train/raw'].shape
     num_samples = dataset_shape[0]
     sample_size = dataset_shape[1:]
 
-    pipeline = (
-        gp.ZarrSource(
-            str(filename),
-            {
-                raw: 'train/raw',
-                labels: 'train/gt'
-            },
-            # treat samples as z dimension
-            array_specs={
-                raw: gp.ArraySpec(
-                    roi=gp.Roi((0, 0, 0), (num_samples,) + sample_size),
-                    voxel_size=(1, 1, 1)),
-                labels: gp.ArraySpec(
-                    roi=gp.Roi((0, 0, 0), (num_samples,) + sample_size),
-                    voxel_size=(1, 1, 1))
-            }) +
-        # raw: (d=1, h, w)
-        # labels: (d=1, h, w)
-        gp.RandomLocation() +
-        # raw: (d=1, h, w)
-        # labels: (d=1, h, w)
-        gp.AddAffinities(
-            affinity_neighborhood=[(0, 1, 0), (0, 0, 1)],
-            labels=labels,
-            affinities=affs) +
-        gp.Normalize(affs, factor=1.0) +
-        # raw: (d=1, h, w)
-        # affs: (c=2, d=1, h, w)
-        Squash(dim=-3) +
-        # get rid of z dim
-        # raw: (h, w)
-        # affs: (c=2, h, w)
-        AddChannelDim(raw) +
-        # raw: (c=1, h, w)
-        # affs: (c=2, h, w)
-        gp.PreCache() +
-        gp.Stack(batch_size) +
-        # raw: (b=10, c=1, h, w)
-        # affs: (b=10, c=2, h, w)
-        gp_torch.Train(
-            model=model,
-            loss=loss,
-            optimizer=optimizer,
-            inputs={'x': raw},
-            target=affs,
-            output=affs_predicted,
-            save_every=1e6) +
-        # raw: (b=10, c=1, h, w)
-        # affs: (b=10, c=2, h, w)
-        # affs_predicted: (b=10, c=2, h, w)
-        TransposeDims(raw, (1, 0, 2, 3)) +
-        TransposeDims(affs, (1, 0, 2, 3)) +
-        TransposeDims(affs_predicted, (1, 0, 2, 3)) +
-        # raw: (c=1, b=10, h, w)
-        # affs: (c=2, b=10, h, w)
-        # affs_predicted: (c=2, b=10, h, w)
-        RemoveChannelDim(raw) +
-        # raw: (b=10, h, w)
-        # affs: (c=2, b=10, h, w)
-        # affs_predicted: (c=2, b=10, h, w)
-        # gp.Snapshot(
-            # dataset_names={
-                # raw: 'raw',
-                # labels: 'labels',
-                # affs: 'affs',
-                # affs_predicted: 'affs_predicted'
-            # },
-            # every=snapshot_every,
-            # output_filename=os.path.join(outdir, "{iteration}.hdf")) +
-        gp.PrintProfilingStats(every=100)
-    )
+    pipeline = gp.ZarrSource(
+        str(filename),
+        {
+            raw: 'train/raw',
+            labels: 'train/gt'
+        },
+        # treat samples as z dimension
+        array_specs={
+            raw: gp.ArraySpec(
+                roi=gp.Roi((0, 0, 0), (num_samples,) + sample_size),
+                voxel_size=(1, 1, 1)),
+            labels: gp.ArraySpec(
+                roi=gp.Roi((0, 0, 0), (num_samples,) + sample_size),
+                voxel_size=(1, 1, 1))
+        })
+    pipeline += gp.Normalize(raw)
+    # raw: (d=1, h, w)
+    # labels: (d=1, h, w)
+    pipeline += gp.RandomLocation()
+    # raw: (d=1, h, w)
+    # labels: (d=1, h, w)
+    pipeline += gp.AddAffinities(
+        affinity_neighborhood=[(0, 1, 0), (0, 0, 1)],
+        labels=labels,
+        affinities=affs)
+
+    if loss.requires_weights:
+
+        pipeline += gp.BalanceLabels(
+            labels=affs,
+            scales=weights)
+        loss_inputs = {0: affs_predicted, 1: affs, 2: weights}
+
+    else:
+
+        loss_inputs = {0: affs_predicted, 1: affs}
+
+    pipeline += gp.Normalize(affs, factor=1.0)
+    # raw: (d=1, h, w)
+    # affs: (c=2, d=1, h, w)
+    pipeline += Squash(dim=-3)
+    # get rid of z dim
+    # raw: (h, w)
+    # affs: (c=2, h, w)
+    pipeline += AddChannelDim(raw)
+    # raw: (c=1, h, w)
+    # affs: (c=2, h, w)
+    pipeline += gp.PreCache()
+    pipeline += gp.Stack(batch_size)
+    # raw: (b=10, c=1, h, w)
+    # affs: (b=10, c=2, h, w)
+    pipeline += gp_torch.Train(
+        model=model,
+        loss=loss,
+        optimizer=optimizer,
+        inputs={'x': raw},
+        loss_inputs=loss_inputs,
+        outputs={0: affs_predicted},
+        save_every=1e6)
+    # raw: (b=10, c=1, h, w)
+    # affs: (b=10, c=2, h, w)
+    # affs_predicted: (b=10, c=2, h, w)
+    pipeline += TransposeDims(raw, (1, 0, 2, 3))
+    pipeline += TransposeDims(affs, (1, 0, 2, 3))
+    pipeline += TransposeDims(affs_predicted, (1, 0, 2, 3))
+    # raw: (c=1, b=10, h, w)
+    # affs: (c=2, b=10, h, w)
+    # affs_predicted: (c=2, b=10, h, w)
+    pipeline += RemoveChannelDim(raw)
+    # raw: (b=10, h, w)
+    # affs: (c=2, b=10, h, w)
+    # affs_predicted: (c=2, b=10, h, w)
+    # pipeline += gp.Snapshot(
+        # dataset_names={
+            # raw: 'raw',
+            # labels: 'labels',
+            # affs: 'affs',
+            # affs_predicted: 'affs_predicted'
+        # },
+        # every=snapshot_every,
+        # output_filename=os.path.join(outdir, "{iteration}.hdf"))
+    pipeline += gp.PrintProfilingStats(every=100)
 
     request = gp.BatchRequest()
     request.add(raw, input_size)
     request.add(affs, output_size)
+    request.add(weights, output_size)
     request.add(affs_predicted, output_size)
 
     return pipeline, request
