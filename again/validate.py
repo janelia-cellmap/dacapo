@@ -7,7 +7,7 @@ import gunpowder.torch as gp_torch
 import zarr
 
 
-def get_dataset_size(task_config):
+def get_voxel_size(task_config):
 
     raw = gp.ArrayKey('RAW')
     source = gp.ZarrSource(
@@ -16,7 +16,7 @@ def get_dataset_size(task_config):
             raw: 'validate/raw'
         })
     with gp.build(source):
-        return source.spec[raw].roi
+        return source.spec[raw].voxel_size
 
 def validate(task_config, model_config, model, store_results=None):
 
@@ -28,15 +28,19 @@ def validate(task_config, model_config, model, store_results=None):
         raise RuntimeError(
             "Validation other than 2D affs from labels not yet implemented")
 
+    voxel_size = get_voxel_size(task_config)
     channels = task_config.data.channels
     filename = task_config.data.filename
-    input_size = gp.Coordinate(model_config.input_size)
-    output_size = gp.Coordinate(model.output_size(channels, input_size))
+    input_shape = gp.Coordinate(model_config.input_size)
+    output_shape = gp.Coordinate(model.output_size(channels, input_shape))
+    input_size = input_shape*voxel_size
+    output_size = output_shape*voxel_size
     context = input_size - output_size
 
     dataset_shape = zarr.open(str(filename))['train/raw'].shape
     num_samples = dataset_shape[0]
     sample_shape = dataset_shape[1:]
+    sample_size = voxel_size*sample_shape
 
     raw = gp.ArrayKey('RAW')
     labels = gp.ArrayKey('LABELS')
@@ -48,9 +52,9 @@ def validate(task_config, model_config, model, store_results=None):
     scan_request.add(labels, output_size)
 
     total_request = gp.BatchRequest()
-    total_request.add(raw, sample_shape)
-    total_request.add(affs_predicted, sample_shape)
-    total_request.add(labels, sample_shape)
+    total_request.add(raw, sample_size)
+    total_request.add(affs_predicted, sample_size)
+    total_request.add(labels, sample_size)
 
     pipeline = (
         gp.ZarrSource(
@@ -60,6 +64,7 @@ def validate(task_config, model_config, model, store_results=None):
                 labels: 'validate/gt'
             }) +
         gp.Pad(raw, size=None) +
+        gp.Normalize(raw) +
         # raw: (s, h, w)
         # labels: (s, h, w)
         AddChannelDim(raw) +
