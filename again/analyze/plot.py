@@ -41,6 +41,14 @@ def plot_runs(runs, smooth=100):
         ("iteration", "@iteration"),
         ("loss", "@loss")
     ]
+    loss_figure = bokeh.plotting.figure(
+        tools="pan, wheel_zoom, reset, save, hover",
+        x_axis_label='iterations',
+        tooltips=loss_tooltips,
+        plot_width=2048)
+    loss_figure.background_fill_color = '#efefef'
+
+
     validation_tooltips = [
         ("task", "@task"),
         ("model", "@model"),
@@ -50,20 +58,30 @@ def plot_runs(runs, smooth=100):
         ("voi_merge", "@voi_merge"),
         ("voi_sum", "@voi_sum")
     ]
-    loss_figure = bokeh.plotting.figure(
-        tools="pan, wheel_zoom, reset, save, hover",
-        x_axis_label='iterations',
-        tooltips=loss_tooltips,
-        plot_width=2048)
-    loss_figure.background_fill_color = '#efefef'
-
-
     validation_figure = bokeh.plotting.figure(
         tools="pan, wheel_zoom, reset, save, hover",
         x_axis_label='iterations',
         tooltips=validation_tooltips,
         plot_width=2048)
     validation_figure.background_fill_color = '#efefef'
+
+    summary_tooltips = [
+        ("task", "@task"),
+        ("model", "@model"),
+        ("optimizer", "@optimizer"),
+        ("best iteration", "@iteration"),
+        ("best voi_split", "@voi_split"),
+        ("best voi_merge", "@voi_merge"),
+        ("best voi_sum", "@voi_sum"),
+        ("num parameters", "@num_parameters")
+    ]
+    summary_figure = bokeh.plotting.figure(
+        tools="pan, wheel_zoom, reset, save, hover",
+        x_axis_label='model size',
+        y_axis_label='best validation',
+        tooltips=summary_tooltips,
+        plot_width=2048)
+    summary_figure.background_fill_color = '#efefef'
 
     for run, color in zip(runs, colors):
 
@@ -99,8 +117,7 @@ def plot_runs(runs, smooth=100):
                 np.concatenate([y + 3*s, (y - 3*s)[::-1]]),
                 legend_label=name,
                 color=color,
-                line_alpha=0.7,
-                fill_alpha=0.4)
+                alpha=0.3)
 
         if run.validation_scores.validated_until() > 0:
             validation_averages = run.validation_scores.get_averages()
@@ -128,5 +145,26 @@ def plot_runs(runs, smooth=100):
                     color=color,
                     alpha=0.7)
 
-    bokeh.plotting.show(bokeh.layouts.column(loss_figure, validation_figure))
+                i = np.argmin(voi_sum)
+                source = bokeh.plotting.ColumnDataSource({
+                    'num_parameters': [run.model_config.num_parameters],
+                    'iteration': [x[i]],
+                    'voi_sum': [voi_sum[i]],
+                    'task': [run.task_config.id],
+                    'model': [run.model_config.id],
+                    'optimizer': [run.optimizer_config.id]
+                })
+                summary_figure.circle(
+                    'num_parameters', 'voi_sum',
+                    legend_label=name,
+                    source=source,
+                    color=color,
+                    alpha=0.7)
+    bokeh.plotting.show(
+        bokeh.layouts.column(
+            loss_figure,
+            validation_figure,
+            summary_figure
+        )
+    )
 
