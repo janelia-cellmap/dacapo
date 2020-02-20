@@ -1,3 +1,4 @@
+from .datasets import get_voxel_size
 from .evaluate import evaluate
 from .gp import AddChannelDim, RemoveChannelDim, TransposeDims
 from .prediction_types import Affinities
@@ -6,17 +7,6 @@ import gunpowder as gp
 import gunpowder.torch as gp_torch
 import zarr
 
-
-def get_voxel_size(task_config):
-
-    raw = gp.ArrayKey('RAW')
-    source = gp.ZarrSource(
-        str(task_config.data.filename),
-        {
-            raw: 'validate/raw'
-        })
-    with gp.build(source):
-        return source.spec[raw].voxel_size
 
 def validate(task_config, model_config, model, store_results=None):
 
@@ -28,17 +18,15 @@ def validate(task_config, model_config, model, store_results=None):
         raise RuntimeError(
             "Validation other than 2D affs from labels not yet implemented")
 
-    voxel_size = get_voxel_size(task_config)
+    voxel_size = get_voxel_size(task_config.data.filename, 'validate/raw')
     channels = task_config.data.channels
     filename = task_config.data.filename
     input_shape = gp.Coordinate(model_config.input_size)
     output_shape = gp.Coordinate(model.output_size(channels, input_shape))
     input_size = input_shape*voxel_size
     output_size = output_shape*voxel_size
-    context = input_size - output_size
 
     dataset_shape = zarr.open(str(filename))['train/raw'].shape
-    num_samples = dataset_shape[0]
     sample_shape = dataset_shape[1:]
     sample_size = voxel_size*sample_shape
 
