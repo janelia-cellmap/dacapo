@@ -17,9 +17,10 @@ class UNet(Model):
         super(UNet, self).__init__()
 
         levels = len(downsample_factors) + 1
+        dims = len(downsample_factors[0])
 
-        kernel_size_down = [[(3, 3), (3, 3)]]*levels
-        kernel_size_up = [[(3, 3), (3, 3)]]*(levels - 1)
+        kernel_size_down = [[(3,)*dims, (3,)*dims]]*levels
+        kernel_size_up = [[(3,)*dims, (3,)*dims]]*(levels - 1)
 
         unet = ft.models.UNet(
             in_channels=fmaps_in,
@@ -30,9 +31,13 @@ class UNet(Model):
             downsample_factors=downsample_factors,
             constant_upsample=True,
             padding=padding)
+        conv = {
+            2: torch.nn.Conv2d,
+            3: torch.nn.Conv3d
+        }[dims]
         self.sequence = torch.nn.Sequential(
             unet,
-            torch.nn.Conv2d(fmaps, fmaps_out, (1, 1)),
+            conv(fmaps, fmaps_out, (1,)*dims),
             torch.nn.Sigmoid()
         )
 
