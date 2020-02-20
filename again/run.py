@@ -78,6 +78,9 @@ class Run:
         loss = self.task_config.loss()
         optimizer = create_optimizer(self.optimizer_config, model)
 
+        outdir = os.path.join('runs', self.id)
+        os.makedirs(outdir, exist_ok=True)
+
         self.model_config.num_parameters = model.num_parameters()
         store.sync_run(self)
         pipeline, request = create_train_pipeline(
@@ -86,7 +89,9 @@ class Run:
             self.optimizer_config,
             model,
             loss,
-            optimizer)
+            optimizer,
+            outdir=outdir,
+            snapshot_every=100)
 
         validation_interval = 500
 
@@ -111,7 +116,7 @@ class Run:
                         self.task_config,
                         self.model_config,
                         model,
-                        store_results=os.path.join('runs', self.id, 'validate.zarr'))
+                        store_results=os.path.join(outdir, 'validate.zarr'))
                     self.validation_scores.add_validation_iteration(
                         i,
                         scores)
