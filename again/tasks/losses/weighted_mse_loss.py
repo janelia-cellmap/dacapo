@@ -1,11 +1,18 @@
-from torch.nn import MSELoss
+from .loss import Loss
+import gunpowder as gp
+import torch
 
 
-class WeightedMSELoss(MSELoss):
+class WeightedMSELoss(torch.nn.MSELoss, Loss):
 
     def __init__(self):
         super(WeightedMSELoss, self).__init__()
-        self.requires_weights = True
+
+    def add_weights(self, target, weights):
+
+        return gp.BalanceLabels(
+            labels=target,
+            scales=weights)
 
     def forward(self, prediction, target, weights):
 

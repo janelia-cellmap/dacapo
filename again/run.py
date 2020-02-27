@@ -1,7 +1,6 @@
 from again.config import TaskConfig, ModelConfig, OptimizerConfig
-from again.models import create_model
-from again.optimizers import create_optimizer
 from again.store import MongoDbStore
+from again.tasks import Task
 from again.train import create_train_pipeline
 from again.training_stats import TrainingStats
 from again.validate import validate
@@ -31,8 +30,17 @@ parser.add(
     '-o', '--optimizer',
     help="The optimizer to use.")
 parser.add(
-    '-r', '--repetition',
+    '-R', '--repetition',
     help="Which repetition to run.")
+parser.add(
+    '-v', '--validation-interval',
+    help="How often to run validation.")
+parser.add(
+    '-s', '--snapshot-interval',
+    help="How often to store a training batch.")
+parser.add(
+    '-b', '--keep-best-validation',
+    help="If given, keep model checkpoint of best validation.")
 
 
 class Run:
@@ -42,7 +50,10 @@ class Run:
             task_config,
             model_config,
             optimizer_config,
-            repetition):
+            repetition,
+            validation_interval,
+            snapshot_interval,
+            keep_best_validation):
 
         self.task_config = task_config
         self.model_config = model_config
@@ -53,6 +64,7 @@ class Run:
         self.validation_scores = ValidationScores()
         self.started = None
         self.stopped = None
+        self.num_parameters = None
 
         run_hash = hashlib.md5()
         run_hash.update(self.task_config.id.encode())
@@ -60,6 +72,19 @@ class Run:
         run_hash.update(self.optimizer_config.id.encode())
         run_hash.update(str(self.repetition).encode())
         self.id = run_hash.hexdigest()
+
+        self.validation_interval = validation_interval
+        self.keep_best_validation = keep_best_validation
+        if keep_best_validation is not None:
+            tokens = keep_best_validation.split(':')
+            self.best_score_name = tokens[1]
+            self.best_score_relation = {
+                'min': min,
+                'max': max
+            }[tokens[0]]
+        else:
+            self.best_score_name = None
+        self.snapshot_interval = snapshot_interval
 
     def start(self):
 
@@ -72,28 +97,26 @@ class Run:
 
         self.started = time.time()
 
-        model = create_model(
-            self.task_config,
-            self.model_config)
-        loss = self.task_config.loss()
-        optimizer = create_optimizer(self.optimizer_config, model)
+        task = Task(self.task_config)
+        model = self.model_config.type(task.data, self.model_config)
+        predictor = task.predictor_type(task.data, model)
+        optimizer = self.optimizer_config.type(
+            predictor.parameters(),
+            self.optimizer_config.lr)
 
         outdir = os.path.join('runs', self.id)
+        print(f"Storing this run's data in {outdir}")
         os.makedirs(outdir, exist_ok=True)
 
-        self.model_config.num_parameters = model.num_parameters()
+        self.num_parameters = predictor.num_parameters()
         store.sync_run(self)
         pipeline, request = create_train_pipeline(
-            self.task_config,
-            self.model_config,
-            self.optimizer_config,
-            model,
-            loss,
+            task,
+            predictor,
             optimizer,
+            self.optimizer_config.batch_size,
             outdir=outdir,
-            snapshot_every=100)
-
-        validation_interval = 500
+            snapshot_every=self.snapshot_interval)
 
         with gp.build(pipeline):
 
@@ -111,16 +134,29 @@ class Run:
                     batch.loss,
                     train_time)
 
-                if i % validation_interval == 0 and i > 0:
+                if i % self.validation_interval == 0 and i > 0:
                     scores = validate(
-                        self.task_config,
-                        self.model_config,
-                        model,
-                        store_results=os.path.join(outdir, 'validate.zarr'))
+                        task.data,
+                        predictor,
+                        store_results=os.path.join(outdir, f'validate_{i}.zarr'))
                     self.validation_scores.add_validation_iteration(
                         i,
                         scores)
                     store.store_validation_scores(self)
+
+                    if self.best_score_name is not None:
+                        all_scores = self.validation_scores.get_averages()
+                        best = self.best_score_relation(
+                            all_scores[self.best_score_name])
+                        if best == all_scores[self.best_score_name][-1]:
+                            print(
+                                f"Iteration {i} current best ({best}), "
+                                "storing checkpoint...")
+                            predictor.save(
+                                os.path.join(
+                                    outdir,
+                                    f'validation_best_{self.best_score_name}.checkpoint'),
+                                optimizer)
 
                 if i % 100 == 0 and i > 0:
                     store.store_training_stats(self)
@@ -141,6 +177,7 @@ class Run:
             'repetition': self.repetition,
             'started': self.started,
             'stopped': self.stopped,
+            'num_parameters': self.num_parameters,
             'id': self.id
         }
 
@@ -153,7 +190,10 @@ def enumerate_runs(
         task_configs,
         model_configs,
         optimizer_configs,
-        repetitions=1):
+        repetitions,
+        validation_interval,
+        snapshot_interval,
+        keep_best_validation):
 
     runs = []
     for task_config in task_configs:
@@ -164,7 +204,10 @@ def enumerate_runs(
                         task_config,
                         model_config,
                         optimizer_config,
-                        repetition))
+                        repetition,
+                        validation_interval,
+                        snapshot_interval,
+                        keep_best_validation))
     return runs
 
 
@@ -185,14 +228,17 @@ def run_remote(run):
                 f'-t {run.task_config.config_file} '
                 f'-m {run.model_config.config_file} '
                 f'-o {run.optimizer_config.config_file} '
-                f'-r {run.repetition}',
+                f'-R {run.repetition} '
+                f'-v {run.validation_interval} '
+                f'-s {run.snapshot_interval} '
+                f'-b {run.keep_best_validation} ',
         num_cpus=2,
         num_gpus=1,
         queue='slowpoke',
         execute=True)
 
 
-def run_all(runs, num_workers=1):
+def run_all(runs, num_workers):
 
     print(f"Running {len(runs)} configs:")
     for run in runs[:10]:
@@ -219,5 +265,8 @@ if __name__ == "__main__":
         TaskConfig(options.task),
         ModelConfig(options.model),
         OptimizerConfig(options.optimizer),
-        int(options.repetition))
+        int(options.repetition),
+        int(options.validation_interval),
+        int(options.snapshot_interval),
+        options.keep_best_validation)
     run_local(run)

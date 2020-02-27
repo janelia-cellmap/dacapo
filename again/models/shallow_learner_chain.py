@@ -5,15 +5,10 @@ from .model import Model
 
 class ShallowLearnerChain(Model):
 
-    def __init__(
-            self,
-            fmaps_in,
-            fmaps_out,
-            num_latents,
-            num_learners,
-            create_shallow_learner):
+    def __init__(self, task, model_config):
 
-        super(ShallowLearnerChain, self).__init__()
+        # TODO: rewrite using 'task' and 'model_config'
+        super(ShallowLearnerChain, self).__init__(num_latents)
 
         # first learner from fmaps_in to latent
         learners = [create_shallow_learner(1, num_latents)]
@@ -24,12 +19,6 @@ class ShallowLearnerChain(Model):
                     num_latents,
                     num_latents))
         self.learners = torch.nn.ModuleList(learners)
-
-        self.head = torch.nn.Sequential(
-            torch.nn.Conv2d(num_latents, 2, (1, 1)),
-            torch.nn.Sigmoid()
-        )
-
         self.num_learners = num_learners
 
     def crop(self, x, shape):
@@ -52,4 +41,4 @@ class ShallowLearnerChain(Model):
         for i in range(1, self.num_learners):
             y = self.learners[i](x)
             x = self.crop(x, y.size()) + y
-        return self.head(x)
+        return x

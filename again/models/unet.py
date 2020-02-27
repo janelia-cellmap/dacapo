@@ -1,45 +1,34 @@
-import torch
 import funlib.learn.torch as ft
 from .model import Model
 
 
 class UNet(Model):
+    '''Creates a funlib.learn.torch U-Net for the given data from a model
+    configuration.'''
 
-    def __init__(
-            self,
-            fmaps_in,
-            fmaps,
-            fmaps_out,
-            fmap_inc_factor,
-            downsample_factors,
-            padding):
+    def __init__(self, data, model_config):
 
-        super(UNet, self).__init__()
+        input_shape = model_config.input_shape
+        fmaps_in = max(1, data.raw.num_channels)
+        fmaps_out = model_config.fmaps
 
-        levels = len(downsample_factors) + 1
-        dims = len(downsample_factors[0])
+        super(UNet, self).__init__(input_shape, fmaps_in, fmaps_out)
+
+        levels = len(model_config.downsample_factors) + 1
+        dims = len(model_config.downsample_factors[0])
 
         kernel_size_down = [[(3,)*dims, (3,)*dims]]*levels
         kernel_size_up = [[(3,)*dims, (3,)*dims]]*(levels - 1)
 
-        unet = ft.models.UNet(
+        self.unet = ft.models.UNet(
             in_channels=fmaps_in,
-            num_fmaps=fmaps,
-            fmap_inc_factor=fmap_inc_factor,
+            num_fmaps=model_config.fmaps,
+            fmap_inc_factor=model_config.fmap_inc_factor,
             kernel_size_down=kernel_size_down,
             kernel_size_up=kernel_size_up,
-            downsample_factors=downsample_factors,
+            downsample_factors=model_config.downsample_factors,
             constant_upsample=True,
-            padding=padding)
-        conv = {
-            2: torch.nn.Conv2d,
-            3: torch.nn.Conv3d
-        }[dims]
-        self.sequence = torch.nn.Sequential(
-            unet,
-            conv(fmaps, fmaps_out, (1,)*dims),
-            torch.nn.Sigmoid()
-        )
+            padding=model_config.padding)
 
     def forward(self, x):
-        return self.sequence(x)
+        return self.unet(x)

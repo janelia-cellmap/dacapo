@@ -114,7 +114,7 @@ class MongoDbStore:
             if not self.__same_doc(
                     run_doc,
                     stored_run,
-                    ignore=['started', 'stopped']):
+                    ignore=['started', 'stopped', 'num_parameters']):
                 raise RuntimeError(
                     f"Data for run {run.id} does not match already synced "
                     f"entry. Found\n\n{stored_run}\n\nin DB, but was "
@@ -155,21 +155,9 @@ class MongoDbStore:
         self.__save_insert(self.tasks, task_config.to_dict())
 
     def __sync_model_config(self, model_config):
-
-        existing = self.__save_insert(
+        self.__save_insert(
             self.models,
-            model_config.to_dict(),
-            ignore=['num_parameters'])
-
-        if existing and existing['num_parameters'] is not None:
-
-            model_config.num_parameters = existing['num_parameters']
-
-        elif model_config.num_parameters is not None:
-
-            self.models.update(
-                {'id': model_config.id},
-                model_config.to_dict())
+            model_config.to_dict())
 
     def __sync_optimizer_config(self, optimizer_config):
         self.__save_insert(

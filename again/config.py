@@ -1,8 +1,7 @@
-from .losses import *  # noqa
 from .models import *  # noqa
 from .optimizers import *  # noqa
-from .prediction_types import *  # noqa
-from .task_types import *  # noqa
+from .tasks.losses import *  # noqa
+from .tasks.predictors import *  # noqa
 from pathlib import Path
 import configparser
 import os
