@@ -1,6 +1,7 @@
 from .gp import Squash, AddChannelDim, RemoveChannelDim, TransposeDims
 import gunpowder as gp
 import gunpowder.torch as gp_torch
+import math
 import os
 
 
@@ -60,6 +61,8 @@ def create_pipeline_2d(
     pipeline += gp.RandomLocation()
     # raw: ([c,] d=1, h, w)
     # gt: ([c,] d=1, h, w)
+    for augmentation in eval(task.augmentations):
+        pipeline += augmentation
     pipeline += predictor.add_target(gt, target)
     # (don't care about gt anymore)
     # raw: ([c,] d=1, h, w)
@@ -183,6 +186,8 @@ def create_pipeline_3d(
     pipeline += gp.RandomLocation()
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
+    for augmentation in eval(task.augmentations):
+        pipeline += augmentation
     pipeline += predictor.add_target(gt, target)
     # (don't care about gt anymore)
     # raw: ([c,] d, h, w)
