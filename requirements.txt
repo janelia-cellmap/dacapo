@@ -1,6 +1,7 @@
 bokeh
 configargparse
 funlib.learn.torch
+git+git://github.com/funkelab/funlib.evaluate@345b994fef03b2faa130b2be4cc2979b70fed087#egg=funlib.evaluate
 gunpowder
 mahotas
 pymongo
