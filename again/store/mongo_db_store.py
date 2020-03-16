@@ -202,7 +202,7 @@ class MongoDbStore:
                 'iteration': int(iteration),
                 'scores': {
                     sample: {
-                        score: values[idx]
+                        score: float(values[idx])
                         for score, values in scores.items()
                     }
                     for sample, scores in
