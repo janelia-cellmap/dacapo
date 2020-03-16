@@ -33,7 +33,7 @@ class ValidationScores:
 
         num_samples = len(self.sample_scores)
         for score in averages.keys():
-            averages[score] /= num_samples
+            averages[score] = averages[score]/num_samples
 
         return averages
 
