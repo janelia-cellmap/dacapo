@@ -1,3 +1,4 @@
+from .hash import hash_adjective, hash_noun
 from .models import *  # noqa
 from .optimizers import *  # noqa
 from .tasks.losses import *  # noqa
@@ -82,6 +83,7 @@ class TaskConfig(ConfigWrapper):
         super(TaskConfig, self).__init__(config_file, 'task')
         try:
             self.data = DataConfig(self.data + '.conf')
+            self.hash = hash_noun(self.id)
         except IOError:
             raise IOError(
                 f"Config file {self.data + '.conf'} does not exist "
@@ -92,11 +94,10 @@ class ModelConfig(ConfigWrapper):
 
     def __init__(self, config_file):
         super(ModelConfig, self).__init__(config_file, 'model')
-        self.num_parameters = None
+        self.hash = hash_adjective(self.id)
 
     def to_dict(self):
         d = super(ModelConfig, self).to_dict()
-        d.update({'num_parameters': self.num_parameters})
         return d
 
 
@@ -104,6 +105,7 @@ class OptimizerConfig(ConfigWrapper):
 
     def __init__(self, config_file):
         super(OptimizerConfig, self).__init__(config_file, 'optimizer')
+        self.hash = hash_adjective(self.id)
 
 
 def find_task_configs(basedir):

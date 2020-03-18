@@ -66,12 +66,17 @@ class Run:
         self.stopped = None
         self.num_parameters = None
 
-        run_hash = hashlib.md5()
-        run_hash.update(self.task_config.id.encode())
-        run_hash.update(self.model_config.id.encode())
-        run_hash.update(self.optimizer_config.id.encode())
-        run_hash.update(str(self.repetition).encode())
-        self.id = run_hash.hexdigest()
+        self.hash = '-'.join([
+            self.model_config.hash,
+            self.optimizer_config.hash,
+            self.task_config.hash]) + ':' + str(self.repetition)
+
+        run_id = hashlib.md5()
+        run_id.update(self.task_config.id.encode())
+        run_id.update(self.model_config.id.encode())
+        run_id.update(self.optimizer_config.id.encode())
+        run_id.update(str(self.repetition).encode())
+        self.id = run_id.hexdigest()
 
         self.validation_interval = validation_interval
         self.keep_best_validation = keep_best_validation
@@ -104,7 +109,7 @@ class Run:
             predictor.parameters(),
             self.optimizer_config.lr)
 
-        outdir = os.path.join('runs', self.id)
+        outdir = os.path.join('runs', self.hash)
         print(f"Storing this run's data in {outdir}")
         os.makedirs(outdir, exist_ok=True)
 
@@ -178,7 +183,8 @@ class Run:
             'started': self.started,
             'stopped': self.stopped,
             'num_parameters': self.num_parameters,
-            'id': self.id
+            'id': self.id,
+            'hash': self.hash
         }
 
     def __repr__(self):
