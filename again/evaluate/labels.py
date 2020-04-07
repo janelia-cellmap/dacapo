@@ -157,7 +157,7 @@ def evaluate_labels(
         else:
             tpr = np.nan
 
-        if num_relevant + num_selected > 0:
+        if ppv + tpr > 0:
             fscore = 2*(ppv*tpr)/(ppv + tpr)
         else:
             fscore = np.nan
