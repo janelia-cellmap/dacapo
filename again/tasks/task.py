@@ -1,12 +1,17 @@
-from .data import Data
-
-
 class Task:
 
-    def __init__(self, task_config):
+    def __init__(self, data, model, task_config):
 
-        self.data = Data(task_config.data)
-        self.predictor_type = task_config.predictor
+        self.data = data
+
+        predictor_args = {}
+        if hasattr(task_config, 'predictor_args'):
+            predictor_args = task_config.predictor_args
+        self.predictor = task_config.predictor(
+            self.data,
+            model,
+            **predictor_args)
+
         self.augmentations = task_config.augmentations
 
         loss_args = {}

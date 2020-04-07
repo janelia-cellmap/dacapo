@@ -7,7 +7,7 @@ import torch
 
 class OneHotLabels(Model):
 
-    def __init__(self, data, model):
+    def __init__(self, data, model, matching_score, matching_threshold):
 
         dims = data.raw.spatial_dims
         num_classes = data.gt.num_classes
@@ -35,6 +35,8 @@ class OneHotLabels(Model):
         self.prediction_channels = data.gt.num_classes
         self.background_label = data.gt.background_label
         self.target_channels = 0
+        self.matching_score = matching_score
+        self.matching_threshold = matching_threshold
 
     def add_target(self, gt, target):
 
@@ -67,4 +69,6 @@ class OneHotLabels(Model):
             prediction,
             gt,
             store_results,
-            background_label=self.background_label)
+            background_label=self.background_label,
+            matching_score=self.matching_score,
+            matching_threshold=self.matching_threshold)

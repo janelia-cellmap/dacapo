@@ -3,7 +3,13 @@ import numpy as np
 import zarr
 
 
-def evaluate_labels(logits, gt_labels, store_results, background_label=None):
+def evaluate_labels(
+        logits,
+        gt_labels,
+        store_results,
+        background_label=None,
+        matching_score='overlap',
+        matching_threshold=1):
 
     pred_labels = np.argmax(logits.data, axis=0)
     gt_labels = gt_labels.data
@@ -123,6 +129,8 @@ def evaluate_labels(logits, gt_labels, store_results, background_label=None):
         gt_labels,
         pred_labels,
         label_ids,
+        matching_score,
+        matching_threshold,
         voxel_size=logits.spec.voxel_size)
     for k, v in detection_scores.items():
         sample_scores[f'detection_{k}'] = v

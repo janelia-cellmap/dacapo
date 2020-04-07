@@ -1,6 +1,7 @@
 from again.config import TaskConfig, ModelConfig, OptimizerConfig
 from again.store import MongoDbStore
 from again.tasks import Task
+from again.tasks.data import Data
 from again.train import create_train_pipeline
 from again.training_stats import TrainingStats
 from again.validate import validate
@@ -102,22 +103,23 @@ class Run:
 
         self.started = time.time()
 
-        task = Task(self.task_config)
-        model = self.model_config.type(task.data, self.model_config)
-        predictor = task.predictor_type(task.data, model)
+        data = Data(self.task_config.data)
+        model = self.model_config.type(data, self.model_config)
+        task = Task(data, model, self.task_config)
+
         optimizer = self.optimizer_config.type(
-            predictor.parameters(),
+            task.predictor.parameters(),
             self.optimizer_config.lr)
 
         outdir = os.path.join('runs', self.hash)
         print(f"Storing this run's data in {outdir}")
         os.makedirs(outdir, exist_ok=True)
 
-        self.num_parameters = predictor.num_parameters()
+        self.num_parameters = task.predictor.num_parameters()
         store.sync_run(self)
         pipeline, request = create_train_pipeline(
             task,
-            predictor,
+            task.predictor,
             optimizer,
             self.optimizer_config.batch_size,
             outdir=outdir,
@@ -142,8 +144,10 @@ class Run:
                 if i % self.validation_interval == 0 and i > 0:
                     scores = validate(
                         task.data,
-                        predictor,
-                        store_results=os.path.join(outdir, f'validate_{i}.zarr'))
+                        task.predictor,
+                        store_results=os.path.join(
+                            outdir,
+                            f'validate_{i}.zarr'))
                     self.validation_scores.add_validation_iteration(
                         i,
                         scores)
@@ -157,7 +161,7 @@ class Run:
                             print(
                                 f"Iteration {i} current best ({best}), "
                                 "storing checkpoint...")
-                            predictor.save(
+                            task.predictor.save(
                                 os.path.join(
                                     outdir,
                                     f'validation_best_{self.best_score_name}.checkpoint'),
@@ -188,8 +192,7 @@ class Run:
         }
 
     def __repr__(self):
-        return f"{self.task_config} with {self.model_config}, " \
-            f"using {self.optimizer_config}, repetition {self.repetition}"
+        return f"{self.hash}"
 
 
 def enumerate_runs(
