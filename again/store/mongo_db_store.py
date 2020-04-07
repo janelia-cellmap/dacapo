@@ -235,21 +235,24 @@ class MongoDbStore:
 
     def __save_insert(self, collection, data, ignore=None):
 
+        data = dict(data)
+        item_id = data['id']
+        del data['id']
+
         existing = collection.find_one_and_update(
-                filter={'id': data['id']},
+                filter={'id': item_id},
                 update={'$set': data},
                 upsert=True,
                 projection={'_id': False})
 
         if existing:
 
+            del existing['id']
             if not self.__same_doc(existing, data, ignore):
                 raise RuntimeError(
-                    f"Data for {data['id']} does not match already synced "
+                    f"Data for {item_id} does not match already synced "
                     f"entry. Found\n\n{existing}\n\nin DB, but was "
                     f"given\n\n{data}")
-
-        return existing
 
     def __same_doc(self, a, b, ignore=None):
 
