@@ -56,6 +56,7 @@ def plot_runs(runs, smooth=100, validation_score=None):
     validation_score_names = np.unique(validation_score_names)
 
     validation_tooltips = [
+        ("run", "@run"),
         ("task", "@task"),
         ("model", "@model"),
         ("optimizer", "@optimizer"),
@@ -72,6 +73,7 @@ def plot_runs(runs, smooth=100, validation_score=None):
     validation_figure.background_fill_color = '#efefef'
 
     summary_tooltips = [
+        ("run", "@run"),
         ("task", "@task"),
         ("model", "@model"),
         ("optimizer", "@optimizer"),
@@ -109,7 +111,8 @@ def plot_runs(runs, smooth=100, validation_score=None):
                 'loss': y,
                 'task': [run.task_config.id]*len(x),
                 'model': [run.model_config.id]*len(x),
-                'optimizer': [run.optimizer_config.id]*len(x)
+                'optimizer': [run.optimizer_config.id]*len(x),
+                'run': [str(run)]*len(x)
             })
             loss_figure.line(
                 'iteration', 'loss',
@@ -132,7 +135,8 @@ def plot_runs(runs, smooth=100, validation_score=None):
                 'iteration': x,
                 'task': [run.task_config.id]*len(x),
                 'model': [run.model_config.id]*len(x),
-                'optimizer': [run.optimizer_config.id]*len(x)
+                'optimizer': [run.optimizer_config.id]*len(x),
+                'run': [str(run)]*len(x)
             }
             validation_averages = run.validation_scores.get_averages()
             source_dict.update({
