@@ -1,6 +1,7 @@
 from again.training_stats import TrainingStats
 from again.validation_scores import ValidationScores
 from pymongo import MongoClient, ASCENDING
+from pymongo.errors import DuplicateKeyError
 import configargparse
 import json
 
@@ -239,11 +240,21 @@ class MongoDbStore:
         item_id = data['id']
         del data['id']
 
-        existing = collection.find_one_and_update(
-                filter={'id': item_id},
-                update={'$set': data},
-                upsert=True,
-                projection={'_id': False})
+        existing = None
+        for _ in range(5):
+
+            try:
+
+                existing = collection.find_one_and_update(
+                        filter={'id': item_id},
+                        update={'$set': data},
+                        upsert=True,
+                        projection={'_id': False})
+
+            except DuplicateKeyError:
+
+                # race condition on upsert? try again to get existing doc
+                continue
 
         if existing:
 
