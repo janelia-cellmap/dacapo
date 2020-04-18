@@ -55,6 +55,7 @@ def create_pipeline_2d(
         task.data.gt.train.get_source(gt, overwrite_spec=spec)
     )
     pipeline = sources + gp.MergeProvider()
+    pipeline += gp.Pad(raw, None)
     pipeline += gp.Normalize(raw)
     # raw: ([c,] d=1, h, w)
     # gt: ([c,] d=1, h, w)
@@ -178,6 +179,7 @@ def create_pipeline_3d(
         task.data.raw.train.get_source(raw),
         task.data.gt.train.get_source(gt))
     pipeline = sources + gp.MergeProvider()
+    pipeline += gp.Pad(raw, None)
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
     pipeline += gp.Normalize(raw)
