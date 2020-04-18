@@ -131,13 +131,23 @@ def evaluate_labels(
         label_ids,
         matching_score,
         matching_threshold,
-        voxel_size=logits.spec.voxel_size)
+        voxel_size=logits.spec.voxel_size,
+        return_matches=store_results)
     for k, v in detection_scores.items():
         sample_scores[f'detection_{k}'] = v
+    non_score_keys = []
+    for k in sample_scores.keys():
+        if k.startswith('detection_components_'):
+            non_score_keys.append(k)
+        elif k.startswith('detection_matches_'):
+            non_score_keys.append(k)
+    for k in non_score_keys:
+        del sample_scores[k]
 
     sample_scores['detection_ppv'] = 0.0
     sample_scores['detection_tpr'] = 0.0
     sample_scores['detection_fscore'] = 0.0
+    components = {}
     for label in label_ids:
 
         tp = detection_scores[f'tp_{label}']
@@ -170,6 +180,28 @@ def evaluate_labels(
         sample_scores['detection_tpr'] += tpr
         sample_scores['detection_fscore'] += fscore
 
+        if store_results:
+
+            components_gt = detection_scores[f'components_truth_{label}']
+            components_pred = detection_scores[f'components_test_{label}']
+            matches = detection_scores[f'matches_{label}']
+            matches_gt = np.array([m[1] for m in matches])
+            matches_pred = np.array([m[0] for m in matches])
+            components_tp_gt = np.copy(components_gt)
+            components_tp_pred = np.copy(components_pred)
+            components_fn_gt = np.copy(components_gt)
+            components_fp_pred = np.copy(components_pred)
+            tp_gt_mask = np.isin(components_gt, matches_gt)
+            tp_pred_mask = np.isin(components_pred, matches_pred)
+            components_tp_gt[np.logical_not(tp_gt_mask)] = 0
+            components_tp_pred[np.logical_not(tp_pred_mask)] = 0
+            components_fn_gt[tp_gt_mask] = 0
+            components_fp_pred[tp_pred_mask] = 0
+            components[f'components_tp_gt_{label}'] = components_tp_gt
+            components[f'components_fn_gt_{label}'] = components_fn_gt
+            components[f'components_tp_pred_{label}'] = components_tp_pred
+            components[f'components_fp_pred_{label}'] = components_fp_pred
+
     num_classes = label_ids.size
     if num_classes >= 1:
         sample_scores['detection_ppv'] /= num_classes
@@ -181,5 +213,7 @@ def evaluate_labels(
         f = zarr.open(store_results)
         f['pred_labels'] = pred_labels.astype(np.uint64)
         f['gt_labels'] = gt_labels.astype(np.uint64)
+        for k, v in components.items():
+            f[k] = v.astype(np.uint64)
 
     return {'sample': sample_scores}
