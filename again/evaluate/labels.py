@@ -4,14 +4,16 @@ import zarr
 
 
 def evaluate_labels(
-        logits,
+        pred_labels,
         gt_labels,
         store_results,
         background_label=None,
         matching_score='overlap',
         matching_threshold=1):
 
-    pred_labels = np.argmax(logits.data, axis=0)
+    voxel_size = gt_labels.spec.voxel_size
+
+    pred_labels = pred_labels.data
     gt_labels = gt_labels.data
 
     # PIXEL-WISE SCORES
@@ -131,7 +133,7 @@ def evaluate_labels(
         label_ids,
         matching_score,
         matching_threshold,
-        voxel_size=logits.spec.voxel_size,
+        voxel_size=voxel_size,
         return_matches=store_results)
     for k, v in detection_scores.items():
         sample_scores[f'detection_{k}'] = v
@@ -216,4 +218,4 @@ def evaluate_labels(
         for k, v in components.items():
             f[k] = v.astype(np.uint64)
 
-    return {'sample': sample_scores}
+    return {'sample': sample_scores, 'average': sample_scores}

@@ -154,10 +154,20 @@ class Run:
                     store.store_validation_scores(self)
 
                     if self.best_score_name is not None:
-                        all_scores = self.validation_scores.get_averages()
-                        best = self.best_score_relation(
-                            all_scores[self.best_score_name])
-                        if best == all_scores[self.best_score_name][-1]:
+
+                        # get best sample-average score for each iteration over
+                        # all post-processing parameters
+                        best_iteration_scores = [
+                            self.best_score_relation([
+                                v['scores']['average'][self.best_score_name]
+                                for v in parameter_scores.values()
+                            ])
+                            for parameter_scores in self.validation_scores.scores
+                        ]
+
+                        # get best score over all iterations
+                        best = self.best_score_relation(best_iteration_scores)
+                        if best == best_iteration_scores[-1]:
                             print(
                                 f"Iteration {i} current best ({best}), "
                                 "storing checkpoint...")

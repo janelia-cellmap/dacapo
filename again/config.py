@@ -1,11 +1,14 @@
+from pathlib import Path
+import configparser
+import importlib
+import numpy as np
+import os
+
 from .hash import hash_adjective, hash_noun
 from .models import *  # noqa
 from .optimizers import *  # noqa
 from .tasks.losses import *  # noqa
 from .tasks.predictors import *  # noqa
-from pathlib import Path
-import configparser
-import os
 
 
 class ConfigWrapper:
@@ -81,6 +84,12 @@ class TaskConfig(ConfigWrapper):
 
     def __init__(self, config_file):
         super(TaskConfig, self).__init__(config_file, 'task')
+        if hasattr(self, 'post_processor_module'):
+            import sys
+            if '.' not in sys.path:
+                sys.path.insert(0, '.')
+            name = self.post_processor_module
+            globals()[name] = importlib.import_module(name)
         try:
             self.data = DataConfig(self.data + '.conf')
             self.hash = hash_noun(self.id)

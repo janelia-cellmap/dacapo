@@ -4,6 +4,7 @@ from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
 import configargparse
 import json
+import numpy as np
 
 parser = configargparse.ArgParser(
     default_config_files=['~/.config/again', './again.conf'])
@@ -198,16 +199,18 @@ class MongoDbStore:
         for idx, iteration in enumerate(validation_scores.iterations):
             if iteration < begin or iteration >= end:
                 continue
+            iteration_scores = validation_scores.scores[idx]
             docs.append({
                 'run': run_id,
                 'iteration': int(iteration),
-                'scores': {
-                    sample: {
-                        score: float(values[idx])
-                        for score, values in scores.items()
+                'parameter_scores': {
+                    k: {
+                        'post_processing_parameters':
+                            self.__sanatize(v['post_processing_parameters']),
+                        'scores':
+                            self.__sanatize(v['scores'])
                     }
-                    for sample, scores in
-                    validation_scores.sample_scores.items()
+                    for k, v in iteration_scores.items()
                 }
             })
 
@@ -221,13 +224,7 @@ class MongoDbStore:
         for doc in docs:
             validation_scores.add_validation_iteration(
                 doc['iteration'],
-                {
-                    sample: {
-                        score: value
-                        for score, value in scores.items()
-                    }
-                    for sample, scores in doc['scores'].items()
-                })
+                doc['parameter_scores'])
 
         return validation_scores
 
@@ -236,7 +233,7 @@ class MongoDbStore:
 
     def __save_insert(self, collection, data, ignore=None):
 
-        data = dict(data)
+        data = self.__sanatize(dict(data))
         item_id = data['id']
         del data['id']
 
@@ -333,3 +330,21 @@ class MongoDbStore:
         self.optimizers = self.database['optimizers']
         self.training_stats = self.database['training_stats']
         self.validation_scores = self.database['validation_scores']
+
+    def __sanatize(self, d):
+        '''Ensure numpy datatypes are converted to float/int for mongo.'''
+
+        sanatized = {}
+        for k, v in d.items():
+            try:
+                if isinstance(v, dict):
+                    sanatized[k] = self.__sanatize(v)
+                elif isinstance(v, np.ndarray):
+                    assert len(v.shape) == 1, "Can only store 1d arrays"
+                    sanatized[k] = list([x.item() for x in v])
+                else:
+                    sanatized[k] = v.item()
+            except AttributeError:
+                # neither a dict nor a numpy type, leave as is
+                sanatized[k] = v
+        return sanatized

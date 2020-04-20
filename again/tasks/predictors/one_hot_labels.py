@@ -1,5 +1,6 @@
-from again.models import Model
 from again.evaluate import evaluate_labels
+from again.models import Model
+from again.tasks.post_processors import ArgMax
 import gunpowder as gp
 import numpy as np
 import torch
@@ -7,7 +8,13 @@ import torch
 
 class OneHotLabels(Model):
 
-    def __init__(self, data, model, matching_score, matching_threshold):
+    def __init__(
+            self,
+            data,
+            model,
+            matching_score,
+            matching_threshold,
+            post_processor=None):
 
         dims = data.raw.spatial_dims
         num_classes = data.gt.num_classes
@@ -37,6 +44,10 @@ class OneHotLabels(Model):
         self.target_channels = 0
         self.matching_score = matching_score
         self.matching_threshold = matching_threshold
+        if post_processor is None:
+            self.post_processor = ArgMax()
+        else:
+            self.post_processor = post_processor
 
     def add_target(self, gt, target):
 
@@ -64,11 +75,22 @@ class OneHotLabels(Model):
             return self.probs(logits)
         return logits
 
-    def evaluate(self, prediction, gt, target, store_results):
-        return evaluate_labels(
-            prediction,
-            gt,
-            store_results,
-            background_label=self.background_label,
-            matching_score=self.matching_score,
-            matching_threshold=self.matching_threshold)
+    def evaluate(self, logits, gt, target, store_results):
+
+        predictions = self.post_processor.enumerate(logits)
+
+        parameter_scores = {}
+        for parameters, prediction in predictions:
+            scores = evaluate_labels(
+                prediction,
+                gt,
+                store_results,
+                background_label=self.background_label,
+                matching_score=self.matching_score,
+                matching_threshold=self.matching_threshold)
+            parameter_scores[parameters.id] = {
+                'post_processing_parameters': parameters.to_dict(),
+                'scores': scores
+            }
+
+        return parameter_scores
