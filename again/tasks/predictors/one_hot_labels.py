@@ -3,6 +3,7 @@ from again.models import Model
 from again.tasks.post_processors import ArgMax
 import gunpowder as gp
 import numpy as np
+import time
 import torch
 
 
@@ -75,22 +76,30 @@ class OneHotLabels(Model):
             return self.probs(logits)
         return logits
 
-    def evaluate(self, logits, gt, target, store_results):
+    def evaluate(
+            self,
+            logits,
+            gt,
+            target,
+            return_results=None):
 
         predictions = self.post_processor.enumerate(logits)
 
-        parameter_scores = {}
         for parameters, prediction in predictions:
-            scores = evaluate_labels(
+
+            print(f"Evaluating post-processing with {parameters}...")
+            start = time.time()
+            ret = evaluate_labels(
                 prediction,
                 gt,
-                store_results,
+                return_results=return_results,
                 background_label=self.background_label,
                 matching_score=self.matching_score,
                 matching_threshold=self.matching_threshold)
-            parameter_scores[parameters.id] = {
-                'post_processing_parameters': parameters.to_dict(),
-                'scores': scores
-            }
+            print(f"...done ({time.time() - start}s)")
 
-        return parameter_scores
+            if return_results:
+                scores, results = ret
+                yield parameters, scores, results
+            else:
+                yield parameters, scores

@@ -1,3 +1,6 @@
+import time
+
+
 class PostProcessor:
 
     def __init__(self, parameter_range):
@@ -12,10 +15,13 @@ class PostProcessor:
 
         for parameters in self.parameter_range:
             if not self.reject_parameters(parameters):
+                print(f"Post-processing prediction with {parameters}...")
+                start = time.time()
                 post_processed = self.process(
                     prediction,
                     parameters,
                     store_results)
+                print(f"...done ({time.time() - start}s)")
                 yield parameters, post_processed
 
     def reject_parameters(self, parameters):

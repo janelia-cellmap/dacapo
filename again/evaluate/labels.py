@@ -1,12 +1,11 @@
 import funlib.evaluate
 import numpy as np
-import zarr
 
 
 def evaluate_labels(
         pred_labels,
         gt_labels,
-        store_results,
+        return_results=False,
         background_label=None,
         matching_score='overlap',
         matching_threshold=1):
@@ -134,7 +133,7 @@ def evaluate_labels(
         matching_score,
         matching_threshold,
         voxel_size=voxel_size,
-        return_matches=store_results)
+        return_matches=return_results)
     for k, v in detection_scores.items():
         sample_scores[f'detection_{k}'] = v
     non_score_keys = []
@@ -182,7 +181,7 @@ def evaluate_labels(
         sample_scores['detection_tpr'] += tpr
         sample_scores['detection_fscore'] += fscore
 
-        if store_results:
+        if return_results:
 
             components_gt = detection_scores[f'components_truth_{label}']
             components_pred = detection_scores[f'components_test_{label}']
@@ -210,12 +209,16 @@ def evaluate_labels(
         sample_scores['detection_tpr'] /= num_classes
         sample_scores['detection_fscore'] /= num_classes
 
-    if store_results:
+    scores = {'sample': sample_scores, 'average': sample_scores}
 
-        f = zarr.open(store_results)
-        f['pred_labels'] = pred_labels.astype(np.uint64)
-        f['gt_labels'] = gt_labels.astype(np.uint64)
+    if return_results:
+        results = {
+            'pred_labels': pred_labels.astype(np.uint64),
+            'gt_labels': gt_labels.astype(np.uint64)
+        }
         for k, v in components.items():
-            f[k] = v.astype(np.uint64)
+            results[k] = v.astype(np.uint64)
 
-    return {'sample': sample_scores, 'average': sample_scores}
+        return scores, results
+
+    return scores

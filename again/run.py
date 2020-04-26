@@ -145,9 +145,11 @@ class Run:
                     scores = validate(
                         task.data,
                         task.predictor,
-                        store_results=os.path.join(
+                        store_best_result=os.path.join(
                             outdir,
-                            f'validate_{i}.zarr'))
+                            f'validate_{i}.zarr'),
+                        best_score_name=self.best_score_name,
+                        best_score_relation=self.best_score_relation)
                     self.validation_scores.add_validation_iteration(
                         i,
                         scores)
@@ -234,7 +236,7 @@ def run_local(run):
 
     print(
         f"Running task {run.task_config} "
-        f"with mode {run.model_config}, "
+        f"with model {run.model_config}, "
         f"using optimizer {run.optimizer_config}")
 
     run.start()
