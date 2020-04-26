@@ -1,4 +1,5 @@
 from .predict import predict
+from again.store import sanatize
 import time
 import zarr
 
@@ -14,6 +15,7 @@ def validate(
     gt_data = data.gt.validate
 
     print("Predicting on validation data...")
+    start = time.time()
     ds = predict(raw_data, predictor, gt_data)
     print(f"...done ({time.time() - start}s)")
 
@@ -52,7 +54,8 @@ def validate(
         f = zarr.open(store_best_result)
         for k, v in best_results.items():
             f[k] = v
-        for k, v in best_parameters.to_dict():
+        d = sanatize(best_parameters.to_dict())
+        for k, v in d.items():
             f.attrs[k] = v
 
     return all_scores

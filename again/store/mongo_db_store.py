@@ -1,10 +1,10 @@
+from .conversion import sanatize
 from again.training_stats import TrainingStats
 from again.validation_scores import ValidationScores
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
 import configargparse
 import json
-import numpy as np
 
 parser = configargparse.ArgParser(
     default_config_files=['~/.config/again', './again.conf'])
@@ -206,9 +206,9 @@ class MongoDbStore:
                 'parameter_scores': {
                     k: {
                         'post_processing_parameters':
-                            self.__sanatize(v['post_processing_parameters']),
+                            sanatize(v['post_processing_parameters']),
                         'scores':
-                            self.__sanatize(v['scores'])
+                            sanatize(v['scores'])
                     }
                     for k, v in iteration_scores.items()
                 }
@@ -233,7 +233,7 @@ class MongoDbStore:
 
     def __save_insert(self, collection, data, ignore=None):
 
-        data = self.__sanatize(dict(data))
+        data = sanatize(dict(data))
         item_id = data['id']
         del data['id']
 
@@ -330,21 +330,3 @@ class MongoDbStore:
         self.optimizers = self.database['optimizers']
         self.training_stats = self.database['training_stats']
         self.validation_scores = self.database['validation_scores']
-
-    def __sanatize(self, d):
-        '''Ensure numpy datatypes are converted to float/int for mongo.'''
-
-        sanatized = {}
-        for k, v in d.items():
-            try:
-                if isinstance(v, dict):
-                    sanatized[k] = self.__sanatize(v)
-                elif isinstance(v, np.ndarray):
-                    assert len(v.shape) == 1, "Can only store 1d arrays"
-                    sanatized[k] = list([x.item() for x in v])
-                else:
-                    sanatized[k] = v.item()
-            except AttributeError:
-                # neither a dict nor a numpy type, leave as is
-                sanatized[k] = v
-        return sanatized
