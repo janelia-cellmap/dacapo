@@ -102,4 +102,4 @@ class OneHotLabels(Model):
                 scores, results = ret
                 yield parameters, scores, results
             else:
-                yield parameters, scores
+                yield parameters, ret
