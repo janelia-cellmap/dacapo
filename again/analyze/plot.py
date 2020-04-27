@@ -138,7 +138,9 @@ def plot_runs(runs, smooth=100, validation_score=None):
                 'optimizer': [run.optimizer_config.id]*len(x),
                 'run': [str(run)]*len(x)
             }
-            validation_averages = run.validation_scores.get_averages()
+            # TODO: get_best: higher_is_better is not true for all scores
+            validation_averages = \
+                run.validation_scores.get_best(validation_score)
             source_dict.update({
                 name: np.array(validation_averages[name])
                 for name in run.validation_scores.get_score_names()
