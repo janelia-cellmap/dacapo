@@ -45,7 +45,7 @@ def validate(
         else:
             parameters, scores = ret
 
-        all_scores[parameters.id] = {
+        all_scores[str(parameters.id)] = {
             'post_processing_parameters': parameters.to_dict(),
             'scores': scores
         }
