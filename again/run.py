@@ -2,7 +2,7 @@ from again.config import TaskConfig, ModelConfig, OptimizerConfig
 from again.store import MongoDbStore
 from again.tasks import Task
 from again.tasks.data import Data
-from again.train import create_train_pipeline
+from again.train_pipeline import create_train_pipeline
 from again.training_stats import TrainingStats
 from again.validate import validate
 from again.validation_scores import ValidationScores

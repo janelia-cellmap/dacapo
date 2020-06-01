@@ -1,4 +1,4 @@
-from .predict import predict
+from .predict_pipeline import predict
 from again.store import sanatize
 import time
 import zarr
