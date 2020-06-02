@@ -11,6 +11,7 @@ import configargparse
 import funlib.run
 import gunpowder as gp
 import hashlib
+import numpy as np
 import os
 import time
 
@@ -159,13 +160,18 @@ class Run:
 
                         # get best sample-average score for each iteration over
                         # all post-processing parameters
-                        best_iteration_scores = [
+                        best_iteration_scores = np.array([
                             self.best_score_relation([
                                 v['scores']['average'][self.best_score_name]
                                 for v in parameter_scores.values()
                             ])
                             for parameter_scores in self.validation_scores.scores
-                        ]
+                        ])
+
+                        # replace nan
+                        replace = -self.best_score_relation([-np.inf, np.inf])
+                        isnan = np.isnan(best_iteration_scores)
+                        best_iteration_scores[isnan] = replace
 
                         # get best score over all iterations
                         best = self.best_score_relation(best_iteration_scores)
