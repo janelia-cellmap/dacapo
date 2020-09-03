@@ -1,6 +1,6 @@
-from again.evaluate import evaluate_labels
-from again.models import Model
-from again.tasks.post_processors import ArgMax
+from dacapo.evaluate import evaluate_labels
+from dacapo.models import Model
+from dacapo.tasks.post_processors import ArgMax
 import gunpowder as gp
 import numpy as np
 import time

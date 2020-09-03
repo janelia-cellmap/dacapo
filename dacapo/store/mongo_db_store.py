@@ -1,13 +1,13 @@
 from .conversion import sanatize
-from again.training_stats import TrainingStats
-from again.validation_scores import ValidationScores
+from dacapo.training_stats import TrainingStats
+from dacapo.validation_scores import ValidationScores
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
 import configargparse
 import json
 
 parser = configargparse.ArgParser(
-    default_config_files=['~/.config/again', './again.conf'])
+    default_config_files=['~/.config/dacapo', './dacapo.conf'])
 parser.add(
     '--mongo_db_host',
     help="Name of the MongoDB host for stats and scores")
@@ -250,7 +250,7 @@ class MongoDbStore:
 
             except DuplicateKeyError:
 
-                # race condition on upsert? try again to get existing doc
+                # race condition on upsert? try dacapo to get existing doc
                 continue
 
         if existing:

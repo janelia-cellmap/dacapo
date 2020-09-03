@@ -1,11 +1,11 @@
-from again.config import TaskConfig, ModelConfig, OptimizerConfig
-from again.store import MongoDbStore
-from again.tasks import Task
-from again.tasks.data import Data
-from again.train_pipeline import create_train_pipeline
-from again.training_stats import TrainingStats
-from again.validate import validate
-from again.validation_scores import ValidationScores
+from dacapo.config import TaskConfig, ModelConfig, OptimizerConfig
+from dacapo.store import MongoDbStore
+from dacapo.tasks import Task
+from dacapo.tasks.data import Data
+from dacapo.train_pipeline import create_train_pipeline
+from dacapo.training_stats import TrainingStats
+from dacapo.validate import validate
+from dacapo.validation_scores import ValidationScores
 from tqdm import tqdm
 import configargparse
 import funlib.run
@@ -17,7 +17,7 @@ import time
 
 
 parser = configargparse.ArgParser(
-    default_config_files=['~/.config/again', './again.conf'])
+    default_config_files=['~/.config/dacapo', './dacapo.conf'])
 parser.add(
     '-c', '--config',
     is_config_file=True,

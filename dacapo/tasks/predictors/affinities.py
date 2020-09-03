@@ -1,5 +1,5 @@
-from again.evaluate import evaluate_affs
-from again.models import Model
+from dacapo.evaluate import evaluate_affs
+from dacapo.models import Model
 import gunpowder as gp
 import torch
 

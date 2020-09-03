@@ -2,7 +2,7 @@ from pymongo import MongoClient
 import configargparse
 
 parser = configargparse.ArgParser(
-    default_config_files=['~/.config/again', './again.conf'])
+    default_config_files=['~/.config/dacapo', './dacapo.conf'])
 parser.add(
     '-c', '--config',
     is_config_file=True,
@@ -19,14 +19,14 @@ def read_runs():
     options = parser.parse()
     client = MongoClient(options.mongo_db_host)
 
-    run_docs = list(client['again_v01'].runs.find())
+    run_docs = list(client['dacapo_v01'].runs.find())
     run_docs = run_docs[-10:]
     runs = []
 
     print("Reading runs...")
     for run_doc in run_docs:
 
-        train_docs = client['again_v01'].train.find({
+        train_docs = client['dacapo_v01'].train.find({
             'run': run_doc['id'],
             'repetition': run_doc['repetition']
         })
@@ -34,7 +34,7 @@ def read_runs():
         train_losses = [t['loss'] for t in train_docs]
         train_iterations = [t['iteration'] for t in train_docs]
 
-        validation_docs = client['again_v01'].validate.find({
+        validation_docs = client['dacapo_v01'].validate.find({
             'run': run_doc['id'],
             'repetition': run_doc['repetition']
         })

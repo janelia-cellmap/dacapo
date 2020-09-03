@@ -9,5 +9,5 @@ install-dev:
 
 .PHONY: tests
 tests:
-	pytest -v --cov=again again
-	flake8 again
+	pytest -v --cov=dacapo dacapo
+	flake8 dacapo
