@@ -42,7 +42,13 @@ class Data:
     def __init__(self, data_config):
 
         self.filename = str(data_config.filename)
-        self.raw = RawData(self.filename, 'train/raw', 'validate/raw')
-        self.gt = GtData(self.filename, 'train/gt', 'validate/gt')
+        self.raw = RawData(
+            self.filename,
+            data_config.train_raw,
+            data_config.validate_raw)
+        self.gt = GtData(
+            self.filename,
+            data_config.train_gt,
+            data_config.validate_gt)
 
         assert self.raw.spatial_dims == self.gt.spatial_dims
