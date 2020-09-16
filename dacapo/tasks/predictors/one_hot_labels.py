@@ -78,19 +78,23 @@ class OneHotLabels(Model):
 
     def evaluate(
             self,
-            logits,
+            predictions,
             gt,
             target,
             return_results=None):
 
-        predictions = self.post_processor.enumerate(logits)
+        reconstructions = self.post_processor.enumerate(predictions)
 
-        for parameters, prediction in predictions:
+        for parameters, reconstruction in reconstructions:
 
             print(f"Evaluating post-processing with {parameters}...")
             start = time.time()
+
+            # This could be factored out.
+            # keep evaulate as a super class method
+            # over-write evaluate_reconstruction
             ret = evaluate_labels(
-                prediction,
+                reconstruction,
                 gt,
                 return_results=return_results,
                 background_label=self.background_label,

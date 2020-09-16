@@ -4,11 +4,12 @@ import importlib
 import numpy as np
 import os
 
-from .hash import hash_adjective, hash_noun
-from .models import *  # noqa
-from .optimizers import *  # noqa
-from .tasks.losses import *  # noqa
-from .tasks.predictors import *  # noqa
+from dacapo.hash import hash_adjective, hash_noun
+from dacapo.models import *  # noqa
+from dacapo.optimizers import *  # noqa
+from dacapo.tasks.losses import *  # noqa
+from dacapo.tasks.predictors import *  # noqa
+from dacapo.tasks.post_processors import * # noqa
 
 
 class ConfigWrapper:
@@ -89,7 +90,7 @@ class TaskConfig(ConfigWrapper):
             if '.' not in sys.path:
                 sys.path.insert(0, '.')
             name = self.post_processor_module
-            globals()[name] = importlib.import_module(name)
+            globals()[name.split(".")[-1]] = importlib.import_module(name)
         try:
             self.data = DataConfig(self.data + '.conf')
             self.hash = hash_noun(self.id)

@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
         name='dacapo',
@@ -7,9 +7,5 @@ setup(
         author='Jan Funke',
         author_email='funkej@janelia.hhmi.org',
         license='MIT',
-        packages=[
-            'dacapo',
-            'dacapo.evaluate',
-            'dacapo.models'
-        ]
+        packages=find_packages()
 )

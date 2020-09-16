@@ -6,7 +6,8 @@ from .post_processing_parameters import PostProcessingParameters
 class PostProcessingParameterRange:
 
     def __init__(self, **kwargs):
-
+        for key, value in kwargs.items():
+            setattr(self, key, value)
         self.names = kwargs.keys()
         self.ranges = kwargs.values()
 

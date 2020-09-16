@@ -262,7 +262,8 @@ def run_remote(run):
         num_cpus=2,
         num_gpus=1,
         queue='slowpoke',
-        execute=True)
+        execute=True,
+        billing="scicompsoft")
 
 
 def run_all(runs, num_workers):
