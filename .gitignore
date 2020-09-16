@@ -10,3 +10,4 @@
 *.so
 *.coverage
 build
+.vscode

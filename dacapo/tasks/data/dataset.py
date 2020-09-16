@@ -13,17 +13,20 @@ class Dataset:
         self.voxel_size = gp.Coordinate(ds.attrs['resolution'])
         self.spatial_dims = len(self.voxel_size)
         if 'offset' in ds.attrs:
-            self.offset = gp.Coordinate(ds['resolution'])
+            self.offset = gp.Coordinate(ds.attrs['offset'])
         else:
             self.offset = gp.Coordinate((0,)*self.spatial_dims)
         self.shape = gp.Coordinate(ds.shape)
         self.spatial_shape = gp.Coordinate(self.shape[-self.spatial_dims:])
         self.roi = gp.Roi(self.offset, self.spatial_shape*self.voxel_size)
 
-        self.axes = {
-            d: a
-            for d, a in enumerate(ds.attrs['axes'])
-        }
+        if 'axes' in ds.attrs:
+            self.axes = {
+                d: a
+                for d, a in enumerate(ds.attrs['axes'])
+            }
+        else:
+            self.axes = {d: d for d in range(len(self.voxel_size))}
 
         if 'c' in self.axes:
             self.num_channels = self.shape[self.axes['c']]

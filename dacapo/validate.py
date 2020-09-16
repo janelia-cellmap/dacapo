@@ -32,7 +32,7 @@ def validate(
             ds['prediction'],
             ds['gt'],
             ds['target'],
-            return_results=store_best_result is not None):
+            store_best_result is not None):
 
         if store_best_result:
             parameters, scores, results = ret
