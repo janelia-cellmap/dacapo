@@ -9,11 +9,16 @@ from dacapo.models import *  # noqa
 from dacapo.optimizers import *  # noqa
 from dacapo.tasks.losses import *  # noqa
 from dacapo.tasks.predictors import *  # noqa
-from dacapo.tasks.post_processors import * # noqa
+from dacapo.tasks.post_processors import *  # noqa
+
+from dacapo.load_plugins import discovered_plugins
+
+for name in discovered_plugins:
+    print(f"Importing {name}")
+    globals()[name.split(".")[0]] = __import__(name, globals={"__name__": __name__})
 
 
 class ConfigWrapper:
-
     def __init__(self, config_file, default_section, id_=None):
 
         self.config_file = config_file
@@ -26,9 +31,10 @@ class ConfigWrapper:
 
     def to_dict(self):
 
-        d = {'id': self.id}
+        d = {"id": self.id}
 
         for key, item in self._config[self._default_section].items():
+            print(f"KEY: {key}, ITEM: {item}")
 
             item = eval(item)
             if type(item) == type:
@@ -38,7 +44,7 @@ class ConfigWrapper:
 
         for section in self._config:
 
-            if section in [self._default_section, 'DEFAULT']:
+            if section in [self._default_section, "DEFAULT"]:
                 continue
 
             d[section] = {}
@@ -56,13 +62,11 @@ class ConfigWrapper:
         if attr in self._config[self._default_section]:
             return eval(self._config[self._default_section][attr])
         elif attr in self._config:
-            return ConfigWrapper(
-                self.config_file,
-                attr,
-                id_=self.id + '::' + attr)
+            return ConfigWrapper(self.config_file, attr, id_=self.id + "::" + attr)
         else:
             raise AttributeError(
-                f"configuration {self.id} is missing a value for {attr}")
+                f"configuration {self.id} is missing a value for {attr}"
+            )
 
     def __getstate__(self):
         return vars(self)
@@ -75,35 +79,27 @@ class ConfigWrapper:
 
 
 class DataConfig(ConfigWrapper):
-
     def __init__(self, config_file):
-        super(DataConfig, self).__init__(config_file, 'data')
+        super(DataConfig, self).__init__(config_file, "data")
         self.filename = Path(self.id).parent / self.filename
 
 
 class TaskConfig(ConfigWrapper):
-
     def __init__(self, config_file):
-        super(TaskConfig, self).__init__(config_file, 'task')
-        if hasattr(self, 'post_processor_module'):
-            import sys
-            if '.' not in sys.path:
-                sys.path.insert(0, '.')
-            name = self.post_processor_module
-            globals()[name.split(".")[-1]] = importlib.import_module(name)
+        super(TaskConfig, self).__init__(config_file, "task")
         try:
-            self.data = DataConfig(self.data + '.conf')
+            self.data = DataConfig(self.data + ".conf")
             self.hash = hash_noun(self.id)
         except IOError:
             raise IOError(
                 f"Config file {self.data + '.conf'} does not exist "
-                f"(referenced in task {self})")
+                f"(referenced in task {self})"
+            )
 
 
 class ModelConfig(ConfigWrapper):
-
     def __init__(self, config_file):
-        super(ModelConfig, self).__init__(config_file, 'model')
+        super(ModelConfig, self).__init__(config_file, "model")
         self.hash = hash_adjective(self.id)
 
     def to_dict(self):
@@ -112,9 +108,8 @@ class ModelConfig(ConfigWrapper):
 
 
 class OptimizerConfig(ConfigWrapper):
-
     def __init__(self, config_file):
-        super(OptimizerConfig, self).__init__(config_file, 'optimizer')
+        super(OptimizerConfig, self).__init__(config_file, "optimizer")
         self.hash = hash_adjective(self.id)
 
 
@@ -131,7 +126,7 @@ def find_optimizer_configs(basedir):
 
 
 def find_configs(basedir):
-    return Path(basedir).rglob('*.conf')
+    return Path(basedir).rglob("*.conf")
 
 
 def parse_config_file(filename):
