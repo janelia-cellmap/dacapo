@@ -76,33 +76,23 @@ class ConfigWrapper:
         return self.id
 
 
+class TaskConfig(ConfigWrapper):
+    def __init__(self, config_file):
+        super(TaskConfig, self).__init__(config_file, "task")
+        self.hash = hash_noun(self.id)
+
+
 class DataConfig(ConfigWrapper):
     def __init__(self, config_file):
         super(DataConfig, self).__init__(config_file, "data")
         self.filename = Path(self.id).parent / self.filename
-
-
-class TaskConfig(ConfigWrapper):
-    def __init__(self, config_file):
-        super(TaskConfig, self).__init__(config_file, "task")
-        try:
-            self.data = DataConfig(self.data + ".conf")
-            self.hash = hash_noun(self.id)
-        except IOError:
-            raise IOError(
-                f"Config file {self.data + '.conf'} does not exist "
-                f"(referenced in task {self})"
-            )
+        self.hash = hash_adjective(self.id)
 
 
 class ModelConfig(ConfigWrapper):
     def __init__(self, config_file):
         super(ModelConfig, self).__init__(config_file, "model")
         self.hash = hash_adjective(self.id)
-
-    def to_dict(self):
-        d = super(ModelConfig, self).to_dict()
-        return d
 
 
 class OptimizerConfig(ConfigWrapper):
@@ -121,6 +111,10 @@ def find_model_configs(basedir):
 
 def find_optimizer_configs(basedir):
     return [OptimizerConfig(f) for f in find_configs(basedir)]
+
+
+def find_data_configs(basedir):
+    return [DataConfig(f) for f in find_configs(basedir)]
 
 
 def find_configs(basedir):

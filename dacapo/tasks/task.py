@@ -5,8 +5,6 @@ class Task:
 
     def __init__(self, data, model, task_config):
 
-        self.data = data
-
         post_processor = None
         if hasattr(task_config, 'post_processor'):
             if hasattr(task_config, 'post_processing_parameter_range'):
@@ -22,7 +20,7 @@ class Task:
         if hasattr(task_config, 'predictor_args'):
             predictor_args = task_config.predictor_args
         self.predictor = task_config.predictor(
-            self.data,
+            data,
             model,
             post_processor=post_processor,
             **predictor_args)

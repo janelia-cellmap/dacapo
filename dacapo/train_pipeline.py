@@ -7,19 +7,20 @@ import os
 
 def create_pipeline_2d(
         task,
+        data,
         predictor,
         optimizer,
         batch_size,
         outdir,
         snapshot_every):
 
-    raw_channels = task.data.raw.num_channels
-    filename = task.data.raw.train.filename
+    raw_channels = data.raw.num_channels
+    filename = data.raw.train.filename
     input_shape = predictor.input_shape
     output_shape = predictor.output_shape
-    dataset_shape = task.data.raw.train.shape
-    dataset_roi = task.data.raw.train.roi
-    voxel_size = task.data.raw.train.voxel_size
+    dataset_shape = data.raw.train.shape
+    dataset_roi = data.raw.train.roi
+    voxel_size = data.raw.train.voxel_size
 
     # switch to world units
     input_size = voxel_size*input_shape
@@ -51,8 +52,8 @@ def create_pipeline_2d(
             (num_samples,) + sample_size),
         voxel_size=(1,) + voxel_size)
     sources = (
-        task.data.raw.train.get_source(raw, overwrite_spec=spec),
-        task.data.gt.train.get_source(gt, overwrite_spec=spec)
+        data.raw.train.get_source(raw, overwrite_spec=spec),
+        data.gt.train.get_source(gt, overwrite_spec=spec)
     )
     pipeline = sources + gp.MergeProvider()
     pipeline += gp.Pad(raw, None)
@@ -148,16 +149,17 @@ def create_pipeline_2d(
 
 def create_pipeline_3d(
         task,
+        data,
         predictor,
         optimizer,
         batch_size,
         outdir,
         snapshot_every):
 
-    raw_channels = max(1, task.data.raw.num_channels)
+    raw_channels = max(1, data.raw.num_channels)
     input_shape = predictor.input_shape
     output_shape = predictor.output_shape
-    voxel_size = task.data.raw.train.voxel_size
+    voxel_size = data.raw.train.voxel_size
 
     # switch to world units
     input_size = voxel_size*input_shape
@@ -171,13 +173,13 @@ def create_pipeline_3d(
 
     channel_dims = 0 if raw_channels == 1 else 1
 
-    num_samples = task.data.raw.train.num_samples
+    num_samples = data.raw.train.num_samples
     assert num_samples == 0, (
         "Multiple samples for 3D training not yet implemented")
 
     sources = (
-        task.data.raw.train.get_source(raw),
-        task.data.gt.train.get_source(gt))
+        data.raw.train.get_source(raw),
+        data.gt.train.get_source(gt))
     pipeline = sources + gp.MergeProvider()
     pipeline += gp.Pad(raw, None)
     # raw: ([c,] d, h, w)
@@ -269,17 +271,19 @@ def create_pipeline_3d(
 
 def create_train_pipeline(
         task,
+        data,
         predictor,
         optimizer,
         batch_size,
         outdir='.',
         snapshot_every=1000):
 
-    task_dims = task.data.raw.spatial_dims
+    task_dims = data.raw.spatial_dims
 
     if task_dims == 2:
         return create_pipeline_2d(
             task,
+            data,
             predictor,
             optimizer,
             batch_size,
@@ -288,6 +292,7 @@ def create_train_pipeline(
     elif task_dims == 3:
         return create_pipeline_3d(
             task,
+            data,
             predictor,
             optimizer,
             batch_size,
