@@ -11,11 +11,9 @@ from dacapo.tasks.losses import *  # noqa
 from dacapo.tasks.predictors import *  # noqa
 from dacapo.tasks.post_processors import *  # noqa
 
-from dacapo.load_plugins import discovered_plugins
+from dacapo.load_plugins import import_plugins
 
-for name in discovered_plugins:
-    print(f"Importing {name}")
-    globals()[name.split(".")[0]] = __import__(name, globals={"__name__": __name__})
+import_plugins(globals())
 
 
 class ConfigWrapper:

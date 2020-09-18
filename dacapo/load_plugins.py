@@ -3,14 +3,14 @@ import pkgutil
 import dacapo.plugins
 
 
-def iter_namespace(ns_pkg):
-    # Specifying the second argument (prefix) to iter_modules makes the
-    # returned name an absolute name instead of a relative one. This allows
-    # import_module to work without having to do additional modification to
-    # the name.
-    return pkgutil.iter_modules(ns_pkg.__path__, ns_pkg.__name__ + ".")
+def import_plugins(name_space):
+    discovered_plugins = [
+        name
+        for finder, name, ispkg in pkgutil.iter_modules(
+            dacapo.plugins.__path__, dacapo.plugins.__name__ + "."
+        )
+    ]
 
-
-discovered_plugins = [
-    name for finder, name, ispkg in iter_namespace(dacapo.plugins)
-]
+    for name in discovered_plugins:
+        print(f"Importing {name}")
+        name_space[name.split(".")[0]] = __import__(name, globals={"__name__": __name__})
