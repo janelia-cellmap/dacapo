@@ -19,17 +19,17 @@ def cli():
 
 
 @cli.command()
-@click.option("-t", "--tasks", required=True, type=click.Path(exists=True))
-@click.option("-d", "--data", required=True, type=click.Path(exists=True))
-@click.option("-m", "--models", required=True, type=click.Path(exists=True))
-@click.option("-o", "--optimizers", required=True, type=click.Path(exists=True))
+@click.option("-t", "--tasks", required=True, type=click.Path(exists=True, file_okay=False))
+@click.option("-d", "--data", required=True, type=click.Path(exists=True, file_okay=False))
+@click.option("-m", "--models", required=True, type=click.Path(exists=True, file_okay=False))
+@click.option("-o", "--optimizers", required=True, type=click.Path(exists=True, file_okay=False))
 @click.option("-R", "--repetitions", required=True, type=int)
 @click.option("-v", "--validation-interval", required=True, type=int)
 @click.option("-s", "--snapshot-interval", required=True, type=int)
 @click.option("-b", "--keep-best-validation", required=True, type=str)
 @click.option("-n", "--num-workers", default=1, type=int)
 @click_config_file.configuration_option(section="runs")
-def run(
+def run_all(
     tasks,
     data,
     models,
@@ -49,7 +49,7 @@ def run(
     model_configs = dacapo.config.find_model_configs(str(models))
     optimizer_configs = dacapo.config.find_optimizer_configs(str(optimizers))
 
-    configs = dacapo.enumerate_runs(
+    runs = dacapo.enumerate_runs(
         task_configs=task_configs,
         data_configs=data_configs,
         model_configs=model_configs,
@@ -60,7 +60,47 @@ def run(
         keep_best_validation=keep_best_validation,
     )
 
-    dacapo.run_all(configs, num_workers=num_workers)
+    dacapo.run_all(runs, num_workers=num_workers)
+
+
+@cli.command()
+@click.option("-t", "--task", required=True, type=click.Path(exists=True, dir_okay=False))
+@click.option("-d", "--data", required=True, type=click.Path(exists=True, dir_okay=False))
+@click.option("-m", "--model", required=True, type=click.Path(exists=True, dir_okay=False))
+@click.option("-o", "--optimizer", required=True, type=click.Path(exists=True, dir_okay=False))
+@click.option("-R", "--repetitions", required=True, type=int)
+@click.option("-v", "--validation-interval", required=True, type=int)
+@click.option("-s", "--snapshot-interval", required=True, type=int)
+@click.option("-b", "--keep-best-validation", required=True, type=str)
+@click.option("-n", "--num-workers", default=1, type=int)
+def run_one(
+    task,
+    data,
+    model,
+    optimizer,
+    repetitions,
+    validation_interval,
+    snapshot_interval,
+    keep_best_validation,
+    billing,
+):
+
+    task = dacapo.config.TaskConfig(task)
+    data = dacapo.config.DataConfig(data)
+    model = dacapo.config.ModelConfig(model)
+    optimizer = dacapo.config.OptimizerConfig(optimizer)
+
+    run = dacapo.Run(
+        task,
+        data,
+        model,
+        optimizer,
+        int(repetitions),
+        int(validation_interval),
+        int(snapshot_interval),
+        keep_best_validation,
+    )
+    dacapo.run_local(run)
 
 
 @cli.group()

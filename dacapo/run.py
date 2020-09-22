@@ -1,4 +1,3 @@
-from dacapo.config import TaskConfig, DataConfig, ModelConfig, OptimizerConfig
 from dacapo.store import MongoDbStore
 from dacapo.tasks import Task
 from dacapo.data import Data
@@ -7,31 +6,12 @@ from dacapo.training_stats import TrainingStats
 from dacapo.validate import validate
 from dacapo.validation_scores import ValidationScores
 from tqdm import tqdm
-import configargparse
 import funlib.run
 import gunpowder as gp
 import hashlib
 import numpy as np
 import os
 import time
-
-
-parser = configargparse.ArgParser(
-    default_config_files=["~/.config/dacapo", "./dacapo.conf"]
-)
-parser.add("-c", "--config", is_config_file=True, help="The config file to use.")
-parser.add("-t", "--task", help="The task to run.")
-parser.add("-d", "--data", help="The data to use.")
-parser.add("-m", "--model", help="The model to use.")
-parser.add("-o", "--optimizer", help="The optimizer to use.")
-parser.add("-R", "--repetition", help="Which repetition to run.")
-parser.add("-v", "--validation-interval", help="How often to run validation.")
-parser.add("-s", "--snapshot-interval", help="How often to store a training batch.")
-parser.add(
-    "-b",
-    "--keep-best-validation",
-    help="If given, keep model checkpoint of best validation.",
-)
 
 
 class Run:
@@ -258,9 +238,13 @@ def run_local(run):
 
 
 def run_remote(run):
+    try:
+        flags = f"-P {run.billing}"
+    except KeyError:
+        flags = None
 
     funlib.run.run(
-        command=f"python {__file__} "
+        command=f"dacapo run_one "
         f"-t {run.task_config.config_file} "
         f"-d {run.data_config.config_file}"
         f"-m {run.model_config.config_file} "
@@ -273,7 +257,7 @@ def run_remote(run):
         num_gpus=1,
         queue="slowpoke",
         execute=True,
-        billing="scicompsoft",
+        flags=flags,
     )
 
 
@@ -296,19 +280,3 @@ def run_all(runs, num_workers):
 
         for run in runs:
             run_local(run)
-
-
-if __name__ == "__main__":
-
-    options = parser.parse_known_args()[0]
-    run = Run(
-        TaskConfig(options.task),
-        DataConfig(options.data),
-        ModelConfig(options.model),
-        OptimizerConfig(options.optimizer),
-        int(options.repetition),
-        int(options.validation_interval),
-        int(options.snapshot_interval),
-        options.keep_best_validation,
-    )
-    run_local(run)
