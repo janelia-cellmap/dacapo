@@ -7,5 +7,9 @@ setup(
         author='Jan Funke',
         author_email='funkej@janelia.hhmi.org',
         license='MIT',
-        packages=find_packages()
+        packages=find_packages(),
+        entry_points='''
+            [console_scripts]
+            dacapo=dacapo.cli.cli:cli
+        ''',
 )
