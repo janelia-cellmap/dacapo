@@ -1,7 +1,12 @@
 from .hash_phrase import hash_phrase
 
-NOUN_WORDLIST = open("hash_words/animals.txt").strip().split()
-ADJECTIVE_WORDLIST = open("hash_words/colors.txt").strip().split()
+from importlib import resources as pkg_resources
+
+from . import hash_words
+
+
+NOUN_WORDLIST = pkg_resources.read_text(hash_words, "animals.txt").strip().split()
+ADJECTIVE_WORDLIST = pkg_resources.read_text(hash_words, "colors.txt").strip().split()
 
 
 def hash_adjective(token):
@@ -13,14 +18,16 @@ def hash_noun(token):
 
 
 def human_readable_hash(tokens):
-    '''Create a human readable hash for the given tokens.'''
+    """Create a human readable hash for the given tokens."""
 
-    human_hash = '-'.join([
-        hash_phrase(token.encode(), dictionary=ADJECTIVE_WORDLIST)
-        for token in tokens[:-1]
-    ])
-    human_hash = '-'.join([
-        human_hash,
-        hash_phrase(tokens[-1].encode(), dictionary=NOUN_WORDLIST)])
+    human_hash = "-".join(
+        [
+            hash_phrase(token.encode(), dictionary=ADJECTIVE_WORDLIST)
+            for token in tokens[:-1]
+        ]
+    )
+    human_hash = "-".join(
+        [human_hash, hash_phrase(tokens[-1].encode(), dictionary=NOUN_WORDLIST)]
+    )
 
     return human_hash
