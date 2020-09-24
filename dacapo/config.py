@@ -5,6 +5,7 @@ import numpy as np
 import os
 
 from dacapo.hash import hash_adjective, hash_noun
+from dacapo.data import *
 from dacapo.models import *  # noqa
 from dacapo.optimizers import *  # noqa
 from dacapo.tasks.losses import *  # noqa
@@ -27,32 +28,32 @@ class ConfigWrapper:
         else:
             self.id = name_from_config_file(config_file)
 
-    def to_dict(self):
+    def to_dict(self, default_only=False):
 
         d = {"id": self.id}
 
         for key, item in self._config[self._default_section].items():
-            print(f"KEY: {key}, ITEM: {item}")
-
             item = eval(item)
             if type(item) == type:
                 d[key] = item.__name__
             else:
                 d[key] = item
 
-        for section in self._config:
+        if not default_only:
+            for section in self._config:
 
-            if section in [self._default_section, "DEFAULT"]:
-                continue
+                if section in [self._default_section, "DEFAULT"]:
+                    continue
 
-            d[section] = {}
-            for key, item in self._config[section].items():
+                print(F"SECTION: {section}")
+                d[section] = {}
+                for key, item in self._config[section].items():
 
-                item = eval(item)
-                if type(item) == type:
-                    d[section][key] = item.__name__
-                else:
-                    d[section][key] = item
+                    item = eval(item)
+                    if type(item) == type:
+                        d[section][key] = item.__name__
+                    else:
+                        d[section][key] = item
 
         return d
 
@@ -85,7 +86,7 @@ class TaskConfig(ConfigWrapper):
 class DataConfig(ConfigWrapper):
     def __init__(self, config_file):
         super(DataConfig, self).__init__(config_file, "data")
-        self.filename = Path(self.id).parent / self.filename
+        # self.filename = Path(self.id).parent / self.filename
         self.hash = hash_adjective(self.id)
 
 
