@@ -14,62 +14,13 @@ class ArrayDataset(ABC):
 
     @property
     @abstractmethod
-    def voxel_size(self):
-        pass
-
-    @property
-    @abstractmethod
-    def spatial_dims(self):
-        pass
-
-    @property
-    @abstractmethod
-    def offset(self):
-        pass
-
-    @property
-    @abstractmethod
-    def shape(self):
-        pass
-
-    @property
-    @abstractmethod
-    def spatial_shape(self):
-        pass
-
-    @property
-    @abstractmethod
-    def roi(self):
-        pass
-
-    @property
-    @abstractmethod
     def axes(self):
-        pass
-
-    @property
-    @abstractmethod
-    def num_channels(self):
-        pass
-
-    @property
-    @abstractmethod
-    def num_samples(self):
-        pass
-
-    @property
-    @abstractmethod
-    def num_classes(self):
-        pass
-
-    @property
-    @abstractmethod
-    def background_label(self):
         pass
 
     @abstractmethod
     def get_source(self):
         pass
+
 
 
 class GraphDataset(ABC):
@@ -81,21 +32,6 @@ class GraphDataset(ABC):
     key, and then provides a gunpowder source node from which that array
     or graph can be requested.
     """
-
-    @property
-    @abstractmethod
-    def spatial_dims(self):
-        pass
-
-    @property
-    @abstractmethod
-    def roi(self):
-        pass
-
-    @property
-    @abstractmethod
-    def axes(self):
-        pass
 
     @abstractmethod
     def get_source(self):

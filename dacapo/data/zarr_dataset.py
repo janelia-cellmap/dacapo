@@ -12,10 +12,8 @@ class ZarrDataset(ArrayDataset):
         self.filename = filename
         self.ds_name = ds_name
 
-        print(f"ZARR FILE: {str(Path(filename).absolute())}")
-
+        print(f"Opening zarr container: {filename}, {ds_name}")
         zarr_container = zarr.open(filename)
-        print(f"ZARR CONTAINER HAS KEYS: {list(zarr_container.keys())}")
         ds = zarr_container[ds_name]
         self._voxel_size = gp.Coordinate(ds.attrs["resolution"])
         self._spatial_dims = len(self.voxel_size)
@@ -30,6 +28,7 @@ class ZarrDataset(ArrayDataset):
         if "axes" in ds.attrs:
             self._axes = {d: a for d, a in enumerate(ds.attrs["axes"])}
         else:
+            raise ValueError("Dacapo expects an axes attribute for zarr datasets")
             self._axes = {d: d for d in range(len(self.voxel_size))}
 
         if "c" in self.axes:

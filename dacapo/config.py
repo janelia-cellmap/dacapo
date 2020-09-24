@@ -13,6 +13,7 @@ from dacapo.tasks.losses import *  # noqa
 from dacapo.tasks.predictors import *  # noqa
 from dacapo.tasks.post_processors import *  # noqa
 
+import dacapo
 from dacapo.load_plugins import import_plugins
 
 import_plugins(globals())
