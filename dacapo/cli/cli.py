@@ -10,19 +10,36 @@ from . import click_config_file
 
 
 @click.group()
-def cli():
+@click.option(
+    "--log-level",
+    type=click.Choice(
+        ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], case_sensitive=False
+    ),
+    default="WARNING",
+)
+def cli(log_level):
     # when calling a function through command line
     # the local directory doesn't seem to be added to
     # the path by default. Add it explicitly here.
     cwd = Path.cwd()
     sys.path.append(str(cwd.absolute()))
 
+    logging.basicConfig(level=getattr(logging, log_level.upper()))
+
 
 @cli.command()
-@click.option("-t", "--tasks", required=True, type=click.Path(exists=True, file_okay=False))
-@click.option("-d", "--data", required=True, type=click.Path(exists=True, file_okay=False))
-@click.option("-m", "--models", required=True, type=click.Path(exists=True, file_okay=False))
-@click.option("-o", "--optimizers", required=True, type=click.Path(exists=True, file_okay=False))
+@click.option(
+    "-t", "--tasks", required=True, type=click.Path(exists=True, file_okay=False)
+)
+@click.option(
+    "-d", "--data", required=True, type=click.Path(exists=True, file_okay=False)
+)
+@click.option(
+    "-m", "--models", required=True, type=click.Path(exists=True, file_okay=False)
+)
+@click.option(
+    "-o", "--optimizers", required=True, type=click.Path(exists=True, file_okay=False)
+)
 @click.option("-R", "--repetitions", required=True, type=int)
 @click.option("-v", "--validation-interval", required=True, type=int)
 @click.option("-s", "--snapshot-interval", required=True, type=int)
@@ -41,8 +58,6 @@ def run_all(
     num_workers,
 ):
     import dacapo.config
-
-    logging.basicConfig(level=logging.INFO)
 
     task_configs = dacapo.config.find_task_configs(str(tasks))
     data_configs = dacapo.config.find_data_configs(str(data))
@@ -64,10 +79,18 @@ def run_all(
 
 
 @cli.command()
-@click.option("-t", "--task", required=True, type=click.Path(exists=True, dir_okay=False))
-@click.option("-d", "--data", required=True, type=click.Path(exists=True, dir_okay=False))
-@click.option("-m", "--model", required=True, type=click.Path(exists=True, dir_okay=False))
-@click.option("-o", "--optimizer", required=True, type=click.Path(exists=True, dir_okay=False))
+@click.option(
+    "-t", "--task", required=True, type=click.Path(exists=True, dir_okay=False)
+)
+@click.option(
+    "-d", "--data", required=True, type=click.Path(exists=True, dir_okay=False)
+)
+@click.option(
+    "-m", "--model", required=True, type=click.Path(exists=True, dir_okay=False)
+)
+@click.option(
+    "-o", "--optimizer", required=True, type=click.Path(exists=True, dir_okay=False)
+)
 @click.option("-R", "--repetitions", required=True, type=int)
 @click.option("-v", "--validation-interval", required=True, type=int)
 @click.option("-s", "--snapshot-interval", required=True, type=int)
