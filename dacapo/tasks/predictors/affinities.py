@@ -47,9 +47,9 @@ class Affinities(Model):
             gp.AddAffinities(
                 affinity_neighborhood=self.neighborhood, labels=gt, affinities=target
             )
-            +
+            # +
             # ensure affs are float
-            gp.Normalize(target, factor=1.0)
+            # gp.Normalize(target, factor=1.0)
         )
 
     def forward(self, x):
