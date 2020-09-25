@@ -53,7 +53,7 @@ class ZarrDataset(ArrayDataset):
         else:
             self._offset = gp.Coordinate(tuple(0 for i in self._spatial_axes))
 
-        # gt specific
+        # more optional fields: gt specific
         if "num_classes" in ds.attrs:
             self._num_classes = ds.attrs["num_classes"]
         else:
