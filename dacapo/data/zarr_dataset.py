@@ -1,9 +1,15 @@
 import gunpowder as gp
 import zarr
 
-from pathlib import Path
+import logging
 
 from .dataset import ArrayDataset
+
+logger = logging.getLogger(__name__)
+
+
+class DacapoConventionError(Exception):
+    pass
 
 
 class ZarrDataset(ArrayDataset):
@@ -12,37 +18,42 @@ class ZarrDataset(ArrayDataset):
         self.filename = filename
         self.ds_name = ds_name
 
-        print(f"Opening zarr container: {filename}, {ds_name}")
         zarr_container = zarr.open(filename)
         ds = zarr_container[ds_name]
-        self._voxel_size = gp.Coordinate(ds.attrs["resolution"])
-        self._spatial_dims = len(self.voxel_size)
+
+        # necessary fields:
+        self._shape = gp.Coordinate(ds.shape)
+        if "axes" in ds.attrs:
+            self._axes = {d: a for d, a in enumerate(ds.attrs["axes"])}
+            self._inv_axes = {a: d for d, a in self._axes.items()}
+            self._channel_dim = self._inv_axes.get("c")
+            self._sample_dim = self._inv_axes.get("s")
+            self._spatial_axes = sorted(
+                [
+                    i
+                    for i in self._axes.keys()
+                    if i != self.channel_dim and i != self.sample_dim
+                ]
+            )
+        else:
+            raise DacapoConventionError(
+                "Dacapo expects zarr arrays to come with axis labels. "
+                "Note that label 'c' is reserved for the (optional) channel dimension. "
+                "Label 's' is reserved for the (optional) sample dimension. "
+                "Any other label will be treated as a spatial dimension."
+            )
+
+        # optional fields
+        if "resolution" in ds.attrs:
+            self._voxel_size = gp.Coordinate(ds.attrs["resolution"])
+        else:
+            self._voxel_size = gp.Coordinate(tuple(1 for i in self._spatial_axes))
         if "offset" in ds.attrs:
             self._offset = gp.Coordinate(ds.attrs["offset"])
         else:
-            self._offset = gp.Coordinate((0,) * self.spatial_dims)
-        self._shape = gp.Coordinate(ds.shape)
-        self._spatial_shape = gp.Coordinate(self.shape[-self.spatial_dims :])
-        self._roi = gp.Roi(self.offset, self.spatial_shape * self.voxel_size)
-
-        if "axes" in ds.attrs:
-            self._axes = {d: a for d, a in enumerate(ds.attrs["axes"])}
-        else:
-            raise ValueError("Dacapo expects an axes attribute for zarr datasets")
-            self._axes = {d: d for d in range(len(self.voxel_size))}
-
-        if "c" in self.axes:
-            self._num_channels = self.shape[self.axes["c"]]
-        else:
-            self._num_channels = 0
-
-        if "s" in self.axes:
-            self._num_samples = self.shape[self.axes["s"]]
-        else:
-            self._num_samples = 0
+            self._offset = gp.Coordinate(tuple(0 for i in self._spatial_axes))
 
         # gt specific
-
         if "num_classes" in ds.attrs:
             self._num_classes = ds.attrs["num_classes"]
         else:
@@ -53,40 +64,58 @@ class ZarrDataset(ArrayDataset):
             self._background_label = None
 
     @property
-    def voxel_size(self):
-        return self._voxel_size
-
-    @property
-    def spatial_dims(self):
-        return self._spatial_dims
-
-    @property
-    def offset(self):
-        return self._offset
-
-    @property
     def shape(self):
         return self._shape
-
-    @property
-    def spatial_shape(self):
-        return self._spatial_shape
-
-    @property
-    def roi(self):
-        return self._roi
 
     @property
     def axes(self):
         return self._axes
 
     @property
+    def channel_dim(self):
+        return self._channel_dim
+
+    @property
+    def sample_dim(self):
+        return self._sample_dim
+
+    @property
+    def spatial_axes(self):
+        return self._spatial_axes
+
+    @property
+    def voxel_size(self):
+        return self._voxel_size
+
+    @property
+    def spatial_dims(self):
+        return len(self.spatial_axes)
+
+    @property
+    def offset(self):
+        return self._offset
+
+    @property
+    def spatial_shape(self):
+        return gp.Coordinate(tuple(self.shape[i] for i in self._spatial_axes))
+
+    @property
+    def roi(self):
+        return gp.Roi(self.offset, self.spatial_shape * self.voxel_size)
+
+    @property
     def num_channels(self):
-        return self._num_channels
+        if "c" in self.axes:
+            return self.shape[self.channel_dim]
+        else:
+            return 0
 
     @property
     def num_samples(self):
-        return self._num_samples
+        if "s" in self.axes:
+            return self.shape[self.sample_dim]
+        else:
+            return 0
 
     @property
     def num_classes(self):
