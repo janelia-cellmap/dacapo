@@ -1,5 +1,7 @@
-from abc import ABC, abstractmethod
 from gunpowder import ArrayKey, GraphKey
+
+from abc import ABC, abstractmethod
+from typing import Union
 
 
 class ArrayDataset(ABC):
@@ -18,29 +20,20 @@ class ArrayDataset(ABC):
     def axes(self):
         """
         Every array in dacapo is expected to have labelled axes.
-        
+
         Reserved labels:
             "c": Channel dimension
             "s": Sample dimension
         """
         pass
 
-    @property
-    @abstractmethod
-    def shape(self):
-        """
-        Every array in dacapo must expose some way of determining its shape.
-        """
-        pass
-
     @abstractmethod
     def get_source(self, *output_keys: ArrayKey):
         """
-        A dacapo dataset is expected to provide a gunpowder tree that provides
-        the given output keys.
+        A dacapo dataset is expected to provide a gunpowder tree that
+        provides the given output keys.
         """
         pass
-
 
 
 class GraphDataset(ABC):
@@ -56,3 +49,6 @@ class GraphDataset(ABC):
     @abstractmethod
     def get_source(self, *output_keys: GraphKey):
         pass
+
+
+Dataset = Union(ArrayDataset, GraphDataset)
