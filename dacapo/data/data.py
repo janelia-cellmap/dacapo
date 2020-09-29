@@ -1,6 +1,6 @@
 import itertools
 
-from .group import DatasetGroup
+from .group import TrainValidateSplit, ArrayGroup, GraphGroup
 
 
 class Data:
@@ -11,12 +11,18 @@ class Data:
         graphs = data_config.graphs
 
         for array in arrays:
-            self.__setattr__(array, DatasetGroup())
+            self.__setattr__(array, TrainValidateSplit(array))
         for graph in graphs:
-            self.__setattr__(graph, DatasetGroup())
+            self.__setattr__(graph, TrainValidateSplit(graph))
 
-        for key in itertools.chain(arrays, graphs):
-            train_source = data_config.train_sources[key]
+        for key in arrays:
+            train_source = ArrayGroup(list(data_config.train_sources[key]))
             getattr(self, key).train = train_source
-            validate_source = data_config.validate_sources[key]
+            validate_source = ArrayGroup(list(data_config.validate_sources[key]))
+            getattr(self, key).validate = validate_source
+
+        for key in graphs:
+            train_source = GraphGroup(list(data_config.train_sources[key]))
+            getattr(self, key).train = train_source
+            validate_source = GraphGroup(list(data_config.validate_sources[key]))
             getattr(self, key).validate = validate_source
