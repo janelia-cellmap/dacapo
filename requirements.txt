@@ -6,6 +6,7 @@ git+git://github.com/funkelab/funlib.evaluate@e53a8c5099f696b076f30ef8851ebaf4c7
 git+git://github.com/pattonw/funlib.run
 git+git://github.com/turagalab/malis
 git+git://github.com/funkey/gunpowder@patch-1.1.6
+git+git://github.com/funkelab/lsd
 mahotas
 pymongo
 scipy
