@@ -216,7 +216,7 @@ def create_pipeline_3d(
     # target: (b, [c,] d, h, w)
     # [weights: (b, [c,] d, h, w)]
     pipeline += gp_torch.Train(
-        model=predictor,
+        model=task.model,
         loss=task.loss,
         optimizer=optimizer,
         inputs={"x": raw},

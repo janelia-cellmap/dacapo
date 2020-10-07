@@ -28,7 +28,6 @@ class Affinities(Model):
 
         conv = {2: torch.nn.Conv2d, 3: torch.nn.Conv3d}[self.dims]
         affs = [
-            model,
             conv(model.fmaps_out, self.dims, (1,) * self.dims),
             torch.nn.Sigmoid(),
         ]

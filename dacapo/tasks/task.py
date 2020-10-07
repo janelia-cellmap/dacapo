@@ -2,12 +2,21 @@ from dacapo.tasks.post_processors import PostProcessingParameterRange
 
 
 class AuxLoss:
-    def __init__(self, regular_loss, aux_loss):
+    def __init__(self, regular_loss, aux_loss, predictor, aux_predictor):
         self.regular_loss = regular_loss
         self.aux_loss = aux_loss
+        self.predictor = predictor
+        self.aux_predictor = aux_predictor
 
-    def forward(self, *args, aux_pred=None, aux_target=None):
-        return self.regular_loss(*args) * self.aux_loss(aux_pred, aux_target)
+    def forward(self, model_output, target, weights=None, aux_target=None):
+        predictor_output = self.predictor.forward(model_output)
+        aux_output = self.aux_predictor.forward(model_output)
+        if weights is not None:
+            regular_loss = self.regular_loss(predictor_output, target, weights)
+        else:
+            regular_loss = self.regular_loss(predictor_output, target)
+        aux_loss = self.aux_loss(aux_output, aux_target)
+        return regular_loss * aux_loss
 
     def add_weights(self, *args, **kwargs):
         return self.regular_loss.add_weights(*args, **kwargs)
@@ -40,6 +49,7 @@ class Task:
         self.predictor = task_config.predictor(
             data, model, post_processor=post_processor, **predictor_args
         )
+        self.model = model
 
         self.augmentations = task_config.augmentations
 
@@ -63,4 +73,6 @@ class Task:
                 loss_args = task_config.loss_args
             self.aux_task.loss = task_config.aux_task.loss(**loss_args)
 
-            self.loss = AuxLoss(self.loss, self.aux_task.loss)
+            self.loss = AuxLoss(
+                self.loss, self.aux_task.loss, self.predictor, self.aux_task.predictor
+            )

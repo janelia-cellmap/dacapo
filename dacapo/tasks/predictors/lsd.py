@@ -15,7 +15,6 @@ class LSD(Model):
         conv = torch.nn.Conv3d
         num_shape_descriptors = 10
         lsd = [
-            model,
             conv(model.fmaps_out, num_shape_descriptors, (1,) * self.dims),
             torch.nn.Sigmoid(),
         ]
