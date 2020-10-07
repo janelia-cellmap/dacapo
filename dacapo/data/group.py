@@ -3,7 +3,6 @@ from gunpowder import ArrayKey, GraphKey
 from typing import Union, Iterable, List
 
 from .dataset import Dataset, ArrayDataset, GraphDataset
-from .group import SampleGroup
 
 
 class ArrayGroup:
@@ -100,7 +99,7 @@ class TrainValidateSplit:
     @train.setter
     def train(self, dataset: Union[Dataset, Iterable[Dataset]]):
         if isinstance(dataset, Iterable):
-            self._train = SampleGroup(dataset)
+            self._train = dataset
         else:
             self._train = dataset
 
@@ -115,12 +114,12 @@ class TrainValidateSplit:
     @validate.setter
     def validate(self, dataset: Union[Dataset, Iterable[Dataset]]):
         if isinstance(dataset, Iterable):
-            self._validate = SampleGroup(dataset)
+            self._validate = dataset
         else:
             self._validate = dataset
 
     def __getattr__(self, attr):
-        if hasattr(self, attr):
-            getattr(self, attr)
+        if attr in self.__dict__:
+            self.__dict__[attr]
         else:
             return getattr(self.train, attr)

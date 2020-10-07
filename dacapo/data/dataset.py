@@ -51,4 +51,4 @@ class GraphDataset(ABC):
         pass
 
 
-Dataset = Union(ArrayDataset, GraphDataset)
+Dataset = Union[ArrayDataset, GraphDataset]
