@@ -4,6 +4,7 @@ import importlib
 import numpy as np
 import os
 
+import dacapo
 from dacapo.hash import hash_adjective, hash_noun
 from dacapo.data import *
 from dacapo.models import *  # noqa
