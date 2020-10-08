@@ -83,7 +83,7 @@ class Task:
             self.aux_task = AuxTask()
             predictor_args = {}
             if hasattr(task_config.aux_task, "predictor_args"):
-                predictor_args = task_config.predictor_args
+                predictor_args = task_config.aux_task.predictor_args
             self.aux_task.predictor = task_config.aux_task.predictor(
                 data, model, **predictor_args
             )
