@@ -26,8 +26,7 @@ class AuxLoss:
         return self.forward(*args, **kwargs)
 
 
-class PredictorLoss():
-
+class PredictorLoss:
     def __init__(self, regular_loss, predictor):
         self.regular_loss = regular_loss
         self.predictor = predictor
@@ -44,6 +43,7 @@ class PredictorLoss():
 
     def __call__(self, *args, **kwargs):
         return self.forward(*args, **kwargs)
+
 
 class AuxTask:
     pass
