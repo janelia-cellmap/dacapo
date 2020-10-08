@@ -10,10 +10,10 @@ class LSD(Model):
 
         self.dims = data.raw.spatial_dims
 
-        super(LSD, self).__init__(model.input_shape, model.fmaps_in, self.dims)
+        num_shape_descriptors = 10
+        super(LSD, self).__init__(model.output_shape, model.fmaps_out, num_shape_descriptors)
 
         conv = torch.nn.Conv3d
-        num_shape_descriptors = 10
         lsd = [
             conv(model.fmaps_out, num_shape_descriptors, (1,) * self.dims),
             torch.nn.Sigmoid(),
@@ -23,7 +23,7 @@ class LSD(Model):
 
     def add_target(self, gt: gp.ArrayKey, target: gp.ArrayKey):
 
-        return lsd.gp.AddLocalShapeDescriptor(gt, target)
+        return lsd.gp.AddLocalShapeDescriptor(gt, target, sigma=40)
 
     def forward(self, x):
         lsd = self.lsd(x)

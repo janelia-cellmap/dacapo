@@ -6,6 +6,7 @@ import zarr
 
 def validate(
         data,
+        model,
         predictor,
         store_best_result=None,
         best_score_name=None,
@@ -16,7 +17,7 @@ def validate(
 
     print("Predicting on validation data...")
     start = time.time()
-    ds = predict(raw_data, predictor, gt_data)
+    ds = predict(raw_data, model, predictor, gt_data)
     print(f"...done ({time.time() - start}s)")
 
     if store_best_result:

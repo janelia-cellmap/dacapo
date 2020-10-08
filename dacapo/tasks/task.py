@@ -12,11 +12,12 @@ class AuxLoss:
         predictor_output = self.predictor.forward(model_output)
         aux_output = self.aux_predictor.forward(model_output)
         if weights is not None:
+            weights = weights.to("cuda")
             regular_loss = self.regular_loss(predictor_output, target, weights)
         else:
             regular_loss = self.regular_loss(predictor_output, target)
         aux_loss = self.aux_loss(aux_output, aux_target)
-        return regular_loss * aux_loss
+        return regular_loss + aux_loss
 
     def add_weights(self, *args, **kwargs):
         return self.regular_loss.add_weights(*args, **kwargs)
@@ -24,6 +25,25 @@ class AuxLoss:
     def __call__(self, *args, **kwargs):
         return self.forward(*args, **kwargs)
 
+
+class PredictorLoss():
+
+    def __init__(self, regular_loss, predictor):
+        self.regular_loss = regular_loss
+        self.predictor = predictor
+
+    def forward(self, model_output, target, weights=None):
+        predictor_output = self.predictor.forward(model_output)
+        if weights is None:
+            return self.regular_loss(predictor_output, target)
+        else:
+            return self.regular_loss(predictor_output, target, weights)
+
+    def add_weights(self, *args, **kwargs):
+        return self.regular_loss.add_weights(*args, **kwargs)
+
+    def __call__(self, *args, **kwargs):
+        return self.forward(*args, **kwargs)
 
 class AuxTask:
     pass
@@ -76,3 +96,5 @@ class Task:
             self.loss = AuxLoss(
                 self.loss, self.aux_task.loss, self.predictor, self.aux_task.predictor
             )
+        else:
+            self.loss = PredictorLoss(self.loss, self.predictor)

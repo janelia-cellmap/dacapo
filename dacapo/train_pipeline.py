@@ -26,6 +26,7 @@ def create_pipeline_2d(
     target = gp.ArrayKey("TARGET")
     weights = gp.ArrayKey("WEIGHTS")
     prediction = gp.ArrayKey("PREDICTION")
+    pred_gradients = gp.ArrayKey("PRED_GRADIENTS")
 
     channel_dims = 0 if raw_channels == 1 else 1
     data_dims = len(dataset_shape) - channel_dims
@@ -96,6 +97,7 @@ def create_pipeline_2d(
         inputs={"x": raw},
         loss_inputs=loss_inputs,
         outputs={0: prediction},
+        gradients={0: pred_gradients},
         save_every=1e6,
     )
     # raw: (b, c, h, w)
@@ -126,6 +128,7 @@ def create_pipeline_2d(
                 raw: "raw",
                 target: "target",
                 prediction: "prediction",
+                pred_gradients: "pred_gradients",
                 weights: "weights",
             },
             every=snapshot_every,
@@ -141,6 +144,7 @@ def create_pipeline_2d(
     if weights_node:
         request.add(weights, output_size)
     request.add(prediction, output_size)
+    request.add(pred_gradients, output_size)
 
     return pipeline, request
 
@@ -150,9 +154,11 @@ def create_pipeline_3d(
 ):
 
     raw_channels = max(1, data.raw.num_channels)
-    input_shape = predictor.input_shape
-    output_shape = predictor.output_shape
+    input_shape = task.model.input_shape
+    output_shape = task.model.output_shape
     voxel_size = data.raw.train.voxel_size
+
+    task.predictor = task.predictor.to("cuda")
 
     # switch to world units
     input_size = voxel_size * input_shape
@@ -164,6 +170,7 @@ def create_pipeline_3d(
     aux_target = gp.ArrayKey("AUX_TARGET")
     weights = gp.ArrayKey("WEIGHTS")
     prediction = gp.ArrayKey("PREDICTION")
+    pred_gradients = gp.ArrayKey("PRED_GRADIENTS")
 
     channel_dims = 0 if raw_channels == 1 else 1
 
@@ -188,6 +195,7 @@ def create_pipeline_3d(
     if task.aux_task is not None:
         aux_task = True
         pipeline += task.aux_task.predictor.add_target(gt, aux_target)
+        task.aux_task.predictor.to("cuda")
     else:
         aux_task = False
     # (don't care about gt anymore)
@@ -201,7 +209,6 @@ def create_pipeline_3d(
         loss_inputs = {0: prediction, 1: target}
     if aux_task:
         loss_inputs["aux_target"] = aux_target
-        loss_inputs["aux_pred"] = prediction
     # raw: ([c,] d, h, w)
     # target: ([c,] d, h, w)
     # [weights: ([c,] d, h, w)]
@@ -222,6 +229,7 @@ def create_pipeline_3d(
         inputs={"x": raw},
         loss_inputs=loss_inputs,
         outputs={0: prediction},
+        gradients={0:pred_gradients},
         save_every=1e6,
     )
     # raw: (b, c, d, h, w)
@@ -253,13 +261,14 @@ def create_pipeline_3d(
                 target: "target",
                 aux_target: "aux_target",
                 prediction: "prediction",
+                pred_gradients: "pred_gradients",
                 weights: "weights",
             },
             every=snapshot_every,
             output_dir=os.path.join(outdir, "snapshots"),
             output_filename="{iteration}.hdf",
         )
-    pipeline += gp.PrintProfilingStats(every=100)
+    pipeline += gp.PrintProfilingStats(every=10)
 
     request = gp.BatchRequest()
     request.add(raw, input_size)
@@ -270,6 +279,7 @@ def create_pipeline_3d(
     if weights_node:
         request.add(weights, output_size)
     request.add(prediction, output_size)
+    request.add(pred_gradients, output_size)
 
     return pipeline, request
 

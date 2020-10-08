@@ -121,11 +121,12 @@ def predict_2d(
 def predict_3d(
         raw_data,
         gt_data,
+        model,
         predictor):
 
     raw_channels = max(1, raw_data.num_channels)
-    input_shape = predictor.input_shape
-    output_shape = predictor.output_shape
+    input_shape = model.input_shape
+    output_shape = model.output_shape
     voxel_size = raw_data.voxel_size
 
     # switch to world units
@@ -135,6 +136,7 @@ def predict_3d(
     raw = gp.ArrayKey('RAW')
     gt = gp.ArrayKey('GT')
     target = gp.ArrayKey('TARGET')
+    model_output = gp.ArrayKey('MODEL_OUTPUT')
     prediction = gp.ArrayKey('PREDICTION')
 
     channel_dims = 0 if raw_channels == 1 else 1
@@ -145,6 +147,7 @@ def predict_3d(
 
     scan_request = gp.BatchRequest()
     scan_request.add(raw, input_size)
+    scan_request.add(model_output, output_size)
     scan_request.add(prediction, output_size)
     if gt_data:
         scan_request.add(gt, output_size)
@@ -181,8 +184,12 @@ def predict_3d(
     # gt: ([c,] d, h, w)
     # target: ([c,] d, h, w)
     pipeline += gp_torch.Predict(
-            model=predictor,
+            model=model,
             inputs={'x': raw},
+            outputs={0: model_output})
+    pipeline += gp_torch.Predict(
+            model=predictor,
+            inputs={'x': model_output},
             outputs={0: prediction})
     # remove "batch" dimension
     pipeline += RemoveChannelDim(raw)
@@ -204,6 +211,7 @@ def predict_3d(
 
     total_request = gp.BatchRequest()
     total_request[raw] = gp.ArraySpec(roi=roi)
+    total_request[model_output] = gp.ArraySpec(roi=roi)
     total_request[prediction] = gp.ArraySpec(roi=roi)
     if gt_data:
         total_request[gt] = gp.ArraySpec(roi=roi)
@@ -225,6 +233,7 @@ def predict_3d(
 
 def predict(
         raw,
+        model,
         predictor,
         gt=None):
 
@@ -233,7 +242,7 @@ def predict(
     if task_dims == 2:
         return predict_2d(raw, gt, predictor)
     elif task_dims == 3:
-        return predict_3d(raw, gt, predictor)
+        return predict_3d(raw, gt, model, predictor)
     else:
         raise RuntimeError(
             "Validation other than 2D/3D not yet implemented")

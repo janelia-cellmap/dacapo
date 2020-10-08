@@ -45,6 +45,7 @@ def cli(log_level):
 @click.option("-s", "--snapshot-interval", required=True, type=int)
 @click.option("-b", "--keep-best-validation", required=True, type=str)
 @click.option("-n", "--num-workers", default=1, type=int)
+@click.option("-P", "--billing", default=None, type=str)
 @click_config_file.configuration_option(section="runs")
 def run_all(
     tasks,
@@ -56,6 +57,7 @@ def run_all(
     snapshot_interval,
     keep_best_validation,
     num_workers,
+    billing,
 ):
     import dacapo.config
 
@@ -63,6 +65,9 @@ def run_all(
     data_configs = dacapo.config.find_data_configs(str(data))
     model_configs = dacapo.config.find_model_configs(str(models))
     optimizer_configs = dacapo.config.find_optimizer_configs(str(optimizers))
+
+    if num_workers > 1:
+        assert billing is not None, "billing must be provided"
 
     runs = dacapo.enumerate_runs(
         task_configs=task_configs,
@@ -73,6 +78,7 @@ def run_all(
         validation_interval=validation_interval,
         snapshot_interval=snapshot_interval,
         keep_best_validation=keep_best_validation,
+        billing=billing,
     )
 
     dacapo.run_all(runs, num_workers=num_workers)
@@ -95,7 +101,6 @@ def run_all(
 @click.option("-v", "--validation-interval", required=True, type=int)
 @click.option("-s", "--snapshot-interval", required=True, type=int)
 @click.option("-b", "--keep-best-validation", required=True, type=str)
-@click.option("-n", "--num-workers", default=1, type=int)
 def run_one(
     task,
     data,
@@ -105,8 +110,9 @@ def run_one(
     validation_interval,
     snapshot_interval,
     keep_best_validation,
-    billing,
 ):
+
+    import dacapo.config
 
     task = dacapo.config.TaskConfig(task)
     data = dacapo.config.DataConfig(data)

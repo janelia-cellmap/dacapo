@@ -17,7 +17,7 @@ class Affinities(Model):
 
         self.dims = data.raw.spatial_dims
 
-        super(Affinities, self).__init__(model.input_shape, model.fmaps_in, self.dims)
+        super(Affinities, self).__init__(model.output_shape, model.fmaps_out, self.dims)
 
         if self.dims == 2:
             self.neighborhood = [(0, 1, 0), (0, 0, 1)]
@@ -46,9 +46,6 @@ class Affinities(Model):
             gp.AddAffinities(
                 affinity_neighborhood=self.neighborhood, labels=gt, affinities=target
             )
-            # +
-            # ensure affs are float
-            # gp.Normalize(target, factor=1.0)
         )
 
     def forward(self, x):

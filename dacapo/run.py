@@ -25,6 +25,7 @@ class Run:
         validation_interval,
         snapshot_interval,
         keep_best_validation,
+        billing=None,
     ):
 
         # configs
@@ -34,6 +35,7 @@ class Run:
         self.optimizer_config = optimizer_config
 
         self.repetition = repetition
+        self.billing = billing
 
         self.training_stats = TrainingStats()
         self.validation_scores = ValidationScores()
@@ -121,6 +123,7 @@ class Run:
                 if i % self.validation_interval == 0 and i > 0:
                     scores = validate(
                         data,
+                        task.model,
                         task.predictor,
                         store_best_result=os.path.join(outdir, f"validate_{i}.zarr"),
                         best_score_name=self.best_score_name,
@@ -202,6 +205,7 @@ def enumerate_runs(
     validation_interval,
     snapshot_interval,
     keep_best_validation,
+    billing,
 ):
 
     runs = []
@@ -220,6 +224,7 @@ def enumerate_runs(
                                 validation_interval,
                                 snapshot_interval,
                                 keep_best_validation,
+                                billing,
                             )
                         )
     return runs
@@ -238,15 +243,15 @@ def run_local(run):
 
 
 def run_remote(run):
-    try:
-        flags = f"-P {run.billing}"
-    except KeyError:
+    if run.billing is not None:
+        flags = [f"-P {run.billing}"]
+    else:
         flags = None
 
     funlib.run.run(
-        command=f"dacapo run_one "
+        command=f"dacapo run-one "
         f"-t {run.task_config.config_file} "
-        f"-d {run.data_config.config_file}"
+        f"-d {run.data_config.config_file} "
         f"-m {run.model_config.config_file} "
         f"-o {run.optimizer_config.config_file} "
         f"-R {run.repetition} "
@@ -255,9 +260,11 @@ def run_remote(run):
         f"-b {run.keep_best_validation} ",
         num_cpus=2,
         num_gpus=1,
-        queue="slowpoke",
+        queue="gpu_any",
         execute=True,
         flags=flags,
+        log_file=f"runs/{run.hash}/log.out",
+        error_file=f"runs/{run.hash}/log.err",
     )
 
 
