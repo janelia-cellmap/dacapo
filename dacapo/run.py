@@ -96,7 +96,7 @@ class Run:
         task = Task(data, model, self.task_config)
 
         optimizer = self.optimizer_config.type(
-            task.predictor.parameters(), self.optimizer_config.lr
+            [{"params":task.predictor.parameters()}, {"params":model.parameters()}, {"params": task.aux_task.predictor.parameters()}], lr=self.optimizer_config.lr
         )
 
         outdir = os.path.join("runs", self.hash)
