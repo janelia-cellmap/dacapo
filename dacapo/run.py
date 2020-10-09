@@ -100,7 +100,7 @@ class Run:
             {"params": task.predictor.parameters()},
         ]
 
-        if hasattr(task, "aux_task"):
+        if task.aux_task is not None:
             parameters.append(
                 {"params": task.aux_task.predictor.parameters()},
             )
