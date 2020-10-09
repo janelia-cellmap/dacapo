@@ -95,9 +95,17 @@ class Run:
         model = self.model_config.type(data, self.model_config)
         task = Task(data, model, self.task_config)
 
-        optimizer = self.optimizer_config.type(
-            [{"params":task.predictor.parameters()}, {"params":model.parameters()}, {"params": task.aux_task.predictor.parameters()}], lr=self.optimizer_config.lr
-        )
+        parameters = [
+            {"params": model.parameters()},
+            {"params": task.predictor.parameters()},
+        ]
+
+        if hasattr(task, "aux_task"):
+            parameters.append(
+                {"params": task.aux_task.predictor.parameters()},
+            )
+
+        optimizer = self.optimizer_config.type(parameters, lr=self.optimizer_config.lr)
 
         outdir = os.path.join("runs", self.hash)
         print(f"Storing this run's data in {outdir}")
