@@ -13,6 +13,8 @@ import numpy as np
 import os
 import time
 
+import torch
+
 
 class Run:
     def __init__(
@@ -75,6 +77,10 @@ class Run:
         self.snapshot_interval = snapshot_interval
 
     def start(self):
+
+        # set torch flags:
+        torch.backends.cudnn.enabled = True
+        torch.backends.cudnn.benchmark = True
 
         store = MongoDbStore()
         store.sync_run(self)

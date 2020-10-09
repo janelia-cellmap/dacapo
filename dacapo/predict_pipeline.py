@@ -207,7 +207,7 @@ def predict_3d(
     pipeline += gp.Scan(scan_request)
 
     # ensure validation ROI is at least the size of the network input
-    roi = raw_data.roi.grow(input_size/2, input_size/2)
+    roi = gt_data.roi.grow(input_size/2, input_size/2)
 
     total_request = gp.BatchRequest()
     total_request[raw] = gp.ArraySpec(roi=roi)
