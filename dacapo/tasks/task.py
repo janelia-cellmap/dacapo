@@ -1,48 +1,48 @@
 from dacapo.tasks.post_processors import PostProcessingParameterRange
+import torch
 
 
-class AuxLoss:
-    def __init__(self, regular_loss, aux_loss, predictor, aux_predictor):
-        self.regular_loss = regular_loss
-        self.aux_loss = aux_loss
+class AgglomeratedLoss(torch.nn.Module):
+    def __init__(self, predictor, loss, aux_tasks):
         self.predictor = predictor
-        self.aux_predictor = aux_predictor
+        self.loss = loss
+        self.aux_tasks = aux_tasks
 
-    def forward(self, model_output, target, weights=None, aux_target=None):
-        predictor_output = self.predictor.forward(model_output)
-        aux_output = self.aux_predictor.forward(model_output)
+    @property
+    def predictors(self):
+        yield self.predictor
+        for aux_task in self.aux_tasks:
+            yield aux_task[1]
+
+    def forward(self, model_output, target, weights=None, **kwargs):
+        predictor_output = self.predictor(model_output)
         if weights is not None:
-            weights = weights.to("cuda")
-            regular_loss = self.regular_loss(predictor_output, target, weights)
+            loss = self.loss(predictor_output, target)
         else:
-            regular_loss = self.regular_loss(predictor_output, target)
-        aux_loss = self.aux_loss(aux_output, aux_target)
-        return regular_loss + aux_loss
+            loss = self.loss(predictor_output, target, weights)
 
-    def add_weights(self, *args, **kwargs):
-        return self.regular_loss.add_weights(*args, **kwargs)
+        aux_outputs = [predictor(model_output) for _, predictor, _ in self.aux_tasks]
+        aux_losses = []
+        for i in range(self.aux_tasks):
+            name, loss, prediction = (
+                self.aux_tasks[i][0],
+                self.aux_tasks[i][2],
+                aux_outputs[i],
+            )
+            loss_inputs = {
+                key[len(name) + 1 :]: value
+                for key, value in kwargs
+                if key.startswith(f"{name}_")
+            }
+            aux_loss = loss.forward(prediction, **loss_inputs)
+            aux_losses.append(aux_loss)
+
+        loss += torch.sum(aux_losses)
+        
+        return loss
 
     def __call__(self, *args, **kwargs):
-        return self.forward(*args, **kwargs)
-
-
-class PredictorLoss:
-    def __init__(self, regular_loss, predictor):
-        self.regular_loss = regular_loss
-        self.predictor = predictor
-
-    def forward(self, model_output, target, weights=None):
-        predictor_output = self.predictor.forward(model_output)
-        if weights is None:
-            return self.regular_loss(predictor_output, target)
-        else:
-            return self.regular_loss(predictor_output, target, weights)
-
-    def add_weights(self, *args, **kwargs):
-        return self.regular_loss.add_weights(*args, **kwargs)
-
-    def __call__(self, *args, **kwargs):
-        return self.forward(*args, **kwargs)
+        self.forward(*args, **kwargs)
 
 
 class AuxTask:
@@ -55,9 +55,10 @@ class Task:
         post_processor = None
         if hasattr(task_config, "post_processor"):
             if hasattr(task_config, "post_processing_parameter_range"):
-                kwargs = task_config.post_processing_parameter_range.to_dict()
+                kwargs = task_config.post_processing_parameter_range.to_dict(
+                    default_only=True
+                )
                 del kwargs["id"]
-                del kwargs["task"]
             else:
                 kwargs = {}
             parameter_range = PostProcessingParameterRange(**kwargs)
@@ -78,23 +79,24 @@ class Task:
             loss_args = task_config.loss_args
         self.loss = task_config.loss(**loss_args)
 
-        self.aux_task = None
-        if hasattr(task_config, "aux_task"):
-            self.aux_task = AuxTask()
+        auxiliary_task_keys = []
+        for key in task_config.to_dict().keys():
+            if key.startswith("aux_task_"):
+                auxiliary_task_keys.append(key[9:])
+
+        # stores tuples of name, predictor, loss
+        self.aux_tasks = []
+        for auxiliary_task_key in auxiliary_task_keys:
+            aux_task_config = getattr(task_config, f"aux_task_{auxiliary_task_key}")
             predictor_args = {}
-            if hasattr(task_config.aux_task, "predictor_args"):
-                predictor_args = task_config.aux_task.predictor_args
-            self.aux_task.predictor = task_config.aux_task.predictor(
-                data, model, **predictor_args
+            if hasattr(aux_task_config, "predictor_args"):
+                predictor_args = aux_task_config.predictor_args
+            self.aux_tasks.append(
+                (
+                    auxiliary_task_key,
+                    aux_task_config.predictor(**predictor_args),
+                    aux_task_config.loss,
+                )
             )
 
-            loss_args = {}
-            if hasattr(task_config, "loss_args"):
-                loss_args = task_config.loss_args
-            self.aux_task.loss = task_config.aux_task.loss(**loss_args)
-
-            self.loss = AuxLoss(
-                self.loss, self.aux_task.loss, self.predictor, self.aux_task.predictor
-            )
-        else:
-            self.loss = PredictorLoss(self.loss, self.predictor)
+        self.total_loss = AgglomeratedLoss(self.predictor, self.loss, self.aux_tasks)
