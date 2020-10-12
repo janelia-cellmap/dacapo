@@ -222,6 +222,7 @@ def enumerate_runs(
     snapshot_interval,
     keep_best_validation,
     billing,
+    batch,
 ):
 
     runs = []
@@ -241,6 +242,7 @@ def enumerate_runs(
                                 snapshot_interval,
                                 keep_best_validation,
                                 billing,
+                                batch,
                             )
                         )
     return runs
