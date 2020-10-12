@@ -47,7 +47,6 @@ class ConfigWrapper:
                 if section in [self._default_section, "DEFAULT"]:
                     continue
 
-                print(F"SECTION: {section}")
                 d[section] = {}
                 for key, item in self._config[section].items():
 

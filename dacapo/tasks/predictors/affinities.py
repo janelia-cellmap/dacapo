@@ -46,6 +46,9 @@ class Affinities(Model):
             gp.AddAffinities(
                 affinity_neighborhood=self.neighborhood, labels=gt, affinities=target
             )
+            # TODO: Fix Error: Found dtype Byte but expected Float
+            # This can occur when backpropogating through MSE where
+            # the predictions are floats but the targets are uint8
         )
 
     def forward(self, x):

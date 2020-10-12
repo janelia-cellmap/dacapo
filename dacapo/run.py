@@ -100,9 +100,9 @@ class Run:
             {"params": task.predictor.parameters()},
         ]
 
-        if task.aux_task is not None:
+        for name, predictor, loss in task.aux_tasks:
             parameters.append(
-                {"params": task.aux_task.predictor.parameters()},
+                {"params": predictor.parameters()},
             )
 
         optimizer = self.optimizer_config.type(parameters, lr=self.optimizer_config.lr)

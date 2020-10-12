@@ -1,6 +1,5 @@
-from .gp import Squash, AddChannelDim, RemoveChannelDim, TransposeDims
+from .gp import Squash, AddChannelDim, RemoveChannelDim, TransposeDims, Train
 import gunpowder as gp
-import gunpowder.torch as gp_torch
 import math
 import os
 
@@ -154,8 +153,8 @@ def create_pipeline_3d(
 ):
 
     raw_channels = max(1, data.raw.num_channels)
-    input_shape = task.model.input_shape
-    output_shape = task.model.output_shape
+    input_shape = gp.Coordinate(task.model.input_shape)
+    output_shape = gp.Coordinate(task.model.output_shape)
     voxel_size = data.raw.train.voxel_size
 
     task.predictor = task.predictor.to("cuda")
@@ -167,10 +166,36 @@ def create_pipeline_3d(
     raw = gp.ArrayKey("RAW")
     gt = gp.ArrayKey("GT")
     target = gp.ArrayKey("TARGET")
-    aux_target = gp.ArrayKey("AUX_TARGET")
     weights = gp.ArrayKey("WEIGHTS")
+    model_outputs = gp.ArrayKey("MODEL_OUTPUTS")
+    model_output_grads = gp.ArrayKey("MODEL_OUT_GRAD")
     prediction = gp.ArrayKey("PREDICTION")
     pred_gradients = gp.ArrayKey("PRED_GRADIENTS")
+
+    snapshot_dataset_names = {
+        raw: "raw",
+        model_outputs: "model_outputs",
+        model_output_grads: "model_out_grad",
+        target: "target",
+        prediction: "prediction",
+        pred_gradients: "pred_gradients",
+        weights: "weights",
+    }
+
+    aux_keys = {}
+    aux_grad_keys = {}
+    for name, _, _ in task.aux_tasks:
+        aux_keys[name] = (
+            gp.ArrayKey(f"{name.upper()}_PREDICTION"),
+            gp.ArrayKey(f"{name.upper()}_TARGET"),
+            None,
+        )
+        aux_grad_keys[name] = gp.ArrayKey(f"{name.upper()}_PRED_GRAD")
+
+        aux_pred, aux_target, _ = aux_keys[name]
+
+        snapshot_dataset_names[aux_pred] = f"{name}_pred"
+        snapshot_dataset_names[aux_target] = f"{name}_target"
 
     channel_dims = 0 if raw_channels == 1 else 1
 
@@ -179,8 +204,8 @@ def create_pipeline_3d(
 
     sources = (data.raw.train.get_source(raw), data.gt.train.get_source(gt))
     pipeline = sources + gp.MergeProvider()
-    pipeline += gp.Pad(raw, (40, 40, 40))
-    pipeline += gp.Pad(gt, (40, 40, 40))
+    pipeline += gp.Pad(raw, input_shape / 2 * voxel_size)
+    pipeline += gp.Pad(gt, input_shape / 2 * voxel_size)
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
     pipeline += gp.Normalize(raw)
@@ -192,23 +217,38 @@ def create_pipeline_3d(
     for augmentation in eval(task.augmentations):
         pipeline += augmentation
     pipeline += predictor.add_target(gt, target)
-    if task.aux_task is not None:
-        aux_task = True
-        pipeline += task.aux_task.predictor.add_target(gt, aux_target)
-        task.aux_task.predictor.to("cuda")
-    else:
-        aux_task = False
     # (don't care about gt anymore)
     # raw: ([c,] d, h, w)
     # target: ([c,] d, h, w)
     weights_node = task.loss.add_weights(target, weights)
+    loss_inputs = []
     if weights_node:
         pipeline += weights_node
-        loss_inputs = {0: prediction, 1: target, 2: weights}
+        loss_inputs.append({0: prediction, 1: target, 2: weights})
     else:
-        loss_inputs = {0: prediction, 1: target}
-    if aux_task:
-        loss_inputs["aux_target"] = aux_target
+        loss_inputs.append({0: prediction, 1: target})
+
+    head_outputs = []
+    head_gradients = []
+    for name, aux_predictor, aux_loss in task.aux_tasks:
+        aux_prediction, aux_target, aux_weights = aux_keys[name]
+        pipeline += aux_predictor.add_target(gt, aux_target)
+        aux_weights_node = aux_loss.add_weights(aux_target, aux_weights)
+        if aux_weights_node:
+            aux_weights = gp.ArrayKey(f"{name.upper()}_WEIGHTS")
+            aux_keys[name] = (
+                aux_prediction,
+                aux_target,
+                aux_weights,
+            )
+            pipeline += aux_weights_node
+            loss_inputs.append({0: aux_prediction, 1: aux_target, 2: aux_weights})
+            snapshot_dataset_names[aux_weights] = f"{name}_weights"
+        else:
+            loss_inputs.append({0: aux_prediction, 1: aux_target})
+        head_outputs.append({0: aux_prediction})
+        aux_pred_gradient = aux_grad_keys[name]
+        head_gradients.append({0: aux_pred_gradient})
     # raw: ([c,] d, h, w)
     # target: ([c,] d, h, w)
     # [weights: ([c,] d, h, w)]
@@ -222,14 +262,17 @@ def create_pipeline_3d(
     # raw: (b, c, d, h, w)
     # target: (b, [c,] d, h, w)
     # [weights: (b, [c,] d, h, w)]
-    pipeline += gp_torch.Train(
+    pipeline += Train(
         model=task.model,
-        loss=task.loss,
+        heads=[("opt", predictor)]
+        + [(name, aux_pred) for name, aux_pred, _ in task.aux_tasks],
+        losses=[task.loss] + [loss for _, _, loss in task.aux_tasks],
         optimizer=optimizer,
         inputs={"x": raw},
+        outputs={0: model_outputs},
+        head_outputs=[{0: prediction}] + head_outputs,
         loss_inputs=loss_inputs,
-        outputs={0: prediction},
-        gradients={0:pred_gradients},
+        gradients=[{0: model_output_grads}, {0: pred_gradients}] + head_gradients,
         save_every=1e6,
     )
     # raw: (b, c, d, h, w)
@@ -256,14 +299,7 @@ def create_pipeline_3d(
         # [weights: ([c,] b, d, h, w)]
         # prediction: (c, b, d, h, w)
         pipeline += gp.Snapshot(
-            dataset_names={
-                raw: "raw",
-                target: "target",
-                aux_target: "aux_target",
-                prediction: "prediction",
-                pred_gradients: "pred_gradients",
-                weights: "weights",
-            },
+            dataset_names=snapshot_dataset_names,
             every=snapshot_every,
             output_dir=os.path.join(outdir, "snapshots"),
             output_filename="{iteration}.hdf",
@@ -274,8 +310,14 @@ def create_pipeline_3d(
     request.add(raw, input_size)
     request.add(gt, output_size)
     request.add(target, output_size)
-    if aux_task:
+    for name, _, _ in task.aux_tasks:
+        aux_pred, aux_target, aux_weight = aux_keys[name]
+        request.add(aux_pred, output_size)
         request.add(aux_target, output_size)
+        if aux_weight is not None:
+            request.add(aux_weight, output_size)
+        aux_pred_grad = aux_grad_keys[name]
+        request.add(aux_pred_grad, output_size)
     if weights_node:
         request.add(weights, output_size)
     request.add(prediction, output_size)

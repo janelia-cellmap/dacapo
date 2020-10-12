@@ -6,7 +6,7 @@ from gunpowder.array_spec import ArraySpec
 from gunpowder.ext import torch, tensorboardX, NoSuchModule
 from gunpowder.nodes.generic_train import GenericTrain
 
-from typing import Dict, Union, Optional, List, Any
+from typing import Dict, Union, Optional, List, Any, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -85,13 +85,13 @@ class Train(GenericTrain):
         self,
         model,
         heads: List[Tuple[str, Any]],
-        losses,
-        optimizer,
+        losses: List[Any],
+        optimizer: Any,
         inputs: Dict[str, ArrayKey],
-        outputs: Dict[Union[int, str], ArrayKey],
+        outputs: List[Dict[Union[int, str], ArrayKey]],
         head_outputs: List[Dict[Union[int, str], ArrayKey]],
         loss_inputs: List[Dict[Union[int, str], ArrayKey]],
-        gradients: Dict[Union[int, str], ArrayKey] = {},
+        gradients: List[Dict[Union[int, str], ArrayKey]] = {},
         array_specs: Optional[Dict[ArrayKey, ArraySpec]] = None,
         checkpoint_basename: str = "model",
         save_every: int = 2000,
@@ -106,18 +106,36 @@ class Train(GenericTrain):
                 "Consider using model.train()"
             )
 
-        # not yet implemented
-        gradients = gradients
-        for loss_input_dict in loss_inputs:
-            inputs.update(
-                {k: v for k, v in loss_input_dict.items() if v not in outputs.values()}
-            )
+        self.head_map = {head[0]: head[1] for head in heads}
 
         for head, head_output_dict in zip(heads, head_outputs):
             outputs.update({f"{head[0]}_{k}": v for k, v in head_output_dict.items()})
 
+        self.all_loss_inputs = {}
+        for head, loss_input_dict in zip(heads, loss_inputs):
+            inputs.update(
+                {
+                    f"{head[0]}_{k}": v
+                    for k, v in loss_input_dict.items()
+                    if v not in outputs.values()
+                }
+            )
+            self.all_loss_inputs.update(
+                {f"{head[0]}_{k}": v for k, v in loss_input_dict.items()}
+            )
+
+        self.gradient_dict = gradients[0]
+        for head, grad_dict in zip(heads, gradients[1:]):
+            self.gradient_dict.update(
+                {f"{head[0]}_{k}": v for k, v in grad_dict.items()}
+            )
+
         super(Train, self).__init__(
-            inputs, outputs, gradients, array_specs, spawn_subprocess=spawn_subprocess
+            inputs,
+            outputs,
+            self.gradient_dict,
+            array_specs,
+            spawn_subprocess=spawn_subprocess,
         )
 
         self.model = model
@@ -144,8 +162,17 @@ class Train(GenericTrain):
     def register_hooks(self):
         for key in self.outputs:
             if isinstance(key, str):
-                layer = getattr(self.model, key)
-                layer.register_forward_hook(self.create_hook(key))
+                name_parts = key.split("_")
+                if name_parts[0] in self.head_map.keys():
+                    layer_name = "_".join(name_parts[1:])
+                    try:
+                        layer_name = int(layer_name)
+                    except ValueError:
+                        layer = getattr(self.head_map[name_parts[0]], layer_name)
+                        layer.register_forward_hook(self.create_hook(key))
+                else:
+                    layer = getattr(self.model, key)
+                    layer.register_forward_hook(self.create_hook(key))
 
     def create_hook(self, key):
         def save_layer(module, input, output):
@@ -160,7 +187,16 @@ class Train(GenericTrain):
             if isinstance(array_name, int):
                 tensor = outputs[array_name]
             elif isinstance(array_name, str):
-                tensor = getattr(self.model, array_name)
+                name_parts = array_name.split("_")
+                if name_parts[0] in self.head_map.keys():
+                    layer_name = "_".join(name_parts[1:])
+                    try:
+                        layer_name = int(layer_name)
+                        tensor = outputs[array_name]
+                    except ValueError:
+                        tensor = getattr(self.head_map[name_parts[0]], layer_name)
+                else:
+                    tensor = getattr(self.model, array_name)
             else:
                 raise RuntimeError(
                     "only ints and strings are supported as gradients keys"
@@ -175,7 +211,7 @@ class Train(GenericTrain):
         try:
             self.model = self.model.to(self.device)
             for i, head in enumerate(self.heads):
-                self.heads[i][1] = head[1].to(self.device)
+                self.heads[i] = (head[0], head[1].to(self.device))
 
         except RuntimeError as e:
             raise RuntimeError(
@@ -234,8 +270,10 @@ class Train(GenericTrain):
         for i, head in enumerate(self.heads):
             head_output = head[1](model_outputs)
             head_outputs.append(head_output)
-            # TODO: Use head name?
-            outputs[f"head_{i}"] = head_output
+            assert isinstance(
+                head_output, torch.Tensor
+            ), "predictor did not return a torch tensor"
+            outputs[f"{head[0]}_0"] = head_output
 
         # Add hooks to retain gradients on some outputs
         self.retain_gradients(request, outputs)
@@ -243,7 +281,9 @@ class Train(GenericTrain):
         flipped_outputs = {v: outputs[k] for k, v in self.outputs.items()}
 
         all_losses = []
+        i = 0
         for loss, loss_inputs in zip(self.losses, self.loss_inputs):
+            i += 1
             # Some inputs to the loss should come from the batch, not the model
             provided_loss_inputs = self.__collect_provided_loss_inputs(
                 batch, loss_inputs
@@ -257,8 +297,11 @@ class Train(GenericTrain):
             # Update device loss inputs with tensors from outputs if available
             device_loss_inputs = {
                 k: flipped_outputs.get(v, device_loss_inputs.get(k))
-                for k, v in self.loss_inputs.items()
+                for k, v in loss_inputs.items()
             }
+            assert all(
+                v is not None for v in device_loss_inputs.values()
+            ), "loss function input must be provided upstream or by the model"
 
             device_loss_args = []
             for i in range(len(device_loss_inputs)):
@@ -270,9 +313,10 @@ class Train(GenericTrain):
             for k, v in list(device_loss_inputs.items()):
                 if isinstance(k, str):
                     device_loss_kwargs[k] = device_loss_inputs.pop(k)
-            assert (
-                len(device_loss_inputs) == 0
-            ), f"Not all loss inputs could be interpreted. Failed keys: {device_loss_inputs.keys()}"
+            assert len(device_loss_inputs) == 0, (
+                f"Not all loss inputs could be interpreted. "
+                f"Failed keys: {device_loss_inputs.keys()}"
+            )
 
             logger.debug("model outputs: %s", {k: v.shape for k, v in outputs.items()})
             logger.debug(
@@ -280,10 +324,11 @@ class Train(GenericTrain):
                 [v.shape for v in device_loss_args],
                 {k: v.shape for k, v in device_loss_kwargs.items()},
             )
+
             loss = loss(*device_loss_args, **device_loss_kwargs)
             all_losses.append(loss)
 
-        loss = torch.sum(all_losses)
+        loss = sum(all_losses)
         loss.backward()
         self.optimizer.step()
 
@@ -301,7 +346,16 @@ class Train(GenericTrain):
             if isinstance(array_name, int):
                 tensor = outputs[array_name]
             elif isinstance(array_name, str):
-                tensor = getattr(self.model, array_name)
+                name_parts = array_name.split("_")
+                if name_parts[0] in self.head_map.keys():
+                    layer_name = "_".join(name_parts[1:])
+                    try:
+                        layer_name = int(layer_name)
+                        tensor = outputs[array_name]
+                    except ValueError:
+                        tensor = getattr(self.head_map[name_parts[0]], layer_name)
+                else:
+                    tensor = getattr(self.model, array_name)
             else:
                 raise RuntimeError(
                     "only ints and strings are supported as gradients keys"
@@ -357,7 +411,8 @@ class Train(GenericTrain):
     def __collect_provided_inputs(self, batch):
 
         return self.__collect_provided_arrays(
-            {k: v for k, v in self.inputs.items() if k not in self.loss_inputs}, batch
+            {k: v for k, v in self.inputs.items() if k not in self.all_loss_inputs},
+            batch,
         )
 
     def __collect_provided_loss_inputs(self, batch, loss_inputs):

@@ -4,6 +4,7 @@ import torch
 
 class AgglomeratedLoss(torch.nn.Module):
     def __init__(self, predictor, loss, aux_tasks):
+        super().__init__()
         self.predictor = predictor
         self.loss = loss
         self.aux_tasks = aux_tasks
@@ -38,7 +39,7 @@ class AgglomeratedLoss(torch.nn.Module):
             aux_losses.append(aux_loss)
 
         loss += torch.sum(aux_losses)
-        
+
         return loss
 
     def __call__(self, *args, **kwargs):
@@ -94,9 +95,9 @@ class Task:
             self.aux_tasks.append(
                 (
                     auxiliary_task_key,
-                    aux_task_config.predictor(**predictor_args),
-                    aux_task_config.loss,
+                    aux_task_config.predictor(
+                        data, model, post_processor=None, **predictor_args
+                    ),
+                    aux_task_config.loss(),
                 )
             )
-
-        self.total_loss = AgglomeratedLoss(self.predictor, self.loss, self.aux_tasks)
