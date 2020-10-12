@@ -205,7 +205,7 @@ def create_pipeline_3d(
     sources = (data.raw.train.get_source(raw), data.gt.train.get_source(gt))
     pipeline = sources + gp.MergeProvider()
     pipeline += gp.Pad(raw, input_shape / 2 * voxel_size)
-    pipeline += gp.Pad(gt, input_shape / 2 * voxel_size)
+    # pipeline += gp.Pad(gt, input_shape / 2 * voxel_size)
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
     pipeline += gp.Normalize(raw)
