@@ -28,6 +28,7 @@ class Run:
         snapshot_interval,
         keep_best_validation,
         billing=None,
+        batch=False,
     ):
 
         # configs
@@ -38,6 +39,7 @@ class Run:
 
         self.repetition = repetition
         self.billing = billing
+        self.batch = batch
 
         self.training_stats = TrainingStats()
         self.validation_scores = ValidationScores()
@@ -277,6 +279,7 @@ def run_remote(run):
         queue="gpu_any",
         execute=True,
         flags=flags,
+        batch=run.batch,
         log_file=f"runs/{run.hash}/log.out",
         error_file=f"runs/{run.hash}/log.err",
     )
