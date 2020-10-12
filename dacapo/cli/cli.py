@@ -46,6 +46,7 @@ def cli(log_level):
 @click.option("-b", "--keep-best-validation", required=True, type=str)
 @click.option("-n", "--num-workers", default=1, type=int)
 @click.option("-P", "--billing", default=None, type=str)
+@click.option("--batch", default=False, type=bool)
 @click_config_file.configuration_option(section="runs")
 def run_all(
     tasks,
@@ -58,6 +59,7 @@ def run_all(
     keep_best_validation,
     num_workers,
     billing,
+    batch,
 ):
     import dacapo.config
 
@@ -79,6 +81,7 @@ def run_all(
         snapshot_interval=snapshot_interval,
         keep_best_validation=keep_best_validation,
         billing=billing,
+        batch=batch,
     )
 
     dacapo.run_all(runs, num_workers=num_workers)
