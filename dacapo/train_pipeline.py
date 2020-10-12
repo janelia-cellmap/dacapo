@@ -196,6 +196,9 @@ def create_pipeline_3d(
 
         snapshot_dataset_names[aux_pred] = f"{name}_pred"
         snapshot_dataset_names[aux_target] = f"{name}_target"
+        
+        aux_grad = aux_grad_keys[name]
+        snapshot_dataset_names[aux_grad] = f"{name}_aux_grad"
 
     channel_dims = 0 if raw_channels == 1 else 1
 
