@@ -221,6 +221,7 @@ def predict_3d(
         batch = pipeline.request_batch(total_request)
         ret = {
             'raw': batch[raw],
+            'model_out': batch[model_output],
             'prediction': batch[prediction]
         }
         if gt_data:
