@@ -69,8 +69,8 @@ class Affinities(Model):
 
             print(f"...done ({time.time() - start}s)")
 
-        if return_results:
-            scores, results = ret
-            yield parameters, scores, results
-        else:
-            yield parameters, ret
+            if return_results:
+                scores, results = ret
+                yield parameters, scores, results
+            else:
+                yield parameters, ret
