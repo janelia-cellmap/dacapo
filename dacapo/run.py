@@ -81,6 +81,7 @@ class Run:
     def start(self):
 
         # set torch flags:
+        # TODO: make these configurable?
         torch.backends.cudnn.enabled = True
         torch.backends.cudnn.benchmark = True
 
