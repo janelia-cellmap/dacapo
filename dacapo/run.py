@@ -132,6 +132,8 @@ class Run:
 
                 batch = pipeline.request_batch(request)
 
+                # TODO: compare against upstream timing to see if there could be gains
+                # with more cpus?
                 train_time = batch.profiling_stats.get_timing_summary(
                     "Train", "process"
                 ).times[-1]
