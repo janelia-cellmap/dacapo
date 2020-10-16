@@ -116,7 +116,7 @@ class Run:
         print(f"Storing this run's data in {self.outdir}")
         self.outdir.mkdir(parents=True, exist_ok=True)
 
-        starting_iteration = self.load_training_state(model, task.heads, optimizer)
+        starting_iteration = self.load_training_state(store, model, task.heads, optimizer)
         if starting_iteration > 0:
             logger.info(
                 f"Continuing previous training from iteration {starting_iteration}"
@@ -230,7 +230,7 @@ class Run:
             "model_state_dict": model.state_dict(),
             "optimizer_state_dict": optimizer.state_dict(),
         }
-        for i, (name, head, loss) in enumerate(self.heads):
+        for i, (name, head, loss) in enumerate(heads):
             state_dicts[f"{name}_{i}_state_dict"] = head.state_dict()
 
         torch.save(
@@ -251,7 +251,7 @@ class Run:
             if checkpoint_iteration < iteration:
                 Path(self.outdir, f"{checkpoint_iteration}.checkpoint").unlink()
 
-    def load_training_state(self, model, heads, optimizer):
+    def load_training_state(self, store, model, heads, optimizer):
         """
         Load the most recent model weights and the iteration they belong to.
         Continue training from here.
@@ -265,8 +265,11 @@ class Run:
             checkpoint = torch.load(checkpoint_name)
             model.load_state_dict(checkpoint["model_state_dict"])
             optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
-            for i, (name, head, loss) in enumerate(self.heads):
+            for i, (name, head, loss) in enumerate(heads):
                 head.load_state_dict(checkpoint[f"{name}_{i}_state_dict"])
+
+            # load training stats:
+            store.read_training_stats(self)
             return iteration
 
     def to_dict(self):
