@@ -114,7 +114,7 @@ class Run:
         optimizer = self.optimizer_config.type(parameters, lr=self.optimizer_config.lr)
 
         print(f"Storing this run's data in {self.outdir}")
-        self.outdir.mkdir(exist_ok=True)
+        self.outdir.mkdir(parents=True, exist_ok=True)
 
         starting_iteration = self.load_training_state(model, task.heads, optimizer)
         if starting_iteration > 0:
