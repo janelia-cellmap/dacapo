@@ -10,10 +10,13 @@ import funlib.run
 import gunpowder as gp
 import hashlib
 import numpy as np
-import os
+from pathlib import Path
 import time
+import logging
 
 import torch
+
+logger = logging.getLogger(__name__)
 
 
 class Run:
@@ -110,9 +113,14 @@ class Run:
 
         optimizer = self.optimizer_config.type(parameters, lr=self.optimizer_config.lr)
 
-        outdir = os.path.join("runs", self.hash)
-        print(f"Storing this run's data in {outdir}")
-        os.makedirs(outdir, exist_ok=True)
+        print(f"Storing this run's data in {self.outdir}")
+        self.outdir.mkdir(exist_ok=True)
+
+        starting_iteration = self.load_training_state(model, task.heads, optimizer)
+        if starting_iteration > 0:
+            logger.info(
+                f"Continuing previous training from iteration {starting_iteration}"
+            )
 
         self.num_parameters = task.predictor.num_parameters()
         store.sync_run(self)
@@ -122,13 +130,16 @@ class Run:
             task.predictor,
             optimizer,
             self.optimizer_config.batch_size,
-            outdir=outdir,
+            outdir=self.outdir,
             snapshot_every=self.snapshot_interval,
         )
 
         with gp.build(pipeline):
 
-            for i in tqdm(range(self.optimizer_config.num_iterations), desc="train"):
+            for i in tqdm(
+                range(starting_iteration, self.optimizer_config.num_iterations),
+                desc="train",
+            ):
 
                 batch = pipeline.request_batch(request)
 
@@ -144,7 +155,7 @@ class Run:
                         data,
                         task.model,
                         task.predictor,
-                        store_best_result=os.path.join(outdir, f"validate_{i}.zarr"),
+                        store_best_result=Path(self.outdir, f"validate_{i}.zarr"),
                         best_score_name=self.best_score_name,
                         best_score_relation=self.best_score_relation,
                     )
@@ -179,16 +190,19 @@ class Run:
                                 f"Iteration {i} current best ({best}), "
                                 "storing checkpoint..."
                             )
-                            task.predictor.save(
-                                os.path.join(
-                                    outdir,
+                            self._save_parameters(
+                                Path(
+                                    self.outdir,
                                     f"validation_best_{self.best_score_name}.checkpoint",
                                 ),
+                                model,
+                                task.heads,
                                 optimizer,
                             )
 
                 if i % 100 == 0 and i > 0:
                     store.store_training_stats(self)
+                    self.save_training_state(i, model, task.heads, optimizer)
 
         store.store_training_stats(self)
         self.stopped = time.time()
@@ -196,6 +210,64 @@ class Run:
 
         # TODO:
         # testing
+
+    @property
+    def outdir(self):
+        return Path("runs", self.hash)
+
+    def get_saved_iterations(self):
+        for f in self.outdir.iterdir():
+            if f.name.endswith(".checkpoint"):
+                tokens = f.name.split(".", maxsplit=1)
+                try:
+                    checkpoint_iteration = int(tokens[0])
+                    yield checkpoint_iteration
+                except ValueError:
+                    pass
+
+    def _save_parameters(self, filename, model, heads, optimizer):
+        state_dicts = {
+            "model_state_dict": model.state_dict(),
+            "optimizer_state_dict": optimizer.state_dict(),
+        }
+        for i, (name, head, loss) in enumerate(self.heads):
+            state_dicts[f"{name}_{i}_state_dict"] = head.state_dict()
+
+        torch.save(
+            state_dicts,
+            filename,
+        )
+
+    def save_training_state(self, iteration, model, heads, optimizer):
+        """
+        Keep the most recent model weights and the iteration they belong to.
+        This allows a run to continue where it left off.
+        """
+        checkpoint_name = self.outdir / f"{iteration}.checkpoint"
+        self._save_parameters(checkpoint_name, model, heads, optimizer)
+
+        # cleanup and remove old iteration checkpoints
+        for checkpoint_iteration in self.get_saved_iterations():
+            if checkpoint_iteration < iteration:
+                Path(self.outdir, f"{checkpoint_iteration}.checkpoint").unlink()
+
+    def load_training_state(self, model, heads, optimizer):
+        """
+        Load the most recent model weights and the iteration they belong to.
+        Continue training from here.
+        """
+        checkpoint_iterations = list(self.get_saved_iterations())
+        if len(checkpoint_iterations) == 0:
+            return 0
+        else:
+            iteration = max(checkpoint_iterations)
+            checkpoint_name = self.outdir / f"{iteration}.checkpoint"
+            checkpoint = torch.load(checkpoint_name)
+            model.load_state_dict(checkpoint["model_state_dict"])
+            optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+            for i, (name, head, loss) in enumerate(self.heads):
+                head.load_state_dict(checkpoint[f"{name}_{i}_state_dict"])
+            return iteration
 
     def to_dict(self):
 

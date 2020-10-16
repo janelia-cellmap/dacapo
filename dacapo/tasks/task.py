@@ -101,3 +101,6 @@ class Task:
                     aux_task_config.loss(),
                 )
             )
+
+        # predictor + aux_tasks
+        self.heads = [("main", self.predictor, self.loss)] + self.aux_tasks
