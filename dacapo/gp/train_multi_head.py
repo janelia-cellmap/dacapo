@@ -210,6 +210,10 @@ class Train(GenericTrain):
 
         try:
             self.model = self.model.to(self.device)
+            for state in self.optimizer.state.values():
+                for k, v in state.items():
+                    if isinstance(v, torch.Tensor):
+                        state[k] = v.cuda()
             for i, head in enumerate(self.heads):
                 self.heads[i] = (head[0], head[1].to(self.device))
 
