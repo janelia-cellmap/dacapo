@@ -1,6 +1,7 @@
 from funlib.evaluate import rand_voi
 
 import numpy as np
+import gunpowder as gp
 
 
 def evaluate_affs(pred_labels, gt_labels, return_results=False):
@@ -12,8 +13,8 @@ def evaluate_affs(pred_labels, gt_labels, return_results=False):
 
     if return_results:
         results = {
-            "pred_labels": pred_labels.data.astype(np.uint64),
-            "gt_labels": gt_labels.data.astype(np.uint64),
+            "pred_labels": gp.Array(pred_labels.data.astype(np.uint64), gp.ArraySpec(roi=pred_labels.spec.roi, voxel_size = pred_labels.spec.voxel_size)),
+            "gt_labels": gp.Array(gt_labels.data.astype(np.uint64), gp.ArraySpec(roi=gt_labels.spec.roi, voxel_size = gt_labels.spec.voxel_size)),
         }
 
         return scores, results

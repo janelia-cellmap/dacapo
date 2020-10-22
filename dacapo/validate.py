@@ -24,7 +24,18 @@ def validate(
     if store_best_result:
         f = zarr.open(store_best_result)
         f['raw'] = ds['raw'].data
+        f['raw'].attrs["offset"] = ds['raw'].spec.roi.get_offset()
+        f['raw'].attrs["resolution"] = ds['raw'].spec.voxel_size
         f['prediction'] = ds['prediction'].data
+        f['prediction'].attrs['offset'] = ds['prediction'].spec.roi.get_offset()
+        f['prediction'].attrs['resolution'] = ds['prediction'].spec.voxel_size
+        aux_task_names = set([name for name, _, _ in aux_tasks])
+        for k, v in ds.items():
+            print(f"volume {k} has offset: {v.spec.roi.get_offset()}")
+            if k in aux_task_names:
+                f[k] = v.data
+                f[k].attrs["offset"] = v.spec.roi.get_offset()
+                f[k].attrs["resolution"] = v.spec.voxel_size
 
     all_scores = {}
     best_score = None
@@ -55,7 +66,9 @@ def validate(
     if store_best_result:
         f = zarr.open(store_best_result)
         for k, v in best_results.items():
-            f[k] = v
+            f[k] = v.data
+            f[k].attrs["offset"] = v.spec.roi.get_offset()
+            f[k].attrs["resolution"] = v.spec.voxel_size
         d = sanatize(best_parameters.to_dict())
         for k, v in d.items():
             f.attrs[k] = v
