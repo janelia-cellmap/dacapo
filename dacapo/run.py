@@ -147,6 +147,7 @@ class Run:
                         store_best_result=os.path.join(outdir, f"validate_{i}.zarr"),
                         best_score_name=self.best_score_name,
                         best_score_relation=self.best_score_relation,
+                        aux_tasks=task.aux_tasks,
                     )
                     self.validation_scores.add_validation_iteration(i, scores)
                     store.store_validation_scores(self)

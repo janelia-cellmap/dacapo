@@ -8,6 +8,7 @@ def validate(
         data,
         model,
         predictor,
+        aux_tasks=None,
         store_best_result=None,
         best_score_name=None,
         best_score_relation=None):
@@ -17,7 +18,7 @@ def validate(
 
     print("Predicting on validation data...")
     start = time.time()
-    ds = predict(raw_data, model, predictor, gt_data)
+    ds = predict(raw_data, model, predictor, gt_data, aux_tasks)
     print(f"...done ({time.time() - start}s)")
 
     if store_best_result:
