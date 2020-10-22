@@ -118,6 +118,7 @@ class Run:
 
         starting_iteration = self.load_training_state(store, model, task.heads, optimizer)
         if starting_iteration > 0:
+            store.store_training_stats(self)
             logger.info(
                 f"Continuing previous training from iteration {starting_iteration}"
             )
@@ -155,9 +156,10 @@ class Run:
                         data,
                         task.model,
                         task.predictor,
-                        store_best_result=Path(self.outdir, f"validate_{i}.zarr"),
+                        store_best_result=str(Path(self.outdir, f"validate_{i}.zarr")),
                         best_score_name=self.best_score_name,
                         best_score_relation=self.best_score_relation,
+                        aux_tasks=task.aux_tasks,
                     )
                     self.validation_scores.add_validation_iteration(i, scores)
                     store.store_validation_scores(self)
@@ -262,7 +264,10 @@ class Run:
         else:
             iteration = max(checkpoint_iterations)
             checkpoint_name = self.outdir / f"{iteration}.checkpoint"
-            checkpoint = torch.load(checkpoint_name)
+            try:
+                checkpoint = torch.load(checkpoint_name)
+            except RuntimeError:
+                return 0
             model.load_state_dict(checkpoint["model_state_dict"])
             optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
             for i, (name, head, loss) in enumerate(heads):
@@ -270,7 +275,7 @@ class Run:
 
             # load training stats:
             store.read_training_stats(self)
-            return iteration
+            return iteration + 1
 
     def to_dict(self):
 

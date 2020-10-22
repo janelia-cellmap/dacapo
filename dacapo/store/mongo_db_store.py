@@ -49,6 +49,9 @@ class MongoDbStore:
 
         store_from_iteration = 0
 
+        print(f"Existing stats: {existing_stats.trained_until()}")
+        print(f"Trained stats: {stats.trained_until()}")
+
         if existing_stats.trained_until() > 0:
 
             if stats.trained_until() > 0:
@@ -57,9 +60,13 @@ class MongoDbStore:
                 if stats.trained_until() > existing_stats.trained_until():
                     # current stats go further than the one in DB
                     store_from_iteration = existing_stats.trained_until()
+                    print(f"STORING FROM: {store_from_iteration}")
                 else:
                     # current stats are behind DB--drop DB
                     self.__delete_training_stats(run.id)
+                    print("DELETING STATS")
+                    deleted_stats = self.__read_training_stats(run.id)
+                    assert deleted_stats.trained_until() == 0
 
         # store all new stats
         self.__store_training_stats(
@@ -184,7 +191,7 @@ class MongoDbStore:
         stats = TrainingStats()
         docs = self.training_stats.find({'run': run_id})
         for doc in docs:
-            if doc < iteration or iteration < 0:
+            if doc['iteration'] < iteration or iteration < 0:
                 stats.add_training_iteration(
                     doc['iteration'],
                     doc['loss'],
@@ -192,7 +199,9 @@ class MongoDbStore:
         return stats
 
     def __delete_training_stats(self, run_id):
-        self.training_stats.delete_many({'run': run_id})
+        result = self.training_stats.delete_many({'run': run_id})
+        assert self.training_stats.count_documents({'run': run_id}) == 0
+        assert result.deleted_count > 0
 
     def __store_validation_scores(self, validation_scores, begin, end, run_id):
 

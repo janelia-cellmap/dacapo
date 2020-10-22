@@ -105,11 +105,11 @@ class TrainValidateSplit:
 
     @property
     def validate(self):
-        if self._train is None:
+        if self._validate is None:
             raise Exception(
                 f"{self.name} train/validation group has no validation data"
             )
-        return self._train
+        return self._validate
 
     @validate.setter
     def validate(self, dataset: Union[Dataset, Iterable[Dataset]]):

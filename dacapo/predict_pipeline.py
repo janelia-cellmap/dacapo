@@ -122,7 +122,8 @@ def predict_3d(
         raw_data,
         gt_data,
         model,
-        predictor):
+        predictor,
+        aux_tasks):
 
     raw_channels = max(1, raw_data.num_channels)
     input_shape = model.input_shape
@@ -191,6 +192,14 @@ def predict_3d(
             model=predictor,
             inputs={'x': model_output},
             outputs={0: prediction})
+    aux_predictions = []
+    for aux_name, aux_predictor, _ in aux_tasks:
+        aux_pred_key = gp.ArrayKey(f"PRED_{aux_name.upper()}")
+        pipeline += gp_torch.Predict(
+            model=aux_predictor,
+            inputs={'x': model_output},
+            outputs={0: aux_pred_key})
+        aux_predictions.append((aux_name, aux_pred_key))
     # remove "batch" dimension
     pipeline += RemoveChannelDim(raw)
     pipeline += RemoveChannelDim(prediction)
@@ -200,22 +209,45 @@ def predict_3d(
     # prediction: ([c,] d, h, w)
     if channel_dims == 0:
         pipeline += RemoveChannelDim(raw)
+
+    scan_request = gp.BatchRequest()
+    scan_request.add(raw, input_size)
+    scan_request.add(model_output, output_size)
+    scan_request.add(prediction, output_size)
+    for aux_name, aux_key in aux_predictions:
+        scan_request.add(aux_key, output_size)
+    if gt_data:
+        scan_request.add(gt, output_size)
+        scan_request.add(target, output_size)
+
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
     # target: ([c,] d, h, w)
     # prediction: ([c,] d, h, w)
     pipeline += gp.Scan(scan_request)
 
-    # ensure validation ROI is at least the size of the network input
-    roi = gt_data.roi.grow(input_size/2, input_size/2)
+    # only output where the gt exists
+    context = (input_size - output_size) / 2
+
+    print(f"gt_roi: {gt_data.roi}, raw_roi: {raw_data.roi}, context: {context}")
+
+    output_roi = gt_data.roi.intersect(raw_data.roi.grow(-context, -context))
+    input_roi = output_roi.grow(context, context)
+
+    print(f"input_roi: {input_roi}, output_roi: {output_roi}")
+
+    assert all([a > b for a, b in zip(input_roi.get_shape(), input_size)])
+    assert all([a > b for a, b in zip(output_roi.get_shape(), output_size)])
 
     total_request = gp.BatchRequest()
-    total_request[raw] = gp.ArraySpec(roi=roi)
-    total_request[model_output] = gp.ArraySpec(roi=roi)
-    total_request[prediction] = gp.ArraySpec(roi=roi)
+    total_request[raw] = gp.ArraySpec(roi=input_roi)
+    total_request[model_output] = gp.ArraySpec(roi=output_roi)
+    total_request[prediction] = gp.ArraySpec(roi=output_roi)
+    for aux_name, aux_key in aux_predictions:
+        total_request[aux_key] = gp.ArraySpec(roi=output_roi)
     if gt_data:
-        total_request[gt] = gp.ArraySpec(roi=roi)
-        total_request[target] = gp.ArraySpec(roi=roi)
+        total_request[gt] = gp.ArraySpec(roi=output_roi)
+        total_request[target] = gp.ArraySpec(roi=output_roi)
 
     with gp.build(pipeline):
         batch = pipeline.request_batch(total_request)
@@ -229,6 +261,8 @@ def predict_3d(
                 'gt': batch[gt],
                 'target': batch[target]
             })
+        for aux_name, aux_key in aux_predictions:
+            ret[aux_name] = batch[aux_key]
         return ret
 
 
@@ -236,14 +270,17 @@ def predict(
         raw,
         model,
         predictor,
-        gt=None):
+        gt=None,
+        aux_tasks=None):
+    if aux_tasks is None:
+        aux_tasks = []
 
     task_dims = raw.spatial_dims
 
     if task_dims == 2:
         return predict_2d(raw, gt, predictor)
     elif task_dims == 3:
-        return predict_3d(raw, gt, model, predictor)
+        return predict_3d(raw, gt, model, predictor, aux_tasks)
     else:
         raise RuntimeError(
             "Validation other than 2D/3D not yet implemented")
