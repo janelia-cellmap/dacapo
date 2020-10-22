@@ -29,24 +29,77 @@ def cli(log_level):
 
 @cli.command()
 @click.option(
-    "-t", "--tasks", required=True, type=click.Path(exists=True, file_okay=False), help='The directory of task configs.'
+    "-t",
+    "--tasks",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of task configs.",
 )
 @click.option(
-    "-d", "--data", required=True, type=click.Path(exists=True, file_okay=False), help='The directory of data configs.'
+    "-d",
+    "--data",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of data configs.",
 )
 @click.option(
-    "-m", "--models", required=True, type=click.Path(exists=True, file_okay=False), help='The directory of model configs.'
+    "-m",
+    "--models",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of model configs.",
 )
 @click.option(
-    "-o", "--optimizers", required=True, type=click.Path(exists=True, file_okay=False), help='The directory of optimizer configs.'
+    "-o",
+    "--optimizers",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of optimizer configs.",
 )
-@click.option("-R", "--repetitions", required=True, type=int, help='Number of times to repeat each combination of (task, data, model, optimizer).')
-@click.option("-v", "--validation-interval", required=True, type=int, help='How many iterations between each validation run.')
-@click.option("-s", "--snapshot-interval", required=True, type=int, help="How many iterations between each saved snapshot.")
-@click.option("-b", "--keep-best-validation", required=True, type=str, help="Definition of what is considered the 'best' validation")
-@click.option("-n", "--num-workers", default=1, type=int, help="How many workers to spawn on to run jobs in parallel.")
-@click.option("-P", "--billing", default=None, type=str, help="Who should be billed for this job.")
-@click.option("--batch", default=False, type=bool, help="Whether to run the jobs as interactive or not.")
+@click.option(
+    "-R",
+    "--repetitions",
+    required=True,
+    type=int,
+    help="Number of times to repeat each combination of (task, data, model, optimizer).",
+)
+@click.option(
+    "-v",
+    "--validation-interval",
+    required=True,
+    type=int,
+    help="How many iterations between each validation run.",
+)
+@click.option(
+    "-s",
+    "--snapshot-interval",
+    required=True,
+    type=int,
+    help="How many iterations between each saved snapshot.",
+)
+@click.option(
+    "-b",
+    "--keep-best-validation",
+    required=True,
+    type=str,
+    help="Definition of what is considered the 'best' validation",
+)
+@click.option(
+    "-n",
+    "--num-workers",
+    default=1,
+    type=int,
+    help="How many workers to spawn on to run jobs in parallel.",
+)
+@click.option(
+    "-P", "--billing", default=None, type=str, help="Who should be billed for this job."
+)
+@click.option(
+    "--batch",
+    default=False,
+    type=bool,
+    help="Whether to run the jobs as interactive or not.",
+)
 @click_config_file.configuration_option(section="runs")
 def run_all(
     tasks,
@@ -89,21 +142,57 @@ def run_all(
 
 @cli.command()
 @click.option(
-    "-t", "--task", required=True, type=click.Path(exists=True, dir_okay=False), help="The task to run."
+    "-t",
+    "--task",
+    required=True,
+    type=click.Path(exists=True, dir_okay=False),
+    help="The task to run.",
 )
 @click.option(
-    "-d", "--data", required=True, type=click.Path(exists=True, dir_okay=False), help="The data to run."
+    "-d",
+    "--data",
+    required=True,
+    type=click.Path(exists=True, dir_okay=False),
+    help="The data to run.",
 )
 @click.option(
-    "-m", "--model", required=True, type=click.Path(exists=True, dir_okay=False), help="The model to run."
+    "-m",
+    "--model",
+    required=True,
+    type=click.Path(exists=True, dir_okay=False),
+    help="The model to run.",
 )
 @click.option(
-    "-o", "--optimizer", required=True, type=click.Path(exists=True, dir_okay=False), help="The optimizer to run."
+    "-o",
+    "--optimizer",
+    required=True,
+    type=click.Path(exists=True, dir_okay=False),
+    help="The optimizer to run.",
 )
-@click.option("-R", "--repetitions", required=True, type=int, help="The repitition to run")
-@click.option("-v", "--validation-interval", required=True, type=int, help="The number of training iterations between validation iterations.")
-@click.option("-s", "--snapshot-interval", required=True, type=int, help="The number of training iterations between each snapshot.")
-@click.option("-b", "--keep-best-validation", required=True, type=str, help="Defines what the 'best' iteration is.")
+@click.option(
+    "-R", "--repetitions", required=True, type=int, help="The repitition to run"
+)
+@click.option(
+    "-v",
+    "--validation-interval",
+    required=True,
+    type=int,
+    help="The number of training iterations between validation iterations.",
+)
+@click.option(
+    "-s",
+    "--snapshot-interval",
+    required=True,
+    type=int,
+    help="The number of training iterations between each snapshot.",
+)
+@click.option(
+    "-b",
+    "--keep-best-validation",
+    required=True,
+    type=str,
+    help="Defines what the 'best' iteration is.",
+)
 def run_one(
     task,
     data,
