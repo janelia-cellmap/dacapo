@@ -68,9 +68,9 @@ class MongoDbStore:
             stats.trained_until(),
             run.id)
 
-    def read_training_stats(self, run):
+    def read_training_stats(self, run, iteration=-1):
 
-        run.training_stats = self.__read_training_stats(run.id)
+        run.training_stats = self.__read_training_stats(run.id, iteration)
 
     def store_validation_scores(self, run):
 
@@ -179,15 +179,16 @@ class MongoDbStore:
         if docs:
             self.training_stats.insert_many(docs)
 
-    def __read_training_stats(self, run_id):
+    def __read_training_stats(self, run_id, iteration=-1):
 
         stats = TrainingStats()
         docs = self.training_stats.find({'run': run_id})
         for doc in docs:
-            stats.add_training_iteration(
-                doc['iteration'],
-                doc['loss'],
-                doc['time'])
+            if doc['iteration'] < iteration or iteration < 0:
+                stats.add_training_iteration(
+                    doc['iteration'],
+                    doc['loss'],
+                    doc['time'])
         return stats
 
     def __delete_training_stats(self, run_id):
