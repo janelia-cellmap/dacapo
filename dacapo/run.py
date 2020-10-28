@@ -241,6 +241,14 @@ class Run:
             filename,
         )
 
+    def _load_parameters(self, filename, model, heads, optimizer=None):
+        checkpoint = torch.load(filename)
+        model.load_state_dict(checkpoint["model_state_dict"])
+        if optimizer is not None:
+            optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+        for i, (name, head, loss) in enumerate(heads):
+            head.load_state_dict(checkpoint[f"{name}_{i}_state_dict"])
+
     def save_training_state(self, iteration, model, heads, optimizer):
         """
         Keep the most recent model weights and the iteration they belong to.

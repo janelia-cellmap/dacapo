@@ -224,6 +224,137 @@ def run_one(
     dacapo.run_local(run)
 
 
+@cli.command()
+@click.option(
+    "-n",
+    "--name",
+    required=True,
+    type=str,
+    help="The name of the run whose weights you want to use.",
+)
+@click.option(
+    "-pd",
+    "--predict-data",
+    required=True,
+    type=click.Path(exists=True, dir_okay=False),
+    help="The config file of the data you want to predict.",
+)
+@click.option(
+    "-t",
+    "--tasks",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of task configs.",
+)
+@click.option(
+    "-d",
+    "--data",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of data configs.",
+)
+@click.option(
+    "-m",
+    "--models",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of model configs.",
+)
+@click.option(
+    "-o",
+    "--optimizers",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of optimizer configs.",
+)
+@click.option(
+    "-R",
+    "--repetitions",
+    required=True,
+    type=int,
+    help="Number of times to repeat each combination of (task, data, model, optimizer).",
+)
+@click.option(
+    "-v",
+    "--validation-interval",
+    required=True,
+    type=int,
+    help="How many iterations between each validation run.",
+)
+@click.option(
+    "-s",
+    "--snapshot-interval",
+    required=True,
+    type=int,
+    help="How many iterations between each saved snapshot.",
+)
+@click.option(
+    "-b",
+    "--keep-best-validation",
+    required=True,
+    type=str,
+    help="Definition of what is considered the 'best' validation",
+)
+@click.option(
+    "-n",
+    "--num-workers",
+    default=1,
+    type=int,
+    help="How many workers to spawn on to run jobs in parallel.",
+)
+@click.option(
+    "-P", "--billing", default=None, type=str, help="Who should be billed for this job."
+)
+@click.option(
+    "--batch",
+    default=False,
+    type=bool,
+    help="Whether to run the jobs as interactive or not.",
+)
+def predict(
+    name,
+    predict_data,
+    tasks,
+    data,
+    models,
+    optimizers,
+    repetitions,
+    validation_interval,
+    snapshot_interval,
+    keep_best_validation,
+    num_workers,
+    billing,
+    batch,
+):
+    import dacapo.config
+
+    task_configs = dacapo.config.find_task_configs(str(tasks))
+    data_configs = dacapo.config.find_data_configs(str(data))
+    model_configs = dacapo.config.find_model_configs(str(models))
+    optimizer_configs = dacapo.config.find_optimizer_configs(str(optimizers))
+
+    if num_workers > 1:
+        assert billing is not None, "billing must be provided"
+
+    runs = dacapo.enumerate_runs(
+        task_configs=task_configs,
+        data_configs=data_configs,
+        model_configs=model_configs,
+        optimizer_configs=optimizer_configs,
+        repetitions=repetitions,
+        validation_interval=validation_interval,
+        snapshot_interval=snapshot_interval,
+        keep_best_validation=keep_best_validation,
+        billing=billing,
+        batch=batch,
+    )
+
+    desired_runs = [run for run in runs if name == run.hash]
+    data = dacapo.config.DataConfig(predict_data)
+    for run in desired_runs:
+        dacapo.predict.run_local(run, data)
+
+
 @cli.group()
 def visualize():
     pass
