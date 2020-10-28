@@ -224,14 +224,8 @@ def predict_3d(
     output_roi = gt_data.roi.intersect(raw_data.roi.grow(-context, -context))
     input_roi = output_roi.grow(context, context)
 
-    assert all([a > b for a, b in zip(input_roi.get_shape(), input_size)]), (
-        f"The input_roi is smaller ({input_roi.get_shape()}) than the "
-        f"model input size ({input_size})"
-    )
-    assert all([a > b for a, b in zip(output_roi.get_shape(), output_size)]), (
-        f"The output_roi is smaller ({output_roi.get_shape()}) than the "
-        f"model output size ({output_size})"
-    )
+    assert all([a > b for a, b in zip(input_roi.get_shape(), input_size)])
+    assert all([a > b for a, b in zip(output_roi.get_shape(), output_size)])
 
     total_request = gp.BatchRequest()
     total_request[raw] = gp.ArraySpec(roi=input_roi)
