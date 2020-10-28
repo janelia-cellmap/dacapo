@@ -1,5 +1,5 @@
 from dacapo.tasks import Task
-from dacapo.data import Data
+from dacapo.data import PredictData
 from dacapo.predict_pipeline import predict
 
 import funlib.run
@@ -34,7 +34,7 @@ class PredictRun:
 
         self.started = time.time()
 
-        data = Data(self.predict_data)
+        data = PredictData(self.predict_data)
         model = self.model_config.type(data, self.run.model_config)
         task = Task(data, model, self.run.task_config)
 

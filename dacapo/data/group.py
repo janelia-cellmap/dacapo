@@ -123,9 +123,42 @@ class TrainValidateSplit:
 
     def __getattr__(self, attr):
         if "__" in attr:
-            super().__getattr__(attr)
+            return super().__getattr__(attr)
         else:
             if attr in self.__dict__:
                 return self.__dict__[attr]
             else:
                 return getattr(self.train, attr)
+
+
+class TestSplit:
+    """
+    Data for prediction
+    """
+
+    def __init__(self, name: str):
+        self._name = name
+        self._test = None
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def test(self):
+        if self._test is None:
+            raise Exception(f"{self.name} test group has no testing data")
+        return self._test
+
+    @test.setter
+    def test(self, dataset: Union[Dataset, Iterable[Dataset]]):
+        if isinstance(dataset, Iterable):
+            self._test = dataset
+        else:
+            self._test = dataset
+
+    def __getattr__(self, attr):
+        if attr in self.__dict__:
+            self.__dict__[attr]
+        else:
+            return getattr(self.test, attr)
