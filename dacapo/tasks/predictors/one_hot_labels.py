@@ -15,14 +15,14 @@ class OneHotLabels(Model):
             model,
             matching_score,
             matching_threshold,
+            num_classes, 
             post_processor=None):
 
         dims = data.raw.spatial_dims
-        num_classes = data.gt.num_classes
 
         super(OneHotLabels, self).__init__(
-            model.input_shape,
-            model.fmaps_in,
+            model.output_shape,
+            model.fmaps_out,            
             num_classes)
 
         assert num_classes > 0, (
@@ -34,7 +34,6 @@ class OneHotLabels(Model):
             3: torch.nn.Conv3d
         }[dims]
         logits = [
-            model,
             conv(model.fmaps_out, num_classes, (1,)*dims)
         ]
 
@@ -64,9 +63,11 @@ class OneHotLabels(Model):
                 self.enable_autoskip()
 
             def process(self, batch, request):
+                spec = batch[self.gt].spec.copy()
+                spec.dtype = np.int64
                 batch[self.target] = gp.Array(
                     batch[self.gt].data.astype(np.int64),
-                    batch[self.gt].spec)
+                    spec)
 
         return AddClassLabels(gt, target)
 
