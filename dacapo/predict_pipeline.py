@@ -2,6 +2,9 @@ from .gp import AddChannelDim, RemoveChannelDim, TransposeDims
 import gunpowder as gp
 import gunpowder.torch as gp_torch
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 def predict_2d(
         raw_data,
@@ -123,11 +126,14 @@ def predict_3d(
         gt_data,
         model,
         predictor,
-        aux_tasks):
+        aux_tasks,
+        total_roi,
+        model_input_padding=(80, 80, 80)
+):
 
     raw_channels = max(1, raw_data.num_channels)
-    input_shape = model.input_shape
-    output_shape = model.output_shape
+    input_shape = tuple(a+b for a, b in zip(model.input_shape, model_input_padding))
+    output_shape = tuple(a+b for a, b in zip(model.output_shape, model_input_padding))
     voxel_size = raw_data.voxel_size
 
     # switch to world units
@@ -212,6 +218,8 @@ def predict_3d(
         scan_request.add(gt, output_size)
         scan_request.add(target, output_size)
 
+    print(f"SCAN REQUEST: {scan_request}")
+
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
     # target: ([c,] d, h, w)
@@ -221,15 +229,25 @@ def predict_3d(
     # only output where the gt exists
     context = (input_size - output_size) / 2
 
-    output_roi = gt_data.roi.intersect(raw_data.roi.grow(-context, -context))
+
+    raw_roi = raw_data.roi
+    if total_roi is not None:
+        raw_roi = raw_roi.intersect(gp.Roi(*total_roi))
+    raw_output_roi = raw_roi.grow(-context, -context)
+    if gt_data is not None:
+        output_roi = gt_data.roi.intersect(raw_data.roi.grow(-context, -context))
+    else:
+        output_roi = raw_output_roi
     input_roi = output_roi.grow(context, context)
 
     assert all([a > b for a, b in zip(input_roi.get_shape(), input_size)])
     assert all([a > b for a, b in zip(output_roi.get_shape(), output_size)])
 
+    logger.warning(f"Predicting on input_roi: {input_roi} and output_roi: {output_roi}")
+
     total_request = gp.BatchRequest()
     total_request[raw] = gp.ArraySpec(roi=input_roi)
-    total_request[model_output] = gp.ArraySpec(roi=output_roi)
+    # total_request[model_output] = gp.ArraySpec(roi=output_roi)
     total_request[prediction] = gp.ArraySpec(roi=output_roi)
     for aux_name, aux_key in aux_predictions:
         total_request[aux_key] = gp.ArraySpec(roi=output_roi)
@@ -241,7 +259,7 @@ def predict_3d(
         batch = pipeline.request_batch(total_request)
         ret = {
             'raw': batch[raw],
-            'model_out': batch[model_output],
+            # 'model_out': batch[model_output],
             'prediction': batch[prediction]
         }
         if gt_data:
@@ -259,7 +277,9 @@ def predict(
         model,
         predictor,
         gt=None,
-        aux_tasks=None):
+        aux_tasks=None,
+        total_roi=None,
+    ):
     if aux_tasks is None:
         aux_tasks = []
 
@@ -268,7 +288,7 @@ def predict(
     if task_dims == 2:
         return predict_2d(raw, gt, predictor)
     elif task_dims == 3:
-        return predict_3d(raw, gt, model, predictor, aux_tasks)
+        return predict_3d(raw, gt, model, predictor, aux_tasks, total_roi)
     else:
         raise RuntimeError(
             "Validation other than 2D/3D not yet implemented")

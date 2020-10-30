@@ -1,5 +1,5 @@
 from dacapo.tasks import Task
-from dacapo.data import PredictData
+from dacapo.data import PredictData, Data
 from dacapo.predict_pipeline import predict
 
 import funlib.run
@@ -35,18 +35,19 @@ class PredictRun:
         self.started = time.time()
 
         data = PredictData(self.predict_data)
-        model = self.model_config.type(data, self.run.model_config)
-        task = Task(data, model, self.run.task_config)
+        run_data = Data(self.run.data_config)
+        model = self.run.model_config.type(data, self.run.model_config)
+        task = Task(run_data, model, self.run.task_config)
 
         self.__load_best_state(self.run, model, task)
 
         results = predict(
-            data.raw.test, model, task.predictor, gt=None, aux_tasks=task.aux_tasks
+            data.raw.test, model, task.predictor, gt=None, aux_tasks=[], total_roi=data.total_roi
         )
 
         output_container = zarr.open(data.raw.test.filename)
         prefix = data.raw.test.ds_name
-        for k, v in results:
+        for k, v in results.items():
             output_container[f"{prefix}_{k}"] = v.data
             output_container[f"{prefix}_{k}"].attrs["offset"] = v.spec.roi.get_offset()
             output_container[f"{prefix}_{k}"].attrs["resolution"] = v.spec.voxel_size

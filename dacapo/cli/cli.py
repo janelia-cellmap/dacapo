@@ -311,6 +311,7 @@ def run_one(
     type=bool,
     help="Whether to run the jobs as interactive or not.",
 )
+@click_config_file.configuration_option(section="runs")
 def predict(
     name,
     predict_data,
@@ -327,6 +328,7 @@ def predict(
     batch,
 ):
     import dacapo.config
+    from dacapo.predict import run_local as predict_run_local
 
     task_configs = dacapo.config.find_task_configs(str(tasks))
     data_configs = dacapo.config.find_data_configs(str(data))
@@ -352,7 +354,7 @@ def predict(
     desired_runs = [run for run in runs if name == run.hash]
     data = dacapo.config.DataConfig(predict_data)
     for run in desired_runs:
-        dacapo.predict.run_local(run, data)
+        predict_run_local(run, data)
 
 
 @cli.group()

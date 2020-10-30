@@ -9,6 +9,11 @@ class Data:
         arrays = data_config.arrays
         graphs = data_config.graphs
 
+        if hasattr(data_config, "total_roi"):
+            self.total_roi = data_config.total_roi
+        else:
+            self.total_roi = None
+
         for array in arrays:
             self.__setattr__(array, TrainValidateSplit(array))
         for graph in graphs:
@@ -44,6 +49,11 @@ class PredictData:
 
         arrays = data_config.arrays
         graphs = data_config.graphs
+
+        if hasattr(data_config, "total_roi"):
+            self.total_roi = data_config.total_roi
+        else:
+            self.total_roi = None
 
         for array in arrays:
             self.__setattr__(array, TestSplit(array))
