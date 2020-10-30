@@ -1,6 +1,8 @@
 import funlib.evaluate
 import numpy as np
 
+import gunpowder as gp
+
 
 def evaluate_labels(
         pred_labels,
@@ -12,8 +14,10 @@ def evaluate_labels(
 
     voxel_size = gt_labels.spec.voxel_size
 
-    pred_labels = pred_labels.data
-    gt_labels = gt_labels.data
+    pred_labels_data = pred_labels.data
+    pred_labels_spec = pred_labels.spec.copy()
+    gt_labels_data = gt_labels.data
+    gt_labels_spec = gt_labels.spec.copy()
 
     # PIXEL-WISE SCORES
 
@@ -38,26 +42,26 @@ def evaluate_labels(
 
     # accuracy
 
-    sample_scores['accuracy'] = (pred_labels == gt_labels).sum()/gt_labels.size
+    sample_scores['accuracy'] = (pred_labels_data == gt_labels_data).sum()/gt_labels_data.size
     if background_label is not None:
-        fg_mask = gt_labels != background_label
+        fg_mask = gt_labels_data != background_label
         sample_scores['fg_accuracy'] = (
-            pred_labels[fg_mask] ==
-            gt_labels[fg_mask]).sum()/fg_mask.sum()
+            pred_labels_data[fg_mask] ==
+            gt_labels_data[fg_mask]).sum()/fg_mask.sum()
 
     # precision, recall, fscore
 
-    label_ids = np.unique(gt_labels).astype(np.int32)
+    label_ids = np.unique(gt_labels_data).astype(np.int32)
     for label in label_ids:
 
-        relevant = gt_labels == label
-        selected = pred_labels == label
+        relevant = gt_labels_data == label
+        selected = pred_labels_data == label
         num_relevant = relevant.sum()
         num_selected = selected.sum()
 
-        tp = (pred_labels[relevant] == label).sum()
+        tp = (pred_labels_data[relevant] == label).sum()
         fp = num_selected - tp
-        tn = (gt_labels.size - num_relevant) - fp
+        tn = (gt_labels_data.size - num_relevant) - fp
 
         # precision, or positive predictive value
         if num_selected > 0:
@@ -127,8 +131,8 @@ def evaluate_labels(
     if background_label is not None:
         label_ids = label_ids[label_ids != background_label]
     detection_scores = funlib.evaluate.detection_scores(
-        gt_labels,
-        pred_labels,
+        gt_labels_data,
+        pred_labels_data,
         label_ids,
         matching_score,
         matching_threshold,
@@ -198,11 +202,23 @@ def evaluate_labels(
             components_tp_pred[np.logical_not(tp_pred_mask)] = 0
             components_fn_gt[tp_gt_mask] = 0
             components_fp_pred[tp_pred_mask] = 0
-            components[f'components_tp_gt_{label}'] = components_tp_gt
-            components[f'components_fn_gt_{label}'] = components_fn_gt
-            components[f'components_tp_pred_{label}'] = components_tp_pred
-            components[f'components_fp_pred_{label}'] = components_fp_pred
 
+            components_spec = gt_labels_spec.copy()
+            components_spec.dtype = components_tp_gt.dtype
+
+            components[f"components_tp_gt_{label}"] = gp.Array(
+                components_tp_gt, components_spec.copy()
+            )
+            components[f"components_fn_gt_{label}"] = gp.Array(
+                components_fn_gt, components_spec.copy()
+            )
+            components[f"components_tp_pred_{label}"] = gp.Array(
+                components_tp_pred, components_spec.copy()
+            )
+            components[f"components_fp_pred_{label}"] = gp.Array(
+                components_fp_pred, components_spec.copy()
+            )
+            
     num_classes = label_ids.size
     if num_classes >= 1:
         sample_scores['detection_ppv'] /= num_classes
@@ -212,9 +228,13 @@ def evaluate_labels(
     scores = {'sample': sample_scores, 'average': sample_scores}
 
     if return_results:
+        pred_labels_spec.dtype = np.uint64
+        gt_labels_spec.dtype = np.uint64
         results = {
-            'pred_labels': pred_labels.astype(np.uint64),
-            'gt_labels': gt_labels.astype(np.uint64)
+            "pred_labels": gp.Array(
+                pred_labels_data.astype(np.uint64), pred_labels_spec
+            ),
+            "gt_labels": gp.Array(gt_labels_data.astype(np.uint64), gt_labels_spec),
         }
         for k, v in components.items():
             results[k] = v.astype(np.uint64)
