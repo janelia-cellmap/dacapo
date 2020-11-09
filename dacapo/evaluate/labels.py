@@ -237,7 +237,10 @@ def evaluate_labels(
             "gt_labels": gp.Array(gt_labels_data.astype(np.uint64), gt_labels_spec),
         }
         for k, v in components.items():
-            results[k] = v.astype(np.uint64)
+            spec = v.spec
+            spec.dtype = np.uint64
+            v_uint64 = gp.Array(v.data.astype(np.uint64), spec)
+            results[k] = v_uint64
 
         return scores, results
 
