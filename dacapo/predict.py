@@ -99,8 +99,6 @@ def predict_worker(run):
 
 
 def run_remote(run, data, daisy_config):
-    raise NotImplementedError("This should probably be handled by the Store Class")
-
     predict = PredictRun(run, data, daisy_config)
 
     for step in predict.steps:
