@@ -160,6 +160,60 @@ class MongoDbStore:
 
             self.runs.insert(run_doc)
 
+    def __sync_prediction(self, prediction):
+
+        prediction_doc = prediction.to_dict()
+        existing = list(
+            self.predictions.find(
+                {'id': prediction.id}, {'_id': False}))
+
+        if existing:
+
+            stored_prediction = existing[0]
+
+            if not self.__same_doc(
+                    prediction_doc,
+                    stored_prediction,
+                    ignore=['started', 'stopped', 'num_parameters']):
+                raise RuntimeError(
+                    f"Data for prediction {prediction.id} does not match already synced "
+                    f"entry. Found\n\n{stored_prediction}\n\nin DB, but was "
+                    f"given\n\n{prediction_doc}")
+
+            # stored and existing are the same, except maybe for started and
+            # stopped timestamp
+
+            update_db = False
+            if stored_prediction['started'] is None and prediction.started is not None:
+                update_db = True
+            if stored_prediction['stopped'] is None and prediction.stopped is not None:
+                update_db = True
+
+            update_current = False
+            if stored_prediction['started'] is not None and prediction.started is None:
+                update_current = True
+            if stored_prediction['stopped'] is not None and prediction.stopped is None:
+                update_current = True
+
+            if update_db and update_current:
+                raise RuntimeError(
+                    f"Start and stop time of prediction {prediction.id} do not match "
+                    f"already synced entry. Found\n\n{stored_prediction}\n\nin "
+                    f"DB, but was given\n\n{prediction_doc}")
+
+            if update_db:
+                self.predictions.update({'id': prediction.id}, prediction_doc)
+            elif update_current:
+                prediction.started = stored_prediction['started']
+                prediction.stopped = stored_prediction['stopped']
+
+        else:
+
+            self.predictions.insert(prediction_doc)
+
+    def check_block(self, prediction_id, step_id, block_id):
+        return self.predictions.count({"id": prediction_id, "step": step_id, "block": block_id}) >= 1
+
     def __sync_task_config(self, task_config):
         self.__save_insert(self.tasks, task_config.to_dict())
 
@@ -298,6 +352,14 @@ class MongoDbStore:
             ],
             name='id_rep',
             unique=True)
+        self.predictions.create_index(
+            [
+                ('id', ASCENDING),
+                ('step', ASCENDING),
+                ('block', ASCENDING)
+            ],
+            name='id_step_block',
+            unique=True)
         self.tasks.create_index(
             [
                 ('id', ASCENDING)
@@ -335,6 +397,7 @@ class MongoDbStore:
         '''Opens the node, edge, and meta collections'''
 
         self.runs = self.database['runs']
+        self.predictions = self.database['predictions']
         self.tasks = self.database['tasks']
         self.models = self.database['models']
         self.optimizers = self.database['optimizers']

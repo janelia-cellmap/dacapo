@@ -1,4 +1,4 @@
-from .gp import AddChannelDim, RemoveChannelDim, TransposeDims
+from .gp import AddChannelDim, RemoveChannelDim
 import gunpowder as gp
 import gunpowder.torch as gp_torch
 
@@ -7,7 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def predict(
+def predict_pipeline(
     raw,
     model,
     predictor,
@@ -17,8 +17,8 @@ def predict(
     aux_tasks=None,
     total_roi=None,
     model_padding=None,
+    daisy=False,
 ):
-
     raw_channels = max(1, raw.num_channels)
     if model_padding is not None:
         input_shape = tuple(a + b for a, b in zip(model.input_shape, model_padding))
@@ -105,8 +105,6 @@ def predict(
         scan_request.add(gt_key, output_size)
         scan_request.add(target, output_size)
 
-    print(f"SCAN REQUEST: {scan_request}")
-
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
     # target: ([c,] d, h, w)
@@ -148,16 +146,17 @@ def predict(
         total_request[gt_key] = gp.ArraySpec(roi=output_roi)
         total_request[target] = gp.ArraySpec(roi=output_roi)
 
-    daisy.run_blockwise(
-        input_roi,
-        input_block_roi,
-        output_block_roi,
-        process_function=lambda: run_pipeline(pipeline),
-        check_function=lambda b: check_block(blocks_predicted, b),
-        num_workers=num_workers,
-        read_write_conflict=False,
-        fit="overhang",
-    )
+    # If using daisy, add the daisy block manager.
+    if daisy:
+        ref_request = scan_request.copy()
+        ds_rois = {raw: "read_roi", prediction: "write_roi"}
+        for aux_name, aux_key in aux_predictions:
+            ds_rois[aux_key] = "write_roi"
+        if gt:
+            ds_rois[gt] = "write_roi"
+            ds_rois[target] = "write_roi"
+        pipeline += gp.DaisyRequestBlocks(ref_request, ds_rois)
+        total_request = gp.BatchRequest()
 
     # Return a pipeline that provides desired arrays/graphs.
     if gt:
@@ -167,6 +166,41 @@ def predict(
             gp.ZarrSource(output_filename, ds_names),
         ) + gp.MergeProvider()
     else:
-        sources = (raw.get_source(raw_key), gp.ZarrSource(output_filename, ds_names))
+        sources = (
+            raw.get_source(raw_key),
+            gp.ZarrSource(output_filename, ds_names),
+        ) + gp.MergeProvider()
 
-    return sources
+    return pipeline, sources, total_request
+
+
+def predict(
+    raw,
+    model,
+    predictor,
+    output_dir,
+    output_filename,
+    gt=None,
+    aux_tasks=None,
+    total_roi=None,
+    model_padding=None,
+    daisy=False,
+):
+
+    compute_pipeline, source_pipeline, total_request = predict_pipeline(
+        raw,
+        model,
+        predictor,
+        output_dir,
+        output_filename,
+        gt=None,
+        aux_tasks=None,
+        total_roi=None,
+        model_padding=None,
+        daisy=False,
+    )
+
+    with gp.build(compute_pipeline):
+        compute_pipeline.request_batch(total_request)
+
+    return source_pipeline

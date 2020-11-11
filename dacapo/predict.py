@@ -2,8 +2,9 @@ from dacapo.tasks import Task
 from dacapo.data import PredictData, Data
 from dacapo.predict_pipeline import predict
 
+import daisy
+
 import funlib.run
-import zarr
 import torch
 
 from pathlib import Path
@@ -19,6 +20,7 @@ class PredictRun:
         self,
         run,
         predict_data,
+        daisy=False,
     ):
 
         # configs
@@ -41,16 +43,14 @@ class PredictRun:
 
         self.__load_best_state(self.run, model, task)
 
-        results = predict(
-            data.raw.test, model, task.predictor, gt=None, aux_tasks=[], total_roi=data.total_roi
+        predict(
+            data.raw.test,
+            model,
+            task.predictor,
+            gt=None,
+            aux_tasks=[],
+            total_roi=data.total_roi,
         )
-
-        output_container = zarr.open(data.raw.test.filename)
-        prefix = data.raw.test.ds_name
-        for k, v in results.items():
-            output_container[f"{prefix}_{k}"] = v.data
-            output_container[f"{prefix}_{k}"].attrs["offset"] = v.spec.roi.get_offset()
-            output_container[f"{prefix}_{k}"].attrs["resolution"] = v.spec.voxel_size
 
         self.stopped = time.time()
 
@@ -64,22 +64,18 @@ class PredictRun:
         run._load_parameters(filename, model, task.heads, optimizer=None)
 
 
-def run_local(run, data):
-    predict = PredictRun(run, data)
+def run_local(run, data, daisy_config):
+    predict = PredictRun(run, data, daisy_config)
 
     print(f"Running run {predict.run.hash} with data {predict.predict_data}")
 
     predict.start()
 
 
-def run_remote(run):
-    if run.billing is not None:
-        flags = [f"-P {run.billing}"]
-    else:
-        flags = None
+def predict_worker(run):
 
     funlib.run.run(
-        command=f"dacapo run-one "
+        command=f"dacapo predict "
         f"-t {run.task_config.config_file} "
         f"-d {run.data_config.config_file} "
         f"-m {run.model_config.config_file} "
@@ -87,13 +83,32 @@ def run_remote(run):
         f"-R {run.repetition} "
         f"-v {run.validation_interval} "
         f"-s {run.snapshot_interval} "
-        f"-b {run.keep_best_validation} ",
+        f"-b {run.keep_best_validation} "
+        f"-daisy",
         num_cpus=2,
         num_gpus=1,
         queue="gpu_any",
         execute=True,
-        flags=flags,
+        flags=run.flags,
         batch=run.batch,
         log_file=f"runs/{run.hash}/log.out",
         error_file=f"runs/{run.hash}/log.err",
     )
+
+
+def run_remote(run, data, daisy_config):
+    raise NotImplementedError("This should probably be handled by the Store Class")
+
+    predict = PredictRun(run, data, daisy_config)
+
+    for step in predict.steps:
+        daisy.run_blockwise(
+            daisy_config.total_roi,
+            daisy_config.input_block_roi,
+            daisy_config.output_block_roi,
+            process_function=lambda: predict_worker(run),
+            check_function=lambda b: run.store.check_block(predict.id, step.id, b.block_id),
+            num_workers=daisy_config.num_workers,
+            read_write_conflict=False,
+            fit="overhang",
+        )

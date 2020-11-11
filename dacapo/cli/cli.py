@@ -240,6 +240,13 @@ def run_one(
     help="The config file of the data you want to predict.",
 )
 @click.option(
+    "-dc",
+    "--daisy-config",
+    required=True,
+    type=click.Path(exists=True, dir_okay=False),
+    help="The config file for daisy."
+)
+@click.option(
     "-t",
     "--tasks",
     required=True,
@@ -311,10 +318,17 @@ def run_one(
     type=bool,
     help="Whether to run the jobs as interactive or not.",
 )
+@click.option(
+    "--daisy-worker",
+    default=False,
+    type=bool,
+    help="Whether this call is a daisy worker or not.",
+)
 @click_config_file.configuration_option(section="runs")
 def predict(
     name,
     predict_data,
+    daisy_config,
     tasks,
     data,
     models,
@@ -326,9 +340,10 @@ def predict(
     num_workers,
     billing,
     batch,
+    daisy_worker,
 ):
     import dacapo.config
-    from dacapo.predict import run_local as predict_run_local
+    from dacapo.predict import run_local as predict_run_local, run_remote as predict_run_remote
 
     task_configs = dacapo.config.find_task_configs(str(tasks))
     data_configs = dacapo.config.find_data_configs(str(data))
@@ -353,8 +368,13 @@ def predict(
 
     desired_runs = [run for run in runs if name == run.hash]
     data = dacapo.config.DataConfig(predict_data)
+    daisy_conf = dacapo.config.DaisyConfig(daisy_config)
+    daisy_conf.worker = daisy_worker
     for run in desired_runs:
-        predict_run_local(run, data)
+        if daisy_conf.num_workers > 1 and not daisy_conf.worker:
+            predict_run_remote(run, data, daisy_config)
+        else:
+            predict_run_local(run, data, daisy_config)
 
 
 @cli.group()
