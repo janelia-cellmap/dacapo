@@ -74,42 +74,30 @@ def run_local(run, data, daisy_config):
     predict.start()
 
 
-def predict_worker(run):
+def predict_worker(dacapo_flags, bsub_flags):
 
     funlib.run.run(
-        command=f"dacapo predict "
-        f"-t {run.task_config.config_file} "
-        f"-d {run.data_config.config_file} "
-        f"-m {run.model_config.config_file} "
-        f"-o {run.optimizer_config.config_file} "
-        f"-R {run.repetition} "
-        f"-v {run.validation_interval} "
-        f"-s {run.snapshot_interval} "
-        f"-b {run.keep_best_validation} "
-        f"--daisy-worker",
+        command=f"dacapo predict {dacapo_flags}",
         num_cpus=2,
         num_gpus=1,
         queue="gpu_any",
         execute=True,
-        flags=run.flags,
-        batch=run.batch,
-        log_file=f"runs/{run.hash}/log.out",
-        error_file=f"runs/{run.hash}/log.err",
+        flags=bsub_flags,
+        batch=True,
+        log_file="predict_logs/%J.log",
+        error_file="predict_logs/%J.err",
     )
 
 
-def run_remote(run, data, daisy_config):
-    predict = PredictRun(run, data, daisy_config)
+def run_remote(dacapo_flags, bsub_flags, daisy_config):
 
     for step in predict.steps:
         daisy.run_blockwise(
             daisy.Roi(*daisy_config.total_roi),
             daisy.Roi(*daisy_config.input_block_roi),
             daisy.Roi(*daisy_config.output_block_roi),
-            process_function=lambda: predict_worker(run),
-            check_function=lambda b: run.store.check_block(
-                predict.id, step.id, b.block_id
-            ),
+            process_function=lambda: predict_worker(dacapo_flags, bsub_flags),
+            check_function=lambda b: False,
             num_workers=daisy_config.num_workers,
             read_write_conflict=False,
             fit="overhang",

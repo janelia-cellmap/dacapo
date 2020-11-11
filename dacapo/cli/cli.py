@@ -244,7 +244,7 @@ def run_one(
     "--daisy-config",
     required=True,
     type=click.Path(exists=True, dir_okay=False),
-    help="The config file for daisy."
+    help="The config file for daisy.",
 )
 @click.option(
     "-t",
@@ -344,40 +344,59 @@ def predict(
     daisy_worker,
 ):
     import dacapo.config
-    from dacapo.predict import run_local as predict_run_local, run_remote as predict_run_remote
+    from dacapo.predict import (
+        run_local as predict_run_local,
+        run_remote as predict_run_remote,
+    )
+
+    daisy_conf = dacapo.config.DaisyConfig(daisy_config)
+    daisy_conf.worker = daisy_worker
 
     if isinstance(bsub_flags, str):
         bsub_flags = bsub_flags.split()
-    if num_workers > 1:
-        assert any(["-P" in flag for flag in bsub_flags]), "billing must be provided"
+    if daisy_conf.num_workers > 1 and not daisy_conf.worker:
+        # start daisy workers who call dacapo.predict with daisy_worker = True
 
-    task_configs = dacapo.config.find_task_configs(str(tasks))
-    data_configs = dacapo.config.find_data_configs(str(data))
-    model_configs = dacapo.config.find_model_configs(str(models))
-    optimizer_configs = dacapo.config.find_optimizer_configs(str(optimizers))
+        dacapo_flags = (
+            f"--name {name} "
+            f"--predict-data {predict_data} "
+            f"--daisy-config {daisy_config} "
+            f"--tasks {tasks} "
+            f"--data {data} "
+            f"--models {models} "
+            f"--optimizers {optimizers} "
+            f"--repetitions {repetitions} "
+            f"--validation-interval {validation_interval} "
+            f"--snapshot-interval {snapshot_interval} "
+            f"--keep-best-validation {keep_best_validation} "
+        )
 
-    runs = dacapo.enumerate_runs(
-        task_configs=task_configs,
-        data_configs=data_configs,
-        model_configs=model_configs,
-        optimizer_configs=optimizer_configs,
-        repetitions=repetitions,
-        validation_interval=validation_interval,
-        snapshot_interval=snapshot_interval,
-        keep_best_validation=keep_best_validation,
-        bsub_flags=bsub_flags,
-        batch=batch,
-    )
+        predict_run_remote(dacapo_flags, bsub_flags, daisy_conf)
+        raise Exception("Running remotely!")
 
-    desired_runs = [run for run in runs if name == run.hash]
-    data = dacapo.config.DataConfig(predict_data)
-    daisy_conf = dacapo.config.DaisyConfig(daisy_config)
-    daisy_conf.worker = daisy_worker
-    for run in desired_runs:
-        if daisy_conf.num_workers > 1 and not daisy_conf.worker:
-            predict_run_remote(run, data, daisy_conf)
-            raise Exception("Running remotely!")
-        else:
+    else:
+
+        task_configs = dacapo.config.find_task_configs(str(tasks))
+        data_configs = dacapo.config.find_data_configs(str(data))
+        model_configs = dacapo.config.find_model_configs(str(models))
+        optimizer_configs = dacapo.config.find_optimizer_configs(str(optimizers))
+
+        runs = dacapo.enumerate_runs(
+            task_configs=task_configs,
+            data_configs=data_configs,
+            model_configs=model_configs,
+            optimizer_configs=optimizer_configs,
+            repetitions=repetitions,
+            validation_interval=validation_interval,
+            snapshot_interval=snapshot_interval,
+            keep_best_validation=keep_best_validation,
+            bsub_flags=bsub_flags,
+            batch=batch,
+        )
+
+        desired_runs = [run for run in runs if name == run.hash]
+        data = dacapo.config.DataConfig(predict_data)
+        for run in desired_runs:
             raise Exception("Don't run locally yet!")
             predict_run_local(run, data, daisy_conf)
 
