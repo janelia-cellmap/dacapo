@@ -27,6 +27,8 @@ class PredictRun:
         self.run = run
         self.predict_data = predict_data
 
+        self.steps = [0]
+
     def start(self):
 
         # set torch flags:
@@ -107,7 +109,9 @@ def run_remote(run, data, daisy_config):
             daisy_config.input_block_roi,
             daisy_config.output_block_roi,
             process_function=lambda: predict_worker(run),
-            check_function=lambda b: run.store.check_block(predict.id, step.id, b.block_id),
+            check_function=lambda b: run.store.check_block(
+                predict.id, step.id, b.block_id
+            ),
             num_workers=daisy_config.num_workers,
             read_write_conflict=False,
             fit="overhang",
