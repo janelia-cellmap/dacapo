@@ -92,7 +92,7 @@ def cli(log_level):
     help="How many workers to spawn on to run jobs in parallel.",
 )
 @click.option(
-    "-P", "--billing", default=None, type=str, help="Who should be billed for this job."
+    "-bf", "--bsub-flags", default=None, type=str, help="flags to pass to bsub"
 )
 @click.option(
     "--batch",
@@ -111,7 +111,7 @@ def run_all(
     snapshot_interval,
     keep_best_validation,
     num_workers,
-    billing,
+    bsub_flags,
     batch,
 ):
     import dacapo.config
@@ -122,7 +122,7 @@ def run_all(
     optimizer_configs = dacapo.config.find_optimizer_configs(str(optimizers))
 
     if num_workers > 1:
-        assert billing is not None, "billing must be provided"
+        assert bsub_flags is not None, "billing must be provided"
 
     runs = dacapo.enumerate_runs(
         task_configs=task_configs,
@@ -133,7 +133,7 @@ def run_all(
         validation_interval=validation_interval,
         snapshot_interval=snapshot_interval,
         keep_best_validation=keep_best_validation,
-        billing=billing,
+        bsub_flags=[bsub_flags],
         batch=batch,
     )
 

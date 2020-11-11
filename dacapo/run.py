@@ -30,8 +30,8 @@ class Run:
         validation_interval,
         snapshot_interval,
         keep_best_validation,
-        billing=None,
         batch=False,
+        bsub_flags=None
     ):
 
         # configs
@@ -41,7 +41,7 @@ class Run:
         self.optimizer_config = optimizer_config
 
         self.repetition = repetition
-        self.billing = billing
+        self.flags = bsub_flags
         self.batch = batch
 
         self.training_stats = TrainingStats()
@@ -353,10 +353,7 @@ def run_local(run):
 
 
 def run_remote(run):
-    if run.billing is not None:
-        flags = [f"-P {run.billing}"]
-    else:
-        flags = None
+    flags = run.flags
 
     funlib.run.run(
         command=f"dacapo run-one "
