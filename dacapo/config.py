@@ -103,6 +103,12 @@ class OptimizerConfig(ConfigWrapper):
         self.hash = hash_adjective(self.id)
 
 
+class DaisyConfig(ConfigWrapper):
+    def __init__(self, config_file):
+        super(DaisyConfig, self).__init__(config_file, "daisy")
+        self.hash = hash_adjective(self.id)
+
+
 def find_task_configs(basedir):
     return [TaskConfig(f) for f in find_configs(basedir)]
 
