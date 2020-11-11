@@ -92,7 +92,7 @@ def cli(log_level):
     help="How many workers to spawn on to run jobs in parallel.",
 )
 @click.option(
-    "-bf", "--bsub-flags", default=None, type=str, help="flags to pass to bsub", multiple=True
+    "-bf", "--bsub-flags", default=None, type=str, help="flags to pass to bsub"
 )
 @click.option(
     "--batch",
@@ -310,7 +310,7 @@ def run_one(
     help="How many workers to spawn on to run jobs in parallel.",
 )
 @click.option(
-    "-bf", "--bsub-flags", default=None, type=str, help="flags to pass to bsub", multiple=True
+    "-bf", "--bsub-flags", default=None, type=str, help="flags to pass to bsub"
 )
 @click.option(
     "--batch",
