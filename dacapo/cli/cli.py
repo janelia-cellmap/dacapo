@@ -313,6 +313,12 @@ def run_one(
     "-bf", "--bsub-flags", default=None, type=str, help="flags to pass to bsub", multiple=True
 )
 @click.option(
+    "--batch",
+    default=False,
+    type=bool,
+    help="Whether to run the jobs as interactive or not.",
+)
+@click.option(
     "--daisy-worker",
     default=False,
     type=bool,
