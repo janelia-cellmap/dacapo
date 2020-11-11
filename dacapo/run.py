@@ -313,7 +313,7 @@ def enumerate_runs(
     validation_interval,
     snapshot_interval,
     keep_best_validation,
-    billing,
+    bsub_flags,
     batch,
 ):
 
@@ -333,7 +333,7 @@ def enumerate_runs(
                                 validation_interval,
                                 snapshot_interval,
                                 keep_best_validation,
-                                billing,
+                                bsub_flags,
                                 batch,
                             )
                         )
