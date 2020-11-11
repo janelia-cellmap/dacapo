@@ -92,7 +92,7 @@ def cli(log_level):
     help="How many workers to spawn on to run jobs in parallel.",
 )
 @click.option(
-    "-bf", "--bsub-flags", default=None, type=str, help="flags to pass to bsub"
+    "-bf", "--bsub-flags", default=None, type=str, help="flags to pass to bsub", multiple=True
 )
 @click.option(
     "--batch",
@@ -122,7 +122,7 @@ def run_all(
     optimizer_configs = dacapo.config.find_optimizer_configs(str(optimizers))
 
     if num_workers > 1:
-        assert bsub_flags is not None, "billing must be provided"
+        assert any(["-P" in flag for flag in bsub_flags]), "billing must be provided"
 
     runs = dacapo.enumerate_runs(
         task_configs=task_configs,
@@ -133,7 +133,7 @@ def run_all(
         validation_interval=validation_interval,
         snapshot_interval=snapshot_interval,
         keep_best_validation=keep_best_validation,
-        bsub_flags=[bsub_flags],
+        bsub_flags=bsub_flags,
         batch=batch,
     )
 
@@ -313,10 +313,7 @@ def run_one(
     "-P", "--billing", default=None, type=str, help="Who should be billed for this job."
 )
 @click.option(
-    "--batch",
-    default=False,
-    type=bool,
-    help="Whether to run the jobs as interactive or not.",
+    "-bf", "--bsub-flags", default=None, type=str, help="flags to pass to bsub", multiple=True
 )
 @click.option(
     "--daisy-worker",
@@ -338,20 +335,20 @@ def predict(
     snapshot_interval,
     keep_best_validation,
     num_workers,
-    billing,
+    bsub_flags,
     batch,
     daisy_worker,
 ):
     import dacapo.config
     from dacapo.predict import run_local as predict_run_local, run_remote as predict_run_remote
 
+    if num_workers > 1:
+        assert any(["-P" in flag for flag in bsub_flags]), "billing must be provided"
+
     task_configs = dacapo.config.find_task_configs(str(tasks))
     data_configs = dacapo.config.find_data_configs(str(data))
     model_configs = dacapo.config.find_model_configs(str(models))
     optimizer_configs = dacapo.config.find_optimizer_configs(str(optimizers))
-
-    if num_workers > 1:
-        assert billing is not None, "billing must be provided"
 
     runs = dacapo.enumerate_runs(
         task_configs=task_configs,
@@ -362,7 +359,7 @@ def predict(
         validation_interval=validation_interval,
         snapshot_interval=snapshot_interval,
         keep_best_validation=keep_best_validation,
-        billing=billing,
+        bsub_flags=bsub_flags,
         batch=batch,
     )
 
