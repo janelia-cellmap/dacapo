@@ -103,9 +103,9 @@ def run_remote(run, data, daisy_config):
 
     for step in predict.steps:
         daisy.run_blockwise(
-            daisy_config.total_roi,
-            daisy_config.input_block_roi,
-            daisy_config.output_block_roi,
+            daisy.Roi(daisy_config.total_roi),
+            daisy.Roi(daisy_config.input_block_roi),
+            daisy.Roi(daisy_config.output_block_roi),
             process_function=lambda: predict_worker(run),
             check_function=lambda b: run.store.check_block(
                 predict.id, step.id, b.block_id
