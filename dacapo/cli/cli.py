@@ -322,6 +322,7 @@ def run_one(
     "--daisy-worker",
     default=False,
     type=bool,
+    is_flag=True,
     help="Whether this call is a daisy worker or not.",
 )
 @click_config_file.configuration_option(section="runs")
