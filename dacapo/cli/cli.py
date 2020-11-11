@@ -310,9 +310,6 @@ def run_one(
     help="How many workers to spawn on to run jobs in parallel.",
 )
 @click.option(
-    "-P", "--billing", default=None, type=str, help="Who should be billed for this job."
-)
-@click.option(
     "-bf", "--bsub-flags", default=None, type=str, help="flags to pass to bsub", multiple=True
 )
 @click.option(
