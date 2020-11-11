@@ -345,6 +345,8 @@ def predict(
     import dacapo.config
     from dacapo.predict import run_local as predict_run_local, run_remote as predict_run_remote
 
+    if isinstance(bsub_flags, str):
+        bsub_flags = bsub_flags.split()
     if num_workers > 1:
         assert any(["-P" in flag for flag in bsub_flags]), "billing must be provided"
 
