@@ -91,14 +91,13 @@ def predict_worker(dacapo_flags, bsub_flags):
 
 def run_remote(dacapo_flags, bsub_flags, daisy_config):
 
-    for step in predict.steps:
-        daisy.run_blockwise(
-            daisy.Roi(*daisy_config.total_roi),
-            daisy.Roi(*daisy_config.input_block_roi),
-            daisy.Roi(*daisy_config.output_block_roi),
-            process_function=lambda: predict_worker(dacapo_flags, bsub_flags),
-            check_function=lambda b: False,
-            num_workers=daisy_config.num_workers,
-            read_write_conflict=False,
-            fit="overhang",
-        )
+    daisy.run_blockwise(
+        daisy.Roi(*daisy_config.total_roi),
+        daisy.Roi(*daisy_config.input_block_roi),
+        daisy.Roi(*daisy_config.output_block_roi),
+        process_function=lambda: predict_worker(dacapo_flags, bsub_flags),
+        check_function=lambda b: False,
+        num_workers=daisy_config.num_workers,
+        read_write_conflict=False,
+        fit="overhang",
+    )
