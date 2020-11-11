@@ -373,7 +373,9 @@ def predict(
     for run in desired_runs:
         if daisy_conf.num_workers > 1 and not daisy_conf.worker:
             predict_run_remote(run, data, daisy_config)
+            raise Exception("Running remotely!")
         else:
+            raise Exception("Don't run locally yet!")
             predict_run_local(run, data, daisy_config)
 
 

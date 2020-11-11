@@ -86,7 +86,7 @@ def predict_worker(run):
         f"-v {run.validation_interval} "
         f"-s {run.snapshot_interval} "
         f"-b {run.keep_best_validation} "
-        f"-daisy",
+        f"--daisy-worker",
         num_cpus=2,
         num_gpus=1,
         queue="gpu_any",
