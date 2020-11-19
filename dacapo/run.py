@@ -151,6 +151,7 @@ class Run:
                 self.training_stats.add_training_iteration(i, batch.loss, train_time)
 
                 if i % self.validation_interval == 0 and i > 0:
+                    task.model.eval()
                     scores = validate(
                         data,
                         task.model,
@@ -160,6 +161,7 @@ class Run:
                         best_score_relation=self.best_score_relation,
                         aux_tasks=task.aux_tasks,
                     )
+                    task.model.train()
                     self.validation_scores.add_validation_iteration(i, scores)
                     store.store_validation_scores(self)
 
