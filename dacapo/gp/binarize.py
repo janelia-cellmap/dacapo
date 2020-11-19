@@ -2,7 +2,7 @@ import gunpowder as gp
 import numpy as np
 
 
-class Binarize(gp.BatchFilter):
+class BinarizeNot(gp.BatchFilter):
     def __init__(self, input_array, output_array, target=0):
         self.input_array = input_array
         self.output_array = output_array
@@ -27,7 +27,7 @@ class Binarize(gp.BatchFilter):
         data = batch[self.input_array].data
         spec = batch[self.input_array].spec.copy()
         spec.dtype = np.bool
-        binarized = data == self.target
+        binarized = data != self.target
         outputs[self.output_array] = gp.Array(binarized, spec)
 
         return outputs

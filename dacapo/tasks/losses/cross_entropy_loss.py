@@ -1,7 +1,7 @@
 import torch
 from .loss import Loss
 
-from dacapo.gp.binarize import Binarize
+from dacapo.gp.binarize import BinarizeNot
 
 
 class CrossEntropyLoss(torch.nn.CrossEntropyLoss, Loss):
@@ -14,4 +14,4 @@ class CrossEntropyLoss(torch.nn.CrossEntropyLoss, Loss):
         super(CrossEntropyLoss, self).__init__(weight, ignore_index=ignore_label)
 
     def add_mask(self, gt, mask):
-        return Binarize(input_array=gt, output_array=mask, target=self.__ignore_label)
+        return BinarizeNot(input_array=gt, output_array=mask, target=self.__ignore_label)
