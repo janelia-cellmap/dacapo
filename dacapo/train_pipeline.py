@@ -165,6 +165,7 @@ def create_pipeline_3d(
 
     raw = gp.ArrayKey("RAW")
     gt = gp.ArrayKey("GT")
+    mask = gp.ArrayKey("MASK")
     target = gp.ArrayKey("TARGET")
     weights = gp.ArrayKey("WEIGHTS")
     model_outputs = gp.ArrayKey("MODEL_OUTPUTS")
@@ -212,9 +213,15 @@ def create_pipeline_3d(
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
     pipeline += gp.Normalize(raw)
-    # raw: ([c,] d, h, w)
-    # gt: ([c,] d, h, w)
-    pipeline += gp.RandomLocation()
+    
+    mask = task.loss.add_mask(gt, mask)
+    if mask is not None:
+        pipeline += mask
+        pipeline += gp.RandomLocation(min_masked=1e-6, mask=mask)
+    else:
+        # raw: ([c,] d, h, w)
+        # gt: ([c,] d, h, w)
+        pipeline += gp.RandomLocation()
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
     for augmentation in eval(task.augmentations):
