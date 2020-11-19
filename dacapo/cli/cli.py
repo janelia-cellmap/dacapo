@@ -318,13 +318,6 @@ def run_one(
     type=bool,
     help="Whether to run the jobs as interactive or not.",
 )
-@click.option(
-    "--daisy-worker",
-    default=False,
-    type=bool,
-    is_flag=True,
-    help="Whether this call is a daisy worker or not.",
-)
 @click_config_file.configuration_option(section="runs")
 def predict(
     name,
@@ -341,13 +334,19 @@ def predict(
     num_workers,
     bsub_flags,
     batch,
-    daisy_worker,
 ):
     import dacapo.config
+    from dacapo.data import Data
+    import daisy
     from dacapo.predict import (
         run_local as predict_run_local,
         run_remote as predict_run_remote,
     )
+    try:
+        daisy.Client()
+        daisy_worker = True
+    except KeyError:
+        daisy_worker = False
 
     daisy_conf = dacapo.config.DaisyConfig(daisy_config)
     daisy_conf.worker = daisy_worker
@@ -371,8 +370,32 @@ def predict(
             f"--keep-best-validation {keep_best_validation} "
         )
 
-        predict_run_remote(dacapo_flags, bsub_flags, daisy_conf)
-        raise Exception("Running remotely!")
+        prediction_data = dacapo.config.DataConfig(predict_data)
+
+        task_configs = dacapo.config.find_task_configs(str(tasks))
+        data_configs = dacapo.config.find_data_configs(str(data))
+        model_configs = dacapo.config.find_model_configs(str(models))
+        optimizer_configs = dacapo.config.find_optimizer_configs(str(optimizers))
+
+        runs = dacapo.enumerate_runs(
+            task_configs=task_configs,
+            data_configs=data_configs,
+            model_configs=model_configs,
+            optimizer_configs=optimizer_configs,
+            repetitions=repetitions,
+            validation_interval=validation_interval,
+            snapshot_interval=snapshot_interval,
+            keep_best_validation=keep_best_validation,
+            bsub_flags=bsub_flags,
+            batch=batch,
+        )
+
+        desired_runs = [run for run in runs if name == run.hash]
+
+        for run in desired_runs:
+            training_data = Data(run.data_config)
+            model = run.model_config.type(training_data, run.model_config)
+            predict_run_remote(model, prediction_data, daisy_conf, dacapo_flags, bsub_flags)
 
     else:
 
@@ -395,10 +418,9 @@ def predict(
         )
 
         desired_runs = [run for run in runs if name == run.hash]
-        data = dacapo.config.DataConfig(predict_data)
+        prediction_data = dacapo.config.DataConfig(predict_data)
         for run in desired_runs:
-            raise Exception("Don't run locally yet!")
-            predict_run_local(run, data, daisy_conf)
+            predict_run_local(run, prediction_data, daisy_conf)
 
 
 @cli.group()

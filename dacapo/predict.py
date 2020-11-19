@@ -3,6 +3,7 @@ from dacapo.data import PredictData, Data
 from dacapo.predict_pipeline import predict
 
 import daisy
+import numpy as np
 
 import funlib.run
 import torch
@@ -16,16 +17,13 @@ logger = logging.getLogger(__name__)
 
 
 class PredictRun:
-    def __init__(
-        self,
-        run,
-        predict_data,
-        daisy=False,
-    ):
+    def __init__(self, run, predict_data, daisy_worker=False, model_padding=None):
 
         # configs
         self.run = run
         self.predict_data = predict_data
+        self.daisy_worker = daisy_worker
+        self.model_padding = model_padding
 
         self.steps = [0]
 
@@ -49,9 +47,13 @@ class PredictRun:
             data.raw.test,
             model,
             task.predictor,
+            output_dir="test",
+            output_filename="data.zarr",
             gt=None,
             aux_tasks=[],
             total_roi=data.total_roi,
+            daisy_worker=self.daisy_worker,
+            model_padding=self.model_padding
         )
 
         self.stopped = time.time()
@@ -67,37 +69,72 @@ class PredictRun:
 
 
 def run_local(run, data, daisy_config):
-    predict = PredictRun(run, data, daisy_config)
+    predict = PredictRun(
+        run, data, daisy_config.worker, getattr(daisy_config, "model_padding", None)
+    )
 
     print(f"Running run {predict.run.hash} with data {predict.predict_data}")
 
     predict.start()
 
 
-def predict_worker(dacapo_flags, bsub_flags):
+def process_block(outdir, block, fail=None):
 
-    funlib.run.run(
-        command=f"dacapo predict {dacapo_flags}",
-        num_cpus=2,
-        num_gpus=1,
-        queue="gpu_any",
-        execute=True,
-        flags=bsub_flags,
-        batch=True,
-        log_file="predict_logs/%J.log",
-        error_file="predict_logs/%J.err",
-    )
+    logger.debug("Processing block %s", block)
+
+    if block.block_id == fail:
+        raise RuntimeError("intended failure")
+
+    path = Path(outdir, "%d.block" % block.block_id)
+    with open(path, "w") as f:
+        f.write(str(block.block_id))
+
+    return 0
 
 
-def run_remote(dacapo_flags, bsub_flags, daisy_config):
+def predict_worker(dacapo_flags, bsub_flags, outdir):
+
+    worker_id = daisy.Context.from_env().worker_id
+
+    log_out = f"{outdir}/out_{worker_id}.log"
+    log_err = f"{outdir}/out_{worker_id}.err"
+    command = [f"dacapo predict {dacapo_flags}"]
+
+    daisy.call(command, log_out=log_out, log_err=log_err)
+
+    logging.warning("Predict worker finished")
+
+
+def run_remote(model, data, daisy_config, dacapo_flags, bsub_flags):
+
+    data = PredictData(data)
+
+    outdir = "test"
+    if not Path(outdir).exists():
+        Path(outdir).mkdir()
+
+    voxel_size = np.array(data.raw.test.voxel_size, dtype=int)
+    input_shape = np.array(model.input_shape, dtype=int) * voxel_size
+    output_shape = np.array(model.output_shape, dtype=int) * voxel_size
+    context = (input_shape - output_shape) // 2
+    offset = input_shape * 0
+    if hasattr(daisy_config, "model_padding"):
+        model_padding = daisy_config.model_padding * voxel_size
+
+        input_block_roi = daisy.Roi(tuple(offset), tuple(input_shape + model_padding))
+        output_block_roi = daisy.Roi(
+            tuple(context), tuple(output_shape + model_padding)
+        )
+    else:
+        input_block_roi = daisy.Roi(tuple(offset), tuple(input_shape))
+        output_block_roi = daisy.Roi(tuple(context), tuple(output_shape))
 
     daisy.run_blockwise(
-        daisy.Roi(*daisy_config.total_roi),
-        daisy.Roi(*daisy_config.input_block_roi),
-        daisy.Roi(*daisy_config.output_block_roi),
-        process_function=lambda: predict_worker(dacapo_flags, bsub_flags),
-        check_function=lambda b: False,
+        daisy.Roi(data.raw.roi.get_offset(), data.raw.roi.get_shape()),
+        input_block_roi,
+        output_block_roi,
+        process_function=lambda: predict_worker(dacapo_flags, bsub_flags, outdir),
         num_workers=daisy_config.num_workers,
         read_write_conflict=False,
-        fit="overhang",
+        fit="valid",
     )

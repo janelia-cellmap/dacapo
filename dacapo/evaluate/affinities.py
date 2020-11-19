@@ -1,20 +1,30 @@
 from funlib.evaluate import rand_voi
 
 import numpy as np
-import gunpowder as gp
+import daisy
 
 
 def evaluate_affs(pred_labels, gt_labels, return_results=False):
+    gt_label_data = gt_labels.to_ndarray(roi=pred_labels.roi)
+    pred_label_data = pred_labels.to_ndarray(roi=pred_labels.roi)
 
-    results = rand_voi(gt_labels.data, pred_labels.data)
+    results = rand_voi(gt_label_data, pred_label_data)
     results["voi_sum"] = results["voi_split"] + results["voi_merge"]
-    
+
     scores = {"sample": results, "average": results}
 
     if return_results:
         results = {
-            "pred_labels": gp.Array(pred_labels.data.astype(np.uint64), gp.ArraySpec(roi=pred_labels.spec.roi, voxel_size = pred_labels.spec.voxel_size)),
-            "gt_labels": gp.Array(gt_labels.data.astype(np.uint64), gp.ArraySpec(roi=gt_labels.spec.roi, voxel_size = gt_labels.spec.voxel_size)),
+            "pred_labels": daisy.Array(
+                pred_labels.data.astype(np.uint64),
+                roi=pred_labels.roi,
+                voxel_size=pred_labels.voxel_size,
+            ),
+            "gt_labels": daisy.Array(
+                gt_labels.data.astype(np.uint64),
+                roi=gt_labels.roi,
+                voxel_size=gt_labels.voxel_size,
+            ),
         }
 
         return scores, results
