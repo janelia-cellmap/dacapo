@@ -214,9 +214,9 @@ def create_pipeline_3d(
     # gt: ([c,] d, h, w)
     pipeline += gp.Normalize(raw)
     
-    mask = task.loss.add_mask(gt, mask)
-    if mask is not None:
-        pipeline += mask
+    mask_node = task.loss.add_mask(gt, mask)
+    if mask_node is not None:
+        pipeline += mask_node
         pipeline += gp.RandomLocation(min_masked=1e-6, mask=mask)
     else:
         # raw: ([c,] d, h, w)
