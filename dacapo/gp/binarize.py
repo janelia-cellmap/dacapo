@@ -3,19 +3,20 @@ import numpy as np
 
 
 class BinarizeNot(gp.BatchFilter):
-    def __init__(self, input_array, output_array, target=0):
-        self.input_array = input_array
-        self.output_array = output_array
+    def __init__(self, in_array, out_array, target=0):
+        self.in_array = in_array
+        self.out_array = out_array
         self.target = target
 
     def setup(self):
-        spec = self.spec[self.input_array].copy()
+        spec = self.spec[self.in_array].copy()
         spec.dtype = np.bool
-        self.provides(self.output_array, spec)
+        self.provides(self.out_array, spec)
 
     def prepare(self, request):
         deps = gp.BatchRequest()
-        deps[self.in_array] = request[self.output_array].spec.copy()
+        spec = gp.ArraySpec(roi=request[self.out_array].roi)
+        deps[self.in_array] = spec
         return deps
 
     def process(self, batch, request):
@@ -24,10 +25,10 @@ class BinarizeNot(gp.BatchFilter):
         if self.in_array not in batch:
             return
 
-        data = batch[self.input_array].data
-        spec = batch[self.input_array].spec.copy()
+        data = batch[self.in_array].data
+        spec = batch[self.in_array].spec.copy()
         spec.dtype = np.bool
         binarized = data != self.target
-        outputs[self.output_array] = gp.Array(binarized, spec)
+        outputs[self.out_array] = gp.Array(binarized, spec)
 
         return outputs

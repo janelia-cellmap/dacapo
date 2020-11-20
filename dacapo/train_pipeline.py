@@ -319,6 +319,8 @@ def create_pipeline_3d(
     request = gp.BatchRequest()
     request.add(raw, input_size)
     request.add(gt, output_size)
+    if mask_node is not None:
+        request.add(mask, output_size)
     request.add(target, output_size)
     for name, _, _ in task.aux_tasks:
         aux_pred, aux_target, aux_weight = aux_keys[name]
