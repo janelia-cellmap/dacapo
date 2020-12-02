@@ -157,8 +157,6 @@ def create_pipeline_3d(
     output_shape = gp.Coordinate(task.model.output_shape)
     voxel_size = data.raw.train.voxel_size
 
-    task.predictor = task.predictor.to("cuda")
-
     # switch to world units
     input_size = voxel_size * input_shape
     output_size = voxel_size * output_shape
