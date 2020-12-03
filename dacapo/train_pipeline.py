@@ -19,7 +19,6 @@ def create_pipeline_3d(
 
     raw = gp.ArrayKey("RAW")
     gt = gp.ArrayKey("GT")
-    mask = gp.ArrayKey("MASK")
     target = gp.ArrayKey("TARGET")
     weights = gp.ArrayKey("WEIGHTS")
     model_outputs = gp.ArrayKey("MODEL_OUTPUTS")
@@ -34,7 +33,6 @@ def create_pipeline_3d(
         target: "target",
         prediction: "prediction",
         pred_gradients: "pred_gradients",
-        weights: "weights",
     }
 
     aux_keys = {}
@@ -51,7 +49,7 @@ def create_pipeline_3d(
 
         snapshot_dataset_names[aux_pred] = f"{name}_pred"
         snapshot_dataset_names[aux_target] = f"{name}_target"
-        
+
         aux_grad = aux_grad_keys[name]
         snapshot_dataset_names[aux_grad] = f"{name}_aux_grad"
 
@@ -60,22 +58,25 @@ def create_pipeline_3d(
     num_samples = data.raw.train.num_samples
     assert num_samples == 0, "Multiple samples for 3D training not yet implemented"
 
-    sources = (data.raw.train.get_source(raw), data.gt.train.get_source(gt))
-    pipeline = sources + gp.MergeProvider()
-    pipeline += gp.Pad(raw, input_shape / 2 * voxel_size)
-    # pipeline += gp.Pad(gt, input_shape / 2 * voxel_size)
-    # raw: ([c,] d, h, w)
-    # gt: ([c,] d, h, w)
-    pipeline += gp.Normalize(raw)
-    
-    mask_node = task.loss.add_mask(gt, mask)
-    if mask_node is not None:
-        pipeline += mask_node
-        pipeline += gp.RandomLocation(min_masked=1e-6, mask=mask)
+    raw_sources = data.raw.train.get_sources(raw)
+    gt_sources = data.gt.train.get_sources(gt)
+    if isinstance(raw_sources, list):
+        assert isinstance(gt_sources, list)
+        assert len(raw_sources) == len(gt_sources)
+
+        pipeline = (
+            tuple(
+                (raw_source, gt_source) + gp.MergeProvider() + gp.RandomLocation()
+                for raw_source, gt_source in zip(raw_sources, gt_sources)
+            )
+            + gp.RandomProvider()
+        )
+
     else:
-        # raw: ([c,] d, h, w)
-        # gt: ([c,] d, h, w)
-        pipeline += gp.RandomLocation()
+        assert not isinstance(gt_sources, list)
+        pipeline = (raw_sources, gt_sources) + gp.MergeProvider() + gp.RandomLocation()
+
+    pipeline += gp.Normalize(raw)
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
     for augmentation in eval(task.augmentations):
@@ -89,6 +90,7 @@ def create_pipeline_3d(
     if weights_node:
         pipeline += weights_node
         loss_inputs.append({0: prediction, 1: target, 2: weights})
+        snapshot_dataset_names[weights] = "weights"
     else:
         loss_inputs.append({0: prediction, 1: target})
 
@@ -166,15 +168,13 @@ def create_pipeline_3d(
             dataset_names=snapshot_dataset_names,
             every=snapshot_every,
             output_dir=os.path.join(outdir, "snapshots"),
-            output_filename="{iteration}.hdf",
+            output_filename="{iteration}.zarr",
         )
     pipeline += gp.PrintProfilingStats(every=10)
 
     request = gp.BatchRequest()
     request.add(raw, input_size)
     request.add(gt, output_size)
-    if mask_node is not None:
-        request.add(mask, output_size)
     request.add(target, output_size)
     for name, _, _ in task.aux_tasks:
         aux_pred, aux_target, aux_weight = aux_keys[name]
@@ -187,6 +187,10 @@ def create_pipeline_3d(
     if weights_node:
         request.add(weights, output_size)
     request.add(prediction, output_size)
+    request.add(model_outputs, output_size)
+    request.add(model_output_grads, output_size)
+    if weights_node:
+        request.add(weights, output_size)
     request.add(pred_gradients, output_size)
 
     return pipeline, request

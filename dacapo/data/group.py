@@ -26,18 +26,21 @@ class ArrayGroup:
         """
         return self._datasets[0].axes
 
-    def get_sources(self, *output_keys: ArrayKey):
+    def get_sources(self, output_key: ArrayKey):
         """
         A dacapo dataset is expected to provide a list of gunpowder trees
         that all provide the given output keys.
         """
-        return [d.get_source() for d in self.datasets]
+        return [d.get_source(output_key) for d in self.datasets]
 
     def __getattr__(self, attr):
-        if hasattr(self, attr):
-            getattr(self, attr)
+        if "__" in attr:
+            return super().__getattr__(attr)
         else:
-            return getattr(self.datasets[0], attr)
+            if attr in self.__dict__:
+                return self.__dict__[attr]
+            else:
+                return getattr(self.datasets[0], attr)
 
 
 class GraphGroup:
@@ -119,7 +122,10 @@ class TrainValidateSplit:
             self._validate = dataset
 
     def __getattr__(self, attr):
-        if attr in self.__dict__:
-            self.__dict__[attr]
+        if "__" in attr:
+            super().__getattr__(attr)
         else:
-            return getattr(self.train, attr)
+            if attr in self.__dict__:
+                return self.__dict__[attr]
+            else:
+                return getattr(self.train, attr)
