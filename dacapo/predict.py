@@ -106,14 +106,15 @@ def predict_worker(dacapo_flags, bsub_flags, outdir):
 
 
 def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
-    data = Data(run.data_config)
+    training_data = Data(run.data_config)
     predict_data = PredictData(data)
-    model = run.model_config.type(data, run.model_config)
-    task = Task(data, model, run.task_config)
+    model = run.model_config.type(training_data, run.model_config)
+    task = Task(training_data, model, run.task_config)
+    post_processor = task.predictor.post_processor
 
     # build pipeline to prepare datasets
     compute_pipeline, sources, total_request = predict_pipeline(
-        data.raw,
+        predict_data.raw,
         model,
         task.predictor,
         output_dir="test",
@@ -129,7 +130,7 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
     if not Path(outdir).exists():
         Path(outdir).mkdir()
 
-    voxel_size = np.array(data.raw.test.voxel_size, dtype=int)
+    voxel_size = np.array(predict_data.raw.test.voxel_size, dtype=int)
     input_shape = np.array(model.input_shape, dtype=int) * voxel_size
     output_shape = np.array(model.output_shape, dtype=int) * voxel_size
     context = (input_shape - output_shape) // 2
@@ -147,7 +148,7 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
 
     logger.warning("Starting blockwise prediction")
     daisy.run_blockwise(
-        daisy.Roi(data.raw.roi.get_offset(), data.raw.roi.get_shape()),
+        daisy.Roi(predict_data.raw.roi.get_offset(), predict_data.raw.roi.get_shape()),
         input_block_roi,
         output_block_roi,
         process_function=lambda: predict_worker(dacapo_flags, bsub_flags, outdir),
@@ -161,7 +162,9 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
         post_processing_parameters = post_processor.daisy_parameters[name]
         logger.warning(f"Starting blockwise {name}")
         daisy.run_blockwise(
-            daisy.Roi(data.raw.roi.get_offset(), data.raw.roi.get_shape()),
+            daisy.Roi(
+                predict_data.raw.roi.get_offset(), predict_data.raw.roi.get_shape()
+            ),
             input_block_roi,
             output_block_roi,
             process_function=lambda: step(**post_processing_parameters),
