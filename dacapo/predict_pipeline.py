@@ -47,7 +47,7 @@ def predict_pipeline(
         raw_roi = raw_roi.intersect(gp.Roi(*total_roi))
     raw_output_roi = raw_roi.grow(-context, -context)
     if gt is not None:
-        output_roi = gt.roi.intersect(raw.roi.grow(-context, -context))
+        output_roi = gt.roi.intersect(raw_output_roi)
     else:
         output_roi = raw_output_roi
     input_roi = output_roi.grow(context, context)
