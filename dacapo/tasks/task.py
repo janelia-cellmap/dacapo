@@ -62,8 +62,15 @@ class Task:
                 del kwargs["id"]
             else:
                 kwargs = {}
+            if hasattr(task_config, "post_processor_daisy_parameters"):
+                daisy_parameters = task_config.post_processor_daisy_parameters.to_dict(
+                    default_only=True
+                )
+                del daisy_parameters["id"]
+            else:
+                daisy_parameters = None
             parameter_range = PostProcessingParameterRange(**kwargs)
-            post_processor = task_config.post_processor(parameter_range)
+            post_processor = task_config.post_processor(parameter_range, daisy_parameters)
 
         predictor_args = {}
         if hasattr(task_config, "predictor_args"):
