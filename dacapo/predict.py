@@ -105,7 +105,7 @@ def predict_worker(dacapo_flags, bsub_flags, outdir):
     logging.warning("Predict worker finished")
 
 
-def run_remote(model, data, daisy_config, dacapo_flags, bsub_flags):
+def run_remote(data, model, post_processor, daisy_config, dacapo_flags, bsub_flags):
 
     data = PredictData(data)
 
@@ -129,6 +129,7 @@ def run_remote(model, data, daisy_config, dacapo_flags, bsub_flags):
         input_block_roi = daisy.Roi(tuple(offset), tuple(input_shape))
         output_block_roi = daisy.Roi(tuple(context), tuple(output_shape))
 
+    logger.warning("Starting blockwise prediction")
     daisy.run_blockwise(
         daisy.Roi(data.raw.roi.get_offset(), data.raw.roi.get_shape()),
         input_block_roi,
@@ -136,5 +137,21 @@ def run_remote(model, data, daisy_config, dacapo_flags, bsub_flags):
         process_function=lambda: predict_worker(dacapo_flags, bsub_flags, outdir),
         num_workers=daisy_config.num_workers,
         read_write_conflict=False,
-        fit="valid",
+        fit="overhang",
     )
+    logger.warning("Finished blockwise prediction")
+
+    for name, fit, step in post_processor.daisy_steps():
+        post_processing_parameters = post_processor.daisy_parameters[name]
+        logger.warning(f"Starting blockwise {name}")
+        daisy.run_blockwise(
+            daisy.Roi(data.raw.roi.get_offset(), data.raw.roi.get_shape()),
+            input_block_roi,
+            output_block_roi,
+            process_function=lambda: step(**post_processing_parameters),
+            num_workers=daisy_config.num_workers,
+            read_write_conflict=False,
+            fit=fit,
+        )
+        logger.warning(f"Finished blockwise {name}")
+
