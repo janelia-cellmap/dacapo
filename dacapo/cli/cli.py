@@ -396,12 +396,9 @@ def predict(
 
         for run in desired_runs:
             training_data = Data(run.data_config)
-            model = run.model_config.type(training_data, run.model_config)
-            task = Task(training_data, model, run.task_config)
             predict_run_remote(
-                prediction_data,
-                model,
-                task.predictor.post_processor,
+                run,
+                training_data,
                 daisy_conf,
                 dacapo_flags,
                 bsub_flags,

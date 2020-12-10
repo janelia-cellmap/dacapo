@@ -1,6 +1,6 @@
 from dacapo.tasks import Task
 from dacapo.data import PredictData, Data
-from dacapo.predict_pipeline import predict
+from dacapo.predict_pipeline import predict, predict_pipeline
 
 import daisy
 import numpy as np
@@ -105,9 +105,25 @@ def predict_worker(dacapo_flags, bsub_flags, outdir):
     logging.warning("Predict worker finished")
 
 
-def run_remote(data, model, post_processor, daisy_config, dacapo_flags, bsub_flags):
+def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
 
-    data = PredictData(data)
+    predict_data = PredictData(data)
+    model = run.model_config.type(data, run.model_config)
+    task = Task(data, model, run.task_config)
+
+    # build pipeline to prepare datasets
+    compute_pipeline, sources, total_request = predict_pipeline(
+        data.raw,
+        model,
+        task.predictor,
+        output_dir="test",
+        output_filename="data.zarr",
+        gt=None,
+        aux_tasks=task.aux_tasks,
+        total_roi=predict_data.total_roi,
+        model_padding=getattr(daisy_config, "model_padding", None),
+        daisy_worker=False,
+    )
 
     outdir = "test"
     if not Path(outdir).exists():
@@ -154,4 +170,3 @@ def run_remote(data, model, post_processor, daisy_config, dacapo_flags, bsub_fla
             fit=fit,
         )
         logger.warning(f"Finished blockwise {name}")
-
