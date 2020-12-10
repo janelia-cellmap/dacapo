@@ -49,6 +49,8 @@ class OneHotLabels(Model):
         else:
             self.post_processor = post_processor
 
+        self.output_channels = num_classes
+
     def add_target(self, gt, target):
 
         # target is gt, just ensure proper type

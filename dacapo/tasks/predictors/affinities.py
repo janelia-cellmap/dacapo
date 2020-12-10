@@ -40,6 +40,8 @@ class Affinities(Model):
         else:
             self.post_processor = post_processor
 
+        self.output_channels = self.dims
+
     def add_target(self, gt, target):
 
         return (

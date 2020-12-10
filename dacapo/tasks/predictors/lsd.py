@@ -25,6 +25,8 @@ class LSD(Model):
         self.prediction_channels = num_shape_descriptors
         self.target_channels = num_shape_descriptors
 
+        self.output_channels = 10
+
     def add_target(self, gt: gp.ArrayKey, target: gp.ArrayKey):
 
         return lsd.gp.AddLocalShapeDescriptor(gt, target, sigma=self.sigma)
