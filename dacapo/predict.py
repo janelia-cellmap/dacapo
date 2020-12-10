@@ -53,7 +53,7 @@ class PredictRun:
             aux_tasks=[],
             total_roi=data.total_roi,
             daisy_worker=self.daisy_worker,
-            model_padding=self.model_padding
+            model_padding=self.model_padding,
         )
 
         self.stopped = time.time()
