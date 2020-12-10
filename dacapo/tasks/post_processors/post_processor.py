@@ -4,9 +4,9 @@ import time
 
 
 class PostProcessor:
-
-    def __init__(self, parameter_range):
+    def __init__(self, parameter_range, daisy_parameters=None):
         self.parameter_range = parameter_range
+        self.daisy_parameters = daisy_parameters if daisy_parameters is not None else {}
 
     def set_prediction(self, prediction):
         '''To be implemented in subclasses. This function will be called before
