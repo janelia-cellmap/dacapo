@@ -106,7 +106,7 @@ def predict_worker(dacapo_flags, bsub_flags, outdir):
 
 
 def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
-
+    data = Data(run.data_config)
     predict_data = PredictData(data)
     model = run.model_config.type(data, run.model_config)
     task = Task(data, model, run.task_config)

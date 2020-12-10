@@ -395,10 +395,9 @@ def predict(
         desired_runs = [run for run in runs if name == run.hash]
 
         for run in desired_runs:
-            training_data = Data(run.data_config)
             predict_run_remote(
                 run,
-                training_data,
+                prediction_data,
                 daisy_conf,
                 dacapo_flags,
                 bsub_flags,
