@@ -73,6 +73,9 @@ def predict_pipeline(
     else:
         pipeline = raw.get_source(raw_key)
 
+    padding = output_size
+    pipeline += gp.Pad(raw_key, padding)
+
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
     pipeline += gp.Normalize(raw_key)
@@ -99,7 +102,9 @@ def predict_pipeline(
         outputs={0: model_output},
         array_specs={
             prediction: gp.ArraySpec(
-                roi=output_roi, voxel_size=voxel_size, dtype=np.float32
+                roi=output_roi.grow(padding, padding),
+                voxel_size=voxel_size,
+                dtype=np.float32,
             )
         },
     )
@@ -109,7 +114,9 @@ def predict_pipeline(
         outputs={0: prediction},
         array_specs={
             prediction: gp.ArraySpec(
-                roi=output_roi, voxel_size=voxel_size, dtype=np.float32
+                roi=output_roi.grow(padding, padding),
+                voxel_size=voxel_size,
+                dtype=np.float32,
             )
         },
     )
@@ -123,7 +130,9 @@ def predict_pipeline(
                 outputs={0: aux_pred_key},
                 array_specs={
                     aux_pred_key: gp.ArraySpec(
-                        roi=output_roi, voxel_size=voxel_size, dtype=np.float32
+                        roi=output_roi.grow(padding, padding),
+                        voxel_size=voxel_size,
+                        dtype=np.float32,
                     )
                 },
             )
