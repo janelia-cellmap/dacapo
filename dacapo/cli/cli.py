@@ -337,11 +337,13 @@ def predict(
 ):
     import dacapo.config
     from dacapo.data import Data
+    from dacapo.tasks import Task
     import daisy
     from dacapo.predict import (
         run_local as predict_run_local,
         run_remote as predict_run_remote,
     )
+
     try:
         daisy.Client()
         daisy_worker = True
@@ -395,7 +397,15 @@ def predict(
         for run in desired_runs:
             training_data = Data(run.data_config)
             model = run.model_config.type(training_data, run.model_config)
-            predict_run_remote(model, prediction_data, daisy_conf, dacapo_flags, bsub_flags)
+            task = Task(training_data, model, run.task_config)
+            predict_run_remote(
+                prediction_data,
+                model,
+                task.predictor.post_processor,
+                daisy_conf,
+                dacapo_flags,
+                bsub_flags,
+            )
 
     else:
 
