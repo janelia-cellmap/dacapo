@@ -168,7 +168,7 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
     for name, fit, step, datasets in post_processor.daisy_steps():
         predictions = daisy.open_ds(
             f"predictions/{run.hash}/data.zarr",
-            "volumes/predictions",
+            "volumes/prediction",
         )
         for dataset in datasets:
             daisy.prepare_ds(
