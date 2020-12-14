@@ -1,10 +1,11 @@
 from .gp import AddChannelDim, RemoveChannelDim
 import gunpowder as gp
 import gunpowder.torch as gp_torch
+import daisy
 
 import numpy as np
 
-import daisy
+from dacapo.store import MongoDbStore
 
 import logging
 from pathlib import Path
@@ -13,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 def predict_pipeline(
+    run_hash,
     raw,
     model,
     predictor,
@@ -24,6 +26,10 @@ def predict_pipeline(
     model_padding=None,
     daisy_worker=False,
 ):
+    """
+    store: a mongodb collection in which to store completed blocks
+    """
+
     raw_channels = max(1, raw.num_channels)
     if model_padding is not None:
         input_shape = tuple(a + b for a, b in zip(model.input_shape, model_padding))
@@ -219,6 +225,11 @@ def predict_pipeline(
 
     # If using daisy, add the daisy block manager.
     if daisy_worker:
+
+        pred_id = f"{run_hash}_predict"
+        step_id = "prediction"
+        store = MongoDbStore()
+
         ref_request = scan_request.copy()
         ds_rois = {
             raw_key: "read_roi",
@@ -230,7 +241,13 @@ def predict_pipeline(
         if gt:
             ds_rois[gt] = "write_roi"
             ds_rois[target] = "write_roi"
-        pipeline += gp.DaisyRequestBlocks(ref_request, ds_rois)
+        pipeline += gp.DaisyRequestBlocks(
+            ref_request,
+            ds_rois,
+            block_done_callback=lambda block, start, duration: store.mark_block_done(
+                pred_id, step_id, block.block_id, start, duration
+            ),
+        )
         total_request = gp.BatchRequest()
 
     # Return a pipeline that provides desired arrays/graphs.
@@ -256,6 +273,7 @@ def predict_pipeline(
 
 
 def predict(
+    run_hash,
     raw,
     model,
     predictor,
@@ -274,6 +292,7 @@ def predict(
             aux_predictor.eval()
 
     compute_pipeline, sources, total_request = predict_pipeline(
+        run_hash,
         raw,
         model,
         predictor,

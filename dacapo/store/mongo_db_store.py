@@ -7,17 +7,13 @@ import configargparse
 import json
 
 parser = configargparse.ArgParser(
-    default_config_files=['~/.config/dacapo', './dacapo.conf'])
-parser.add(
-    '--mongo_db_host',
-    help="Name of the MongoDB host for stats and scores")
-parser.add(
-    '--mongo_db_name',
-    help="Name of the MongoDB database for stats and scores")
+    default_config_files=["~/.config/dacapo", "./dacapo.conf"]
+)
+parser.add("--mongo_db_host", help="Name of the MongoDB host for stats and scores")
+parser.add("--mongo_db_name", help="Name of the MongoDB database for stats and scores")
 
 
 class MongoDbStore:
-
     def __init__(self):
         """Create a MongoDB sync. Used to sync runs, tasks, models,
         optimizers, trainig stats, and validation scores."""
@@ -32,10 +28,8 @@ class MongoDbStore:
         self.__init_db()
 
     def sync_run(
-            self,
-            run,
-            exclude_training_stats=False,
-            exclude_validation_scores=False):
+        self, run, exclude_training_stats=False, exclude_validation_scores=False
+    ):
 
         self.__sync_run(run)
         self.__sync_task_config(run.task_config)
@@ -70,10 +64,8 @@ class MongoDbStore:
 
         # store all new stats
         self.__store_training_stats(
-            stats,
-            store_from_iteration,
-            stats.trained_until(),
-            run.id)
+            stats, store_from_iteration, stats.trained_until(), run.id
+        )
 
     def read_training_stats(self, run, iteration=-1):
 
@@ -91,8 +83,7 @@ class MongoDbStore:
             if scores.validated_until() > 0:
 
                 # both current scores and DB contain data
-                if scores.validated_until() > \
-                        existing_scores.validated_until():
+                if scores.validated_until() > existing_scores.validated_until():
                     # current scores go further than the one in DB
                     store_from_iteration = existing_scores.validated_until()
                 else:
@@ -100,10 +91,8 @@ class MongoDbStore:
                     self.__delete_validation_scores(run.id)
 
         self.__store_validation_scores(
-                scores,
-                store_from_iteration,
-                scores.validated_until(),
-                run.id)
+            scores, store_from_iteration, scores.validated_until(), run.id
+        )
 
     def read_validation_scores(self, run):
 
@@ -112,49 +101,48 @@ class MongoDbStore:
     def __sync_run(self, run):
 
         run_doc = run.to_dict()
-        existing = list(
-            self.runs.find(
-                {'id': run.id}, {'_id': False}))
+        existing = list(self.runs.find({"id": run.id}, {"_id": False}))
 
         if existing:
 
             stored_run = existing[0]
 
             if not self.__same_doc(
-                    run_doc,
-                    stored_run,
-                    ignore=['started', 'stopped', 'num_parameters']):
+                run_doc, stored_run, ignore=["started", "stopped", "num_parameters"]
+            ):
                 raise RuntimeError(
                     f"Data for run {run.id} does not match already synced "
                     f"entry. Found\n\n{stored_run}\n\nin DB, but was "
-                    f"given\n\n{run_doc}")
+                    f"given\n\n{run_doc}"
+                )
 
             # stored and existing are the same, except maybe for started and
             # stopped timestamp
 
             update_db = False
-            if stored_run['started'] is None and run.started is not None:
+            if stored_run["started"] is None and run.started is not None:
                 update_db = True
-            if stored_run['stopped'] is None and run.stopped is not None:
+            if stored_run["stopped"] is None and run.stopped is not None:
                 update_db = True
 
             update_current = False
-            if stored_run['started'] is not None and run.started is None:
+            if stored_run["started"] is not None and run.started is None:
                 update_current = True
-            if stored_run['stopped'] is not None and run.stopped is None:
+            if stored_run["stopped"] is not None and run.stopped is None:
                 update_current = True
 
             if update_db and update_current:
                 raise RuntimeError(
                     f"Start and stop time of run {run.id} do not match "
                     f"already synced entry. Found\n\n{stored_run}\n\nin "
-                    f"DB, but was given\n\n{run_doc}")
+                    f"DB, but was given\n\n{run_doc}"
+                )
 
             if update_db:
-                self.runs.update({'id': run.id}, run_doc)
+                self.runs.update({"id": run.id}, run_doc)
             elif update_current:
-                run.started = stored_run['started']
-                run.stopped = stored_run['stopped']
+                run.started = stored_run["started"]
+                run.stopped = stored_run["stopped"]
 
         else:
 
@@ -163,98 +151,109 @@ class MongoDbStore:
     def __sync_prediction(self, prediction):
 
         prediction_doc = prediction.to_dict()
-        existing = list(
-            self.predictions.find(
-                {'id': prediction.id}, {'_id': False}))
+        existing = list(self.predictions.find({"id": prediction.id}, {"_id": False}))
 
         if existing:
 
             stored_prediction = existing[0]
 
             if not self.__same_doc(
-                    prediction_doc,
-                    stored_prediction,
-                    ignore=['started', 'stopped', 'num_parameters']):
+                prediction_doc,
+                stored_prediction,
+                ignore=["started", "stopped", "num_parameters"],
+            ):
                 raise RuntimeError(
                     f"Data for prediction {prediction.id} does not match already synced "
                     f"entry. Found\n\n{stored_prediction}\n\nin DB, but was "
-                    f"given\n\n{prediction_doc}")
+                    f"given\n\n{prediction_doc}"
+                )
 
             # stored and existing are the same, except maybe for started and
             # stopped timestamp
 
             update_db = False
-            if stored_prediction['started'] is None and prediction.started is not None:
+            if stored_prediction["started"] is None and prediction.started is not None:
                 update_db = True
-            if stored_prediction['stopped'] is None and prediction.stopped is not None:
+            if stored_prediction["stopped"] is None and prediction.stopped is not None:
                 update_db = True
 
             update_current = False
-            if stored_prediction['started'] is not None and prediction.started is None:
+            if stored_prediction["started"] is not None and prediction.started is None:
                 update_current = True
-            if stored_prediction['stopped'] is not None and prediction.stopped is None:
+            if stored_prediction["stopped"] is not None and prediction.stopped is None:
                 update_current = True
 
             if update_db and update_current:
                 raise RuntimeError(
                     f"Start and stop time of prediction {prediction.id} do not match "
                     f"already synced entry. Found\n\n{stored_prediction}\n\nin "
-                    f"DB, but was given\n\n{prediction_doc}")
+                    f"DB, but was given\n\n{prediction_doc}"
+                )
 
             if update_db:
-                self.predictions.update({'id': prediction.id}, prediction_doc)
+                self.predictions.update({"id": prediction.id}, prediction_doc)
             elif update_current:
-                prediction.started = stored_prediction['started']
-                prediction.stopped = stored_prediction['stopped']
+                prediction.started = stored_prediction["started"]
+                prediction.stopped = stored_prediction["stopped"]
 
         else:
 
             self.predictions.insert(prediction_doc)
 
     def check_block(self, prediction_id, step_id, block_id):
-        return self.predictions.count({"id": prediction_id, "step": step_id, "block": block_id}) >= 1
+        return (
+            self.predictions.count(
+                {"id": prediction_id, "step": step_id, "block": block_id}
+            )
+            >= 1
+        )
+
+    def mark_block_done(self, prediction_id, step_id, block_id, start, duration):
+        doc = {
+            "id": prediction_id,
+            "step": step_id,
+            "block": block_id,
+            "start": start,
+            "duration": duration,
+        }
+        self.predictions.insert_one(doc)
 
     def __sync_task_config(self, task_config):
         self.__save_insert(self.tasks, task_config.to_dict())
 
     def __sync_model_config(self, model_config):
-        self.__save_insert(
-            self.models,
-            model_config.to_dict())
+        self.__save_insert(self.models, model_config.to_dict())
 
     def __sync_optimizer_config(self, optimizer_config):
-        self.__save_insert(
-            self.optimizers,
-            optimizer_config.to_dict())
+        self.__save_insert(self.optimizers, optimizer_config.to_dict())
 
     def __store_training_stats(self, stats, begin, end, run_id):
 
         docs = []
         for i in range(begin, end):
-            docs.append({
-                'run': run_id,
-                'iteration': int(stats.iterations[i]),
-                'loss': float(stats.losses[i]),
-                'time': float(stats.times[i])
-            })
+            docs.append(
+                {
+                    "run": run_id,
+                    "iteration": int(stats.iterations[i]),
+                    "loss": float(stats.losses[i]),
+                    "time": float(stats.times[i]),
+                }
+            )
         if docs:
             self.training_stats.insert_many(docs)
 
     def __read_training_stats(self, run_id, iteration=-1):
 
         stats = TrainingStats()
-        docs = self.training_stats.find({'run': run_id})
+        docs = self.training_stats.find({"run": run_id})
         for doc in docs:
-            if doc['iteration'] < iteration or iteration < 0:
-                stats.add_training_iteration(
-                    doc['iteration'],
-                    doc['loss'],
-                    doc['time'])
+            if doc["iteration"] < iteration or iteration < 0:
+                stats.add_training_iteration(doc["iteration"], doc["loss"], doc["time"])
         return stats
 
     def __delete_training_stats(self, run_id):
-        result = self.training_stats.delete_many({'run': run_id})
-        assert self.training_stats.count_documents({'run': run_id}) == 0
+        result = self.training_stats.delete_many({"run": run_id})
+        assert self.training_stats.count_documents({"run": run_id}) == 0
         assert result.deleted_count > 0
 
     def __store_validation_scores(self, validation_scores, begin, end, run_id):
@@ -264,19 +263,21 @@ class MongoDbStore:
             if iteration < begin or iteration >= end:
                 continue
             iteration_scores = validation_scores.scores[idx]
-            docs.append({
-                'run': run_id,
-                'iteration': int(iteration),
-                'parameter_scores': {
-                    k: {
-                        'post_processing_parameters':
-                            sanatize(v['post_processing_parameters']),
-                        'scores':
-                            sanatize(v['scores'])
-                    }
-                    for k, v in iteration_scores.items()
+            docs.append(
+                {
+                    "run": run_id,
+                    "iteration": int(iteration),
+                    "parameter_scores": {
+                        k: {
+                            "post_processing_parameters": sanatize(
+                                v["post_processing_parameters"]
+                            ),
+                            "scores": sanatize(v["scores"]),
+                        }
+                        for k, v in iteration_scores.items()
+                    },
                 }
-            })
+            )
 
         if docs:
             self.validation_scores.insert_many(docs)
@@ -284,22 +285,22 @@ class MongoDbStore:
     def __read_validation_scores(self, run_id):
 
         validation_scores = ValidationScores()
-        docs = self.validation_scores.find({'run': run_id})
+        docs = self.validation_scores.find({"run": run_id})
         for doc in docs:
             validation_scores.add_validation_iteration(
-                doc['iteration'],
-                doc['parameter_scores'])
+                doc["iteration"], doc["parameter_scores"]
+            )
 
         return validation_scores
 
     def __delete_validation_scores(self, run_id):
-        self.validation_scores.delete_many({'run': run_id})
+        self.validation_scores.delete_many({"run": run_id})
 
     def __save_insert(self, collection, data, ignore=None):
 
         data = sanatize(dict(data))
-        item_id = data['id']
-        del data['id']
+        item_id = data["id"]
+        del data["id"]
 
         existing = None
         for _ in range(5):
@@ -307,10 +308,11 @@ class MongoDbStore:
             try:
 
                 existing = collection.find_one_and_update(
-                        filter={'id': item_id},
-                        update={'$set': data},
-                        upsert=True,
-                        projection={'_id': False})
+                    filter={"id": item_id},
+                    update={"$set": data},
+                    upsert=True,
+                    projection={"_id": False},
+                )
 
             except DuplicateKeyError:
 
@@ -319,12 +321,13 @@ class MongoDbStore:
 
         if existing:
 
-            del existing['id']
+            del existing["id"]
             if not self.__same_doc(existing, data, ignore):
                 raise RuntimeError(
                     f"Data for {item_id} does not match already synced "
                     f"entry. Found\n\n{existing}\n\nin DB, but was "
-                    f"given\n\n{data}")
+                    f"given\n\n{data}"
+                )
 
     def __same_doc(self, a, b, ignore=None):
 
@@ -346,60 +349,30 @@ class MongoDbStore:
     def __init_db(self):
 
         self.runs.create_index(
-            [
-                ('id', ASCENDING),
-                ('repetition', ASCENDING)
-            ],
-            name='id_rep',
-            unique=True)
+            [("id", ASCENDING), ("repetition", ASCENDING)], name="id_rep", unique=True
+        )
         self.predictions.create_index(
-            [
-                ('id', ASCENDING),
-                ('step', ASCENDING),
-                ('block', ASCENDING)
-            ],
-            name='id_step_block',
-            unique=True)
-        self.tasks.create_index(
-            [
-                ('id', ASCENDING)
-            ],
-            name='id',
-            unique=True)
-        self.models.create_index(
-            [
-                ('id', ASCENDING)
-            ],
-            name='id',
-            unique=True)
-        self.optimizers.create_index(
-            [
-                ('id', ASCENDING)
-            ],
-            name='id',
-            unique=True)
+            [("id", ASCENDING), ("step", ASCENDING), ("block", ASCENDING)],
+            name="id_step_block",
+            unique=True,
+        )
+        self.tasks.create_index([("id", ASCENDING)], name="id", unique=True)
+        self.models.create_index([("id", ASCENDING)], name="id", unique=True)
+        self.optimizers.create_index([("id", ASCENDING)], name="id", unique=True)
         self.training_stats.create_index(
-            [
-                ('run', ASCENDING),
-                ('iteration', ASCENDING)
-            ],
-            name='run_it',
-            unique=True)
+            [("run", ASCENDING), ("iteration", ASCENDING)], name="run_it", unique=True
+        )
         self.validation_scores.create_index(
-            [
-                ('run', ASCENDING),
-                ('iteration', ASCENDING)
-            ],
-            name='run_it',
-            unique=True)
+            [("run", ASCENDING), ("iteration", ASCENDING)], name="run_it", unique=True
+        )
 
     def __open_collections(self):
-        '''Opens the node, edge, and meta collections'''
+        """Opens the node, edge, and meta collections"""
 
-        self.runs = self.database['runs']
-        self.predictions = self.database['predictions']
-        self.tasks = self.database['tasks']
-        self.models = self.database['models']
-        self.optimizers = self.database['optimizers']
-        self.training_stats = self.database['training_stats']
-        self.validation_scores = self.database['validation_scores']
+        self.runs = self.database["runs"]
+        self.predictions = self.database["predictions"]
+        self.tasks = self.database["tasks"]
+        self.models = self.database["models"]
+        self.optimizers = self.database["optimizers"]
+        self.training_stats = self.database["training_stats"]
+        self.validation_scores = self.database["validation_scores"]

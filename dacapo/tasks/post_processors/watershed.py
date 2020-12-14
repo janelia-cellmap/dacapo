@@ -1,5 +1,4 @@
 import daisy
-import pymongo
 import numpy as np
 
 from .post_processor import PostProcessor
@@ -9,6 +8,8 @@ from scipy.ndimage.morphology import distance_transform_edt
 import mahotas
 import waterz
 import lsd
+
+from dacapo.store import MongoDbStore
 
 import logging
 import time
@@ -43,12 +44,11 @@ class Watershed(PostProcessor):
 
 
 def blockwise_fragments_worker(
+    run_hash,
     affs_file,
     affs_dataset,
     fragments_file,
     fragments_dataset,
-    db_name,
-    db_host,
     mask_file=None,
     mask_dataset=None,
     filter_fragments=0,
@@ -80,24 +80,27 @@ def blockwise_fragments_worker(
 
         mask = None
 
+    # open block done DB
+    logger.warning("Mongo storage should be handled by dacapo.Store class")
+
+    pred_id = f"{run_hash}_fragments"
+    step_id = "prediction"
+    store = MongoDbStore()
+
     # open RAG DB
     logger.info("Opening RAG DB...")
     logger.warning("Mongo storage should be handled by dacapo.Store class")
     logger.warning("Hard coded position attrs")
     rag_provider = daisy.persistence.MongoDbGraphProvider(
-        db_name,
-        host=db_host,
+        store.db_name,
+        host=store.db_host,
+        nodes_collection=f"{run_hash}_frags",
+        edges_collection=f"{run_hash}_frag_agglom",
         mode="r+",
         directed=False,
         position_attribute=["center_z", "center_y", "center_x"],
     )
     logger.info("RAG DB opened")
-
-    # open block done DB
-    logger.warning("Mongo storage should be handled by dacapo.Store class")
-    client = pymongo.MongoClient(db_host)
-    db = client[db_name]
-    blocks_extracted = db["blocks_extracted"]
 
     client = daisy.Client()
 
@@ -133,89 +136,21 @@ def blockwise_fragments_worker(
             replace_sections=None,
         )
 
-        document = {
-            "num_cpus": 5,
-            "block_id": block.block_id,
-            "read_roi": (block.read_roi.get_begin(), block.read_roi.get_shape()),
-            "write_roi": (block.write_roi.get_begin(), block.write_roi.get_shape()),
-            "start": start,
-            "duration": time.time() - start,
-        }
-        blocks_extracted.insert(document)
+        store.mark_block_done(
+            pred_id, step_id, block.block_id, start, time.time() - start
+        )
 
         client.release_block(block, ret=0)
 
 
 def blockwise_agglomerate_worker(
+    run_hash,
     affs_file,
     affs_dataset,
     fragments_file,
     fragments_dataset,
-    db_host,
-    db_name,
     merge_function="mean",
 ):
-    """
-    logging.info("Reading affs from %s", affs_file)
-    affs = daisy.open_ds(affs_file, affs_dataset, mode='r')
-
-    network_dir = os.path.join(experiment, setup, str(iteration), merge_function)
-
-    logging.info("Reading fragments from %s", fragments_file)
-    fragments = daisy.open_ds(fragments_file, fragments_dataset, mode='r')
-
-    client = pymongo.MongoClient(db_host)
-    db = client[db_name]
-
-    blocks_agglomerated = ''.join([
-        'blocks_agglomerated_',
-        merge_function])
-
-    if ''.join(['blocks_agglomerated_', merge_function]) not in db.list_collection_names():
-        blocks_agglomerated = db[blocks_agglomerated]
-        blocks_agglomerated.create_index(
-                [('block_id', pymongo.ASCENDING)],
-                name='block_id')
-    else:
-        blocks_agglomerated = db[blocks_agglomerated]
-
-    context = daisy.Coordinate(context)
-    total_roi = affs.roi.grow(context, context)
-
-    # total_roi = daisy.Roi((0, 0, 67200), (900000, 285600, 403200))
-    # total_roi = daisy.Roi((459960, 92120, 217952), (80040, 75880, 62048))
-
-    # total_roi = daisy.Roi((50800, 43200, 44100), (10800, 10800, 10800))
-    # total_roi = daisy.Roi((40000, 32400, 33300), (32400,)*3)
-    # total_roi = daisy.Roi((96504,51660,44904),(1500,)*3)
-    # total_roi = total_roi.grow(context, context)
-
-    read_roi = daisy.Roi((0,)*affs.roi.dims(), block_size).grow(context, context)
-    write_roi = daisy.Roi((0,)*affs.roi.dims(), block_size)
-
-    daisy.run_blockwise(
-        total_roi,
-        read_roi,
-        write_roi,
-        process_function=lambda: start_worker(
-            affs_file,
-            affs_dataset,
-            fragments_file,
-            fragments_dataset,
-            db_host,
-            db_name,
-            queue,
-            merge_function,
-            network_dir),
-        check_function=lambda b: check_block(
-            blocks_agglomerated,
-            b),
-        num_workers=num_workers,
-        read_write_conflict=False,
-        fit='shrink')
-    """
-
-    config = None
 
     waterz_merge_function = {
         "hist_quant_10": "OneMinus<HistogramQuantileAffinity<RegionGraphType, 10, ScoreValue, 256, false>>",
@@ -237,27 +172,27 @@ def blockwise_agglomerate_worker(
     affs = daisy.open_ds(affs_file, affs_dataset, mode="r")
     fragments = daisy.open_ds(fragments_file, fragments_dataset, mode="r+")
 
+    # open block done DB
+    logger.warning("Dacapo.Store should handle mongodb storage")
+
+    pred_id = f"{run_hash}_agglomerate"
+    step_id = "prediction"
+    store = MongoDbStore()
+
     # open RAG DB
     logging.info("Opening RAG DB...")
     logger.warning("Dacapo.Store should handle mongodb storage")
     logger.warning("Hard coded position attrs")
     rag_provider = daisy.persistence.MongoDbGraphProvider(
-        db_name,
-        host=db_host,
+        store.db_name,
+        host=store.db_host,
         mode="r+",
         directed=False,
-        edges_collection="edges_" + merge_function,
+        nodes_collection=f"{run_hash}_frags",
+        edges_collection=f"{run_hash}_frag_agglom",
         position_attribute=["center_z", "center_y", "center_x"],
     )
     logging.info("RAG DB opened")
-
-    # open block done DB
-    logger.warning("Dacapo.Store should handle mongodb storage")
-    client = pymongo.MongoClient(db_host)
-    db = client[db_name]
-    blocks_agglomerated = "".join(["blocks_agglomerated_", merge_function])
-
-    blocks_agglomerated = db[blocks_agglomerated]
 
     client = daisy.Client()
     while True:
@@ -278,15 +213,9 @@ def blockwise_agglomerate_worker(
             threshold=1.0,
         )
 
-        document = {
-            "num_cpus": 5,
-            "block_id": block.block_id,
-            "read_roi": (block.read_roi.get_begin(), block.read_roi.get_shape()),
-            "write_roi": (block.write_roi.get_begin(), block.write_roi.get_shape()),
-            "start": start,
-            "duration": time.time() - start,
-        }
-        blocks_agglomerated.insert(document)
+        store.mark_block_done(
+            pred_id, step_id, block.block_id, start, time.time() - start
+        )
 
         client.release_block(block, ret=0)
 

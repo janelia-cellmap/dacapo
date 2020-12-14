@@ -1,6 +1,7 @@
 from dacapo.tasks import Task
 from dacapo.data import PredictData, Data
 from dacapo.predict_pipeline import predict, predict_pipeline
+from dacapo.store import MongoDbStore
 
 import daisy
 import numpy as np
@@ -44,6 +45,7 @@ class PredictRun:
         self.__load_best_state(self.run, model, task)
 
         predict(
+            self.run.hash,
             data.raw.test,
             model,
             task.predictor,
@@ -114,6 +116,7 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
 
     # build pipeline to prepare datasets
     compute_pipeline, sources, total_request = predict_pipeline(
+        run.hash,
         predict_data.raw,
         model,
         task.predictor,
@@ -131,27 +134,33 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
         Path(outdir).mkdir()
 
     voxel_size = np.array(predict_data.raw.test.voxel_size, dtype=int)
-    input_shape = np.array(model.input_shape, dtype=int) * voxel_size
-    output_shape = np.array(model.output_shape, dtype=int) * voxel_size
-    context = (input_shape - output_shape) // 2
-    offset = input_shape * 0
+    input_size = np.array(model.input_shape, dtype=int) * voxel_size
+    output_size = np.array(model.output_shape, dtype=int) * voxel_size
+    context = (input_size - output_size) // 2
+    offset = input_size * 0
     if hasattr(daisy_config, "model_padding"):
         model_padding = daisy_config.model_padding * voxel_size
 
-        input_block_roi = daisy.Roi(tuple(offset), tuple(input_shape + model_padding))
+        input_block_roi = daisy.Roi(tuple(offset), tuple(input_size + model_padding))
         output_block_roi = daisy.Roi(
-            tuple(context), tuple(output_shape + model_padding)
+            tuple(context), tuple(output_size + model_padding)
         )
     else:
-        input_block_roi = daisy.Roi(tuple(offset), tuple(input_shape))
-        output_block_roi = daisy.Roi(tuple(context), tuple(output_shape))
+        input_block_roi = daisy.Roi(tuple(offset), tuple(input_size))
+        output_block_roi = daisy.Roi(tuple(context), tuple(output_size))
 
     logger.warning("Starting blockwise prediction")
+
+    store = MongoDbStore()
+    step_id = "prediction"
+    prediction_id = f"{run.hash}_predict"
+
     daisy.run_blockwise(
         daisy.Roi(predict_data.raw.roi.get_offset(), predict_data.raw.roi.get_shape()),
         input_block_roi,
         output_block_roi,
         process_function=lambda: predict_worker(dacapo_flags, bsub_flags, outdir),
+        check_function=lambda b: store.check_block(prediction_id, step_id, b.block_id),
         num_workers=daisy_config.num_workers,
         read_write_conflict=False,
         fit="overhang",
@@ -167,7 +176,8 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
             ),
             input_block_roi,
             output_block_roi,
-            process_function=lambda: step(**post_processing_parameters),
+            process_function=lambda: step(run_hash=run.hash, **post_processing_parameters),
+            check_function=lambda b: store.check_block(f"{run.hash}_{name}", step_id, b.block_id),
             num_workers=daisy_config.num_workers,
             read_write_conflict=False,
             fit=fit,
