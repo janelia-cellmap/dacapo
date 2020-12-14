@@ -39,7 +39,7 @@ class Watershed(PostProcessor):
         )
 
     def daisy_steps(self):
-        yield ("fragments", "shrink", blockwise_fragments_worker, ["fragments"])
+        yield ("fragments", "shrink", blockwise_fragments_worker, ["volumes/fragments"])
         yield ("agglomerate", "shrink", blockwise_agglomerate_worker, [])
 
 
