@@ -165,7 +165,21 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
     )
     logger.warning("Finished blockwise prediction")
 
-    for name, fit, step in post_processor.daisy_steps():
+    for name, fit, step, datasets in post_processor.daisy_steps():
+        predictions = daisy.open_ds(
+            f"predictions/{run.hash}/data.zarr",
+            "volumes/predictions",
+        )
+        for dataset in datasets:
+            daisy.prepare_ds(
+                f"predictions/{run.hash}/data.zarr",
+                dataset,
+                predictions.roi,
+                predictions.voxel_size,
+                dtype=np.uint64,
+                write_size=predictions.voxel_size
+                * predictions.chunk_shape[-len(predictions.voxel_size) :],
+            )
         post_processing_parameters = post_processor.daisy_parameters[name]
         logger.warning(f"Starting blockwise {name}")
         daisy.run_blockwise(

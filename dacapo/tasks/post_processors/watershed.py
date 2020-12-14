@@ -39,8 +39,8 @@ class Watershed(PostProcessor):
         )
 
     def daisy_steps(self):
-        yield ("fragments", "shrink", blockwise_fragments_worker)
-        yield ("agglomerate", "shrink", blockwise_agglomerate_worker)
+        yield ("fragments", "shrink", blockwise_fragments_worker, ["fragments"])
+        yield ("agglomerate", "shrink", blockwise_agglomerate_worker, [])
 
 
 def blockwise_fragments_worker(
@@ -60,15 +60,6 @@ def blockwise_fragments_worker(
     affs = daisy.open_ds(f"{output_dir}/{output_filename}", affs_dataset, mode="r")
 
     logger.info(f"Reading fragments from {output_dir}/{output_filename}")
-    if not Path(f"{output_dir}/{output_filename}", fragments_dataset).exists():
-        daisy.prepare_ds(
-            f"{output_dir}/{output_filename}",
-            fragments_dataset,
-            affs.roi,
-            affs.voxel_size,
-            dtype=np.uint64,
-            write_size=affs.voxel_size * affs.chunk_shape[-len(affs.voxel_size) :],
-        )
     fragments = daisy.open_ds(
         f"{output_dir}/{output_filename}", fragments_dataset, mode="r+"
     )
