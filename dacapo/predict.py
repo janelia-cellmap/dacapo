@@ -120,8 +120,8 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
         predict_data.raw,
         model,
         task.predictor,
-        output_dir="test",
-        output_filename="data.zarr",
+        output_dir="predictions",
+        output_filename=f"{run.hash}.zarr",
         gt=None,
         aux_tasks=task.aux_tasks,
         total_roi=predict_data.total_roi,
@@ -129,7 +129,7 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
         daisy_worker=False,
     )
 
-    outdir = "test"
+    outdir = "predictions"
     if not Path(outdir).exists():
         Path(outdir).mkdir()
 
@@ -142,9 +142,7 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
         model_padding = daisy_config.model_padding * voxel_size
 
         input_block_roi = daisy.Roi(tuple(offset), tuple(input_size + model_padding))
-        output_block_roi = daisy.Roi(
-            tuple(context), tuple(output_size + model_padding)
-        )
+        output_block_roi = daisy.Roi(tuple(context), tuple(output_size + model_padding))
     else:
         input_block_roi = daisy.Roi(tuple(offset), tuple(input_size))
         output_block_roi = daisy.Roi(tuple(context), tuple(output_size))
@@ -176,8 +174,15 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
             ),
             input_block_roi,
             output_block_roi,
-            process_function=lambda: step(run_hash=run.hash, **post_processing_parameters),
-            check_function=lambda b: store.check_block(f"{run.hash}_{name}", step_id, b.block_id),
+            process_function=lambda: step(
+                run_hash=run.hash,
+                output_dir="predictions",
+                output_filename=f"{run.hash}.zarr",
+                **post_processing_parameters,
+            ),
+            check_function=lambda b: store.check_block(
+                f"{run.hash}_{name}", step_id, b.block_id
+            ),
             num_workers=daisy_config.num_workers,
             read_write_conflict=False,
             fit=fit,

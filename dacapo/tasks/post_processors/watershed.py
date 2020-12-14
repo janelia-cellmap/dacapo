@@ -45,9 +45,9 @@ class Watershed(PostProcessor):
 
 def blockwise_fragments_worker(
     run_hash,
-    affs_file,
+    output_dir,
+    output_filename,
     affs_dataset,
-    fragments_file,
     fragments_dataset,
     mask_file=None,
     mask_dataset=None,
@@ -56,20 +56,22 @@ def blockwise_fragments_worker(
     epsilon_agglomerate=0,
 ):
 
-    logger.info("Reading affs from %s", affs_file)
-    affs = daisy.open_ds(affs_file, affs_dataset, mode="r")
+    logger.info(f"Reading affs from {output_dir}/{output_filename}")
+    affs = daisy.open_ds(f"{output_dir}/{output_filename}", affs_dataset, mode="r")
 
-    logger.info("Reading fragments from %s", fragments_file)
-    if not Path(fragments_file, fragments_dataset).exists():
+    logger.info(f"Reading fragments from {output_dir}/{output_filename}")
+    if not Path(f"{output_dir}/{output_filename}", fragments_dataset).exists():
         daisy.prepare_ds(
-            fragments_file,
+            f"{output_dir}/{output_filename}",
             fragments_dataset,
             affs.roi,
             affs.voxel_size,
             dtype=np.uint64,
             write_size=affs.voxel_size * affs.chunk_shape[-len(affs.voxel_size) :],
         )
-    fragments = daisy.open_ds(fragments_file, fragments_dataset, mode="r+")
+    fragments = daisy.open_ds(
+        f"{output_dir}/{output_filename}", fragments_dataset, mode="r+"
+    )
 
     if mask_file:
 
@@ -145,9 +147,9 @@ def blockwise_fragments_worker(
 
 def blockwise_agglomerate_worker(
     run_hash,
-    affs_file,
+    output_dir,
+    output_filename,
     affs_dataset,
-    fragments_file,
     fragments_dataset,
     merge_function="mean",
 ):
@@ -168,9 +170,11 @@ def blockwise_agglomerate_worker(
         merge_function
     ]  # watershed should know this
 
-    logging.info("Reading affs from %s" % affs_file)
-    affs = daisy.open_ds(affs_file, affs_dataset, mode="r")
-    fragments = daisy.open_ds(fragments_file, fragments_dataset, mode="r+")
+    logging.info(f"Reading affs from {output_dir}/{output_filename}")
+    affs = daisy.open_ds(f"{output_dir}/{output_filename}", affs_dataset, mode="r")
+    fragments = daisy.open_ds(
+        f"{output_dir}/{output_filename}", fragments_dataset, mode="r+"
+    )
 
     # open block done DB
     logger.warning("Dacapo.Store should handle mongodb storage")
