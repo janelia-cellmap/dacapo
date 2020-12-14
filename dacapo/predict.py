@@ -49,7 +49,7 @@ class PredictRun:
             data.raw.test,
             model,
             task.predictor,
-            output_dir=f"predictions/{run.hash}",
+            output_dir=f"predictions/{self.run.hash}",
             output_filename="data.zarr",
             gt=None,
             aux_tasks=[],
