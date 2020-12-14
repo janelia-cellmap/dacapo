@@ -49,7 +49,7 @@ class PredictRun:
             data.raw.test,
             model,
             task.predictor,
-            output_dir="test",
+            output_dir=f"predictions/{run.hash}",
             output_filename="data.zarr",
             gt=None,
             aux_tasks=[],
@@ -120,8 +120,8 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
         predict_data.raw,
         model,
         task.predictor,
-        output_dir="predictions",
-        output_filename=f"{run.hash}.zarr",
+        output_dir=f"predictions/{run.hash}",
+        output_filename="data.zarr",
         gt=None,
         aux_tasks=task.aux_tasks,
         total_roi=predict_data.total_roi,
@@ -129,7 +129,7 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
         daisy_worker=False,
     )
 
-    outdir = "predictions"
+    outdir = f"predictions/{run.hash}"
     if not Path(outdir).exists():
         Path(outdir).mkdir()
 
@@ -176,8 +176,8 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
             output_block_roi,
             process_function=lambda: step(
                 run_hash=run.hash,
-                output_dir="predictions",
-                output_filename=f"{run.hash}.zarr",
+                output_dir=f"predictions/{run.hash}",
+                output_filename="data.zarr",
                 **post_processing_parameters,
             ),
             check_function=lambda b: store.check_block(
