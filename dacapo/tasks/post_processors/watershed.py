@@ -9,6 +9,9 @@ import mahotas
 import waterz
 import lsd
 
+from funlib.segment.graphs.impl import connected_components
+from funlib.segment.arrays import replace_values
+
 from dacapo.store import MongoDbStore
 
 import logging
@@ -41,6 +44,8 @@ class Watershed(PostProcessor):
     def daisy_steps(self):
         yield ("fragments", "shrink", blockwise_fragments_worker, ["volumes/fragments"])
         yield ("agglomerate", "shrink", blockwise_agglomerate_worker, [])
+        yield ("create_luts", "global", global_create_luts, [])
+        yield ("segment", "shrink", blockwise_write_segmentation, ["volumes/segmentation"])
 
 
 def blockwise_fragments_worker(
@@ -207,6 +212,165 @@ def blockwise_agglomerate_worker(
             merge_function=waterz_merge_function,
             threshold=1.0,
         )
+
+        store.mark_block_done(
+            pred_id, step_id, block.block_id, start, time.time() - start
+        )
+
+        client.release_block(block, ret=0)
+
+
+def global_create_luts(
+    run_hash,
+    output_dir,
+    output_filename,
+    fragments_dataset,
+    num_workers,
+    threshold,
+    lookup,
+):
+
+    """
+
+    Args:
+
+        fragments_file (``string``):
+
+            Path to the file containing the fragments.
+
+        edges_collection (``string``):
+
+            The name of the MongoDB database collection to use.
+
+        thresholds_minmax (``list`` of ``int``):
+
+            The lower and upper bound to use (i.e [0,1]) when generating
+            thresholds.
+
+        thresholds_step (``float``):
+
+            The step size to use when generating thresholds between min/max.
+
+        roi_offset (array-like of ``int``):
+
+            The starting point (inclusive) of the ROI. Entries can be ``None``
+            to indicate unboundedness.
+
+        roi_shape (array-like of ``int``):
+
+            The shape of the ROI. Entries can be ``None`` to indicate
+            unboundedness.
+
+    """
+    store = MongoDbStore()
+
+    start = time.time()
+
+    edges_collection = f"{run_hash}_frag_agglom"
+    graph_provider = daisy.persistence.MongoDbGraphProvider(
+        store.db_name,
+        store.db_host,
+        nodes_collection=f"{run_hash}_frags",
+        edges_collection=edges_collection,
+        position_attribute=["center_z", "center_y", "center_x"],
+    )
+
+    fragments = daisy.open_ds(f"{output_dir}/{output_filename}", fragments_dataset)
+    roi = fragments.roi
+
+    g = graph_provider.get_graph(roi)
+
+    logger.info("Read graph in %.3fs" % (time.time() - start))
+
+    assert g.number_of_nodes() > 0, f"No nodes found in roi {roi}"
+
+    nodes = np.array(list(g.nodes()))
+    edges = np.array([(u, v) for u, v in g.edges()], dtype=np.uint64)
+    scores = np.array([attrs["merge_score"] for edge, attrs in g.edges.items()])
+
+    logger.debug("Nodes dtype: ", nodes.dtype)
+    logger.debug("edges dtype: ", edges.dtype)
+    logger.debug("scores dtype: ", scores.dtype)
+
+    logger.info("Complete RAG contains %d nodes, %d edges" % (len(nodes), len(edges)))
+
+    start = time.time()
+
+    logger.info("Getting CCs for threshold %.3f..." % threshold)
+    start = time.time()
+    components = connected_components(nodes, edges, scores, threshold)
+    logger.info("%.3fs" % (time.time() - start))
+
+    logger.info("Creating fragment-segment LUT for threshold %.3f..." % threshold)
+    start = time.time()
+    lut = np.array([nodes, components])
+
+    logger.info("%.3fs" % (time.time() - start))
+
+    logger.info("Storing fragment-segment LUT for threshold %.3f..." % threshold)
+    start = time.time()
+
+    for node, component in lut:
+        g.nodes[node][lookup] = component
+
+    g.update_node_attrs(attributes=[lookup])
+
+    logger.info("%.3fs" % (time.time() - start))
+
+    logger.info("Created and stored lookup tables in %.3fs" % (time.time() - start))
+
+    return True
+
+
+def blockwise_write_segmentation(
+    run_hash,
+    output_dir,
+    output_filename,
+    fragments_dataset,
+    segmentation_dataset,
+    lookup,
+):
+
+    logging.info("Copying fragments to memory...")
+    start = time.time()
+    fragments = daisy.open_ds(f"{output_dir}/{output_filename}", fragments_dataset)
+    segmentation = daisy.open_ds(
+        f"{output_dir}/{output_filename}", segmentation_dataset
+    )
+
+    store = MongoDbStore()
+
+    edges_collection = f"{run_hash}_frag_agglom"
+    graph_provider = daisy.persistence.MongoDbGraphProvider(
+        store.db_name,
+        store.db_host,
+        nodes_collection=f"{run_hash}_frags",
+        edges_collection=edges_collection,
+        position_attribute=["center_z", "center_y", "center_x"],
+    )
+
+    pred_id = f"{run_hash}_segmentation"
+    step_id = "prediction"
+
+    client = daisy.Client()
+    while True:
+
+        block = client.acquire_block()
+        fragments = fragments.to_ndarray(block.write_roi)
+        logging.info("%.3fs" % (time.time() - start))
+
+        start = time.time()
+
+        relabelled = np.zeros_like(fragments)
+
+        agg_graph = graph_provider.get_graph(roi=block.write_roi)
+
+        lut = np.array([(node, attrs[lookup]) for node, attrs in agg_graph.nodes.items()])
+
+        relabelled = replace_values(fragments, lut[0], lut[1], out_array=relabelled)
+        logging.info("%.3fs" % (time.time() - start))
+
+        segmentation[block.write_roi] = relabelled
 
         store.mark_block_done(
             pred_id, step_id, block.block_id, start, time.time() - start

@@ -181,24 +181,40 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
                 * predictions.chunk_shape[-len(predictions.voxel_size) :],
             )
         post_processing_parameters = post_processor.daisy_parameters[name]
-        logger.warning(f"Starting blockwise {name}")
-        daisy.run_blockwise(
-            daisy.Roi(
-                predict_data.raw.roi.get_offset(), predict_data.raw.roi.get_shape()
-            ),
-            input_block_roi,
-            output_block_roi,
-            process_function=lambda: step(
+        if fit != "global":
+            logger.warning(f"Starting blockwise {name}")
+            success = daisy.run_blockwise(
+                daisy.Roi(
+                    predict_data.raw.roi.get_offset(), predict_data.raw.roi.get_shape()
+                ),
+                input_block_roi,
+                output_block_roi,
+                process_function=lambda: step(
+                    run_hash=run.hash,
+                    output_dir=f"predictions/{run.hash}",
+                    output_filename="data.zarr",
+                    **post_processing_parameters,
+                ),
+                check_function=lambda b: store.check_block(
+                    f"{run.hash}_{name}", step_id, b.block_id
+                ),
+                num_workers=daisy_config.num_workers,
+                read_write_conflict=False,
+                fit=fit,
+            )
+            if not success:
+                logger.warning(f"Failed blockwsie {name}")
+                return
+            logger.warning(f"Finished blockwise {name}")
+        else:
+            logger.warning(f"Starting global {name}")
+            success = step(
                 run_hash=run.hash,
                 output_dir=f"predictions/{run.hash}",
                 output_filename="data.zarr",
                 **post_processing_parameters,
-            ),
-            check_function=lambda b: store.check_block(
-                f"{run.hash}_{name}", step_id, b.block_id
-            ),
-            num_workers=daisy_config.num_workers,
-            read_write_conflict=False,
-            fit=fit,
-        )
-        logger.warning(f"Finished blockwise {name}")
+            )
+            if not success:
+                logger.warning(f"Failed global {name}")
+                return
+            logger.warning(f"Finished global {name}")
