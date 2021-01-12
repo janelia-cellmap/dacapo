@@ -4,6 +4,7 @@ from dacapo.predict_pipeline import predict, predict_pipeline
 from dacapo.store import MongoDbStore
 
 import daisy
+import zarr
 import numpy as np
 
 import funlib.run
@@ -155,8 +156,12 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
     step_id = "prediction"
     prediction_id = f"{run.hash}_predict"
 
+    total_roi = daisy.Roi(
+        predict_data.raw.roi.get_offset(), predict_data.raw.roi.get_shape()
+    )
+
     daisy.run_blockwise(
-        daisy.Roi(predict_data.raw.roi.get_offset(), predict_data.raw.roi.get_shape()),
+        total_roi,
         input_block_roi,
         output_block_roi,
         process_function=lambda: predict_worker(dacapo_flags, bsub_flags, outdir),
@@ -172,25 +177,55 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
             f"predictions/{run.hash}/data.zarr",
             "volumes/prediction",
         )
-        for dataset in datasets:
-            daisy.prepare_ds(
-                f"predictions/{run.hash}/data.zarr",
-                dataset,
-                predictions.roi,
-                predictions.voxel_size,
-                dtype=np.uint64,
-                write_size=predictions.voxel_size
-                * predictions.chunk_shape[-len(predictions.voxel_size) :],
-            )
         post_processing_parameters = post_processor.daisy_parameters[name]
+
+        if "total_roi" in post_processing_parameters:
+            step_total_roi = daisy.Roi(
+                *post_processing_parameters.pop("total_roi")
+            )
+            step_total_roi = total_roi.intersect(step_total_roi)
+        elif "total_roi_context" in post_processing_parameters:
+            total_roi_context = daisy.Coordinate(
+                post_processing_parameters.pop("total_roi_context")
+            )
+            step_total_roi = total_roi.grow(-total_roi_context, -total_roi_context)
+        else:
+            step_total_roi = total_roi
+
         if fit != "global":
             logger.warning(f"Starting blockwise {name}")
+            if "write_shape" in post_processing_parameters:
+                write_shape = post_processing_parameters.pop("write_shape")
+                context = post_processing_parameters.pop("context")
+                step_output_block_roi = daisy.Roi(context, write_shape)
+                step_input_block_roi = step_output_block_roi.grow(context, context)
+            else:
+                step_output_block_roi = output_block_roi
+                step_input_block_roi = input_block_roi
+
+            for dataset in datasets:
+                output_roi = step_total_roi.grow(
+                    -daisy.Coordinate(context), -daisy.Coordinate(context)
+                )
+                daisy.prepare_ds(
+                    f"predictions/{run.hash}/data.zarr",
+                    dataset,
+                    output_roi,
+                    predictions.voxel_size,
+                    dtype=np.uint64,
+                    write_size=step_output_block_roi.get_shape(),
+                    compressor=zarr.storage.default_compressor.get_config(),
+                )
+
+            if "num_workers" in post_processing_parameters:
+                num_workers = post_processing_parameters.pop("num_workers")
+            else:
+                num_workers = daisy_config.num_workers
+
             success = daisy.run_blockwise(
-                daisy.Roi(
-                    predict_data.raw.roi.get_offset(), predict_data.raw.roi.get_shape()
-                ),
-                input_block_roi,
-                output_block_roi,
+                step_total_roi,
+                step_input_block_roi,
+                step_output_block_roi,
                 process_function=lambda: step(
                     run_hash=run.hash,
                     output_dir=f"predictions/{run.hash}",
@@ -200,7 +235,7 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
                 check_function=lambda b: store.check_block(
                     f"{run.hash}_{name}", step_id, b.block_id
                 ),
-                num_workers=daisy_config.num_workers,
+                num_workers=num_workers,
                 read_write_conflict=False,
                 fit=fit,
             )
@@ -212,8 +247,7 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
             logger.warning(f"Starting global {name}")
             success = step(
                 run_hash=run.hash,
-                output_dir=f"predictions/{run.hash}",
-                output_filename="data.zarr",
+                roi=step_total_roi,
                 **post_processing_parameters,
             )
             if not success:
