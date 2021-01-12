@@ -161,11 +161,13 @@ def predict_pipeline(
         outputs={0: model_output},
         array_specs={
             prediction: gp.ArraySpec(
-                roi=output_roi.grow(padding, padding),
+                roi=output_roi,
                 voxel_size=voxel_size,
                 dtype=np.float32,
             )
         },
+        checkpoint=checkpoint,
+        state_dict_key="model_state_dict",
     )
     pipeline += gp_torch.Predict(
         model=predictor,
@@ -173,29 +175,32 @@ def predict_pipeline(
         outputs={0: prediction},
         array_specs={
             prediction: gp.ArraySpec(
-                roi=output_roi.grow(padding, padding),
+                roi=output_roi,
                 voxel_size=voxel_size,
                 dtype=np.float32,
             )
         },
+        checkpoint=checkpoint,
+        state_dict_key="main_0_state_dict",
     )
-    aux_predictions = []
     if aux_tasks is not None:
-        for aux_name, aux_predictor, _ in aux_tasks:
-            aux_pred_key = gp.ArrayKey(f"PRED_{aux_name.upper()}")
+        for i, (aux_name, aux_predictor, _) in enumerate(aux_tasks):
+            aux_pred_key, _ = aux_keys[name]
             pipeline += gp_torch.Predict(
                 model=aux_predictor,
                 inputs={"x": model_output},
                 outputs={0: aux_pred_key},
                 array_specs={
                     aux_pred_key: gp.ArraySpec(
-                        roi=output_roi.grow(padding, padding),
+                        roi=output_roi,
                         voxel_size=voxel_size,
                         dtype=np.float32,
                     )
                 },
+                checkpoint=checkpoint,
+                state_dict_key=f"{aux_name}_{i+1}_state_dict",
             )
-            aux_predictions.append((aux_name, aux_pred_key))
+            pipeline += RemoveChannelDim(aux_pred_key)
     # remove "batch" dimension
     pipeline += RemoveChannelDim(raw_key)
     pipeline += RemoveChannelDim(prediction)
