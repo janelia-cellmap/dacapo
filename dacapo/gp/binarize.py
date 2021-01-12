@@ -11,7 +11,10 @@ class BinarizeNot(gp.BatchFilter):
     def setup(self):
         spec = self.spec[self.in_array].copy()
         spec.dtype = np.bool
-        self.provides(self.out_array, spec)
+        if self.in_array != self.out_array:
+            self.provides(self.out_array, spec)
+        else:
+            self.updates(self.out_array, spec)
 
     def prepare(self, request):
         deps = gp.BatchRequest()
