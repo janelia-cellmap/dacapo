@@ -215,11 +215,13 @@ def predict_pipeline(
     scan_request.add(raw_key, input_size)
     scan_request.add(model_output, output_size)
     scan_request.add(prediction, output_size)
-    for aux_name, aux_key in aux_predictions:
-        scan_request.add(aux_key, output_size)
+    for aux_name, (aux_pred_key, _) in aux_keys.items():
+        scan_request.add(aux_pred_key, output_size)
     if gt:
         scan_request.add(gt_key, output_size)
         scan_request.add(target, output_size)
+        for aux_name, (_, aux_target_key) in aux_keys.items():
+            scan_request.add(aux_target_key, output_size)
 
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
