@@ -117,8 +117,8 @@ def predict_pipeline(
         extra_gt_padding, dtype=np.float32
     ) / np.asarray(voxel_size)
 
-    padding = gp.Coordinate(np.ceil(padding_in_voxel_fractions))
-    extra_gt_padding = gp.Coordinate(np.ceil(extra_in_voxel_fractions))
+    padding = gp.Coordinate(np.ceil(padding_in_voxel_fractions)) * voxel_size
+    extra_gt_padding = gp.Coordinate(np.ceil(extra_in_voxel_fractions)) * voxel_size
 
     if gt:
         sources = (
