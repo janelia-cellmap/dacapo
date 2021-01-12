@@ -1,4 +1,4 @@
-from .gp import Squash, AddChannelDim, RemoveChannelDim, TransposeDims, Train
+from .padding import compute_padding
 import gunpowder as gp
 import math
 import os
@@ -58,15 +58,36 @@ def create_pipeline_3d(
     num_samples = data.raw.train.num_samples
     assert num_samples == 0, "Multiple samples for 3D training not yet implemented"
 
-    raw_sources = data.raw.train.get_sources(raw)
-    gt_sources = data.gt.train.get_sources(gt)
+    # compute padding
+    _, _, padding = compute_padding(
+        data.raw.roi,
+        data.gt.roi,
+        input_size,
+        output_size,
+        voxel_size,
+        padding=data.train_padding,
+    )
+    target_node, extra_gt_padding = predictor.add_target(gt, target)
+    if extra_gt_padding is None:
+        extra_gt_padding = gp.Coordinate((0,) * len(padding))
+    for _, aux_predictor, _ in task.aux_tasks:
+        aux_extra_gt_padding = aux_predictor.add_target(gt, aux_target)[1]
+        extra_gt_padding = gp.Coordinate(
+            tuple(max(a, b) for a, b in zip(extra_gt_padding, aux_extra_gt_padding))
+        )
+    if task.padding is not None:
+        padding += eval(task.padding)
     if isinstance(raw_sources, list):
         assert isinstance(gt_sources, list)
         assert len(raw_sources) == len(gt_sources)
 
         pipeline = (
             tuple(
-                (raw_source, gt_source) + gp.MergeProvider() + gp.RandomLocation()
+                (raw_source, gt_source)
+                + gp.MergeProvider()
+                + gp.Pad(raw, padding)
+                + gp.Pad(gt, padding + extra_gt_padding)
+                + gp.RandomLocation()
                 for raw_source, gt_source in zip(raw_sources, gt_sources)
             )
             + gp.RandomProvider()
@@ -74,7 +95,13 @@ def create_pipeline_3d(
 
     else:
         assert not isinstance(gt_sources, list)
-        pipeline = (raw_sources, gt_sources) + gp.MergeProvider() + gp.RandomLocation()
+        pipeline = (
+            (raw_sources, gt_sources)
+            + gp.MergeProvider()
+            + gp.Pad(raw, padding)
+            + gp.Pad(gt, padding + extra_gt_padding)
+            + gp.RandomLocation()
+        )
 
     pipeline += gp.Normalize(raw)
     # raw: ([c,] d, h, w)

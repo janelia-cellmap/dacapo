@@ -15,6 +15,8 @@ class Affinities(Model):
             "to get affinities out of that."
         )
 
+        self.voxel_size = data.raw.voxel_size
+
         self.dims = data.raw.spatial_dims
 
         super(Affinities, self).__init__(model.output_shape, model.fmaps_out, self.dims)
@@ -43,11 +45,19 @@ class Affinities(Model):
         self.output_channels = self.dims
 
     def add_target(self, gt, target):
+        target_node = gp.AddAffinities(
+            affinity_neighborhood=self.neighborhood, labels=gt, affinities=target
+        )
+        padding = (
+            gp.Coordinate(
+                max([0] + [a[d] for a in self.neighborhood])
+                for d in range(len(self.neighborhood[0]))
+            )
+            * self.voxel_size
+        )
 
         return (
-            gp.AddAffinities(
-                affinity_neighborhood=self.neighborhood, labels=gt, affinities=target
-            )
+            target_node, padding
             # TODO: Fix Error: Found dtype Byte but expected Float
             # This can occur when backpropogating through MSE where
             # the predictions are floats but the targets are uint8

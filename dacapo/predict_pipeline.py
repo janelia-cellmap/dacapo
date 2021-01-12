@@ -1,4 +1,6 @@
 from .gp import AddChannelDim, RemoveChannelDim
+from .padding import compute_padding
+
 import gunpowder as gp
 import gunpowder.torch as gp_torch
 import daisy
@@ -14,17 +16,19 @@ logger = logging.getLogger(__name__)
 
 
 def predict_pipeline(
-    run_hash,
     raw,
     model,
     predictor,
     output_dir,
     output_filename,
+    run_hash=None,
     gt=None,
     aux_tasks=None,
     total_roi=None,
     model_padding=None,
     daisy_worker=False,
+    checkpoint=None,
+    padding_mode="same",
 ):
     """
     store: a mongodb collection in which to store completed blocks
@@ -58,8 +62,14 @@ def predict_pipeline(
         output_roi = raw_output_roi
     input_roi = output_roi.grow(context, context)
 
-    assert all([a > b for a, b in zip(input_roi.get_shape(), input_size)])
-    assert all([a > b for a, b in zip(output_roi.get_shape(), output_size)])
+    input_roi, output_roi, padding = compute_padding(
+        input_roi,
+        output_roi,
+        input_size,
+        output_size,
+        voxel_size,
+        padding=padding_mode,
+    )
 
     # create gunpowder keys
     raw_key = gp.ArrayKey("RAW")
@@ -73,14 +83,42 @@ def predict_pipeline(
     num_samples = raw.num_samples
     assert num_samples == 0, "Multiple samples for 3D validation not yet implemented"
 
+    if gt is not None:
+        target_node, extra_gt_padding = predictor.add_target(gt_key, target)
+        if extra_gt_padding is None:
+            extra_gt_padding = gp.Coordinate((0,) * len(padding))
+        for aux_name, aux_predictor, _ in aux_tasks:
+            _, aux_target = aux_keys[name]
+            aux_extra_gt_padding = aux_predictor.add_target(gt_key, aux_target)[1]
+            if aux_extra_gt_padding is not None:
+                extra_gt_padding = gp.Coordinate(
+                    tuple(
+                        max(a, b)
+                        for a, b in zip(aux_extra_gt_padding, extra_gt_padding)
+                    )
+                )
+    else:
+        extra_gt_padding = gp.Coordinate((0,) * len(padding))
+
+    padding_in_voxel_fractions = np.asarray(padding, dtype=np.float32) / np.asarray(
+        voxel_size
+    )
+    extra_in_voxel_fractions = np.asarray(
+        extra_gt_padding, dtype=np.float32
+    ) / np.asarray(voxel_size)
+
+    padding = gp.Coordinate(np.ceil(padding_in_voxel_fractions))
+    extra_gt_padding = gp.Coordinate(np.ceil(extra_in_voxel_fractions))
+
     if gt:
         sources = (raw.get_source(raw_key), gt.get_source(gt_key))
         pipeline = sources + gp.MergeProvider()
     else:
         pipeline = raw.get_source(raw_key)
 
-    padding = output_size
     pipeline += gp.Pad(raw_key, padding)
+    if gt:
+        pipeline += gp.Pad(gt_key, padding + extra_gt_padding)
 
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)

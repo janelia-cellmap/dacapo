@@ -81,6 +81,10 @@ class Task:
         self.model = model
 
         self.augmentations = task_config.augmentations
+        if hasattr(task_config, "padding"):
+            self.padding = task_config.padding
+        else:
+            self.padding = None
 
         loss_args = {}
         if hasattr(task_config, "loss_args"):

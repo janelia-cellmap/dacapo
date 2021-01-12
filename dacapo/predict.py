@@ -45,10 +45,10 @@ class PredictRun:
         self.__load_best_state(self.run, model, task)
 
         predict(
-            self.run.hash,
             data.raw.test,
             model,
             task.predictor,
+            run_hash=self.run.hash,
             output_dir=f"predictions/{self.run.hash}",
             output_filename="data.zarr",
             gt=None,
@@ -56,6 +56,8 @@ class PredictRun:
             total_roi=data.total_roi,
             daisy_worker=self.daisy_worker,
             model_padding=self.model_padding,
+            checkpoint=f"{self.run.best_checkpoint}",
+            padding_mode=data.prediction_padding,
         )
 
         self.stopped = time.time()

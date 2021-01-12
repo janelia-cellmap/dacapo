@@ -8,6 +8,18 @@ class Data:
 
         arrays = data_config.arrays
         graphs = data_config.graphs
+        padding_options = ["valid", "same", "minimal"]
+        if hasattr(data_config, "train_padding"):
+            self.train_padding = data_config
+            assert self.train_padding in padding_options
+        else:
+            self.train_padding = "same"
+
+        if hasattr(data_config, "prediction_padding"):
+            self.prediction_padding = data_config
+            assert self.prediction_padding in padding_options
+        else:
+            self.prediction_padding = "valid"
 
         if hasattr(data_config, "total_roi"):
             self.total_roi = data_config.total_roi

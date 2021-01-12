@@ -12,7 +12,9 @@ class LSD(Model):
         self.sigma = sigma
 
         num_shape_descriptors = 10
-        super(LSD, self).__init__(model.output_shape, model.fmaps_out, num_shape_descriptors)
+        super(LSD, self).__init__(
+            model.output_shape, model.fmaps_out, num_shape_descriptors
+        )
 
         conv = torch.nn.Conv3d
         lsd = [
@@ -29,7 +31,11 @@ class LSD(Model):
 
     def add_target(self, gt: gp.ArrayKey, target: gp.ArrayKey):
 
-        return lsd.gp.AddLocalShapeDescriptor(gt, target, sigma=self.sigma)
+        extra_context = gp.Coordinate(tuple(s * 3 for s in (self.sigma,) * 3))
+        return (
+            lsd.gp.AddLocalShapeDescriptor(gt, target, sigma=self.sigma),
+            extra_context,
+        )
 
     def forward(self, x):
         lsd = self.lsd(x)

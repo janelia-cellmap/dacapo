@@ -31,6 +31,7 @@ def validate(
         output_filename=out_filename,
         gt=gt_data,
         aux_tasks=aux_tasks,
+        padding_mode=data.prediction_padding,
     )
     print(f"...done ({time.time() - start}s)")
 
