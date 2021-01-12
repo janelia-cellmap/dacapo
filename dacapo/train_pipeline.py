@@ -1,3 +1,11 @@
+from .gp import (
+    Squash,
+    AddChannelDim,
+    RemoveChannelDim,
+    TransposeDims,
+    Train,
+    BinarizeNot,
+)
 from .padding import compute_padding
 import gunpowder as gp
 import math
@@ -41,7 +49,7 @@ def create_pipeline_3d(
         aux_keys[name] = (
             gp.ArrayKey(f"{name.upper()}_PREDICTION"),
             gp.ArrayKey(f"{name.upper()}_TARGET"),
-            None,
+            gp.ArrayKey(f"{name.upper()}_WEIGHT"),
         )
         aux_grad_keys[name] = gp.ArrayKey(f"{name.upper()}_PRED_GRAD")
 
@@ -111,7 +119,7 @@ def create_pipeline_3d(
     # gt: ([c,] d, h, w)
     for augmentation in eval(task.augmentations):
         pipeline += augmentation
-    pipeline += predictor.add_target(gt, target)
+    pipeline += target_node
     # (don't care about gt anymore)
     # raw: ([c,] d, h, w)
     # target: ([c,] d, h, w)
@@ -128,10 +136,9 @@ def create_pipeline_3d(
     head_gradients = []
     for name, aux_predictor, aux_loss in task.aux_tasks:
         aux_prediction, aux_target, aux_weights = aux_keys[name]
-        pipeline += aux_predictor.add_target(gt, aux_target)
+        pipeline += aux_predictor.add_target(gt, aux_target)[0]
         aux_weights_node = aux_loss.add_weights(aux_target, aux_weights)
         if aux_weights_node:
-            aux_weights = gp.ArrayKey(f"{name.upper()}_WEIGHTS")
             aux_keys[name] = (
                 aux_prediction,
                 aux_target,
@@ -153,7 +160,7 @@ def create_pipeline_3d(
     # raw: (c, d, h, w)
     # target: ([c,] d, h, w)
     # [weights: ([c,] d, h, w)]
-    pipeline += gp.PreCache()
+    pipeline += gp.PreCache(num_workers=5)
     pipeline += gp.Stack(batch_size)
     # raw: (b, c, d, h, w)
     # target: (b, [c,] d, h, w)
