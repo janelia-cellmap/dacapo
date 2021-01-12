@@ -4,6 +4,7 @@ from .padding import compute_padding
 import gunpowder as gp
 import gunpowder.torch as gp_torch
 import daisy
+import zarr
 
 import numpy as np
 
@@ -11,6 +12,7 @@ from dacapo.store import MongoDbStore
 
 import logging
 from pathlib import Path
+
 
 logger = logging.getLogger(__name__)
 
@@ -306,7 +308,7 @@ def predict_pipeline(
 
     # If using daisy, add the daisy block manager.
     if daisy_worker:
-
+        assert run_hash is not None
         pred_id = f"{run_hash}_predict"
         step_id = "prediction"
         store = MongoDbStore()
@@ -354,17 +356,19 @@ def predict_pipeline(
 
 
 def predict(
-    run_hash,
     raw,
     model,
     predictor,
     output_dir,
     output_filename,
+    run_hash=None,
     gt=None,
     aux_tasks=None,
     total_roi=None,
     model_padding=None,
     daisy_worker=False,
+    checkpoint=None,
+    padding_mode="same",
 ):
     model.eval()
     predictor.eval()
@@ -373,17 +377,19 @@ def predict(
             aux_predictor.eval()
 
     compute_pipeline, sources, total_request = predict_pipeline(
-        run_hash,
         raw,
         model,
         predictor,
         output_dir,
         output_filename,
+        run_hash=run_hash,
         gt=gt,
         aux_tasks=aux_tasks,
         total_roi=total_roi,
         model_padding=model_padding,
         daisy_worker=daisy_worker,
+        checkpoint=checkpoint,
+        padding_mode="same",
     )
 
     with gp.build(compute_pipeline):
