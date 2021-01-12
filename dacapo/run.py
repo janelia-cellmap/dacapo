@@ -27,11 +27,12 @@ class Run:
         model_config,
         optimizer_config,
         repetition,
+        num_iterations,
         validation_interval,
         snapshot_interval,
         keep_best_validation,
         batch=False,
-        bsub_flags=None
+        bsub_flags=None,
     ):
 
         # configs
@@ -41,6 +42,7 @@ class Run:
         self.optimizer_config = optimizer_config
 
         self.repetition = repetition
+        self.num_iterations = num_iterations
         self.flags = bsub_flags
         self.batch = batch
 
@@ -137,7 +139,7 @@ class Run:
         with gp.build(pipeline):
 
             for i in tqdm(
-                range(starting_iteration, self.optimizer_config.num_iterations),
+                range(starting_iteration, self.num_iterations),
                 desc="train",
             ):
 
@@ -311,6 +313,7 @@ def enumerate_runs(
     model_configs,
     optimizer_configs,
     repetitions,
+    num_iterations,
     validation_interval,
     snapshot_interval,
     keep_best_validation,
@@ -331,6 +334,7 @@ def enumerate_runs(
                                 model_config,
                                 optimizer_config,
                                 repetition,
+                                num_iterations,
                                 validation_interval,
                                 snapshot_interval,
                                 keep_best_validation,
@@ -362,6 +366,7 @@ def run_remote(run):
         f"-m {run.model_config.config_file} "
         f"-o {run.optimizer_config.config_file} "
         f"-R {run.repetition} "
+        f"-i {run.num_iterations} "
         f"-v {run.validation_interval} "
         f"-s {run.snapshot_interval} "
         f"-b {run.keep_best_validation} ",

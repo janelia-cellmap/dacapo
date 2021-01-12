@@ -64,6 +64,13 @@ def cli(log_level):
     help="Number of times to repeat each combination of (task, data, model, optimizer).",
 )
 @click.option(
+    "-i",
+    "--num-iterations",
+    required=True,
+    type=int,
+    help="Number of iterations to train.",
+)
+@click.option(
     "-v",
     "--validation-interval",
     required=True,
@@ -107,6 +114,7 @@ def run_all(
     models,
     optimizers,
     repetitions,
+    num_iterations,
     validation_interval,
     snapshot_interval,
     keep_best_validation,
@@ -121,6 +129,7 @@ def run_all(
     model_configs = dacapo.config.find_model_configs(str(models))
     optimizer_configs = dacapo.config.find_optimizer_configs(str(optimizers))
 
+    bsub_flags = bsub_flags.split(" ")
     if num_workers > 1:
         assert any(["-P" in flag for flag in bsub_flags]), "billing must be provided"
 
@@ -130,6 +139,7 @@ def run_all(
         model_configs=model_configs,
         optimizer_configs=optimizer_configs,
         repetitions=repetitions,
+        num_iterations=num_iterations,
         validation_interval=validation_interval,
         snapshot_interval=snapshot_interval,
         keep_best_validation=keep_best_validation,
@@ -173,6 +183,13 @@ def run_all(
     "-R", "--repetitions", required=True, type=int, help="The repitition to run"
 )
 @click.option(
+    "-i",
+    "--num-iterations",
+    required=True,
+    type=int,
+    help="Number of iterations to train.",
+)
+@click.option(
     "-v",
     "--validation-interval",
     required=True,
@@ -199,6 +216,7 @@ def run_one(
     model,
     optimizer,
     repetitions,
+    num_iterations,
     validation_interval,
     snapshot_interval,
     keep_best_validation,
@@ -217,6 +235,7 @@ def run_one(
         model,
         optimizer,
         int(repetitions),
+        int(num_iterations),
         int(validation_interval),
         int(snapshot_interval),
         keep_best_validation,
@@ -282,6 +301,13 @@ def run_one(
     help="Number of times to repeat each combination of (task, data, model, optimizer).",
 )
 @click.option(
+    "-i",
+    "--num-iterations",
+    required=True,
+    type=int,
+    help="Number of iterations to train.",
+)
+@click.option(
     "-v",
     "--validation-interval",
     required=True,
@@ -328,6 +354,7 @@ def predict(
     models,
     optimizers,
     repetitions,
+    num_iterations,
     validation_interval,
     snapshot_interval,
     keep_best_validation,
@@ -367,6 +394,7 @@ def predict(
             f"--models {models} "
             f"--optimizers {optimizers} "
             f"--repetitions {repetitions} "
+            f"--num-iterations {num_iterations} "
             f"--validation-interval {validation_interval} "
             f"--snapshot-interval {snapshot_interval} "
             f"--keep-best-validation {keep_best_validation} "
@@ -385,6 +413,7 @@ def predict(
             model_configs=model_configs,
             optimizer_configs=optimizer_configs,
             repetitions=repetitions,
+            num_iterations=num_iterations,
             validation_interval=validation_interval,
             snapshot_interval=snapshot_interval,
             keep_best_validation=keep_best_validation,
@@ -416,6 +445,7 @@ def predict(
             model_configs=model_configs,
             optimizer_configs=optimizer_configs,
             repetitions=repetitions,
+            num_iterations=num_iterations,
             validation_interval=validation_interval,
             snapshot_interval=snapshot_interval,
             keep_best_validation=keep_best_validation,
