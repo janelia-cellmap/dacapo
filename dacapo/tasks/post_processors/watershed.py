@@ -411,9 +411,8 @@ def watershed_from_affinities(
     boundary_mask = np.mean(affs, axis=0) > 0.5 * max_affinity_value
     boundary_distances = distance_transform_edt(boundary_mask)
 
-    max_filtered = maximum_filter(
-        boundary_distances, np.ceil(min_seed_distance / np.array(voxel_size))
-    )
+    neighborhood_size = 1 + 2 * np.ceil(min_seed_distance / np.array(voxel_size))
+    max_filtered = maximum_filter(boundary_distances, neighborhood_size)
     maxima = max_filtered == boundary_distances
     seeds, n = label(maxima)
 
