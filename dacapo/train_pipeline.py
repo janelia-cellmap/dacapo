@@ -77,6 +77,9 @@ def create_pipeline_3d(
         )
     if task.padding is not None:
         padding += eval(task.padding)
+
+    raw_sources = data.raw.train.get_sources(raw, gp.ArraySpec(interpolatable=True))
+    gt_sources = data.gt.train.get_sources(gt, gp.ArraySpec(interpolatable=False))
     if isinstance(raw_sources, list):
         assert isinstance(gt_sources, list)
         assert len(raw_sources) == len(gt_sources)

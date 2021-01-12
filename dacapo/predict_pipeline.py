@@ -111,10 +111,13 @@ def predict_pipeline(
     extra_gt_padding = gp.Coordinate(np.ceil(extra_in_voxel_fractions))
 
     if gt:
-        sources = (raw.get_source(raw_key), gt.get_source(gt_key))
+        sources = (
+            raw.get_source(raw_key, gp.ArraySpec(interpolatable=True)),
+            gt.get_source(gt_key, gp.ArraySpec(interpolatable=False)),
+        )
         pipeline = sources + gp.MergeProvider()
     else:
-        pipeline = raw.get_source(raw_key)
+        pipeline = raw.get_source(raw_key, gp.ArraySpec(interpolatable=True))
 
     pipeline += gp.Pad(raw_key, padding)
     if gt:
