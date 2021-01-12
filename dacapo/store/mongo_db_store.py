@@ -43,9 +43,6 @@ class MongoDbStore:
 
         store_from_iteration = 0
 
-        print(f"Existing stats: {existing_stats.trained_until()}")
-        print(f"Trained stats: {stats.trained_until()}")
-
         if existing_stats.trained_until() > 0:
 
             if stats.trained_until() > 0:
