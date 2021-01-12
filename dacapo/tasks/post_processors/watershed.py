@@ -292,31 +292,22 @@ def global_create_luts(
     )
     scores = np.nan_to_num(scores, nan=1)
 
-    print(
-        f"percentiles (%): {np.array([0, 1, 5, 10, 25, 50, 75, 90, 95, 99, 100])}"
-        f"scores: {np.percentile(scores, [0, 1, 5, 10, 25, 50, 75, 90, 95, 99, 100])}"
-    )
+    logger.debug("Nodes dtype: ", nodes.dtype)
+    logger.debug("edges dtype: ", edges.dtype)
+    logger.debug("scores dtype: ", scores.dtype)
 
-    print("Nodes dtype: ", nodes.dtype)
-    print("edges dtype: ", edges.dtype)
-    print("scores dtype: ", scores.dtype)
-
-    print("Complete RAG contains %d nodes, %d edges" % (len(nodes), len(edges)))
+    logger.debug("Complete RAG contains %d nodes, %d edges" % (len(nodes), len(edges)))
 
     start = time.time()
 
-    print("Getting CCs for threshold %.3f..." % threshold)
+    logger.debug("Getting CCs for threshold %.3f..." % threshold)
     start = time.time()
     components = connected_components(nodes, edges, scores, threshold).astype(np.int64)
-    print("%.3fs" % (time.time() - start))
+    logger.debug("%.3fs" % (time.time() - start))
 
-    print("Creating fragment-segment LUT for threshold %.3f..." % threshold)
+    logger.debug("Creating fragment-segment LUT for threshold %.3f..." % threshold)
     start = time.time()
     lut = np.array([(n, c) for n, c in zip(nodes, components)], dtype=int)
-    print(
-        f"got {len(nodes)} nodes and ended with {len(components)} "
-        f"components, {len(np.unique(components))} unique!"
-    )
 
     logger.info("%.3fs" % (time.time() - start))
 
@@ -387,16 +378,6 @@ def blockwise_write_segmentation(
                 for node, attrs in agg_graph.nodes.items()
                 if lookup in attrs
             ]
-        )
-
-        unique_fragment_ids = set(np.unique(block_fragments))
-        nodes = set(
-            [node for node, attrs in agg_graph.nodes.items() if lookup in attrs]
-        )
-        print(
-            f"{len(unique_fragment_ids)} unique fragments in this block\n"
-            f"{agg_graph.number_of_nodes()} nodes in this block\n"
-            f"{len(nodes)} nodes with lookup in this block\n\n"
         )
 
         replace_values(block_fragments, lut[:, 0], lut[:, 1], out_array=relabelled)
