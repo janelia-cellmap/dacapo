@@ -365,9 +365,9 @@ def run_remote(run):
         f"-v {run.validation_interval} "
         f"-s {run.snapshot_interval} "
         f"-b {run.keep_best_validation} ",
-        num_cpus=2,
+        num_cpus=5,
         num_gpus=1,
-        queue="gpu_any",
+        queue="gpu_rtx",
         execute=True,
         flags=run.flags,
         batch=run.batch,
