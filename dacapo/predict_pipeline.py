@@ -137,7 +137,11 @@ def predict_pipeline(
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
     if gt:
-        pipeline += predictor.add_target(gt_key, target)
+        pipeline += target_node
+        if aux_tasks is not None:
+            for i, (aux_name, aux_predictor, _) in enumerate(aux_tasks):
+                _, aux_target = aux_keys[name]
+                pipeline += aux_predictor.add_target(gt_key, aux_target)[0]
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
     # target: ([c,] d, h, w)
