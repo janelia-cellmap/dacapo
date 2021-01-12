@@ -240,6 +240,7 @@ def predict_pipeline(
             np.float32,
             write_size=output_size,
             num_channels=predictor.output_channels,
+            compressor=zarr.storage.default_compressor.get_config(),
         )
     if gt:
         ds_names[target] = "volumes/target"
@@ -251,11 +252,13 @@ def predict_pipeline(
                 voxel_size,
                 np.float32,
                 write_size=output_size,
-                num_channels=predictor.output_channels,
+                num_channels=predictor.target_channels,
+                compressor=zarr.storage.default_compressor.get_config(),
             )
+
     if aux_tasks is not None:
         for aux_name, aux_predictor, _ in aux_tasks:
-            aux_pred_key = gp.ArrayKey(f"PRED_{aux_name.upper()}")
+            aux_pred_key, aux_target_key = aux_keys[aux_name]
             ds_names[aux_pred_key] = f"volumes/{aux_name}"
             if not Path(f"{output_dir}/{output_filename}/volumes/{aux_name}").exists():
                 daisy.prepare_ds(
@@ -266,7 +269,23 @@ def predict_pipeline(
                     np.float32,
                     write_size=output_size,
                     num_channels=aux_predictor.output_channels,
+                    compressor=zarr.storage.default_compressor.get_config(),
                 )
+            if gt is not None:
+                ds_names[aux_target_key] = f"volumes/{aux_name}_target"
+                if not Path(
+                    f"{output_dir}/{output_filename}/volumes/{aux_name}_target"
+                ).exists():
+                    daisy.prepare_ds(
+                        f"{output_dir}/{output_filename}",
+                        f"volumes/{aux_name}_target",
+                        daisy.Roi(output_roi.get_offset(), output_roi.get_shape()),
+                        voxel_size,
+                        np.float32,
+                        write_size=output_size,
+                        num_channels=aux_predictor.output_channels,
+                        compressor=zarr.storage.default_compressor.get_config(),
+                    )
     pipeline += gp.ZarrWrite(
         ds_names,
         output_dir,
