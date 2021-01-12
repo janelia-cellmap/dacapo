@@ -30,6 +30,13 @@ def smooth_values(a, n, stride=1):
 
 
 def plot_runs(runs, smooth=100, validation_score=None):
+    relation, validation_score = validation_score.split(":")
+    if relation == "min":
+        higher_is_better = False
+    elif relation == "max":
+        higher_is_better = True
+    else:
+        raise Exception(f"Don't know how to handle relation: {relation}")
 
     run_names = [str(run) for run in runs]
     max_iteration = max([run.training_stats.trained_until() for run in runs])
@@ -138,7 +145,9 @@ def plot_runs(runs, smooth=100, validation_score=None):
                 "run": [str(run)] * len(x),
             }
             # TODO: get_best: higher_is_better is not true for all scores
-            validation_averages = run.validation_scores.get_best(validation_score)
+            validation_averages = run.validation_scores.get_best(
+                validation_score, higher_is_better=higher_is_better
+            )
             source_dict.update(
                 {
                     name: np.array(validation_averages[name])
@@ -194,6 +203,5 @@ def plot_runs(runs, smooth=100, validation_score=None):
     validation_figure.yaxis.axis_label_text_font = "times"
     validation_figure.yaxis.axis_label_text_color = "black"
 
-    bokeh.plotting.save(
-        bokeh.layouts.column(loss_figure, validation_figure)
-    )
+    bokeh.plotting.output_file("performance_plots.html")
+    bokeh.plotting.save(bokeh.layouts.column(loss_figure, validation_figure))
