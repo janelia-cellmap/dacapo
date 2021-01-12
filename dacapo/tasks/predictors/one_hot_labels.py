@@ -90,9 +90,6 @@ class OneHotLabels(Model):
 
         for parameters, reconstruction in reconstructions:
 
-            print(f"Evaluating post-processing with {parameters}...")
-            start = time.time()
-
             # This could be factored out.
             # keep evaulate as a super class method
             # over-write evaluate_reconstruction
@@ -103,7 +100,6 @@ class OneHotLabels(Model):
                 background_label=self.background_label,
                 matching_score=self.matching_score,
                 matching_threshold=self.matching_threshold)
-            print(f"...done ({time.time() - start}s)")
 
             if return_results:
                 scores, results = ret

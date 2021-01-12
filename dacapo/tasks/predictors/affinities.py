@@ -72,14 +72,10 @@ class Affinities(Model):
 
         for parameters, reconstruction in reconstructions:
 
-            print(f"Evaluation post-processing with {parameters}...")
-            start = time.time()
             # This could be factored out.
             # keep evaulate as a super class method
             # over-write evaluate_reconstruction
             ret = evaluate_affs(reconstruction, gt, return_results=return_results)
-
-            print(f"...done ({time.time() - start}s)")
 
             if return_results:
                 scores, results = ret
