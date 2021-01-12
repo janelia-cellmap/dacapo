@@ -26,12 +26,12 @@ class ArrayGroup:
         """
         return self._datasets[0].axes
 
-    def get_sources(self, output_key: ArrayKey):
+    def get_sources(self, output_key: ArrayKey, overwrite_spec=None):
         """
         A dacapo dataset is expected to provide a list of gunpowder trees
         that all provide the given output keys.
         """
-        return [d.get_source(output_key) for d in self.datasets]
+        return [d.get_source(output_key, overwrite_spec) for d in self.datasets]
 
     def __getattr__(self, attr):
         if "__" in attr:
