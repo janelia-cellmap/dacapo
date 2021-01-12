@@ -52,15 +52,15 @@ def predict_pipeline(
     context = (input_size - output_size) / 2
     logger.warning(f"context: {context}")
 
-    raw_roi = raw.roi
-    if total_roi is not None:
-        raw_roi = raw_roi.intersect(gp.Roi(*total_roi))
-    raw_output_roi = raw_roi.grow(-context, -context)
+    input_roi = raw.roi
     if gt is not None:
-        output_roi = gt.roi.intersect(raw_output_roi)
+        output_roi = gt.roi
+        if total_roi is not None:
+            output_roi = output_roi.intersect(gp.Roi(*total_roi))
     else:
-        output_roi = raw_output_roi
-    input_roi = output_roi.grow(context, context)
+        output_roi = input_roi
+        if total_roi is not None:
+            output_roi = input_roi.intersect(gp.Roi(*total_roi))
 
     input_roi, output_roi, padding = compute_padding(
         input_roi,
@@ -77,6 +77,14 @@ def predict_pipeline(
     target = gp.ArrayKey("TARGET")
     model_output = gp.ArrayKey("MODEL_OUTPUT")
     prediction = gp.ArrayKey("PREDICTION")
+
+    aux_keys = {}
+    if aux_tasks is not None:
+        for name, _, _ in aux_tasks:
+            aux_keys[name] = (
+                gp.ArrayKey(f"{name.upper()}_PREDICTION"),
+                gp.ArrayKey(f"{name.upper()}_TARGET"),
+            )
 
     channel_dims = 0 if raw_channels == 1 else 1
 
