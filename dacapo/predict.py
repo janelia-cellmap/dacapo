@@ -118,10 +118,10 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
 
     # build pipeline to prepare datasets
     compute_pipeline, sources, total_request = predict_pipeline(
-        run.hash,
         predict_data.raw,
         model,
         task.predictor,
+        run_hash=run.hash,
         output_dir=f"predictions/{run.hash}",
         output_filename="data.zarr",
         gt=None,
