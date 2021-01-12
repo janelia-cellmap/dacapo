@@ -296,11 +296,13 @@ def predict_pipeline(
     total_request[raw_key] = gp.ArraySpec(roi=input_roi)
     # total_request[model_output] = gp.ArraySpec(roi=output_roi)
     total_request[prediction] = gp.ArraySpec(roi=output_roi)
-    for aux_name, aux_key in aux_predictions:
-        total_request[aux_key] = gp.ArraySpec(roi=output_roi)
+    for aux_name, (aux_pred_key, _) in aux_keys.items():
+        total_request[aux_pred_key] = gp.ArraySpec(roi=output_roi)
     if gt:
         total_request[gt_key] = gp.ArraySpec(roi=output_roi)
         total_request[target] = gp.ArraySpec(roi=output_roi)
+        for aux_name, (_, aux_target_key) in aux_keys.items():
+            total_request[aux_target_key] = gp.ArraySpec(roi=output_roi)
 
     # If using daisy, add the daisy block manager.
     if daisy_worker:
