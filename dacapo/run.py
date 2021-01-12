@@ -117,7 +117,9 @@ class Run:
 
         self.outdir.mkdir(parents=True, exist_ok=True)
 
-        starting_iteration = self.load_training_state(store, model, task.heads, optimizer)
+        starting_iteration = self.load_training_state(
+            store, model, task.heads, optimizer
+        )
         if starting_iteration > 0:
             store.store_training_stats(self)
             logger.info(
@@ -197,10 +199,7 @@ class Run:
                                 "storing checkpoint..."
                             )
                             self._save_parameters(
-                                Path(
-                                    self.outdir,
-                                    f"validation_best_{self.best_score_name}.checkpoint",
-                                ),
+                                self.best_checkpoint,
                                 model,
                                 task.heads,
                                 optimizer,
@@ -220,6 +219,13 @@ class Run:
     @property
     def outdir(self):
         return Path("runs", self.hash)
+
+    @property
+    def best_checkpoint(self):
+        return Path(
+            self.outdir,
+            f"validation_best_{self.best_score_name}.checkpoint",
+        )
 
     def get_saved_iterations(self):
         for f in self.outdir.iterdir():
