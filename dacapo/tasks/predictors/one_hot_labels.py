@@ -84,7 +84,7 @@ class OneHotLabels(Model):
             predictions,
             gt,
             target,
-            return_results=None):
+            return_results):
 
         reconstructions = self.post_processor.enumerate(predictions)
 
