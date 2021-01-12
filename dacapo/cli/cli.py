@@ -459,6 +459,158 @@ def predict(
             predict_run_local(run, prediction_data, daisy_conf)
 
 
-@cli.group()
-def visualize():
-    pass
+@cli.command()
+@click.option(
+    "-t",
+    "--tasks",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of task configs.",
+)
+@click.option(
+    "-d",
+    "--data",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of data configs.",
+)
+@click.option(
+    "-m",
+    "--models",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of model configs.",
+)
+@click.option(
+    "-o",
+    "--optimizers",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of optimizer configs.",
+)
+@click.option(
+    "-R",
+    "--repetitions",
+    required=True,
+    type=int,
+    help="Number of times to repeat each combination of (task, data, model, optimizer).",
+)
+@click.option(
+    "-i",
+    "--num-iterations",
+    required=True,
+    type=int,
+    help="Number of iterations to train.",
+)
+@click.option(
+    "-v",
+    "--validation-interval",
+    required=True,
+    type=int,
+    help="How many iterations between each validation run.",
+)
+@click.option(
+    "-s",
+    "--snapshot-interval",
+    required=True,
+    type=int,
+    help="How many iterations between each saved snapshot.",
+)
+@click.option(
+    "-b",
+    "--keep-best-validation",
+    required=True,
+    type=str,
+    help="Definition of what is considered the 'best' validation",
+)
+@click.option(
+    "-n",
+    "--num-workers",
+    default=1,
+    type=int,
+    help="How many workers to spawn on to run jobs in parallel.",
+)
+@click.option(
+    "-bf", "--bsub-flags", default=None, type=str, help="flags to pass to bsub"
+)
+@click.option(
+    "--batch",
+    default=False,
+    type=bool,
+    help="Whether to run the jobs as interactive or not.",
+)
+@click_config_file.configuration_option(section="runs")
+def visualize(
+    tasks,
+    data,
+    models,
+    optimizers,
+    repetitions,
+    num_iterations,
+    validation_interval,
+    snapshot_interval,
+    keep_best_validation,
+    num_workers,
+    bsub_flags,
+    batch,
+):
+    import dacapo.config
+
+    print("Finding runs...")
+    tasks = dacapo.config.find_task_configs(tasks)
+    datas = dacapo.config.find_data_configs(data)
+    models = dacapo.config.find_model_configs(models)
+    optimizers = dacapo.config.find_optimizer_configs(optimizers)
+    runs = dacapo.enumerate_runs(
+        tasks,
+        datas,
+        models,
+        optimizers,
+        repetitions=repetitions,
+        num_iterations=num_iterations,
+        validation_interval=validation_interval,
+        snapshot_interval=snapshot_interval,
+        keep_best_validation=keep_best_validation,
+        bsub_flags=bsub_flags,
+        batch=batch,
+    )
+
+    print("Fetching data...")
+    store = dacapo.store.MongoDbStore()
+    for run in runs:
+        store.sync_run(run)
+        store.read_training_stats(run)
+        store.read_validation_scores(run)
+
+    print("Plotting...")
+    dacapo.analyze.plot_runs(
+        runs, smooth=100, validation_score=keep_best_validation
+    )
+
+    # import numpy as np
+
+    # def get_best(self, score_name=None, higher_is_better=True):
+
+    #     names = self.get_score_names()
+
+    #     best_scores = {name: [] for name in names}
+    #     for iteration_scores in self.scores:
+    #         ips = np.array(
+    #             [
+    #                 parameter_scores["scores"]["average"][score_name]
+    #                 for parameter_scores in iteration_scores.values()
+    #             ]
+    #         )
+    #         print(ips[:10])
+    #         print(np.isnan(ips[:10]))
+    #         ips[np.isnan(ips)] = -np.inf if higher_is_better else np.inf
+    #         print(ips[:10])
+    #         i = np.argmax(ips) if higher_is_better else np.argmin(ips)
+    #         for name in names:
+    #             best_scores[name].append(
+    #                 list(iteration_scores.values())[i]["scores"]["average"][name]
+    #             )
+    #     return best_scores
+
+    # best = get_best(run.validation_scores, "fscore")
+    # print(best["detection_fscore"])
