@@ -375,7 +375,7 @@ class Train(GenericTrain):
                 outputs[array_name].cpu().detach().numpy(), spec
             )
 
-        batch.loss = loss.cpu().detach().numpy()
+        batch.loss = loss.cpu().detach().numpy().tolist()
         self.iteration += 1
         batch.iteration = self.iteration
 
