@@ -47,7 +47,12 @@ class Watershed(PostProcessor):
         yield ("fragments", "shrink", blockwise_fragments_worker, ["volumes/fragments"])
         yield ("agglomerate", "shrink", blockwise_agglomerate_worker, [])
         yield ("create_luts", "global", global_create_luts, [])
-        yield ("segment", "shrink", blockwise_write_segmentation, ["volumes/segmentation"])
+        yield (
+            "segment",
+            "shrink",
+            blockwise_write_segmentation,
+            ["volumes/segmentation"],
+        )
 
 
 def blockwise_fragments_worker(
@@ -59,7 +64,7 @@ def blockwise_fragments_worker(
     mask_file=None,
     mask_dataset=None,
     filter_fragments=0,
-    fragments_in_xy=True,
+    fragments_in_xy=False,
     epsilon_agglomerate=0,
 ):
 
@@ -149,7 +154,7 @@ def blockwise_agglomerate_worker(
     output_filename,
     affs_dataset,
     fragments_dataset,
-    merge_function="mean",
+    merge_function="hist_quant_75",
 ):
 
     waterz_merge_function = {
@@ -224,12 +229,9 @@ def blockwise_agglomerate_worker(
 
 def global_create_luts(
     run_hash,
-    output_dir,
-    output_filename,
-    fragments_dataset,
-    num_workers,
     threshold,
     lookup,
+    roi,
 ):
 
     """
@@ -277,9 +279,6 @@ def global_create_luts(
         position_attribute=["center_z", "center_y", "center_x"],
     )
 
-    fragments = daisy.open_ds(f"{output_dir}/{output_filename}", fragments_dataset)
-    roi = fragments.roi
-
     g = graph_provider.get_graph(roi)
 
     logger.info("Read graph in %.3fs" % (time.time() - start))
@@ -288,24 +287,36 @@ def global_create_luts(
 
     nodes = np.array(list(g.nodes()))
     edges = np.array([(u, v) for u, v in g.edges()], dtype=np.uint64)
-    scores = np.array([attrs["merge_score"] for edge, attrs in g.edges.items()])
+    scores = np.array(
+        [attrs["merge_score"] for edge, attrs in g.edges.items()], dtype=np.float32
+    )
+    scores = np.nan_to_num(scores, nan=1)
 
-    logger.debug("Nodes dtype: ", nodes.dtype)
-    logger.debug("edges dtype: ", edges.dtype)
-    logger.debug("scores dtype: ", scores.dtype)
+    print(
+        f"percentiles (%): {np.array([0, 1, 5, 10, 25, 50, 75, 90, 95, 99, 100])}"
+        f"scores: {np.percentile(scores, [0, 1, 5, 10, 25, 50, 75, 90, 95, 99, 100])}"
+    )
 
-    logger.info("Complete RAG contains %d nodes, %d edges" % (len(nodes), len(edges)))
+    print("Nodes dtype: ", nodes.dtype)
+    print("edges dtype: ", edges.dtype)
+    print("scores dtype: ", scores.dtype)
+
+    print("Complete RAG contains %d nodes, %d edges" % (len(nodes), len(edges)))
 
     start = time.time()
 
-    logger.info("Getting CCs for threshold %.3f..." % threshold)
+    print("Getting CCs for threshold %.3f..." % threshold)
     start = time.time()
-    components = connected_components(nodes, edges, scores, threshold)
-    logger.info("%.3fs" % (time.time() - start))
+    components = connected_components(nodes, edges, scores, threshold).astype(np.int64)
+    print("%.3fs" % (time.time() - start))
 
-    logger.info("Creating fragment-segment LUT for threshold %.3f..." % threshold)
+    print("Creating fragment-segment LUT for threshold %.3f..." % threshold)
     start = time.time()
-    lut = np.array([nodes, components])
+    lut = np.array([(n, c) for n, c in zip(nodes, components)], dtype=int)
+    print(
+        f"got {len(nodes)} nodes and ended with {len(components)} "
+        f"components, {len(np.unique(components))} unique!"
+    )
 
     logger.info("%.3fs" % (time.time() - start))
 
@@ -313,7 +324,7 @@ def global_create_luts(
     start = time.time()
 
     for node, component in lut:
-        g.nodes[node][lookup] = component
+        g.nodes[node][lookup] = int(component)
 
     g.update_node_attrs(attributes=[lookup])
 
@@ -337,7 +348,7 @@ def blockwise_write_segmentation(
     start = time.time()
     fragments = daisy.open_ds(f"{output_dir}/{output_filename}", fragments_dataset)
     segmentation = daisy.open_ds(
-        f"{output_dir}/{output_filename}", segmentation_dataset
+        f"{output_dir}/{output_filename}", segmentation_dataset, mode="r+"
     )
 
     store = MongoDbStore()
@@ -351,25 +362,44 @@ def blockwise_write_segmentation(
         position_attribute=["center_z", "center_y", "center_x"],
     )
 
-    pred_id = f"{run_hash}_segmentation"
+    pred_id = f"{run_hash}_segment"
     step_id = "prediction"
 
     client = daisy.Client()
     while True:
 
         block = client.acquire_block()
-        fragments = fragments.to_ndarray(block.write_roi)
+        if block is None:
+            break
+
+        block_fragments = fragments.to_ndarray(block.write_roi)
         logging.info("%.3fs" % (time.time() - start))
 
         start = time.time()
 
-        relabelled = np.zeros_like(fragments)
+        relabelled = np.zeros_like(block_fragments)
 
         agg_graph = graph_provider.get_graph(roi=block.write_roi)
 
-        lut = np.array([(node, attrs[lookup]) for node, attrs in agg_graph.nodes.items()])
+        lut = np.array(
+            [
+                (np.uint64(node), np.uint64(attrs[lookup]))
+                for node, attrs in agg_graph.nodes.items()
+                if lookup in attrs
+            ]
+        )
 
-        relabelled = replace_values(fragments, lut[0], lut[1], out_array=relabelled)
+        unique_fragment_ids = set(np.unique(block_fragments))
+        nodes = set(
+            [node for node, attrs in agg_graph.nodes.items() if lookup in attrs]
+        )
+        print(
+            f"{len(unique_fragment_ids)} unique fragments in this block\n"
+            f"{agg_graph.number_of_nodes()} nodes in this block\n"
+            f"{len(nodes)} nodes with lookup in this block\n\n"
+        )
+
+        replace_values(block_fragments, lut[:, 0], lut[:, 1], out_array=relabelled)
         logging.info("%.3fs" % (time.time() - start))
 
         segmentation[block.write_roi] = relabelled
