@@ -245,6 +245,161 @@ def run_one(
 
 @cli.command()
 @click.option(
+    "-t",
+    "--tasks",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of task configs.",
+)
+@click.option(
+    "-d",
+    "--data",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of data configs.",
+)
+@click.option(
+    "-m",
+    "--models",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of model configs.",
+)
+@click.option(
+    "-o",
+    "--optimizers",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help="The directory of optimizer configs.",
+)
+@click.option(
+    "-R",
+    "--repetitions",
+    required=True,
+    type=int,
+    help="Number of times to repeat each combination of (task, data, model, optimizer).",
+)
+@click.option(
+    "-i",
+    "--num-iterations",
+    required=True,
+    type=int,
+    help="Number of iterations to train.",
+)
+@click.option(
+    "-v",
+    "--validation-interval",
+    required=True,
+    type=int,
+    help="How many iterations between each validation run.",
+)
+@click.option(
+    "-s",
+    "--snapshot-interval",
+    required=True,
+    type=int,
+    help="How many iterations between each saved snapshot.",
+)
+@click.option(
+    "-b",
+    "--keep-best-validation",
+    required=True,
+    type=str,
+    help="Definition of what is considered the 'best' validation",
+)
+@click.option(
+    "-n",
+    "--num-workers",
+    default=1,
+    type=int,
+    help="How many workers to spawn on to run jobs in parallel.",
+)
+@click.option(
+    "-bf", "--bsub-flags", default=None, type=str, help="flags to pass to bsub"
+)
+@click.option(
+    "--batch",
+    default=False,
+    type=bool,
+    help="Whether to run the jobs as interactive or not.",
+)
+@click_config_file.configuration_option(section="runs")
+def clear_all(
+    tasks,
+    data,
+    models,
+    optimizers,
+    repetitions,
+    num_iterations,
+    validation_interval,
+    snapshot_interval,
+    keep_best_validation,
+    num_workers,
+    bsub_flags,
+    batch,
+):
+    import dacapo.config
+
+    task_configs = dacapo.config.find_task_configs(str(tasks))
+    data_configs = dacapo.config.find_data_configs(str(data))
+    model_configs = dacapo.config.find_model_configs(str(models))
+    optimizer_configs = dacapo.config.find_optimizer_configs(str(optimizers))
+
+    bsub_flags = bsub_flags.split(" ")
+    if num_workers > 1:
+        assert any(["-P" in flag for flag in bsub_flags]), "billing must be provided"
+
+    runs = dacapo.enumerate_runs(
+        task_configs=task_configs,
+        data_configs=data_configs,
+        model_configs=model_configs,
+        optimizer_configs=optimizer_configs,
+        repetitions=repetitions,
+        num_iterations=num_iterations,
+        validation_interval=validation_interval,
+        snapshot_interval=snapshot_interval,
+        keep_best_validation=keep_best_validation,
+        bsub_flags=bsub_flags,
+        batch=batch,
+    )
+
+    store = dacapo.store.MongoDbStore()
+    for run in runs:
+        output_dir = run.outdir
+        saved_checkpoints = []
+        for f in output_dir.iterdir():
+            parts = f.name.split(".")
+            if len(parts) > 1 and parts[-1] == "checkpoint":
+                try:
+                    saved_checkpoints.append(int(parts[0]))
+                except ValueError:
+                    f.unlink()
+            elif f.is_file():
+                f.unlink()
+            elif f.is_dir():
+                import shutil
+
+                shutil.rmtree(f)
+
+        for checkpoint in saved_checkpoints:
+            if checkpoint == max(saved_checkpoints):
+                pass
+            else:
+                (output_dir / f"{checkpoint}.checkpoint").unlink()
+
+        run_id = list(store.runs.find({"hash": run.hash}))
+        assert len(run_id) == 1
+        run_id = run_id[0]["id"]
+        deleted = store.runs.delete_one({"hash": run.hash})
+        print(f"deleted run: {deleted.deleted_count} runs")
+        deleted = store.training_stats.delete_many({"run": run_id})
+        print(f"deleted training_stats: {deleted.deleted_count} training_stats")
+        deleted = store.validation_scores.delete_many({"run": run_id})
+        print(f"deleted validation_scores: {deleted.deleted_count} validation scores")
+
+
+@cli.command()
+@click.option(
     "-n",
     "--name",
     required=True,
@@ -583,9 +738,7 @@ def visualize(
         store.read_validation_scores(run)
 
     print("Plotting...")
-    dacapo.analyze.plot_runs(
-        runs, smooth=100, validation_score=keep_best_validation
-    )
+    dacapo.analyze.plot_runs(runs, smooth=100, validation_score=keep_best_validation)
 
     # import numpy as np
 
