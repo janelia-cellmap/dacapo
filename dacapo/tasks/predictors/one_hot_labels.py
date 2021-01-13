@@ -71,7 +71,7 @@ class OneHotLabels(Model):
                     batch[self.gt].data.astype(np.int64),
                     spec)
 
-        return AddClassLabels(gt, target)
+        return AddClassLabels(gt, target), None
 
     def forward(self, x):
         logits = self.logits(x)
