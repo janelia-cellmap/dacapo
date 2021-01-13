@@ -15,12 +15,12 @@ def evaluate_affs(pred_labels, gt_labels, return_results=False):
 
     if return_results:
         results = {
-            "pred_labels": daisy.Array(
+            "volumes/pred_labels": daisy.Array(
                 pred_labels.data.astype(np.uint64),
                 roi=pred_labels.roi,
                 voxel_size=pred_labels.voxel_size,
             ),
-            "gt_labels": daisy.Array(
+            "volumes/gt_labels": daisy.Array(
                 gt_labels.data.astype(np.uint64),
                 roi=gt_labels.roi,
                 voxel_size=gt_labels.voxel_size,
