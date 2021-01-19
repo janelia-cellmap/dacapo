@@ -67,6 +67,13 @@ class PredictData:
         else:
             self.total_roi = None
 
+        padding_options = ["valid", "same", "minimal"]
+        if hasattr(data_config, "prediction_padding"):
+            self.prediction_padding = data_config
+            assert self.prediction_padding in padding_options
+        else:
+            self.prediction_padding = "valid"
+
         for array in arrays:
             self.__setattr__(array, TestSplit(array))
         for graph in graphs:
