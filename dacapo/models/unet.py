@@ -17,8 +17,14 @@ class UNet(Model):
         levels = len(model_config.downsample_factors) + 1
         dims = len(model_config.downsample_factors[0])
 
-        kernel_size_down = [[(3,)*dims, (3,)*dims]]*levels
-        kernel_size_up = [[(3,)*dims, (3,)*dims]]*(levels - 1)
+        if hasattr(model_config, "kernel_size_down"):
+            kernel_size_down = model_config.kernel_size_down
+        else:
+            kernel_size_down = [[(3,)*dims, (3,)*dims]]*levels
+        if hasattr(model_config, "kernel_size_up"):
+            kernel_size_up = model_config.kernel_size_up
+        else:
+            kernel_size_up = [[(3,)*dims, (3,)*dims]]*(levels - 1)
 
         self.unet = ft.models.UNet(
             in_channels=fmaps_in,
