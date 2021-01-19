@@ -8,34 +8,29 @@ import torch
 
 
 class OneHotLabels(Model):
-
     def __init__(
-            self,
-            data,
-            model,
-            matching_score,
-            matching_threshold,
-            num_classes, 
-            post_processor=None):
+        self,
+        data,
+        model,
+        matching_score,
+        matching_threshold,
+        num_classes,
+        post_processor=None,
+    ):
 
         dims = data.raw.spatial_dims
 
         super(OneHotLabels, self).__init__(
-            model.output_shape,
-            model.fmaps_out,            
-            num_classes)
+            model.output_shape, model.fmaps_out, num_classes
+        )
 
         assert num_classes > 0, (
             "Your GT has no classes, don't know how to get one-hot encoding "
-            "out of that.")
+            "out of that."
+        )
 
-        conv = {
-            2: torch.nn.Conv2d,
-            3: torch.nn.Conv3d
-        }[dims]
-        logits = [
-            conv(model.fmaps_out, num_classes, (1,)*dims)
-        ]
+        conv = {2: torch.nn.Conv2d, 3: torch.nn.Conv3d}[dims]
+        logits = [conv(model.fmaps_out, num_classes, (1,) * dims)]
 
         self.logits = torch.nn.Sequential(*logits)
         self.probs = torch.nn.LogSoftmax()
@@ -51,27 +46,46 @@ class OneHotLabels(Model):
 
         self.output_channels = num_classes
 
-    def add_target(self, gt, target):
+    def add_target(self, gt, target, weights=None, mask=None):
 
         # target is gt, just ensure proper type
         class AddClassLabels(gp.BatchFilter):
-
             def __init__(self, gt, target):
                 self.gt = gt
                 self.target = target
 
             def setup(self):
-                self.provides(target, self.spec[gt])
+                self.provides(target, self.spec[gt].copy())
                 self.enable_autoskip()
 
             def process(self, batch, request):
                 spec = batch[self.gt].spec.copy()
                 spec.dtype = np.int64
                 batch[self.target] = gp.Array(
-                    batch[self.gt].data.astype(np.int64),
-                    spec)
+                    batch[self.gt].data.astype(np.int64), spec
+                )
 
-        return AddClassLabels(gt, target), None
+        class MaskToWeights(gp.BatchFilter):
+            def __init__(self, mask, weights):
+                self.mask = mask
+                self.weights = weights
+
+            def setup(self):
+                self.provides(weights, self.spec[mask].copy())
+                self.enable_autoskip()
+
+            def process(self, batch, request):
+                spec = batch[self.mask].spec.copy()
+                spec.dtype = np.float32
+                batch[self.weights] = gp.Array(
+                    batch[self.mask].data.astype(np.float32), spec
+                )
+
+        if mask is not None and weights is not None:
+            weights_node = MaskToWeights(mask, weights)
+        else:
+            weights_node = None
+        return AddClassLabels(gt, target), weights_node, None
 
     def forward(self, x):
         logits = self.logits(x)
@@ -79,12 +93,7 @@ class OneHotLabels(Model):
             return self.probs(logits)
         return logits
 
-    def evaluate(
-            self,
-            predictions,
-            gt,
-            target,
-            return_results):
+    def evaluate(self, predictions, gt, target, return_results):
 
         reconstructions = self.post_processor.enumerate(predictions)
 
@@ -99,7 +108,8 @@ class OneHotLabels(Model):
                 return_results=return_results,
                 background_label=self.background_label,
                 matching_score=self.matching_score,
-                matching_threshold=self.matching_threshold)
+                matching_threshold=self.matching_threshold,
+            )
 
             if return_results:
                 scores, results = ret

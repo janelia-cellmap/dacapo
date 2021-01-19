@@ -94,12 +94,16 @@ def predict_pipeline(
     assert num_samples == 0, "Multiple samples for 3D validation not yet implemented"
 
     if gt is not None:
-        target_node, extra_gt_padding = predictor.add_target(gt_key, target)
+        target_node, _, extra_gt_padding = predictor.add_target(
+            gt_key, target, None, None
+        )
         if extra_gt_padding is None:
             extra_gt_padding = gp.Coordinate((0,) * len(padding))
         for aux_name, aux_predictor, _ in aux_tasks:
             _, aux_target = aux_keys[name]
-            aux_extra_gt_padding = aux_predictor.add_target(gt_key, aux_target)[1]
+            aux_extra_gt_padding = aux_predictor.add_target(
+                gt_key, aux_target, None, None
+            )[2]
             if aux_extra_gt_padding is not None:
                 extra_gt_padding = gp.Coordinate(
                     tuple(
@@ -143,7 +147,7 @@ def predict_pipeline(
         if aux_tasks is not None:
             for i, (aux_name, aux_predictor, _) in enumerate(aux_tasks):
                 _, aux_target = aux_keys[name]
-                pipeline += aux_predictor.add_target(gt_key, aux_target)[0]
+                pipeline += aux_predictor.add_target(gt_key, aux_target, None, None)[0]
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
     # target: ([c,] d, h, w)
@@ -319,8 +323,9 @@ def predict_pipeline(
             prediction: "write_roi",
             model_output: "write_roi",
         }
-        for aux_name, aux_key in aux_predictions:
-            ds_rois[aux_key] = "write_roi"
+        for aux_name, (aux_pred_key, aux_target_key) in aux_keys.items():
+            ds_rois[aux_pred_key] = "write_roi"
+            ds_rois[aux_target_key] = "write_roi"
         if gt:
             ds_rois[gt] = "write_roi"
             ds_rois[target] = "write_roi"

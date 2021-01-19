@@ -44,10 +44,14 @@ class Affinities(Model):
 
         self.output_channels = self.dims
 
-    def add_target(self, gt, target):
+    def add_target(self, gt, target, weights=None, mask=None):
         target_node = gp.AddAffinities(
             affinity_neighborhood=self.neighborhood, labels=gt, affinities=target
         )
+        if weights is not None:
+            weights_node = gp.BalanceLabels(target, weights, mask=mask)
+        else:
+            weights_node = None
         padding = (
             gp.Coordinate(
                 max([0] + [a[d] for a in self.neighborhood])
@@ -57,7 +61,7 @@ class Affinities(Model):
         )
 
         return (
-            target_node, padding
+            target_node, weights_node, padding
             # TODO: Fix Error: Found dtype Byte but expected Float
             # This can occur when backpropogating through MSE where
             # the predictions are floats but the targets are uint8

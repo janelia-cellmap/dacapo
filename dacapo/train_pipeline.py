@@ -25,10 +25,19 @@ def create_pipeline_3d(
     input_size = voxel_size * input_shape
     output_size = voxel_size * output_shape
 
+    # keys for provided datasets
     raw = gp.ArrayKey("RAW")
     gt = gp.ArrayKey("GT")
+    if hasattr(data, "mask"):
+        mask = gp.ArrayKey("MASK")
+    else:
+        mask = None
+
+    # keys for generated datasets
     target = gp.ArrayKey("TARGET")
     weights = gp.ArrayKey("WEIGHTS")
+
+    # keys for predictions
     model_outputs = gp.ArrayKey("MODEL_OUTPUTS")
     model_output_grads = gp.ArrayKey("MODEL_OUT_GRAD")
     prediction = gp.ArrayKey("PREDICTION")
@@ -75,44 +84,87 @@ def create_pipeline_3d(
         voxel_size,
         padding=data.train_padding,
     )
-    target_node, extra_gt_padding = predictor.add_target(gt, target)
+    target_node, weights_node, extra_gt_padding = predictor.add_target(
+        gt, target, weights, mask
+    )
     if extra_gt_padding is None:
         extra_gt_padding = gp.Coordinate((0,) * len(padding))
-    for _, aux_predictor, _ in task.aux_tasks:
-        aux_extra_gt_padding = aux_predictor.add_target(gt, aux_target)[1]
-        extra_gt_padding = gp.Coordinate(
-            tuple(max(a, b) for a, b in zip(extra_gt_padding, aux_extra_gt_padding))
-        )
+    for name, aux_predictor, _ in task.aux_tasks:
+        _, aux_target, aux_weights = aux_keys[name]
+        aux_extra_gt_padding = aux_predictor.add_target(gt, aux_target, aux_weights, mask)[
+            2
+        ]
+        if aux_extra_gt_padding is not None:
+            extra_gt_padding = gp.Coordinate(
+                tuple(max(a, b) for a, b in zip(extra_gt_padding, aux_extra_gt_padding))
+            )
+    # print(f"padding: {padding}")
     if task.padding is not None:
         padding += eval(task.padding)
 
+    # raise Exception(f"Padding: {padding}, extra: {extra_gt_padding}")
+
     raw_sources = data.raw.train.get_sources(raw, gp.ArraySpec(interpolatable=True))
     gt_sources = data.gt.train.get_sources(gt, gp.ArraySpec(interpolatable=False))
+    if mask is not None:
+        mask_sources = data.mask.train.get_sources(
+            mask, gp.ArraySpec(interpolatable=False)
+        )
     if isinstance(raw_sources, list):
         assert isinstance(gt_sources, list)
         assert len(raw_sources) == len(gt_sources)
+        if mask is not None:
+            assert isinstance(mask_sources, list)
+            assert len(raw_sources) == len(mask_sources)
 
-        pipeline = (
-            tuple(
-                (raw_source, gt_source)
+            pipeline = (
+                tuple(
+                    (raw_source, gt_source, mask_source)
+                    + gp.MergeProvider()
+                    + gp.Pad(raw, padding)
+                    + gp.Pad(gt, padding + extra_gt_padding)
+                    + gp.Pad(mask, padding + extra_gt_padding)
+                    + gp.RandomLocation()
+                    for raw_source, gt_source, mask_source in zip(
+                        raw_sources, gt_sources, mask_sources
+                    )
+                )
+                + gp.RandomProvider()
+            )
+
+        else:
+            pipeline = (
+                tuple(
+                    (raw_source, gt_source)
+                    + gp.MergeProvider()
+                    + gp.Pad(raw, padding)
+                    + gp.Pad(gt, padding + extra_gt_padding)
+                    + gp.RandomLocation()
+                    for raw_source, gt_source in zip(raw_sources, gt_sources)
+                )
+                + gp.RandomProvider()
+            )
+
+    else:
+        assert not isinstance(gt_sources, list)
+        if mask is not None:
+            assert not isinstance(mask_sources, list)
+            pipeline = (
+                (raw_sources, gt_sources, mask_sources)
+                + gp.MergeProvider()
+                + gp.Pad(raw, padding)
+                + gp.Pad(gt, padding + extra_gt_padding)
+                + gp.Pad(mask, padding + extra_gt_padding)
+                + gp.RandomLocation()
+            )
+        else:
+            pipeline = (
+                (raw_sources, gt_sources)
                 + gp.MergeProvider()
                 + gp.Pad(raw, padding)
                 + gp.Pad(gt, padding + extra_gt_padding)
                 + gp.RandomLocation()
-                for raw_source, gt_source in zip(raw_sources, gt_sources)
             )
-            + gp.RandomProvider()
-        )
-
-    else:
-        assert not isinstance(gt_sources, list)
-        pipeline = (
-            (raw_sources, gt_sources)
-            + gp.MergeProvider()
-            + gp.Pad(raw, padding)
-            + gp.Pad(gt, padding + extra_gt_padding)
-            + gp.RandomLocation()
-        )
 
     pipeline += gp.Normalize(raw)
     # raw: ([c,] d, h, w)
@@ -123,7 +175,6 @@ def create_pipeline_3d(
     # (don't care about gt anymore)
     # raw: ([c,] d, h, w)
     # target: ([c,] d, h, w)
-    weights_node = task.loss.add_weights(target, weights)
     loss_inputs = []
     if weights_node:
         pipeline += weights_node
@@ -136,15 +187,18 @@ def create_pipeline_3d(
     head_gradients = []
     for name, aux_predictor, aux_loss in task.aux_tasks:
         aux_prediction, aux_target, aux_weights = aux_keys[name]
-        pipeline += aux_predictor.add_target(gt, aux_target)[0]
-        aux_weights_node = aux_loss.add_weights(aux_target, aux_weights)
-        if aux_weights_node:
+        aux_target_node, aux_weights_node, _ = aux_predictor.add_target(
+            gt, aux_target, aux_weights, mask
+        )
+        pipeline += aux_target_node
+        if aux_weights_node is not None:
             aux_keys[name] = (
                 aux_prediction,
                 aux_target,
                 aux_weights,
             )
-            pipeline += aux_weights_node
+            if aux_weights_node is not True:
+                pipeline += aux_weights_node
             loss_inputs.append({0: aux_prediction, 1: aux_target, 2: aux_weights})
             snapshot_dataset_names[aux_weights] = f"{name}_weights"
         else:

@@ -29,11 +29,15 @@ class LSD(Model):
 
         self.output_channels = 10
 
-    def add_target(self, gt: gp.ArrayKey, target: gp.ArrayKey):
+    def add_target(self, gt, target, weights=None, mask=None):
+        """
+        Ignores the provided mask and returns a new one where gt != 0
+        """
 
         extra_context = gp.Coordinate(tuple(s * 3 for s in (self.sigma,) * 3))
         return (
-            lsd.gp.AddLocalShapeDescriptor(gt, target, sigma=self.sigma),
+            lsd.gp.AddLocalShapeDescriptor(gt, target, mask=weights, sigma=self.sigma),
+            True,
             extra_context,
         )
 
