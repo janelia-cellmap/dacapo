@@ -114,14 +114,10 @@ def predict_pipeline(
     else:
         extra_gt_padding = gp.Coordinate((0,) * len(padding))
 
-    padding_in_voxel_fractions = np.asarray(padding, dtype=np.float32) / np.asarray(
-        voxel_size
-    )
     extra_in_voxel_fractions = np.asarray(
         extra_gt_padding, dtype=np.float32
     ) / np.asarray(voxel_size)
 
-    padding = gp.Coordinate(np.ceil(padding_in_voxel_fractions)) * voxel_size
     extra_gt_padding = gp.Coordinate(np.ceil(extra_in_voxel_fractions)) * voxel_size
 
     if gt:
@@ -345,7 +341,6 @@ def predict_pipeline(
             "gt": (gt.filename, gt.ds_name),
         }
         for key, ds_name in ds_names.items():
-            print(f"Opening dataset: {output_dir / output_filename}, {ds_name}")
             sources[str(key).lower()] = (f"{output_dir / output_filename}", ds_name)
     else:
         sources = {
@@ -373,7 +368,7 @@ def predict(
     model_padding=None,
     daisy_worker=False,
     checkpoint=None,
-    padding_mode="same",
+    padding_mode="valid",
 ):
     model.eval()
     predictor.eval()
@@ -394,7 +389,7 @@ def predict(
         model_padding=model_padding,
         daisy_worker=daisy_worker,
         checkpoint=checkpoint,
-        padding_mode="same",
+        padding_mode=padding_mode,
     )
 
     with gp.build(compute_pipeline):

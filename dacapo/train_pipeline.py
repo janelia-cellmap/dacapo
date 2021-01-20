@@ -8,6 +8,7 @@ from .gp import (
 )
 from .padding import compute_padding
 import gunpowder as gp
+import numpy as np
 import math
 import os
 
@@ -98,6 +99,13 @@ def create_pipeline_3d(
             extra_gt_padding = gp.Coordinate(
                 tuple(max(a, b) for a, b in zip(extra_gt_padding, aux_extra_gt_padding))
             )
+
+    extra_in_voxel_fractions = np.asarray(
+        extra_gt_padding, dtype=np.float32
+    ) / np.asarray(voxel_size)
+
+    extra_gt_padding = gp.Coordinate(np.ceil(extra_in_voxel_fractions)) * voxel_size
+
     # print(f"padding: {padding}")
     if task.padding is not None:
         padding += eval(task.padding)
