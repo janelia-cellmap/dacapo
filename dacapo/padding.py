@@ -1,9 +1,11 @@
 from gunpowder import Coordinate
+import numpy as np
 
 
 def compute_padding(
     input_roi, output_roi, input_size, output_size, voxel_size, padding
 ):
+    # raise Exception(output_size/voxel_size)
     """
     Compute the necessary padding!
 
@@ -24,11 +26,15 @@ def compute_padding(
         assert all(
             [a >= b for a, b in zip(output_roi.get_shape(), output_size)]
         ), f"output_roi {output_roi} is too small to accomodate model output_size: {output_size}"
-        return no_pad_input_roi, no_pad_output_roi, Coordinate([0] * input_roi.dims)
+        return no_pad_input_roi, no_pad_output_roi, Coordinate([0] * input_roi.dims())
 
     elif padding == "same":
 
         padding = (output_roi.get_shape() - no_pad_output_roi.get_shape()) / 2
+        padding_in_voxel_fractions = np.asarray(padding, dtype=np.float32) / np.asarray(
+            voxel_size
+        )
+        padding = Coordinate(np.ceil(padding_in_voxel_fractions)) * voxel_size
 
         assert all(
             [a >= b for a, b in zip(input_roi.get_shape() + padding * 2, input_size)]
@@ -47,6 +53,10 @@ def compute_padding(
         padding = (
             (padding + voxel_size - (1,) * len(voxel_size)) / voxel_size
         ) * voxel_size
+        padding_in_voxel_fractions = np.asarray(padding, dtype=np.float32) / np.asarray(
+            voxel_size
+        )
+        padding = Coordinate(np.ceil(padding_in_voxel_fractions)) * voxel_size
         assert all(
             [a >= b for a, b in zip(input_roi.get_shape() + padding * 2, input_size)]
         ), f"{input_roi.get_shape() + padding * 2} < {input_size}"
