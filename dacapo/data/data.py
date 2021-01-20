@@ -10,14 +10,18 @@ class Data:
         graphs = data_config.graphs
         padding_options = ["valid", "same", "minimal"]
         if hasattr(data_config, "train_padding"):
-            self.train_padding = data_config
-            assert self.train_padding in padding_options
+            self.train_padding = data_config.train_padding
+            assert (
+                self.train_padding in padding_options
+            ), f"{self.train_padding} not in {padding_options}"
         else:
-            self.train_padding = "same"
+            self.train_padding = "valid"
 
         if hasattr(data_config, "prediction_padding"):
-            self.prediction_padding = data_config
-            assert self.prediction_padding in padding_options
+            self.prediction_padding = data_config.prediction_padding
+            assert (
+                self.prediction_padding in padding_options
+            ), f"{self.prediction_padding} not in {padding_options}"
         else:
             self.prediction_padding = "valid"
 
@@ -69,8 +73,10 @@ class PredictData:
 
         padding_options = ["valid", "same", "minimal"]
         if hasattr(data_config, "prediction_padding"):
-            self.prediction_padding = data_config
-            assert self.prediction_padding in padding_options
+            self.prediction_padding = data_config.prediction_padding
+            assert (
+                self.prediction_padding in padding_options
+            ), f"{self.prediction_padding} not in {padding_options}"
         else:
             self.prediction_padding = "valid"
 
