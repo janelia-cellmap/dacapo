@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 class Watershed(PostProcessor):
     def set_prediction(self, prediction):
         fragments = watershed_from_affinities(
-            prediction.to_ndarray(), prediction.voxel_size
+            prediction.to_ndarray(), voxel_size=prediction.voxel_size
         )
         thresholds = self.parameter_range.threshold
         segmentations = waterz.agglomerate(
