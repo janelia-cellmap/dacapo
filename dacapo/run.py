@@ -205,7 +205,7 @@ class Run:
                                 optimizer,
                             )
 
-                if i % 100 == 0 and i > 0:
+                if (i % self.validation_interval == 0 or i % 100 == 0) and i > 0:
                     store.store_training_stats(self)
                     self.save_training_state(i, model, task.heads, optimizer)
 
