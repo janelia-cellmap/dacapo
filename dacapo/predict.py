@@ -168,7 +168,7 @@ def run_remote(run, data, daisy_config, dacapo_flags, bsub_flags):
         check_function=lambda b: store.check_block(prediction_id, step_id, b.block_id),
         num_workers=daisy_config.num_workers,
         read_write_conflict=False,
-        fit="valid",
+        fit="overhang",
     )
     logger.warning("Finished blockwise prediction")
 
