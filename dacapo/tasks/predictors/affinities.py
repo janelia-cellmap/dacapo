@@ -1,4 +1,4 @@
-from dacapo.evaluate import evaluate_affs
+from dacapo.evaluate import evaluate_detection
 from dacapo.models import Model
 from dacapo.tasks.post_processors import Watershed
 import gunpowder as gp
@@ -79,7 +79,7 @@ class Affinities(Model):
             # This could be factored out.
             # keep evaulate as a super class method
             # over-write evaluate_reconstruction
-            ret = evaluate_affs(reconstruction, gt, return_results=return_results)
+            ret = evaluate_detection(reconstruction, gt, return_results=return_results)
 
             if return_results:
                 scores, results = ret
