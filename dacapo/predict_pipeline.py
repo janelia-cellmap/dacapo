@@ -30,7 +30,7 @@ def predict_pipeline(
     model_padding=None,
     daisy_worker=False,
     checkpoint=None,
-    padding_mode="same",
+    padding_mode="valid",
 ):
     """
     store: a mongodb collection in which to store completed blocks
@@ -166,7 +166,7 @@ def predict_pipeline(
         outputs={0: model_output},
         array_specs={
             prediction: gp.ArraySpec(
-                roi=output_roi,
+                roi=output_roi.grow(padding, padding),
                 voxel_size=voxel_size,
                 dtype=np.float32,
             )
@@ -180,7 +180,7 @@ def predict_pipeline(
         outputs={0: prediction},
         array_specs={
             prediction: gp.ArraySpec(
-                roi=output_roi,
+                roi=output_roi.grow(padding, padding),
                 voxel_size=voxel_size,
                 dtype=np.float32,
             )
@@ -197,7 +197,7 @@ def predict_pipeline(
                 outputs={0: aux_pred_key},
                 array_specs={
                     aux_pred_key: gp.ArraySpec(
-                        roi=output_roi,
+                        roi=output_roi.grow(padding, padding),
                         voxel_size=voxel_size,
                         dtype=np.float32,
                     )
