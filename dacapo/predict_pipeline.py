@@ -73,6 +73,9 @@ def predict_pipeline(
         padding=padding_mode,
     )
 
+    if daisy_worker:
+        padding = gp.Coordinate([None] * len(padding))
+
     # create gunpowder keys
     raw_key = gp.ArrayKey("RAW")
     gt_key = gp.ArrayKey("GT")
