@@ -238,20 +238,26 @@ class AddDistance(BatchFilter):
         else:
             dims = label_array.ndim
             inner_distances = []
-            for foreground_id in foreground_ids:
+            for foreground_obj in foreground_ids:
                 inner_distances.append(
                     distance_transform_edt(
                         binary_erosion(
-                            label_array == foreground_id,
+                            np.isin(label_array, foreground_obj),
                             border_value=1,
                             structure=generate_binary_structure(dims, dims),
                         ),
                         **kwargs,
                     )
                 )
-            background = np.isin(label_array, background_ids, invert=True)
-            outer_distance = distance_transform_edt(background, **kwargs)
-            return np.sum(inner_distances, axis=0) - outer_distance
+            outer_distances = []
+            for background_obj in background_ids:
+                outer_distances.append(
+                    distance_transform_edt(
+                        np.isin(label_array, background_obj),
+                        **kwargs,
+                    )
+                )
+            return np.sum(inner_distances, axis=0) - np.sum(outer_distances, axis=0)
 
     def __constrain_distances(self, mask, distances, mask_sampling):
         # remove elements from the mask where the label distances exceed the
