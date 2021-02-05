@@ -2,7 +2,7 @@ from .loss import Loss
 import gunpowder as gp
 import torch
 
-from .gp import AddDistance
+from dacapo.gp import AddDistance
 
 
 class WeightedMSELoss(torch.nn.MSELoss, Loss):
@@ -26,7 +26,7 @@ class DistanceWeightedMSELoss(torch.nn.MSELoss, Loss):
 
     def add_weights(self, target, weights):
 
-        return AddDistance(labels=target, scales=weights)
+        return AddDistance(target, weights)
 
     def forward(self, prediction, target, weights):
 
