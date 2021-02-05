@@ -1,6 +1,8 @@
 from dacapo.evaluate import evaluate_detection
 from dacapo.models import Model
 from dacapo.tasks.post_processors import Watershed
+from dacapo.gp import AddDistance
+
 import gunpowder as gp
 import torch
 
@@ -8,12 +10,16 @@ import time
 
 
 class Affinities(Model):
-    def __init__(self, data, model, post_processor=None):
+    def __init__(self, data, model, post_processor=None, weighting_type=None):
 
         assert data.gt.num_classes == 0, (
             f"Your GT has {data.gt.num_classes} classes, don't know how "
             "to get affinities out of that."
         )
+        if weighting_type is not None:
+            self.weighting_type = weighting_type
+        else:
+            self.weighting_type = "balance_labels"
 
         self.voxel_size = data.raw.voxel_size
 
@@ -49,7 +55,12 @@ class Affinities(Model):
             affinity_neighborhood=self.neighborhood, labels=gt, affinities=target
         )
         if weights is not None:
-            weights_node = gp.BalanceLabels(target, weights, mask=mask)
+            if self.weighting_type == "balance_labels":
+                weights_node = gp.BalanceLabels(target, weights, mask=mask)
+            elif self.weighting_type == "distance":
+                weights_node = AddDistance(gt, weights, mask)
+            else:
+                raise Exception(f"{self.weighting_type} not a valid option")
         else:
             weights_node = None
         padding = (
@@ -61,7 +72,9 @@ class Affinities(Model):
         )
 
         return (
-            target_node, weights_node, padding
+            target_node,
+            weights_node,
+            padding
             # TODO: Fix Error: Found dtype Byte but expected Float
             # This can occur when backpropogating through MSE where
             # the predictions are floats but the targets are uint8
