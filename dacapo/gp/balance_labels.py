@@ -14,6 +14,10 @@ from gunpowder.array_spec import ArraySpec
 logger = logging.getLogger(__name__)
 
 
+def sigmoid_dropoff(x, scale):
+    return 2.0 - (2 / (1 + np.exp(-np.abs(x) / scale)))
+
+
 class AddDistance(BatchFilter):
     """Compute array with signed distances from specific labels
     Args:
@@ -65,11 +69,13 @@ class AddDistance(BatchFilter):
 
             ids from which to compute distance transform as background
 
-        max_distance(scalar, tuple, optional):
+        distance_tranform(function):
 
-            maximal distance that computed distances will be clipped to. For a
-            single value this is the absolute value of the minimal and maximal distance.
-            A tuple should be given as (minimal_distance, maximal_distance)
+            A function to transform the absolute distances to more useful values.
+            Default is a sigmoid dropoff where 0 distance (i.e. boundaries) are
+            given a value of 1, and as you progress towards +- inf, scores drop
+            to 0.
+            distance_transforms should always take a distance array and scale float.
     """
 
     def __init__(
@@ -80,11 +86,18 @@ class AddDistance(BatchFilter):
         label_id=None,
         bg_value=0,
         max_distance=None,
+        output_channels=None,
+        transform_func=sigmoid_dropoff,
+        scale=None,
     ):
 
         self.label_array_key = label_array_key
         self.distance_array_key = distance_array_key
         self.mask_array_key = mask_array_key
+        self.scale = scale
+
+        self.output_channels = output_channels
+        self.transform_func = transform_func
 
         self.all_labels = set()
         self.rest = None
@@ -200,14 +213,41 @@ class AddDistance(BatchFilter):
 
         outputs = Batch()
 
-        outputs.arrays[self.distance_array_key] = Array(distances, spec)
+        if self.scale is None:
+            self.scale = min(voxel_size) * 3
+
+        if self.output_channels is not None:
+            outputs.arrays[self.distance_array_key] = Array(
+                np.repeat(
+                    self.transform_func(distances, self.scale).astype(spec.dtype)[
+                        np.newaxis
+                    ],
+                    3,
+                    axis=0,
+                ),
+                spec,
+            )
+        else:
+            outputs.arrays[self.distance_array_key] = Array(
+                np.repeat(
+                    self.transform_func(distances, self.scale).astype(spec.dtype)[
+                        np.newaxis
+                    ],
+                    self.output_channels,
+                    axis=0,
+                ),
+                spec,
+            )
 
         if self.mask_array_key is not None:
-            mask_voxel_size = tuple(
-                float(v) for v in self.spec[self.mask_array_key].voxel_size
+            mask_spec = spec.copy()
+            mask_spec.dtype = np.bool
+            mask = self.__constrain_distances(mask, distances, voxel_size)
+            outputs.arrays[self.mask_array_key] = Array(
+                mask.astype(mask_spec.dtype), mask_spec
             )
-            mask = self.__constrain_distances(mask, distances, mask_voxel_size)
-            outputs.arrays[self.mask_array_key] = Array(mask, spec)
+
+        return outputs
 
     @staticmethod
     def __signed_distance(label_array, foreground_ids, background_ids, **kwargs):
