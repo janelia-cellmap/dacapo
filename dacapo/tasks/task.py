@@ -54,6 +54,11 @@ class Task:
     def __init__(self, data, model, task_config):
 
         post_processor = None
+        if hasattr(task_config, "weighting_type"):
+            self.weighting_type = task_config.weighting_type
+        else:
+            self.weighting_type = "balanced_labels"
+
         if hasattr(task_config, "post_processor"):
             if hasattr(task_config, "post_processing_parameter_range"):
                 kwargs = task_config.post_processing_parameter_range.to_dict(
@@ -70,7 +75,9 @@ class Task:
             else:
                 daisy_parameters = None
             parameter_range = PostProcessingParameterRange(**kwargs)
-            post_processor = task_config.post_processor(parameter_range, daisy_parameters)
+            post_processor = task_config.post_processor(
+                parameter_range, daisy_parameters
+            )
 
         predictor_args = {}
         if hasattr(task_config, "predictor_args"):
