@@ -30,7 +30,7 @@ class ValidationScores:
             ips = np.array([
                 parameter_scores['scores']['average'].get(score_name, np.nan)
                 for parameter_scores in iteration_scores.values()
-            ])
+            ], dtype=np.float32)
             ips[np.isnan(ips)] = -np.inf if higher_is_better else np.inf
             i = np.argmax(ips) if higher_is_better else np.argmin(ips)
             for name in names:
