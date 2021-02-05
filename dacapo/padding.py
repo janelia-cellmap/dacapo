@@ -31,10 +31,9 @@ def compute_padding(
     elif padding == "same":
 
         padding = (output_roi.get_shape() - no_pad_output_roi.get_shape()) / 2
-        padding_in_voxel_fractions = np.asarray(padding, dtype=np.float32) / np.asarray(
-            voxel_size
-        )
-        padding = Coordinate(np.ceil(padding_in_voxel_fractions)) * voxel_size
+        padding = (
+            (padding + voxel_size - (1,) * len(voxel_size)) / voxel_size
+        ) * voxel_size
 
         assert all(
             [a >= b for a, b in zip(input_roi.get_shape() + padding * 2, input_size)]
@@ -53,10 +52,6 @@ def compute_padding(
         padding = (
             (padding + voxel_size - (1,) * len(voxel_size)) / voxel_size
         ) * voxel_size
-        padding_in_voxel_fractions = np.asarray(padding, dtype=np.float32) / np.asarray(
-            voxel_size
-        )
-        padding = Coordinate(np.ceil(padding_in_voxel_fractions)) * voxel_size
         assert all(
             [a >= b for a, b in zip(input_roi.get_shape() + padding * 2, input_size)]
         ), f"{input_roi.get_shape() + padding * 2} < {input_size}"
@@ -68,4 +63,5 @@ def compute_padding(
             no_pad_output_roi.grow(padding, padding),
             padding,
         )
-    return padding
+    else:
+        raise Exception(f"Padding mode {padding} not valid")
