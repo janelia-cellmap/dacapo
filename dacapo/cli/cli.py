@@ -366,36 +366,47 @@ def clear_all(
     store = dacapo.store.MongoDbStore()
     for run in runs:
         output_dir = run.outdir
-        saved_checkpoints = []
-        for f in output_dir.iterdir():
-            parts = f.name.split(".")
-            if len(parts) > 1 and parts[-1] == "checkpoint":
-                try:
-                    saved_checkpoints.append(int(parts[0]))
-                except ValueError:
+        if output_dir.exists():
+            saved_checkpoints = []
+            for f in output_dir.iterdir():
+                parts = f.name.split(".")
+                if len(parts) > 1 and parts[-1] == "checkpoint":
+                    try:
+                        saved_checkpoints.append(int(parts[0]))
+                    except ValueError:
+                        f.unlink()
+                elif f.is_file():
                     f.unlink()
-            elif f.is_file():
-                f.unlink()
-            elif f.is_dir():
-                import shutil
+                elif f.is_dir():
+                    import shutil
 
-                shutil.rmtree(f)
+                    shutil.rmtree(f)
 
-        for checkpoint in saved_checkpoints:
-            if checkpoint == max(saved_checkpoints):
-                pass
-            else:
-                (output_dir / f"{checkpoint}.checkpoint").unlink()
+            for checkpoint in saved_checkpoints:
+                if checkpoint == max(saved_checkpoints):
+                    pass
+                else:
+                    (output_dir / f"{checkpoint}.checkpoint").unlink()
 
-        run_id = list(store.runs.find({"hash": run.hash}))
-        assert len(run_id) == 1
-        run_id = run_id[0]["id"]
-        deleted = store.runs.delete_one({"hash": run.hash})
-        print(f"deleted run: {deleted.deleted_count} runs")
-        deleted = store.training_stats.delete_many({"run": run_id})
-        print(f"deleted training_stats: {deleted.deleted_count} training_stats")
-        deleted = store.validation_scores.delete_many({"run": run_id})
-        print(f"deleted validation_scores: {deleted.deleted_count} validation scores")
+        deleted_runs = list(store.runs.find({"hash": run.hash}))
+        assert len(deleted_runs) <= 1
+        for run_data in deleted_runs:
+            run_id = run_data["id"]
+            deleted = store.runs.delete_one({"hash": run.hash})
+            print(f"deleted run: {deleted.deleted_count} runs")
+            deleted = store.training_stats.delete_many({"run": run_id})
+            print(f"deleted training_stats: {deleted.deleted_count} training_stats")
+            deleted = store.validation_scores.delete_many({"run": run_id})
+            print(
+                f"deleted validation_scores: {deleted.deleted_count} validation scores"
+            )
+
+        task_id = run.task_config.to_dict()["id"]
+        deleted_tasks = list(store.tasks.find({"id": task_id}))
+        assert len(deleted_tasks) <= 1
+        for task_data in deleted_tasks:
+            store.tasks.delete_one({"id": task_id})
+            print(f"deleted task: {task_id}")
 
 
 @cli.command()
