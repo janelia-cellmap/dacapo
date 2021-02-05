@@ -183,7 +183,8 @@ class Run:
                                     ]
                                 )
                                 for parameter_scores in self.validation_scores.scores
-                            ]
+                            ],
+                            dtype=np.float32,
                         )
 
                         # replace nan
