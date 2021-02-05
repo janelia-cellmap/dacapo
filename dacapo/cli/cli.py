@@ -741,6 +741,13 @@ def visualize(
         batch=batch,
     )
 
+    print(
+        f"Visualizing tasks: {[t.hash for t in tasks]}\n"
+        f"datas: {[d.hash for d in datas]}\n"
+        f"models: {[m.hash for m in models]}\n"
+        f"optimizers: {[o.hash for o in optimizers]}"
+    )
+
     print("Fetching data...")
     store = dacapo.store.MongoDbStore()
     for run in runs:
