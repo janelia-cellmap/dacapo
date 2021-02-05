@@ -345,6 +345,7 @@ class MongoDbStore:
 
     def __init_db(self):
 
+        self.users.create_index([("username", ASCENDING)], name="username", unique=True)
         self.runs.create_index(
             [("id", ASCENDING), ("repetition", ASCENDING)], name="id_rep", unique=True
         )
@@ -354,6 +355,7 @@ class MongoDbStore:
             unique=True,
         )
         self.tasks.create_index([("id", ASCENDING)], name="id", unique=True)
+        self.datasets.create_index([("id", ASCENDING)], name="id", unique=True)
         self.models.create_index([("id", ASCENDING)], name="id", unique=True)
         self.optimizers.create_index([("id", ASCENDING)], name="id", unique=True)
         self.training_stats.create_index(
@@ -366,9 +368,11 @@ class MongoDbStore:
     def __open_collections(self):
         """Opens the node, edge, and meta collections"""
 
+        self.users = self.database["users"]
         self.runs = self.database["runs"]
         self.predictions = self.database["predictions"]
         self.tasks = self.database["tasks"]
+        self.datasets = self.database["datasets"]
         self.models = self.database["models"]
         self.optimizers = self.database["optimizers"]
         self.training_stats = self.database["training_stats"]
