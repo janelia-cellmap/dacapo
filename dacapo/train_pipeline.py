@@ -1,15 +1,12 @@
 from .gp import (
-    Squash,
     AddChannelDim,
     RemoveChannelDim,
     TransposeDims,
     Train,
-    BinarizeNot,
 )
 from .padding import compute_padding
 import gunpowder as gp
 import numpy as np
-import math
 import os
 
 
@@ -33,6 +30,10 @@ def create_pipeline_3d(
         mask = gp.ArrayKey("MASK")
     else:
         mask = None
+    if hasattr(data, "nonempty_mask"):
+        nonempty_mask = gp.ArrayKey("NONEMPTY_MASK")
+    else:
+        nonempty_mask = None
 
     # keys for generated datasets
     target = gp.ArrayKey("TARGET")
@@ -92,9 +93,9 @@ def create_pipeline_3d(
         extra_gt_padding = gp.Coordinate((0,) * len(padding))
     for name, aux_predictor, _ in task.aux_tasks:
         _, aux_target, aux_weights = aux_keys[name]
-        aux_extra_gt_padding = aux_predictor.add_target(gt, aux_target, aux_weights, mask)[
-            2
-        ]
+        aux_extra_gt_padding = aux_predictor.add_target(
+            gt, aux_target, aux_weights, mask
+        )[2]
         if aux_extra_gt_padding is not None:
             extra_gt_padding = gp.Coordinate(
                 tuple(max(a, b) for a, b in zip(extra_gt_padding, aux_extra_gt_padding))
@@ -108,7 +109,10 @@ def create_pipeline_3d(
 
     # print(f"padding: {padding}")
     if task.padding is not None:
-        padding += eval(task.padding)
+        task_padding = (
+            (eval(task.padding) + voxel_size - (1,) * len(voxel_size)) / voxel_size
+        ) * voxel_size
+        padding += task_padding
 
     # raise Exception(f"Padding: {padding}, extra: {extra_gt_padding}")
 
@@ -118,10 +122,35 @@ def create_pipeline_3d(
         mask_sources = data.mask.train.get_sources(
             mask, gp.ArraySpec(interpolatable=False)
         )
+    if nonempty_mask is not None:
+        nonempty_mask_sources = data.nonempty_mask.train.get_sources(
+            nonempty_mask, gp.ArraySpec(interpolatable=False)
+        )
     if isinstance(raw_sources, list):
         assert isinstance(gt_sources, list)
         assert len(raw_sources) == len(gt_sources)
-        if mask is not None:
+        if mask is not None and nonempty_mask is not None:
+            assert isinstance(mask_sources, list)
+            assert len(raw_sources) == len(mask_sources)
+
+            pipeline = (
+                tuple(
+                    (raw_source, gt_source, mask_source, nonempty_mask_source)
+                    + gp.MergeProvider()
+                    + gp.Pad(raw, padding)
+                    + gp.Pad(gt, padding + extra_gt_padding)
+                    + gp.Pad(mask, padding + extra_gt_padding)
+                    + gp.Pad(nonempty_mask, padding + extra_gt_padding)
+                    # + gp.DownSample(nonempty_mask, 2, nonempty_mask_downsampled)
+                    + gp.RandomLocation(mask=nonempty_mask, min_masked=0.05)
+                    for raw_source, gt_source, mask_source, nonempty_mask_source in zip(
+                        raw_sources, gt_sources, mask_sources, nonempty_mask_sources
+                    )
+                )
+                + gp.RandomProvider()
+            )
+
+        elif mask is not None and nonempty_mask is None:
             assert isinstance(mask_sources, list)
             assert len(raw_sources) == len(mask_sources)
 
@@ -135,6 +164,23 @@ def create_pipeline_3d(
                     + gp.RandomLocation()
                     for raw_source, gt_source, mask_source in zip(
                         raw_sources, gt_sources, mask_sources
+                    )
+                )
+                + gp.RandomProvider()
+            )
+
+        elif mask is None and nonempty_mask is not None:
+
+            pipeline = (
+                tuple(
+                    (raw_source, gt_source, nonempty_mask_source)
+                    + gp.MergeProvider()
+                    + gp.Pad(raw, padding)
+                    + gp.Pad(gt, padding + extra_gt_padding)
+                    + gp.Pad(nonempty_mask, padding + extra_gt_padding)
+                    + gp.RandomLocation(mask=nonempty_mask)
+                    for raw_source, gt_source, nonempty_mask_source in zip(
+                        raw_sources, gt_sources, nonempty_mask_sources
                     )
                 )
                 + gp.RandomProvider()
@@ -275,6 +321,8 @@ def create_pipeline_3d(
     request.add(raw, input_size)
     request.add(gt, output_size)
     request.add(target, output_size)
+    if nonempty_mask is not None:
+        request.add(nonempty_mask, output_size)
     for name, _, _ in task.aux_tasks:
         aux_pred, aux_target, aux_weight = aux_keys[name]
         request.add(aux_pred, output_size)
