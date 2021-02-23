@@ -1,85 +1,68 @@
-from dacapo.evaluate import evaluate_labels
 from dacapo.models import Model
-from dacapo.tasks.post_processors import ArgMax
+from .predictor_abc import PredictorABC
+
 import gunpowder as gp
-import numpy as np
-import time
 import torch
+import numpy as np
+import attr
+
+from typing import Optional
+from enum import Enum
 
 
-class OneHotLabels(Model):
-    def __init__(
-        self,
-        data,
-        model,
-        matching_score,
-        matching_threshold,
-        num_classes,
-        post_processor=None,
-    ):
+# Define conv layers for different dimension counts
+CONV_LAYERS = {2: torch.nn.Conv2d, 3: torch.nn.Conv3d}
 
-        dims = data.raw.spatial_dims
 
-        super(OneHotLabels, self).__init__(
-            model.output_shape, model.fmaps_out, num_classes
-        )
+class WeightingOption(Enum):
+    BALANCE_LABELS = "balance_labels"
+    DISTANCE = "distance"
 
-        assert num_classes > 0, (
-            "Your GT has no classes, don't know how to get one-hot encoding "
-            "out of that."
-        )
 
-        conv = {2: torch.nn.Conv2d, 3: torch.nn.Conv3d}[dims]
-        logits = [conv(model.fmaps_out, num_classes, (1,) * dims)]
+class AddClassLabels(gp.BatchFilter):
+    def __init__(self, gt, target):
+        self.gt = gt
+        self.target = target
 
-        self.logits = torch.nn.Sequential(*logits)
-        self.probs = torch.nn.LogSoftmax()
-        self.prediction_channels = data.gt.num_classes
-        self.background_label = data.gt.background_label
-        self.target_channels = 0
-        self.matching_score = matching_score
-        self.matching_threshold = matching_threshold
-        if post_processor is None:
-            self.post_processor = ArgMax()
-        else:
-            self.post_processor = post_processor
+    def setup(self):
+        self.provides(self.target, self.spec[self.gt].copy())
+        self.enable_autoskip()
 
-        self.output_channels = num_classes
+    def process(self, batch, request):
+        spec = batch[self.gt].spec.copy()
+        spec.dtype = np.int64
+        batch[self.target] = gp.Array(batch[self.gt].data.astype(np.int64), spec)
 
-    def add_target(self, gt, target, weights=None, mask=None):
 
-        # target is gt, just ensure proper type
-        class AddClassLabels(gp.BatchFilter):
-            def __init__(self, gt, target):
-                self.gt = gt
-                self.target = target
+class MaskToWeights(gp.BatchFilter):
+    def __init__(self, mask, weights):
+        self.mask = mask
+        self.weights = weights
 
-            def setup(self):
-                self.provides(target, self.spec[gt].copy())
-                self.enable_autoskip()
+    def setup(self):
+        self.provides(self.weights, self.spec[self.mask].copy())
+        self.enable_autoskip()
 
-            def process(self, batch, request):
-                spec = batch[self.gt].spec.copy()
-                spec.dtype = np.int64
-                batch[self.target] = gp.Array(
-                    batch[self.gt].data.astype(np.int64), spec
-                )
+    def process(self, batch, request):
+        spec = batch[self.mask].spec.copy()
+        spec.dtype = np.float32
+        batch[self.weights] = gp.Array(batch[self.mask].data.astype(np.float32), spec)
 
-        class MaskToWeights(gp.BatchFilter):
-            def __init__(self, mask, weights):
-                self.mask = mask
-                self.weights = weights
 
-            def setup(self):
-                self.provides(weights, self.spec[mask].copy())
-                self.enable_autoskip()
+@attr.s
+class OneHotLabels(PredictorABC):
 
-            def process(self, batch, request):
-                spec = batch[self.mask].spec.copy()
-                spec.dtype = np.float32
-                batch[self.weights] = gp.Array(
-                    batch[self.mask].data.astype(np.float32), spec
-                )
+    name: str = attr.ib()
+
+    # attributes that can be read from other configurable classes
+    fmaps_in: Optional[int] = attr.ib(default=None)
+    dims: Optional[int] = attr.ib()
+    num_classes: Optional[int] = attr.ib()
+
+    def head(self):
+        return OneHotLabelsHead(self)
+
+    def add_target(self, gt, target, weights=None, mask=None, target_voxel_size=None):
 
         if mask is not None and weights is not None:
             weights_node = MaskToWeights(mask, weights)
@@ -87,32 +70,21 @@ class OneHotLabels(Model):
             weights_node = None
         return AddClassLabels(gt, target), weights_node, None
 
+
+class OneHotLabelsHead(Model):
+    def __init__(self, config: OneHotLabels):
+        super(OneHotLabels, self).__init__(
+            config.output_shape, config.fmaps_out, config.num_classes
+        )
+
+        conv = CONV_LAYERS[self.dims]
+        logit_layers = [conv(self.fmaps_in, self.num_classes, (1,) * self.dims)]
+
+        self.logits = torch.nn.Sequential(*logit_layers)
+        self.probs = torch.nn.LogSoftmax()
+
     def forward(self, x):
         logits = self.logits(x)
         if not self.training:
             return self.probs(logits)
         return logits
-
-    def evaluate(self, predictions, gt, target, return_results):
-
-        reconstructions = self.post_processor.enumerate(predictions)
-
-        for parameters, reconstruction in reconstructions:
-
-            # This could be factored out.
-            # keep evaulate as a super class method
-            # over-write evaluate_reconstruction
-            ret = evaluate_labels(
-                reconstruction,
-                gt,
-                return_results=return_results,
-                background_label=self.background_label,
-                matching_score=self.matching_score,
-                matching_threshold=self.matching_threshold,
-            )
-
-            if return_results:
-                scores, results = ret
-                yield parameters, scores, results
-            else:
-                yield parameters, ret

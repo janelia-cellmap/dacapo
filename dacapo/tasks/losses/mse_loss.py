@@ -1,8 +1,10 @@
+from .loss_abc import LossABC
+
 import torch
-from .loss import Loss
+import attr
 
 
-class MSELoss(torch.nn.MSELoss, Loss):
-
-    def __init__(self):
-        super(MSELoss, self).__init__()
+@attr.s
+class MSELoss(LossABC):
+    def loss(self):
+        return torch.nn.MSELoss()

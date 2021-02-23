@@ -1,17 +1,17 @@
+from .loss_abc import LossABC
+
 import torch
-from .loss import Loss
+import attr
 
-from dacapo.gp.binarize import BinarizeNot
+from typing import Optional, List
 
 
-class CrossEntropyLoss(torch.nn.CrossEntropyLoss, Loss):
-    def __init__(self, weight=None, ignore_label: int = -100):
-        self.__ignore_label = ignore_label
+@attr.s
+class CrossEntropyLoss(LossABC):
+    ignore_label: Optional[int] = attr.ib()
+    weights: Optional[List[int]] = attr.ib()
 
-        if weight is not None:
-            weight = torch.tensor(weight)
-
-        super(CrossEntropyLoss, self).__init__(weight, ignore_index=ignore_label)
-
-    def add_mask(self, gt, mask):
-        return BinarizeNot(in_array=gt, out_array=mask, target=self.__ignore_label)
+    def loss(self):
+        return torch.nn.CrossEntropyLoss(
+            torch.tensor(self.weights), ignore_index=self.ignore_label
+        )

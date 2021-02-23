@@ -1,7 +1,7 @@
 import daisy
 import numpy as np
 
-from .post_processor import PostProcessor
+from .post_processor_abc import PostProcessorABC
 
 from scipy.ndimage.filters import maximum_filter
 from scipy.ndimage.morphology import distance_transform_edt
@@ -22,7 +22,7 @@ import time
 logger = logging.getLogger(__name__)
 
 
-class Watershed(PostProcessor):
+class Watershed(PostProcessorABC):
     def set_prediction(self, prediction):
         fragments = watershed_from_affinities(
             prediction.to_ndarray(), voxel_size=prediction.voxel_size
@@ -291,7 +291,9 @@ def global_create_luts(
     )
     scores = np.nan_to_num(scores, nan=1)
 
-    logger.debug(f"percentiles (1, 5, 50, 95, 99): {np.percentile(scores, [1,5,50,95,99])}")
+    logger.debug(
+        f"percentiles (1, 5, 50, 95, 99): {np.percentile(scores, [1,5,50,95,99])}"
+    )
 
     logger.debug("Nodes dtype: ", nodes.dtype)
     logger.debug("edges dtype: ", edges.dtype)
@@ -505,7 +507,9 @@ def watershed_in_block(
     # ensure we don't have IDs larger than the number of voxels (that would
     # break uniqueness of IDs below)
     if max_id > num_voxels_in_block:
-        logger.debug("fragments in %s have max ID %d, relabelling...", block.write_roi, max_id)
+        logger.debug(
+            "fragments in %s have max ID %d, relabelling...", block.write_roi, max_id
+        )
         fragments.data, max_id = relabel(fragments.data)
 
         assert max_id < num_voxels_in_block

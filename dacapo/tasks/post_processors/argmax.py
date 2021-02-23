@@ -1,13 +1,26 @@
-import daisy
-import numpy as np
-
-from .post_processor import PostProcessor
+from .post_processor_abc import PostProcessorABC
+from .steps import ArgMaxStep
 from dacapo.store import MongoDbStore
 
+import daisy
+import numpy as np
+import attr
+
 import time
+from typing import Tuple
+from pathlib import Path
 
 
-class ArgMax(PostProcessor):
+@attr.s
+class ArgMax(PostProcessorABC):
+    zarr_collection: Path = attr.ib()
+    soft_predictions: str = attr.ib()
+    predictions: str = attr.ib()
+    steps: Tuple[ArgMaxStep] = attr.ib()
+
+    def task(self):
+        pass
+
     def process(self, prediction, parameters):
         return daisy.Array(
             np.argmax(prediction.data, axis=0), prediction.roi, prediction.voxel_size

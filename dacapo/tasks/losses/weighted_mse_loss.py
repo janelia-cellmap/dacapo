@@ -1,35 +1,21 @@
-from .loss import Loss
-import gunpowder as gp
+from .loss_abc import LossABC
+
 import torch
+import attr
 
-from dacapo.gp import AddDistance
+
+@attr.s
+class WeightedMSELossConfig(LossABC):
+    def loss(self):
+        return WeightedMSELoss()
 
 
-class WeightedMSELoss(torch.nn.MSELoss, Loss):
+class WeightedMSELoss(torch.nn.MSELoss):
     def __init__(self):
         super(WeightedMSELoss, self).__init__()
-
-    def add_weights(self, target, weights):
-
-        return gp.BalanceLabels(labels=target, scales=weights)
 
     def forward(self, prediction, target, weights):
 
         return super(WeightedMSELoss, self).forward(
-            prediction * weights, target * weights
-        )
-
-
-class DistanceWeightedMSELoss(torch.nn.MSELoss, Loss):
-    def __init__(self):
-        super(DistanceWeightedMSELoss, self).__init__()
-
-    def add_weights(self, target, weights):
-
-        return AddDistance(target, weights)
-
-    def forward(self, prediction, target, weights):
-
-        return super(DistanceWeightedMSELoss, self).forward(
             prediction * weights, target * weights
         )

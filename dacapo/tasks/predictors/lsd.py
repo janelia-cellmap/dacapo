@@ -1,10 +1,56 @@
-from dacapo.models import Model
+from .predictor_abc import PredictorABC
+
 import gunpowder as gp
 import torch
-
 import lsd
+import attr
+
+from typing import Optional
+from enum import Enum
 
 
+# Define conv layers for different dimension counts
+CONV_LAYERS = {2: torch.nn.Conv2d, 3: torch.nn.Conv3d}
+
+
+class WeightingOption(Enum):
+    BALANCE_LABELS = "balance_labels"
+    DISTANCE = "distance"
+
+
+@attr.s
+class LSD(PredictorABC):
+
+    name: str = attr.ib()
+    sigma: float = attr.ib()
+    num_shape_descriptors: int = attr.ib(default=10)
+
+    # attributes that can be read from other configurable classes
+    fmaps_in: Optional[int] = attr.ib(default=None)
+    dims: Optional[int] = attr.ib()
+
+    def head(self, fmaps_in: int):
+        conv = torch.nn.Conv3d
+        lsd = [
+            conv(fmaps_in, self.num_shape_descriptors, (1,) * self.dims),
+            torch.nn.Sigmoid(),
+        ]
+
+        self.lsd = torch.nn.Sequential(*lsd)
+
+    def add_target(self, gt, target, weights=None, mask=None, target_voxel_size=None):
+
+        target_node = lsd.gp.AddLocalShapeDescriptor(
+            gt, target, mask=weights, sigma=self.sigma
+        )
+        weights_node = None
+        padding = gp.Coordinate(tuple(s * 3 for s in (self.sigma,) * 3))
+
+        return (target_node, weights_node, padding)
+
+
+# PREFACTOR
+"""
 class LSD(Model):
     def __init__(self, data, model, post_processor=None, sigma=1):
 
@@ -30,9 +76,6 @@ class LSD(Model):
         self.output_channels = 10
 
     def add_target(self, gt, target, weights=None, mask=None):
-        """
-        Ignores the provided mask and returns a new one where gt != 0
-        """
 
         extra_context = gp.Coordinate(tuple(s * 3 for s in (self.sigma,) * 3))
         return (
@@ -44,3 +87,4 @@ class LSD(Model):
     def forward(self, x):
         lsd = self.lsd(x)
         return lsd
+"""

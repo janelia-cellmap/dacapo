@@ -1,4 +1,6 @@
-from .cross_entropy_loss import CrossEntropyLoss  # noqa
-from .mse_loss import MSELoss  # noqa
-from .weighted_mse_loss import WeightedMSELoss  # noqa
-from .masked_mse_loss import MaskedMSELoss  # noqa
+from .cross_entropy_loss import CrossEntropyLoss
+from .mse_loss import MSELoss
+
+from typing import Union
+
+AnyLoss = Union[MSELoss, CrossEntropyLoss]

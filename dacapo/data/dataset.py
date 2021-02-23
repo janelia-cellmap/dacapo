@@ -1,54 +1,40 @@
-from gunpowder import ArrayKey, GraphKey
+import itertools
 
-from abc import ABC, abstractmethod
-from typing import Union
+from .group import TrainValidateSplit, TestSplit, ArrayGroup, GraphGroup
 
+from typing import List, Dict, Optional
+import attr
 
-class ArrayDataset(ABC):
-    """
-    A class representing a dataset of arrays used for training, validation, or testing.
-    i.e. Raw or Labels or Mask etc.
-
-    Must have some attributes such as voxel_size, spatial_dims, etc.
-    Must have a get_source function that takes as input a gunpowder Array or Graph
-    key, and then provides a gunpowder source node from which that array
-    or graph can be requested.
-    """
-
-    @property
-    @abstractmethod
-    def axes(self):
-        """
-        Every array in dacapo is expected to have labelled axes.
-
-        Reserved labels:
-            "c": Channel dimension
-            "s": Sample dimension
-        """
-        pass
-
-    @abstractmethod
-    def get_source(self, *output_keys: ArrayKey):
-        """
-        A dacapo dataset is expected to provide a gunpowder tree that
-        provides the given output keys.
-        """
-        pass
+from .data_source import DataSource
+from .keys import ArrayKey, GraphKey, DataKey
+from dacapo.data.padding import PaddingOption
 
 
-class GraphDataset(ABC):
-    """
-    A class representing a graph dataset used for training, validation, or testing.
+@attr.s
+class Dataset:
+    name: str = attr.ib()
+    arrays: List[ArrayKey] = attr.ib()
+    graphs: List[GraphKey] = attr.ib()
+    train_padding: PaddingOption = attr.ib(
+        default=PaddingOption.VALID,
+    )
+    validation_padding: PaddingOption = attr.ib(
+        default=PaddingOption.VALID,
+    )
+    predict_padding: PaddingOption = attr.ib(
+        default=PaddingOption.VALID,
+    )
+    train_sources: Optional[Dict[DataKey, DataSource]] = attr.ib()
+    validate_sources: Optional[Dict[DataKey, DataSource]] = attr.ib()
+    predict_sources: Optional[Dict[DataKey, DataSource]] = attr.ib()
 
-    Must have some attributes such as voxel_size, spatial_dims, etc.
-    Must have a get_source function that takes as input a gunpowder Array or Graph
-    key, and then provides a gunpowder source node from which that array
-    or graph can be requested.
-    """
+    def __attrs_post_init__(self):
+        # add attrs for each array and graph key
+        for array in self.arrays:
+            self.__setattr__(array, TrainValidateSplit(array))
+        for graph in self.graphs:
+            self.__setattr__(graph, TrainValidateSplit(graph))
 
-    @abstractmethod
-    def get_source(self, *output_keys: GraphKey):
-        pass
-
-
-Dataset = Union[ArrayDataset, GraphDataset]
+        for data_key in itertools.chain(self.arrays, self.graphs):
+            getattr(self, data_key).train = self.train_sources[data_key]
+            getattr(self, data_key).validate = self.validate_sources[data_key]
