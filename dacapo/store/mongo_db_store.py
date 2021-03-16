@@ -1,10 +1,14 @@
 from .conversion import sanatize
 from dacapo.training_stats import TrainingStats
 from dacapo.validation_scores import ValidationScores
+from dacapo.converter import converter
+
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
+
 import configargparse
 import json
+from hashlib import md5
 
 parser = configargparse.ArgParser(
     default_config_files=["~/.config/dacapo", "./dacapo.conf"]
@@ -30,11 +34,7 @@ class MongoDbStore:
     def sync_run(
         self, run, exclude_training_stats=False, exclude_validation_scores=False
     ):
-
         self.__sync_run(run)
-        self.__sync_task_config(run.task_config)
-        self.__sync_model_config(run.model_config)
-        self.__sync_optimizer_config(run.optimizer_config)
 
     def store_training_stats(self, run):
 
@@ -95,10 +95,59 @@ class MongoDbStore:
 
         run.validation_scores = self.__read_validation_scores(run.id)
 
-    def __sync_run(self, run):
+    def add_run(self, run: dict):
+        self.__save_insert(self.runs, run)
 
-        run_doc = run.to_dict()
-        existing = list(self.runs.find({"id": run.id}, {"_id": False}))
+    def get_run(self, run: str):
+        from dacapo.configs import Run
+        run_doc = self.runs.find_one({"id": run}, projection={"_id": False})
+        print(run)
+        print(run_doc)
+        return converter.structure(run_doc, Run)
+
+    def add_task(self, task: dict):
+        self.__save_insert(self.tasks, task)
+
+    def get_task(self, task: str):
+        from dacapo.tasks import Task
+        task_doc = self.tasks.find_one({"id": task}, projection={"_id": False})
+        return converter.structure(task_doc, Task)
+
+    def add_dataset(self, dataset: dict):
+        self.__save_insert(self.datasets, dataset)
+
+    def get_dataset(self, dataset: str):
+        from dacapo.data import Dataset
+        return converter.structure(
+            self.datasets.find_one({"id": dataset}, projection={"_id": False}), Dataset
+        )
+
+    def add_model(self, model: dict):
+        self.__save_insert(self.models, model)
+
+    def get_model(self, model: str):
+        from dacapo.models import Model
+        return converter.structure(
+            self.models.find_one({"id": model}, projection={"_id": False}), Model
+        )
+
+    def add_optimizer(self, optimizer: dict):
+        self.__save_insert(self.optimizers, optimizer)
+
+    def get_optimizer(self, optimizer: str):
+        from dacapo.optimizers import Optimizer
+        return converter.structure(
+            self.optimizers.find_one({"id": optimizer}, projection={"_id": False}),
+            Optimizer,
+        )
+
+    def __sync_run(self, run):
+        item_id = self.__save_insert(self.runs, converter.unstructure(run))
+        run.id = item_id
+        # Can't we just get rid of all of this?
+        """
+        run_id = self.get_id(run_doc)
+        existing = list(self.runs.find({"id": run_id}, {"_id": False}))
 
         if existing:
 
@@ -144,6 +193,7 @@ class MongoDbStore:
         else:
 
             self.runs.insert(run_doc)
+        """
 
     def __sync_prediction(self, prediction):
 
@@ -215,14 +265,21 @@ class MongoDbStore:
         }
         self.predictions.insert_one(doc)
 
-    def __sync_task_config(self, task_config):
-        self.__save_insert(self.tasks, task_config.to_dict())
+    def __sync_task(self, task):
+        item_id = self.__save_insert(self.tasks, converter.unstructure(task))
+        task.id = item_id
 
-    def __sync_model_config(self, model_config):
-        self.__save_insert(self.models, model_config.to_dict())
+    def __sync_dataset(self, dataset):
+        item_id = self.__save_insert(self.datasets, converter.unstructure(dataset))
+        dataset.id = item_id
 
-    def __sync_optimizer_config(self, optimizer_config):
-        self.__save_insert(self.optimizers, optimizer_config.to_dict())
+    def __sync_model(self, model):
+        item_id = self.__save_insert(self.models, converter.unstructure(model))
+        model.id = item_id
+
+    def __sync_optimizer(self, optimizer):
+        item_id = self.__save_insert(self.optimizers, converter.unstructure(optimizer))
+        optimizer.id = item_id
 
     def __store_training_stats(self, stats, begin, end, run_id):
 
@@ -293,11 +350,14 @@ class MongoDbStore:
     def __delete_validation_scores(self, run_id):
         self.validation_scores.delete_many({"run": run_id})
 
+    def get_id(self, data):
+        return md5(json.dumps(data, sort_keys=True).encode('utf-8')).hexdigest()
+
     def __save_insert(self, collection, data, ignore=None):
 
         data = sanatize(dict(data))
-        item_id = data["id"]
-        del data["id"]
+        data.pop("id", None)
+        item_id = self.get_id(data)
 
         existing = None
         for _ in range(5):
@@ -325,6 +385,7 @@ class MongoDbStore:
                     f"entry. Found\n\n{existing}\n\nin DB, but was "
                     f"given\n\n{data}"
                 )
+        return item_id
 
     def __same_doc(self, a, b, ignore=None):
 
