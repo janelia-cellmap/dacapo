@@ -3,10 +3,13 @@ from .loss_abc import LossABC
 import torch
 import attr
 
+from typing import Optional
+
 
 @attr.s
 class WeightedMSELossConfig(LossABC):
-    def loss(self):
+
+    def instantiate(self):
         return WeightedMSELoss()
 
 
