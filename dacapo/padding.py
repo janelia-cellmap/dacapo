@@ -1,5 +1,24 @@
 from gunpowder import Coordinate
-import numpy as np
+
+from .converter import converter
+
+from enum import Enum
+
+
+class PaddingOption(Enum):
+    VALID = "valid"
+    SAME = "same"
+    MINIMAL = "minimal"
+
+
+converter.register_unstructure_hook(
+    PaddingOption,
+    lambda o: {"value": o.value},
+)
+converter.register_structure_hook(
+    PaddingOption,
+    lambda o, _: PaddingOption(o["value"]),
+)
 
 
 def compute_padding(
@@ -16,48 +35,56 @@ def compute_padding(
 
     If padding is "minimal", padding will be added to input_roi s.t. input_roi >= output_size
     """
+    def f(a, b):
+        if a is None:
+            return True
+        elif b is None:
+            return False
+        else:
+            return a >= b
+
     context = (input_size - output_size) / 2
     no_pad_output_roi = output_roi.intersect(input_roi.grow(-context, -context))
     no_pad_input_roi = no_pad_output_roi.grow(context, context)
-    if padding == "valid":
+    if padding == PaddingOption.VALID:
         assert all(
-            [a >= b for a, b in zip(input_roi.get_shape(), input_size)]
+            [f(a, b) for a, b in zip(input_roi.shape, input_size)]
         ), f"input_roi {input_roi} is too small to accomodate model input_size: {input_size}"
         assert all(
-            [a >= b for a, b in zip(output_roi.get_shape(), output_size)]
+            [f(a, b) for a, b in zip(output_roi.shape, output_size)]
         ), f"output_roi {output_roi} is too small to accomodate model output_size: {output_size}"
-        return no_pad_input_roi, no_pad_output_roi, Coordinate([0] * input_roi.dims())
+        return no_pad_input_roi, no_pad_output_roi, Coordinate([0] * input_roi.dims)
 
-    elif padding == "same":
+    elif padding == PaddingOption.SAME:
 
-        padding = (output_roi.get_shape() - no_pad_output_roi.get_shape()) / 2
+        padding = (output_roi.shape - no_pad_output_roi.shape) / 2
         padding = (
-            (padding + voxel_size - (1,) * len(voxel_size)) / voxel_size
+            (padding + voxel_size - 1) / voxel_size
         ) * voxel_size
 
         assert all(
-            [a >= b for a, b in zip(input_roi.get_shape() + padding * 2, input_size)]
-        ), f"{input_roi.get_shape() + padding * 2} < {input_size}"
+            [f(a, b) for a, b in zip(input_roi.shape + padding * 2, input_size)]
+        ), f"{input_roi.shape + padding * 2} < {input_size}"
         assert all(
-            [a >= b for a, b in zip(output_roi.get_shape() + padding * 2, output_size)]
-        ), f"{output_roi.get_shape() + padding * 2} < {output_size}"
+            [f(a, b) for a, b in zip(output_roi.shape + padding * 2, output_size)]
+        ), f"{output_roi.shape + padding * 2} < {output_size}"
         return (
             no_pad_input_roi.grow(padding, padding),
             no_pad_output_roi.grow(padding, padding),
             padding,
         )
-    elif padding == "minimal":
-        padding = (input_size - no_pad_input_roi.get_shape()) / 2
+    elif padding == PaddingOption.MINIMAL:
+        padding = (input_size - no_pad_input_roi.shape) / 2
         padding = Coordinate([max(p, 0) for p in padding])
         padding = (
-            (padding + voxel_size - (1,) * len(voxel_size)) / voxel_size
+            (padding + voxel_size - 1) / voxel_size
         ) * voxel_size
         assert all(
-            [a >= b for a, b in zip(input_roi.get_shape() + padding * 2, input_size)]
-        ), f"{input_roi.get_shape() + padding * 2} < {input_size}"
+            [f(a, b) for a, b in zip(input_roi.shape + padding * 2, input_size)]
+        ), f"{input_roi.shape + padding * 2} < {input_size}"
         assert all(
-            [a >= b for a, b in zip(output_roi.get_shape() + padding * 2, output_size)]
-        ), f"{output_roi.get_shape() + padding * 2} < {output_size}"
+            [f(a, b) for a, b in zip(output_roi.shape + padding * 2, output_size)]
+        ), f"{output_roi.shape + padding * 2} < {output_size}"
         return (
             no_pad_input_roi.grow(padding, padding),
             no_pad_output_roi.grow(padding, padding),
