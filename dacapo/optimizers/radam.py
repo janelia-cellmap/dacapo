@@ -1,24 +1,23 @@
 import math
 import torch
+from torch.optim.optimizer import Optimizer
 
-from torch.optim.optimizer import Optimizer, required
-import funlib.learn.torch as ft
-from .model import Model, ModelConfig
+from .algorithm_abc import Algorithm
 
-from typing import List, Dict, Optional, Tuple
+from typing import Tuple
 import attr
 
 
 @attr.s
-class RAdamConfig:
+class RAdam(Algorithm):
     lr: float = attr.ib(default=1e-3)
     betas: Tuple[float, float] = attr.ib(default=(0.9, 0.999))
     eps: float = attr.ib(default=1e-8)
     weight_decay: float = attr.ib(default=0)
     degenerated_to_sgd: bool = attr.ib(default=True)
 
-    def optimizer(self, params):
-        return RAdam(
+    def instance(self, params):
+        return RAdamOptimizer(
             params,
             self.lr,
             self.betas,
@@ -28,7 +27,7 @@ class RAdamConfig:
         )
 
 
-class RAdam(Optimizer):
+class RAdamOptimizer(Optimizer):
     def __init__(
         self,
         params,
@@ -65,10 +64,10 @@ class RAdam(Optimizer):
             weight_decay=weight_decay,
             buffer=[[None, None, None] for _ in range(10)],
         )
-        super(RAdam, self).__init__(params, defaults)
+        super(RAdamOptimizer, self).__init__(params, defaults)
 
     def __setstate__(self, state):
-        super(RAdam, self).__setstate__(state)
+        super(RAdamOptimizer, self).__setstate__(state)
 
     def step(self, closure=None):
 
@@ -83,7 +82,9 @@ class RAdam(Optimizer):
                     continue
                 grad = p.grad.data.float()
                 if grad.is_sparse:
-                    raise RuntimeError("RAdam does not support sparse gradients")
+                    raise RuntimeError(
+                        "RAdamOptimizer does not support sparse gradients"
+                    )
 
                 p_data_fp32 = p.data.float()
 
@@ -191,7 +192,9 @@ class PlainRAdam(Optimizer):
                     continue
                 grad = p.grad.data.float()
                 if grad.is_sparse:
-                    raise RuntimeError("RAdam does not support sparse gradients")
+                    raise RuntimeError(
+                        "RAdamOptimizer does not support sparse gradients"
+                    )
 
                 p_data_fp32 = p.data.float()
 
