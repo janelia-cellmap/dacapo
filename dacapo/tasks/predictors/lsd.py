@@ -20,14 +20,16 @@ class WeightingOption(Enum):
 
 @attr.s
 class LSD(PredictorABC):
+    name: str = attr.ib(metadata={
+            "help_text": "This name is used to differentiate between predictors."
+        })
 
-    name: str = attr.ib()
     sigma: float = attr.ib()
     num_shape_descriptors: int = attr.ib(default=10)
 
     # attributes that can be read from other configurable classes
     fmaps_in: Optional[int] = attr.ib(default=None)
-    dims: Optional[int] = attr.ib()
+    dims: Optional[int] = attr.ib(default=None)
 
     def head(self, fmaps_in: int):
         conv = torch.nn.Conv3d

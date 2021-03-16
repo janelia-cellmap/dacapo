@@ -20,14 +20,18 @@ class WeightingOption(Enum):
 
 @attr.s
 class Affinities(PredictorABC):
+    name: str = attr.ib(
+        metadata={
+            "help_text": "This name is used to differentiate between predictors."
+        }
+    )
 
-    name: str = attr.ib()
     neighborhood: List[List[int]] = attr.ib()
     weighting_type: WeightingOption = attr.ib()
 
     # attributes that can be read from other configurable classes
     fmaps_in: Optional[int] = attr.ib(default=None)  # from model
-    dims: int = attr.ib()  # from data
+    dims: Optional[int] = attr.ib(default=None)  # from data
 
     def head(self, fmaps_in: int):
 

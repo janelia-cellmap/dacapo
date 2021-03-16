@@ -1,4 +1,4 @@
-from dacapo.models import Model
+from dacapo.models import ModuleWrapper
 from .predictor_abc import PredictorABC
 
 import gunpowder as gp
@@ -51,15 +51,26 @@ class MaskToWeights(gp.BatchFilter):
 
 @attr.s
 class OneHotLabels(PredictorABC):
-
-    name: str = attr.ib()
+    name: str = attr.ib(
+        metadata={"help_text": "This name is used to differentiate between predictors."}
+    )
 
     # attributes that can be read from other configurable classes
-    fmaps_in: Optional[int] = attr.ib(default=None)
-    dims: Optional[int] = attr.ib()
-    num_classes: Optional[int] = attr.ib()
+    fmaps_in: Optional[int] = attr.ib(default=None)  # can be read from model
+    dims: Optional[int] = attr.ib(default=None)  # can be read from data
+    num_classes: Optional[int] = attr.ib(default=None)  # can be read from data
 
-    def head(self):
+    @property
+    def fmaps_out(self):
+        return self.num_classes
+
+    def head(self, model, dataset):
+        assert self.fmaps_in is None or self.fmaps_in == model.architecture.fmaps_out
+        self.fmaps_in = model.architecture.fmaps_out
+        assert self.dims is None or self.dims == dataset.dims
+        self.dims = dataset.dims
+        assert self.num_classes is None or self.num_classes == dataset.gt.num_classes
+        self.num_classes = dataset.gt.num_classes
         return OneHotLabelsHead(self)
 
     def add_target(self, gt, target, weights=None, mask=None, target_voxel_size=None):
@@ -71,14 +82,14 @@ class OneHotLabels(PredictorABC):
         return AddClassLabels(gt, target), weights_node, None
 
 
-class OneHotLabelsHead(Model):
+class OneHotLabelsHead(ModuleWrapper):
     def __init__(self, config: OneHotLabels):
-        super(OneHotLabels, self).__init__(
-            config.output_shape, config.fmaps_out, config.num_classes
+        super(OneHotLabelsHead, self).__init__(
+            None, config.fmaps_in, config.num_classes
         )
 
-        conv = CONV_LAYERS[self.dims]
-        logit_layers = [conv(self.fmaps_in, self.num_classes, (1,) * self.dims)]
+        conv = CONV_LAYERS[config.dims]
+        logit_layers = [conv(config.fmaps_in, config.num_classes, (1,) * config.dims)]
 
         self.logits = torch.nn.Sequential(*logit_layers)
         self.probs = torch.nn.LogSoftmax()
