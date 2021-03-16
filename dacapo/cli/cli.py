@@ -1,4 +1,5 @@
 import dacapo
+from dacapo.store import MongoDbStore
 
 import click
 
@@ -152,95 +153,37 @@ def run_all(
 
 @cli.command()
 @click.option(
-    "-t",
-    "--task",
+    "-r",
+    "--run-id",
     required=True,
-    type=click.Path(exists=True, dir_okay=False),
-    help="The task to run.",
+    type=str,
+    help="The id of the Run.",
 )
+def run_one(run_id):
+    store = MongoDbStore()
+    run = store.get_run(run_id)
+    dacapo.run_local(run)
+
+
+@cli.command()
 @click.option(
-    "-d",
-    "--data",
+    "-r",
+    "--run-id",
     required=True,
-    type=click.Path(exists=True, dir_okay=False),
-    help="The data to run.",
-)
-@click.option(
-    "-m",
-    "--model",
-    required=True,
-    type=click.Path(exists=True, dir_okay=False),
-    help="The model to run.",
-)
-@click.option(
-    "-o",
-    "--optimizer",
-    required=True,
-    type=click.Path(exists=True, dir_okay=False),
-    help="The optimizer to run.",
-)
-@click.option(
-    "-R", "--repetitions", required=True, type=int, help="The repitition to run"
+    type=str,
+    help="The id of the Run.",
 )
 @click.option(
     "-i",
-    "--num-iterations",
+    "--iteration",
     required=True,
     type=int,
-    help="Number of iterations to train.",
+    help="The iteration at which to validate the run",
 )
-@click.option(
-    "-v",
-    "--validation-interval",
-    required=True,
-    type=int,
-    help="The number of training iterations between validation iterations.",
-)
-@click.option(
-    "-s",
-    "--snapshot-interval",
-    required=True,
-    type=int,
-    help="The number of training iterations between each snapshot.",
-)
-@click.option(
-    "-b",
-    "--keep-best-validation",
-    required=True,
-    type=str,
-    help="Defines what the 'best' iteration is.",
-)
-def run_one(
-    task,
-    data,
-    model,
-    optimizer,
-    repetitions,
-    num_iterations,
-    validation_interval,
-    snapshot_interval,
-    keep_best_validation,
-):
-
-    import dacapo.config
-
-    task = dacapo.config.TaskConfig(task)
-    data = dacapo.config.DataConfig(data)
-    model = dacapo.config.ModelConfig(model)
-    optimizer = dacapo.config.OptimizerConfig(optimizer)
-
-    run = dacapo.Run(
-        task,
-        data,
-        model,
-        optimizer,
-        int(repetitions),
-        int(num_iterations),
-        int(validation_interval),
-        int(snapshot_interval),
-        keep_best_validation,
-    )
-    dacapo.run_local(run)
+def validate_one(run_id, iteration):
+    store = MongoDbStore()
+    run = store.get_run(run_id)
+    dacapo.validate_local(run, iteration)
 
 
 @cli.command()
