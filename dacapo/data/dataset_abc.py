@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import Union
 
 
-class ArrayDataset(ABC):
+class ArrayDatasetABC(ABC):
     """
     A class representing a dataset of arrays used for training, validation, or testing.
     i.e. Raw or Labels or Mask etc.
@@ -23,7 +23,6 @@ class ArrayDataset(ABC):
 
         Reserved labels:
             "c": Channel dimension
-            "s": Sample dimension
         """
         pass
 
@@ -36,7 +35,7 @@ class ArrayDataset(ABC):
         pass
 
 
-class GraphDataset(ABC):
+class GraphDatasetABC(ABC):
     """
     A class representing a graph dataset used for training, validation, or testing.
 
@@ -49,6 +48,3 @@ class GraphDataset(ABC):
     @abstractmethod
     def get_source(self, *output_keys: GraphKey):
         pass
-
-
-Dataset = Union[ArrayDataset, GraphDataset]
