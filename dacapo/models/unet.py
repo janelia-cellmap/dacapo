@@ -1,9 +1,12 @@
 import funlib.learn.torch as ft
-from .model import Model, ModelConfig
-
-from typing import List, Dict, Optional, Tuple
+from funlib.geometry import Coordinate
 import attr
 
+from .module_wrapper import ModuleWrapper
+from .model_abc import ModelABC
+from dacapo.converter import converter
+
+from typing import List, Optional, Tuple
 from enum import Enum
 
 
@@ -12,19 +15,33 @@ class ConvPaddingOption(Enum):
     SAME = "same"
 
 
+converter.register_unstructure_hook(
+    ConvPaddingOption,
+    lambda o: {"value": o.value},
+)
+converter.register_structure_hook(
+    ConvPaddingOption,
+    lambda o, _: ConvPaddingOption(o["value"]),
+)
+
+
 @attr.s
-class UNetConfig(ModelConfig):
+class UNet(ModelABC):
     # standard model attributes
-    name: str = attr.ib()
     input_shape: List[int] = attr.ib()
-    output_shape: Optional[List[int]] = attr.ib()
     fmaps_out: int = attr.ib()
 
     # unet attributes
     fmap_inc_factor: int = attr.ib()
-    kernel_size_down: Optional[List[Tuple[int]]] = attr.ib()
-    kernel_size_up: Optional[List[Tuple[int]]] = attr.ib()
-    downsample_factors: List[Tuple[int]] = attr.ib()
+    downsample_factors: List[List[int]] = attr.ib()
+
+    # optional values
+    # standard model attributes
+    output_shape: Optional[List[int]] = attr.ib(default=None)
+
+    # unet attributes
+    kernel_size_down: Optional[List[List[int]]] = attr.ib(default=None)
+    kernel_size_up: Optional[List[List[int]]] = attr.ib(default=None)
     constant_upsample: bool = attr.ib(default=True)
     padding: ConvPaddingOption = attr.ib(default=ConvPaddingOption.VALID)
 
@@ -33,19 +50,25 @@ class UNetConfig(ModelConfig):
         default=None
     )  # can be read from data num_channels
 
-    def model(self, fmaps_in: int):
-        assert self.fmaps_in is None or self.fmaps_in == fmaps_in
-        self.fmaps_in = fmaps_in
-        return UNet(self)
+    def instantiate(self, dataset):
+        assert (
+            self.fmaps_in is None or self.fmaps_in == dataset.raw.num_channels
+        ), f"{self.fmaps_in} {dataset.raw.num_channels}"
+        self.fmaps_in = dataset.raw.num_channels
+        return UNetModule(self)
 
 
-class UNet(Model):
+class UNetModule(ModuleWrapper):
     """Creates a funlib.learn.torch U-Net for the given data from a model
     configuration."""
 
-    def __init__(self, model_config: UNetConfig):
+    def __init__(self, model_config: UNet):
 
-        super(UNet, self).__init__(model_config)
+        super(UNetModule, self).__init__(
+            None,
+            model_config.fmaps_in,
+            model_config.fmaps_out,
+        )
 
         fmaps_in = model_config.fmaps_in
         levels = len(model_config.downsample_factors) + 1
@@ -60,13 +83,16 @@ class UNet(Model):
         else:
             kernel_size_up = [[(3,) * dims, (3,) * dims]] * (levels - 1)
 
+        # downsample factors has to be a list of tuples
+        downsample_factors = [tuple(x) for x in model_config.downsample_factors]
+
         self.unet = ft.models.UNet(
             in_channels=fmaps_in,
-            num_fmaps=model_config.fmaps,
+            num_fmaps=model_config.fmaps_out,
             fmap_inc_factor=model_config.fmap_inc_factor,
             kernel_size_down=kernel_size_down,
             kernel_size_up=kernel_size_up,
-            downsample_factors=model_config.downsample_factors,
+            downsample_factors=downsample_factors,
             constant_upsample=True,
             padding=model_config.padding,
         )
