@@ -35,7 +35,6 @@ class ArrayDataSource:
         self.arrays.append(source)
 
     def get_sources(self, array_key, override_spec=None):
-        print(self.arrays)
         return [source.get_source(array_key, override_spec) for source in self.arrays]
 
 
