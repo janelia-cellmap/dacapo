@@ -101,8 +101,6 @@ class MongoDbStore:
     def get_run(self, run: str):
         from dacapo.configs import Run
         run_doc = self.runs.find_one({"id": run}, projection={"_id": False})
-        print(run)
-        print(run_doc)
         return converter.structure(run_doc, Run)
 
     def add_task(self, task: dict):
