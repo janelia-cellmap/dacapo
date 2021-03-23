@@ -182,7 +182,7 @@ class DefaultBatchGenerator:
         # raw: ([c,] d, h, w)
         # gt: ([c,] d, h, w)
 
-        warnings.warn("Exceptions not yet handled!")
+        warnings.warn("Augmentations not yet handled!")
         # for augmentation in eval(task.augmentations):
         #     pipeline += augmentation
 
@@ -218,7 +218,7 @@ class DefaultBatchGenerator:
         # stack to create a batch dimension
         pipeline += gp.Stack(optimizer.batch_size)
 
-        warnings.warn("Train/Snapshot/PrintProfiling not handled!")
+        warnings.warn("PrintProfiling not handled!")
 
         # generate request for all necessary inputs to training
         request = gp.BatchRequest()
