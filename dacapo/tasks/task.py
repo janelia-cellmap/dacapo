@@ -5,6 +5,7 @@ from dacapo.tasks.predictors import AnyPredictor
 from dacapo.tasks.losses import AnyLoss
 from dacapo.tasks.post_processors import AnyPostProcessor
 from dacapo.converter import converter
+from dacapo.tasks.augments import AnyAugment
 
 from typing import List, Optional
 
@@ -35,6 +36,10 @@ class Task:
     padding: Optional[Coordinate] = attr.ib(
         default=None, metadata={"help_text": "Any extra padding you may want to add"}
     )
+    augments: List[AnyAugment] = attr.ib(
+        factory=lambda: list(),
+        metadata={"help_text": "Augmentations to apply during training"},
+    )
 
     def verify(self):
         unstructured = converter.unstructure(self)
@@ -53,5 +58,7 @@ converter.register_unstructure_hook(
 )
 converter.register_unstructure_hook(
     List[AnyPostProcessor],
-    lambda o: [{**converter.unstructure(e, unstructure_as=AnyPostProcessor)} for e in o],
+    lambda o: [
+        {**converter.unstructure(e, unstructure_as=AnyPostProcessor)} for e in o
+    ],
 )
