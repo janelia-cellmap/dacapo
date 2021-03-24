@@ -76,21 +76,24 @@ def validate_one(run_id, iteration):
     "--prediction-id",
     required=True,
     type=str,
-    help="The id of the prediction. Used to mark blocks done in MongoDB",
+    help="The id of the prediction. Used to mark blocks done in MongoDB. "
+    "During validation this is set to 'validation_{iteration}",
 )
 @click.option(
     "-d",
     "--dataset-id",
     required=True,
     type=str,
-    help=("The dataset config id"),
+    help="The dataset config id. This allows you to predict on a dataset "
+    "other than that defined in your Run config.",
 )
 @click.option(
     "-ds",
     "--data-source",
     required=True,
     type=str,
-    help=("The data source to train on. Either validate or predict"),
+    help="Either validate or predict. This defines which "
+    "source to use from the provided dataset-id",
 )
 @click.option(
     "-oc",
@@ -108,7 +111,8 @@ def validate_one(run_id, iteration):
     "--backbone",
     required=True,
     type=click.Path(exists=True, dir_okay=False),
-    help=("The file containing the backbone checkpoint to use for prediction"),
+    help="The file containing the backbone checkpoint to use for prediction. "
+    "This checkpoint corresponds to the Model config architecture",
 )
 @click.option(
     "-hs",
@@ -116,7 +120,8 @@ def validate_one(run_id, iteration):
     required=True,
     type=click.Path(exists=True, dir_okay=False),
     multiple=True,
-    help=("The file containing the backbone checkpoint to use for prediction"),
+    help="The file containing the head checkpoints to use for prediction. "
+    "Each predictor has its own 'head' that is run on the outputs of the backbone model",
 )
 def predict_one(
     run_id,
@@ -145,54 +150,43 @@ def predict_one(
     "--run-id",
     required=True,
     type=str,
-    help="The id of the Run.",
 )
 @click.option(
     "-p",
     "--prediction-id",
     required=True,
     type=str,
-    help="The id of the prediction. Used to mark blocks done in MongoDB",
 )
 @click.option(
     "-d",
     "--dataset-id",
     required=True,
     type=str,
-    help=("The dataset config id"),
 )
 @click.option(
     "-ds",
     "--data-source",
     required=True,
     type=str,
-    help=("The data source to train on. Either validate or predict"),
 )
 @click.option(
     "-oc",
     "--output-container",
     required=True,
     type=click.Path(exists=True, file_okay=False),
-    help=(
-        "The zarr container into which to write predictions. "
-        "logs will be written to the parent directory of the zarr container. "
-        "Predictions will be writtent to dataset 'volumes/{predictor}'."
-    ),
 )
 @click.option(
     "-bb",
-    "--backbone-checkpoint",
+    "--backbone",
     required=True,
     type=click.Path(exists=True, dir_okay=False),
-    help=("The file containing the backbone checkpoint to use for prediction"),
 )
 @click.option(
     "-hs",
-    "--head-checkpoints",
+    "--heads",
     required=True,
     type=click.Path(exists=True, dir_okay=False),
     multiple=True,
-    help=("The file containing the backbone checkpoint to use for prediction"),
 )
 def predict_worker(
     run_id,
