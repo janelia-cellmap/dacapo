@@ -6,15 +6,21 @@ from dacapo.converter import converter
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
 
-import configargparse
+import yaml
+from pathlib import Path
 import json
 from hashlib import md5
+import logging
 
-parser = configargparse.ArgParser(
-    default_config_files=["~/.config/dacapo", "./dacapo.conf"]
-)
-parser.add("--mongo_db_host", help="Name of the MongoDB host for stats and scores")
-parser.add("--mongo_db_name", help="Name of the MongoDB database for stats and scores")
+logger = logging.getLogger(__name__)
+
+
+class DictAsMember(dict):
+    def __getattr__(self, name):
+        value = self[name]
+        if isinstance(value, dict):
+            value = DictAsMember(value)
+        return value
 
 
 class MongoDbStore:
@@ -22,7 +28,14 @@ class MongoDbStore:
         """Create a MongoDB sync. Used to sync runs, tasks, models,
         optimizers, trainig stats, and validation scores."""
 
-        options = parser.parse_known_args()[0]
+        assert Path("~/.config/dacapo").exists() or Path("./dacapo.yaml").exists()
+        store_config_file = (
+            Path("./dacapo.yaml")
+            if Path("./dacapo.yaml").exists()
+            else Path("~/.config/dacapo")
+        )
+        with store_config_file.open("r") as stream:
+            options = DictAsMember(**yaml.safe_load(stream))
         self.db_host = options.mongo_db_host
         self.db_name = options.mongo_db_name
 
