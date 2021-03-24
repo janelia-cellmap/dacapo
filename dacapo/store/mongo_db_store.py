@@ -113,6 +113,7 @@ class MongoDbStore:
 
     def get_run(self, run: str):
         from dacapo.configs import Run
+
         run_doc = self.runs.find_one({"id": run}, projection={"_id": False})
         return converter.structure(run_doc, Run)
 
@@ -121,6 +122,7 @@ class MongoDbStore:
 
     def get_task(self, task: str):
         from dacapo.tasks import Task
+
         task_doc = self.tasks.find_one({"id": task}, projection={"_id": False})
         return converter.structure(task_doc, Task)
 
@@ -129,6 +131,7 @@ class MongoDbStore:
 
     def get_dataset(self, dataset: str):
         from dacapo.data import Dataset
+
         return converter.structure(
             self.datasets.find_one({"id": dataset}, projection={"_id": False}), Dataset
         )
@@ -138,6 +141,7 @@ class MongoDbStore:
 
     def get_model(self, model: str):
         from dacapo.models import Model
+
         return converter.structure(
             self.models.find_one({"id": model}, projection={"_id": False}), Model
         )
@@ -147,6 +151,7 @@ class MongoDbStore:
 
     def get_optimizer(self, optimizer: str):
         from dacapo.optimizers import Optimizer
+
         return converter.structure(
             self.optimizers.find_one({"id": optimizer}, projection={"_id": False}),
             Optimizer,
@@ -362,7 +367,7 @@ class MongoDbStore:
         self.validation_scores.delete_many({"run": run_id})
 
     def get_id(self, data):
-        return md5(json.dumps(data, sort_keys=True).encode('utf-8')).hexdigest()
+        return md5(json.dumps(data, sort_keys=True).encode("utf-8")).hexdigest()
 
     def __save_insert(self, collection, data, ignore=None):
 
