@@ -152,14 +152,15 @@ class Run:
                 ):
                     self.save_validation_model(backbone, heads, i)
                     # async function. Spawn a new worker to run validation.
-                    # if this model hapens to be the best it will clean up the checkpoints
+                    # if this model hapens to be the best: clean up past best
                     # and move the weights to the "best" checkpoint file
+                    # TODO: async problems... what if validations finish out of order?
                     validate_one(self, i)
 
                 # sync with mongodb
                 if i % 100 == 0 and i > 0:
                     store.store_training_stats(self)
-                    self.save_training_state(backbone, heads, optimizer, i)
+                    self.save_training_state(backbone, heads, torch_optimizer, i)
 
         store.store_training_stats(self)
         self.stopped = time.time()
