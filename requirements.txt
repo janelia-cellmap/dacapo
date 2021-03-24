@@ -9,6 +9,8 @@ git+git://github.com/funkey/gunpowder@v1.3-dev
 git+git://github.com/funkelab/lsd
 git+git://github.com/funkelab/funlib.segment
 git+git://github.com/funkelab/funlib.geometry
+git+git://github.com/funkelab/daisy@refactor-geometry
+git+git://github.com/funkelab/funlib.math
 mahotas
 pymongo
 scipy
@@ -16,3 +18,6 @@ torch
 tqdm
 zarr
 click
+attr
+cattrs
+intern # for bossdb
