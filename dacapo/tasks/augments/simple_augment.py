@@ -13,7 +13,7 @@ class SimpleAugment(AugmentABC):
     mirror_probs: Optional[List[float]] = attr.ib(default=None)
     transpose_probs: Optional[List[float]] = attr.ib(default=None)
 
-    def node(self):
+    def node(self, array=None):
         return gp.SimpleAugment(
             self.mirror_only,
             self.transpose_only,

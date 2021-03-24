@@ -27,7 +27,7 @@ class IntensityAugment(AugmentABC):
 
     def node(self, array):
         return gp.IntensityAugment(
-            self.array,
+            array,
             self.scale_min,
             self.scale_max,
             self.shift_min,
