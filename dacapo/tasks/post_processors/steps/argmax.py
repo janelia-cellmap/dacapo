@@ -6,11 +6,17 @@ from dacapo.store import MongoDbStore
 from .step_abc import PostProcessingStepABC
 
 import time
+from typing import Optional, List
 
 
 @attr.s
 class ArgMaxStep(PostProcessingStepABC):
     step_id: str = attr.ib(default="argmax")
+
+    # blockwise_processing_parameters
+    write_shape: Optional[List[int]] = attr.ib(default=None)
+    context: Optional[List[int]] = attr.ib(default=None)
+    num_workers: int = attr.ib(default=2)
 
     def tasks(
         self,
@@ -29,17 +35,66 @@ class ArgMaxStep(PostProcessingStepABC):
             if not None, apply argmax to each individually.
         """
 
-        probs = daisy.open_ds(container, probabilities_dataset, mode="r")
-        labels = daisy.open_ds(container, labels_dataset, mode="r+")
+        tasks, task_parameters = [], []
 
-        input_roi = probs.roi
-        read_roi = daisy.Roi(
-            (0,) * input_roi.dims,
-            tuple(min(a, b) for a, b in zip(input_roi.shape, [128] * input_roi.dims)),
-        )  # default to 128 voxels in each axis unless input_roi has smaller shape
-        write_roi = read_roi
-        num_workers = 2  # should be configurable
+        if upstream_tasks is None:
+            upstream_tasks = [None, {}]
 
+        for upstream_task, upstream_parameters in zip(*upstream_tasks):
+            parameters = dict(**upstream_parameters)
+
+            # TODO: The dataset to use may depend on the upstream task
+            probs = daisy.open_ds(container, probabilities_dataset, mode="r")
+            labels = daisy.open_ds(container, labels_dataset, mode="r+")
+            # input_roi defined by provided dataset
+            # TODO: allow for subrois?
+            input_roi = probs.roi
+
+            # get write_shape
+            if self.write_shape is None:
+                # default to 128 per axis or input_roi shape if less than that
+                write_shape = daisy.Coordinate(
+                    tuple(
+                        min(a, b)
+                        for a, b in zip(input_roi.shape, [128] * input_roi.dims)
+                    )
+                )
+            else:
+                write_shape = self.write_shape
+
+            # get context
+            # TODO: do we need context for agglomeration?
+            if self.context is None:
+                # default to 20 per axis or input_roi shape if less than that
+                context = daisy.Coordinate(
+                    tuple(
+                        min(a, b)
+                        for a, b in zip(input_roi.shape, [20] * input_roi.dims)
+                    )
+                )
+            else:
+                context = self.context
+
+            # define block read/write rois based on write_shape and context
+            read_roi = daisy.Roi((0,) * context.dims, write_shape + context * 2)
+            write_roi = daisy.Roi(context, write_shape)
+
+            t = daisy.Task(
+                task_id=f"{pred_id}_{self.step_id}",
+                total_roi=input_roi,
+                read_roi=read_roi,
+                write_roi=write_roi,
+                process_function=self.get_process_function(pred_id, probs, labels),
+                check_function=self.get_check_function(pred_id),
+                num_workers=self.num_workers,
+                fit="overhang",
+            )
+            tasks.append(t)
+            task_parameters.append(parameters)
+
+        return tasks, task_parameters
+
+    def get_process_function(self, pred_id, probs, labels):
         store = MongoDbStore()
 
         def argmax_block(b):
@@ -55,17 +110,4 @@ class ArgMaxStep(PostProcessingStepABC):
                 pred_id, self.step_id, b.block_id, start, time.time() - start
             )
 
-        t = daisy.Task(
-            task_id=f"{pred_id}_{self.step_id}",
-            total_roi=input_roi,
-            read_roi=read_roi,
-            write_roi=write_roi,
-            process_function=lambda b: argmax_block(b),
-            check_function=lambda b: store.check_block(
-                pred_id, self.step_id, b.block_id
-            ),
-            num_workers=num_workers,
-            fit="overhang",
-        )
-
-        return [t, [{}]]
+        return argmax_block
