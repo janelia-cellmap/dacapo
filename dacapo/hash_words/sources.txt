@@ -1,9 +1,0 @@
-animals.txt: https://gist.github.com/atduskgreg/3cf8ef48cb0d29cf151bedad81553a54
-- removed "list"
-- removed some categories (i.e. "Fancy rat varieties", "sheep breeds")
-- removed all multi-word items (i.e. rows with a space or hyphen)
-
-colors.txt: https://en.wikipedia.org/wiki/Lists_of_colors
-- used lists: A-F, G-M, N-Z, Crayola crayon colors (standard colors)
-- removed all multi-word items
-- removed duplicates
