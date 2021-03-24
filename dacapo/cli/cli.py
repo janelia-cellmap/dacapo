@@ -30,129 +30,6 @@ def cli(log_level):
 
 @cli.command()
 @click.option(
-    "-t",
-    "--tasks",
-    required=True,
-    type=click.Path(exists=True, file_okay=False),
-    help="The directory of task configs.",
-)
-@click.option(
-    "-d",
-    "--data",
-    required=True,
-    type=click.Path(exists=True, file_okay=False),
-    help="The directory of data configs.",
-)
-@click.option(
-    "-m",
-    "--models",
-    required=True,
-    type=click.Path(exists=True, file_okay=False),
-    help="The directory of model configs.",
-)
-@click.option(
-    "-o",
-    "--optimizers",
-    required=True,
-    type=click.Path(exists=True, file_okay=False),
-    help="The directory of optimizer configs.",
-)
-@click.option(
-    "-R",
-    "--repetitions",
-    required=True,
-    type=int,
-    help="Number of times to repeat each combination of (task, data, model, optimizer).",
-)
-@click.option(
-    "-i",
-    "--num-iterations",
-    required=True,
-    type=int,
-    help="Number of iterations to train.",
-)
-@click.option(
-    "-v",
-    "--validation-interval",
-    required=True,
-    type=int,
-    help="How many iterations between each validation run.",
-)
-@click.option(
-    "-s",
-    "--snapshot-interval",
-    required=True,
-    type=int,
-    help="How many iterations between each saved snapshot.",
-)
-@click.option(
-    "-b",
-    "--keep-best-validation",
-    required=True,
-    type=str,
-    help="Definition of what is considered the 'best' validation",
-)
-@click.option(
-    "-n",
-    "--num-workers",
-    default=1,
-    type=int,
-    help="How many workers to spawn on to run jobs in parallel.",
-)
-@click.option(
-    "-bf", "--bsub-flags", default=None, type=str, help="flags to pass to bsub"
-)
-@click.option(
-    "--batch",
-    default=False,
-    type=bool,
-    help="Whether to run the jobs as interactive or not.",
-)
-@click_config_file.configuration_option(section="runs")
-def run_all(
-    tasks,
-    data,
-    models,
-    optimizers,
-    repetitions,
-    num_iterations,
-    validation_interval,
-    snapshot_interval,
-    keep_best_validation,
-    num_workers,
-    bsub_flags,
-    batch,
-):
-    import dacapo.config
-
-    task_configs = dacapo.config.find_task_configs(str(tasks))
-    data_configs = dacapo.config.find_data_configs(str(data))
-    model_configs = dacapo.config.find_model_configs(str(models))
-    optimizer_configs = dacapo.config.find_optimizer_configs(str(optimizers))
-
-    bsub_flags = bsub_flags.split(" ")
-    if num_workers > 1:
-        assert any(["-P" in flag for flag in bsub_flags]), "billing must be provided"
-
-    runs = dacapo.enumerate_runs(
-        task_configs=task_configs,
-        data_configs=data_configs,
-        model_configs=model_configs,
-        optimizer_configs=optimizer_configs,
-        repetitions=repetitions,
-        num_iterations=num_iterations,
-        validation_interval=validation_interval,
-        snapshot_interval=snapshot_interval,
-        keep_best_validation=keep_best_validation,
-        bsub_flags=bsub_flags,
-        batch=batch,
-    )
-
-    dacapo.run_all(runs, num_workers=num_workers)
-
-
-@cli.command()
-@click.option(
     "-r",
     "--run-id",
     required=True,
@@ -183,7 +60,158 @@ def run_one(run_id):
 def validate_one(run_id, iteration):
     store = MongoDbStore()
     run = store.get_run(run_id)
-    dacapo.validate_local(run, iteration)
+    dacapo.validate_one(run, iteration)
+
+
+@cli.command()
+@click.option(
+    "-r",
+    "--run-id",
+    required=True,
+    type=str,
+    help="The id of the Run.",
+)
+@click.option(
+    "-p",
+    "--prediction-id",
+    required=True,
+    type=str,
+    help="The id of the prediction. Used to mark blocks done in MongoDB",
+)
+@click.option(
+    "-d",
+    "--dataset-id",
+    required=True,
+    type=str,
+    help=("The dataset config id"),
+)
+@click.option(
+    "-ds",
+    "--data-source",
+    required=True,
+    type=str,
+    help=("The data source to train on. Either validate or predict"),
+)
+@click.option(
+    "-oc",
+    "--output-container",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help=(
+        "The zarr container into which to write predictions. "
+        "logs will be written to the parent directory of the zarr container. "
+        "Predictions will be writtent to dataset 'volumes/{predictor}'."
+    ),
+)
+@click.option(
+    "-bb",
+    "--backbone",
+    required=True,
+    type=click.Path(exists=True, dir_okay=False),
+    help=("The file containing the backbone checkpoint to use for prediction"),
+)
+@click.option(
+    "-hs",
+    "--heads",
+    required=True,
+    type=click.Path(exists=True, dir_okay=False),
+    multiple=True,
+    help=("The file containing the backbone checkpoint to use for prediction"),
+)
+def predict_one(
+    run_id,
+    prediction_id,
+    dataset_id,
+    data_source,
+    output_container,
+    backbone_checkpoint,
+    head_checkpoints,
+):
+    dacapo.predict_one(
+        run_id,
+        prediction_id,
+        dataset_id,
+        data_source,
+        output_container,
+        backbone_checkpoint,
+        head_checkpoints,
+        worker=False,
+    )
+
+
+@cli.command()
+@click.option(
+    "-r",
+    "--run-id",
+    required=True,
+    type=str,
+    help="The id of the Run.",
+)
+@click.option(
+    "-p",
+    "--prediction-id",
+    required=True,
+    type=str,
+    help="The id of the prediction. Used to mark blocks done in MongoDB",
+)
+@click.option(
+    "-d",
+    "--dataset-id",
+    required=True,
+    type=str,
+    help=("The dataset config id"),
+)
+@click.option(
+    "-ds",
+    "--data-source",
+    required=True,
+    type=str,
+    help=("The data source to train on. Either validate or predict"),
+)
+@click.option(
+    "-oc",
+    "--output-container",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help=(
+        "The zarr container into which to write predictions. "
+        "logs will be written to the parent directory of the zarr container. "
+        "Predictions will be writtent to dataset 'volumes/{predictor}'."
+    ),
+)
+@click.option(
+    "-bb",
+    "--backbone-checkpoint",
+    required=True,
+    type=click.Path(exists=True, dir_okay=False),
+    help=("The file containing the backbone checkpoint to use for prediction"),
+)
+@click.option(
+    "-hs",
+    "--head-checkpoints",
+    required=True,
+    type=click.Path(exists=True, dir_okay=False),
+    multiple=True,
+    help=("The file containing the backbone checkpoint to use for prediction"),
+)
+def predict_worker(
+    run_id,
+    prediction_id,
+    dataset_id,
+    data_source,
+    output_container,
+    backbone_checkpoint,
+    head_checkpoints,
+):
+    dacapo.predict_worker(
+        run_id,
+        prediction_id,
+        dataset_id,
+        data_source,
+        output_container,
+        backbone_checkpoint,
+        head_checkpoints,
+    )
 
 
 @cli.command()
@@ -350,222 +378,6 @@ def clear_all(
         for task_data in deleted_tasks:
             store.tasks.delete_one({"id": task_id})
             print(f"deleted task: {task_id}")
-
-
-@cli.command()
-@click.option(
-    "-n",
-    "--name",
-    required=True,
-    type=str,
-    help="The name of the run whose weights you want to use.",
-)
-@click.option(
-    "-pd",
-    "--predict-data",
-    required=True,
-    type=click.Path(exists=True, dir_okay=False),
-    help="The config file of the data you want to predict.",
-)
-@click.option(
-    "-dc",
-    "--daisy-config",
-    required=True,
-    type=click.Path(exists=True, dir_okay=False),
-    help="The config file for daisy.",
-)
-@click.option(
-    "-t",
-    "--tasks",
-    required=True,
-    type=click.Path(exists=True, file_okay=False),
-    help="The directory of task configs.",
-)
-@click.option(
-    "-d",
-    "--data",
-    required=True,
-    type=click.Path(exists=True, file_okay=False),
-    help="The directory of data configs.",
-)
-@click.option(
-    "-m",
-    "--models",
-    required=True,
-    type=click.Path(exists=True, file_okay=False),
-    help="The directory of model configs.",
-)
-@click.option(
-    "-o",
-    "--optimizers",
-    required=True,
-    type=click.Path(exists=True, file_okay=False),
-    help="The directory of optimizer configs.",
-)
-@click.option(
-    "-R",
-    "--repetitions",
-    required=True,
-    type=int,
-    help="Number of times to repeat each combination of (task, data, model, optimizer).",
-)
-@click.option(
-    "-i",
-    "--num-iterations",
-    required=True,
-    type=int,
-    help="Number of iterations to train.",
-)
-@click.option(
-    "-v",
-    "--validation-interval",
-    required=True,
-    type=int,
-    help="How many iterations between each validation run.",
-)
-@click.option(
-    "-s",
-    "--snapshot-interval",
-    required=True,
-    type=int,
-    help="How many iterations between each saved snapshot.",
-)
-@click.option(
-    "-b",
-    "--keep-best-validation",
-    required=True,
-    type=str,
-    help="Definition of what is considered the 'best' validation",
-)
-@click.option(
-    "-n",
-    "--num-workers",
-    default=1,
-    type=int,
-    help="How many workers to spawn on to run jobs in parallel.",
-)
-@click.option(
-    "-bf", "--bsub-flags", default=None, type=str, help="flags to pass to bsub"
-)
-@click.option(
-    "--batch",
-    default=False,
-    type=bool,
-    help="Whether to run the jobs as interactive or not.",
-)
-@click_config_file.configuration_option(section="runs")
-def predict(
-    name,
-    predict_data,
-    daisy_config,
-    tasks,
-    data,
-    models,
-    optimizers,
-    repetitions,
-    num_iterations,
-    validation_interval,
-    snapshot_interval,
-    keep_best_validation,
-    num_workers,
-    bsub_flags,
-    batch,
-):
-    import dacapo.config
-    from dacapo.data import Data
-    from dacapo.tasks import Task
-    import daisy
-    from dacapo.predict import (
-        run_local as predict_run_local,
-        run_remote as predict_run_remote,
-    )
-
-    try:
-        daisy.Client()
-        daisy_worker = True
-    except KeyError:
-        daisy_worker = False
-
-    daisy_conf = dacapo.config.DaisyConfig(daisy_config)
-    daisy_conf.worker = daisy_worker
-
-    if isinstance(bsub_flags, str):
-        bsub_flags = bsub_flags.split()
-    if daisy_conf.num_workers > 1 and not daisy_conf.worker:
-        # start daisy workers who call dacapo.predict with daisy_worker = True
-
-        dacapo_flags = (
-            f"--name {name} "
-            f"--predict-data {predict_data} "
-            f"--daisy-config {daisy_config} "
-            f"--tasks {tasks} "
-            f"--data {data} "
-            f"--models {models} "
-            f"--optimizers {optimizers} "
-            f"--repetitions {repetitions} "
-            f"--num-iterations {num_iterations} "
-            f"--validation-interval {validation_interval} "
-            f"--snapshot-interval {snapshot_interval} "
-            f"--keep-best-validation {keep_best_validation} "
-        )
-
-        prediction_data = dacapo.config.DataConfig(predict_data)
-
-        task_configs = dacapo.config.find_task_configs(str(tasks))
-        data_configs = dacapo.config.find_data_configs(str(data))
-        model_configs = dacapo.config.find_model_configs(str(models))
-        optimizer_configs = dacapo.config.find_optimizer_configs(str(optimizers))
-
-        runs = dacapo.enumerate_runs(
-            task_configs=task_configs,
-            data_configs=data_configs,
-            model_configs=model_configs,
-            optimizer_configs=optimizer_configs,
-            repetitions=repetitions,
-            num_iterations=num_iterations,
-            validation_interval=validation_interval,
-            snapshot_interval=snapshot_interval,
-            keep_best_validation=keep_best_validation,
-            bsub_flags=bsub_flags,
-            batch=batch,
-        )
-
-        desired_runs = [run for run in runs if name == run.hash]
-
-        for run in desired_runs:
-            predict_run_remote(
-                run,
-                prediction_data,
-                daisy_conf,
-                dacapo_flags,
-                bsub_flags,
-            )
-
-    else:
-
-        task_configs = dacapo.config.find_task_configs(str(tasks))
-        data_configs = dacapo.config.find_data_configs(str(data))
-        model_configs = dacapo.config.find_model_configs(str(models))
-        optimizer_configs = dacapo.config.find_optimizer_configs(str(optimizers))
-
-        runs = dacapo.enumerate_runs(
-            task_configs=task_configs,
-            data_configs=data_configs,
-            model_configs=model_configs,
-            optimizer_configs=optimizer_configs,
-            repetitions=repetitions,
-            num_iterations=num_iterations,
-            validation_interval=validation_interval,
-            snapshot_interval=snapshot_interval,
-            keep_best_validation=keep_best_validation,
-            bsub_flags=bsub_flags,
-            batch=batch,
-        )
-
-        desired_runs = [run for run in runs if name == run.hash]
-        prediction_data = dacapo.config.DataConfig(predict_data)
-        for run in desired_runs:
-            predict_run_local(run, prediction_data, daisy_conf)
 
 
 @cli.command()

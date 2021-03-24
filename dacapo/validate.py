@@ -1,91 +1,85 @@
 import zarr
 from funlib.geometry import Coordinate
 import funlib.run
+import daisy
 
-from .daisy import predict
 from dacapo.store import sanatize, MongoDbStore
+from dacapo.predict import predict_one
 
 import time
+import logging
+import subprocess
+
+logger = logging.getLogger(__name__)
 
 
 def validate_one(run, iteration):
-    print(f"Validating iteration {iteration}")
+    # This is a blocking call, will only return when validation
+    # is completed.
+    # It is assumed that we first need to predict on the validation data,
+    # so we make a blocking call to predict first.
+    # When that is complete, we create a daisy
+    # validation task with validation workers that only need cpus.
+    outdir = run.validation_outdir(iteration)
+    container = "data.zarr"
+    backbone_checkpoint, head_checkpoints = run.get_validation_checkpoints(iteration)
 
-    if run.execution_details.num_workers is not None:
+    predict_one(
+        run_id=run.id,
+        prediction_id=f"validation_{iteration}",
+        dataset_id=run.dataset,
+        data_source="validate",
+        out_container=outdir / container,
+        backbone_checkpoint=backbone_checkpoint,
+        head_checkpoints=head_checkpoints,
+    )
 
-        from multiprocessing import Pool
+    # start a new cpu job on cluster for this?
+    run_validation_worker(run, iteration)
 
-        # TODO: do we want to support multiple workers to validate
-        # on large volumes?.
-        with Pool(1) as pool:
-            pool.starmap(validate_remote, zip([run], [iteration]))
 
-    else:
-        validate_local(run, iteration)
+def run_validation_worker(run, iteration):
+    # It is assumed that postprocessor tasks only need cpus, so
+    # post processing tasks do not spawn new jobs in their
+    # processing functions.
+    store = MongoDbStore()
+    task = store.get_task(run.task)
+    for predictor, post_processor in zip(task.predictors, task.post_processors):
+        validate_task = post_processor.get_validate_task()
+        daisy.run_blockwise([validate_task])
 
 
 def validate_local(run, iteration):
+    # Must already be in daisy context
+    # Predictions must already be done
+    daisy.Client()
     if not run.outdir.exists():
         run.outdir.mkdir(parents=True, exist_ok=True)
-
-    print(f"Validating run {run.id} at iteration {iteration}:")
+    logger.info(f"Validating run {run.id} at iteration {iteration}:")
     validate(run, iteration)
 
 
 def validate_remote(run, iteration):
-    print(f"synced run with id {run.id}")
     if not run.validation_outdir(iteration).exists():
         run.validation_outdir(iteration).mkdir(parents=True, exist_ok=True)
 
-    funlib.run.run(
+    command_args = funlib.run.run(
         command=f"dacapo validate-one -r {run.id} -i {iteration}",
         num_cpus=5,
         num_gpus=1,
         queue="gpu_rtx",
-        execute=True,
+        execute=False,
+        expand=False,
         flags=run.execution_details.bsub_flags.split(" "),
         batch=run.execution_details.batch,
         log_file=f"{run.validation_outdir(iteration)}/log.out",
         error_file=f"{run.validation_outdir(iteration)}/log.err",
     )
+    subprocess.Popen(" ".join(command_args), shell=True, encoding="UTF-8")
 
 
 def validate(run, iteration):
-    store = MongoDbStore()
-    task = store.get_task(run.task)
-    dataset = store.get_dataset(run.dataset)
-    model = store.get_model(run.model)
-
-    input_shape = Coordinate(model.input_shape)
-    output_shape = (
-        Coordinate(model.output_shape) if model.output_shape is not None else None
-    )
-
-    backbone_checkpoint, head_checkpoints = run.get_validation_checkpoints(iteration)
-
-    print("Predicting on validation data...")
-    start = time.time()
-    ds = predict(
-        job_id=f"{run.id}_{iteration}",
-        task=task,
-        dataset=dataset,
-        model=model,
-        input_shape=input_shape,
-        output_shape=output_shape,
-        output_dir=run.validation_outdir(iteration),
-        output_filename="data.zarr",
-        backbone_checkpoint=backbone_checkpoint,
-        head_checkpoints=head_checkpoints,
-        raw=dataset.raw.validate,
-        gt=dataset.gt.validate,
-    )
-    print(f"...done ({time.time() - start}s)")
-
-    all_scores = {}
-    best_score = None
-    best_parameters = None
-    best_results = None
-    raise Exception("Post processing/evaluation not yet supported!")
+    raise Exception("Post processing/evaluation not yet implemented!")
     for ret in predictor.evaluate(
         ds["prediction"], ds["gt"], ds["target"], store_best_result
     ):
@@ -119,7 +113,7 @@ def validate(run, iteration):
 
 
 def save_validation_results():
-    print("validating")
+    logger.warning("validating")
     scores = validate(
         task=task,
         dataset=dataset,
