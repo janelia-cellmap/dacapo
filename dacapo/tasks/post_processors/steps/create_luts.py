@@ -15,10 +15,10 @@ logger = logging.getLogger(__name__)
 
 
 @attr.s
-class CreateLuts(PostProcessingStepABC):
+class CreateLUTS(PostProcessingStepABC):
     step_id: str = attr.ib(default="luts")
     # grid searchable arguments
-    threshold: List[float] = attr.ib()
+    threshold: List[float] = attr.ib(factory=list)
 
     def tasks(
         self,

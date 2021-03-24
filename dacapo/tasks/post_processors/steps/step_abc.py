@@ -13,6 +13,7 @@ class PostProcessingStepABC(ABC):
     @abstractmethod
     def step_id(self):
         # All PostProcessingSteps must have a step_id property
+        pass
 
     @abstractmethod
     def get_process_function(self):

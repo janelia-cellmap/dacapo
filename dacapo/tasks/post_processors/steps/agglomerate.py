@@ -16,7 +16,7 @@ import time
 class Agglomerate(PostProcessingStepABC):
     step_id: str = attr.ib(default="agglomerate")
     # grid searchable arguments
-    merge_function: List[MergeFunction] = attr.ib()
+    merge_function: List[MergeFunction] = attr.ib(factory=list)
 
     # blockwise_processing_parameters
     write_shape: Optional[List[int]] = attr.ib(default=None)
