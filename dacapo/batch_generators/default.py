@@ -182,9 +182,10 @@ class DefaultBatchGenerator:
         # raw: ([c,] d, h, w)
         # gt: ([c,] d, h, w)
 
-        warnings.warn("Augmentations not yet handled!")
-        # for augmentation in eval(task.augmentations):
-        #     pipeline += augmentation
+        # TODO: How should we configure augmentations on specific arrays?
+        warnings.warn("Augmentations can only be applied to raw or all keys for now!")
+        for augmentation in task.augments:
+            pipeline += augmentation.node(raw)
 
         # (don't care about gt anymore)
         # raw: ([c,] d, h, w)
