@@ -108,8 +108,8 @@ class MongoDbStore:
 
         run.validation_scores = self.__read_validation_scores(run.id)
 
-    def add_run(self, run: dict):
-        self.__save_insert(self.runs, run)
+    def add_run(self, run):
+        return self.__save_insert(self.runs, converter.unstructure(run))
 
     def get_run(self, run: str):
         from dacapo.configs import Run
@@ -117,8 +117,8 @@ class MongoDbStore:
         run_doc = self.runs.find_one({"id": run}, projection={"_id": False})
         return converter.structure(run_doc, Run)
 
-    def add_task(self, task: dict):
-        self.__save_insert(self.tasks, task)
+    def add_task(self, task):
+        return self.__save_insert(self.tasks, converter.unstructure(task))
 
     def get_task(self, task: str):
         from dacapo.tasks import Task
@@ -126,8 +126,8 @@ class MongoDbStore:
         task_doc = self.tasks.find_one({"id": task}, projection={"_id": False})
         return converter.structure(task_doc, Task)
 
-    def add_dataset(self, dataset: dict):
-        self.__save_insert(self.datasets, dataset)
+    def add_dataset(self, dataset):
+        return self.__save_insert(self.datasets, converter.unstructure(dataset))
 
     def get_dataset(self, dataset: str):
         from dacapo.data import Dataset
@@ -136,8 +136,8 @@ class MongoDbStore:
             self.datasets.find_one({"id": dataset}, projection={"_id": False}), Dataset
         )
 
-    def add_model(self, model: dict):
-        self.__save_insert(self.models, model)
+    def add_model(self, model):
+        return self.__save_insert(self.models, converter.unstructure(model))
 
     def get_model(self, model: str):
         from dacapo.models import Model
@@ -146,8 +146,8 @@ class MongoDbStore:
             self.models.find_one({"id": model}, projection={"_id": False}), Model
         )
 
-    def add_optimizer(self, optimizer: dict):
-        self.__save_insert(self.optimizers, optimizer)
+    def add_optimizer(self, optimizer):
+        return self.__save_insert(self.optimizers, converter.unstructure(optimizer))
 
     def get_optimizer(self, optimizer: str):
         from dacapo.optimizers import Optimizer
