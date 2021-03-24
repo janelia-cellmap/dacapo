@@ -20,6 +20,12 @@ import os
 
 logger = logging.getLogger(__name__)
 
+# DaCapo api for Prediction
+# TODO: debug daisy: Currently getting tornado error: "stream closed" in workers
+# predict_one -> blocking. spawns new workers to run blockwise
+# predict_worker -> must have daisy context -> runs prediction_pipeline
+# predict_remote -> async non-blocking call to predict_one
+
 
 @attr.s
 class PredictConfig:
@@ -191,7 +197,6 @@ def predict_one(
     backbone_checkpoint,
     head_checkpoints,
 ):
-    # Command line entrypoint to generating a prediction.
     # This is a blocking call, will only return when prediction
     # is completed.
     # This call creates a daisy task and spins up a set of predict workers
@@ -245,6 +250,19 @@ def predict_worker(
     predict(predict_config)
 
 
+def predict_remote(
+    run_id,
+    prediction_id,
+    dataset_id,
+    data_source,
+    out_container,
+    backbone_checkpoint,
+    head_checkpoints,
+):
+    # nonblocking call to predict_one
+    raise NotImplementedError()
+
+
 def remote_prediction_worker(
     run_id,
     prediction_id,
@@ -254,6 +272,10 @@ def remote_prediction_worker(
     backbone_checkpoint,
     head_checkpoints,
 ):
+    # get a function that starts a new daisy worker.
+    # Assumes access to bsub. Starts working with gpu and 5 cpus.
+    # TODO: make prediction worker details configurable so this can run in more places
+    # i.e. local, cloud, etc.
     store = MongoDbStore()
     run = store.get_run(run_id)
     out_dir = Path(out_container).parent
