@@ -1,5 +1,6 @@
 from dacapo.gp import AddDistance
 from .predictor_abc import PredictorABC
+from dacapo.converter import converter
 
 import gunpowder as gp
 import torch
@@ -18,20 +19,60 @@ class WeightingOption(Enum):
     DISTANCE = "distance"
 
 
+converter.register_unstructure_hook(
+    WeightingOption,
+    lambda o: {"value": o.value},
+)
+
+
+def structure_weighting_option(o):
+    print(o)
+    return WeightingOption(o["value"])
+
+
+converter.register_structure_hook(
+    WeightingOption,
+    lambda o, _: structure_weighting_option(o),
+)
+
+
 @attr.s
 class Affinities(PredictorABC):
     name: str = attr.ib(
+        metadata={"help_text": "This name is used to differentiate between predictors."}
+    )
+
+    neighborhood: List[List[int]] = attr.ib(
         metadata={
-            "help_text": "This name is used to differentiate between predictors."
+            "help_text": "The neighborhood upon which to calculate affinities. "
+            "This is provided as a list of offsets, where each offset is a list of "
+            "ints defining the offset in each axis in voxels. "
+            "For 3D data, this is usually [[1,0,0],[0,1,0],[0,0,1]]"
+        }
+    )
+    weighting_type: WeightingOption = attr.ib(
+        metadata={
+            "help_text": "Experimental support for different loss weighting schemes. "
+            "Balance labels dynamically balances between the number of classes per batch"
         }
     )
 
-    neighborhood: List[List[int]] = attr.ib()
-    weighting_type: WeightingOption = attr.ib()
-
     # attributes that can be read from other configurable classes
-    fmaps_in: Optional[int] = attr.ib(default=None)  # from model
-    dims: Optional[int] = attr.ib(default=None)  # from data
+    fmaps_in: Optional[int] = attr.ib(
+        default=None,
+        metadata={
+            "help_text": "The number of fmaps used to calculate affinities (provided by Model). "
+            "Default None to work with any Model."
+        },
+    )  # from model
+    dims: Optional[int] = attr.ib(
+        default=3,
+        metadata={"help_text": "The number of dimensions of your data. Defaults to 3."},
+    )  # from data
+
+    @property
+    def fmaps_out(self):
+        return len(self.neighborhood)
 
     def head(self, fmaps_in: int):
 
