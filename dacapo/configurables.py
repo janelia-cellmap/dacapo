@@ -1,9 +1,9 @@
 from .configs import RunExecution, Run
 from .tasks import Task
+from .tasks.augments import IntensityAugment, SimpleAugment
 from .tasks.predictors import Affinities, OneHotLabels, LSD
 from .tasks.losses import MSELoss, CrossEntropyLoss
 from .tasks.post_processors import Watershed, ArgMax
-from .tasks.post_processors.steps import ArgMaxStep
 from .data import (
     Dataset,
     ZarrSource,
@@ -30,6 +30,8 @@ __all__ = [
     RAdam,
     VGGNet,
     ZarrSource,
+    BossDBSource,
+    RasterizeSource,
     CSVSource,
     NXGraphSource,
     ArrayDataSource,
@@ -42,5 +44,7 @@ __all__ = [
     Watershed,
     ArgMax,
     RasterizationSetting,
-    ArgMaxStep,
+    ArgMax,
+    IntensityAugment,
+    SimpleAugment,
 ]
