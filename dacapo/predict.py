@@ -137,13 +137,19 @@ def load_prediction_config(
     dataset = store.get_dataset(run.dataset)
     model = store.get_model(run.model)
 
-    input_shape = Coordinate(model.input_shape)
-    output_shape = (
-        Coordinate(model.output_shape) if model.output_shape is not None else None
-    )
+    try:
+        input_shape = Coordinate(model.predict_input_shape)
+    except AttributeError:
+        input_shape = Coordinate(model.input_shape)
+    try:
+        output_shape = Coordinate(model.predict_output_shape)
+    except AttributeError:
+        output_shape = (
+            Coordinate(model.output_shape) if model.output_shape is not None else None
+        )
 
-    backbone = model.instantiate(dataset)
     if output_shape is None:
+        backbone = model.instantiate(dataset)
         output_shape = Coordinate(backbone.output_shape(input_shape))
 
     # load in data to run on
