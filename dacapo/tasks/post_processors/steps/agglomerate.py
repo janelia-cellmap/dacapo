@@ -86,7 +86,7 @@ class Agglomerate(PostProcessingStepABC):
                         fragments_dataset=fragments_dataset,
                         merge_function=merge_func,
                     ),
-                    check_function=self.get_check_function,
+                    check_function=self.get_check_function(pred_id),
                     num_workers=self.num_workers,
                     fit="overhang",
                 )
@@ -135,9 +135,3 @@ class Agglomerate(PostProcessingStepABC):
             pass
 
         return process_block
-
-    def get_check_function(self, task_id):
-        def check_block(b: Block):
-            pass
-
-        return check_block
