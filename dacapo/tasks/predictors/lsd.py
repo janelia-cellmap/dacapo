@@ -13,11 +13,6 @@ from enum import Enum
 CONV_LAYERS = {2: torch.nn.Conv2d, 3: torch.nn.Conv3d}
 
 
-class WeightingOption(Enum):
-    BALANCE_LABELS = "balance_labels"
-    DISTANCE = "distance"
-
-
 @attr.s
 class LSD(PredictorABC):
     name: str = attr.ib(metadata={

@@ -14,11 +14,6 @@ from enum import Enum
 CONV_LAYERS = {2: torch.nn.Conv2d, 3: torch.nn.Conv3d}
 
 
-class WeightingOption(Enum):
-    BALANCE_LABELS = "balance_labels"
-    DISTANCE = "distance"
-
-
 class AddClassLabels(gp.BatchFilter):
     def __init__(self, gt, target):
         self.gt = gt
