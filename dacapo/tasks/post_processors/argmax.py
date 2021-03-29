@@ -6,7 +6,9 @@ import attr
 
 @attr.s
 class ArgMax(PostProcessorABC):
-    outputs: str = attr.ib(default="labels")
+    outputs: str = attr.ib(
+        default="labels", metadata={"help_text": "The name of the provided outputs."}
+    )
     # steps: Tuple[ArgMaxStep] = attr.ib()
 
     def tasks(self, pred_id: str):

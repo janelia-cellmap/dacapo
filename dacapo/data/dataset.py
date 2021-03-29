@@ -43,30 +43,35 @@ converter.register_unstructure_hook(
 
 @attr.s
 class Dataset:
-    name: str = attr.ib()
-    id: Optional[str] = attr.ib(default=None)
+    name: str = attr.ib(metadata={"help_text": "The name of this dataset."})
 
     train_sources: Optional[List[Tuple[DataKey, DataSource]]] = attr.ib(
-        default=attr.Factory(list)
+        default=attr.Factory(list), metadata={"help_text": "The sources to train on."}
     )
     validate_sources: Optional[List[Tuple[DataKey, DataSource]]] = attr.ib(
-        default=attr.Factory(list)
+        default=attr.Factory(list),
+        metadata={"help_text": "The sources to validate on."},
     )
     predict_sources: Optional[List[Tuple[DataKey, DataSource]]] = attr.ib(
-        default=attr.Factory(list)
+        default=attr.Factory(list), metadata={"help_text": "The sources to predict on."}
     )
 
     train_padding: PaddingOption = attr.ib(
         default=PaddingOption.VALID,
+        metadata={"help_text": "How to pad your training data."},
     )
     validate_padding: PaddingOption = attr.ib(
         default=PaddingOption.VALID,
+        metadata={"help_text": "How to pad your validation data."},
     )
     predict_padding: PaddingOption = attr.ib(
         default=PaddingOption.VALID,
+        metadata={"help_text": "How to pad your prediction data."},
     )
 
-    dims: int = attr.ib(default=3)
+    dims: int = attr.ib(
+        default=3, metadata={"help_text": "The dimensionality of your data."}
+    )
 
     def verify(self):
         unstructured = converter.unstructure(self)

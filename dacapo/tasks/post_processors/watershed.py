@@ -18,17 +18,44 @@ class Watershed(PostProcessorABC):
 
     # parameter ranges to explore:
     # creating fragments
-    filter_fragments: List[float] = attr.ib(factory=lambda: list([0]))
-    fragments_in_xy: List[bool] = attr.ib(factory=lambda: list([False]))
-    epsilon_agglomerate: List[float] = attr.ib(factory=lambda: list([0]))
-    min_seed_distance: List[float] = attr.ib(factory=lambda: list([1]))
-    compactness: List[float] = attr.ib(factory=lambda: list([0]))
+    filter_fragments: List[float] = attr.ib(
+        factory=lambda: list([0]),
+        metadata={
+            "help_text": "A float between 0 and 1 determining a threshold for ignoring "
+            "fragments with an average affinity below this threshold."
+        },
+    )
+    fragments_in_xy: List[bool] = attr.ib(
+        factory=lambda: list([False]),
+        metadata={
+            "help_text": "Whether to generate fragments in xy only or to include the z dimension."
+        },
+    )
+    epsilon_agglomerate: List[float] = attr.ib(
+        factory=lambda: list([0]),
+        metadata={
+            "help_text": "Whether to automatically merge fragments with scores below epsilon. "
+            "Can help reduce the number of fragments and keep the agglomeration graph small."
+        },
+    )
+    min_seed_distance: List[float] = attr.ib(
+        factory=lambda: list([1]),
+        metadata={"help_text": "The minimum distance between seeds in watershed."},
+    )
+    compactness: List[float] = attr.ib(
+        factory=lambda: list([0]),
+        metadata={"help_text": "The compactness of watershed fragments."},
+    )
     # agglomerating fragments
     merge_function: List[MergeFunction] = attr.ib(
-        factory=lambda: list([MergeFunction.MEAN])
+        factory=lambda: list([MergeFunction.MEAN]),
+        metadata={"help_text": "The waterz merge function to use for agglomeration."},
     )
     # create_luts
-    threshold: List[float] = attr.ib(factory=lambda: list([0.5]))
+    threshold: List[float] = attr.ib(
+        factory=lambda: list([0.5]),
+        metadata={"help_text": "The threshold to use for merging."},
+    )
 
     def tasks(
         self,

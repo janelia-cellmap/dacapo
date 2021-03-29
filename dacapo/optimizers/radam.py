@@ -10,11 +10,31 @@ import attr
 
 @attr.s
 class RAdam(Algorithm):
-    lr: float = attr.ib(default=1e-3)
-    betas: Tuple[float, float] = attr.ib(default=(0.9, 0.999))
-    eps: float = attr.ib(default=1e-8)
-    weight_decay: float = attr.ib(default=0)
-    degenerated_to_sgd: bool = attr.ib(default=True)
+    lr: float = attr.ib(
+        default=1e-3,
+        metadata={"help_text": "The learning rate."},
+    )
+    betas: Tuple[float, float] = attr.ib(
+        default=(0.9, 0.999),
+        metadata={
+            "help_text": "coefficients used for computing running averages of "
+            "gradient and its square."
+        },
+    )
+    eps: float = attr.ib(
+        default=1e-8,
+        metadata={
+            "help_text": "term added to the denominator to improve numerical stability."
+        },
+    )
+    weight_decay: float = attr.ib(
+        default=0,
+        metadata={"help_text": "weight decay (L2 penalty)."},
+    )
+    degenerated_to_sgd: bool = attr.ib(
+        default=True,
+        metadata={"help_text": ""},
+    )
 
     def instance(self, params):
         return RAdamOptimizer(

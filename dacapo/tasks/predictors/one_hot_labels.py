@@ -51,9 +51,17 @@ class OneHotLabels(PredictorABC):
     )
 
     # attributes that can be read from other configurable classes
-    fmaps_in: Optional[int] = attr.ib(default=None)  # can be read from model
-    dims: Optional[int] = attr.ib(default=None)  # can be read from data
-    num_classes: Optional[int] = attr.ib(default=None)  # can be read from data
+    fmaps_in: Optional[int] = attr.ib(
+        default=None,
+        metadata={"help_text": "The number of feature maps provided by the model."},
+    )
+    dims: Optional[int] = attr.ib(
+        default=None, metadata={"help_text": "The dimensionality of your data."}
+    )  # can be read from data
+    num_classes: Optional[int] = attr.ib(
+        default=None,
+        metadata={"help_text": "The number of classes in your ground truth data."},
+    )  # can be read from data
 
     @property
     def fmaps_out(self):

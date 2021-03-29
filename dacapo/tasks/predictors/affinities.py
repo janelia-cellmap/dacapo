@@ -47,7 +47,7 @@ class Affinities(PredictorABC):
             "help_text": "The neighborhood upon which to calculate affinities. "
             "This is provided as a list of offsets, where each offset is a list of "
             "ints defining the offset in each axis in voxels. "
-            "For 3D data, this is usually [[1,0,0],[0,1,0],[0,0,1]]"
+            "For 3D data and plain affinities, this is usually [[1,0,0],[0,1,0],[0,0,1]]"
         }
     )
     weighting_type: WeightingOption = attr.ib(

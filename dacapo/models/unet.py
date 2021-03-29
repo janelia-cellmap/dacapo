@@ -28,26 +28,63 @@ converter.register_structure_hook(
 @attr.s
 class UNet(ModelABC):
     # standard model attributes
-    input_shape: List[int] = attr.ib()
-    fmaps_out: int = attr.ib()
+    input_shape: List[int] = attr.ib(
+        metadata={"help_text": "The input shape of the model."}
+    )
+    fmaps_out: int = attr.ib(
+        metadata={"help_text": "Number of feature maps output by model."}
+    )
 
     # unet attributes
-    fmap_inc_factor: int = attr.ib()
-    downsample_factors: List[List[int]] = attr.ib()
+    fmap_inc_factor: int = attr.ib(
+        metadata={
+            "help_text": "The increment factor for the number of "
+            "feature maps at each down sample."
+        }
+    )
+    downsample_factors: List[List[int]] = attr.ib(
+        metadata={
+            "help_text": "The factor by which to downsample spatial dimensions along each axis."
+        }
+    )
 
     # optional values
     # standard model attributes
-    output_shape: Optional[List[int]] = attr.ib(default=None)
+    output_shape: Optional[List[int]] = attr.ib(
+        default=None, metadata={"help_text": "The output shape of the Model."}
+    )
 
     # unet attributes
-    kernel_size_down: Optional[List[List[int]]] = attr.ib(default=None)
-    kernel_size_up: Optional[List[List[int]]] = attr.ib(default=None)
-    constant_upsample: bool = attr.ib(default=True)
-    padding: ConvPaddingOption = attr.ib(default=ConvPaddingOption.VALID)
+    kernel_size_down: Optional[List[List[int]]] = attr.ib(
+        default=None,
+        metadata={
+            "help_text": "The number and size of the convolutional kernels before downsampling. "
+            "Defaults to 2 3x3x3 kernels."
+        },
+    )
+    kernel_size_up: Optional[List[List[int]]] = attr.ib(
+        default=None,
+        metadata={
+            "help_text": "The number and size of the convolutional kernels after upsampling. "
+            "Defaults to 2 3x3x3 kernels."
+        },
+    )
+    constant_upsample: bool = attr.ib(
+        default=True,
+        metadata={
+            "help_text": "Whether to learn a transpose convolution or a simple "
+            "scale/shift for upsampling. Keeping the upsample constant can help avoid "
+            "checkerpattern local minima."
+        },
+    )
+    padding: ConvPaddingOption = attr.ib(
+        default=ConvPaddingOption.VALID,
+        metadata={"help_text": "How to pad your convolutions. Either same or valid."},
+    )
 
     # attributes that can be read from other configs:
     fmaps_in: Optional[int] = attr.ib(
-        default=None
+        default=None, metadata={"help_text": "The number of channels in your raw data."}
     )  # can be read from data num_channels
 
     def instantiate(self, dataset):

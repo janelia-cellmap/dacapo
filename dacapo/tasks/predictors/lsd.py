@@ -15,16 +15,32 @@ CONV_LAYERS = {2: torch.nn.Conv2d, 3: torch.nn.Conv3d}
 
 @attr.s
 class LSD(PredictorABC):
-    name: str = attr.ib(metadata={
-            "help_text": "This name is used to differentiate between predictors."
-        })
+    name: str = attr.ib(
+        metadata={"help_text": "This name is used to differentiate between predictors."}
+    )
 
-    sigma: float = attr.ib()
-    num_shape_descriptors: int = attr.ib(default=10)
+    sigma: float = attr.ib(
+        metadata={
+            "help_text": "The size of the gaussian (in world units) "
+            "used to calculate shape descriptors."
+        }
+    )
+    num_shape_descriptors: int = attr.ib(
+        default=10,
+        metadata={
+            "help_text": "The number of shape descriptors. Currently 10 is the only option."
+        },
+    )
 
     # attributes that can be read from other configurable classes
-    fmaps_in: Optional[int] = attr.ib(default=None)
-    dims: Optional[int] = attr.ib(default=None)
+    fmaps_in: Optional[int] = attr.ib(
+        default=None,
+        metadata={"help_text": "The number of feature maps provided by the Model."},
+    )
+    dims: Optional[int] = attr.ib(
+        default=None,
+        metadata={"help_text": "The dimensionality of your data."},
+    )
 
     def head(self, fmaps_in: int):
         conv = torch.nn.Conv3d
