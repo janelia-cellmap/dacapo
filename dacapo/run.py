@@ -71,6 +71,7 @@ def run_remote(run):
 
     funlib.run.run(
         command=f"dacapo run-one -r {run.id}",
+        job_name=f"run_one_{run.id}",
         num_cpus=5,
         num_gpus=1,
         queue="gpu_rtx",
