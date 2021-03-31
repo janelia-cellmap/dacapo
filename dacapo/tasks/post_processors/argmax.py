@@ -11,16 +11,18 @@ class ArgMax(PostProcessorABC):
     )
     # steps: Tuple[ArgMaxStep] = attr.ib()
 
-    def tasks(self, pred_id: str):
-        """
-        pred_id should be the unique id of the predictions you are post processing.
-        i.e. run.id + iteration or prediction.id if run during prediction
-        """
+    def tasks(
+        self,
+        pred_id: str,
+        container,
+        input_dataset,
+        output_dataset,
+    ):
         tasks, parameters = ArgMaxStep().tasks(
             pred_id,
             container,
-            probabilities_dataset,
-            labels_dataset,
+            input_dataset,
+            output_dataset,
         )
 
         return tasks, parameters

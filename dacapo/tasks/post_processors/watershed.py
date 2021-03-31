@@ -59,9 +59,10 @@ class Watershed(PostProcessorABC):
 
     def tasks(
         self,
-        input_id: str,
-        input_zarr: Path,
-        affs_dataset: str,
+        pred_id: str,
+        container,
+        input_dataset,
+        output_dataset,
     ):
         """
         input_id should be the unique id of the predictions you are post processing.
@@ -90,9 +91,9 @@ class Watershed(PostProcessorABC):
         # what about num_workers per step? different for fragment/agglomerate/segment?
         # what about input/output rois? input/output_roi = affs.roi
 
-        fragments_dataset = f"{affs_dataset}_fragments"
-        segmentation_dataset = f"{affs_dataset}_ids"
-        lookup = f"{input_id}_watershed_lut"
+        fragments_dataset = f"{input_dataset}_fragments"
+        segmentation_dataset = output_dataset
+        lookup = f"{pred_id}_watershed_lut"
         # create a seperate dataset: f"{fragments_dataset}_{i}" for each parameter group
         # store parameters as attributes on the zarr
 
@@ -103,9 +104,9 @@ class Watershed(PostProcessorABC):
             min_seed_distance=self.min_seed_distance,
             compactness=self.compactness,
         ).tasks(
-            input_id=input_id,
-            input_zarr=input_zarr,
-            affs_dataset=affs_dataset,
+            input_id=pred_id,
+            input_zarr=container,
+            affs_dataset=input_dataset,
             fragments_dataset=fragments_dataset,
             mask_file=None,
             mask_dataset=None,
@@ -113,20 +114,20 @@ class Watershed(PostProcessorABC):
         agglomerate_tasks, parameters = Agglomerate(
             merge_function=self.merge_function,
         ).tasks(
-            input_id=input_id,
-            input_zarr=input_zarr,
-            affs_dataset=affs_dataset,
+            input_id=pred_id,
+            input_zarr=container,
+            affs_dataset=input_dataset,
             fragments_dataset=fragments_dataset,
             upstream_tasks=(fragment_tasks, parameters),
         )
         create_luts_tasks, parameters = CreateLUTS(threshold=self.threshold).tasks(
-            input_id=input_id,
+            input_id=pred_id,
             lookup=lookup,
             upstream_task=(agglomerate_tasks, parameters),
         )
         segment_tasks, parameters = Segment().tasks(
-            input_id=input_id,
-            input_zarr=input_zarr,
+            input_id=pred_id,
+            input_zarr=container,
             fragments_dataset=fragments_dataset,
             segmentation_dataset=segmentation_dataset,
             lookup=lookup,
