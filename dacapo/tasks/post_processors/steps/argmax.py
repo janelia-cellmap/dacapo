@@ -7,6 +7,9 @@ from .step_abc import PostProcessingStepABC
 
 import time
 from typing import Optional, List
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @attr.s
@@ -15,7 +18,6 @@ class ArgMaxStep(PostProcessingStepABC):
 
     # blockwise_processing_parameters
     write_shape: Optional[List[int]] = attr.ib(default=None)
-    context: Optional[List[int]] = attr.ib(default=None)
     num_workers: int = attr.ib(default=2)
 
     def tasks(
@@ -43,7 +45,10 @@ class ArgMaxStep(PostProcessingStepABC):
         for upstream_task, upstream_parameters in zip(*upstream_tasks):
             parameters = dict(**upstream_parameters)
 
-            # TODO: The dataset to use may depend on the upstream task
+            logger.error(
+                "The dataset_names should include a unique id for the parameter "
+                "set to avoid conflicts"
+            )
             probs = daisy.open_ds(container, probabilities_dataset, mode="r")
             labels = daisy.open_ds(container, labels_dataset, mode="r+")
             # input_roi defined by provided dataset
@@ -52,37 +57,22 @@ class ArgMaxStep(PostProcessingStepABC):
 
             # get write_shape
             if self.write_shape is None:
-                # default to 128 per axis or input_roi shape if less than that
+                # default to 512 per axis or input_roi shape if less than that
                 write_shape = daisy.Coordinate(
                     tuple(
                         min(a, b)
-                        for a, b in zip(input_roi.shape, [128] * input_roi.dims)
+                        for a, b in zip(input_roi.shape, [512] * input_roi.dims)
                     )
                 )
             else:
                 write_shape = self.write_shape
 
-            # get context
-            # TODO: do we need context for agglomeration?
-            if self.context is None:
-                # default to 20 per axis or input_roi shape if less than that
-                context = daisy.Coordinate(
-                    tuple(
-                        min(a, b)
-                        for a, b in zip(input_roi.shape, [20] * input_roi.dims)
-                    )
-                )
-            else:
-                context = self.context
-
-            # define block read/write rois based on write_shape and context
-            read_roi = daisy.Roi((0,) * context.dims, write_shape + context * 2)
-            write_roi = daisy.Roi(context, write_shape)
+            write_roi = daisy.Roi((0,) * write_shape.dims, write_shape)
 
             t = daisy.Task(
                 task_id=f"{pred_id}_{self.step_id}",
                 total_roi=input_roi,
-                read_roi=read_roi,
+                read_roi=write_roi,
                 write_roi=write_roi,
                 process_function=self.get_process_function(pred_id, probs, labels),
                 check_function=self.get_check_function(pred_id),
