@@ -90,15 +90,8 @@ class PredictConfig:
         return f"{self.run_id}_{self.pred_id}"
 
     def task(self):
-        store = MongoDbStore()
+        # store = MongoDbStore()
 
-        print(
-            {
-                "total_roi": self.input_roi,
-                "read_roi": Roi((0,) * self.input_size.dims, self.input_size),
-                "write_roi": Roi(self.context, self.output_size),
-            }
-        )
         return daisy.Task(
             task_id=self.task_id,
             total_roi=self.input_roi,
@@ -113,9 +106,9 @@ class PredictConfig:
                 self.backbone_checkpoint,
                 self.head_checkpoints,
             ),
-            check_function=lambda b: store.check_block(
-                self.task_id, "prediction", b.block_id
-            ),
+            # check_function=lambda b: store.check_block(
+            #     self.task_id, "prediction", b.block_id
+            # ),
             num_workers=self.num_workers,
             fit="overhang",
         )

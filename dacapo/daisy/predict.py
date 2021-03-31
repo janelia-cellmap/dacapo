@@ -236,9 +236,9 @@ def predict(
     pipeline += gp.DaisyRequestBlocks(
         ref_request,
         ds_rois,
-        block_done_callback=lambda block, start, duration: store.mark_block_done(
-            predict_config.task_id, step_id, block.block_id, start, duration
-        ),
+        # block_done_callback=lambda block, start, duration: store.mark_block_done(
+        #     predict_config.task_id, step_id, block.block_id, start, duration
+        # ),
     )
     with gp.build(pipeline):
         pipeline.request_batch(gp.BatchRequest())
