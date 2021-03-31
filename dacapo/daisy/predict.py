@@ -170,9 +170,7 @@ def predict(
         name = predictor.name
         pred_key, target_key = predictor_keys[name]
         ds_names[pred_key] = f"volumes/{name}"
-        if not Path(
-            f"{predict_config.out_container}/volumes/{name}"
-        ).exists():
+        if not Path(f"{predict_config.out_container}/volumes/{name}").exists():
             daisy.prepare_ds(
                 f"{predict_config.out_container}",
                 f"volumes/{name}",
@@ -186,8 +184,7 @@ def predict(
         if predict_config.gt is not None:
             ds_names[target_key] = f"volumes/{name}_target"
             if not Path(
-                f"{predict_config.out_container}"
-                f"/volumes/{name}_target"
+                f"{predict_config.out_container}" f"/volumes/{name}_target"
             ).exists():
                 daisy.prepare_ds(
                     f"{predict_config.out_container}",
