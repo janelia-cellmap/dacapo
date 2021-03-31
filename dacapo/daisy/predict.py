@@ -18,18 +18,10 @@ import numpy as np
 
 import logging
 from pathlib import Path
-from typing import Optional, List
 
 
 logger = logging.getLogger(__name__)
 
-# debug file handler to print out all logs
-"""
-fh = logging.FileHandler("spam.log")
-fh.setLevel(logging.DEBUG)
-
-logger.addHandler(fh)
-"""
 
 def predict(
     predict_config,
