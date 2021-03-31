@@ -337,14 +337,14 @@ class Run:
             iteration
         )
         torch.save(
-            backbone.state_dict,
+            {"model_state_dict": backbone.state_dict()},
             backbone_checkpoint,
         )
 
         # cleanup and remove old iteration checkpoints
         for head, checkpoint in zip(heads, head_checkpoints):
             torch.save(
-                head.state_dict,
+                {"model_state_dict": head.state_dict()},
                 checkpoint,
             )
 
