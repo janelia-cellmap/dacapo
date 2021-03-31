@@ -95,6 +95,10 @@ def predict(
     if predict_config.gt:
         pipeline += gp.Pad(gt_key, Coordinate((None,) * voxel_size.dims))
 
+    with gp.build(pipeline):
+        # pipeline provides an infinite roi
+        provided_roi = pipeline.spec[raw_key].roi
+
     # raw: ([c,] d, h, w)
     # gt: ([c,] d, h, w)
     pipeline += gp.Normalize(raw_key)
@@ -124,7 +128,7 @@ def predict(
         outputs={0: model_output},
         array_specs={
             model_output: gp.ArraySpec(
-                roi=output_roi,
+                roi=provided_roi,
                 voxel_size=voxel_size,
                 dtype=np.float32,
             )
@@ -141,7 +145,7 @@ def predict(
             outputs={0: aux_pred_key},
             array_specs={
                 aux_pred_key: gp.ArraySpec(
-                    roi=output_roi,
+                    roi=provided_roi,
                     voxel_size=voxel_size,
                     dtype=np.float32,
                 )
