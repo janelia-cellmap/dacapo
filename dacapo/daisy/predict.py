@@ -205,16 +205,6 @@ def predict(
         f"{predict_config.output_filename}",
     )
 
-    total_request = gp.BatchRequest()
-    total_request[raw_key] = gp.ArraySpec(roi=input_roi)
-    total_request[model_output] = gp.ArraySpec(roi=output_roi)
-    if predict_config.gt is not None:
-        total_request[gt_key] = gp.ArraySpec(roi=output_roi)
-    for aux_name, (pred_key, target_key) in predictor_keys.items():
-        total_request[aux_pred_key] = gp.ArraySpec(roi=output_roi)
-        if predict_config.gt:
-            total_request[target_key] = gp.ArraySpec(roi=output_roi)
-
     ds_rois = {
         raw_key: "read_roi",
         model_output: "write_roi",
