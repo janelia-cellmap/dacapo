@@ -47,9 +47,43 @@ def run_validation_worker(run, iteration):
     # processing functions.
     store = MongoDbStore()
     task = store.get_task(run.task)
+    pred_id = run.validation_id(iteration)
     for predictor, post_processor in zip(task.predictors, task.post_processors):
-        validate_task = post_processor.get_validate_task()
-        daisy.run_blockwise([validate_task])
+        out_dir = run.validation_outdir(iteration)
+        validation_tasks, parameters = post_processor.tasks(
+            pred_id=pred_id,
+            container=out_dir / "data.zarr",
+            input_dataset=f"volumes/{predictor.name}",
+            output_dataset=f"volumes/{predictor.name}_post_processed_{{parameters}}",
+        )
+        success = daisy.run_blockwise(validation_tasks)
+
+        if success:
+            for i, parameters in enumerate(parameters):
+                post_processed_dataset = f"volumes/{predictor.name}_post_processed_{i}"
+                post_processed = daisy.open_ds(
+                    out_dir / "data.zarr", post_processed_dataset
+                )
+
+                raise Exception("Evaluators not yet running blockwise!")
+
+                # gt_dataset can be stored in any format (csv, ...). may be too large to load
+                # into memory. How can we get a blockwise processable dataset out of this?
+
+                # Once, at the start of a run, we build our gunpowder pipeline to
+                # retrieve gt data and write to zarr. Then open as daisy array here.
+
+                # something like:
+                gt = daisy.open_ds(run.validation_container, run.gt_dataset)
+
+                # Seperate evaluation into an Evaluator
+                # Should operate blockwise like everything else.
+                predictor.evaluate(pred_id, post_processed, gt, parameters, i)
+        else:
+            logger.error(
+                f"Post processing for predictor: {predictor} and post_processor: {post_processor} "
+                "failed. Cannot continue with evaluation!"
+            )
 
 
 def validate_local(run, iteration):
