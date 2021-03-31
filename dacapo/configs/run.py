@@ -5,7 +5,7 @@ import torch
 
 
 from dacapo.store import MongoDbStore
-from dacapo.validate import validate_one
+from dacapo.validate import validate_remote
 from dacapo.training_stats import TrainingStats
 from dacapo.validation_scores import ValidationScores
 from dacapo.batch_generators.default import DefaultBatchGenerator
@@ -155,7 +155,7 @@ class Run:
                     # if this model hapens to be the best: clean up past best
                     # and move the weights to the "best" checkpoint file
                     # TODO: async problems... what if validations finish out of order?
-                    validate_one(self, i)
+                    validate_remote(self, i)
 
                 # sync with mongodb
                 if i % 100 == 0 and i > 0:
