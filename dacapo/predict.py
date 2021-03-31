@@ -279,11 +279,17 @@ def remote_prediction_worker(
     run = store.get_run(run_id)
     out_dir = Path(out_container).parent
 
+    logger.warning(
+        "Starting a predict worker! Watch out these "
+        "Jobs run on the cluster and don't seem to be exiting when finished"
+    )
+
     command_args = funlib.run.run(
         command=f"dacapo predict-worker -r {run_id} -p {prediction_id} "
         f"-d {dataset_id} -ds {data_source} -oc {out_container} "
         f"-bb {backbone_checkpoint} "
         + " ".join(f"-hs {head_checkpoint}" for head_checkpoint in head_checkpoints),
+        job_name=f"predict_worker_{run_id}_{prediction_id}",
         num_cpus=5,
         num_gpus=1,
         queue="gpu_rtx",
@@ -291,8 +297,8 @@ def remote_prediction_worker(
         expand=False,
         flags=run.execution_details.bsub_flags.split(" "),
         batch=run.execution_details.batch,
-        log_file=f"{out_dir}/log.out",
-        error_file=f"{out_dir}/log.err",
+        log_file=f"{out_dir}/worker_log.out",
+        error_file=f"{out_dir}/worker_log.err",
     )
 
     def process_function():
