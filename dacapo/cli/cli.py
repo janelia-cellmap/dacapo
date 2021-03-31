@@ -177,13 +177,13 @@ def predict_one(
 )
 @click.option(
     "-bb",
-    "--backbone",
+    "--backbone-checkpoint",
     required=True,
     type=click.Path(exists=True, dir_okay=False),
 )
 @click.option(
     "-hs",
-    "--heads",
+    "--head-checkpoints",
     required=True,
     type=click.Path(exists=True, dir_okay=False),
     multiple=True,
