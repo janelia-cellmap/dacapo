@@ -19,10 +19,11 @@ logger = logging.getLogger(__name__)
 class Segment(PostProcessingStepABC):
     step_id: str = attr.ib(default="segment")
 
-    # blockwise_processing_parameters
+    # blockwise_processing_parameters:
     write_shape: Optional[List[int]] = attr.ib(default=None)
-    context: Optional[List[int]] = attr.ib(default=None)
     num_workers: int = attr.ib(default=2)
+
+    # searchable parameters:
 
     def tasks(
         self,
@@ -57,18 +58,17 @@ class Segment(PostProcessingStepABC):
             else:
                 write_shape = self.write_shape
 
-            # get context
-            # TODO: do we need context for agglomeration?
-            context = daisy.Coordinate((0,) * input_roi.dims)
-
             # define block read/write rois based on write_shape and context
-            read_roi = daisy.Roi((0,) * context.dims, write_shape + context * 2)
-            write_roi = daisy.Roi(context, write_shape)
+            write_roi = daisy.Roi((0,) * write_shape.dims, write_shape)
+
+            upstream_tasks = []
+            if upstream_task is not None:
+                upstream_tasks.append(upstream_task)
 
             task = Task(
                 task_id=f"{pred_id}_{self.step_id}",
                 total_roi=input_roi,
-                read_roi=read_roi,
+                read_roi=write_roi,
                 write_roi=write_roi,
                 process_function=self.get_process_function(
                     pred_id=pred_id,
@@ -80,6 +80,7 @@ class Segment(PostProcessingStepABC):
                 check_function=self.get_check_function(pred_id),
                 num_workers=self.num_workers,
                 fit="overhang",
+                upstream_tasks=upstream_tasks,
             )
             tasks.append(task)
             task_parameters.append(parameters)
