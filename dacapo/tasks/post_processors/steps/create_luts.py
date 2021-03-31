@@ -36,6 +36,11 @@ class CreateLUTS(PostProcessingStepABC):
         for i, threshold in enumerate(self.merge_function):
             for upstream_task, upstream_parameters in zip(*upstream_tasks):
                 parameters = dict(**upstream_parameters)
+                parameters["threshold"] = threshold
+
+                upstream_tasks = []
+                if upstream_task is not None:
+                    upstream_tasks.append(upstream_task)
 
                 task = Task(
                     task_id=f"{pred_id}_{self.step_id}",
@@ -48,6 +53,7 @@ class CreateLUTS(PostProcessingStepABC):
                     ),
                     check_function=self.get_check_function(pred_id),
                     num_workers=1,
+                    upstream_tasks=upstream_tasks,
                 )
                 tasks.append(task)
                 task_parameters.append(parameters)
@@ -61,6 +67,10 @@ class CreateLUTS(PostProcessingStepABC):
     ):
         store = MongoDbStore()
         # TODO: Depends on parameters
+        logger.error(
+            "'lookup' should depend on the specific upstream parameter set and "
+            "chosen threshold to avoid conflicts in mongodb."
+        )
         lookup = f"{pred_id}_{self.step_id}"
         rag_provider = MongoDbGraphProvider(
             store.db_name,
