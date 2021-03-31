@@ -97,14 +97,20 @@ def validate_local(run, iteration):
 
 
 def validate_remote(run, iteration):
+    # TODO: optimizer resources. validate-one starts a job that is just acting as
+    # the dacapo server. It will start a new gpu job for prediction.
+    # It does not start new cluster jobs for post_processing or evaluation
+    # which are both run blockwise with some number of workers, but should
+    # be cpu only. It might be more efficient to spawn new jobs with more exact
+    # resources for post_processing and evaluation.
     if not run.validation_outdir(iteration).exists():
         run.validation_outdir(iteration).mkdir(parents=True, exist_ok=True)
 
     command_args = funlib.run.run(
         command=f"dacapo validate-one -r {run.id} -i {iteration}",
+        job_name=f"validate_one_{run.id}_{iteration}",
         num_cpus=5,
-        num_gpus=1,
-        queue="gpu_rtx",
+        queue=None,
         execute=False,
         expand=False,
         flags=run.execution_details.bsub_flags.split(" "),
@@ -112,7 +118,11 @@ def validate_remote(run, iteration):
         log_file=f"{run.validation_outdir(iteration)}/log.out",
         error_file=f"{run.validation_outdir(iteration)}/log.err",
     )
-    subprocess.Popen(" ".join(command_args), shell=True, encoding="UTF-8")
+    subprocess.Popen(
+        " ".join(command_args),
+        shell=True,
+        encoding="UTF-8",
+    )
 
 
 def validate(run, iteration):
