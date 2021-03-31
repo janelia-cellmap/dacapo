@@ -24,7 +24,8 @@ def validate_one(run, iteration):
     container = "data.zarr"
     backbone_checkpoint, head_checkpoints = run.get_validation_checkpoints(iteration)
 
-    predict_one(
+    logger.info("Predicting!")
+    success = predict_one(
         run_id=run.id,
         prediction_id=f"validation_{iteration}",
         dataset_id=run.dataset,
@@ -33,6 +34,8 @@ def validate_one(run, iteration):
         backbone_checkpoint=backbone_checkpoint,
         head_checkpoints=head_checkpoints,
     )
+    message = "success" if success else "failure"
+    logger.info(f"Done predicting! Prediction was a {message}! returned {success}!")
 
     # start a new cpu job on cluster for this?
     run_validation_worker(run, iteration)
