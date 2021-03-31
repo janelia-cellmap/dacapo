@@ -193,7 +193,7 @@ def predict(
                     voxel_size,
                     np.float32,
                     write_size=output_size,
-                    num_channels=predictor.fmaps_out,
+                    num_channels=predictor.target_fmaps,
                     compressor=zarr.storage.default_compressor.get_config(),
                 )
     pipeline += gp.ZarrWrite(

@@ -64,6 +64,10 @@ class OneHotLabels(PredictorABC):
     )  # can be read from data
 
     @property
+    def target_fmaps(self):
+        return 1
+
+    @property
     def fmaps_out(self):
         return self.num_classes
 
