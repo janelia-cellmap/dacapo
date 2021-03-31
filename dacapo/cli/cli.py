@@ -80,6 +80,45 @@ def validate_one(run_id, iteration):
     "During validation this is set to 'validation_{iteration}",
 )
 @click.option(
+    "-oc",
+    "--output-container",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+    help=(
+        "The zarr container into which to write predictions. "
+        "logs will be written to the parent directory of the zarr container. "
+        "Predictions will be writtent to dataset 'volumes/{predictor}'."
+    ),
+)
+def post_process_one(
+    run_id,
+    prediction_id,
+    output_container,
+):
+    # assuming prediction was completed successfully,
+    # we now want to post_process
+    store = MongoDbStore()
+    run = store.get_run(run_id)
+    dacapo.post_process_one(run, prediction_id, output_container)
+
+
+@cli.command()
+@click.option(
+    "-r",
+    "--run-id",
+    required=True,
+    type=str,
+    help="The id of the Run.",
+)
+@click.option(
+    "-p",
+    "--prediction-id",
+    required=True,
+    type=str,
+    help="The id of the prediction. Used to mark blocks done in MongoDB. "
+    "During validation this is set to 'validation_{iteration}",
+)
+@click.option(
     "-d",
     "--dataset-id",
     required=True,
