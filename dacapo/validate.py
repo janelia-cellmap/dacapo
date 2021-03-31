@@ -125,6 +125,11 @@ def validate_remote(run, iteration):
     )
 
 
+####################################################
+#                  PREFACTOR                       #
+####################################################
+# only kept around as a reference
+
 def validate(run, iteration):
     raise Exception("Post processing/evaluation not yet implemented!")
     for ret in predictor.evaluate(
