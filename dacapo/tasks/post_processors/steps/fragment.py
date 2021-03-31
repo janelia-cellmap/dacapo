@@ -22,9 +22,6 @@ class Fragment(PostProcessingStepABC):
     min_seed_distance: List[float] = attr.ib(factory=lambda: list([1]))
     compactness: List[float] = attr.ib(factory=lambda: list([0]))
 
-    # configurable block sizes # 512 cubed in voxels?
-    # just output_shape and context_shape
-
     # blockwise_processing_parameters
     write_shape: Optional[List[int]] = attr.ib(default=None)
     context: Optional[List[int]] = attr.ib(default=None)
@@ -43,107 +40,116 @@ class Fragment(PostProcessingStepABC):
         # handle upstream tasks: Tuple[List[Task], List[Dict]]
 
         store = MongoDbStore()
-        tasks = []
-        parameters = []
-        for i, (
-            filter_fragments,
-            fragments_in_xy,
-            epsilon_agglomerate,
-            min_seed_distance,
-            compactness,
-        ) in enumerate(
-            itertools.product(
-                self.filter_fragments,
-                self.fragments_in_xy,
-                self.epsilon_agglomerate,
-                self.min_seed_distance,
-                self.compactness,
-            )
-        ):
-            parameters.append(
-                {
+        tasks, task_parameters = [], []
+
+        if upstream_tasks is None:
+            upstream_tasks = [None, {}]
+
+        for upstream_task, upstream_parameters in upstream_tasks:
+            for i, (
+                filter_fragments,
+                fragments_in_xy,
+                epsilon_agglomerate,
+                min_seed_distance,
+                compactness,
+            ) in enumerate(
+                itertools.product(
+                    self.filter_fragments,
+                    self.fragments_in_xy,
+                    self.epsilon_agglomerate,
+                    self.min_seed_distance,
+                    self.compactness,
+                )
+            ):
+                parameters = dict(**upstream_parameters)
+                new_parameters = {
                     "filter_fragments": filter_fragments,
                     "fragments_in_xy": fragments_in_xy,
                     "epsilon_agglomerate": epsilon_agglomerate,
                     "min_seed_distance": min_seed_distance,
                     "compactness": compactness,
                 }
-            )
+                parameters.update(new_parameters)
 
-            task_id = f"{pred_id}_{self.step_id}_{i}"
+                task_id = f"{pred_id}_{self.step_id}_{i}"
 
-            affs = daisy.open_ds(container, affs_dataset, "r")
-            input_roi = affs.roi
+                affs = daisy.open_ds(container, affs_dataset, "r")
+                input_roi = affs.roi
 
-            # get write_shape
-            if self.write_shape is None:
-                # default to 128 per axis or input_roi shape if less than that
-                write_shape = daisy.Coordinate(
-                    tuple(
-                        min(a, b)
-                        for a, b in zip(input_roi.shape, [128] * input_roi.dims)
+                # get write_shape
+                if self.write_shape is None:
+                    # default to 512 per axis or input_roi shape if less than that
+                    write_shape = daisy.Coordinate(
+                        tuple(
+                            min(a, b)
+                            for a, b in zip(input_roi.shape, [512] * input_roi.dims)
+                        )
                     )
-                )
-            else:
-                write_shape = self.write_shape
+                else:
+                    write_shape = self.write_shape
 
-            # get context
-            # TODO: do we need context for agglomeration?
-            if self.context is None:
-                # default to 20 per axis or input_roi shape if less than that
-                context = daisy.Coordinate(
-                    tuple(
-                        min(a, b)
-                        for a, b in zip(input_roi.shape, [20] * input_roi.dims)
+                # get context
+                if self.context is None:
+                    # default to 20 per axis or input_roi shape if less than that
+                    context = daisy.Coordinate(
+                        tuple(
+                            min(a, b)
+                            for a, b in zip(input_roi.shape, [20] * input_roi.dims)
+                        )
                     )
+                else:
+                    context = self.context
+
+                # define block read/write rois based on write_shape and context
+                read_roi = daisy.Roi((0,) * context.dims, write_shape + context * 2)
+                write_roi = daisy.Roi(context, write_shape)
+
+                rag_provider = MongoDbGraphProvider(
+                    store.db_name,
+                    host=store.db_host,
+                    nodes_collection=f"{task_id}_nodes",
+                    edges_collection=f"{task_id}_edges",
+                    mode="r+",
+                    directed=False,
+                    position_attribute=["center_z", "center_y", "center_x"],
                 )
-            else:
-                context = self.context
+                affs = daisy.open_ds(container, affs_dataset, mode="r")
+                if mask_file is not None and mask_dataset is not None:
+                    mask = daisy.open_ds(mask_file, mask_dataset, mode="r")
+                else:
+                    mask = None
 
-            # define block read/write rois based on write_shape and context
-            read_roi = daisy.Roi((0,) * context.dims, write_shape + context * 2)
-            write_roi = daisy.Roi(context, write_shape)
+                fragments = daisy.open_ds(container, fragments_dataset, mode="r+")
 
-            rag_provider = MongoDbGraphProvider(
-                store.db_name,
-                host=store.db_host,
-                nodes_collection=f"{task_id}_nodes",
-                edges_collection=f"{task_id}_edges",
-                mode="r+",
-                directed=False,
-                position_attribute=["center_z", "center_y", "center_x"],
-            )
-            affs = daisy.open_ds(container, affs_dataset, mode="r")
-            if mask_file is not None and mask_dataset is not None:
-                mask = daisy.open_ds(mask_file, mask_dataset, mode="r")
-            else:
-                mask = None
+                upstream_tasks = []
+                if upstream_task is not None:
+                    upstream_tasks.append(upstream_task)
 
-            fragments = daisy.open_ds(container, fragments_dataset, mode="r+")
-
-            task = Task(
-                task_id=task_id,
-                total_roi=input_roi,
-                read_roi=read_roi,
-                write_roi=write_roi,
-                process_function=self.get_process_function(
-                    filter_fragments=filter_fragments,
-                    fragments_in_xy=fragments_in_xy,
-                    epsilon_agglomerate=epsilon_agglomerate,
-                    min_seed_distance=min_seed_distance,
-                    compactness=compactness,
+                task = Task(
                     task_id=task_id,
-                    rag_provider=rag_provider,
-                    affs=affs,
-                    fragments=fragments,
-                    mask=mask,
-                ),
-                check_function=self.get_check_function(pred_id),
-                num_workers=self.num_workers,
-                fit="overhang",
-            )
+                    total_roi=input_roi,
+                    read_roi=read_roi,
+                    write_roi=write_roi,
+                    process_function=self.get_process_function(
+                        filter_fragments=filter_fragments,
+                        fragments_in_xy=fragments_in_xy,
+                        epsilon_agglomerate=epsilon_agglomerate,
+                        min_seed_distance=min_seed_distance,
+                        compactness=compactness,
+                        task_id=task_id,
+                        rag_provider=rag_provider,
+                        affs=affs,
+                        fragments=fragments,
+                        mask=mask,
+                    ),
+                    check_function=self.get_check_function(pred_id),
+                    num_workers=self.num_workers,
+                    fit="overhang",
+                    upstream_tasks=upstream_tasks,
+                )
 
-            tasks.append(task)
+                tasks.append(task)
+                task_parameters.append(parameters)
 
         return tasks, parameters
 
