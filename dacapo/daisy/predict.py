@@ -218,6 +218,7 @@ def predict(
 
     ref_request = gp.BatchRequest()
     ref_request.add(raw_key, input_size)
+    ref_request.add(model_output, output_size)
     if predict_config.gt is not None:
         ref_request.add(gt_key, output_size)
     for pred_key, target_key in predictor_keys.values():
