@@ -62,3 +62,7 @@ converter.register_unstructure_hook(
         {**converter.unstructure(e, unstructure_as=AnyPostProcessor)} for e in o
     ],
 )
+converter.register_unstructure_hook(
+    List[AnyAugment],
+    lambda o: [{**converter.unstructure(e, unstructure_as=AnyAugment)} for e in o],
+)
