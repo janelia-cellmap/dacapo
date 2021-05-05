@@ -12,6 +12,8 @@ import json
 from hashlib import md5
 import logging
 
+from os.path import expanduser
+
 logger = logging.getLogger(__name__)
 
 
@@ -28,11 +30,11 @@ class MongoDbStore:
         """Create a MongoDB sync. Used to sync runs, tasks, models,
         optimizers, trainig stats, and validation scores."""
 
-        assert Path("~/.config/dacapo").exists() or Path("./dacapo.yaml").exists()
+        assert Path( expanduser("~/.config/dacapo") ).exists() or Path("./dacapo.yaml").exists()
         store_config_file = (
             Path("./dacapo.yaml")
             if Path("./dacapo.yaml").exists()
-            else Path("~/.config/dacapo")
+            else Path( expanduser("~/.config/dacapo") )
         )
         with store_config_file.open("r") as stream:
             options = DictAsMember(**yaml.safe_load(stream))
