@@ -80,13 +80,13 @@ class OneHotLabels(PredictorABC):
         self.num_classes = dataset.gt.num_classes
         return OneHotLabelsHead(self)
 
-    def add_target(self, gt, target, weights=None, mask=None, target_voxel_size=None):
+    def add_target(self, gt, target, weights=None, mask=None):
 
         if mask is not None and weights is not None:
             weights_node = MaskToWeights(mask, weights)
         else:
             weights_node = None
-        return AddClassLabels(gt, target), weights_node, None
+        return AddClassLabels(gt, target), weights_node
 
 
 class OneHotLabelsHead(ModuleWrapper):

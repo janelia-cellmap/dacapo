@@ -51,15 +51,14 @@ class LSD(PredictorABC):
 
         self.lsd = torch.nn.Sequential(*lsd)
 
-    def add_target(self, gt, target, weights=None, mask=None, target_voxel_size=None):
+    def add_target(self, gt, target, weights=None, mask=None):
 
         target_node = lsd.gp.AddLocalShapeDescriptor(
             gt, target, mask=weights, sigma=self.sigma
         )
         weights_node = None
-        padding = gp.Coordinate(tuple(s * 3 for s in (self.sigma,) * 3))
 
-        return (target_node, weights_node, padding)
+        return (target_node, weights_node)
 
 
 # PREFACTOR

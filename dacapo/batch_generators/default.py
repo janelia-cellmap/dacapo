@@ -195,7 +195,7 @@ class DefaultBatchGenerator:
         for predictor in task.predictors:
             name = predictor.name
             predictor_target, predictor_weights = predictor_keys[name]
-            predictor_target_node, predictor_weights_node, _ = predictor.add_target(
+            predictor_target_node, predictor_weights_node = predictor.add_target(
                 gt, predictor_target, predictor_weights, mask
             )
             pipeline += predictor_target_node
