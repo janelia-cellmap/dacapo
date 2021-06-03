@@ -74,7 +74,9 @@ class Affinities(PredictorABC):
     def fmaps_out(self):
         return len(self.neighborhood)
 
-    def head(self, fmaps_in: int):
+    def head(self, model, dataset):
+
+        fmaps_in = model.architecture.fmaps_out
 
         assert self.fmaps_in is None or self.fmaps_in == fmaps_in
         self.fmaps_in = fmaps_in
