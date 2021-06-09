@@ -7,18 +7,18 @@ from typing import Optional
 
 
 @attr.s
-class WeightedMSELossConfig(LossABC):
+class WeightedMSELoss(LossABC):
 
     def instantiate(self):
-        return WeightedMSELoss()
+        return WeightedMSELossOp()
 
 
-class WeightedMSELoss(torch.nn.MSELoss):
+class WeightedMSELossOp(torch.nn.MSELoss):
     def __init__(self):
-        super(WeightedMSELoss, self).__init__()
+        super(WeightedMSELossOp, self).__init__()
 
     def forward(self, prediction, target, weights):
 
-        return super(WeightedMSELoss, self).forward(
+        return super(WeightedMSELossOp, self).forward(
             prediction * weights, target * weights
         )

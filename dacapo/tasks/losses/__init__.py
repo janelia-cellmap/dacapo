@@ -1,10 +1,11 @@
 from .cross_entropy_loss import CrossEntropyLoss
 from .mse_loss import MSELoss
+from .weighted_mse_loss import WeightedMSELoss
 from dacapo.converter import converter
 
 from typing import Union
 
-AnyLoss = Union[MSELoss, CrossEntropyLoss]
+AnyLoss = Union[MSELoss, WeightedMSELoss, CrossEntropyLoss]
 
 converter.register_unstructure_hook(
     AnyLoss,
