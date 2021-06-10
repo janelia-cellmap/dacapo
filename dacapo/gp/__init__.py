@@ -2,3 +2,9 @@ from .add_channel_dim import AddChannelDim  # noqa
 from .remove_channel_dim import RemoveChannelDim  # noqa
 from .squash import Squash  # noqa
 from .transpose_dims import TransposeDims  # noqa
+from .train_multi_head import Train  # noqa
+from .binarize import BinarizeNot  # noqa
+from .balance_labels import AddDistance  # noqa
+from .nx_source import NXSource  # noqa
+from .batch_source import BatchSource  # noqa
+from .array_source import ArraySource  # noqa

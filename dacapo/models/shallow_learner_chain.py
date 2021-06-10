@@ -6,6 +6,7 @@ from .model import Model
 class ShallowLearnerChain(Model):
 
     def __init__(self, task, model_config):
+        raise Exception("Not supported at the moment")
 
         # TODO: rewrite using 'task' and 'model_config'
         super(ShallowLearnerChain, self).__init__(num_latents)

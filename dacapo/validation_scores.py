@@ -28,14 +28,14 @@ class ValidationScores:
         best_scores = {name: [] for name in names}
         for iteration_scores in self.scores:
             ips = np.array([
-                parameter_scores['scores']['average'][score_name]
+                parameter_scores['scores']['average'].get(score_name, np.nan)
                 for parameter_scores in iteration_scores.values()
-            ])
+            ], dtype=np.float32)
             ips[np.isnan(ips)] = -np.inf if higher_is_better else np.inf
             i = np.argmax(ips) if higher_is_better else np.argmin(ips)
             for name in names:
                 best_scores[name].append(
-                    list(iteration_scores.values())[i]['scores']['average'][name]
+                    list(iteration_scores.values())[i]['scores']['average'].get(name, 0)
                 )
         return best_scores
 
