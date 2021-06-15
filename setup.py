@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name="dacapo",
@@ -7,7 +7,17 @@ setup(
     author="Jan Funke, Will Patton",
     author_email="funkej@janelia.hhmi.org, pattonw@janelia.hhmi.org",
     license="MIT",
-    packages=find_packages(),
+    packages=[
+        'dacapo',
+        'dacapo.experiments',
+        'dacapo.experiments.architectures',
+        'dacapo.experiments.datasets',
+        'dacapo.experiments.tasks',
+        'dacapo.experiments.tasks.losses',
+        'dacapo.experiments.tasks.post_processors',
+        'dacapo.experiments.tasks.predictors',
+        'dacapo.experiments.trainers'
+    ],
     entry_points={
         'console_scripts': [
             'dacapo=scripts.dacapo:cli'
