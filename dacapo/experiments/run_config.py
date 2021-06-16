@@ -14,8 +14,25 @@ class RunConfig:
     trainer_config: TrainerConfig = attr.ib()
     dataset_config: DatasetConfig = attr.ib()
 
-    repetition: int = attr.ib()
-    num_iterations: int = attr.ib()
+    name: str = attr.ib(
+        metadata={
+            "help_text":
+                "A unique name for this run. This will be saved so you and "
+                "others can find this run. Keep it short and avoid special "
+                "characters."
+        }
+    )
+
+    repetition: int = attr.ib(
+        metadata={
+            'help_text':
+                "The repetition number of this run."
+        })
+    num_iterations: int = attr.ib(
+        metadata={
+            'help_text':
+                "The number of iterations to train for."
+        })
 
     validation_score: str = attr.ib(
         metadata={
@@ -28,6 +45,17 @@ class RunConfig:
             'help_text':
                 "Whether lower validation scores are better."
         })
-    validation_interval: int = attr.ib(default=1000)
+    validation_interval: int = attr.ib(
+        default=1000,
+        metadata={
+            'help_text':
+                "How often to perform validation."
+        })
 
-    snapshot_interval: int = attr.ib(default=0)
+    snapshot_interval: int = attr.ib(
+        default=0,
+        metadata={
+            'help_text':
+                "How often to save a snapshot of a training batch for "
+                "manual inspection."
+        })
