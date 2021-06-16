@@ -1,8 +1,12 @@
-from enum import Enum
-from typing import Union
+from enum import Enum, unique
 
 
-class ArrayKey(Enum):
+class DataKey(Enum):
+    pass
+
+
+@unique
+class ArrayKey(DataKey):
 
     RAW = "raw"
     GT = "gt"
@@ -10,9 +14,7 @@ class ArrayKey(Enum):
     NON_EMPTY = "non_empty_mask"
 
 
-class GraphKey(Enum):
+@unique
+class GraphKey(DataKey):
 
     SPECIFIED_LOCATIONS = "specified_locations"
-
-
-DataKey = Union[ArrayKey, GraphKey]

@@ -4,6 +4,8 @@ from dacapo.experiments.tasks import *
 from dacapo.experiments.architectures import *
 from dacapo.experiments.trainers import *
 from dacapo.experiments.datasets import *
+from dacapo.experiments.datasets.dataset_config import DataSourceConfigs
+from dacapo.experiments.datasets.keys import *
 from pathlib import Path
 
 def register_hierarchy_hooks(converter):
@@ -14,16 +16,45 @@ def register_hierarchy_hooks(converter):
     converter.register_hierarchy(TrainerConfig, cls_fun)
     converter.register_hierarchy(ArraySourceConfig, cls_fun)
     converter.register_hierarchy(GraphSourceConfig, cls_fun)
+    # converter.register_hierarchy(DataKey, cls_fun)
 
 def register_hooks(converter):
     """Central place to register all conversion hooks with the given
     converter."""
 
-    # DaCapo specific hooks
+    #########################
+    # DaCapo specific hooks #
+    #########################
 
+    # class hierarchies:
     register_hierarchy_hooks(converter)
 
-    # general hooks
+    # data source dictionaries:
+    converter.register_structure_hook(
+        DataSourceConfigs,
+        lambda obj, cls: {
+            converter.structure(key, DataKey):
+                converter.structure(
+                    value,
+                    ArraySourceConfig
+                    if isinstance(key, ArrayKey)
+                    else GraphSourceConfig)
+            for key, value in obj.items()
+        })
+
+    # data key enums:
+    converter.register_unstructure_hook(
+        DataKey,
+        lambda obj: type(obj).__name__ + '::' + obj.value,
+    )
+    converter.register_structure_hook(
+        DataKey,
+        lambda obj, _: eval(obj.split('::')[0])(obj.split('::')[1]),
+    )
+
+    #################
+    # general hooks #
+    #################
 
     # path to string and back
     converter.register_unstructure_hook(
