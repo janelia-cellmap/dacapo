@@ -21,5 +21,9 @@ class DummyArchitecture(torch.nn.Module, Architecture):
     def num_in_channels(self):
         return self.channels_in
 
+    @property
+    def num_out_channels(self):
+        return self.channels_out
+
     def forward(self, x):
         return self.conv(x)
