@@ -1,3 +1,4 @@
+from .evaluators import DummyEvaluator
 from .losses import DummyLoss
 from .post_processors import DummyPostProcessor
 from .predictors import DummyPredictor
@@ -13,5 +14,6 @@ class DummyTask(Task):
         predictor = DummyPredictor(task_config.embedding_dims)
         loss = DummyLoss()
         post_processor = DummyPostProcessor(task_config.detection_threshold)
+        evaluator = DummyEvaluator()
 
-        super().__init__(predictor, loss, post_processor)
+        super().__init__(predictor, loss, post_processor, evaluator)
