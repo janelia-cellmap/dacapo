@@ -1,7 +1,6 @@
 from .validation_iteration_scores import ValidationIterationScores
 from typing import List
 import attr
-import numpy as np
 
 
 @attr.s
@@ -14,6 +13,14 @@ class ValidationScores:
 
         self.iteration_scores.append(iteration_scores)
 
+    def delete_after(self, iteration):
+
+        self.iteration_scores = [
+            scores
+            for scores in self.iteration_scores
+            if scores.iteration < iteration
+        ]
+
     def validated_until(self):
         """The number of iterations validated for (the maximum iteration plus
         one)."""
@@ -21,6 +28,7 @@ class ValidationScores:
         if not self.iteration_scores:
             return 0
         return max([score.iteration for score in self.iteration_scores]) + 1
+
 
 '''
     def get_score_names(self):

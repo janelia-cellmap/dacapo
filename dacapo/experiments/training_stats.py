@@ -13,6 +13,14 @@ class TrainingStats:
 
         self.iteration_stats.append(iteration_stats)
 
+    def delete_after(self, iteration):
+
+        self.iteration_stats = [
+            stats
+            for stats in self.iteration_stats
+            if stats.iteration < iteration
+        ]
+
     def trained_until(self):
         """The number of iterations trained for (the maximum iteration plus
         one)."""

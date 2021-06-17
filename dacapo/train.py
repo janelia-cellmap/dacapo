@@ -1,5 +1,8 @@
 from .experiments import Run
-from .store import create_config_store, create_stats_store
+from .store import \
+    create_config_store, \
+    create_stats_store, \
+    create_weights_store
 from .validate import validate_run
 import logging
 
@@ -31,6 +34,53 @@ def train(run_name):
         trained_until,
         train_until)
 
+    # read weights of the latest iteration
+
+    weights_store = create_weights_store()
+    latest_weights_iteration = weights_store.latest_iteration(run)
+
+    if trained_until > 0:
+
+        if latest_weights_iteration is None:
+
+            logger.warning(
+                "Run %s was previously trained until %d, but no weights are "
+                "stored. Will restart training from scratch.",
+                run.name,
+                trained_until)
+
+            trained_until = 0
+            run.training_stats.delete_after(0)
+            run.validation_scores.delete_after(0)
+
+        elif latest_weights_iteration < trained_until:
+
+            logger.warning(
+                "Run %s was previously trained until %d, but the latest "
+                "weights are stored for iteration %d. Will resume training "
+                "from %d.",
+                run.name,
+                trained_until,
+                latest_weights_iteration,
+                latest_weights_iteration)
+
+            trained_until = latest_weights_iteration
+            run.training_stats.delete_after(trained_until)
+            run.validation_scores.delete_after(trained_until)
+            weights_store.retrieve_weights(run, iteration=trained_until)
+
+        elif latest_weights_iteration == trained_until:
+
+            logger.info("Resuming training from iteration %d", trained_until)
+
+            weights_store.retrieve_weights(run, iteration=trained_until)
+
+        elif latest_weights_iteration > trained_until:
+
+            raise RuntimeError(
+                "Found weights for iteration {latest_weights_iteration}, but "
+                "run {run.name} was only trained until {trained_until}.")
+
     # start/resume training
 
     run.trainer.set_iteration(trained_until)
@@ -45,6 +95,8 @@ def train(run_name):
             run.training_stats.add_iteration_stats(iteration_stats)
 
             if (iteration_stats.iteration + 1) % validation_interval == 0:
+
+                weights_store.store_weights(run, iteration_stats.iteration + 1)
                 validate_run(run)
 
         stats_store.store_training_stats(run)
