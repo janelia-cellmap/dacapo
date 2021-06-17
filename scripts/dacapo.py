@@ -19,22 +19,22 @@ def cli(log_level):
 @cli.command()
 @click.option(
     "-r",
-    "--run-id",
+    "--run-name",
     required=True,
     type=str,
-    help="The ID of the run to train."
+    help="The NAME of the run to train."
 )
-def train(run_id):
-    dacapo.train(run_id)
+def train(run_name):
+    dacapo.train(run_name)
 
 
 @cli.command()
 @click.option(
     "-r",
-    "--run-id",
+    "--run",
     required=True,
     type=str,
-    help="The ID of the run to validate."
+    help="The name of the run to validate."
 )
 @click.option(
     "-i",
@@ -43,17 +43,17 @@ def train(run_id):
     type=int,
     help="The iteration at which to validate the run."
 )
-def validate(run_id, iteration):
-    dacapo.validate(run_id, iteration)
+def validate(run_name, iteration):
+    dacapo.validate(run_name, iteration)
 
 
 @cli.command()
 @click.option(
     "-r",
-    "--run-id",
+    "--run",
     required=True,
     type=str,
-    help="The ID of the run to predict."
+    help="The name of the run to predict."
 )
 @click.option(
     "-i",
@@ -64,13 +64,13 @@ def validate(run_id, iteration):
 )
 @click.option(
     "-r",
-    "--dataset-id",
+    "--dataset",
     required=True,
     type=str,
-    help="The ID of the dataset to predict on."
+    help="The name of the dataset to predict on."
 )
 def predict(
-        run_id,
+        run_name,
         iteration,
-        dataset_id):
-    dacapo.predict(run_id, iteration, dataset_id)
+        dataset_name):
+    dacapo.predict(run_name, iteration, dataset_name)

@@ -3,9 +3,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def predict(run_id, iteration, dataset_id):
+def predict(run_name, iteration, dataset_name):
     logger.info(
         "Predicting run %s at iteration %d on dataset %s",
-        run_id,
+        run_name,
         iteration,
-        dataset_id)
+        dataset_name)
