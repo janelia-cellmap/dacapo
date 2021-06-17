@@ -53,24 +53,24 @@ def validate(run_name, iteration):
     "--run",
     required=True,
     type=str,
-    help="The name of the run to predict."
+    help="The name of the run to use."
 )
 @click.option(
     "-i",
     "--iteration",
     required=True,
     type=int,
-    help="The iteration weights and parameters to use for prediction."
+    help="The iteration weights and parameters to use."
 )
 @click.option(
     "-r",
     "--dataset",
     required=True,
     type=str,
-    help="The name of the dataset to predict on."
+    help="The name of the dataset to apply the run to."
 )
-def predict(
+def apply(
         run_name,
         iteration,
         dataset_name):
-    dacapo.predict(run_name, iteration, dataset_name)
+    dacapo.apply(run_name, iteration, dataset_name)
