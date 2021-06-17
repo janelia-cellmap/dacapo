@@ -1,5 +1,6 @@
 from .mongo_config_store import MongoConfigStore
 from .mongo_stats_store import MongoStatsStore
+from .local_weights_store import LocalWeightsStore
 from dacapo import Options
 
 
@@ -23,3 +24,13 @@ def create_stats_store():
     db_host = options.mongo_db_host
     db_name = options.mongo_db_name
     return MongoStatsStore(db_host, db_name)
+
+
+def create_weights_store():
+    """Create a weights store based on the global DaCapo options."""
+
+    options = Options.instance()
+
+    # currently, only the LocalWeightsStore is supported
+    base_dir = options.runs_base_dir
+    return LocalWeightsStore(base_dir)
