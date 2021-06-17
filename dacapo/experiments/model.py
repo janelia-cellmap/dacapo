@@ -27,16 +27,6 @@ class Model(torch.nn.Module):
 
         return self.__get_output_shape(input_shape, self.num_in_channels)
 
-    def get_state(self):
-        """Get the parameters of this model as a state dict."""
-
-        return self.state_dict()
-
-    def set_state(self, state_dict):
-        """Set the parameters of this model from a state dict."""
-
-        self.load_state_dict(state_dict)
-
     def __get_output_shape(self, input_shape, in_channels):
 
         device = "cpu"
