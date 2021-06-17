@@ -13,10 +13,13 @@ setup(
         'dacapo.experiments.architectures',
         'dacapo.experiments.datasets',
         'dacapo.experiments.tasks',
+        'dacapo.experiments.tasks.evaluators',
         'dacapo.experiments.tasks.losses',
         'dacapo.experiments.tasks.post_processors',
         'dacapo.experiments.tasks.predictors',
-        'dacapo.experiments.trainers'
+        'dacapo.experiments.trainers',
+        'dacapo.experiments.trainers.optimizers',
+        'dacapo.store',
     ],
     entry_points={
         'console_scripts': [
