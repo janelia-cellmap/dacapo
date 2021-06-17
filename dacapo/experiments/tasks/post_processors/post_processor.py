@@ -9,7 +9,13 @@ class PostProcessor(ABC):
     """
 
     @abstractmethod
-    def process(self, container, prediction_dataset, output_dataset):
+    def process(
+            self,
+            prediction_container,
+            prediction_dataset,
+            output_container,
+            output_dataset,
+            parameters):
         """Convert predictions into the final output.
 
         Since the predictions (and therefore also the output) are in general

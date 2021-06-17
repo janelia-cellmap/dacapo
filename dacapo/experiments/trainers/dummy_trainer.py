@@ -1,7 +1,6 @@
-import torch
-
+from ..training_iteration_stats import TrainingIterationStats
 from .trainer import Trainer
-from .training_iteration_stats import TrainingIterationStats
+import torch
 
 
 class DummyTrainer(Trainer):
@@ -25,4 +24,5 @@ class DummyTrainer(Trainer):
         for self.iteration in range(self.iteration, target_iteration):
             yield TrainingIterationStats(
                 loss=1.0/(self.iteration + 1),
-                iteration=self.iteration)
+                iteration=self.iteration,
+                time=0.1)

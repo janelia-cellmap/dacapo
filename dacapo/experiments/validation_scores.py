@@ -1,18 +1,28 @@
+from .validation_iteration_scores import ValidationIterationScores
+from typing import List
+import attr
 import numpy as np
 
 
+@attr.s
 class ValidationScores:
 
-    def __init__(self):
+    iteration_scores: List[ValidationIterationScores] = attr.ib(
+        default=attr.Factory(list))
 
-        self.iterations = []
-        self.scores = []
+    def add_iteration_scores(self, iteration_scores):
 
-    def add_validation_iteration(self, iteration, scores):
+        self.iteration_scores.append(iteration_scores)
 
-        self.iterations.append(iteration)
-        self.scores.append(scores)
+    def validated_until(self):
+        """The number of iterations validated for (the maximum iteration plus
+        one)."""
 
+        if not self.iteration_scores:
+            return 0
+        return max([score.iteration for score in self.iteration_scores]) + 1
+
+'''
     def get_score_names(self):
 
         for scores in self.scores:
@@ -38,11 +48,4 @@ class ValidationScores:
                     list(iteration_scores.values())[i]['scores']['average'].get(name, 0)
                 )
         return best_scores
-
-    def validated_until(self):
-        """The number of iterations trained for (the maximum iteration plus
-        one)."""
-
-        if not self.iterations:
-            return 0
-        return max(self.iterations) + 1
+'''
