@@ -30,7 +30,12 @@ class Options:
 
     def __getattr__(self, name):
 
-        return self.__options[name]
+        try:
+            return self.__options[name]
+        except KeyError:
+            raise RuntimeError(
+                f"Configuration file {self.filename} does not contain an "
+                f"entry for option {name}")
 
     def __parse_options(self):
 
@@ -41,6 +46,7 @@ class Options:
 
             with path.open('r') as f:
                 self.__options = yaml.safe_load(f)
+                self.filename = path
 
             return
 
