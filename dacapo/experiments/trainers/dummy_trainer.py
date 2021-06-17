@@ -26,3 +26,5 @@ class DummyTrainer(Trainer):
                 loss=1.0/(self.iteration + 1),
                 iteration=self.iteration,
                 time=0.1)
+
+        self.iteration += 1
