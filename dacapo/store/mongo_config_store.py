@@ -1,0 +1,179 @@
+from .config_store import ConfigStore, DuplicateNameError
+from .converter import converter
+from dacapo.experiments import RunConfig
+from dacapo.experiments.architectures import ArchitectureConfig
+from dacapo.experiments.datasets import DatasetConfig
+from dacapo.experiments.tasks import TaskConfig
+from dacapo.experiments.trainers import TrainerConfig
+from pymongo import MongoClient, ASCENDING
+from pymongo.errors import DuplicateKeyError
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+class MongoConfigStore(ConfigStore):
+    """A MongoDB store for configurations. Used to store and retrieve
+    configurations for runs, tasks, architectures, trainers, and datasets.
+    """
+
+    def __init__(self, db_host, db_name):
+
+        logger.info(
+            "Creating MongoConfigStore:\n\thost    : %s\n\tdatabase: %s",
+            db_host, db_name)
+
+        self.db_host = db_host
+        self.db_name = db_name
+
+        self.client = MongoClient(self.db_host)
+        self.database = self.client[self.db_name]
+        self.__open_collections()
+        self.__init_db()
+
+    def store_run_config(self, run_config):
+
+        run_doc = converter.unstructure(run_config)
+        self.__save_insert(self.runs, run_doc)
+
+    def retrieve_run_config(self, run_name):
+
+        run_doc = self.runs.find_one(
+            {"name": run_name},
+            projection={"_id": False})
+        return converter.structure(run_doc, RunConfig)
+
+    def store_task_config(self, task_config):
+
+        task_doc = converter.unstructure(task_config)
+        self.__save_insert(self.tasks, task_doc)
+
+    def retrieve_task_config(self, task_name):
+
+        task_doc = self.tasks.find_one(
+            {"name": task_name},
+            projection={"_id": False})
+        return converter.structure(task_doc, TaskConfig)
+
+    def store_architecture_config(self, architecture_config):
+
+        architecture_doc = converter.unstructure(architecture_config)
+        self.__save_insert(self.architectures, architecture_doc)
+
+    def retrieve_architecture_config(self, architecture_name):
+
+        architecture_doc = self.architectures.find_one(
+            {"name": architecture_name},
+            projection={"_id": False})
+        return converter.structure(architecture_doc, ArchitectureConfig)
+
+    def store_trainer_config(self, trainer_config):
+
+        trainer_doc = converter.unstructure(trainer_config)
+        self.__save_insert(self.trainers, trainer_doc)
+
+    def retrieve_trainer_config(self, trainer_name):
+
+        trainer_doc = self.trainers.find_one(
+            {"name": trainer_name},
+            projection={"_id": False})
+        return converter.structure(trainer_doc, TrainerConfig)
+
+    def store_dataset_config(self, dataset_config):
+
+        dataset_doc = converter.unstructure(dataset_config)
+        self.__save_insert(self.datasets, dataset_doc)
+
+    def retrieve_dataset_config(self, dataset_name):
+
+        dataset_doc = self.datasets.find_one(
+            {"name": dataset_name},
+            projection={"_id": False})
+        return converter.structure(dataset_doc, DatasetConfig)
+
+    def __save_insert(self, collection, data, ignore=None):
+
+        name = data['name']
+
+        existing = None
+        for _ in range(5):
+
+            try:
+
+                existing = collection.find_one_and_update(
+                    filter={"name": name},
+                    update={"$set": data},
+                    upsert=True,
+                    projection={"_id": False},
+                )
+
+                break
+
+            except DuplicateKeyError:
+
+                logger.error("DuplicateKeyError on %s", data)
+                logger.error("Possible race condiation in upsert, retrying...")
+                continue
+
+        if existing:
+
+            if not self.__same_doc(existing, data, ignore):
+                raise DuplicateNameError(
+                    f"Data for {name} does not match already stored "
+                    f"entry. Found\n\n{existing}\n\nin DB, but was "
+                    f"given\n\n{data}"
+                )
+
+    def __same_doc(self, a, b, ignore=None):
+
+        if ignore:
+            a = dict(a)
+            b = dict(b)
+            for key in ignore:
+                if key in a:
+                    del a[key]
+                if key in b:
+                    del b[key]
+
+        return a == b
+
+    def __init_db(self):
+
+        self.users.create_index(
+            [("username", ASCENDING)],
+            name="username",
+            unique=True)
+
+        self.runs.create_index(
+            [("name", ASCENDING), ("repetition", ASCENDING)],
+            name="name_rep",
+            unique=True)
+
+        self.tasks.create_index(
+            [("name", ASCENDING)],
+            name="name",
+            unique=True)
+
+        self.datasets.create_index(
+            [("name", ASCENDING)],
+            name="name",
+            unique=True)
+
+        self.architectures.create_index(
+            [("name", ASCENDING)],
+            name="name",
+            unique=True)
+
+        self.trainers.create_index(
+            [("name", ASCENDING)],
+            name="name",
+            unique=True)
+
+    def __open_collections(self):
+
+        self.users = self.database["users"]
+        self.runs = self.database["runs"]
+        self.tasks = self.database["tasks"]
+        self.datasets = self.database["datasets"]
+        self.architectures = self.database["architectures"]
+        self.trainers = self.database["trainers"]
