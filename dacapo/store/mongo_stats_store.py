@@ -28,10 +28,9 @@ class MongoStatsStore(StatsStore):
         self.__open_collections()
         self.__init_db()
 
-    def store_training_stats(self, run):
+    def store_training_stats(self, run_name, stats):
 
-        stats = run.training_stats
-        existing_stats = self.__read_training_stats(run.name)
+        existing_stats = self.__read_training_stats(run_name)
 
         store_from_iteration = 0
 
@@ -45,30 +44,29 @@ class MongoStatsStore(StatsStore):
                     store_from_iteration = existing_stats.trained_until()
                     logger.info(
                         "Updating training stats of run %s after iteration %d",
-                        run.name,
+                        run_name,
                         store_from_iteration)
                 else:
                     # current stats are behind DB--drop DB
                     logger.warn(
                         "Overwriting previous training stats for run %s",
-                        run.name)
-                    self.__delete_training_stats(run.name)
+                        run_name)
+                    self.__delete_training_stats(run_name)
 
         # store all new stats
         self.__store_training_stats(
             stats,
             store_from_iteration,
             stats.trained_until(),
-            run.name)
+            run_name)
 
-    def retrieve_training_stats(self, run):
+    def retrieve_training_stats(self, run_name):
 
-        run.training_stats = self.__read_training_stats(run.name)
+        return self.__read_training_stats(run_name)
 
-    def store_validation_scores(self, run):
+    def store_validation_scores(self, run_name, scores):
 
-        scores = run.validation_scores
-        existing_scores = self.__read_validation_scores(run.name)
+        existing_scores = self.__read_validation_scores(run_name)
         existing_scores_until = existing_scores.validated_until()
 
         store_from_iteration = 0
@@ -84,24 +82,24 @@ class MongoStatsStore(StatsStore):
                     logger.info(
                         "Updating validation scores of run %s after iteration "
                         "%d",
-                        run.name,
+                        run_name,
                         store_from_iteration)
                 else:
                     # current scores are behind DB--drop DB
                     logger.warn(
                         "Overwriting previous validation scores for run %s",
-                        run.name)
-                    self.__delete_validation_scores(run.name)
+                        run_name)
+                    self.__delete_validation_scores(run_name)
 
         self.__store_validation_scores(
             scores,
             store_from_iteration,
             scores.validated_until(),
-            run.name)
+            run_name)
 
-    def retrieve_validation_scores(self, run):
+    def retrieve_validation_scores(self, run_name):
 
-        run.validation_scores = self.__read_validation_scores(run.name)
+        return self.__read_validation_scores(run_name)
 
     def __store_training_stats(self, stats, begin, end, run_name):
 
