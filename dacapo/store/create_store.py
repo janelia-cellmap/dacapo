@@ -1,6 +1,7 @@
+from .local_array_store import LocalArrayStore
+from .local_weights_store import LocalWeightsStore
 from .mongo_config_store import MongoConfigStore
 from .mongo_stats_store import MongoStatsStore
-from .local_weights_store import LocalWeightsStore
 from dacapo import Options
 
 
@@ -34,3 +35,13 @@ def create_weights_store():
     # currently, only the LocalWeightsStore is supported
     base_dir = options.runs_base_dir
     return LocalWeightsStore(base_dir)
+
+
+def create_array_store():
+    """Create an array store based on the global DaCapo options."""
+
+    options = Options.instance()
+
+    # currently, only the LocalArrayStore is supported
+    base_dir = options.runs_base_dir
+    return LocalArrayStore(base_dir)
