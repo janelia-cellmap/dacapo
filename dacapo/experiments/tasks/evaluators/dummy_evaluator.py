@@ -6,10 +6,8 @@ class DummyEvaluator(Evaluator):
 
     def evaluate(
             self,
-            output_container,
-            output_dataset,
-            gt_container,
-            gt_dataset):
+            output_array,
+            evaluation_dataset):
 
         return DummyEvaluationScores(
             frizz_level=9.0,

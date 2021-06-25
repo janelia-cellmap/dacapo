@@ -4,4 +4,5 @@ import attr
 @attr.s
 class PostProcessorParameters:
     """Base class for post-processor parameters."""
-    pass
+
+    id: int = attr.ib()

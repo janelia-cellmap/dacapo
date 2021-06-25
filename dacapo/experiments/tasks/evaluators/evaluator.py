@@ -11,15 +11,13 @@ class Evaluator(ABC):
     @abstractmethod
     def evaluate(
             self,
-            output_container,
-            output_dataset,
-            gt_container,
-            gt_dataset):
-        """Compare an output dataset against ground-truth.
+            output_array,
+            evaluation_dataset):
+        """Compare an output dataset against ground-truth from an evaluation
+        dataset.
 
-        Since the output is in general too large to be held in memory, this
-        method receives the path to zarr containers and the dataset names of
-        the output and ground-truth.
+        The evaluation dataset is a dictionary mapping from ``DataKey`` to
+        ``ArraySource`` or ``GraphSource``.
 
         Should return an instance of ``EvaluationScores``.
         """

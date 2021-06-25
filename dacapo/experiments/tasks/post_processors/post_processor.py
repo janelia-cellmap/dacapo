@@ -9,18 +9,19 @@ class PostProcessor(ABC):
     """
 
     @abstractmethod
+    def enumerate_parameters(self):
+        """Enumerate all possible parameters of this post-processor. Should
+        yield instances of ``PostProcessorParameters``."""
+        pass
+
+    @abstractmethod
+    def set_prediction(self, prediction_array):
+        pass
+
+    @abstractmethod
     def process(
             self,
-            prediction_container,
-            prediction_dataset,
-            output_container,
-            output_dataset,
-            parameters):
-        """Convert predictions into the final output.
-
-        Since the predictions (and therefore also the output) are in general
-        too large to be held in memory, this method receives the path to a zarr
-        container and the dataset names of the prediction and the output
-        dataset to be generated.
-        """
+            parameters,
+            output_array):
+        """Convert predictions into the final output."""
         pass

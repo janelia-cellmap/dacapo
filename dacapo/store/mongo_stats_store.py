@@ -94,7 +94,7 @@ class MongoStatsStore(StatsStore):
         self.__store_validation_scores(
             scores,
             store_from_iteration,
-            scores.validated_until(),
+            scores.validated_until() + 1,
             run_name)
 
     def retrieve_validation_scores(self, run_name):
@@ -133,7 +133,7 @@ class MongoStatsStore(StatsStore):
         docs = [
             converter.unstructure(scores)
             for scores in validation_scores.iteration_scores
-            if scores.iteration >= begin or scores.iteration < end
+            if scores.iteration >= begin and scores.iteration < end
         ]
         for doc in docs:
             doc.update({'run_name': run_name})

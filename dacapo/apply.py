@@ -9,3 +9,7 @@ def apply(run_name, iteration, dataset_name):
         run_name,
         iteration,
         dataset_name)
+
+
+def predict(model, dataset, prediction_array):
+    pass

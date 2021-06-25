@@ -78,8 +78,8 @@ def train(run_name):
         elif latest_weights_iteration > trained_until:
 
             raise RuntimeError(
-                "Found weights for iteration {latest_weights_iteration}, but "
-                "run {run.name} was only trained until {trained_until}.")
+                f"Found weights for iteration {latest_weights_iteration}, but "
+                f"run {run.name} was only trained until {trained_until}.")
 
     # start/resume training
 
@@ -97,7 +97,10 @@ def train(run_name):
             if (iteration_stats.iteration + 1) % validation_interval == 0:
 
                 weights_store.store_weights(run, iteration_stats.iteration + 1)
-                validate_run(run)
+                validate_run(run, iteration_stats.iteration + 1)
+                stats_store.store_validation_scores(
+                    run_name,
+                    run.validation_scores)
 
         stats_store.store_training_stats(run_name, run.training_stats)
         trained_until = run.training_stats.trained_until()
