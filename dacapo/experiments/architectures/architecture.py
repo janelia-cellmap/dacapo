@@ -14,3 +14,8 @@ class Architecture(ABC):
     def num_out_channels(self):
         """Return the number of output channels of this architecture."""
         pass
+
+    @abstractmethod
+    def forward(self, x):
+        """Process an input tensor."""
+        pass
