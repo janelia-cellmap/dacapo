@@ -17,6 +17,10 @@ class Model(torch.nn.Module):
             prediction_head)
         self.num_in_channels = architecture.num_in_channels
 
+        self.input_shape = architecture.input_shape
+        self.num_out_channels, self.output_shape = \
+            self.compute_output_shape(self.input_shape)
+
     def forward(self, x):
         return self.chain(x)
 
@@ -36,4 +40,4 @@ class Model(torch.nn.Module):
 
         dummy_data = torch.zeros((1, in_channels) + input_shape, device=device)
         out = self.forward(dummy_data)
-        return tuple(out.shape[2:])
+        return out.shape[1], tuple(out.shape[2:])

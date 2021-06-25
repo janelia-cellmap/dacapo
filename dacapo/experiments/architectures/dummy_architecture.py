@@ -18,6 +18,10 @@ class DummyArchitecture(torch.nn.Module, Architecture):
             kernel_size=3)
 
     @property
+    def input_shape(self):
+        return (40, 20, 20)
+
+    @property
     def num_in_channels(self):
         return self.channels_in
 

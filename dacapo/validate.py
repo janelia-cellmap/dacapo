@@ -1,4 +1,4 @@
-from .apply import predict
+from .predict import predict
 from .experiments import Run, ValidationIterationScores
 from .store import \
     create_array_store, \
