@@ -96,11 +96,15 @@ def train(run_name):
 
             if (iteration_stats.iteration + 1) % validation_interval == 0:
 
+                run.model.eval()
+
                 weights_store.store_weights(run, iteration_stats.iteration + 1)
                 validate_run(run, iteration_stats.iteration + 1)
                 stats_store.store_validation_scores(
                     run_name,
                     run.validation_scores)
+
+                run.model.train()
 
         stats_store.store_training_stats(run_name, run.training_stats)
         trained_until = run.training_stats.trained_until()
