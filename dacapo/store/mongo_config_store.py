@@ -55,6 +55,13 @@ class MongoConfigStore(ConfigStore):
             projection={"_id": False})
         return converter.structure(task_doc, TaskConfig)
 
+    def retrieve_task_names(self):
+
+        tasks = self.tasks.find(
+            {},
+            projection={"_id": False, "name": True})
+        return [task["name"] for task in tasks]
+
     def store_architecture_config(self, architecture_config):
 
         architecture_doc = converter.unstructure(architecture_config)
@@ -66,6 +73,13 @@ class MongoConfigStore(ConfigStore):
             {"name": architecture_name},
             projection={"_id": False})
         return converter.structure(architecture_doc, ArchitectureConfig)
+
+    def retrieve_architecture_names(self):
+
+        architectures = self.architectures.find(
+            {},
+            projection={"_id": False, "name": True})
+        return [architecture["name"] for architecture in architectures]
 
     def store_trainer_config(self, trainer_config):
 
@@ -79,6 +93,13 @@ class MongoConfigStore(ConfigStore):
             projection={"_id": False})
         return converter.structure(trainer_doc, TrainerConfig)
 
+    def retrieve_trainer_names(self):
+
+        trainers = self.trainers.find(
+            {},
+            projection={"_id": False, "name": True})
+        return [trainer["name"] for trainer in trainers]
+
     def store_dataset_config(self, dataset_config):
 
         dataset_doc = converter.unstructure(dataset_config)
@@ -90,6 +111,13 @@ class MongoConfigStore(ConfigStore):
             {"name": dataset_name},
             projection={"_id": False})
         return converter.structure(dataset_doc, DatasetConfig)
+
+    def retrieve_dataset_names(self):
+
+        datasets = self.datasets.find(
+            {},
+            projection={"_id": False, "name": True})
+        return [dataset["name"] for dataset in datasets]
 
     def __save_insert(self, collection, data, ignore=None):
 

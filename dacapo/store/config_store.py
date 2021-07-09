@@ -32,6 +32,11 @@ class ConfigStore(ABC):
         pass
 
     @abstractmethod
+    def retrieve_task_names(self):
+        """Retrieve all task names."""
+        pass
+
+    @abstractmethod
     def store_architecture_config(self, architecture_config):
         """Store a architecture config."""
         pass
@@ -39,6 +44,11 @@ class ConfigStore(ABC):
     @abstractmethod
     def retrieve_architecture_config(self, architecture_name):
         """Retrieve a architecture config from a architecture name."""
+        pass
+
+    @abstractmethod
+    def retrieve_architecture_names(self):
+        """Retrieve all architecture names."""
         pass
 
     @abstractmethod
@@ -52,6 +62,11 @@ class ConfigStore(ABC):
         pass
 
     @abstractmethod
+    def retrieve_trainer_names(self):
+        """Retrieve all trainer names."""
+        pass
+
+    @abstractmethod
     def store_dataset_config(self, dataset_config):
         """Store a dataset config."""
         pass
@@ -59,4 +74,9 @@ class ConfigStore(ABC):
     @abstractmethod
     def retrieve_dataset_config(self, dataset_name):
         """Retrieve a dataset config from a dataset name."""
+        pass
+
+    @abstractmethod
+    def retrieve_dataset_names(self):
+        """Retrieve all dataset names."""
         pass
