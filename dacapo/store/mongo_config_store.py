@@ -43,6 +43,13 @@ class MongoConfigStore(ConfigStore):
             projection={"_id": False})
         return converter.structure(run_doc, RunConfig)
 
+    def retrieve_run_config_names(self):
+
+        runs = self.runs.find(
+            {},
+            projection={"_id": False, "name": True})
+        return list([run["name"] for run in runs])
+
     def store_task_config(self, task_config):
 
         task_doc = converter.unstructure(task_config)
@@ -55,12 +62,12 @@ class MongoConfigStore(ConfigStore):
             projection={"_id": False})
         return converter.structure(task_doc, TaskConfig)
 
-    def retrieve_task_names(self):
+    def retrieve_task_config_names(self):
 
         tasks = self.tasks.find(
             {},
             projection={"_id": False, "name": True})
-        return [task["name"] for task in tasks]
+        return list([task["name"] for task in tasks])
 
     def store_architecture_config(self, architecture_config):
 
@@ -74,12 +81,12 @@ class MongoConfigStore(ConfigStore):
             projection={"_id": False})
         return converter.structure(architecture_doc, ArchitectureConfig)
 
-    def retrieve_architecture_names(self):
+    def retrieve_architecture_config_names(self):
 
         architectures = self.architectures.find(
             {},
             projection={"_id": False, "name": True})
-        return [architecture["name"] for architecture in architectures]
+        return list([architecture["name"] for architecture in architectures])
 
     def store_trainer_config(self, trainer_config):
 
@@ -93,12 +100,12 @@ class MongoConfigStore(ConfigStore):
             projection={"_id": False})
         return converter.structure(trainer_doc, TrainerConfig)
 
-    def retrieve_trainer_names(self):
+    def retrieve_trainer_config_names(self):
 
         trainers = self.trainers.find(
             {},
             projection={"_id": False, "name": True})
-        return [trainer["name"] for trainer in trainers]
+        return list([trainer["name"] for trainer in trainers])
 
     def store_dataset_config(self, dataset_config):
 
@@ -112,12 +119,12 @@ class MongoConfigStore(ConfigStore):
             projection={"_id": False})
         return converter.structure(dataset_doc, DatasetConfig)
 
-    def retrieve_dataset_names(self):
+    def retrieve_dataset_config_names(self):
 
         datasets = self.datasets.find(
             {},
             projection={"_id": False, "name": True})
-        return [dataset["name"] for dataset in datasets]
+        return list([dataset["name"] for dataset in datasets])
 
     def __save_insert(self, collection, data, ignore=None):
 
