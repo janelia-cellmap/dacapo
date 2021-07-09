@@ -130,29 +130,18 @@ class MongoConfigStore(ConfigStore):
 
         name = data['name']
 
-        existing = None
-        for _ in range(5):
+        try:
 
-            try:
+            collection.insert_one(dict(data))
 
-                existing = collection.find_one_and_update(
-                    filter={"name": name},
-                    update={"$set": data},
-                    upsert=True,
-                    projection={"_id": False},
-                )
+        except DuplicateKeyError:
 
-                break
-
-            except DuplicateKeyError:
-
-                logger.error("DuplicateKeyError on %s", data)
-                logger.error("Possible race condiation in upsert, retrying...")
-                continue
-
-        if existing:
+            existing = collection.find(
+                {'name': name},
+                projection={'_id': False})[0]
 
             if not self.__same_doc(existing, data, ignore):
+
                 raise DuplicateNameError(
                     f"Data for {name} does not match already stored "
                     f"entry. Found\n\n{existing}\n\nin DB, but was "
