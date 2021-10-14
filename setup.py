@@ -11,7 +11,7 @@ setup(
         'dacapo',
         'dacapo.experiments',
         'dacapo.experiments.architectures',
-        'dacapo.experiments.datasets',
+        'dacapo.experiments.datasplits',
         'dacapo.experiments.tasks',
         'dacapo.experiments.tasks.evaluators',
         'dacapo.experiments.tasks.losses',
