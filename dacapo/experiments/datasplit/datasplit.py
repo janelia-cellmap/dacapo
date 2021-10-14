@@ -10,9 +10,3 @@ class DataSplit(ABC):
     def train(self) -> DataSet:
         """The Dataset to train on."""
         pass
-
-    @property
-    @abstractmethod
-    def validate(self) -> DataSet:
-        """The Dataset to validate on."""
-        pass
