@@ -41,6 +41,7 @@ class Options:
         if len(kwargs) > 0:
             self.__options = kwargs
             self.filename = "kwargs"
+            return
 
         for path in options_files:
 
