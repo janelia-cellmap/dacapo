@@ -12,4 +12,4 @@ class DummyDatasetConfig(DatasetConfig):
 
     datasplit_type = DummyDataset
 
-    raw_config: ArrayStoreConfig = attr.ib(DummyArrayStoreConfig())
+    raw_config: ArrayStoreConfig = attr.ib(DummyArrayStoreConfig(name="dummy_array"))
