@@ -14,4 +14,4 @@ class DummyDataSplitConfig(DataSplitConfig):
 
     datasplit_type = DummyDataSplit
 
-    train_config: List[DatasetConfig] = attr.ib([DummyDatasetConfig()])
+    train_config: DatasetConfig = attr.ib(DummyDatasetConfig(name="dummy_dataset"))
