@@ -1,4 +1,4 @@
-from dacapo.experiments.datasets import ArrayKey
+from dacapo.experiments.datasplits.keys import ArrayKey
 from funlib.geometry import Coordinate
 import daisy
 import gunpowder as gp

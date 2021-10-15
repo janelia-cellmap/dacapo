@@ -72,16 +72,16 @@ class ConfigStore(ABC):
         pass
 
     @abstractmethod
-    def store_dataset_config(self, dataset_config):
-        """Store a dataset config."""
+    def store_datasplit_config(self, datasplit_config):
+        """Store a datasplit config."""
         pass
 
     @abstractmethod
-    def retrieve_dataset_config(self, dataset_name):
-        """Retrieve a dataset config from a dataset name."""
+    def retrieve_datasplit_config(self, datasplit_name):
+        """Retrieve a datasplit config from a datasplit name."""
         pass
 
     @abstractmethod
-    def retrieve_dataset_config_names(self):
-        """Retrieve all dataset names."""
+    def retrieve_datasplit_config_names(self):
+        """Retrieve all datasplit names."""
         pass

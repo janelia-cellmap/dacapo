@@ -1,7 +1,7 @@
 import attr
 
 from .architectures import ArchitectureConfig
-from .datasets import DatasetConfig
+from .datasplits import DataSplitConfig
 from .tasks import TaskConfig
 from .trainers import TrainerConfig
 
@@ -12,7 +12,7 @@ class RunConfig:
     task_config: TaskConfig = attr.ib()
     architecture_config: ArchitectureConfig = attr.ib()
     trainer_config: TrainerConfig = attr.ib()
-    dataset_config: DatasetConfig = attr.ib()
+    datasplit_config: DataSplitConfig = attr.ib()
 
     name: str = attr.ib(
         metadata={

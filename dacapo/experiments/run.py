@@ -1,10 +1,9 @@
-from .datasets import Dataset
+from .datasplits import DataSplit
 from .training_stats import TrainingStats
 from .validation_scores import ValidationScores
 
 
 class Run:
-
     def __init__(self, run_config):
 
         self.name = run_config.name
@@ -12,15 +11,14 @@ class Run:
         task_type = run_config.task_config.task_type
         architecture_type = run_config.architecture_config.architecture_type
         trainer_type = run_config.trainer_config.trainer_type
+        datasplit_type = run_config.datasplit_config.datasplit_type
 
         self.task = task_type(run_config.task_config)
         self.architecture = architecture_type(run_config.architecture_config)
         self.trainer = trainer_type(run_config.trainer_config)
-        self.dataset = Dataset(run_config.dataset_config)
+        self.datasplit = datasplit_type(run_config.datasplit_config)
 
-        self.model = self.task.predictor.create_model(
-            self.architecture,
-            self.dataset)
+        self.model = self.task.predictor.create_model(self.architecture, self.datasplit.train.raw)
         self.optimizer = self.trainer.create_optimizer(self.model)
 
         self.training_stats = TrainingStats()

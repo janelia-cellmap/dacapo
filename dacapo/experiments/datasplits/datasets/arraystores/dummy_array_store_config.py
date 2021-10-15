@@ -5,7 +5,7 @@ from .dummy_array_store import DummyArrayStore
 
 
 @attr.s
-class DummyArrayStourConfig(ArrayStoreConfig):
+class DummyArrayStoreConfig(ArrayStoreConfig):
     """This is just a dummy array store config used for testing. None of the
     attributes have any particular meaning."""
 
