@@ -20,11 +20,11 @@ class Options:
         raise RuntimeError("Singleton: Use Options.instance()")
 
     @classmethod
-    def instance(cls):
+    def instance(cls, **kwargs):
 
         if cls._instance is None:
             cls._instance = cls.__new__(cls)
-            cls._instance.__parse_options()
+            cls._instance.__parse_options(**kwargs)
 
         return cls._instance
 
@@ -37,7 +37,10 @@ class Options:
                 f"Configuration file {self.filename} does not contain an "
                 f"entry for option {name}")
 
-    def __parse_options(self):
+    def __parse_options(self, **kwargs):
+        if len(kwargs) > 0:
+            self.__options = kwargs
+            self.filename = "kwargs"
 
         for path in options_files:
 
@@ -57,3 +60,4 @@ class Options:
             logger.error("\t%s", path)
 
         raise RuntimeError("Could not find a DaCapo options file.")
+        
