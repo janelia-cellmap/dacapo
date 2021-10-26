@@ -1,3 +1,5 @@
+from funlib.geometry import Coordinate, Roi
+
 from abc import ABC, abstractmethod
 
 
@@ -17,18 +19,18 @@ class Array(ABC):
 
     @property
     @abstractmethod
-    def dims(self):
+    def dims(self) -> int:
         """Returns the number of spatial dimensions."""
         pass
 
     @property
     @abstractmethod
-    def voxel_size(self):
+    def voxel_size(self) -> Coordinate:
         """The size of a voxel in physical units."""
         pass
 
     @property
     @abstractmethod
-    def roi(self):
+    def roi(self) -> Roi:
         """The total ROI of this array, in world units."""
         pass
