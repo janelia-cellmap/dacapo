@@ -1,5 +1,7 @@
 from funlib.geometry import Coordinate, Roi
 
+import numpy as np
+
 from abc import ABC, abstractmethod
 
 
@@ -33,4 +35,19 @@ class Array(ABC):
     @abstractmethod
     def roi(self) -> Roi:
         """The total ROI of this array, in world units."""
+        pass
+
+    @property
+    @abstractmethod
+    def data(self):
+        """
+        Get a numpy like readable and writable view into this array.
+        """
+        pass
+
+    @abstractmethod
+    def __getitem__(self, roi: Roi) -> np.ndarray:
+        """
+        Get the provided data from this `Array` for the given `roi`.
+        """
         pass
