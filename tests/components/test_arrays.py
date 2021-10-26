@@ -17,7 +17,7 @@ def test_arrays(
     array_config = array_mk_function(tmp_path)
 
     # Test store/retrieve
-    store.store_run_config(array_config)
+    store.store_array_config(array_config)
     fetched_array_config = store.retrieve_array_config(array_config.name)
     assert fetched_array_config == array_config
 

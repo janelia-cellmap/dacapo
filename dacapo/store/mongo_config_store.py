@@ -203,6 +203,11 @@ class MongoConfigStore(ConfigStore):
             name="name",
             unique=True)
 
+        self.arrays.create_index(
+            [("name", ASCENDING)],
+            name="name",
+            unique=True)
+
         self.architectures.create_index(
             [("name", ASCENDING)],
             name="name",
@@ -219,5 +224,6 @@ class MongoConfigStore(ConfigStore):
         self.runs = self.database["runs"]
         self.tasks = self.database["tasks"]
         self.datasets = self.database["datasets"]
+        self.arrays = self.database["arrays"]
         self.architectures = self.database["architectures"]
         self.trainers = self.database["trainers"]

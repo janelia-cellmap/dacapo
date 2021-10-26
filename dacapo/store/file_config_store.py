@@ -172,6 +172,8 @@ class FileConfigStore(ConfigStore):
         self.tasks.mkdir(exist_ok=True, parents=True)
         self.datasplits = self.path / "datasplits"
         self.datasplits.mkdir(exist_ok=True, parents=True)
+        self.arrays = self.path / "arrays"
+        self.arrays.mkdir(exist_ok=True, parents=True)
         self.architectures = self.path / "architectures"
         self.architectures.mkdir(exist_ok=True, parents=True)
         self.trainers = self.path / "trainers"
