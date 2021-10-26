@@ -3,12 +3,13 @@ from ..fixtures.arrays import ARRAY_MK_FUNCTIONS
 from dacapo import Options
 from dacapo.store import create_config_store
 
+from funlib.geometry import Coordinate, Roi
+
 import pytest
 
+
 @pytest.mark.parametrize("array_mk_function", ARRAY_MK_FUNCTIONS)
-def test_arrays(
-    tmp_path, array_mk_function
-):
+def test_arrays(tmp_path, array_mk_function):
     # Initialize the config store
     Options.instance(type="files", runs_base_dir=f"{tmp_path}")
     store = create_config_store()
@@ -28,3 +29,7 @@ def test_arrays(
     # dims/voxel_size/roi
     assert array.dims == array.voxel_size.dims
     assert array.dims == array.roi.dims
+    # data and __getitem__
+    expected_data_shape = array.roi.shape / array.voxel_size
+    assert array[array.roi].shape[-array.dims:] == expected_data_shape
+    assert array.data.shape[-array.dims:] == expected_data_shape
