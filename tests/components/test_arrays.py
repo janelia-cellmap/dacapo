@@ -29,7 +29,12 @@ def test_arrays(tmp_path, array_mk_function):
     # dims/voxel_size/roi
     assert array.dims == array.voxel_size.dims
     assert array.dims == array.roi.dims
-    # data and __getitem__
+    # fetching data:
     expected_data_shape = array.roi.shape / array.voxel_size
-    assert array[array.roi].shape[-array.dims:] == expected_data_shape
-    assert array.data.shape[-array.dims:] == expected_data_shape
+    assert array[array.roi].shape[-array.dims :] == expected_data_shape
+    assert array.data.shape[-array.dims :] == expected_data_shape
+    # setting data:
+    data_slice = array.data[0].copy()
+    array.data[0] = data_slice + 1
+    assert data_slice.sum() == 0
+    assert (array.data[0] - data_slice).sum() == data_slice.size
