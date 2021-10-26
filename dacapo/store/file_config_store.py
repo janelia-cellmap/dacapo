@@ -150,14 +150,14 @@ class FileConfigStore(ConfigStore):
     def __open_collections(self):
 
         self.users = self.path / "users"
-        self.users.mkdir(exist_ok=True)
+        self.users.mkdir(exist_ok=True, parents=True)
         self.runs = self.path / "runs"
-        self.runs.mkdir(exist_ok=True)
+        self.runs.mkdir(exist_ok=True, parents=True)
         self.tasks = self.path / "tasks"
-        self.tasks.mkdir(exist_ok=True)
+        self.tasks.mkdir(exist_ok=True, parents=True)
         self.datasplits = self.path / "datasplits"
-        self.datasplits.mkdir(exist_ok=True)
+        self.datasplits.mkdir(exist_ok=True, parents=True)
         self.architectures = self.path / "architectures"
-        self.architectures.mkdir(exist_ok=True)
+        self.architectures.mkdir(exist_ok=True, parents=True)
         self.trainers = self.path / "trainers"
-        self.trainers.mkdir(exist_ok=True)
+        self.trainers.mkdir(exist_ok=True, parents=True)

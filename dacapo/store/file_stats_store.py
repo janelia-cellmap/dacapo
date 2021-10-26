@@ -174,6 +174,6 @@ class FileStatsStore(StatsStore):
     def __open_collections(self):
 
         self.training_stats = self.path / 'training_stats'
-        self.training_stats.mkdir(exist_ok=True)
+        self.training_stats.mkdir(exist_ok=True, parents=True)
         self.validation_scores = self.path / 'validation_scores'
-        self.validation_scores.mkdir(exist_ok=True)
+        self.validation_scores.mkdir(exist_ok=True, parents=True)
