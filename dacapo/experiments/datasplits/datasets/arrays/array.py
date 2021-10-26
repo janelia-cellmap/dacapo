@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class ArrayStore(ABC):
+class Array(ABC):
 
     @property
     @abstractmethod

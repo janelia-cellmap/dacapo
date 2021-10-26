@@ -1,14 +1,15 @@
-from .array_store import ArrayStore
+from .array import Array
+
 from funlib.geometry import Coordinate, Roi
+
 import numpy as np
-import zarr
 
+class DummyArray(Array):
+    """This is just a dummy array for testing."""
 
-class DummyArrayStore(ArrayStore):
-    """This is just a dummy array store for testing."""
-
-    def __init__(self, store_config):
+    def __init__(self, array_config):
         super().__init__()
+        self._data = np.zeros(100, 50, 50)
 
     @property
     def axes(self):

@@ -1,6 +1,6 @@
 from .dummy_dataset import DummyDataset
 from .dataset_config import DatasetConfig
-from .arraystores import ArrayStoreConfig, DummyArrayStoreConfig
+from .arrays import ArrayConfig, DummyArrayConfig
 
 import attr
 
@@ -12,4 +12,4 @@ class DummyDatasetConfig(DatasetConfig):
 
     datasplit_type = DummyDataset
 
-    raw_config: ArrayStoreConfig = attr.ib(DummyArrayStoreConfig(name="dummy_array"))
+    raw_config: ArrayConfig = attr.ib(DummyArrayConfig(name="dummy_array"))
