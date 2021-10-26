@@ -3,6 +3,7 @@ from .converter import converter
 from dacapo.experiments import RunConfig
 from dacapo.experiments.architectures import ArchitectureConfig
 from dacapo.experiments.datasplits import DataSplitConfig
+from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
 from dacapo.experiments.tasks import TaskConfig
 from dacapo.experiments.trainers import TrainerConfig
 from pymongo import MongoClient, ASCENDING
@@ -101,6 +102,20 @@ class FileConfigStore(ConfigStore):
     def retrieve_datasplit_config_names(self):
 
         return [f.name for f in self.datasplits.iterdir()]
+
+    def store_array_config(self, array_config):
+
+        array_doc = converter.unstructure(array_config)
+        self.__save_insert(self.arrays, array_doc)
+
+    def retrieve_array_config(self, array_name):
+
+        array_doc = self.__load(self.arrays, array_name)
+        return converter.structure(array_doc, ArrayConfig)
+
+    def retrieve_array_config_names(self):
+
+        return [f.name for f in self.arrays.iterdir()]
 
     def __save_insert(self, collection, data, ignore=None):
 

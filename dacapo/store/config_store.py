@@ -85,3 +85,18 @@ class ConfigStore(ABC):
     def retrieve_datasplit_config_names(self):
         """Retrieve all datasplit names."""
         pass
+
+    @abstractmethod
+    def store_array_config(self, array_config):
+        """Store a array config."""
+        pass
+
+    @abstractmethod
+    def retrieve_array_config(self, array_name):
+        """Retrieve a array config from a array name."""
+        pass
+
+    @abstractmethod
+    def retrieve_array_config_names(self):
+        """Retrieve all array names."""
+        pass
