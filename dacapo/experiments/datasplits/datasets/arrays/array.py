@@ -2,6 +2,7 @@ from funlib.geometry import Coordinate, Roi
 
 import numpy as np
 
+from typing import Optional
 from abc import ABC, abstractmethod
 
 
@@ -35,6 +36,21 @@ class Array(ABC):
     @abstractmethod
     def roi(self) -> Roi:
         """The total ROI of this array, in world units."""
+        pass
+
+    @property
+    @abstractmethod
+    def dtype(self):
+        """The dtype of this array, in numpy dtypes"""
+        pass
+
+    @property
+    @abstractmethod
+    def num_channels(self) -> Optional[int]:
+        """
+        The number of channels provided by this dataset.
+        Should return None if the channel dimension doesn't exist.
+        """
         pass
 
     @property

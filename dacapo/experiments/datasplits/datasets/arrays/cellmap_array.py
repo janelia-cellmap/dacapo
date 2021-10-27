@@ -1,10 +1,8 @@
 from .array import Array
 
 from funlib.geometry import Coordinate, Roi
-import daisy
 
 import numpy as np
-import zarr
 
 
 class CellMapArray(Array):
@@ -38,6 +36,14 @@ class CellMapArray(Array):
         return False
 
     @property
+    def dtype(self):
+        return np.uint8
+
+    @property
+    def num_channels(self) -> int:
+        return len(self._groupings)
+
+    @property
     def data(self):
         raise ValueError(
             "Cannot get a writable view of this array because it is a virtual "
@@ -45,9 +51,8 @@ class CellMapArray(Array):
         )
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        # TODO: Fix datatype to be more efficient. bool or uint8
         labels = self._source_array[roi]
-        grouped = np.zeros((len(self._groupings), *labels.shape), dtype=labels.dtype)
+        grouped = np.zeros((len(self._groupings), *labels.shape), dtype=np.uint8)
         for i, ids in enumerate(self._groupings):
             for id in ids:
                 grouped[i] += labels == id

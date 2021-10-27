@@ -36,6 +36,14 @@ class DummyArray(Array):
     def data(self):
         return self._data
 
+    @property
+    def dtype(self):
+        return self._data.dtype
+
+    @property
+    def num_channels(self):
+        return None
+
     def __getitem__(self, roi: Roi) -> np.ndarray:
         if not self.roi.contains(roi):
             raise ValueError(f"Cannot fetch data from outside my roi: {self.roi}!")

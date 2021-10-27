@@ -58,6 +58,14 @@ class ZarrArray(Array):
         return True
 
     @property
+    def dtype(self):
+        return self.data.dtype
+
+    @property
+    def num_channels(self):
+        return None if "c" not in self.axes else self.data.shape[self.axes.index("c")]
+
+    @property
     def data(self):
         zarr_container = zarr.open(str(self.file_name))
         return zarr_container[self.dataset]
