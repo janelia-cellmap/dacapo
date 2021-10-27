@@ -1,5 +1,5 @@
 from dacapo.experiments.datasplits.datasets.arrays import Array, NumpyArray
-from dacapo.gp import DaCapoArraySource
+from dacapo.gp import DaCapoArraySource, DaCapoTargetProvider
 
 import gunpowder as gp
 from funlib.geometry import Coordinate
@@ -77,12 +77,8 @@ class GunpowderPipeline:
         for predictor in self.task.predictors:
             name = predictor.name
             predictor_target, predictor_weights = self.predictor_keys[name]
-            # TODO: How do we want to add targets and weights to pipeline?
-            # Custom DaCapoTargetNode that uses predictor api
-            # What should weights depend on? gt, target, both?
-            # Does the target ever need to know about a mask?
-            # Where should weights be defined? Predictor, gt dataset, or somewhere else?
-            raise NotImplementedError()
+            pipeline += DaCapoTargetProvider(predictor, self.gt_key, predictor_target)
+            # TODO: Handle weights/masks?
 
         # Trainer attributes:
         pipeline += gp.PreCache(num_workers=self.trainer.num_data_fetchers)
