@@ -13,11 +13,16 @@ class CellMapArray(Array):
         self._source_array = array_config.source_array_config.array_type(
             array_config.source_array_config
         )
+
+        assert (
+            "c" not in self._source_array.axes
+        ), f"Cannot initialize a CellMapArray with a source array with channels"
+
         self._groupings = array_config.groupings
 
     @property
     def axes(self):
-        return self._source_array.axes
+        return "c" + self._source_array.axes
 
     @property
     def dims(self) -> int:

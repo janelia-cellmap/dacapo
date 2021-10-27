@@ -26,6 +26,11 @@ def test_arrays(tmp_path, array_mk_function):
     array = array_config.array_type(array_config)
 
     # Test API
+    # channels/axes
+    if "c" in array.axes:
+        assert array.num_channels is not None
+    else:
+        assert array.num_channels is None
     # dims/voxel_size/roi
     assert array.dims == array.voxel_size.dims
     assert array.dims == array.roi.dims
