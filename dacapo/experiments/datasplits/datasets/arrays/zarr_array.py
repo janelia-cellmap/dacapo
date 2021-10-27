@@ -54,6 +54,10 @@ class ZarrArray(Array):
             ) from e
 
     @property
+    def writable(self):
+        return True
+
+    @property
     def data(self):
         zarr_container = zarr.open(str(self.file_name))
         return zarr_container[self.dataset]

@@ -29,6 +29,10 @@ class DummyArray(Array):
         return Roi((0, 0, 0), (100, 100, 100))
 
     @property
+    def writable(self) -> bool:
+        return True
+
+    @property
     def data(self):
         return self._data
 

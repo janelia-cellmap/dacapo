@@ -45,6 +45,14 @@ class Array(ABC):
         """
         pass
 
+    @property
+    @abstractmethod
+    def writable(self):
+        """
+        Can we write to this Array?
+        """
+        pass
+
     @abstractmethod
     def __getitem__(self, roi: Roi) -> np.ndarray:
         """
