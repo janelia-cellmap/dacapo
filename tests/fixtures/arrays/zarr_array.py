@@ -10,7 +10,7 @@ def mk_zarr_array(temp_path):
         file_name=temp_path / "zarr_array.zarr",
         dataset="volumes/test",
     )
-    zarr_container = zarr.open(temp_path / "zarr_array.zarr")
+    zarr_container = zarr.open(str(temp_path / "zarr_array.zarr"))
     dataset = zarr_container.create_dataset(
         "volumes/test", data=np.zeros((100, 50, 25))
     )
