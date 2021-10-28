@@ -21,7 +21,6 @@ class GunpowderPipeline:
 
         # define keys:
         self.raw_key = gp.ArrayKey("RAW")
-        self.gt_key = gp.ArrayKey("GT")
         self.mask_key = gp.ArrayKey("MASK")
         self.predictor_keys = {
             predictor.name: (
@@ -52,14 +51,21 @@ class GunpowderPipeline:
         for dataset in self.datasets:
 
             raw_source = DaCapoArraySource(dataset.raw, self.raw_key)
-            gt_source = DaCapoArraySource(dataset.gt, self.gt_key)
+            dataset_sources = [raw_source]
             if dataset.mask is not None:
                 mask_source = DaCapoArraySource(dataset.mask, self.mask_key)
-                dataset_sources = (raw_source, gt_source, mask_source)
-            else:
-                dataset_sources = (raw_source, gt_source)
+                dataset_sources.append(mask_source)
 
-            dataset_source = dataset_sources + gp.MergeProvider() + gp.RandomLocation()
+            # Add predictor nodes to pipeline
+            for predictor in self.task.predictors:
+                name = predictor.name
+                predictor_target, predictor_weights = self.predictor_keys[name]
+                dataset_sources.append(
+                    DaCapoTargetProvider(predictor, dataset.gt, predictor_target)
+                )
+                # TODO: Handle weights/masks?
+
+            dataset_source = tuple(dataset_sources) + gp.MergeProvider() + gp.RandomLocation()
 
             if dataset.mask is not None:
                 dataset_source += gp.Reject(self.mask_key, self.min_masked)
@@ -71,14 +77,9 @@ class GunpowderPipeline:
             # TODO: Should each augmentation be output into a new key?
             # Could be helpful to show users the affects of applying an
             # augmentation with specific parameters
+            # TODO: Can we remove the need for augmentations to provide a node?
+            # Some augmentations can get quite involved (elastic augment)
             pipeline += augmentation.node(self.raw_key)
-
-        # Add predictor nodes to pipeline
-        for predictor in self.task.predictors:
-            name = predictor.name
-            predictor_target, predictor_weights = self.predictor_keys[name]
-            pipeline += DaCapoTargetProvider(predictor, self.gt_key, predictor_target)
-            # TODO: Handle weights/masks?
 
         # Trainer attributes:
         pipeline += gp.PreCache(num_workers=self.trainer.num_data_fetchers)
