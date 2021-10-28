@@ -1,11 +1,10 @@
-# from dacapo.stateless.arraysources.helpers import ArraySource
-
 from dacapo.experiments.tasks.predictors import Predictor
+from dacapo.experiments.datasplits.datasets.arrays import Array
 
 import gunpowder as gp
 
 
-class DaCapoTargetProvider(gp.BatchFilter):
+class DaCapoTargetProvider(gp.BatchProvider):
     """A Gunpowder node for generating the target from the ground truth
 
     Args:
@@ -14,39 +13,34 @@ class DaCapoTargetProvider(gp.BatchFilter):
 
             The DaCapo Predictor to use to transform gt into target
 
-        gt_key (``gp.ArrayKey``):
+        gt (``Array``):
 
-            The key to use to fetch ground truth data.
+            The dataset to use for generating the target.
 
         target_key (``gp.ArrayKey``):
 
             The key with which to provide the target.
     """
 
-    def __init__(
-        self, predictor: Predictor, gt_key: gp.ArrayKey, target_key: gp.ArrayKey
-    ):
+    def __init__(self, predictor: Predictor, gt: Array, target_key: gp.ArrayKey):
         self.predictor = predictor
-        self.gt_key = gt_key
+        self.gt = gt
         self.target_key = target_key
 
     def setup(self):
-        # TODO: How to update the spec?
-        raise NotImplementedError()
+        provided_spec = gp.ArraySpec(
+            roi=self.gt.roi,
+            interpolatable=self.predictor.output_array_type.interpolatable,
+            dtype=self.predictor.output_array_type.dtype,
+        )
+        self.provides(self.target_key, provided_spec)
 
-    def prepare(self, request):
-        deps = gp.BatchRequest()
-        target_spec = request[self.target_key].copy()
-        target_spec.roi = self.predictor.gt_region_for_roi(target_spec.roi)
-        deps[self.gt_key] = target_spec
-        return deps
-
-    def process(self, batch, request):
+    def provide(self, request):
         output = gp.Batch()
-        gt_data = batch[self.gt_key].data
-        target_data = self.predictor.create_target(gt_data)
+        request_spec = request[self.target_key]
+        
+        gt_data = self.gt[request_spec.roi]
+        target_data = self.provider.create_target(gt_data)
 
-        raise NotImplementedError("How to define target spec?")
-        output[self.target_key] = gp.Array(target_data, target_spec)
-
+        output[self.target_key] = gp.Array(target_data, request_spec)
         return output
