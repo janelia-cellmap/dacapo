@@ -90,7 +90,7 @@ def train(run_name):
         # train for at most 100 iterations at a time, then store training stats
         iterations = min(100, train_until - trained_until)
 
-        for iteration_stats in run.trainer.iterate(iterations):
+        for iteration_stats in run.trainer.iterate(iterations, run.model, run.optimizer):
 
             run.training_stats.add_iteration_stats(iteration_stats)
 
