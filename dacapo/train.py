@@ -85,28 +85,29 @@ def train(run_name):
 
     run.trainer.set_iteration(trained_until)
 
-    while trained_until < train_until:
+    with run.trainer as trainer:
+        while trained_until < train_until:
 
-        # train for at most 100 iterations at a time, then store training stats
-        iterations = min(100, train_until - trained_until)
+            # train for at most 100 iterations at a time, then store training stats
+            iterations = min(100, train_until - trained_until)
 
-        for iteration_stats in run.trainer.iterate(iterations, run.model, run.optimizer):
+            for iteration_stats in trainer.iterate(iterations, run.model, run.optimizer):
 
-            run.training_stats.add_iteration_stats(iteration_stats)
+                run.training_stats.add_iteration_stats(iteration_stats)
 
-            if (iteration_stats.iteration + 1) % validation_interval == 0:
+                if (iteration_stats.iteration + 1) % validation_interval == 0:
 
-                run.model.eval()
+                    run.model.eval()
 
-                weights_store.store_weights(run, iteration_stats.iteration + 1)
-                validate_run(run, iteration_stats.iteration + 1)
-                stats_store.store_validation_scores(
-                    run_name,
-                    run.validation_scores)
+                    weights_store.store_weights(run, iteration_stats.iteration + 1)
+                    validate_run(run, iteration_stats.iteration + 1)
+                    stats_store.store_validation_scores(
+                        run_name,
+                        run.validation_scores)
 
-                run.model.train()
+                    run.model.train()
 
-        stats_store.store_training_stats(run_name, run.training_stats)
-        trained_until = run.training_stats.trained_until()
+            stats_store.store_training_stats(run_name, run.training_stats)
+            trained_until = run.training_stats.trained_until()
 
     logger.info("Trained until %d, finished.", trained_until)
