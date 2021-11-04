@@ -9,7 +9,7 @@ import pytest
 
 
 @pytest.mark.parametrize("array_mk_function", ARRAY_MK_FUNCTIONS)
-def test_arrays(tmp_path, array_mk_function):
+def test_array_api(tmp_path, array_mk_function):
     # Initialize the config store
     Options.instance(type="files", runs_base_dir=f"{tmp_path}")
     store = create_config_store()
