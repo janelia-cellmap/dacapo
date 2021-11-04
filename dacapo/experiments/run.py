@@ -18,7 +18,7 @@ class Run:
         self.trainer = trainer_type(run_config.trainer_config)
         self.datasplit = datasplit_type(run_config.datasplit_config)
 
-        self.model = self.task.predictor.create_model(self.architecture, self.datasplit.train.raw)
+        self.model = self.task.predictor.create_model(self.architecture)
         self.optimizer = self.trainer.create_optimizer(self.model)
 
         self.training_stats = TrainingStats()

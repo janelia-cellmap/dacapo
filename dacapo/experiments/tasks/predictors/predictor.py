@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class Predictor(ABC):
 
     @abstractmethod
-    def create_model(self, architecture, dataset):
+    def create_model(self, architecture):
         """Given a training architecture, create a model for this predictor.
         This is usually done by appending extra layers to the output of the
         architecture to get the output tensor of the architecture into the

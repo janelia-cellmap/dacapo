@@ -8,7 +8,7 @@ class DummyPredictor(Predictor):
     def __init__(self, embedding_dims):
         self.embedding_dims = embedding_dims
 
-    def create_model(self, architecture, dataset):
+    def create_model(self, architecture):
 
         head = torch.nn.Conv3d(
             architecture.num_out_channels,
