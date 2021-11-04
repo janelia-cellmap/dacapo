@@ -17,7 +17,7 @@ class DummyTrainer(Trainer):
             lr=self.learning_rate,
             params=model.parameters())
 
-    def iterate(self, num_iterations):
+    def iterate(self, num_iterations, model, optimizer):
 
         target_iteration = self.iteration + num_iterations
 
@@ -28,3 +28,12 @@ class DummyTrainer(Trainer):
                 time=0.1)
 
         self.iteration += 1
+
+    def build_batch_provider(self, datasplit, architecture, task):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
