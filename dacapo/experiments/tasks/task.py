@@ -1,8 +1,30 @@
-class Task:
+from .predictors import Predictor
+from .losses import Loss
+from .evaluators import Evaluator
+from .post_processors import PostProcessor
 
-    def __init__(self, predictor, loss, post_processor, evaluator):
+from abc import ABC, abstractmethod
+from typing import Iterable
 
-        self.predictor = predictor
-        self.loss = loss
-        self.post_processor = post_processor
-        self.evaluator = evaluator
+
+class Task(ABC):
+    @property
+    @abstractmethod
+    def predictor(self) -> Predictor:
+        """The predictors to use on for this task"""
+        pass
+
+    @property
+    @abstractmethod
+    def loss(self) -> Loss:
+        pass
+
+    @property
+    @abstractmethod
+    def evaluator(self) -> Evaluator:
+        pass
+
+    @property
+    @abstractmethod
+    def post_processor(self) -> PostProcessor:
+        pass
