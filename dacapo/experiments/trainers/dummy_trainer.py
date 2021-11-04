@@ -4,11 +4,14 @@ import torch
 
 
 class DummyTrainer(Trainer):
+    learning_rate = None
+    batch_size = None
+    iteration = 0
 
     def __init__(self, trainer_config):
 
-        super().__init__(trainer_config)
-
+        self.learning_rate = trainer_config.learning_rate
+        self.batch_size = trainer_config.batch_size
         self.mirror_augment = trainer_config.mirror_augment
 
     def create_optimizer(self, model):

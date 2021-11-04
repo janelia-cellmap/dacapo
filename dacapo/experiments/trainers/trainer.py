@@ -3,11 +3,20 @@ from contextlib import contextmanager
 
 
 class Trainer(ABC):
-    def __init__(self, trainer_config):
+    @property
+    @abstractmethod
+    def learning_rate(self):
+        pass
 
-        self.learning_rate = trainer_config.learning_rate
-        self.batch_size = trainer_config.batch_size
-        self.iteration = 0
+    @property
+    @abstractmethod
+    def batch_size(self):
+        pass
+
+    @property
+    @abstractmethod
+    def iteration(self):
+        pass
 
     def set_iteration(self, iteration):
         """Set the iteration for this trainer when resuming training."""
