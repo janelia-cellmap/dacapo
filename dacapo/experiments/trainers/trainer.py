@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
+from contextlib import contextmanager
 
 
 class Trainer(ABC):
-
     def __init__(self, trainer_config):
 
         self.learning_rate = trainer_config.learning_rate
@@ -20,7 +20,15 @@ class Trainer(ABC):
         pass
 
     @abstractmethod
-    def iterate(self, num_iterations):
+    def iterate(self, num_iterations, model, optimizer):
         """Perform ``num_iterations`` training iterations. Each iteration
         should ``yield`` an instance of ``TrainingIterationStats``."""
+        pass
+
+    @abstractmethod
+    def __enter__(self):
+        return self
+
+    @abstractmethod
+    def __exit__(self, exc_type, exc_val, exc_tb):
         pass
