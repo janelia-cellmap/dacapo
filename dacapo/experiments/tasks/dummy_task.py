@@ -8,6 +8,11 @@ from .task import Task
 class DummyTask(Task):
     """This is just a dummy task for testing."""
 
+    predictor = None
+    loss = None
+    post_processor = None
+    evaluator = None
+
     def __init__(self, task_config):
         """Create a `DummyTask` from a `DummyTaskConfig`."""
 
