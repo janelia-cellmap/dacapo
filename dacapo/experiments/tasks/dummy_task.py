@@ -11,9 +11,8 @@ class DummyTask(Task):
     def __init__(self, task_config):
         """Create a `DummyTask` from a `DummyTaskConfig`."""
 
-        predictor = DummyPredictor(task_config.embedding_dims)
-        loss = DummyLoss()
-        post_processor = DummyPostProcessor(task_config.detection_threshold)
-        evaluator = DummyEvaluator()
+        self.predictor = DummyPredictor(task_config.embedding_dims)
+        self.loss = DummyLoss()
+        self.post_processor = DummyPostProcessor(task_config.detection_threshold)
+        self.evaluator = DummyEvaluator()
 
-        super().__init__(predictor, loss, post_processor, evaluator)
