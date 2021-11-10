@@ -35,6 +35,9 @@ class DummyTrainer(Trainer):
     def build_batch_provider(self, datasplit, architecture, task):
         pass
 
+    def can_train(self, datasplit):
+        return True
+
     def __enter__(self):
         return self
 
