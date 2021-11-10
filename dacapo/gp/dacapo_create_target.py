@@ -37,7 +37,6 @@ class DaCapoTargetFilter(gp.BatchFilter):
         provided_spec = gp.ArraySpec(
             roi=self.spec[self.gt_key].roi,
             interpolatable=self.predictor.output_array_type.interpolatable,
-            dtype=self.predictor.output_array_type.dtype,
         )
         self.provides(self.target_key, provided_spec)
 
