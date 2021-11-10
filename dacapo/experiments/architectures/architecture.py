@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from funlib.geometry import Coordinate
 
 class Architecture(ABC):
 
@@ -26,3 +27,6 @@ class Architecture(ABC):
     def forward(self, x):
         """Process an input tensor."""
         pass
+
+    def scale(self, input_voxel_size: Coordinate) -> Coordinate:
+        return input_voxel_size
