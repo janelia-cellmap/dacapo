@@ -46,10 +46,11 @@ def test_trainer(
     model = task.predictor.create_model(architecture)
     optimizer = trainer.create_optimizer(model)
 
-    # Trainer must build its batch provider:
-    trainer.build_batch_provider(datasplit.train, architecture, task)
+    if trainer.can_train(datasplit.train):
+        # Trainer must build its batch provider:
+        trainer.build_batch_provider(datasplit.train, model, task)
 
-    # enter the training context:
-    with trainer as trainer:
-        training_stats = list(trainer.iterate(NUM_ITER, model, optimizer))
-        assert len(training_stats) == NUM_ITER
+        # enter the training context:
+        with trainer as trainer:
+            training_stats = list(trainer.iterate(NUM_ITER, model, optimizer))
+            assert len(training_stats) == NUM_ITER
