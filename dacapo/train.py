@@ -84,6 +84,7 @@ def train(run_name):
     # start/resume training
 
     run.trainer.set_iteration(trained_until)
+    run.trainer.build_batch_provider(run.datasplit.train, run.model, run.task)
 
     with run.trainer as trainer:
         while trained_until < train_until:
