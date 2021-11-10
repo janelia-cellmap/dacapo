@@ -135,19 +135,11 @@ class GunpowderTrainer(Trainer):
 
     def __enter__(self):
         self._iter = iter(self)
-        print("ENTERING")
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        print("EXITING")
         self._iter.send(True)
         pass
 
     def can_train(self, datasets) -> bool:
         return all([dataset.gt is not None for dataset in datasets])
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
