@@ -100,18 +100,18 @@ class GunpowderTrainer(Trainer):
         self._weight_key = weight_key
         self._target_key = target_key
 
-    def iterate(self, num_iterations, device, model, optimizer):
+    def iterate(self, num_iterations, model, optimizer):
         for self.iteration in range(self.iteration, self.iteration + num_iterations):
             raw, target, weight = self.next()
 
             for param in model.parameters():
                 param.grad = None
 
-            predicted = model.forward(torch.as_tensor(raw[raw.roi], device=device))
+            predicted = model.forward(torch.as_tensor(raw[raw.roi]))
             loss = self.loss(
                 predicted,
-                torch.as_tensor(target[target.roi], device=device),
-                torch.as_tensor(weight[weight.roi], device=device),
+                torch.as_tensor(target[target.roi]),
+                torch.as_tensor(weight[weight.roi]),
             )
             loss.backward()
             optimizer.step()
