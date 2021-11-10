@@ -1,7 +1,4 @@
-from ..fixtures.datasplits import DATASPLIT_MK_FUNCTIONS
-from ..fixtures.tasks import TASK_CONFIGS
-from ..fixtures.architectures import ARCHITECTURE_CONFIGS
-from ..fixtures.trainers import TRAINER_CONFIGS
+from ..fixtures.runs import RUNS
 
 from dacapo import Options
 from dacapo.experiments import RunConfig
@@ -15,10 +12,9 @@ logging.basicConfig(level=logging.INFO)
 import pytest
 
 
-@pytest.mark.parametrize("datasplit_mkfunction", DATASPLIT_MK_FUNCTIONS)
-@pytest.mark.parametrize("architecture_config", ARCHITECTURE_CONFIGS)
-@pytest.mark.parametrize("task_config", TASK_CONFIGS)
-@pytest.mark.parametrize("trainer_config", TRAINER_CONFIGS)
+@pytest.mark.parametrize(
+    "datasplit_mkfunction, architecture_config, task_config, trainer_config", RUNS
+)
 def test_train(
     tmp_path, datasplit_mkfunction, architecture_config, task_config, trainer_config
 ):  # create a run config
@@ -32,7 +28,7 @@ def test_train(
         architecture_config=architecture_config,
         trainer_config=trainer_config,
         datasplit_config=datasplit_config,
-        repetition=2,
+        repetition=0,
         num_iterations=100,
         snapshot_interval=5,
         validation_score="frizz_level",
