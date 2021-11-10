@@ -1,4 +1,4 @@
-from arraytype import ArrayType
+from .arraytype import ArrayType
 
 import numpy as np
 
