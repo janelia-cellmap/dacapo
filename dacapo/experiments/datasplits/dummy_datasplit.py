@@ -10,6 +10,6 @@ class DummyDataSplit(DataSplit):
 
         super().__init__()
 
-        self.train = datasplit_config.train_config.datasplit_type(
-            datasplit_config.train_config
-        )
+        self.train = [
+            datasplit_config.train_config.datasplit_type(datasplit_config.train_config)
+        ]
