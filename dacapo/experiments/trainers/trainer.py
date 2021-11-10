@@ -35,6 +35,14 @@ class Trainer(ABC):
         pass
 
     @abstractmethod
+    def can_train(self, datasets):
+        """
+        Can this trainer train with a specific set of datasets. Some trainers
+        may have requirements for their training datasets.
+        """
+        pass
+
+    @abstractmethod
     def __enter__(self):
         return self
 
