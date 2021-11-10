@@ -1,5 +1,6 @@
 from .predictor import Predictor
 from dacapo.experiments import Model
+from dacapo.experiments.arraytypes import EmbeddingArray
 import torch
 
 
@@ -19,3 +20,7 @@ class DummyPredictor(Predictor):
 
     def create_target(self, gt):
         pass
+
+    @property
+    def output_array_type(self):
+        return EmbeddingArray(self.embedding_dims)

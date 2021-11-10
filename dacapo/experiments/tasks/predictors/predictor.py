@@ -33,6 +33,11 @@ class Predictor(ABC):
         """
         pass
 
+    @property
+    @abstractmethod
+    def output_array_type(self):
+        pass
+
     def gt_region_for_roi(self, target_roi):
         """Report how much spatial context this predictor needs to generate a
         target for the given ROI. By default, uses the same ROI.
