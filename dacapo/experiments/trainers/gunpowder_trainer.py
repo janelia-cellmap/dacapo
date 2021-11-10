@@ -45,13 +45,13 @@ class GunpowderTrainer(Trainer):
 
             raw_source = DaCapoArraySource(dataset.raw, raw_key)
             gt_source = DaCapoArraySource(dataset.gt, gt_key)
-            dataset_sources = [raw_source, gt_source]
+            array_sources = [raw_source, gt_source]
             if dataset.mask is not None:
                 mask_source = DaCapoArraySource(dataset.mask, mask_key)
-                dataset_sources.append(mask_source)
+                array_sources.append(mask_source)
 
             dataset_source = (
-                tuple(dataset_sources) + gp.MergeProvider() + gp.RandomLocation()
+                tuple(array_sources) + gp.MergeProvider() + gp.RandomLocation()
             )
 
             if dataset.mask is not None:
@@ -69,7 +69,7 @@ class GunpowderTrainer(Trainer):
             pipeline += self.get_augment_node(augmentation, raw_key)
 
         # Add predictor nodes to pipeline
-        DaCapoTargetFilter(
+        pipeline += DaCapoTargetFilter(
             task.predictor, gt_key=gt_key, target_key=target_key, weights_key=weight_key
         )
 
@@ -120,7 +120,7 @@ class GunpowderTrainer(Trainer):
         with gp.build(self._pipeline):
             teardown = False
             while not teardown:
-                batch = self._pipeline.request(self._request)
+                batch = self._pipeline.request_batch(self._request)
                 yield batch
                 teardown = yield
         yield None
