@@ -123,6 +123,7 @@ class GunpowderTrainer(Trainer):
                 batch = self._pipeline.request(self._request)
                 yield batch
                 teardown = yield
+        yield None
 
     def next(self):
         batch = next(self._iter)
