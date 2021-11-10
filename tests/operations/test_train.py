@@ -22,6 +22,7 @@ import pytest
 def test_train(
     tmp_path, datasplit_mkfunction, architecture_config, task_config, trainer_config
 ):  # create a run config
+    Options._instance = None
     Options.instance(type="files", runs_base_dir=f"{tmp_path}")
 
     datasplit_config = datasplit_mkfunction(tmp_path)
