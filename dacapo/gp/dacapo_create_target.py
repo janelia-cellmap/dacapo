@@ -1,10 +1,10 @@
 from dacapo.experiments.tasks.predictors import Predictor
-from dacapo.experiments.datasplits.datasets.arrays import Array
+from dacapo.experiments.datasplits.datasets.arrays import Array, NumpyArray
 
 import gunpowder as gp
 
 
-class DaCapoTargetProvider(gp.BatchProvider):
+class DaCapoTargetFilter(gp.BatchFilter):
     """A Gunpowder node for generating the target from the ground truth
 
     Args:
@@ -22,9 +22,15 @@ class DaCapoTargetProvider(gp.BatchProvider):
             The key with which to provide the target.
     """
 
-    def __init__(self, predictor: Predictor, gt: Array, target_key: gp.ArrayKey):
+    def __init__(
+        self,
+        predictor: Predictor,
+        gt_key: gp.ArrayKey,
+        target_key: gp.ArrayKey,
+        weights_key: gp.ArrayKey,
+    ):
         self.predictor = predictor
-        self.gt = gt
+        self.gt_key = gt_key
         self.target_key = target_key
 
     def setup(self):
@@ -35,12 +41,17 @@ class DaCapoTargetProvider(gp.BatchProvider):
         )
         self.provides(self.target_key, provided_spec)
 
-    def provide(self, request):
+    def prepare(self, request):
+        deps = gp.BatchRequest()
+        deps[self.gt_key] = request[self.target_key].copy()
+        return deps
+
+    def process(self, batch, request):
         output = gp.Batch()
         request_spec = request[self.target_key]
-        
-        gt_data = self.gt[request_spec.roi]
-        target_data = self.provider.create_target(gt_data)
 
-        output[self.target_key] = gp.Array(target_data, request_spec)
+        gt_array = NumpyArray.from_gp_array(batch[self.gt_key])
+        target_array = self.predictor.create_target(gt_array)
+
+        output[self.target_key] = gp.Array(target_array[request_spec.roi], request_spec)
         return output
