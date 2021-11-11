@@ -54,8 +54,10 @@ def mk_twelve_class_datasplit(tmp_path):
         raw_dataset[:] = random_data
         raw_dataset.attrs["offset"] = (0, 0, 0)
         raw_dataset.attrs["resolution"] = (2, 2, 2)
+        raw_dataset.attrs["axes"] = ("z", "y", "x")
         gt_dataset.attrs["offset"] = (0, 0, 0)
         gt_dataset.attrs["resolution"] = (2, 2, 2)
+        gt_dataset.attrs["axes"] = ("z", "y", "x")
 
     crop1 = RawGTDatasetConfig(name="crop1", raw_config=crop1_raw, gt_config=crop1_gt)
     crop2 = RawGTDatasetConfig(name="crop2", raw_config=crop2_raw, gt_config=crop2_gt)
