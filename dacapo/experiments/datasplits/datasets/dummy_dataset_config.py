@@ -13,4 +13,3 @@ class DummyDatasetConfig(DatasetConfig):
     datasplit_type = DummyDataset
 
     raw_config: ArrayConfig = attr.ib(DummyArrayConfig(name="dummy_array"))
-    gt_config: ArrayConfig = attr.ib(DummyArrayConfig(name="dummy_gt_array"))
