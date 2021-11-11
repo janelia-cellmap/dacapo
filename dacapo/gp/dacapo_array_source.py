@@ -5,6 +5,7 @@ from dacapo.experiments.datasplits.datasets.arrays import Array
 import gunpowder as gp
 from gunpowder.array_spec import ArraySpec
 
+import numpy as np
 
 class DaCapoArraySource(gp.BatchProvider):
     """A DaCapo Array source node
@@ -36,6 +37,10 @@ class DaCapoArraySource(gp.BatchProvider):
         spec = self.array_spec.copy()
         spec.roi = request[self.key].roi
 
-        output[self.key] = gp.Array(self.array[spec.roi], spec=spec)
+        data = self.array[spec.roi]
+        if "c" not in self.array.axes:
+            # add a channel dimension
+            data = np.expand_dims(data, 0)
+        output[self.key] = gp.Array(data, spec=spec)
 
         return output
