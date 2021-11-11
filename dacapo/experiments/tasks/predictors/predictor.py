@@ -33,6 +33,13 @@ class Predictor(ABC):
         """
         pass
 
+    @abstractmethod
+    def create_weight(self, gt, target):
+        """Create the weight array for training, given a ground-truth and
+        associated target array.
+        """
+        pass
+
     @property
     @abstractmethod
     def output_array_type(self):
