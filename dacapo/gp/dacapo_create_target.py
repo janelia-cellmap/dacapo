@@ -32,25 +32,42 @@ class DaCapoTargetFilter(gp.BatchFilter):
         self.predictor = predictor
         self.gt_key = gt_key
         self.target_key = target_key
+        self.weights_key = weights_key
 
     def setup(self):
         provided_spec = gp.ArraySpec(
             roi=self.spec[self.gt_key].roi,
+            voxel_size=self.spec[self.gt_key].voxel_size,
             interpolatable=self.predictor.output_array_type.interpolatable,
         )
         self.provides(self.target_key, provided_spec)
 
+        provided_spec = gp.ArraySpec(
+            roi=self.spec[self.gt_key].roi,
+            voxel_size=self.spec[self.gt_key].voxel_size,
+            interpolatable=True,
+        )
+        self.provides(self.weights_key, provided_spec)
+
     def prepare(self, request):
         deps = gp.BatchRequest()
+        # TODO: Does the gt depend on weights too?
         deps[self.gt_key] = request[self.target_key].copy()
         return deps
 
     def process(self, batch, request):
         output = gp.Batch()
-        request_spec = request[self.target_key]
 
         gt_array = NumpyArray.from_gp_array(batch[self.gt_key])
         target_array = self.predictor.create_target(gt_array)
+        weight_array = self.predictor.create_weight(gt_array, target_array)
 
+        request_spec = request[self.target_key]
+        request_spec.voxel_size = gt_array.voxel_size
         output[self.target_key] = gp.Array(target_array[request_spec.roi], request_spec)
+        request_spec = request[self.weights_key]
+        request_spec.voxel_size = gt_array.voxel_size
+        output[self.weights_key] = gp.Array(
+            weight_array[request_spec.roi], request_spec
+        )
         return output
