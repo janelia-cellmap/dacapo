@@ -9,6 +9,7 @@ import gunpowder as gp
 
 import torch
 
+import time
 
 class GunpowderTrainer(Trainer):
     learning_rate = None
@@ -99,6 +100,7 @@ class GunpowderTrainer(Trainer):
         self._gt_key = gt_key
         self._weight_key = weight_key
         self._target_key = target_key
+        self._loss = task.loss
 
     def iterate(self, num_iterations, model, optimizer):
         for self.iteration in range(self.iteration, self.iteration + num_iterations):
@@ -107,14 +109,19 @@ class GunpowderTrainer(Trainer):
             for param in model.parameters():
                 param.grad = None
 
+            t_start = time.time()
             predicted = model.forward(torch.as_tensor(raw[raw.roi]))
-            loss = self.loss(
+            loss = self._loss.compute(
                 predicted,
                 torch.as_tensor(target[target.roi]),
                 torch.as_tensor(weight[weight.roi]),
             )
             loss.backward()
             optimizer.step()
+            yield TrainingIterationStats(
+                loss=loss,
+                iteration=self.iteration,
+                time=time.time() - t_start)
 
     def __iter__(self):
         with gp.build(self._pipeline):
@@ -129,7 +136,7 @@ class GunpowderTrainer(Trainer):
         batch = next(self._iter)
         self._iter.send(False)
         return (
-            NumpyArray(batch[self._raw_key]),
+            NumpyArray.from_gp_array(batch[self._raw_key]),
             NumpyArray.from_gp_array(batch[self._target_key]),
             NumpyArray.from_gp_array(batch[self._weight_key]),
         )
