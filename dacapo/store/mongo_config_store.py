@@ -3,6 +3,7 @@ from .converter import converter
 from dacapo.experiments import RunConfig
 from dacapo.experiments.architectures import ArchitectureConfig
 from dacapo.experiments.datasplits import DataSplitConfig
+from dacapo.experiments.datasplits.datasets import DatasetConfig
 from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
 from dacapo.experiments.tasks import TaskConfig
 from dacapo.experiments.trainers import TrainerConfig
@@ -127,6 +128,25 @@ class MongoConfigStore(ConfigStore):
             projection={"_id": False, "name": True})
         return list([datasplit["name"] for datasplit in datasplits])
 
+    def store_dataset_config(self, dataset_config):
+
+        dataset_doc = converter.unstructure(dataset_config)
+        self.__save_insert(self.datasets, dataset_doc)
+
+    def retrieve_dataset_config(self, dataset_name):
+
+        dataset_doc = self.datasets.find_one(
+            {"name": dataset_name},
+            projection={"_id": False})
+        return converter.structure(dataset_doc, DatasetConfig)
+
+    def retrieve_dataset_config_names(self):
+
+        datasets = self.datasets.find(
+            {},
+            projection={"_id": False, "name": True})
+        return list([dataset["name"] for dataset in datasets])
+
     def store_array_config(self, array_config):
 
         array_doc = converter.unstructure(array_config)
@@ -198,6 +218,11 @@ class MongoConfigStore(ConfigStore):
             name="name",
             unique=True)
 
+        self.datasplits.create_index(
+            [("name", ASCENDING)],
+            name="name",
+            unique=True)
+
         self.datasets.create_index(
             [("name", ASCENDING)],
             name="name",
@@ -223,6 +248,7 @@ class MongoConfigStore(ConfigStore):
         self.users = self.database["users"]
         self.runs = self.database["runs"]
         self.tasks = self.database["tasks"]
+        self.datasplits = self.database["datasplits"]
         self.datasets = self.database["datasets"]
         self.arrays = self.database["arrays"]
         self.architectures = self.database["architectures"]
