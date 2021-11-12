@@ -16,7 +16,7 @@ def create_config_store():
 
     try:
         store_type = options.type
-    except KeyError:
+    except RuntimeError:
         store_type = "mongo"
     if store_type == "mongo":
         db_host = options.mongo_db_host
@@ -34,7 +34,7 @@ def create_stats_store():
 
     try:
         store_type = options.type
-    except KeyError:
+    except RuntimeError:
         store_type = "mongo"
     if store_type == "mongo":
         db_host = options.mongo_db_host
