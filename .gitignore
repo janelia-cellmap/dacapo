@@ -12,3 +12,4 @@
 build
 .vscode
 runs/*
+dacapo.yaml
