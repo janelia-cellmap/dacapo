@@ -119,7 +119,7 @@ class GunpowderTrainer(Trainer):
             loss.backward()
             optimizer.step()
             yield TrainingIterationStats(
-                loss=loss,
+                loss=loss.item(),
                 iteration=self.iteration,
                 time=time.time() - t_start)
 
