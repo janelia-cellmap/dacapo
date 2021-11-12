@@ -1,4 +1,5 @@
 from ..fixtures.trainers import TRAINER_CONFIGS
+from ..fixtures.db import options
 
 from dacapo import Options
 from dacapo.store import create_config_store
@@ -8,11 +9,10 @@ import pytest
 
 @pytest.mark.parametrize("trainer_config", TRAINER_CONFIGS)
 def test_trainer(
-    tmp_path,
+    options,
     trainer_config,
 ):
-    # Initialize the config store
-    Options.instance(type="files", runs_base_dir=f"{tmp_path}")
+    # Initialize the config store (uses options behind the scene)
     store = create_config_store()
 
     # Test store/retrieve

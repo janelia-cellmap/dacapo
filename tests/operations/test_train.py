@@ -1,27 +1,27 @@
 from ..fixtures.runs import RUNS
+from ..fixtures.db import options
 
-from dacapo import Options
 from dacapo.experiments import RunConfig
 from dacapo.store import create_config_store
 from dacapo import train
 
+import pytest
+
 import logging
+from pathlib import Path
 
 logging.basicConfig(level=logging.INFO)
-
-import pytest
 
 
 @pytest.mark.parametrize(
     "datasplit_mkfunction, architecture_config, task_config, trainer_config", RUNS
 )
 def test_train(
-    tmp_path, datasplit_mkfunction, architecture_config, task_config, trainer_config
-):  # create a run config
-    Options._instance = None
-    Options.instance(type="files", runs_base_dir=f"{tmp_path}")
+    options, datasplit_mkfunction, architecture_config, task_config, trainer_config
+):
 
-    datasplit_config = datasplit_mkfunction(tmp_path)
+
+    datasplit_config = datasplit_mkfunction(Path(options.runs_base_dir) / "data")
     run_config = RunConfig(
         name="test_run",
         task_config=task_config,

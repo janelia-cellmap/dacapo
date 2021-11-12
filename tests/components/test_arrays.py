@@ -1,21 +1,20 @@
 from ..fixtures.arrays import ARRAY_MK_FUNCTIONS
+from ..fixtures.db import options
 
-from dacapo import Options
 from dacapo.store import create_config_store
-
-from funlib.geometry import Coordinate, Roi
 
 import pytest
 
+from pathlib import Path
+
 
 @pytest.mark.parametrize("array_mk_function", ARRAY_MK_FUNCTIONS)
-def test_array_api(tmp_path, array_mk_function):
-    # Initialize the config store
-    Options.instance(type="files", runs_base_dir=f"{tmp_path}")
+def test_array_api(options, array_mk_function):
+    # create_config_store (uses options behind the scenes)
     store = create_config_store()
 
     # Initialize the dataset and get the array config
-    array_config = array_mk_function(tmp_path)
+    array_config = array_mk_function(Path(options.runs_base_dir) / "data")
 
     # Test store/retrieve
     store.store_array_config(array_config)
