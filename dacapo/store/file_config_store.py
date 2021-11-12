@@ -70,10 +70,7 @@ class FileConfigStore(ConfigStore):
 
     def retrieve_architecture_config_names(self):
 
-        architectures = self.architectures.find(
-            {}, projection={"_id": False, "name": True}
-        )
-        return list([architecture["name"] for architecture in architectures])
+        return [f.name for f in self.architectures.iterdir()]
 
     def store_trainer_config(self, trainer_config):
 
