@@ -1,3 +1,4 @@
+from dacapo.store.create_store import create_stats_store
 from ..fixtures.runs import RUNS
 from ..fixtures.db import options
 
@@ -38,6 +39,7 @@ def test_train(
     # create a store
 
     store = create_config_store()
+    stats_store = create_stats_store()
 
     # store the configs
 
@@ -48,3 +50,9 @@ def test_train(
     # train
 
     train("test_run")
+
+    # assert train_stats and validation_scores are available
+
+    training_stats = stats_store.retrieve_training_stats("test_run")
+
+    assert training_stats.trained_until() == 100
