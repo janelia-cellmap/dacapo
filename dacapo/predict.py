@@ -1,4 +1,5 @@
 from dacapo.experiments.datasplits.keys import ArrayKey
+from dacapo.gp import DaCapoArraySource
 from funlib.geometry import Coordinate
 import daisy
 import gunpowder as gp
@@ -10,14 +11,10 @@ import zarr
 logger = logging.getLogger(__name__)
 
 
-def predict(model, dataset, prediction_array, num_cpu_workers=4):
-
-    raw_source = dataset[ArrayKey.RAW]
-    raw_has_channels = 'c' in raw_source.axes
-
+def predict(model, raw_array, prediction_array, num_cpu_workers=4):
     # get the model's input and output size
 
-    voxel_size = Coordinate(raw_source.voxel_size)
+    voxel_size = Coordinate(raw_array.voxel_size)
     input_size = voxel_size * Coordinate(model.input_shape)
     output_size = voxel_size * Coordinate(model.output_shape)
 
@@ -28,7 +25,7 @@ def predict(model, dataset, prediction_array, num_cpu_workers=4):
     # calculate input and output rois
 
     context = (input_size - output_size) / 2
-    input_roi = raw_source.roi
+    input_roi = raw_array.roi
     output_roi = input_roi.grow(-context, -context)
 
     logger.info(
@@ -54,19 +51,9 @@ def predict(model, dataset, prediction_array, num_cpu_workers=4):
     # assemble prediction pipeline
 
     # prepare data source
-    pipeline = gp.ZarrSource(
-        raw_source.container,
-        {
-            raw: raw_source.dataset
-        },
-        {
-            raw: gp.ArraySpec(interpolatable=True)
-        })
-    # raw: ([c,] d, h, w)
+    pipeline = DaCapoArraySource(raw_array, raw)
+    # raw: (c, d, h, w)
     pipeline += gp.Pad(raw, Coordinate((None,) * voxel_size.dims))
-    pipeline += gp.Normalize(raw)
-    if not raw_has_channels:
-        pipeline += gp.Unsqueeze([raw])
     # raw: (c, d, h, w)
     pipeline += gp.Unsqueeze([raw])
     # raw: (1, c, d, h, w)
@@ -89,11 +76,9 @@ def predict(model, dataset, prediction_array, num_cpu_workers=4):
     # prepare writing
     pipeline += gp.Squeeze([raw, prediction])
     # raw: (c, d, h, w)
-    # prediction: ([c,] d, h, w)
-    if not raw_has_channels:
-        pipeline += gp.Squeeze([raw])
-    # raw: ([c,] d, h, w)
-    # prediction: ([c,] d, h, w)
+    # prediction: (c, d, h, w)
+    # raw: (c, d, h, w)
+    # prediction: (c, d, h, w)
 
     # write to zarr
     pipeline += gp.ZarrWrite(
