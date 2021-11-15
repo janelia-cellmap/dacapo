@@ -5,7 +5,6 @@ from ..fixtures.db import options
 from dacapo.experiments import RunConfig, Run
 from dacapo.store import create_config_store
 from dacapo import validate
-from dacapo.errors import DataError
 
 import pytest
 
