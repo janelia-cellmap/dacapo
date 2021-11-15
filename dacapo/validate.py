@@ -56,7 +56,7 @@ def validate_run(run, iteration):
         iteration)
     predict(
         run.model,
-        run.dataset.validate,
+        run.datasplit.validate[0].raw,
         prediction_array)
 
     # post-process and evaluate for each parameter
@@ -82,7 +82,7 @@ def validate_run(run, iteration):
 
         scores = evaluator.evaluate(
             output_array,
-            run.dataset.validate)
+            run.datasplit.validate[0].gt)
 
         if iteration_scores.is_better(
                 scores,
