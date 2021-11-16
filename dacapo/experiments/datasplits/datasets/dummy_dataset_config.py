@@ -10,6 +10,6 @@ class DummyDatasetConfig(DatasetConfig):
     """This is just a dummy DataSplit config used for testing. None of the
     attributes have any particular meaning."""
 
-    datasplit_type = DummyDataset
+    dataset_type = DummyDataset
 
     raw_config: ArrayConfig = attr.ib(DummyArrayConfig(name="dummy_array"))
