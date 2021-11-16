@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 @pytest.mark.parametrize(
     "datasplit_mkfunction, architecture_config, task_config, trainer_config", RUNS
 )
-def test_train(
+def test_validate(
     options, datasplit_mkfunction, architecture_config, task_config, trainer_config
 ):
     compute_context = LocalTorch(device="cpu")
