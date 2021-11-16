@@ -53,13 +53,13 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
     # predict on validation dataset
     run.model = run.model.to(compute_context.device)
 
-    prediction_array = array_store.validation_prediction_array(
+    prediction_array_identifier = array_store.validation_prediction_array(
         run.name,
         iteration)
     predict(
         run.model,
         run.datasplit.validate[0].raw,
-        prediction_array,
+        prediction_array_identifier,
         compute_context=compute_context)
 
     # post-process and evaluate for each parameter
@@ -68,7 +68,7 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
     evaluator = run.task.evaluator
     iteration_scores = ValidationIterationScores(iteration, [])
 
-    post_processor.set_prediction(prediction_array)
+    post_processor.set_prediction(prediction_array_identifier)
     best_parameters = None
     best_scores = None
 

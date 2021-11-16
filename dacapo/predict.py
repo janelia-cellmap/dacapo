@@ -13,7 +13,7 @@ import zarr
 logger = logging.getLogger(__name__)
 
 
-def predict(model, raw_array, prediction_array, num_cpu_workers=4, compute_context=LocalTorch()):
+def predict(model, raw_array, prediction_array_identifier, num_cpu_workers=4, compute_context=LocalTorch()):
     # get the model's input and output size
 
     voxel_size = Coordinate(raw_array.voxel_size)
@@ -36,8 +36,8 @@ def predict(model, raw_array, prediction_array, num_cpu_workers=4, compute_conte
 
     # prepare prediction dataset
     daisy.prepare_ds(
-        str(prediction_array.container),
-        prediction_array.dataset,
+        str(prediction_array_identifier.container),
+        prediction_array_identifier.dataset,
         output_roi,
         voxel_size,
         np.float32,
@@ -85,9 +85,9 @@ def predict(model, raw_array, prediction_array, num_cpu_workers=4, compute_conte
 
     # write to zarr
     pipeline += gp.ZarrWrite(
-        {prediction: prediction_array.dataset},
-        prediction_array.container.parent,
-        prediction_array.container.name)
+        {prediction: prediction_array_identifier.dataset},
+        prediction_array_identifier.container.parent,
+        prediction_array_identifier.container.name)
 
     # create reference batch request
     ref_request = gp.BatchRequest()
