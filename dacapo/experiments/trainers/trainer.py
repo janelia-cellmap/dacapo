@@ -29,7 +29,7 @@ class Trainer(ABC):
         pass
 
     @abstractmethod
-    def iterate(self, num_iterations, model, optimizer):
+    def iterate(self, num_iterations, model, optimizer, device):
         """Perform ``num_iterations`` training iterations. Each iteration
         should ``yield`` an instance of ``TrainingIterationStats``."""
         pass

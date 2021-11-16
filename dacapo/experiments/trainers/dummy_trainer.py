@@ -20,7 +20,7 @@ class DummyTrainer(Trainer):
             lr=self.learning_rate,
             params=model.parameters())
 
-    def iterate(self, num_iterations, model, optimizer):
+    def iterate(self, num_iterations, model, optimizer, device):
 
         target_iteration = self.iteration + num_iterations
 

@@ -2,6 +2,7 @@ from ..training_iteration_stats import TrainingIterationStats
 from .trainer import Trainer
 
 from dacapo.gp import DaCapoArraySource, DaCapoTargetFilter
+from dacapo.compute_context import LocalTorch
 from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
 
 from funlib.geometry import Coordinate
@@ -102,7 +103,7 @@ class GunpowderTrainer(Trainer):
         self._target_key = target_key
         self._loss = task.loss
 
-    def iterate(self, num_iterations, model, optimizer):
+    def iterate(self, num_iterations, model, optimizer, device):
         for self.iteration in range(self.iteration, self.iteration + num_iterations):
             raw, target, weight = self.next()
 
@@ -110,11 +111,11 @@ class GunpowderTrainer(Trainer):
                 param.grad = None
 
             t_start = time.time()
-            predicted = model.forward(torch.as_tensor(raw[raw.roi]))
+            predicted = model.forward(torch.as_tensor(raw[raw.roi]).to(device))
             loss = self._loss.compute(
                 predicted,
-                torch.as_tensor(target[target.roi]),
-                torch.as_tensor(weight[weight.roi]),
+                torch.as_tensor(target[target.roi]).to(device),
+                torch.as_tensor(weight[weight.roi]).to(device),
             )
             loss.backward()
             optimizer.step()
