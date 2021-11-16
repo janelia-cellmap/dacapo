@@ -14,7 +14,7 @@ class DummyArray(Array):
 
     @property
     def axes(self):
-        return "zyx"
+        return ["z", "y", "x"]
 
     @property
     def dims(self):
@@ -58,4 +58,4 @@ class DummyArray(Array):
         offset = roi.offset / self.voxel_size
         shape = roi.shape / self.voxel_size
 
-        return self.data[tuple(slice(o, o+s) for o, s in zip(offset, shape))]
+        return self.data[tuple(slice(o, o + s) for o, s in zip(offset, shape))]
