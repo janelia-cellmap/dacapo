@@ -99,3 +99,7 @@ def predict(model, raw_array, prediction_array_identifier, num_cpu_workers=4, co
 
     with gp.build(pipeline):
         pipeline.request_batch(gp.BatchRequest())
+
+    container = zarr.open(prediction_array_identifier.container)
+    dataset = container[prediction_array_identifier.dataset]
+    dataset.attrs["axes"] = raw_array.axes if "c" in raw_array.axes else ["c"] + raw_array.axes
