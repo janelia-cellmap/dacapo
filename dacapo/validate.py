@@ -1,4 +1,5 @@
 from .predict import predict
+from .compute_context import LocalTorch
 from .experiments import Run, ValidationIterationScores
 from .store import \
     create_array_store, \
@@ -10,7 +11,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def validate(run_name, iteration):
+def validate(run_name, iteration, compute_context = LocalTorch()):
     """Validate a run at a given iteration. Loads the weights from a previously
     stored checkpoint. Returns the best parameters and scores for this
     iteration."""
@@ -34,10 +35,10 @@ def validate(run_name, iteration):
     weights_store = create_weights_store()
     weights_store.retrieve_weights(run, iteration)
 
-    return validate_run(run, iteration)
+    return validate_run(run, iteration, compute_context=compute_context)
 
 
-def validate_run(run, iteration):
+def validate_run(run, iteration, compute_context=LocalTorch()):
     """Validate an already loaded run at the given iteration. This does not
     load the weights of that iteration, it is assumed that the model is already
     loaded correctly. Returns the best parameters and scores for this
@@ -50,6 +51,7 @@ def validate_run(run, iteration):
     array_store = create_array_store()
 
     # predict on validation dataset
+    run.model = run.model.to(compute_context.device)
 
     prediction_array = array_store.validation_prediction_array(
         run.name,
@@ -57,7 +59,8 @@ def validate_run(run, iteration):
     predict(
         run.model,
         run.datasplit.validate[0].raw,
-        prediction_array)
+        prediction_array,
+        compute_context=compute_context)
 
     # post-process and evaluate for each parameter
 

@@ -1,5 +1,7 @@
 from dacapo.experiments.datasplits.keys import ArrayKey
 from dacapo.gp import DaCapoArraySource
+from dacapo.compute_context import LocalTorch
+
 from funlib.geometry import Coordinate
 import daisy
 import gunpowder as gp
@@ -11,7 +13,7 @@ import zarr
 logger = logging.getLogger(__name__)
 
 
-def predict(model, raw_array, prediction_array, num_cpu_workers=4):
+def predict(model, raw_array, prediction_array, num_cpu_workers=4, compute_context=LocalTorch()):
     # get the model's input and output size
 
     voxel_size = Coordinate(raw_array.voxel_size)
@@ -69,7 +71,8 @@ def predict(model, raw_array, prediction_array, num_cpu_workers=4):
                 voxel_size=voxel_size,
                 dtype=np.float32)
         },
-        spawn_subprocess=True)
+        spawn_subprocess=True,
+        device=compute_context._device)
     # raw: (1, c, d, h, w)
     # prediction: (1, [c,] d, h, w)
 

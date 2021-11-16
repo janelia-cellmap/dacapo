@@ -1,9 +1,9 @@
-from dacapo.store.create_store import create_stats_store, create_weights_store
 from ..fixtures.runs import RUNS
 from ..fixtures.db import options
 
 from dacapo.experiments import RunConfig, Run
-from dacapo.store import create_config_store
+from dacapo.compute_context import LocalTorch
+from dacapo.store import create_config_store, create_weights_store
 from dacapo import validate
 
 import pytest
@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.INFO)
 def test_train(
     options, datasplit_mkfunction, architecture_config, task_config, trainer_config
 ):
-
+    compute_context = LocalTorch(device="cpu")
 
     datasplit_config = datasplit_mkfunction(Path(options.runs_base_dir) / "data")
     run_config = RunConfig(
@@ -53,6 +53,6 @@ def test_train(
 
     # -------------------------------------
 
-    # train
+    # validate
 
-    best_parameters, best_scores = validate("test_run", 0)
+    best_parameters, best_scores = validate("test_run", 0, compute_context=compute_context)

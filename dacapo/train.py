@@ -1,4 +1,5 @@
 from .experiments import Run
+from .compute_context import LocalTorch
 from .store import \
     create_config_store, \
     create_stats_store, \
@@ -9,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def train(run_name):
+def train(run_name, compute_context=LocalTorch()):
 
     logger.info("Starting/resuming training for run %s...", run_name)
 
@@ -83,6 +84,8 @@ def train(run_name):
 
     # start/resume training
 
+    run.model = run.model.to(compute_context.device)
+
     run.trainer.set_iteration(trained_until)
     run.trainer.build_batch_provider(run.datasplit.train, run.model, run.task)
 
@@ -92,7 +95,7 @@ def train(run_name):
             # train for at most 100 iterations at a time, then store training stats
             iterations = min(100, train_until - trained_until)
 
-            for iteration_stats in trainer.iterate(iterations, run.model, run.optimizer):
+            for iteration_stats in trainer.iterate(iterations, run.model, run.optimizer, compute_context.device):
 
                 run.training_stats.add_iteration_stats(iteration_stats)
 
