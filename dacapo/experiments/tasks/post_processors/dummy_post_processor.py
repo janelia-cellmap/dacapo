@@ -22,8 +22,8 @@ class DummyPostProcessor(PostProcessor):
     def process(
             self,
             parameters,
-            output_array):
+            output_array_identifier):
 
         # store some dummy data
-        f = zarr.open(str(output_array.container), 'a')
-        f[output_array.dataset] = np.ones((10, 10, 10)) * parameters.min_size
+        f = zarr.open(str(output_array_identifier.container), 'a')
+        f[output_array_identifier.dataset] = np.ones((10, 10, 10)) * parameters.min_size
