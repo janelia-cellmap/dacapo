@@ -71,7 +71,7 @@ def predict(model, raw_array, prediction_array, num_cpu_workers=4, compute_conte
                 voxel_size=voxel_size,
                 dtype=np.float32)
         },
-        spawn_subprocess=True,
+        spawn_subprocess=False,
         device=compute_context._device)
     # raw: (1, c, d, h, w)
     # prediction: (1, [c,] d, h, w)
@@ -93,7 +93,7 @@ def predict(model, raw_array, prediction_array, num_cpu_workers=4, compute_conte
     ref_request = gp.BatchRequest()
     ref_request.add(raw, input_size)
     ref_request.add(prediction, output_size)
-    pipeline += gp.Scan(ref_request, num_cpu_workers)
+    pipeline += gp.Scan(ref_request)
 
     # build pipeline and predict in complete output ROI
 
