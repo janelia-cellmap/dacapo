@@ -71,4 +71,52 @@ class ZarrArray(Array):
         return zarr_container[self.dataset]
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        return daisy.open_ds(str(self.file_name), self.dataset, mode="r+").to_ndarray(roi=roi)
+        return daisy.open_ds(str(self.file_name), self.dataset, mode="r+").to_ndarray(
+            roi=roi
+        )
+
+    def __setitem__(self, roi: Roi, value: np.ndarray):
+        daisy.open_ds(str(self.file_name), self.dataset, mode="r+")[roi] = value
+
+    @classmethod
+    def create_from_array_identifier(
+        cls,
+        array_identifier,
+        axes,
+        roi,
+        num_channels,
+        voxel_size,
+        dtype,
+        chunks=None,
+        name=None,
+    ):
+        """
+        Create a new ZarrArray given an array identifier. It is assumed that
+        this array_identifier points to a dataset that does not yet exist
+        """
+        zarr_container = zarr.open(array_identifier.container, "r+")
+        zarr_dataset = zarr_container.create_dataset(
+            array_identifier.dataset,
+            shape=(num_channels,) + roi.shape / voxel_size
+            if num_channels is not None
+            else roi.shape / voxel_size,
+            dtype=dtype,
+            chunks=chunks,
+        )
+        zarr_dataset.attrs["offset"] = roi.offset
+        zarr_dataset.attrs["resolution"] = voxel_size
+        zarr_dataset.attrs["axes"] = axes
+
+        zarr_array = cls.__new__(cls)
+        zarr_array.file_name = array_identifier.container
+        zarr_array.dataset = array_identifier.dataset
+        zarr_array._attributes = zarr_array.data.attrs
+        return zarr_array
+
+    @classmethod
+    def open_from_array_identifier(cls, array_identifier):
+        zarr_array = cls.__new__(cls)
+        zarr_array.file_name = array_identifier.container
+        zarr_array.dataset = array_identifier.dataset
+        zarr_array._attributes = zarr_array.data.attrs
+        return zarr_array
