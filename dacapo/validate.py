@@ -74,17 +74,17 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
 
     for parameters in post_processor.enumerate_parameters():
 
-        output_array = array_store.validation_output_array(
+        output_array_identifier = array_store.validation_output_array(
                 run.name,
                 iteration,
                 parameters)
 
         post_processor.process(
             parameters,
-            output_array)
+            output_array_identifier)
 
         scores = evaluator.evaluate(
-            output_array,
+            output_array_identifier,
             run.datasplit.validate[0].gt)
 
         if iteration_scores.is_better(
@@ -107,7 +107,7 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
         else:
 
             # delete current output
-            array_store.remove(output_array)
+            array_store.remove(output_array_identifier)
 
         iteration_scores.parameter_scores.append((parameters, scores))
 
