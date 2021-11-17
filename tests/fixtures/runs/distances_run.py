@@ -8,4 +8,6 @@ distance_run = (
     dummy_architecture_config,
     distance_task_config,
     gunpowder_trainer_config,
+    "dice",
+    False,
 )

@@ -25,6 +25,16 @@ class DistanceTaskConfig(TaskConfig):
             "help_text": "A list of channel names and id's in the gt that make up that channel."
         }
     )
+    clip_distance: float = attr.ib(
+        metadata={
+            "help_text": ""
+        },
+    )
+    tol_distance: float = attr.ib(
+        metadata={
+            "help_text": ""
+        },
+    )
     scale_factor: float = attr.ib(
         default=1,
         metadata={

@@ -15,10 +15,17 @@ logging.basicConfig(level=logging.INFO)
 
 
 @pytest.mark.parametrize(
-    "datasplit_mkfunction, architecture_config, task_config, trainer_config", RUNS
+    "datasplit_mkfunction, architecture_config, task_config, trainer_config, validation_score, validation_score_minimize",
+    RUNS,
 )
 def test_validate(
-    options, datasplit_mkfunction, architecture_config, task_config, trainer_config
+    options,
+    datasplit_mkfunction,
+    architecture_config,
+    task_config,
+    trainer_config,
+    validation_score,
+    validation_score_minimize,
 ):
     compute_context = LocalTorch(device="cpu")
 
@@ -33,8 +40,8 @@ def test_validate(
         num_iterations=1,
         validation_interval=1,
         snapshot_interval=5,
-        validation_score="frizz_level",
-        validation_score_minimize=False,
+        validation_score=validation_score,
+        validation_score_minimize=validation_score_minimize,
     )
 
     # create a store
@@ -55,4 +62,6 @@ def test_validate(
 
     # validate
 
-    best_parameters, best_scores = validate("test_run", 0, compute_context=compute_context)
+    best_parameters, best_scores = validate(
+        "test_run", 0, compute_context=compute_context
+    )

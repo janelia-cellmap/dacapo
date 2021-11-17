@@ -21,4 +21,7 @@ class DistanceTask(Task):
         )
         self.loss = DummyLoss()
         self.post_processor = ThresholdPostProcessor()
-        self.evaluator = BinarySegmentationEvaluator()
+        self.evaluator = BinarySegmentationEvaluator(
+            clip_distance=task_config.clip_distance,
+            tol_distance=task_config.tol_distance,
+        )

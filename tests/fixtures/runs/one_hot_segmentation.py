@@ -8,4 +8,6 @@ one_hot_run = (
     dummy_architecture_config,
     one_hot_task_config,
     gunpowder_trainer_config,
+    "frizz_level",
+    False,
 )

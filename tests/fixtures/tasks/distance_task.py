@@ -10,4 +10,6 @@ distance_task_config = DistanceTaskConfig(
         ("4", [10, 11, 0, 1, 2]),
         ("5", [3, 4, 5, 6, 7, 8]),
     ],
+    clip_distance=5,
+    tol_distance=10
 )
