@@ -1,5 +1,8 @@
 from .evaluator import Evaluator
-from .binary_segmentation_evaluation_scores import BinarySegmentationEvaluationScores
+from .binary_segmentation_evaluation_scores import (
+    BinarySegmentationEvaluationScores,
+    MultiChannelBinarySegmentationEvaluationScores,
+)
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 
 import numpy as np
@@ -8,53 +11,172 @@ import cremi.evaluation
 import lazy_property
 import scipy
 
+import itertools
+import logging
+
+logger = logging.getLogger(__name__)
 
 BG = 0
 
 
 class BinarySegmentationEvaluator(Evaluator):
-    def __init__(self, clip_distance, tol_distance):
+    """
+    Given a binary segmentation, compute various metrics to determine their similarity.
+    """
+
+    criteria = ["jaccard", "voi"]
+
+    def __init__(self, clip_distance, tol_distance, channels):
         self.clip_distance = clip_distance
         self.tol_distance = tol_distance
+        self.channels = channels
+        self.criteria = [
+            f"{channel}:{criteria}"
+            for channel, criteria in itertools.product(channels, self.criteria)
+        ]
 
-    def evaluate(self, output_array, evaluation_array_identifier):
-        evaluation_array = evaluation_array_identifier
-        output_array = ZarrArray.open_from_array_identifier(output_array)
-        evaluator = Evaluator(
-            evaluation_array_identifier.data[:],
-            output_array.data[:],
-            evaluation_array_identifier.data[:].any(),
-            output_array.data[:].any(),
-            metric_params={
-                "clip_distance": self.clip_distance,
-                "tol_distance": self.tol_distance,
-            },
-            resolution = evaluation_array.voxel_size
+    def evaluate(self, output_array_identifier, evaluation_array):
+        output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
+        evaluation_data = evaluation_array[evaluation_array.roi]
+        output_data = output_array[output_array.roi]
+        logger.info(
+            f"Evaluating binary segmentations on evaluation_data of shape: {evaluation_data.shape}"
         )
+        assert (
+            evaluation_data.shape == output_data.shape
+        ), f"{evaluation_data.shape} vs {output_data.shape}"
+        if "c" in evaluation_array.axes:
+            score_dict = {}
+            for indx, channel in enumerate(evaluation_array.channels):
+                evaluation_channel_data = evaluation_data.take(
+                    indices=indx, axis=evaluation_array.axes.index("c")
+                )
+                output_channel_data = output_data.take(
+                    indices=indx, axis=output_array.axes.index("c")
+                )
+                evaluator = Evaluator(
+                    evaluation_channel_data,
+                    output_channel_data,
+                    evaluation_channel_data.any(),
+                    output_channel_data.any(),
+                    metric_params={
+                        "clip_distance": self.clip_distance,
+                        "tol_distance": self.tol_distance,
+                    },
+                    resolution=evaluation_array.voxel_size,
+                )
+                score_dict[f"{channel}"] = BinarySegmentationEvaluationScores(
+                    dice=evaluator.dice(),
+                    jaccard=evaluator.jaccard(),
+                    hausdorff=evaluator.hausdorff(),
+                    false_negative_rate=evaluator.false_negative_rate(),
+                    false_negative_rate_with_tolerance=evaluator.false_negative_rate_with_tolerance(),
+                    false_positive_rate=evaluator.false_positive_rate(),
+                    false_discovery_rate=evaluator.false_discovery_rate(),
+                    false_positive_rate_with_tolerance=evaluator.false_positive_rate_with_tolerance(),
+                    voi=evaluator.voi(),
+                    mean_false_distance=evaluator.mean_false_distance(),
+                    mean_false_negative_distance=evaluator.mean_false_negative_distance(),
+                    mean_false_positive_distance=evaluator.mean_false_positive_distance(),
+                    mean_false_distance_clipped=evaluator.mean_false_distance_clipped(),
+                    mean_false_negative_distance_clipped=evaluator.mean_false_negative_distance_clipped(),
+                    mean_false_positive_distance_clipped=evaluator.mean_false_positive_distance_clipped(),
+                    precision_with_tolerance=evaluator.precision_with_tolerance(),
+                    recall_with_tolerance=evaluator.recall_with_tolerance(),
+                    f1_score_with_tolerance=evaluator.f1_score_with_tolerance(),
+                    precision=evaluator.precision(),
+                    recall=evaluator.recall(),
+                    f1_score=evaluator.f1_score(),
+                )
+            return MultiChannelBinarySegmentationEvaluationScores(score_dict)
 
-        return BinarySegmentationEvaluationScores(
-            dice=evaluator.dice(),
-            jaccard=evaluator.jaccard(),
-            hausdorff=evaluator.hausdorff(),
-            false_negative_rate=evaluator.false_negative_rate(),
-            false_negative_rate_with_tolerance=evaluator.false_negative_rate_with_tolerance(),
-            false_positive_rate=evaluator.false_positive_rate(),
-            false_discovery_rate=evaluator.false_discovery_rate(),
-            false_positive_rate_with_tolerance=evaluator.false_positive_rate_with_tolerance(),
-            voi=evaluator.voi(),
-            mean_false_distance=evaluator.mean_false_distance(),
-            mean_false_negative_distance=evaluator.mean_false_negative_distance(),
-            mean_false_positive_distance=evaluator.mean_false_positive_distance(),
-            mean_false_distance_clipped=evaluator.mean_false_distance_clipped(),
-            mean_false_negative_distance_clipped=evaluator.mean_false_negative_distance_clipped(),
-            mean_false_positive_distance_clipped=evaluator.mean_false_positive_distance_clipped(),
-            precision_with_tolerance=evaluator.precision_with_tolerance(),
-            recall_with_tolerance=evaluator.recall_with_tolerance(),
-            f1_score_with_tolerance=evaluator.f1_score_with_tolerance(),
-            precision=evaluator.precision(),
-            recall=evaluator.recall(),
-            f1_score=evaluator.f1_score(),
-        )
+        else:
+            evaluator = Evaluator(
+                evaluation_data,
+                output_data,
+                evaluation_data.any(),
+                output_data.any(),
+                metric_params={
+                    "clip_distance": self.clip_distance,
+                    "tol_distance": self.tol_distance,
+                },
+                resolution=evaluation_array.voxel_size,
+            )
+            return BinarySegmentationEvaluationScores(
+                dice=evaluator.dice(),
+                jaccard=evaluator.jaccard(),
+                hausdorff=evaluator.hausdorff(),
+                false_negative_rate=evaluator.false_negative_rate(),
+                false_negative_rate_with_tolerance=evaluator.false_negative_rate_with_tolerance(),
+                false_positive_rate=evaluator.false_positive_rate(),
+                false_discovery_rate=evaluator.false_discovery_rate(),
+                false_positive_rate_with_tolerance=evaluator.false_positive_rate_with_tolerance(),
+                voi=evaluator.voi(),
+                mean_false_distance=evaluator.mean_false_distance(),
+                mean_false_negative_distance=evaluator.mean_false_negative_distance(),
+                mean_false_positive_distance=evaluator.mean_false_positive_distance(),
+                mean_false_distance_clipped=evaluator.mean_false_distance_clipped(),
+                mean_false_negative_distance_clipped=evaluator.mean_false_negative_distance_clipped(),
+                mean_false_positive_distance_clipped=evaluator.mean_false_positive_distance_clipped(),
+                precision_with_tolerance=evaluator.precision_with_tolerance(),
+                recall_with_tolerance=evaluator.recall_with_tolerance(),
+                f1_score_with_tolerance=evaluator.f1_score_with_tolerance(),
+                precision=evaluator.precision(),
+                recall=evaluator.recall(),
+                f1_score=evaluator.f1_score(),
+            )
+
+    def is_best(self, iteration, parameter, score, criteria=None):
+        """
+        Check if the provided score is the best according to some criterion
+        """
+        if criteria is None:
+            # check all criteria
+            criteria = self.criteria
+        replaced = []
+        for criterion in criteria:
+            if self._best_scores[criterion] is None:
+                replaced.append(criterion)
+            else:
+                ranks = self.compute_ranks(
+                    [score, self._best_scores[criterion][1]], criterion
+                )
+                if ranks[0] == 0:
+                    replaced.append(criterion)
+                    self._best_scores[criterion] = ((iteration, parameter), score)
+        return replaced
+
+    def set_best(self, iteration_scores):
+        self._best_scores = {}
+        if len(iteration_scores.iteration_scores) == 0:
+            iteration_parameters, scores = [], []
+        else:
+            iteration_parameters, scores = zip(
+                *[
+                    (
+                        (validation_scores.iteration, parameter_scores[0]),
+                        parameter_scores[1],
+                    )
+                    for validation_scores in iteration_scores.iteration_scores
+                    for parameter_scores in validation_scores.parameter_scores
+                ]
+            )
+        for criterion in self.criteria:
+            if len(scores) == 0:
+                self._best_scores[criterion] = None
+            else:
+                best_score = self.compute_ranks(scores, criterion)[0]
+                self._best_scores[criterion] = (
+                    iteration_parameters[best_score],
+                    scores[best_score],
+                )
+
+    def compute_ranks(self, scores, criterion):
+        scores = [getattr(score, criterion) for score in scores]
+        return [
+            rank
+            for rank, _ in sorted(enumerate(scores), key=lambda x: x[1], reverse=True)
+        ]
 
 
 class Evaluator:

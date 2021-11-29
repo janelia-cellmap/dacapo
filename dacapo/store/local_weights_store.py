@@ -51,6 +51,18 @@ class LocalWeightsStore(WeightsStore):
         }
 
         torch.save(weights, weights_name)
+    def store_best(self, run, iteration, criterion):
+        """
+        Take the weights from run/iteration and store it
+        in run/criterion.
+        """
+
+        # must exist since we must read run/iteration weights
+        weights_dir = self.__get_weights_dir(run)
+        iteration_weights = Path(weights_dir, f"{iteration}")
+        best_weights = Path(weights_dir, criterion)
+
+        best_weights.write_bytes(iteration_weights.read_bytes())
 
     def retrieve_weights(self, run, iteration):
         """Retrieve the network weights of the given run."""

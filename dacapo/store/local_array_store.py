@@ -26,6 +26,12 @@ class LocalArrayStore(ArrayStore):
 
         self.basedir = basedir
 
+    def best_validation_array(self, run_name, criteria):
+        container = Path(self.__get_run_dir(run_name), "validation.zarr")
+        dataset = f"{criteria}"
+
+        return LocalArrayIdentifier(container, dataset)
+
     def validation_prediction_array(self, run_name, iteration):
         """Get the array identifier for a particular validation prediction."""
 
