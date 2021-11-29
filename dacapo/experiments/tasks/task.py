@@ -28,3 +28,6 @@ class Task(ABC):
     @abstractmethod
     def post_processor(self) -> PostProcessor:
         pass
+
+    def create_model(self, architecture):
+        return self.predictor.create_model(architecture=architecture)
