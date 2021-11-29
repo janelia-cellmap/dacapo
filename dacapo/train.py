@@ -86,8 +86,14 @@ def train(run_name, compute_context=LocalTorch()):
 
     run.model = run.model.to(compute_context.device)
 
+    array_store = create_array_store()
     run.trainer.set_iteration(trained_until)
-    run.trainer.build_batch_provider(run.datasplit.train, run.model, run.task)
+    run.trainer.build_batch_provider(
+        run.datasplit.train,
+        run.model,
+        run.task,
+        array_store.snapshot_container(run.name),
+    )
 
     with run.trainer as trainer:
         while trained_until < train_until:

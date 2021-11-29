@@ -32,7 +32,7 @@ class DummyTrainer(Trainer):
 
         self.iteration += 1
 
-    def build_batch_provider(self, datasplit, architecture, task):
+    def build_batch_provider(self, datasplit, architecture, task, snapshot_container):
         pass
 
     def can_train(self, datasplit):

@@ -8,6 +8,11 @@ logger = logging.getLogger(__name__)
 
 
 @attr.s
+class LocalContainerIdentifier:
+    container: Path = attr.ib()
+
+
+@attr.s
 class LocalArrayIdentifier:
 
     container: Path = attr.ib()
@@ -36,6 +41,14 @@ class LocalArrayStore(ArrayStore):
         dataset = f'{iteration}/output/{parameters.id}'
 
         return LocalArrayIdentifier(container, dataset)
+
+    def snapshot_container(self, run_name):
+        """
+        Get a container identifier for storage of a snapshot.
+        """
+        return LocalContainerIdentifier(
+            Path(self.__get_run_dir(run_name), "snapshot.zarr")
+        )
 
     def remove(self, array_identifier):
 

@@ -2,15 +2,18 @@ from ..training_iteration_stats import TrainingIterationStats
 from .trainer import Trainer
 
 from dacapo.gp import DaCapoArraySource, DaCapoTargetFilter
-from dacapo.compute_context import LocalTorch
 from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
-
 from funlib.geometry import Coordinate
 import gunpowder as gp
 
+import zarr
 import torch
 
 import time
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class GunpowderTrainer(Trainer):
     learning_rate = None
@@ -27,7 +30,7 @@ class GunpowderTrainer(Trainer):
     def create_optimizer(self, model):
         return torch.optim.Adam(lr=self.learning_rate, params=model.parameters())
 
-    def build_batch_provider(self, datasets, model, task):
+    def build_batch_provider(self, datasets, model, task, snapshot_container=None):
         input_shape = Coordinate(model.input_shape)
         output_shape = Coordinate(model.output_shape)
 
@@ -94,6 +97,8 @@ class GunpowderTrainer(Trainer):
         request.add(raw_key, input_size)
         request.add(target_key, output_size)
         request.add(weight_key, output_size)
+        # request additional keys for snapshots
+        request.add(gt_key, output_size)
 
         self._request = request
         self._pipeline = pipeline
@@ -103,26 +108,63 @@ class GunpowderTrainer(Trainer):
         self._target_key = target_key
         self._loss = task.loss
 
+        self.snapshot_container = snapshot_container
     def iterate(self, num_iterations, model, optimizer, device):
+        worst_loss = float("inf")
+        snapshot_arrays = None
+
+        logger.info("Starting iteration!")
+
         for self.iteration in range(self.iteration, self.iteration + num_iterations):
-            raw, target, weight = self.next()
+            raw, gt, target, weight = self.next()
 
             for param in model.parameters():
                 param.grad = None
 
             t_start = time.time()
-            predicted = model.forward(torch.as_tensor(raw[raw.roi]).to(device))
+            predicted = model.forward(torch.as_tensor(raw[raw.roi]).to(device).float())
+            predicted.retain_grad()
             loss = self._loss.compute(
                 predicted,
-                torch.as_tensor(target[target.roi]).to(device),
-                torch.as_tensor(weight[weight.roi]).to(device),
+                torch.as_tensor(target[target.roi]).to(device).float(),
+                torch.as_tensor(weight[weight.roi]).to(device).float(),
             )
             loss.backward()
             optimizer.step()
+
+            if loss.item() < worst_loss:
+                worst_loss = loss.item()
+                snapshot_arrays = {
+                    "volumes/raw": raw,
+                    "volumes/gt": gt,
+                    "volumes/target": target,
+                    "volumes/weight": weight,
+                    "volumes/prediction": NumpyArray.from_np_array(
+                        predicted.detach().cpu().numpy(),
+                        target.roi,
+                        target.voxel_size,
+                        target.axes,
+                    ),
+                    "volumes/gradients": NumpyArray.from_np_array(
+                        predicted.grad.detach().cpu().numpy(),
+                        target.roi,
+                        target.voxel_size,
+                        target.axes,
+                    ),
+                }
             yield TrainingIterationStats(
-                loss=loss.item(),
-                iteration=self.iteration,
-                time=time.time() - t_start)
+                loss=loss.item(), iteration=self.iteration, time=time.time() - t_start
+            )
+        self.iteration += 1
+
+        if self.snapshot_container is not None:
+            logger.info("Saving Snapshot!")
+            snapshot_zarr = zarr.open(self.snapshot_container.container, "w")
+            for k, v in snapshot_arrays.items():
+                dataset = snapshot_zarr.create_dataset(k, data=v[v.roi][0])
+                dataset.attrs["offset"] = v.roi.offset
+                dataset.attrs["resolution"] = v.voxel_size
+                dataset.attrs["axes"] = v.axes
 
     def __iter__(self):
         with gp.build(self._pipeline):
@@ -138,6 +180,7 @@ class GunpowderTrainer(Trainer):
         self._iter.send(False)
         return (
             NumpyArray.from_gp_array(batch[self._raw_key]),
+            NumpyArray.from_gp_array(batch[self._gt_key]),
             NumpyArray.from_gp_array(batch[self._target_key]),
             NumpyArray.from_gp_array(batch[self._weight_key]),
         )
