@@ -104,10 +104,12 @@ def train(run_name, compute_context=LocalTorch()):
                     run.model.eval()
 
                     weights_store.store_weights(run, iteration_stats.iteration + 1)
-                    validate_run(run, iteration_stats.iteration + 1)
-                    stats_store.store_validation_scores(
-                        run_name,
-                        run.validation_scores)
+                    validate_run(
+                        run,
+                        iteration_stats.iteration + 1,
+                        compute_context=compute_context,
+                    )
+                    stats_store.store_validation_scores(run_name, run.validation_scores)
 
                     run.model.train()
 
