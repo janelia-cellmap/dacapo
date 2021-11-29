@@ -41,7 +41,7 @@ class Model(torch.nn.Module):
 
         dummy_data = torch.zeros((1, in_channels) + input_shape, device=device)
         out = self.forward(dummy_data)
-        return out.shape[1], tuple(out.shape[2:])
+        return out.shape[1], Coordinate(out.shape[2:])
 
     def scale(self, voxel_size: Coordinate) -> Coordinate:
         return self.architecture.scale(voxel_size)
