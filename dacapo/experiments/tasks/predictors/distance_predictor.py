@@ -2,6 +2,7 @@ from .predictor import Predictor
 from dacapo.experiments import Model
 from dacapo.experiments.arraytypes import DistanceArray
 from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+from dacapo.utils.balance_weights import balance_weights
 
 from funlib.geometry import Coordinate
 
@@ -12,10 +13,20 @@ import torch
 from typing import List
 import logging
 
-logger = logging.getLogger(__file__)
+logger = logging.getLogger(__name__)
 
 
 class DistancePredictor(Predictor):
+    """
+    Predict signed distances for a binary segmentation task.
+    Distances deep within background are pushed to -inf, distances deep within
+    the foreground object are pushed to inf. After distances have been
+    calculated they are passed through a tanh so that distances saturate at +-1.
+    Multiple classes can be predicted via multiple distance channels. The names
+    of each class that is being segmented can be passed in as a list of strings
+    in the channels argument.
+    """
+
     def __init__(self, channels: List[str], scale_factor: float):
         self.channels = channels
         self.norm = "tanh"
@@ -28,7 +39,7 @@ class DistancePredictor(Predictor):
     def create_model(self, architecture):
 
         head = torch.nn.Conv3d(
-            architecture.num_out_channels, self.embedding_dims, kernel_size=3
+            architecture.num_out_channels, self.embedding_dims, kernel_size=1
         )
 
         return Model(architecture, head)
@@ -45,11 +56,9 @@ class DistancePredictor(Predictor):
         )
 
     def create_weight(self, gt, target):
-        return NumpyArray.from_np_array(
-            np.ones(target.data.shape),
-            target.roi,
-            target.voxel_size,
-            target.axes,
+        # balance weights independently for each channel
+        return balance_weights(
+            gt, 2, slab=tuple(1 if c == "c" else -1 for c in gt.axes)
         )
 
     @property
