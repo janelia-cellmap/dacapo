@@ -30,10 +30,7 @@ def train(run_name, compute_context=LocalTorch()):
     trained_until = run.training_stats.trained_until()
     validation_interval = run_config.validation_interval
 
-    logger.info(
-        "Current state: trained until %d/%d",
-        trained_until,
-        train_until)
+    logger.info("Current state: trained until %d/%d", trained_until, train_until)
 
     # read weights of the latest iteration
 
@@ -48,7 +45,8 @@ def train(run_name, compute_context=LocalTorch()):
                 "Run %s was previously trained until %d, but no weights are "
                 "stored. Will restart training from scratch.",
                 run.name,
-                trained_until)
+                trained_until,
+            )
 
             trained_until = 0
             run.training_stats.delete_after(0)
@@ -63,7 +61,8 @@ def train(run_name, compute_context=LocalTorch()):
                 run.name,
                 trained_until,
                 latest_weights_iteration,
-                latest_weights_iteration)
+                latest_weights_iteration,
+            )
 
             trained_until = latest_weights_iteration
             run.training_stats.delete_after(trained_until)
@@ -80,7 +79,8 @@ def train(run_name, compute_context=LocalTorch()):
 
             raise RuntimeError(
                 f"Found weights for iteration {latest_weights_iteration}, but "
-                f"run {run.name} was only trained until {trained_until}.")
+                f"run {run.name} was only trained until {trained_until}."
+            )
 
     # start/resume training
 
