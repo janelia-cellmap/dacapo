@@ -1,9 +1,7 @@
+from dacapo.store.create_store import create_array_store
 from .experiments import Run
 from .compute_context import LocalTorch
-from .store import \
-    create_config_store, \
-    create_stats_store, \
-    create_weights_store
+from .store import create_config_store, create_stats_store, create_weights_store
 from .validate import validate_run
 import logging
 
@@ -101,7 +99,12 @@ def train(run_name, compute_context=LocalTorch()):
             # train for at most 100 iterations at a time, then store training stats
             iterations = min(100, train_until - trained_until)
 
-            for iteration_stats in trainer.iterate(iterations, run.model, run.optimizer, compute_context.device):
+            for iteration_stats in trainer.iterate(
+                iterations,
+                run.model,
+                run.optimizer,
+                compute_context.device,
+            ):
 
                 run.training_stats.add_iteration_stats(iteration_stats)
 
