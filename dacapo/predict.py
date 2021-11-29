@@ -30,21 +30,19 @@ def predict(
     output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
 
     logger.info(
-        "Predicting with input size %s, output size %s",
-        input_size, output_size)
+        "Predicting with input size %s, output size %s", input_size, output_size
+    )
 
     # calculate input and output rois
 
     context = (input_size - output_size) / 2
     if output_roi is None:
-    input_roi = raw_array.roi
-    output_roi = input_roi.grow(-context, -context)
+        input_roi = raw_array.roi
+        output_roi = input_roi.grow(-context, -context)
     else:
         input_roi = output_roi.grow(context, context)
 
-    logger.info(
-        "Total input ROI: %s, output ROI: %s",
-        input_roi, output_roi)
+    logger.info("Total input ROI: %s, output ROI: %s", input_roi, output_roi)
 
     # prepare prediction dataset
     daisy.prepare_ds(
@@ -55,7 +53,8 @@ def predict(
         np.float32,
         write_size=output_size,
         num_channels=model.num_out_channels,
-        compressor=zarr.storage.default_compressor.get_config())
+        compressor=zarr.storage.default_compressor.get_config(),
+    )
 
     # create gunpowder keys
 
@@ -79,12 +78,12 @@ def predict(
         outputs={0: prediction},
         array_specs={
             prediction: gp.ArraySpec(
-                roi=output_roi,
-                voxel_size=output_voxel_size,
-                dtype=np.float32)
+                roi=output_roi, voxel_size=output_voxel_size, dtype=np.float32
+            )
         },
         spawn_subprocess=False,
-        device=compute_context._device)
+        device=str(compute_context.device),
+    )
     # raw: (1, c, d, h, w)
     # prediction: (1, [c,] d, h, w)
 
@@ -99,7 +98,8 @@ def predict(
     pipeline += gp.ZarrWrite(
         {prediction: prediction_array_identifier.dataset},
         prediction_array_identifier.container.parent,
-        prediction_array_identifier.container.name)
+        prediction_array_identifier.container.name,
+    )
 
     # create reference batch request
     ref_request = gp.BatchRequest()
@@ -114,4 +114,6 @@ def predict(
 
     container = zarr.open(prediction_array_identifier.container)
     dataset = container[prediction_array_identifier.dataset]
-    dataset.attrs["axes"] = raw_array.axes if "c" in raw_array.axes else ["c"] + raw_array.axes
+    dataset.attrs["axes"] = (
+        raw_array.axes if "c" in raw_array.axes else ["c"] + raw_array.axes
+    )
