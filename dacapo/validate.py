@@ -1,11 +1,16 @@
 from .predict import predict
 from .compute_context import LocalTorch
 from .experiments import Run, ValidationIterationScores
-from .store import \
-    create_array_store, \
-    create_config_store, \
-    create_stats_store, \
-    create_weights_store
+from .experiments.datasplits.datasets.arrays import ZarrArray
+from .store import (
+    create_array_store,
+    create_config_store,
+    create_stats_store,
+    create_weights_store,
+)
+
+import os
+from pathlib import Path
 import logging
 
 logger = logging.getLogger(__name__)
@@ -114,48 +119,51 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
     iteration_scores = ValidationIterationScores(iteration, [])
 
     post_processor.set_prediction(prediction_array_identifier)
-    best_parameters = None
-    best_scores = None
+
+    # there can be multiple best iteration/parameter predictions
+    # The evaluator stores a record of them internally here
+    evaluator.set_best(run.validation_scores)
 
     for parameters in post_processor.enumerate_parameters():
 
         output_array_identifier = array_store.validation_output_array(
-                run.name,
-                iteration,
-                parameters)
+            run.name, iteration, parameters
+        )
 
-        post_processor.process(
-            parameters,
-            output_array_identifier)
+        post_processed_array = post_processor.process(
+            parameters, output_array_identifier
+        )
 
         scores = evaluator.evaluate(
-            output_array_identifier,
-            run.datasplit.validate[0].gt)
+            output_array_identifier, run.datasplit.validate[0].gt
+        )
 
-        if iteration_scores.is_better(
-                scores,
-                run.validation_score,
-                run.validation_score_minimize):
+        replaced = evaluator.is_best(iteration, parameters, scores, None)
+        for criterion in replaced:
+            # replace predictions in array with the new better predictions
+            best_array_identifier = array_store.best_validation_array(
+                run.name, criterion
+            )
+            best_array = ZarrArray.create_from_array_identifier(
+                best_array_identifier,
+                post_processed_array.axes,
+                post_processed_array.roi,
+                post_processed_array.num_channels,
+                post_processed_array.voxel_size,
+                post_processed_array.dtype,
+            )
+            best_array[best_array.roi] = post_processed_array[post_processed_array.roi]
+            weights_store.store_best(run, iteration, criterion)
 
-            if best_parameters is not None:
-
-                # delete previous best output
-                prev_best_array = array_store.validation_output_array(
-                        run.name,
-                        iteration,
-                        best_parameters)
-                array_store.remove(prev_best_array)
-
-            best_parameters = parameters
-            best_scores = scores
-
-        else:
-
-            # delete current output
+        # delete current output. We only keep the best outputs as determined by
+        # the evaluator
             array_store.remove(output_array_identifier)
+        weights_store.remove(run, iteration)
 
         iteration_scores.parameter_scores.append((parameters, scores))
 
-    run.validation_scores.add_iteration_scores(iteration_scores)
+    array_store.remove(prediction_array_identifier)
 
-    return best_parameters, best_scores
+    run.validation_scores.add_iteration_scores(iteration_scores)
+    stats_store = create_stats_store()
+    stats_store.store_validation_scores(run.name, run.validation_scores)
