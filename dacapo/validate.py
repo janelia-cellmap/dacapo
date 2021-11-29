@@ -35,11 +35,6 @@ def validate(run_name, iteration, compute_context = LocalTorch()):
     run.training_stats = stats_store.retrieve_training_stats(run_name)
     run.validation_scores = stats_store.retrieve_validation_scores(run_name)
 
-    # read weights for the given iteration
-
-    weights_store = create_weights_store()
-    weights_store.retrieve_weights(run, iteration)
-
     return validate_run(run, iteration, compute_context=compute_context)
 
 
@@ -49,7 +44,20 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
     loaded correctly. Returns the best parameters and scores for this
     iteration."""
 
+    if run.datasplit.validate[0].gt is None:
+        logger.info("Cannot validate run %s. Continuing training!", run.name)
+        return None, None
+
+    if len(run.datasplit.validate) > 1:
+        raise NotImplementedError(
+            "We don't yet support validating on multiple volumes!"
+        )
+
     logger.info("Validating run %s...", run.name)
+
+    # create weights store and read weights
+    weights_store = create_weights_store()
+    weights_store.retrieve_weights(run, iteration)
 
     # create an array store
 
