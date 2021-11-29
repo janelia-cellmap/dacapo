@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 @pytest.mark.parametrize(
-    "datasplit_mkfunction, architecture_config, task_config, trainer_config, validation_score, validation_score_minimize",
+    "datasplit_mkfunction, architecture_config, task_config, trainer_config",
     RUNS,
 )
 def test_validate(
@@ -24,8 +24,6 @@ def test_validate(
     architecture_config,
     task_config,
     trainer_config,
-    validation_score,
-    validation_score_minimize,
 ):
     compute_context = LocalTorch(device="cpu")
 
@@ -40,8 +38,6 @@ def test_validate(
         num_iterations=1,
         validation_interval=1,
         snapshot_interval=5,
-        validation_score=validation_score,
-        validation_score_minimize=validation_score_minimize,
     )
 
     # create a store
@@ -56,12 +52,15 @@ def test_validate(
     run_config = store.retrieve_run_config("test_run")
     run = Run(run_config)
 
-    weights_store.store_weights(run, 0)
-
     # -------------------------------------
 
     # validate
 
-    best_parameters, best_scores = validate(
+    weights_store.store_weights(run, 0)
+    validate(
         "test_run", 0, compute_context=compute_context
+    )
+    weights_store.store_weights(run, 1)
+    validate(
+        "test_run", 1, compute_context=compute_context
     )
