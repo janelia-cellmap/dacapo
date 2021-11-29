@@ -23,6 +23,3 @@ class Run:
 
         self.training_stats = TrainingStats()
         self.validation_scores = ValidationScores()
-
-        self.validation_score = run_config.validation_score
-        self.validation_score_minimize = run_config.validation_score_minimize

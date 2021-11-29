@@ -34,17 +34,6 @@ class RunConfig:
                 "The number of iterations to train for."
         })
 
-    validation_score: str = attr.ib(
-        metadata={
-            'help_text':
-                "The name of the score used to compare validation results."
-        })
-    validation_score_minimize: bool = attr.ib(
-        default=True,
-        metadata={
-            'help_text':
-                "Whether lower validation scores are better."
-        })
     validation_interval: int = attr.ib(
         default=1000,
         metadata={
