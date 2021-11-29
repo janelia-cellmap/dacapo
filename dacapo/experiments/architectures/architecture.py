@@ -2,14 +2,21 @@ from abc import ABC, abstractmethod
 
 from funlib.geometry import Coordinate
 
-class Architecture(ABC):
 
+class Architecture(ABC):
     @property
     @abstractmethod
     def input_shape(self):
         """The spatial input shape (i.e., not accounting for channels and batch
         dimensions) of this architecture."""
         pass
+
+    @property
+    def eval_shape_increase(self):
+        """
+        How much to increase the input shape during prediction.
+        """
+        return Coordinate((0,) * self.input_shape.dims)
 
     @property
     @abstractmethod

@@ -18,6 +18,7 @@ class Model(torch.nn.Module):
         self.num_in_channels = architecture.num_in_channels
 
         self.input_shape = architecture.input_shape
+        self.eval_input_shape = self.input_shape + architecture.eval_shape_increase
         self.num_out_channels, self.output_shape = self.compute_output_shape(
             self.input_shape
         )
