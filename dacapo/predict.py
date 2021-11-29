@@ -13,7 +13,14 @@ import zarr
 logger = logging.getLogger(__name__)
 
 
-def predict(model, raw_array, prediction_array_identifier, num_cpu_workers=4, compute_context=LocalTorch()):
+def predict(
+    model,
+    raw_array,
+    prediction_array_identifier,
+    num_cpu_workers=4,
+    compute_context=LocalTorch(),
+    output_roi=None,
+):
     # get the model's input and output size
 
     input_voxel_size = Coordinate(raw_array.voxel_size)
@@ -29,8 +36,11 @@ def predict(model, raw_array, prediction_array_identifier, num_cpu_workers=4, co
     # calculate input and output rois
 
     context = (input_size - output_size) / 2
+    if output_roi is None:
     input_roi = raw_array.roi
     output_roi = input_roi.grow(-context, -context)
+    else:
+        input_roi = output_roi.grow(context, context)
 
     logger.info(
         "Total input ROI: %s, output ROI: %s",
