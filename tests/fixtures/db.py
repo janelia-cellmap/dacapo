@@ -27,6 +27,8 @@ def mongo_db_available():
     ]
 )
 def options(request, tmp_path):
+    # TODO: Clean up this fixture. Its a bit clunky to use.
+    # Maybe just write the dacapo.yaml file instead of assigning to Options._instance
     kwargs_from_file = {}
     if request.param == "mongo":
         options_from_file = Options.instance()
