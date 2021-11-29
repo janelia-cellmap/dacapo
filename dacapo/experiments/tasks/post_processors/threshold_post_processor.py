@@ -33,3 +33,5 @@ class ThresholdPostProcessor(PostProcessor):
         output_array[self.prediction_array.roi] = (
             self.prediction_array[self.prediction_array.roi] > 0
         ).astype(np.uint8)
+
+        return output_array

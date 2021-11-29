@@ -33,3 +33,4 @@ class ArgmaxPostProcessor(PostProcessor):
             self.prediction_array[self.prediction_array.roi],
             axis=self.prediction_array.axes.index("c"),
         )
+        return output_array
