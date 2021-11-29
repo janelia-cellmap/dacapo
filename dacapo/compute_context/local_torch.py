@@ -19,5 +19,8 @@ class LocalTorch(ComputeContext):
     @property
     def device(self):
         if self._device is None:
-            raise NotImplementedError()
+            if torch.cuda.is_available():
+                return torch.device("cuda")
+            else:
+                return torch.device("cpu")
         return torch.device(self._device)
