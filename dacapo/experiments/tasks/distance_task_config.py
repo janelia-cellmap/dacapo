@@ -20,9 +20,9 @@ class DistanceTaskConfig(TaskConfig):
 
     task_type = DistanceTask
 
-    channels: List[Tuple[str, List[int]]] = attr.ib(
+    channels: List[str] = attr.ib(
         metadata={
-            "help_text": "A list of channel names and id's in the gt that make up that channel."
+            "help_text": "A list of channel names."
         }
     )
     clip_distance: float = attr.ib(
