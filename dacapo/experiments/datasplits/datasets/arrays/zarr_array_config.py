@@ -5,6 +5,8 @@ from .zarr_array import ZarrArray
 
 from pathlib import Path
 
+from typing import Optional, List
+
 @attr.s
 class ZarrArrayConfig(ArrayConfig):
     """This config class provides the necessary configuration for a zarr array"""
@@ -19,3 +21,4 @@ class ZarrArrayConfig(ArrayConfig):
             "help_text": "The name of your dataset. May include '/' characters for nested heirarchies"
         }
     )
+    _axes: Optional[List[str]] = attr.ib(default=None)
