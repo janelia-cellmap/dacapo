@@ -16,9 +16,11 @@ logger = logging.getLogger(__name__)
 def predict(model, raw_array, prediction_array_identifier, num_cpu_workers=4, compute_context=LocalTorch()):
     # get the model's input and output size
 
-    voxel_size = Coordinate(raw_array.voxel_size)
-    input_size = voxel_size * Coordinate(model.input_shape)
-    output_size = voxel_size * Coordinate(model.output_shape)
+    input_voxel_size = Coordinate(raw_array.voxel_size)
+    output_voxel_size = model.scale(input_voxel_size)
+    input_shape = Coordinate(model.eval_input_shape)
+    input_size = input_voxel_size * input_shape
+    output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
 
     logger.info(
         "Predicting with input size %s, output size %s",
@@ -39,7 +41,7 @@ def predict(model, raw_array, prediction_array_identifier, num_cpu_workers=4, co
         str(prediction_array_identifier.container),
         prediction_array_identifier.dataset,
         output_roi,
-        voxel_size,
+        output_voxel_size,
         np.float32,
         write_size=output_size,
         num_channels=model.num_out_channels,
@@ -55,7 +57,7 @@ def predict(model, raw_array, prediction_array_identifier, num_cpu_workers=4, co
     # prepare data source
     pipeline = DaCapoArraySource(raw_array, raw)
     # raw: (c, d, h, w)
-    pipeline += gp.Pad(raw, Coordinate((None,) * voxel_size.dims))
+    pipeline += gp.Pad(raw, Coordinate((None,) * input_voxel_size.dims))
     # raw: (c, d, h, w)
     pipeline += gp.Unsqueeze([raw])
     # raw: (1, c, d, h, w)
@@ -68,7 +70,7 @@ def predict(model, raw_array, prediction_array_identifier, num_cpu_workers=4, co
         array_specs={
             prediction: gp.ArraySpec(
                 roi=output_roi,
-                voxel_size=voxel_size,
+                voxel_size=output_voxel_size,
                 dtype=np.float32)
         },
         spawn_subprocess=False,
