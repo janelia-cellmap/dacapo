@@ -22,3 +22,28 @@ class Evaluator(ABC):
         Should return an instance of ``EvaluationScores``.
         """
         pass
+
+    @abstractmethod
+    def is_best(self, score, criterion):
+        """
+        Check if the provided score is the best according to some criterion
+        """
+        pass
+
+    @abstractmethod
+    def set_best(self, iteration_scores):
+        """
+        Store a mapping from criterion to the best model according to that criterion
+        """
+        pass
+
+    @property
+    @abstractmethod
+    def criteria(self):
+        """
+        A list of all criteria for which a model might be "best". i.e. your
+        criteria might be "precision", "recall", and "jaccard". It is unlikely
+        that the best iteration/post processing parameters will be the same
+        for all 3 of these criteria
+        """
+        pass
