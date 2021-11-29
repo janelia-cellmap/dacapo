@@ -9,6 +9,9 @@ from dacapo.experiments.tasks import *
 from dacapo.experiments.tasks.evaluators import *
 from dacapo.experiments.tasks.post_processors import *
 from dacapo.experiments.trainers import *
+
+from funlib.geometry import Coordinate
+
 from pathlib import Path
 
 
@@ -49,6 +52,16 @@ def register_hooks(converter):
     converter.register_structure_hook(
         Path,
         lambda o, _: Path(o),
+    )
+
+    # Coordinate to tuple and back
+    converter.register_unstructure_hook(
+        Coordinate,
+        lambda o: tuple(o),
+    )
+    converter.register_structure_hook(
+        Coordinate,
+        lambda o, _: Coordinate(o),
     )
 
 
