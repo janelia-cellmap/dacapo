@@ -79,7 +79,8 @@ class GunpowderTrainer(Trainer):
         )
 
         # Trainer attributes:
-        pipeline += gp.PreCache(num_workers=self.num_data_fetchers)
+        if self.num_data_fetchers > 1:
+            pipeline += gp.PreCache(num_workers=self.num_data_fetchers)
 
         # stack to create a batch dimension
         pipeline += gp.Stack(self.batch_size)
@@ -109,6 +110,7 @@ class GunpowderTrainer(Trainer):
         self._loss = task.loss
 
         self.snapshot_container = snapshot_container
+
     def iterate(self, num_iterations, model, optimizer, device):
         worst_loss = float("inf")
         snapshot_arrays = None
