@@ -136,10 +136,21 @@ class ZarrArray(Array):
             zarr_dataset.attrs["axes"] = axes
         except zarr.errors.ContainsArrayError:
             zarr_dataset = zarr_container[array_identifier.dataset]
-            assert zarr_dataset.attrs["offset"] == roi.offset
-            assert zarr_dataset.attrs["resolution"] == voxel_size
-            assert zarr_dataset.attrs["axes"] == axes
-            assert zarr_dataset.shape == (num_channels,) + roi.shape / voxel_size
+            assert (
+                tuple(zarr_dataset.attrs["offset"]) == roi.offset
+            ), f"{zarr_dataset.attrs['offset']}, {roi.offset}"
+            assert (
+                tuple(zarr_dataset.attrs["resolution"]) == voxel_size
+            ), f"{zarr_dataset.attrs['resolution']}, {voxel_size}"
+            assert tuple(zarr_dataset.attrs["axes"]) == tuple(
+                axes
+            ), f"{zarr_dataset.attrs['axes']}, {axes}"
+            assert (
+                zarr_dataset.shape
+                == ((num_channels,) if num_channels is not None else ())
+                + roi.shape / voxel_size
+            ), f"{zarr_dataset.shape}, {((num_channels,) if num_channels is not None else ()) + roi.shape / voxel_size}"
+            zarr_dataset[:] = np.zeros(zarr_dataset.shape, dtype)
 
         zarr_array = cls.__new__(cls)
         zarr_array.file_name = array_identifier.container
