@@ -1,7 +1,8 @@
-import torch
-
 from .architecture import Architecture
 
+from funlib.geometry import Coordinate
+
+import torch
 
 class DummyArchitecture(torch.nn.Module, Architecture):
 
@@ -19,7 +20,7 @@ class DummyArchitecture(torch.nn.Module, Architecture):
 
     @property
     def input_shape(self):
-        return (40, 20, 20)
+        return Coordinate(40, 20, 20)
 
     @property
     def num_in_channels(self):
