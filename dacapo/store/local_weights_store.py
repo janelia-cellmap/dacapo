@@ -51,6 +51,13 @@ class LocalWeightsStore(WeightsStore):
         }
 
         torch.save(weights, weights_name)
+    
+    def remove(self, run, iteration):
+        weights_dir = self.__get_weights_dir(run)
+        weights = Path(weights_dir, str(iteration))
+
+        weights.unlink()        
+
     def store_best(self, run, iteration, criterion):
         """
         Take the weights from run/iteration and store it
