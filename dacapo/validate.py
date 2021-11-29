@@ -53,6 +53,51 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
     # predict on validation dataset
     run.model = run.model.to(compute_context.device)
 
+    (
+        input_raw_array_identifier,
+        input_gt_array_identifier,
+    ) = array_store.validation_input_arrays(run.name)
+    if (
+        not Path(
+            f"{input_raw_array_identifier.container}/{input_raw_array_identifier.dataset}"
+        ).exists()
+        or not Path(
+            f"{input_gt_array_identifier.container}/{input_gt_array_identifier.dataset}"
+        ).exists()
+    ):
+        logger.info("Copying validation inputs!")
+        input_voxel_size = run.datasplit.validate[0].raw.voxel_size
+        output_voxel_size = run.model.scale(input_voxel_size)
+        input_size = run.model.input_shape * input_voxel_size
+        output_size = run.model.output_shape * output_voxel_size
+        context = (input_size - output_size) / 2
+        output_roi = run.datasplit.validate[0].gt.roi
+        input_roi = output_roi.grow(context, context).intersect(
+            run.datasplit.validate[0].raw.roi
+        )
+        input_raw = ZarrArray.create_from_array_identifier(
+            input_raw_array_identifier,
+            run.datasplit.validate[0].raw.axes,
+            input_roi,
+            run.datasplit.validate[0].raw.num_channels,
+            run.datasplit.validate[0].raw.voxel_size,
+            run.datasplit.validate[0].raw.dtype,
+            name=f"{run.name}_validation_raw",
+        )
+        input_raw[input_roi] = run.datasplit.validate[0].raw[input_roi]
+        input_gt = ZarrArray.create_from_array_identifier(
+            input_gt_array_identifier,
+            run.datasplit.validate[0].gt.axes,
+            output_roi,
+            run.datasplit.validate[0].gt.num_channels,
+            run.datasplit.validate[0].gt.voxel_size,
+            run.datasplit.validate[0].gt.dtype,
+            name=f"{run.name}_validation_gt",
+        )
+        input_gt[output_roi] = run.datasplit.validate[0].gt[output_roi]
+    else:
+        logger.info("validation inputs already copied!")
+
     prediction_array_identifier = array_store.validation_prediction_array(
         run.name,
         iteration)

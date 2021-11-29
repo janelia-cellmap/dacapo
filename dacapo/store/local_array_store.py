@@ -42,6 +42,24 @@ class LocalArrayStore(ArrayStore):
 
         return LocalArrayIdentifier(container, dataset)
 
+    def validation_input_arrays(self, run_name):
+        """
+        Get an array identifiers for the validation input raw/gt.
+
+        It would be nice to store raw/gt with the validation predictions/outputs.
+        If we don't store these we would have to look up the datasplit config
+        and figure out where to find the inputs for each run. If we write
+        the data then we don't need to search for it.
+        This convenience comes at the cost of some extra memory usage.
+        """
+
+        container = Path(self.__get_run_dir(run_name), "validation.zarr")
+        dataset_prefix = "inputs"
+
+        return LocalArrayIdentifier(
+            container, f"{dataset_prefix}/raw"
+        ), LocalArrayIdentifier(container, f"{dataset_prefix}/gt")
+
     def snapshot_container(self, run_name):
         """
         Get a container identifier for storage of a snapshot.
