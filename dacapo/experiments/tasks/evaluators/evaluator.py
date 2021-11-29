@@ -24,7 +24,7 @@ class Evaluator(ABC):
         pass
 
     @abstractmethod
-    def is_best(self, score, criterion):
+    def is_best(self, iteration, parameters, score, criterion):
         """
         Check if the provided score is the best according to some criterion
         """
