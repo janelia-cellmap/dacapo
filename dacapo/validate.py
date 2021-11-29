@@ -16,7 +16,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def validate(run_name, iteration, compute_context = LocalTorch()):
+def validate(run_name, iteration, compute_context=LocalTorch()):
     """Validate a run at a given iteration. Loads the weights from a previously
     stored checkpoint. Returns the best parameters and scores for this
     iteration."""
@@ -112,13 +112,15 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
         logger.info("validation inputs already copied!")
 
     prediction_array_identifier = array_store.validation_prediction_array(
-        run.name,
-        iteration)
+        run.name, iteration
+    )
     predict(
         run.model,
         run.datasplit.validate[0].raw,
         prediction_array_identifier,
-        compute_context=compute_context)
+        compute_context=compute_context,
+        output_roi=run.datasplit.validate[0].gt.roi,
+    )
 
     # post-process and evaluate for each parameter
 
@@ -165,7 +167,7 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
 
         # delete current output. We only keep the best outputs as determined by
         # the evaluator
-            array_store.remove(output_array_identifier)
+        array_store.remove(output_array_identifier)
         weights_store.remove(run, iteration)
 
         iteration_scores.parameter_scores.append((parameters, scores))
