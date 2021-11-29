@@ -1,4 +1,4 @@
-from .evaluators import MultiClassSegmentationEvaluator
+from .evaluators import DummyEvaluator
 from .losses import DummyLoss
 from .post_processors import ArgmaxPostProcessor
 from .predictors import OneHotPredictor
@@ -16,4 +16,4 @@ class OneHotTask(Task):
         self.predictor = OneHotPredictor(classes=task_config.classes)
         self.loss = DummyLoss()
         self.post_processor = ArgmaxPostProcessor()
-        self.evaluator = MultiClassSegmentationEvaluator()
+        self.evaluator = DummyEvaluator()
