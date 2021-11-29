@@ -21,10 +21,7 @@ class LocalWeightsStore(WeightsStore):
 
         weights_dir = self.__get_weights_dir(run)
 
-        iterations = sorted([
-            int(path.parts[-1])
-            for path in weights_dir.glob('*')
-        ])
+        iterations = sorted([int(path.parts[-1]) for path in weights_dir.glob("*")])
 
         if not iterations:
             return None
@@ -34,10 +31,7 @@ class LocalWeightsStore(WeightsStore):
     def store_weights(self, run, iteration):
         """Store the network weights of the given run."""
 
-        logger.info(
-            "Storing weights for run %s, iteration %d",
-            run.name,
-            iteration)
+        logger.info("Storing weights for run %s, iteration %d", run.name, iteration)
 
         weights_dir = self.__get_weights_dir(run)
         weights_name = Path(weights_dir, str(iteration))
@@ -46,8 +40,8 @@ class LocalWeightsStore(WeightsStore):
             weights_dir.mkdir(parents=True, exist_ok=True)
 
         weights = {
-            'model': run.model.state_dict(),
-            'optimizer': run.optimizer.state_dict()
+            "model": run.model.state_dict(),
+            "optimizer": run.optimizer.state_dict(),
         }
 
         torch.save(weights, weights_name)
@@ -57,6 +51,7 @@ class LocalWeightsStore(WeightsStore):
         weights = Path(weights_dir, str(iteration))
 
         weights.unlink()        
+
 
     def store_best(self, run, iteration, criterion):
         """
@@ -74,19 +69,16 @@ class LocalWeightsStore(WeightsStore):
     def retrieve_weights(self, run, iteration):
         """Retrieve the network weights of the given run."""
 
-        logger.info(
-            "Retrieving weights for run %s, iteration %d",
-            run.name,
-            iteration)
+        logger.info("Retrieving weights for run %s, iteration %d", run.name, iteration)
 
         weights_dir = self.__get_weights_dir(run)
         weights_name = Path(weights_dir, str(iteration))
 
-        weights = torch.load(weights_name)
+        weights = torch.load(weights_name, map_location="cpu")
 
-        run.model.load_state_dict(weights['model'])
-        run.optimizer.load_state_dict(weights['optimizer'])
+        run.model.load_state_dict(weights["model"])
+        run.optimizer.load_state_dict(weights["optimizer"])
 
     def __get_weights_dir(self, run):
 
-        return Path(self.basedir, run.name, 'checkpoints')
+        return Path(self.basedir, run.name, "checkpoints")
