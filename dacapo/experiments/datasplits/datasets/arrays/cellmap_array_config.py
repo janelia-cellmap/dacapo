@@ -4,7 +4,7 @@ from .array_config import ArrayConfig
 from .cellmap_array import CellMapArray
 from .array_config import ArrayConfig
 
-from typing import List
+from typing import List, Tuple
 
 
 @attr.s
@@ -20,9 +20,9 @@ class CellMapArrayConfig(ArrayConfig):
         }
     )
 
-    groupings: List[List[int]] = attr.ib(
+    groupings: List[Tuple[str, List[int]]] = attr.ib(
         metadata={
-            "help_text": "List of id groups, where each id group is a List of ids. "
+            "help_text": "List of id groups with a symantic name. Each id group is a List of ids. "
             "Group i found in groupings[i] will be binarized and placed in channel i."
         }
     )

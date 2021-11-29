@@ -19,12 +19,16 @@ def mk_cellmap_array(temp_path):
     )
     dataset.attrs["offset"] = (12, 12, 12)
     dataset.attrs["resolution"] = (1, 2, 4)
-    dataset.attrs["axes"] = "zyx"
+    dataset.attrs["axes"] = ["z", "y", "x"]
 
     cellmap_array_config = CellMapArrayConfig(
         name="cellmap_zarr_array",
         source_array_config=zarr_array_config,
-        groupings=[list(range(0, 10)), list(range(10, 70)), list(range(70, 90))],
+        groupings=[
+            ("a", list(range(0, 10))),
+            ("b", list(range(10, 70))),
+            ("c", list(range(70, 90))),
+        ],
     )
 
     return cellmap_array_config
