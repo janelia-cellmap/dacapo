@@ -62,12 +62,12 @@ class MultiChannelBinarySegmentationEvaluationScores(EvaluationScores):
     def __attrs_post_init__(self):
         for channel, scores in self.channel_scores.items():
             for criteria in BinarySegmentationEvaluationScores.criteria:
-                setattr(self, f"{channel}:{criteria}", getattr(scores, criteria))
+                setattr(self, f"{channel}__{criteria}", getattr(scores, criteria))
 
     @property
     def criteria(self):
         return [
-            f"{channel}:{criteria}"
+            f"{channel}__{criteria}"
             for channel in self.channel_scores
             for criteria in BinarySegmentationEvaluationScores.criteria
         ]
