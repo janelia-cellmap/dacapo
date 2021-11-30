@@ -6,7 +6,10 @@ import attr
 @attr.s
 class TrainingStats:
 
-    iteration_stats: List[TrainingIterationStats] = attr.ib(default=attr.Factory(list))
+    iteration_stats: List[TrainingIterationStats] = attr.ib(
+        default=attr.Factory(list),
+        metadata={"help_text": "A ordered list of training stats."},
+    )
 
     def add_iteration_stats(self, iteration_stats):
         if len(self.iteration_stats) > 0:

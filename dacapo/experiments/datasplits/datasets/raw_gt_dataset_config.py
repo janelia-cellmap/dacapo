@@ -13,5 +13,11 @@ class RawGTDatasetConfig(DatasetConfig):
 
     dataset_type = RawGTDataset
 
-    raw_config: ArrayConfig = attr.ib()
-    gt_config: ArrayConfig = attr.ib()
+    raw_config: ArrayConfig = attr.ib(
+        metadata={"help_text": "Config for the raw data associated with this dataset."},
+    )
+    gt_config: ArrayConfig = attr.ib(
+        metadata={
+            "help_text": "Config for the ground truth data associated with this dataset."
+        },
+    )

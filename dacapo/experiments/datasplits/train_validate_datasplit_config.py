@@ -19,5 +19,7 @@ class TrainValidateDataSplitConfig(DataSplitConfig):
         metadata={"help_text": "All of the datasets to use for training"}
     )
     validate_configs: List[DatasetConfig] = attr.ib(
-        metadata={"help_text": "All of the datasets to use for validation"}
+        metadata={
+            "help_text": "All of the datasets to use for validation. Currently only supports 1 volume!"
+        }
     )

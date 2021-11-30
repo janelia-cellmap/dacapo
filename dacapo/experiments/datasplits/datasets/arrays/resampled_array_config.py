@@ -14,11 +14,15 @@ class ResampledArrayConfig(ArrayConfig):
     array_type = ResampledArray
 
     source_array_config: ArrayConfig = attr.ib(
-        metadata={
-            "help_text": "The Array from which to pull annotated data. Is expected to contain a volume with uint64 voxels and no channel dimension"
-        }
+        metadata={"help_text": "The Array that you want to upsample or downsample."}
     )
 
-    upsample: Coordinate = attr.ib()
-    downsample: Coordinate = attr.ib()
-    interp_order: bool = attr.ib()
+    upsample: Coordinate = attr.ib(
+        metadata={"help_text": "The amount by which to upsample!"}
+    )
+    downsample: Coordinate = attr.ib(
+        metadata={"help_text": "The amount by which to downsample!"}
+    )
+    interp_order: bool = attr.ib(
+        metadata={"help_text": "The order of the interpolation!"}
+    )
