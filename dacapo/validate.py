@@ -168,7 +168,6 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
         # delete current output. We only keep the best outputs as determined by
         # the evaluator
         array_store.remove(output_array_identifier)
-        weights_store.remove(run, iteration)
 
         iteration_scores.parameter_scores.append((parameters, scores))
 
