@@ -1,0 +1,13 @@
+numpy
+pyyaml
+zarr
+cattrs
+pymongo
+tqdm
+simpleitk
+lazy-property
+git+git://github.com/funkelab/funlib.math
+git+git://github.com/funkelab/funlib.geometry
+git+git://github.com/cremi/cremi_python@python3
+git+git://github.com/funkelab/daisy@refactor
+git+git://github.com/funkey/gunpowder@v1.3-dev
