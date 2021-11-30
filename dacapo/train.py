@@ -140,6 +140,7 @@ def train(run_name, compute_context=LocalTorch()):
                     run.move_optimizer(compute_context.device)
                     run.model.train()
 
+            weights_store.store_weights(run, run.trained_until())
             stats_store.store_training_stats(run_name, run.training_stats)
             trained_until = run.training_stats.trained_until()
 
