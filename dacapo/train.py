@@ -82,7 +82,12 @@ def train(run_name, compute_context=LocalTorch()):
 
     # start/resume training
 
+    # make sure model and optimizer are on correct device.
+    # loading weights directly from a checkpoint into cuda
+    # can allocate twice the memory of loading to cpu before
+    # moving to cuda.
     run.model = run.model.to(compute_context.device)
+    run.move_optimizer(compute_context.device)
 
     array_store = create_array_store()
     run.trainer.set_iteration(trained_until)
@@ -111,6 +116,8 @@ def train(run_name, compute_context=LocalTorch()):
                 if (iteration_stats.iteration + 1) % validation_interval == 0:
 
                     run.model.eval()
+                    # free up optimizer memory to allow larger validation blocks
+                    run.move_optimizer(torch.device("cpu"), empty_cuda_cache=True)
 
                     weights_store.store_weights(run, iteration_stats.iteration + 1)
                     validate_run(
@@ -120,6 +127,8 @@ def train(run_name, compute_context=LocalTorch()):
                     )
                     stats_store.store_validation_scores(run_name, run.validation_scores)
 
+                    # make sure to move optimizer back to the correct device
+                    run.move_optimizer(compute_context.device)
                     run.model.train()
 
             stats_store.store_training_stats(run_name, run.training_stats)
