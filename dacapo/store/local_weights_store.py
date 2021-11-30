@@ -28,7 +28,7 @@ class LocalWeightsStore(WeightsStore):
 
         return iterations[-1]
 
-    def store_weights(self, run, iteration):
+    def store_weights(self, run, iteration, remove_old=False):
         """Store the network weights of the given run."""
 
         logger.info("Storing weights for run %s, iteration %d", run.name, iteration)
@@ -43,6 +43,11 @@ class LocalWeightsStore(WeightsStore):
             "model": run.model.state_dict(),
             "optimizer": run.optimizer.state_dict(),
         }
+
+        if remove_old:
+            for checkpoint in list(weights_dir.iterdir()):
+                if int(checkpoint.name) < iteration:
+                    self.remove(run, int(checkpoint.name))
 
         torch.save(weights, weights_name)
 
