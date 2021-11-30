@@ -3,6 +3,10 @@ from .experiments import Run
 from .compute_context import LocalTorch
 from .store import create_config_store, create_stats_store, create_weights_store
 from .validate import validate_run
+
+import torch
+from tqdm import tqdm
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -104,11 +108,15 @@ def train(run_name, compute_context=LocalTorch()):
             # train for at most 100 iterations at a time, then store training stats
             iterations = min(100, train_until - trained_until)
 
-            for iteration_stats in trainer.iterate(
+            for iteration_stats in tqdm(
+                trainer.iterate(
+                    iterations,
+                    run.model,
+                    run.optimizer,
+                    compute_context.device,
+                ),
+                "training",
                 iterations,
-                run.model,
-                run.optimizer,
-                compute_context.device,
             ):
 
                 run.training_stats.add_iteration_stats(iteration_stats)
@@ -126,6 +134,7 @@ def train(run_name, compute_context=LocalTorch()):
                         compute_context=compute_context,
                     )
                     stats_store.store_validation_scores(run_name, run.validation_scores)
+                    stats_store.store_training_stats(run_name, run.training_stats)
 
                     # make sure to move optimizer back to the correct device
                     run.move_optimizer(compute_context.device)
