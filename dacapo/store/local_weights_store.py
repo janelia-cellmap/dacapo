@@ -19,7 +19,7 @@ class LocalWeightsStore(WeightsStore):
         """Return the latest iteration for which weights are available for the
         given run."""
 
-        weights_dir = self.__get_weights_dir(run)
+        weights_dir = self.__get_weights_dir(run) / "iterations"
 
         iterations = sorted([int(path.parts[-1]) for path in weights_dir.glob("*")])
 
@@ -33,8 +33,8 @@ class LocalWeightsStore(WeightsStore):
 
         logger.info("Storing weights for run %s, iteration %d", run.name, iteration)
 
-        weights_dir = self.__get_weights_dir(run)
-        weights_name = Path(weights_dir, str(iteration))
+        weights_dir = self.__get_weights_dir(run) / "iterations"
+        weights_name = weights_dir / str(iteration)
 
         if not weights_dir.exists():
             weights_dir.mkdir(parents=True, exist_ok=True)
@@ -45,13 +45,10 @@ class LocalWeightsStore(WeightsStore):
         }
 
         torch.save(weights, weights_name)
-    
+
     def remove(self, run, iteration):
-        weights_dir = self.__get_weights_dir(run)
-        weights = Path(weights_dir, str(iteration))
-
-        weights.unlink()        
-
+        weights = self.__get_weights_dir(run) / "iterations" / str(iteration)
+        weights.unlink()
 
     def store_best(self, run, iteration, criterion):
         """
@@ -61,8 +58,8 @@ class LocalWeightsStore(WeightsStore):
 
         # must exist since we must read run/iteration weights
         weights_dir = self.__get_weights_dir(run)
-        iteration_weights = Path(weights_dir, f"{iteration}")
-        best_weights = Path(weights_dir, criterion)
+        iteration_weights = weights_dir / "iterations" / f"{iteration}"
+        best_weights = weights_dir / criterion
 
         best_weights.write_bytes(iteration_weights.read_bytes())
 
@@ -71,8 +68,7 @@ class LocalWeightsStore(WeightsStore):
 
         logger.info("Retrieving weights for run %s, iteration %d", run.name, iteration)
 
-        weights_dir = self.__get_weights_dir(run)
-        weights_name = Path(weights_dir, str(iteration))
+        weights_name = self.__get_weights_dir(run) / "iterations" / str(iteration)
 
         weights = torch.load(weights_name, map_location="cpu")
 
