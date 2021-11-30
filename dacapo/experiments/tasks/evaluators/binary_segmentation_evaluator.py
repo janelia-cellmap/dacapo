@@ -31,7 +31,7 @@ class BinarySegmentationEvaluator(Evaluator):
         self.tol_distance = tol_distance
         self.channels = channels
         self.criteria = [
-            f"{channel}:{criteria}"
+            f"{channel}__{criteria}"
             for channel, criteria in itertools.product(channels, self.criteria)
         ]
 
