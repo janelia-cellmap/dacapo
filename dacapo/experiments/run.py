@@ -2,6 +2,7 @@ from .datasplits import DataSplit
 from .training_stats import TrainingStats
 from .validation_scores import ValidationScores
 
+import torch
 
 class Run:
     def __init__(self, run_config):
@@ -23,3 +24,11 @@ class Run:
 
         self.training_stats = TrainingStats()
         self.validation_scores = ValidationScores()
+
+    def move_optimizer(self, device, empty_cuda_cache=False):
+        for state in self.optimizer.state.values():
+            for k, v in state.items():
+                if torch.is_tensor(v):
+                    state[k] = v.to(device)
+        if empty_cuda_cache:
+            torch.cuda.empty_cache()
