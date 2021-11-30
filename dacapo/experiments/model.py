@@ -41,7 +41,8 @@ class Model(torch.nn.Module):
             break
 
         dummy_data = torch.zeros((1, in_channels) + input_shape, device=device)
-        out = self.forward(dummy_data)
+        with torch.no_grad():
+            out = self.forward(dummy_data)
         return out.shape[1], Coordinate(out.shape[2:])
 
     def scale(self, voxel_size: Coordinate) -> Coordinate:
