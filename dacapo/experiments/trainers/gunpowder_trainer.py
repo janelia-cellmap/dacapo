@@ -24,8 +24,13 @@ class GunpowderTrainer(Trainer):
         self.learning_rate = trainer_config.learning_rate
         self.batch_size = trainer_config.batch_size
         self.num_data_fetchers = trainer_config.num_data_fetchers
-        self.augments = []
         self.print_profiling = 100
+
+        self.simple_augment = trainer_config.simple_augment
+        self.elastic_augment = trainer_config.elastic_augment
+        self.intensity_augment = trainer_config.intensity_augment
+        self.gamma_noise_augment = trainer_config.gamma_noise_augment
+        self.intensity_clip = trainer_config.intensity_clip
 
     def create_optimizer(self, model):
         return torch.optim.Adam(lr=self.learning_rate, params=model.parameters())
@@ -65,13 +70,16 @@ class GunpowderTrainer(Trainer):
             dataset_sources.append(dataset_source)
         pipeline = tuple(dataset_sources) + gp.RandomProvider()
 
-        for augmentation in self.augments:
-            # TODO: Should each augmentation be output into a new key?
-            # Could be helpful to show users the affects of applying an
-            # augmentation with specific parameters
-            # TODO: Can we remove the need for augmentations to provide a node?
-            # Some augmentations can get quite involved (elastic augment)
-            pipeline += self.get_augment_node(augmentation, raw_key)
+        if self.simple_augment is not None:
+            pipeline += gp.SimpleAugment(**self.simple_augment)
+        if self.elastic_augment is not None:
+            pipeline += gp.ElasticAugment(**self.elastic_augment)
+        if self.intensity_augment is not None:
+            pipeline += gp.IntensityAugment(**self.intensity_augment)
+        if self.gamma_noise_augment is not None:
+            pipeline += self.gamma_noise_augment
+        if self.intensity_clip is not None:
+            pipeline += self.intensity_clip
 
         # Add predictor nodes to pipeline
         pipeline += DaCapoTargetFilter(
