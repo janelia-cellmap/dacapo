@@ -53,7 +53,6 @@ def predict(
         np.float32,
         write_size=output_size,
         num_channels=model.num_out_channels,
-        compressor=zarr.storage.default_compressor.get_config(),
     )
 
     # create gunpowder keys
