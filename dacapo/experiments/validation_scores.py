@@ -19,7 +19,9 @@ class ValidationScores:
     def delete_after(self, iteration):
 
         self.iteration_scores = [
-            scores for scores in self.iteration_scores if scores.iteration < iteration
+            scores
+            for scores in self.iteration_scores
+            if scores.iteration < iteration
         ]
 
     def validated_until(self):
@@ -44,7 +46,7 @@ class ValidationScores:
         if self.iteration_scores:
             example_parameter_scores = self.iteration_scores[0].parameter_scores
             score_class_instance = example_parameter_scores[0][1]
-            return self.get_attribute_names(score_class_instance)
+            return score_class_instance.criteria
 
         raise RuntimeError("No scores were added, yet")
 

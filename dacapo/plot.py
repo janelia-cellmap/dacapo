@@ -159,7 +159,7 @@ def plot_runs(run_config_base_names, smooth=100, validation_scores=None, higher_
 
     for run, color in zip(runs, colors):
         name = run.name
-        
+
         if run.plot_loss:
             iterations = [stat.iteration
                           for stat in run.training_stats.iteration_stats]
@@ -232,6 +232,7 @@ def plot_runs(run_config_base_names, smooth=100, validation_scores=None, higher_
                     for name in run.validation_scores.get_score_names()
                 }
             )
+
             source = bokeh.plotting.ColumnDataSource(source_dict)
             validation_figure.line(
                 "iteration",
