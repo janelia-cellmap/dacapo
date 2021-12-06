@@ -120,18 +120,20 @@ class GunpowderTrainer(Trainer):
         self.snapshot_container = snapshot_container
 
     def iterate(self, num_iterations, model, optimizer, device):
+        t_start_fetch = time.time()
         worst_loss = float("inf")
         snapshot_arrays = None
 
         logger.info("Starting iteration!")
 
-        for self.iteration in range(self.iteration, self.iteration + num_iterations):
+        for iteration in range(self.iteration, self.iteration + num_iterations):
             raw, gt, target, weight = self.next()
+            logger.info(f"Trainer fetch batch took {time.time() - t_start_fetch} seconds")
 
             for param in model.parameters():
                 param.grad = None
 
-            t_start = time.time()
+            t_start_prediction = time.time()
             predicted = model.forward(torch.as_tensor(raw[raw.roi]).to(device).float())
             predicted.retain_grad()
             loss = self._loss.compute(
@@ -162,10 +164,12 @@ class GunpowderTrainer(Trainer):
                         target.axes,
                     ),
                 }
+            logger.info(f"Trainer step took {time.time() - t_start_prediction} seconds")
+            self.iteration += 1
             yield TrainingIterationStats(
-                loss=loss.item(), iteration=self.iteration, time=time.time() - t_start
+                loss=loss.item(), iteration=iteration, time=time.time() - t_start_prediction
             )
-        self.iteration += 1
+            t_start_fetch = time.time()
 
         if self.snapshot_container is not None:
             logger.info("Saving Snapshot!")
