@@ -1,4 +1,3 @@
-from dacapo.experiments.datasplits.keys import ArrayKey
 from dacapo.gp import DaCapoArraySource
 from dacapo.compute_context import LocalTorch
 
@@ -53,6 +52,7 @@ def predict(
         np.float32,
         write_size=output_size,
         num_channels=model.num_out_channels,
+        compressor={"id": "blosc", "cname": "zstd", "clevel": 6},
     )
 
     # create gunpowder keys
