@@ -1,7 +1,7 @@
 from ..training_iteration_stats import TrainingIterationStats
 from .trainer import Trainer
 
-from dacapo.gp import DaCapoArraySource, DaCapoTargetFilter
+from dacapo.gp import DaCapoArraySource, DaCapoTargetFilter, GammaAugment, ElasticAugment
 from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
 from funlib.geometry import Coordinate
 import gunpowder as gp
@@ -29,8 +29,8 @@ class GunpowderTrainer(Trainer):
         self.simple_augment = trainer_config.simple_augment
         self.elastic_augment = trainer_config.elastic_augment
         self.intensity_augment = trainer_config.intensity_augment
-        self.gamma_noise_augment = trainer_config.gamma_noise_augment
-        self.intensity_clip = trainer_config.intensity_clip
+        self.gamma_augment = trainer_config.gamma_augment
+        self.intensity_scale_shift = trainer_config.intensity_scale_shift
 
     def create_optimizer(self, model):
         return torch.optim.Adam(lr=self.learning_rate, params=model.parameters())
@@ -73,13 +73,13 @@ class GunpowderTrainer(Trainer):
         if self.simple_augment is not None:
             pipeline += gp.SimpleAugment(**self.simple_augment)
         if self.elastic_augment is not None:
-            pipeline += gp.ElasticAugment(**self.elastic_augment)
+            pipeline += ElasticAugment(**self.elastic_augment)
         if self.intensity_augment is not None:
-            pipeline += gp.IntensityAugment(**self.intensity_augment)
-        if self.gamma_noise_augment is not None:
-            pipeline += self.gamma_noise_augment
-        if self.intensity_clip is not None:
-            pipeline += self.intensity_clip
+            pipeline += gp.IntensityAugment(raw_key, **self.intensity_augment)
+        if self.gamma_augment is not None:
+            pipeline += GammaAugment(raw_key, **self.gamma_augment)
+        if self.intensity_scale_shift is not None:
+            pipeline += gp.IntensityScaleShift(raw_key, **self.intensity_scale_shift)
 
         # Add predictor nodes to pipeline
         pipeline += DaCapoTargetFilter(
