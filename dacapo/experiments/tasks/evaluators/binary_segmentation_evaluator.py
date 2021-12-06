@@ -57,8 +57,8 @@ class BinarySegmentationEvaluator(Evaluator):
                 evaluator = Evaluator(
                     evaluation_channel_data,
                     output_channel_data,
-                    evaluation_channel_data.any(),
-                    output_channel_data.any(),
+                    not evaluation_channel_data.any(),
+                    not output_channel_data.any(),
                     metric_params={
                         "clip_distance": self.clip_distance,
                         "tol_distance": self.tol_distance,
@@ -94,8 +94,8 @@ class BinarySegmentationEvaluator(Evaluator):
             evaluator = Evaluator(
                 evaluation_data,
                 output_data,
-                evaluation_data.any(),
-                output_data.any(),
+                not evaluation_data.any(),
+                not output_data.any(),
                 metric_params={
                     "clip_distance": self.clip_distance,
                     "tol_distance": self.tol_distance,
