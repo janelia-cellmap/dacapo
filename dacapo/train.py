@@ -86,6 +86,9 @@ def train(run_name, compute_context=LocalTorch()):
 
     # start/resume training
 
+    # set flag to improve training speeds
+    torch.backends.cudnn.benchmark = True
+    
     # make sure model and optimizer are on correct device.
     # loading weights directly from a checkpoint into cuda
     # can allocate twice the memory of loading to cpu before
@@ -122,23 +125,25 @@ def train(run_name, compute_context=LocalTorch()):
                 run.training_stats.add_iteration_stats(iteration_stats)
 
                 if (iteration_stats.iteration + 1) % validation_interval == 0:
+                    break
 
-                    run.model.eval()
-                    # free up optimizer memory to allow larger validation blocks
-                    run.move_optimizer(torch.device("cpu"), empty_cuda_cache=True)
+            run.model.eval()
+            # free up optimizer memory to allow larger validation blocks
+            run.model = run.model.to(torch.device("cpu"))
+            run.move_optimizer(torch.device("cpu"), empty_cuda_cache=True)
 
-                    weights_store.store_weights(run, iteration_stats.iteration + 1)
-                    validate_run(
-                        run,
-                        iteration_stats.iteration + 1,
-                        compute_context=compute_context,
-                    )
-                    stats_store.store_validation_scores(run_name, run.validation_scores)
-                    stats_store.store_training_stats(run_name, run.training_stats)
+            weights_store.store_weights(run, iteration_stats.iteration + 1)
+            validate_run(
+                run,
+                iteration_stats.iteration + 1,
+                compute_context=compute_context,
+            )
+            stats_store.store_validation_scores(run_name, run.validation_scores)
+            stats_store.store_training_stats(run_name, run.training_stats)
 
-                    # make sure to move optimizer back to the correct device
-                    run.move_optimizer(compute_context.device)
-                    run.model.train()
+            # make sure to move optimizer back to the correct device
+            run.move_optimizer(compute_context.device)
+            run.model.train()
 
             weights_store.store_weights(run, run.training_stats.trained_until(), remove_old=True)
             stats_store.store_training_stats(run_name, run.training_stats)
