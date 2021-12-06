@@ -22,5 +22,5 @@ class GunpowderTrainerConfig(TrainerConfig):
     simple_augment: Optional[Dict[str, Any]] = attr.ib(default=None)
     elastic_augment: Optional[Dict[str, Any]] = attr.ib(default=None)
     intensity_augment: Optional[Dict[str, Any]] = attr.ib(default=None)
-    gamma_noise_augment: Optional[Dict[str, Any]] = attr.ib(default=None)
-    intensity_clip: Optional[Dict[str, Any]] = attr.ib(default=None)
+    gamma_augment: Optional[Dict[str, Any]] = attr.ib(default=None)
+    intensity_scale_shift: Optional[Dict[str, Any]] = attr.ib(default=None)
