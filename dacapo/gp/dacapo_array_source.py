@@ -3,6 +3,7 @@
 from dacapo.experiments.datasplits.datasets.arrays import Array
 
 import gunpowder as gp
+from gunpowder.profiling import Timing
 from gunpowder.array_spec import ArraySpec
 
 import numpy as np
@@ -34,6 +35,9 @@ class DaCapoArraySource(gp.BatchProvider):
     def provide(self, request):
         output = gp.Batch()
 
+        timing_provide = Timing(self, "provide")
+        timing_provide.start()
+
         spec = self.array_spec.copy()
         spec.roi = request[self.key].roi
 
@@ -42,5 +46,9 @@ class DaCapoArraySource(gp.BatchProvider):
             # add a channel dimension
             data = np.expand_dims(data, 0)
         output[self.key] = gp.Array(data, spec=spec)
+
+        timing_provide.stop()
+
+        output.profiling_stats.add(timing_provide)
 
         return output
