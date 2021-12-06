@@ -9,7 +9,6 @@ from .store import (
     create_weights_store,
 )
 
-import os
 from pathlib import Path
 import logging
 
@@ -35,6 +34,10 @@ def validate(run_name, iteration, compute_context=LocalTorch()):
     run.training_stats = stats_store.retrieve_training_stats(run_name)
     run.validation_scores = stats_store.retrieve_validation_scores(run_name)
 
+    # create weights store and read weights
+    weights_store = create_weights_store()
+    weights_store.retrieve_weights(run, iteration)
+
     return validate_run(run, iteration, compute_context=compute_context)
 
 
@@ -55,17 +58,9 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
 
     logger.info("Validating run %s...", run.name)
 
-    # create weights store and read weights
+    # get array and weight store
     weights_store = create_weights_store()
-    weights_store.retrieve_weights(run, iteration)
-
-    # create an array store
-
     array_store = create_array_store()
-
-    # predict on validation dataset
-    run.model = run.model.to(compute_context.device)
-
     (
         input_raw_array_identifier,
         input_gt_array_identifier,
