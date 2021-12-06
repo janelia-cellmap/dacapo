@@ -9,3 +9,5 @@ from .cellmap_array_config import CellMapArrayConfig  # noqa
 from .numpy_array import NumpyArray  # noqa
 from .resampled_array import ResampledArray  # noqa
 from .resampled_array_config import ResampledArrayConfig  # noqa
+from .intensity_array import IntensitiesArray  # noqa
+from .intensity_array_config import IntensitiesArrayConfig  # noqa
