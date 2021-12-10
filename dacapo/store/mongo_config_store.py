@@ -44,12 +44,25 @@ class MongoConfigStore(ConfigStore):
             {"name": run_name},
             projection={"_id": False})
         return converter.structure(run_doc, RunConfig)
+        
+    def retrieve_run_config_names(
+        self,
+        task_names=None,
+        datasplit_names=None,
+        architecture_names=None,
+        trainer_names=None,
+    ):
 
-    def retrieve_run_config_names(self):
-
-        runs = self.runs.find(
-            {},
-            projection={"_id": False, "name": True})
+        filters = {}
+        if task_names is not None:
+            filters["task_config.name"] = {"$in": task_names}
+        if datasplit_names is not None:
+            filters["datasplit_config.name"] = {"$in": datasplit_names}
+        if architecture_names is not None:
+            filters["architecture_config.name"] = {"$in": architecture_names}
+        if trainer_names is not None:
+            filters["trainer_config.name"] = {"$in": trainer_names}
+        runs = self.runs.find(filters, projection={"_id": False, "name": True})
         return list([run["name"] for run in runs])
 
     def store_task_config(self, task_config):
