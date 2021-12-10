@@ -9,7 +9,9 @@ from dacapo.experiments.tasks import TaskConfig
 from dacapo.experiments.trainers import TrainerConfig
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import DuplicateKeyError
+
 import logging
+import bson
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +36,7 @@ class MongoConfigStore(ConfigStore):
         self.__init_db()
 
     def store_run_config(self, run_config):
+        print("Storing run config!!!")
 
         run_doc = converter.unstructure(run_config)
         self.__save_insert(self.runs, run_doc)
@@ -211,8 +214,11 @@ class MongoConfigStore(ConfigStore):
                     del a[key]
                 if key in b:
                     del b[key]
+        
+        bson_a = bson.encode(a)
+        bson_b = bson.encode(b)
 
-        return a == b
+        return bson_a == bson_b
 
     def __init_db(self):
 
