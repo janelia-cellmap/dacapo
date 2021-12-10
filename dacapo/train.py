@@ -13,6 +13,10 @@ logger = logging.getLogger(__name__)
 
 
 def train(run_name, compute_context=LocalTorch()):
+    if compute_context.train(run_name):
+        # if compute context runs train in some other process
+        # we are done here.
+        return
 
     logger.info("Starting/resuming training for run %s...", run_name)
 
