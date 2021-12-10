@@ -3,6 +3,8 @@ from dacapo.experiments.datasplits.datasets.arrays import Array, NumpyArray
 
 import gunpowder as gp
 
+from typing import Optional
+
 
 class DaCapoTargetFilter(gp.BatchFilter):
     """A Gunpowder node for generating the target from the ground truth
@@ -28,11 +30,13 @@ class DaCapoTargetFilter(gp.BatchFilter):
         gt_key: gp.ArrayKey,
         target_key: gp.ArrayKey,
         weights_key: gp.ArrayKey,
+        mask_key: Optional[gp.ArrayKey] = None,
     ):
         self.predictor = predictor
         self.gt_key = gt_key
         self.target_key = target_key
         self.weights_key = weights_key
+        self.mask_key = mask_key
 
     def setup(self):
         provided_spec = gp.ArraySpec(
@@ -53,6 +57,8 @@ class DaCapoTargetFilter(gp.BatchFilter):
         deps = gp.BatchRequest()
         # TODO: Does the gt depend on weights too?
         deps[self.gt_key] = request[self.target_key].copy()
+        if self.mask_key is not None:
+            deps[self.mask_key] = request[self.target_key].copy()
         return deps
 
     def process(self, batch, request):
@@ -61,6 +67,15 @@ class DaCapoTargetFilter(gp.BatchFilter):
         gt_array = NumpyArray.from_gp_array(batch[self.gt_key])
         target_array = self.predictor.create_target(gt_array)
         weight_array = self.predictor.create_weight(gt_array, target_array)
+
+        if self.mask_key is not None:
+            mask_array = NumpyArray.from_gp_array(batch[self.mask_key])
+            weight_array = NumpyArray.from_np_array(
+                weight_array[weight_array.roi] * mask_array[mask_array.roi],
+                weight_array.roi,
+                weight_array.voxel_size,
+                weight_array.axes,
+            )
 
         request_spec = request[self.target_key]
         request_spec.voxel_size = gt_array.voxel_size

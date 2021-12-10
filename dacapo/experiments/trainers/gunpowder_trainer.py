@@ -1,7 +1,12 @@
 from ..training_iteration_stats import TrainingIterationStats
 from .trainer import Trainer
 
-from dacapo.gp import DaCapoArraySource, DaCapoTargetFilter, GammaAugment, ElasticAugment
+from dacapo.gp import (
+    DaCapoArraySource,
+    DaCapoTargetFilter,
+    GammaAugment,
+    ElasticAugment,
+)
 from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
 from funlib.geometry import Coordinate
 import gunpowder as gp
@@ -56,16 +61,17 @@ class GunpowderTrainer(Trainer):
             raw_source = DaCapoArraySource(dataset.raw, raw_key)
             gt_source = DaCapoArraySource(dataset.gt, gt_key)
             array_sources = [raw_source, gt_source]
-            if dataset.mask is not None:
+            if mask_key is not None and dataset.mask is not None:
                 mask_source = DaCapoArraySource(dataset.mask, mask_key)
                 array_sources.append(mask_source)
+            else:
+                # if any of the training datasets do not have a mask available,
+                # we cannot use it during training
+                mask_key = None
 
             dataset_source = (
                 tuple(array_sources) + gp.MergeProvider() + gp.RandomLocation()
             )
-
-            if dataset.mask is not None:
-                dataset_source += gp.Reject(mask_key, self.trainer.min_masked)
 
             dataset_sources.append(dataset_source)
         pipeline = tuple(dataset_sources) + gp.RandomProvider()
@@ -83,7 +89,11 @@ class GunpowderTrainer(Trainer):
 
         # Add predictor nodes to pipeline
         pipeline += DaCapoTargetFilter(
-            task.predictor, gt_key=gt_key, target_key=target_key, weights_key=weight_key
+            task.predictor,
+            gt_key=gt_key,
+            target_key=target_key,
+            weights_key=weight_key,
+            mask_key=mask_key,
         )
 
         # Trainer attributes:
@@ -108,11 +118,14 @@ class GunpowderTrainer(Trainer):
         request.add(weight_key, output_size)
         # request additional keys for snapshots
         request.add(gt_key, output_size)
+        if mask_key is not None:
+            request.add(mask_key, output_size)
 
         self._request = request
         self._pipeline = pipeline
         self._raw_key = raw_key
         self._gt_key = gt_key
+        self._mask_key = mask_key
         self._weight_key = weight_key
         self._target_key = target_key
         self._loss = task.loss
@@ -121,14 +134,20 @@ class GunpowderTrainer(Trainer):
 
     def iterate(self, num_iterations, model, optimizer, device):
         t_start_fetch = time.time()
-        worst_loss = float("inf")
-        snapshot_arrays = None
+        # snapshot_zarr = zarr.open(self.snapshot_container.container, "a+")
+        # if "loss" in snapshot_zarr.attrs:
+        #     worst_loss = snapshot_zarr.attrs["loss"]
+        # else:
+        #     worst_loss = float("-inf")
+        # snapshot_arrays = None
 
         logger.info("Starting iteration!")
 
         for iteration in range(self.iteration, self.iteration + num_iterations):
-            raw, gt, target, weight = self.next()
-            logger.info(f"Trainer fetch batch took {time.time() - t_start_fetch} seconds")
+            raw, gt, target, weight, mask = self.next()
+            logger.info(
+                f"Trainer fetch batch took {time.time() - t_start_fetch} seconds"
+            )
 
             for param in model.parameters():
                 param.grad = None
@@ -144,41 +163,47 @@ class GunpowderTrainer(Trainer):
             loss.backward()
             optimizer.step()
 
-            if loss.item() < worst_loss:
-                worst_loss = loss.item()
-                snapshot_arrays = {
-                    "volumes/raw": raw,
-                    "volumes/gt": gt,
-                    "volumes/target": target,
-                    "volumes/weight": weight,
-                    "volumes/prediction": NumpyArray.from_np_array(
-                        predicted.detach().cpu().numpy(),
-                        target.roi,
-                        target.voxel_size,
-                        target.axes,
-                    ),
-                    "volumes/gradients": NumpyArray.from_np_array(
-                        predicted.grad.detach().cpu().numpy(),
-                        target.roi,
-                        target.voxel_size,
-                        target.axes,
-                    ),
-                }
+            # if loss.item() > worst_loss:
+            #     worst_loss = loss.item()
+            #     snapshot_arrays = {
+            #         "volumes/raw": raw,
+            #         "volumes/gt": gt,
+            #         "volumes/target": target,
+            #         "volumes/weight": weight,
+            #         "volumes/prediction": NumpyArray.from_np_array(
+            #             predicted.detach().cpu().numpy(),
+            #             target.roi,
+            #             target.voxel_size,
+            #             target.axes,
+            #         ),
+            #         "volumes/gradients": NumpyArray.from_np_array(
+            #             predicted.grad.detach().cpu().numpy(),
+            #             target.roi,
+            #             target.voxel_size,
+            #             target.axes,
+            #         ),
+            #     }
+            #     if mask is not None:
+            #         snapshot_arrays["volumes/mask"] = mask
+            #     logger.info("Saving Snapshot!")
+            #     for k, v in snapshot_arrays.items():
+            #         if k not in snapshot_zarr:
+            #             dataset = snapshot_zarr.create_dataset(k, data=v[v.roi][0])
+            #         else:
+            #             snapshot_zarr[k][:] = v[v.roi]
+            #         dataset.attrs["offset"] = v.roi.offset
+            #         dataset.attrs["resolution"] = v.voxel_size
+            #         dataset.attrs["axes"] = v.axes
+            #         snapshot_zarr.attrs["loss"] = worst_loss
+
             logger.info(f"Trainer step took {time.time() - t_start_prediction} seconds")
             self.iteration += 1
             yield TrainingIterationStats(
-                loss=loss.item(), iteration=iteration, time=time.time() - t_start_prediction
+                loss=loss.item(),
+                iteration=iteration,
+                time=time.time() - t_start_prediction,
             )
             t_start_fetch = time.time()
-
-        if self.snapshot_container is not None:
-            logger.info("Saving Snapshot!")
-            snapshot_zarr = zarr.open(self.snapshot_container.container, "w")
-            for k, v in snapshot_arrays.items():
-                dataset = snapshot_zarr.create_dataset(k, data=v[v.roi][0])
-                dataset.attrs["offset"] = v.roi.offset
-                dataset.attrs["resolution"] = v.voxel_size
-                dataset.attrs["axes"] = v.axes
 
     def __iter__(self):
         with gp.build(self._pipeline):
@@ -197,6 +222,9 @@ class GunpowderTrainer(Trainer):
             NumpyArray.from_gp_array(batch[self._gt_key]),
             NumpyArray.from_gp_array(batch[self._target_key]),
             NumpyArray.from_gp_array(batch[self._weight_key]),
+            NumpyArray.from_gp_array(batch[self._mask_key])
+            if self._mask_key is not None
+            else None,
         )
 
     def __enter__(self):

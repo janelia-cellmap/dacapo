@@ -4,6 +4,8 @@ from .arrays import ArrayConfig
 
 import attr
 
+from typing import Optional
+
 
 @attr.s
 class RawGTDatasetConfig(DatasetConfig):
@@ -19,5 +21,12 @@ class RawGTDatasetConfig(DatasetConfig):
     gt_config: ArrayConfig = attr.ib(
         metadata={
             "help_text": "Config for the ground truth data associated with this dataset."
+        },
+    )
+    mask_config: Optional[ArrayConfig] = attr.ib(
+        default=None,
+        metadata={
+            "help_text": "An optional mask that sets the loss equal to zero on voxels where "
+            "the mask is 1"
         },
     )
