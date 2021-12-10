@@ -21,7 +21,8 @@ class Bsub(ComputeContext):
         metadata={"help_text": "The number of cpus to use to generate training data."},
     )
     billing: Optional[str] = attr.ib(
-        default=None, metadata={"Project name that will be paying for this Job."}
+        default=None,
+        metadata={"help_text": "Project name that will be paying for this Job."},
     )
 
     @property
