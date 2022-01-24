@@ -6,7 +6,12 @@ import itertools
 
 
 def balance_weights(
-    labels, num_classes, masks=list(), slab=None, clipmin=0.05, clipmax=0.95
+    labels,
+    num_classes,
+    masks=list(),
+    slab=None,
+    clipmin=0.05,
+    clipmax=0.95,
 ):
 
     label_data = labels[labels.roi]
