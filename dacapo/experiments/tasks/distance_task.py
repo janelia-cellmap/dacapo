@@ -17,7 +17,9 @@ class DistanceTask(Task):
         """Create a `DummyTask` from a `DummyTaskConfig`."""
 
         self.predictor = DistancePredictor(
-            channels=task_config.channels, scale_factor=task_config.scale_factor
+            channels=task_config.channels,
+            scale_factor=task_config.scale_factor,
+            mask_distances=task_config.mask_distances,
         )
         self.loss = MSELoss()
         self.post_processor = ThresholdPostProcessor()
