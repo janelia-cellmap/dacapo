@@ -126,6 +126,42 @@ class BinarySegmentationEvaluator(Evaluator):
                 f1_score=evaluator.f1_score(),
             )
 
+    def _evaluate(self, output_data, evaluation_data, voxel_size):
+        evaluator = Evaluator(
+            evaluation_data,
+            output_data,
+            not evaluation_data.any(),
+            not output_data.any(),
+            metric_params={
+                "clip_distance": self.clip_distance,
+                "tol_distance": self.tol_distance,
+            },
+            resolution=voxel_size,
+        )
+        return BinarySegmentationEvaluationScores(
+            dice=evaluator.dice(),
+            jaccard=evaluator.jaccard(),
+            hausdorff=evaluator.hausdorff(),
+            false_negative_rate=evaluator.false_negative_rate(),
+            false_negative_rate_with_tolerance=evaluator.false_negative_rate_with_tolerance(),
+            false_positive_rate=evaluator.false_positive_rate(),
+            false_discovery_rate=evaluator.false_discovery_rate(),
+            false_positive_rate_with_tolerance=evaluator.false_positive_rate_with_tolerance(),
+            voi=evaluator.voi(),
+            mean_false_distance=evaluator.mean_false_distance(),
+            mean_false_negative_distance=evaluator.mean_false_negative_distance(),
+            mean_false_positive_distance=evaluator.mean_false_positive_distance(),
+            mean_false_distance_clipped=evaluator.mean_false_distance_clipped(),
+            mean_false_negative_distance_clipped=evaluator.mean_false_negative_distance_clipped(),
+            mean_false_positive_distance_clipped=evaluator.mean_false_positive_distance_clipped(),
+            precision_with_tolerance=evaluator.precision_with_tolerance(),
+            recall_with_tolerance=evaluator.recall_with_tolerance(),
+            f1_score_with_tolerance=evaluator.f1_score_with_tolerance(),
+            precision=evaluator.precision(),
+            recall=evaluator.recall(),
+            f1_score=evaluator.f1_score(),
+        )
+
     def is_best(self, iteration, parameter, score, criteria=None):
         """
         Check if the provided score is the best according to some criterion
