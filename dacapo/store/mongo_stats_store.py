@@ -3,8 +3,10 @@ from pymongo import MongoClient, ASCENDING
 from .converter import converter
 from dacapo.experiments import TrainingStats, TrainingIterationStats
 from dacapo.experiments import ValidationScores, ValidationIterationScores
+from dacapo.experiments.tasks.evaluators import *
 from typing import List
 import logging
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +20,9 @@ class MongoStatsStore(StatsStore):
 
         logger.info(
             "Creating MongoStatsStore:\n\thost    : %s\n\tdatabase: %s",
-            db_host, db_name)
+            db_host,
+            db_name,
+        )
 
         self.db_host = db_host
         self.db_name = db_name
@@ -45,24 +49,23 @@ class MongoStatsStore(StatsStore):
                     logger.info(
                         "Updating training stats of run %s after iteration %d",
                         run_name,
-                        store_from_iteration)
+                        store_from_iteration,
+                    )
                 else:
                     # current stats are behind DB--drop DB
                     logger.warn(
-                        "Overwriting previous training stats for run %s",
-                        run_name)
+                        "Overwriting previous training stats for run %s", run_name
+                    )
                     self.__delete_training_stats(run_name)
 
         # store all new stats
         self.__store_training_stats(
-            stats,
-            store_from_iteration,
-            stats.trained_until(),
-            run_name)
+            stats, store_from_iteration, stats.trained_until(), run_name
+        )
 
-    def retrieve_training_stats(self, run_name):
+    def retrieve_training_stats(self, run_name, subsample=False):
 
-        return self.__read_training_stats(run_name)
+        return self.__read_training_stats(run_name, subsample=subsample)
 
     def store_validation_scores(self, run_name, scores):
 
@@ -80,55 +83,67 @@ class MongoStatsStore(StatsStore):
                     # current scores go further than the one in DB
                     store_from_iteration = existing_scores_until
                     logger.info(
-                        "Updating validation scores of run %s after iteration "
-                        "%d",
+                        "Updating validation scores of run %s after iteration " "%d",
                         run_name,
-                        store_from_iteration)
+                        store_from_iteration,
+                    )
                 else:
                     # current scores are behind DB--drop DB
                     logger.warn(
-                        "Overwriting previous validation scores for run %s",
-                        run_name)
+                        "Overwriting previous validation scores for run %s", run_name
+                    )
                     self.__delete_validation_scores(run_name)
 
         self.__store_validation_scores(
-            scores,
-            store_from_iteration,
-            scores.validated_until() + 1,
-            run_name)
+            scores, store_from_iteration, scores.validated_until() + 1, run_name
+        )
 
-    def retrieve_validation_scores(self, run_name):
+    def retrieve_validation_scores(self, run_name, subsample=False, validation_interval=None):
 
-        return self.__read_validation_scores(run_name)
+        return self.__read_validation_scores(run_name, subsample=subsample, validation_interval=validation_interval)
 
     def __store_training_stats(self, stats, begin, end, run_name):
 
         docs = converter.unstructure(stats.iteration_stats[begin:end])
         for doc in docs:
-            doc.update({'run_name': run_name})
+            doc.update({"run_name": run_name})
 
         if docs:
             self.training_stats.insert_many(docs)
 
-    def __read_training_stats(self, run_name):
+    def __read_training_stats(self, run_name, subsample=False):
+        # TODO: using the converter to structure the training/validation stats is extremely slow.
+        # (3e-5 seconds to get training stats, 6 seconds to convert)
+        t1 = time.time()
+        filters = {"run_name": run_name}
+        if subsample:
+            # if possible subsample s.t. we get 1000 iterations
+            max_iteration = list(
+                self.training_stats.find(filters).sort("iteration", -1).limit(1)
+            )
+            if len(max_iteration) == 0:
+                return TrainingStats()
+            else:
+                max_iteration = max_iteration[0]
+            filters["iteration"] = {
+                "$mod": [(max_iteration["iteration"] + 999) // 1000, 0]
+            }
+        docs = list(self.training_stats.find(filters))
+        if subsample and not docs[-1] == max_iteration:
+            docs += [max_iteration]
+        t2 = time.time()
+        stats = TrainingStats(converter.structure(docs, List[TrainingIterationStats]))
+        print(
+            f"Reading training stats took {t2-t1} seconds, converting took {time.time() - t2} seconds"
+        )
 
-        docs = self.training_stats.find({'run_name': run_name})
-        stats = TrainingStats(
-            converter.structure(
-                docs,
-                List[TrainingIterationStats]))
         return stats
 
     def __delete_training_stats(self, run_name):
 
-        self.training_stats.delete_many({'run_name': run_name})
+        self.training_stats.delete_many({"run_name": run_name})
 
-    def __store_validation_scores(
-            self,
-            validation_scores,
-            begin,
-            end,
-            run_name):
+    def __store_validation_scores(self, validation_scores, begin, end, run_name):
 
         docs = [
             converter.unstructure(scores)
@@ -136,38 +151,59 @@ class MongoStatsStore(StatsStore):
             if scores.iteration >= begin and scores.iteration < end
         ]
         for doc in docs:
-            doc.update({'run_name': run_name})
+            doc.update({"run_name": run_name})
 
         if docs:
             self.validation_scores.insert_many(docs)
 
-    def __read_validation_scores(self, run_name):
-
-        docs = self.validation_scores.find({'run_name': run_name})
+    def __read_validation_scores(self, run_name, subsample=False, validation_interval=None):
+        # TODO: using the converter to structure the training/validation stats is extremely slow.
+        # (5e-5 seconds to get validation stats, 3 seconds to convert)
+        filters = {"run_name": run_name}
+        if subsample:
+            # if possible subsample s.t. we get 1000 iterations
+            max_iteration = list(
+                self.validation_scores.find(filters).sort("iteration", -1).limit(1)
+            )
+            if len(max_iteration) == 0:
+                return ValidationScores()
+            else:
+                max_iteration = max_iteration[0]
+            divisor = (max_iteration["iteration"] + 999) // 1000
+            # round divisor down to nearest validation_interval
+            divisor -= divisor % validation_interval
+            # avoid using 0 as a divisor
+            divisor = max(divisor, validation_interval)
+            print(f"Max_iteration: {max_iteration['iteration']}, divisor: {divisor}, validation_interval: {validation_interval}")
+            filters["iteration"] = {"$mod": [divisor, 0]}
+        docs = list(self.validation_scores.find(filters))
+        if subsample and not docs[-1] == max_iteration:
+            docs += [max_iteration]
         scores = ValidationScores(
-            converter.structure(
-                docs,
-                List[ValidationIterationScores]))
+            converter.structure(docs, List[ValidationIterationScores])
+        )
         return scores
 
     def __delete_validation_scores(self, run_name):
 
-        self.validation_scores.delete_many({'run_name': run_name})
+        self.validation_scores.delete_many({"run_name": run_name})
 
     def __init_db(self):
 
         self.training_stats.create_index(
-            [('run_name', ASCENDING), ('iteration', ASCENDING)],
-            name='run_it',
-            unique=True
+            [("run_name", ASCENDING), ("iteration", ASCENDING)],
+            name="run_it",
+            unique=True,
         )
         self.validation_scores.create_index(
-            [('run_name', ASCENDING), ('iteration', ASCENDING)],
-            name='run_it',
-            unique=True
+            [("run_name", ASCENDING), ("iteration", ASCENDING)],
+            name="run_it",
+            unique=True,
         )
+        self.training_stats.create_index([("iteration", ASCENDING)], name="it")
+        self.validation_scores.create_index([("iteration", ASCENDING)], name="it")
 
     def __open_collections(self):
 
-        self.training_stats = self.database['training_stats']
-        self.validation_scores = self.database['validation_scores']
+        self.training_stats = self.database["training_stats"]
+        self.validation_scores = self.database["validation_scores"]
