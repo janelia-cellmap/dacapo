@@ -92,7 +92,7 @@ def train(run_name, compute_context=LocalTorch()):
 
     # set flag to improve training speeds
     torch.backends.cudnn.benchmark = True
-    
+
     # make sure model and optimizer are on correct device.
     # loading weights directly from a checkpoint into cuda
     # can allocate twice the memory of loading to cpu before
@@ -114,6 +114,7 @@ def train(run_name, compute_context=LocalTorch()):
 
             # train for at most 100 iterations at a time, then store training stats
             iterations = min(100, train_until - trained_until)
+            iteration_stats = None
 
             for iteration_stats in tqdm(
                 trainer.iterate(
@@ -130,6 +131,13 @@ def train(run_name, compute_context=LocalTorch()):
 
                 if (iteration_stats.iteration + 1) % validation_interval == 0:
                     break
+
+            if iteration_stats is None or not (
+                (iteration_stats.iteration + 1) % validation_interval == 0
+            ):
+                stats_store.store_training_stats(run_name, run.training_stats)
+                trained_until = run.training_stats.trained_until()
+                continue
 
             run.model.eval()
             # free up optimizer memory to allow larger validation blocks
@@ -149,7 +157,9 @@ def train(run_name, compute_context=LocalTorch()):
             run.move_optimizer(compute_context.device)
             run.model.train()
 
-            weights_store.store_weights(run, run.training_stats.trained_until(), remove_old=True)
+            weights_store.store_weights(
+                run, run.training_stats.trained_until(), remove_old=True
+            )
             stats_store.store_training_stats(run_name, run.training_stats)
             trained_until = run.training_stats.trained_until()
 
