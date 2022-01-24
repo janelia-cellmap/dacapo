@@ -51,123 +51,122 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
         logger.info("Cannot validate run %s. Continuing training!", run.name)
         return None, None
 
-    if len(run.datasplit.validate) > 1:
-        raise NotImplementedError(
-            "We don't yet support validating on multiple volumes!"
-        )
-
-    logger.info("Validating run %s...", run.name)
-
     # get array and weight store
     weights_store = create_weights_store()
     array_store = create_array_store()
-    (
-        input_raw_array_identifier,
-        input_gt_array_identifier,
-    ) = array_store.validation_input_arrays(run.name)
-    if (
-        not Path(
-            f"{input_raw_array_identifier.container}/{input_raw_array_identifier.dataset}"
-        ).exists()
-        or not Path(
-            f"{input_gt_array_identifier.container}/{input_gt_array_identifier.dataset}"
-        ).exists()
-    ):
-        logger.info("Copying validation inputs!")
-        input_voxel_size = run.datasplit.validate[0].raw.voxel_size
-        output_voxel_size = run.model.scale(input_voxel_size)
-        input_size = run.model.input_shape * input_voxel_size
-        output_size = run.model.output_shape * output_voxel_size
-        context = (input_size - output_size) / 2
-        output_roi = run.datasplit.validate[0].gt.roi
-        input_roi = output_roi.grow(context, context).intersect(
-            run.datasplit.validate[0].raw.roi
-        )
-        input_raw = ZarrArray.create_from_array_identifier(
+
+    for datasplit_ind, validation_dataset in enumerate(run.datasplit.validate):
+        logger.info("Validating run %s on datasplit %s", run.name, datasplit_ind)
+
+        (
             input_raw_array_identifier,
-            run.datasplit.validate[0].raw.axes,
-            input_roi,
-            run.datasplit.validate[0].raw.num_channels,
-            run.datasplit.validate[0].raw.voxel_size,
-            run.datasplit.validate[0].raw.dtype,
-            name=f"{run.name}_validation_raw",
-        )
-        input_raw[input_roi] = run.datasplit.validate[0].raw[input_roi]
-        input_gt = ZarrArray.create_from_array_identifier(
             input_gt_array_identifier,
-            run.datasplit.validate[0].gt.axes,
-            output_roi,
-            run.datasplit.validate[0].gt.num_channels,
-            run.datasplit.validate[0].gt.voxel_size,
-            run.datasplit.validate[0].gt.dtype,
-            name=f"{run.name}_validation_gt",
-        )
-        input_gt[output_roi] = run.datasplit.validate[0].gt[output_roi]
-    else:
-        logger.info("validation inputs already copied!")
-
-    prediction_array_identifier = array_store.validation_prediction_array(
-        run.name, iteration
-    )
-    predict(
-        run.model,
-        run.datasplit.validate[0].raw,
-        prediction_array_identifier,
-        compute_context=compute_context,
-        output_roi=run.datasplit.validate[0].gt.roi,
-    )
-
-    # post-process and evaluate for each parameter
-
-    post_processor = run.task.post_processor
-    evaluator = run.task.evaluator
-    iteration_scores = ValidationIterationScores(iteration, [])
-
-    post_processor.set_prediction(prediction_array_identifier)
-
-    # there can be multiple best iteration/parameter predictions
-    # The evaluator stores a record of them internally here
-    evaluator.set_best(run.validation_scores)
-
-    for parameters in post_processor.enumerate_parameters():
-
-        output_array_identifier = array_store.validation_output_array(
-            run.name, iteration, parameters
-        )
-
-        post_processed_array = post_processor.process(
-            parameters, output_array_identifier
-        )
-
-        scores = evaluator.evaluate(
-            output_array_identifier, run.datasplit.validate[0].gt
-        )
-
-        replaced = evaluator.is_best(iteration, parameters, scores, None)
-        for criterion in replaced:
-            # replace predictions in array with the new better predictions
-            best_array_identifier = array_store.best_validation_array(
-                run.name, criterion
+        ) = array_store.validation_input_arrays(run.name, datasplit_ind)
+        if (
+            not Path(
+                f"{input_raw_array_identifier.container}/{input_raw_array_identifier.dataset}"
+            ).exists()
+            or not Path(
+                f"{input_gt_array_identifier.container}/{input_gt_array_identifier.dataset}"
+            ).exists()
+        ):
+            logger.info("Copying validation inputs!")
+            input_voxel_size = validation_dataset.raw.voxel_size
+            output_voxel_size = run.model.scale(input_voxel_size)
+            input_size = run.model.input_shape * input_voxel_size
+            output_size = run.model.output_shape * output_voxel_size
+            context = (input_size - output_size) / 2
+            output_roi = validation_dataset.gt.roi
+            input_roi = output_roi.grow(context, context).intersect(
+                validation_dataset.raw.roi
             )
-            best_array = ZarrArray.create_from_array_identifier(
-                best_array_identifier,
-                post_processed_array.axes,
-                post_processed_array.roi,
-                post_processed_array.num_channels,
-                post_processed_array.voxel_size,
-                post_processed_array.dtype,
+            input_raw = ZarrArray.create_from_array_identifier(
+                input_raw_array_identifier,
+                validation_dataset.raw.axes,
+                input_roi,
+                validation_dataset.raw.num_channels,
+                validation_dataset.raw.voxel_size,
+                validation_dataset.raw.dtype,
+                name=f"{run.name}_validation_raw",
             )
-            best_array[best_array.roi] = post_processed_array[post_processed_array.roi]
-            weights_store.store_best(run, iteration, criterion)
+            input_raw[input_roi] = validation_dataset.raw[input_roi]
+            input_gt = ZarrArray.create_from_array_identifier(
+                input_gt_array_identifier,
+                validation_dataset.gt.axes,
+                output_roi,
+                validation_dataset.gt.num_channels,
+                validation_dataset.gt.voxel_size,
+                validation_dataset.gt.dtype,
+                name=f"{run.name}_validation_gt",
+            )
+            input_gt[output_roi] = validation_dataset.gt[output_roi]
+        else:
+            logger.info("validation inputs already copied!")
 
-        # delete current output. We only keep the best outputs as determined by
-        # the evaluator
-        array_store.remove(output_array_identifier)
+        prediction_array_identifier = array_store.validation_prediction_array(
+            run.name, iteration
+        )
+        predict(
+            run.model,
+            validation_dataset.raw,
+            prediction_array_identifier,
+            compute_context=compute_context,
+            output_roi=validation_dataset.gt.roi,
+        )
 
-        iteration_scores.parameter_scores.append((parameters, scores))
+        # post-process and evaluate for each parameter
 
-    array_store.remove(prediction_array_identifier)
+        post_processor = run.task.post_processor
+        evaluator = run.task.evaluator
+        iteration_scores = ValidationIterationScores(
+            iteration, [], dataset=datasplit_ind
+        )
 
-    run.validation_scores.add_iteration_scores(iteration_scores)
+        post_processor.set_prediction(prediction_array_identifier)
+
+        # there can be multiple best iteration/parameter predictions
+        # The evaluator stores a record of them internally here
+        evaluator.set_best(run.validation_scores)
+
+        for parameters in post_processor.enumerate_parameters():
+
+            output_array_identifier = array_store.validation_output_array(
+                run.name, iteration, parameters
+            )
+
+            post_processed_array = post_processor.process(
+                parameters, output_array_identifier
+            )
+
+            scores = evaluator.evaluate(output_array_identifier, validation_dataset.gt)
+
+            replaced = evaluator.is_best(iteration, parameters, scores, None)
+            for criterion in replaced:
+                # replace predictions in array with the new better predictions
+                best_array_identifier = array_store.best_validation_array(
+                    run.name, criterion
+                )
+                best_array = ZarrArray.create_from_array_identifier(
+                    best_array_identifier,
+                    post_processed_array.axes,
+                    post_processed_array.roi,
+                    post_processed_array.num_channels,
+                    post_processed_array.voxel_size,
+                    post_processed_array.dtype,
+                )
+                best_array[best_array.roi] = post_processed_array[
+                    post_processed_array.roi
+                ]
+                weights_store.store_best(run, iteration, criterion)
+
+            # delete current output. We only keep the best outputs as determined by
+            # the evaluator
+            array_store.remove(output_array_identifier)
+
+            iteration_scores.parameter_scores.append((parameters, scores))
+
+        array_store.remove(prediction_array_identifier)
+
+        run.validation_scores.add_iteration_scores(iteration_scores)
     stats_store = create_stats_store()
     stats_store.store_validation_scores(run.name, run.validation_scores)

@@ -41,6 +41,20 @@ class ValidationScores:
 
         return names
 
+    @property
+    def criteria(self):
+        if self.iteration_scores:
+            return self.iteration_scores[0].criteria
+        
+        raise RuntimeError("No scores to evaluate yet")
+
+    @property
+    def parameter_names(self):
+        if self.iteration_scores:
+            return self.iteration_scores[0].parameter_names
+        
+        raise RuntimeError("No scores to evaluate yet")
+
     def get_score_names(self):
 
         if self.iteration_scores:
@@ -53,9 +67,7 @@ class ValidationScores:
     def get_postprocessor_parameter_names(self):
 
         if self.iteration_scores:
-            example_parameter_scores = self.iteration_scores[0].parameter_scores
-            postprocessor_class_instance = example_parameter_scores[0][0]
-            return self.get_attribute_names(postprocessor_class_instance)
+            return self.iteration_scores[0].parameter_names
 
         raise RuntimeError("No scores were added, yet")
 
@@ -78,9 +90,12 @@ class ValidationScores:
             best_score = iteration_score.parameter_scores[i]
 
             for name in names:
-                best_scores[name].append(
-                    getattr(best_score[1], name)
-                )
+                try:
+                    best_scores[name].append(
+                        getattr(best_score[1], name)
+                    )
+                except AttributeError as e:
+                    raise AttributeError(iteration_score.iteration) from e
 
             for name in postprocessor_parameter_names:
                 best_score_parameters[name].append(
@@ -88,6 +103,18 @@ class ValidationScores:
                 )
 
         return (best_score_parameters, best_scores)
+
+    def _get_best(self, criterion):
+        """
+        Get the best score according to this criterion.
+        return iteration, parameters, score
+        """
+        iteration_bests = []
+        for iteration_score in self.iteration_scores:
+            parameters, iteration_best = iteration_score._get_best(criterion)
+            iteration_bests.append((iteration_score.iteration, parameters, iteration_best))
+
+        
 
 '''
     def get_score_names(self):

@@ -26,9 +26,12 @@ class LocalArrayStore(ArrayStore):
 
         self.basedir = basedir
 
-    def best_validation_array(self, run_name, criteria):
+    def best_validation_array(self, run_name, criterion, index=None):
         container = Path(self.__get_run_dir(run_name), "validation.zarr")
-        dataset = f"{criteria}"
+        if index is None:
+            dataset = f"{criterion}"
+        else:
+            dataset = f"{index}/{criterion}"
 
         return LocalArrayIdentifier(container, dataset)
 
@@ -48,7 +51,7 @@ class LocalArrayStore(ArrayStore):
 
         return LocalArrayIdentifier(container, dataset)
 
-    def validation_input_arrays(self, run_name):
+    def validation_input_arrays(self, run_name, index=None):
         """
         Get an array identifiers for the validation input raw/gt.
 
@@ -60,7 +63,10 @@ class LocalArrayStore(ArrayStore):
         """
 
         container = Path(self.__get_run_dir(run_name), "validation.zarr")
-        dataset_prefix = "inputs"
+        if index is not None:
+            dataset_prefix = f"inputs/{index}"
+        else:
+            dataset_prefix = "inputs"
 
         return LocalArrayIdentifier(
             container, f"{dataset_prefix}/raw"
