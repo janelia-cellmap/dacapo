@@ -27,10 +27,11 @@ class DistancePredictor(Predictor):
     in the channels argument.
     """
 
-    def __init__(self, channels: List[str], scale_factor: float):
+    def __init__(self, channels: List[str], scale_factor: float, mask_distances=bool):
         self.channels = channels
         self.norm = "tanh"
         self.dt_scale_factor = scale_factor
+        self.mask_distances = mask_distances
 
     @property
     def embedding_dims(self):
@@ -57,13 +58,54 @@ class DistancePredictor(Predictor):
 
     def create_weight(self, gt, target):
         # balance weights independently for each channel
+        if self.mask_distances:
+            distance_mask = self.create_distance_mask(
+                target.data, target.voxel_size, self.norm, self.dt_scale_factor
+            )
+        else:
+            distance_mask = np.ones_like(target.data)
         return balance_weights(
-            gt, 2, slab=tuple(1 if c == "c" else -1 for c in gt.axes)
+            gt,
+            2,
+            slab=tuple(1 if c == "c" else -1 for c in gt.axes),
+            masks=[
+                NumpyArray.from_np_array(distance_mask, gt.roi, gt.voxel_size, gt.axes)
+            ],
         )
 
     @property
     def output_array_type(self):
         return DistanceArray(self.embedding_dims)
+
+    def create_distance_mask(
+        self,
+        distances: np.ndarray,
+        voxel_size: Coordinate,
+        normalize=None,
+        normalize_args=None,
+    ):
+
+        mask = np.zeros(distances.shape, dtype=bool)
+        boundary_distances = np.ones(distances.shape[1:], dtype=np.float32)
+        boundary_distances = np.pad(
+            boundary_distances, 1, mode="constant", constant_values=0
+        )
+        boundary_distances = distance_transform_edt(
+            boundary_distances, sampling=voxel_size
+        )
+        boundary_distances = boundary_distances[
+            tuple(slice(1, -1) for _ in range(len(boundary_distances.shape)))
+        ]
+        boundary_distances = boundary_distances.astype(np.float32)
+        if normalize is not None:
+            boundary_distances = self.__normalize(
+                boundary_distances, normalize, normalize_args
+            )
+
+        for ii, channel in enumerate(distances):
+            mask[ii] = boundary_distances > abs(channel)
+
+        return mask
 
     def process(
         self,
