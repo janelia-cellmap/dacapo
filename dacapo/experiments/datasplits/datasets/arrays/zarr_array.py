@@ -22,7 +22,10 @@ def voxel_size_conventions(attrs):
     elif "transform" in attrs:
         # also a cosem convention
         return Coordinate(attrs["transform"]["scale"])
-    raise ValueError("DaCapo expects the voxel size to be stored in the zarr metadata!")
+    raise ValueError(
+        "DaCapo expects the voxel size to be stored in the zarr metadata!\n"
+        f"Attributes provided: {dict(attrs)}"
+    )
 
 
 def offset_conventions(attrs):
