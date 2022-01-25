@@ -14,7 +14,7 @@ class IntensitiesArray(Array):
     """
 
     def __init__(self, array_config):
-        super().__init__()
+        self.name = array_config.name
         self._source_array = array_config.source_array_config.array_type(
             array_config.source_array_config
         )
@@ -61,3 +61,12 @@ class IntensitiesArray(Array):
         intensities = self._source_array[roi]
         normalized = (intensities.astype(np.float32) - self._min) / (self._max - self._min)
         return normalized
+
+    def _can_neuroglance(self):
+        return self._source_array._can_neuroglance()
+
+    def _neuroglancer_layer(self):
+        return self._source_array._neuroglancer_layer()
+
+    def _source_name(self):
+        return self._source_array._source_name()

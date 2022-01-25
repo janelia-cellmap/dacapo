@@ -2,6 +2,8 @@ from .array import Array
 
 from funlib.geometry import Coordinate, Roi
 
+import neuroglancer
+
 import numpy as np
 
 
@@ -20,11 +22,11 @@ class CellMapArray(Array):
     where 4 is mito_membrane, 8 is er_membrane, and 1 is plasma_membrane.
     Now you can have a binary classification for membrane or not which in
     some cases overlaps with the channel for mitochondria which includes
-    the mito membrane.    
+    the mito membrane.
     """
 
     def __init__(self, array_config):
-        super().__init__()
+        self.name = array_config.name
         self._source_array = array_config.source_array_config.array_type(
             array_config.source_array_config
         )
@@ -81,3 +83,21 @@ class CellMapArray(Array):
             for id in ids:
                 grouped[i] += labels == id
         return grouped
+
+    def _can_neuroglance(self):
+        return self._source_array._can_neuroglance()
+
+    def _neuroglancer_source(self):
+        return self._source_array._neuroglancer_source()
+
+    def _neuroglancer_layer(self):
+        # Generates an Segmentation layer
+
+        layer = neuroglancer.SegmentationLayer(source=self._neuroglancer_source())
+        kwargs = {
+            "visible": False,
+        }
+        return layer, kwargs
+
+    def _source_name(self):
+        return self._source_array._source_name()

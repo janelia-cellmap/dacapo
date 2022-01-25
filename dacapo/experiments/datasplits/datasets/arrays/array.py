@@ -7,7 +7,6 @@ from abc import ABC, abstractmethod
 
 
 class Array(ABC):
-
     @property
     @abstractmethod
     def axes(self):
@@ -74,4 +73,10 @@ class Array(ABC):
         """
         Get the provided data from this `Array` for the given `roi`.
         """
+        pass
+
+    def _can_neuroglance(self):
+        return False
+
+    def _neuroglancer_layer(self):
         pass

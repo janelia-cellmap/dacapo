@@ -14,6 +14,7 @@ class ResampledArray(Array):
     """This is a zarr array"""
 
     def __init__(self, array_config):
+        self.name = array_config.name
         self._source_array = array_config.source_array_config.array_type(
             array_config.source_array_config
         )
@@ -86,3 +87,12 @@ class ResampledArray(Array):
             voxel_size=self.voxel_size,
         )
         return resampled_array.to_ndarray(roi)
+
+    def _can_neuroglance(self):
+        return self._source_array._can_neuroglance()
+
+    def _neuroglancer_layer(self):
+        return self._source_array._neuroglancer_layer()
+
+    def _source_name(self):
+        return self._source_array._source_name()

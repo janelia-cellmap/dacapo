@@ -1,13 +1,19 @@
+from os import symlink
 from .array import Array
+from dacapo import Options
 
 from funlib.geometry import Coordinate, Roi
 import daisy
+
+import neuroglancer
 
 import lazy_property
 import numpy as np
 import zarr
 
 import logging
+from pathlib import Path
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +46,7 @@ class ZarrArray(Array):
 
     def __init__(self, array_config):
         super().__init__()
+        self.name = array_config.name
         self.file_name = array_config.file_name
         self.dataset = array_config.dataset
 
@@ -96,6 +103,10 @@ class ZarrArray(Array):
     @property
     def num_channels(self):
         return None if "c" not in self.axes else self.data.shape[self.axes.index("c")]
+
+    @property
+    def spatial_axes(self):
+        return [ax for ax in self.axes if ax not in set(["c", "b"])]
 
     @property
     def data(self):
@@ -170,3 +181,83 @@ class ZarrArray(Array):
         zarr_array._axes = None
         zarr_array._attributes = zarr_array.data.attrs
         return zarr_array
+
+    def _can_neuroglance(self):
+        return True
+
+    def _neuroglancer_source(self):
+        container_name = self.file_name.name
+        source_type = "n5" if self.file_name.name.endswith(".n5") else "zarr"
+        options = Options.instance()
+        base_dir = Path(options.runs_base_dir)
+        symlink_path = f"data_symlinks/{container_name}"
+
+        # Check if data is symlinked to a servable location
+        if not (base_dir / symlink_path).exists():
+            if not (base_dir / symlink_path).parent.exists():
+                (base_dir / symlink_path).parent.mkdir()
+            (base_dir / symlink_path).symlink_to(Path(self.file_name))
+
+        dataset = self.dataset
+        parent_attributes_path = (
+            base_dir / symlink_path / self.dataset
+        ).parent / "attributes.json"
+        if parent_attributes_path.exists():
+            dataset_parent_attributes = json.loads(
+                open(
+                    (base_dir / symlink_path / self.dataset).parent / "attributes.json",
+                    "r",
+                ).read()
+            )
+            if "scales" in dataset_parent_attributes:
+                print(dataset)
+                dataset = "/".join(self.dataset.split("/")[:-1])
+                print(dataset)
+
+        source = {
+            "url": f"{source_type}://{options.file_server}/{symlink_path}/{dataset}",
+            "transform": {
+                "matrix": self._transform_matrix(),
+                "outputDimensions": self._output_dimensions(),
+            },
+        }
+        return source
+
+    def _neuroglancer_layer(self):
+        # Generates an Image layer. May not be correct if this crop contains a segmentation
+
+        layer = neuroglancer.ImageLayer(source=self._neuroglancer_source())
+        kwargs = {
+            "visible": False,
+            "blend": "additive",
+        }
+        return layer, kwargs
+
+    def _transform_matrix(self):
+        is_zarr = self.file_name.name.endswith(".zarr")
+        if is_zarr:
+            offset = self.roi.offset
+            voxel_size = self.voxel_size
+            matrix = [
+                [0] * (self.dims - i - 1) + [1e-9 * vox] + [0] * i + [off / vox]
+                for i, (vox, off) in enumerate(zip(voxel_size, offset[::-1]))
+            ]
+            return matrix
+        else:
+            return [[0] * i + [1] + [0] * (self.dims - i) for i in range(self.dims)]
+
+    def _output_dimensions(self):
+        is_zarr = self.file_name.name.endswith(".zarr")
+        if is_zarr:
+            return {
+                dim: [vox * 1e-9, "m"]
+                for dim, vox in zip(self.spatial_axes[::-1], self.voxel_size[::-1])
+            }
+        else:
+            return {
+                dim: [vox * 1e-9, "m"]
+                for dim, vox in zip(self.spatial_axes, self.voxel_size)
+            }
+
+    def _source_name(self):
+        return self.name
