@@ -30,12 +30,20 @@ class DataSplit(ABC):
 
             train_layers = {}
             for i, dataset in enumerate(self.train):
-                train_layers.update(dataset._neuroglancer_layers(""))
+                train_layers.update(
+                    dataset._neuroglancer_layers(
+                        exclude_layers=set(train_layers.keys())
+                    )
+                )
 
             validate_layers = {}
             if self.validate is not None:
                 for i, dataset in enumerate(self.validate):
-                    validate_layers.update(dataset._neuroglancer_layers(""))
+                    validate_layers.update(
+                        dataset._neuroglancer_layers(
+                            exclude_layers=set(validate_layers.keys())
+                        )
+                    )
 
             for layer_name, (layer, kwargs) in itertools.chain(
                 train_layers.items(), validate_layers.items()
