@@ -210,9 +210,7 @@ class ZarrArray(Array):
                 ).read()
             )
             if "scales" in dataset_parent_attributes:
-                print(dataset)
                 dataset = "/".join(self.dataset.split("/")[:-1])
-                print(dataset)
 
         source = {
             "url": f"{source_type}://{options.file_server}/{symlink_path}/{dataset}",
