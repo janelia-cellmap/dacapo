@@ -30,7 +30,7 @@ class LocalArrayStore(ArrayStore):
         self.basedir = basedir
 
     def best_validation_array(self, run_name, criterion, index=None):
-        container = self.validation_container().container
+        container = self.validation_container(run_name).container
         if index is None:
             dataset = f"{criterion}"
         else:
@@ -41,7 +41,7 @@ class LocalArrayStore(ArrayStore):
     def validation_prediction_array(self, run_name, iteration):
         """Get the array identifier for a particular validation prediction."""
 
-        container = self.validation_container().container
+        container = self.validation_container(run_name).container
         dataset = f"{iteration}/prediction"
 
         return LocalArrayIdentifier(container, dataset)
@@ -49,7 +49,7 @@ class LocalArrayStore(ArrayStore):
     def validation_output_array(self, run_name, iteration, parameters):
         """Get the array identifier for a particular validation output."""
 
-        container = self.validation_container().container
+        container = self.validation_container(run_name).container
         dataset = f"{iteration}/output/{parameters.id}"
 
         return LocalArrayIdentifier(container, dataset)
@@ -65,7 +65,7 @@ class LocalArrayStore(ArrayStore):
         This convenience comes at the cost of some extra memory usage.
         """
 
-        container = self.validation_container().container
+        container = self.validation_container(run_name).container
         if index is not None:
             dataset_prefix = f"inputs/{index}"
         else:
