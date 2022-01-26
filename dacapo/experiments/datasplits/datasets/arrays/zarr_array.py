@@ -11,6 +11,7 @@ import lazy_property
 import numpy as np
 import zarr
 
+from collections import OrderedDict
 import logging
 from pathlib import Path
 import json
@@ -174,8 +175,9 @@ class ZarrArray(Array):
         return zarr_array
 
     @classmethod
-    def open_from_array_identifier(cls, array_identifier):
+    def open_from_array_identifier(cls, array_identifier, name=""):
         zarr_array = cls.__new__(cls)
+        zarr_array.name = name
         zarr_array.file_name = array_identifier.container
         zarr_array.dataset = array_identifier.dataset
         zarr_array._axes = None
@@ -238,8 +240,10 @@ class ZarrArray(Array):
             voxel_size = self.voxel_size
             matrix = [
                 [0] * (self.dims - i - 1) + [1e-9 * vox] + [0] * i + [off / vox]
-                for i, (vox, off) in enumerate(zip(voxel_size, offset[::-1]))
+                for i, (vox, off) in enumerate(zip(voxel_size[::-1], offset[::-1]))
             ]
+            if "c" in self.axes:
+                matrix = [[1] + [0] * (self.dims + 1)] + [[0] + row for row in matrix]
             return matrix
         else:
             return [[0] * i + [1] + [0] * (self.dims - i) for i in range(self.dims)]
@@ -247,10 +251,12 @@ class ZarrArray(Array):
     def _output_dimensions(self):
         is_zarr = self.file_name.name.endswith(".zarr")
         if is_zarr:
-            return {
-                dim: [vox * 1e-9, "m"]
-                for dim, vox in zip(self.spatial_axes[::-1], self.voxel_size[::-1])
-            }
+            spatial_dimensions = OrderedDict()
+            if "c" in self.axes:
+                spatial_dimensions["c^"] = [1, ""]
+            for dim, vox in zip(self.spatial_axes[::-1], self.voxel_size[::-1]):
+                spatial_dimensions[dim] = [vox * 1e-9, "m"]
+            return spatial_dimensions
         else:
             return {
                 dim: [vox * 1e-9, "m"]
