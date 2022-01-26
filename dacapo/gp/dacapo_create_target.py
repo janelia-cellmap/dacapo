@@ -56,9 +56,14 @@ class DaCapoTargetFilter(gp.BatchFilter):
     def prepare(self, request):
         deps = gp.BatchRequest()
         # TODO: Does the gt depend on weights too?
-        deps[self.gt_key] = request[self.target_key].copy()
+        request[self.target_key].voxel_size = self.spec[self.gt_key].voxel_size
+        deps[self.gt_key] = self.predictor.gt_region_for_roi(
+            request[self.target_key].copy()
+        )
         if self.mask_key is not None:
-            deps[self.mask_key] = request[self.target_key].copy()
+            deps[self.mask_key] = self.predictor.gt_region_for_roi(
+                request[self.target_key].copy()
+            )
         return deps
 
     def process(self, batch, request):

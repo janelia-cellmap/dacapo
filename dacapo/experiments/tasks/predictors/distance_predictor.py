@@ -33,6 +33,8 @@ class DistancePredictor(Predictor):
         self.dt_scale_factor = scale_factor
         self.mask_distances = mask_distances
 
+        self.max_distance = 2.76 * scale_factor
+
     @property
     def embedding_dims(self):
         return len(self.channels)
@@ -200,3 +202,14 @@ class DistancePredictor(Predictor):
             return np.tanh(distances / scale)
         else:
             raise ValueError("Only tanh is supported for normalization")
+
+    def gt_region_for_roi(self, target_spec):
+        if self.mask_distances:
+            gt_spec = target_spec
+            gt_spec.roi = gt_spec.roi.grow(
+                gt_spec.voxel_size * self.max_distance,
+                gt_spec.voxel_size * self.max_distance,
+            )
+        else:
+            gt_spec = target_spec
+        return gt_spec

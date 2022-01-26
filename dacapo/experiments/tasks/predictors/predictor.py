@@ -45,10 +45,10 @@ class Predictor(ABC):
     def output_array_type(self):
         pass
 
-    def gt_region_for_roi(self, target_roi):
+    def gt_region_for_roi(self, target_spec):
         """Report how much spatial context this predictor needs to generate a
         target for the given ROI. By default, uses the same ROI.
 
         Overwrite this method to request ground-truth in a larger ROI, as
         needed."""
-        return target_roi
+        return target_spec
