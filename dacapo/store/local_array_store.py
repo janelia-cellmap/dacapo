@@ -11,6 +11,9 @@ logger = logging.getLogger(__name__)
 class LocalContainerIdentifier:
     container: Path = attr.ib()
 
+    def array_container(self, dataset):
+        return LocalArrayIdentifier(self.container, dataset)
+
 
 @attr.s
 class LocalArrayIdentifier:
@@ -27,7 +30,7 @@ class LocalArrayStore(ArrayStore):
         self.basedir = basedir
 
     def best_validation_array(self, run_name, criterion, index=None):
-        container = Path(self.__get_run_dir(run_name), "validation.zarr")
+        container = self.validation_container().container
         if index is None:
             dataset = f"{criterion}"
         else:
@@ -38,7 +41,7 @@ class LocalArrayStore(ArrayStore):
     def validation_prediction_array(self, run_name, iteration):
         """Get the array identifier for a particular validation prediction."""
 
-        container = Path(self.__get_run_dir(run_name), "validation.zarr")
+        container = self.validation_container().container
         dataset = f"{iteration}/prediction"
 
         return LocalArrayIdentifier(container, dataset)
@@ -46,7 +49,7 @@ class LocalArrayStore(ArrayStore):
     def validation_output_array(self, run_name, iteration, parameters):
         """Get the array identifier for a particular validation output."""
 
-        container = Path(self.__get_run_dir(run_name), "validation.zarr")
+        container = self.validation_container().container
         dataset = f"{iteration}/output/{parameters.id}"
 
         return LocalArrayIdentifier(container, dataset)
@@ -62,7 +65,7 @@ class LocalArrayStore(ArrayStore):
         This convenience comes at the cost of some extra memory usage.
         """
 
-        container = Path(self.__get_run_dir(run_name), "validation.zarr")
+        container = self.validation_container().container
         if index is not None:
             dataset_prefix = f"inputs/{index}"
         else:
@@ -78,6 +81,14 @@ class LocalArrayStore(ArrayStore):
         """
         return LocalContainerIdentifier(
             Path(self.__get_run_dir(run_name), "snapshot.zarr")
+        )
+
+    def validation_container(self, run_name):
+        """
+        Get a container identifier for storage of a snapshot.
+        """
+        return LocalContainerIdentifier(
+            Path(self.__get_run_dir(run_name), "validation.zarr")
         )
 
     def remove(self, array_identifier):
