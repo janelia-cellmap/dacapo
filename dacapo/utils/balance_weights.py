@@ -31,7 +31,7 @@ def balance_weights(
 
     # set error_scale to 0 in masked-out areas
     for mask in masks:
-        error_scale *= mask[mask.roi]
+        error_scale *= mask[labels.roi]
 
     if slab is None:
         slab = error_scale.shape
