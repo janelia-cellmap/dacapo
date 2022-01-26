@@ -33,7 +33,8 @@ class DistancePredictor(Predictor):
         self.dt_scale_factor = scale_factor
         self.mask_distances = mask_distances
 
-        self.max_distance = 2.76 * scale_factor
+        self.max_distance = 1 * scale_factor
+        self.epsilon = 5e-2
 
     @property
     def embedding_dims(self):
@@ -105,7 +106,7 @@ class DistancePredictor(Predictor):
             )
 
         for ii, channel in enumerate(distances):
-            mask[ii] = boundary_distances > abs(channel)
+            mask[ii] = boundary_distances > (abs(channel) - self.epsilon)
 
         return mask
 
@@ -126,7 +127,7 @@ class DistancePredictor(Predictor):
 
             if np.sum(boundaries == 0) == 0:
                 max_distance = min(
-                    dim * vs for dim, vs in zip(channel.shape, voxel_size)
+                    dim * vs / 2 for dim, vs in zip(channel.shape, voxel_size)
                 )
                 if np.sum(channel) == 0:
                     distances = -np.ones(channel.shape, dtype=np.float32) * max_distance
@@ -207,9 +208,9 @@ class DistancePredictor(Predictor):
         if self.mask_distances:
             gt_spec = target_spec
             gt_spec.roi = gt_spec.roi.grow(
-                gt_spec.voxel_size * self.max_distance,
-                gt_spec.voxel_size * self.max_distance,
-            )
+                Coordinate((self.max_distance,) * gt_spec.voxel_size.dims),
+                Coordinate((self.max_distance,) * gt_spec.voxel_size.dims),
+            ).snap_to_grid(gt_spec.voxel_size, mode="shrink")
         else:
             gt_spec = target_spec
         return gt_spec
