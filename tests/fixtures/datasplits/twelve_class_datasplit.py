@@ -74,8 +74,8 @@ def mk_twelve_class_datasplit(tmp_path):
 
     twelve_class_datasplit_config = TrainValidateDataSplitConfig(
         name="twelve_class_datasplit",
-        train_configs=[crop1, crop2],
-        validate_configs=[crop3],
+        train_configs=[crop1],
+        validate_configs=[crop2, crop3],
     )
     return twelve_class_datasplit_config
 
