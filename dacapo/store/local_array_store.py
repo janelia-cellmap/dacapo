@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class LocalContainerIdentifier:
     container: Path = attr.ib()
 
-    def array_container(self, dataset):
+    def array_identifier(self, dataset):
         return LocalArrayIdentifier(self.container, dataset)
 
 

@@ -60,13 +60,13 @@ class ArrayStore(ABC):
             snapshot_layers = {}
             for snapshot in snapshots:
                 snapshot_layers[snapshot] = ZarrArray.open_from_array_identifier(
-                    snapshot_container.array_container(snapshot), name=snapshot
+                    snapshot_container.array_identifier(snapshot), name=snapshot
                 )._neuroglancer_layer()
 
             validation_layers = {}
             for validation in validations:
                 validation_layers[validation] = ZarrArray.open_from_array_identifier(
-                    validation_container.array_container(validation), name=validation
+                    validation_container.array_identifier(validation), name=validation
                 )._neuroglancer_layer()
 
             for layer_name, (layer, kwargs) in itertools.chain(
