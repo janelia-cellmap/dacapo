@@ -19,11 +19,16 @@ class NumpyArray(Array):
         instance._dtype = array.data.dtype
         instance._roi = array.spec.roi
         instance._voxel_size = array.spec.voxel_size
-        instance._axes = (["c"] if len(array.data.shape) == instance.dims + 1 else []) + [
-            "z",
-            "y",
-            "x",
-        ][-instance.dims :]
+        instance._axes = (
+            ((["b", "c"] if len(array.data.shape) == instance.dims + 2 else []))
+            + (["c"] if len(array.data.shape) == instance.dims + 1 else [])
+            + [
+                "t",
+                "z",
+                "y",
+                "x",
+            ][-instance.dims :]
+        )
         return instance
 
     @classmethod
@@ -86,7 +91,14 @@ class NumpyArray(Array):
         offset = (roi.offset - self.roi.offset) / self.voxel_size
         shape = roi.shape / self.voxel_size
 
-        slices = tuple(slice(o, o + s) for o, s in zip(offset, shape))
-        if self.axes[0] == "c":
-            slices = (slice(None, None),) + slices
+        spatial_slices = {
+            a: slice(o, o + s)
+            for o, s, a in zip(offset, shape, self.axes[-self.dims :])
+        }
+        slices = ()
+        for axis in self.axes:
+            if axis == "b" or axis == "c":
+                slices = slices + (slice(None, None),)
+            else:
+                slices = slices + (spatial_slices[axis],)
         return self.data[slices]
