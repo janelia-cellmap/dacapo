@@ -24,4 +24,4 @@ class GunpowderTrainerConfig(TrainerConfig):
     intensity_augment: Optional[Dict[str, Any]] = attr.ib(default=None)
     gamma_augment: Optional[Dict[str, Any]] = attr.ib(default=None)
     intensity_scale_shift: Optional[Dict[str, Any]] = attr.ib(default=None)
-    snapshot_iteration: Optional[int] = attr.ib(default=None)
+    snapshot_interval: Optional[int] = attr.ib(default=None)
