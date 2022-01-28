@@ -138,14 +138,15 @@ class ZarrArray(Array):
         """
         zarr_container = zarr.open(array_identifier.container, "a")
         try:
-            zarr_dataset = zarr_container.create_dataset(
+            daisy.prepare_ds(
+                f"{array_identifier.container}",
                 array_identifier.dataset,
-                shape=(num_channels,) + roi.shape / voxel_size
-                if num_channels is not None
-                else roi.shape / voxel_size,
-                dtype=dtype,
-                chunks=chunks,
+                roi,
+                voxel_size,
+                dtype,
+                num_channels=num_channels if num_channels is not None else 1,
             )
+            zarr_dataset = zarr_container[array_identifier.dataset]
             zarr_dataset.attrs["offset"] = roi.offset
             zarr_dataset.attrs["resolution"] = voxel_size
             zarr_dataset.attrs["axes"] = axes
@@ -188,11 +189,14 @@ class ZarrArray(Array):
         return True
 
     def _neuroglancer_source(self):
-        container_name = self.file_name.name
         source_type = "n5" if self.file_name.name.endswith(".n5") else "zarr"
         options = Options.instance()
         base_dir = Path(options.runs_base_dir)
-        symlink_path = f"data_symlinks/{container_name}"
+        try:
+            relpath = self.file_name.relative_to(base_dir)
+        except ValueError:
+            relpath = self.file_name.name
+        symlink_path = f"data_symlinks/{relpath}"
 
         # Check if data is symlinked to a servable location
         if not (base_dir / symlink_path).exists():

@@ -1,5 +1,6 @@
 from dacapo.gp import DaCapoArraySource
 from dacapo.compute_context import LocalTorch
+from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 
 from funlib.geometry import Coordinate
 import daisy
@@ -44,15 +45,14 @@ def predict(
     logger.info("Total input ROI: %s, output ROI: %s", input_roi, output_roi)
 
     # prepare prediction dataset
-    daisy.prepare_ds(
-        str(prediction_array_identifier.container),
-        prediction_array_identifier.dataset,
+    axes = ["c"] + [axis for axis in raw_array.axes if axis != "c"]
+    ZarrArray.create_from_array_identifier(
+        prediction_array_identifier,
+        axes,
         output_roi,
+        model.num_out_channels,
         output_voxel_size,
         np.float32,
-        write_size=output_size,
-        num_channels=model.num_out_channels,
-        compressor={"id": "blosc", "cname": "zstd", "clevel": 6},
     )
 
     # create gunpowder keys
