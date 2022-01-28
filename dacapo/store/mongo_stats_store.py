@@ -98,9 +98,13 @@ class MongoStatsStore(StatsStore):
             scores, store_from_iteration, scores.validated_until() + 1, run_name
         )
 
-    def retrieve_validation_scores(self, run_name, subsample=False, validation_interval=None):
+    def retrieve_validation_scores(
+        self, run_name, subsample=False, validation_interval=None
+    ):
 
-        return self.__read_validation_scores(run_name, subsample=subsample, validation_interval=validation_interval)
+        return self.__read_validation_scores(
+            run_name, subsample=subsample, validation_interval=validation_interval
+        )
 
     def __store_training_stats(self, stats, begin, end, run_name):
 
@@ -156,7 +160,9 @@ class MongoStatsStore(StatsStore):
         if docs:
             self.validation_scores.insert_many(docs)
 
-    def __read_validation_scores(self, run_name, subsample=False, validation_interval=None):
+    def __read_validation_scores(
+        self, run_name, subsample=False, validation_interval=None
+    ):
         # TODO: using the converter to structure the training/validation stats is extremely slow.
         # (5e-5 seconds to get validation stats, 3 seconds to convert)
         filters = {"run_name": run_name}
@@ -174,7 +180,6 @@ class MongoStatsStore(StatsStore):
             divisor -= divisor % validation_interval
             # avoid using 0 as a divisor
             divisor = max(divisor, validation_interval)
-            print(f"Max_iteration: {max_iteration['iteration']}, divisor: {divisor}, validation_interval: {validation_interval}")
             filters["iteration"] = {"$mod": [divisor, 0]}
         docs = list(self.validation_scores.find(filters))
         if subsample and not docs[-1] == max_iteration:
@@ -196,8 +201,8 @@ class MongoStatsStore(StatsStore):
             unique=True,
         )
         self.validation_scores.create_index(
-            [("run_name", ASCENDING), ("iteration", ASCENDING)],
-            name="run_it",
+            [("run_name", ASCENDING), ("iteration", ASCENDING), ("dataset", ASCENDING)],
+            name="run_it_ds",
             unique=True,
         )
         self.training_stats.create_index([("iteration", ASCENDING)], name="it")
