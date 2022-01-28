@@ -7,7 +7,8 @@ from dacapo.gp import (
     GammaAugment,
     ElasticAugment,
 )
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+from dacapo.experiments.datasplits.datasets.arrays import NumpyArray, ZarrArray
+
 from funlib.geometry import Coordinate
 import gunpowder as gp
 
@@ -36,6 +37,7 @@ class GunpowderTrainer(Trainer):
         self.intensity_augment = trainer_config.intensity_augment
         self.gamma_augment = trainer_config.gamma_augment
         self.intensity_scale_shift = trainer_config.intensity_scale_shift
+        self.snapshot_iteration = trainer_config.snapshot_interval
 
     def create_optimizer(self, model):
         return torch.optim.Adam(lr=self.learning_rate, params=model.parameters())
@@ -134,12 +136,6 @@ class GunpowderTrainer(Trainer):
 
     def iterate(self, num_iterations, model, optimizer, device):
         t_start_fetch = time.time()
-        # snapshot_zarr = zarr.open(self.snapshot_container.container, "a+")
-        # if "loss" in snapshot_zarr.attrs:
-        #     worst_loss = snapshot_zarr.attrs["loss"]
-        # else:
-        #     worst_loss = float("-inf")
-        # snapshot_arrays = None
 
         logger.info("Starting iteration!")
 
@@ -163,38 +159,63 @@ class GunpowderTrainer(Trainer):
             loss.backward()
             optimizer.step()
 
-            # if loss.item() > worst_loss:
-            #     worst_loss = loss.item()
-            #     snapshot_arrays = {
-            #         "volumes/raw": raw,
-            #         "volumes/gt": gt,
-            #         "volumes/target": target,
-            #         "volumes/weight": weight,
-            #         "volumes/prediction": NumpyArray.from_np_array(
-            #             predicted.detach().cpu().numpy(),
-            #             target.roi,
-            #             target.voxel_size,
-            #             target.axes,
-            #         ),
-            #         "volumes/gradients": NumpyArray.from_np_array(
-            #             predicted.grad.detach().cpu().numpy(),
-            #             target.roi,
-            #             target.voxel_size,
-            #             target.axes,
-            #         ),
-            #     }
-            #     if mask is not None:
-            #         snapshot_arrays["volumes/mask"] = mask
-            #     logger.info("Saving Snapshot!")
-            #     for k, v in snapshot_arrays.items():
-            #         if k not in snapshot_zarr:
-            #             dataset = snapshot_zarr.create_dataset(k, data=v[v.roi][0])
-            #         else:
-            #             snapshot_zarr[k][:] = v[v.roi]
-            #         dataset.attrs["offset"] = v.roi.offset
-            #         dataset.attrs["resolution"] = v.voxel_size
-            #         dataset.attrs["axes"] = v.axes
-            #         snapshot_zarr.attrs["loss"] = worst_loss
+            if self.snapshot_iteration is not None and iteration % self.snapshot_iteration == 0:
+                snapshot_zarr = zarr.open(self.snapshot_container.container, "a")
+                snapshot_arrays = {
+                    "volumes/raw": raw,
+                    "volumes/gt": gt,
+                    "volumes/target": target,
+                    "volumes/weight": weight,
+                    "volumes/prediction": NumpyArray.from_np_array(
+                        predicted.detach().cpu().numpy(),
+                        target.roi,
+                        target.voxel_size,
+                        target.axes,
+                    ),
+                    "volumes/gradients": NumpyArray.from_np_array(
+                        predicted.grad.detach().cpu().numpy(),
+                        target.roi,
+                        target.voxel_size,
+                        target.axes,
+                    ),
+                }
+                if mask is not None:
+                    snapshot_arrays["volumes/mask"] = mask
+                logger.info("Saving Snapshot!")
+                for k, v in snapshot_arrays.items():
+                    k = f"{iteration}/{k}"
+                    if k not in snapshot_zarr:
+                        snapshot_array_identifier = (
+                            self.snapshot_container.array_identifier(k)
+                        )
+                        ZarrArray.create_from_array_identifier(
+                            snapshot_array_identifier,
+                            v.axes,
+                            v.roi,
+                            v.num_channels,
+                            v.voxel_size,
+                            v.dtype,
+                        )
+                        dataset = snapshot_zarr[k]
+                    else:
+                        dataset = snapshot_zarr[k]
+                    # remove batch dimension. Everything has a batch
+                    # and channel dim because of torch.
+                    data = v[v.roi][0]
+                    if v.num_channels is None or v.num_channels == 1:
+                        data = data[0]
+                    print(
+                        k,
+                        v.roi,
+                        v.num_channels,
+                        v.voxel_size,
+                        dataset.shape,
+                        data.shape,
+                    )
+                    dataset[:] = data
+                    dataset.attrs["offset"] = v.roi.offset
+                    dataset.attrs["resolution"] = v.voxel_size
+                    dataset.attrs["axes"] = v.axes
 
             logger.info(f"Trainer step took {time.time() - t_start_prediction} seconds")
             self.iteration += 1
