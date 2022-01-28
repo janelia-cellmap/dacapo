@@ -26,7 +26,7 @@ class ValidationScores:
         }
     )
     scores: List[ValidationIterationScores] = attr.ib(
-        factor=lambda: list(),
+        factory=lambda: list(),
         metadata={
             "help_text": "A list of evaluation scores and their associated post-processing parameters."
         },
