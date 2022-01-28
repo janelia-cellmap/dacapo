@@ -11,6 +11,7 @@ class RawGTDataset(Dataset):
 
     def __init__(self, dataset_config):
 
+        self.name = dataset_config.name
         self.raw = dataset_config.raw_config.array_type(dataset_config.raw_config)
         self.gt = dataset_config.gt_config.array_type(dataset_config.gt_config)
         self.mask = (

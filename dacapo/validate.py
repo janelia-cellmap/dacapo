@@ -55,13 +55,15 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
     weights_store = create_weights_store()
     array_store = create_array_store()
 
-    for datasplit_ind, validation_dataset in enumerate(run.datasplit.validate):
-        logger.info("Validating run %s on datasplit %s", run.name, datasplit_ind)
+    for validation_dataset in run.datasplit.validate:
+        logger.info(
+            "Validating run %s on datasplit %s", run.name, validation_dataset.name
+        )
 
         (
             input_raw_array_identifier,
             input_gt_array_identifier,
-        ) = array_store.validation_input_arrays(run.name, datasplit_ind)
+        ) = array_store.validation_input_arrays(run.name, validation_dataset.name)
         if (
             not Path(
                 f"{input_raw_array_identifier.container}/{input_raw_array_identifier.dataset}"
@@ -119,7 +121,7 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
         post_processor = run.task.post_processor
         evaluator = run.task.evaluator
         iteration_scores = ValidationIterationScores(
-            iteration, [], dataset=datasplit_ind
+            iteration, [], dataset=validation_dataset.name
         )
 
         post_processor.set_prediction(prediction_array_identifier)
@@ -144,7 +146,7 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
             for criterion in replaced:
                 # replace predictions in array with the new better predictions
                 best_array_identifier = array_store.best_validation_array(
-                    run.name, criterion
+                    run.name, criterion, index=validation_dataset.name
                 )
                 best_array = ZarrArray.create_from_array_identifier(
                     best_array_identifier,
