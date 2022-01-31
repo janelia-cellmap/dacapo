@@ -54,6 +54,14 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
     # get array and weight store
     weights_store = create_weights_store()
     array_store = create_array_store()
+    iteration_scores = []
+
+    # get post processor and evaluator
+    post_processor = run.task.post_processor
+    evaluator = run.task.evaluator
+
+    # Initialize the evaluator with the best scores seen so far
+    evaluator.set_best(run.validation_scores)
 
     for validation_dataset in run.datasplit.validate:
         logger.info(
@@ -114,14 +122,6 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
             prediction_array_identifier,
             compute_context=compute_context,
             output_roi=validation_dataset.gt.roi,
-        )
-
-        # post-process and evaluate for each parameter
-
-        post_processor = run.task.post_processor
-        evaluator = run.task.evaluator
-        iteration_scores = ValidationIterationScores(
-            iteration, [], dataset=validation_dataset.name
         )
 
         post_processor.set_prediction(prediction_array_identifier)
