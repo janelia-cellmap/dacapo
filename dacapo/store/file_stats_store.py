@@ -19,9 +19,7 @@ class FileStatsStore(StatsStore):
 
     def __init__(self, path):
 
-        logger.info(
-            "Creating MongoStatsStore:\n\tpath    : %s",
-            path)
+        logger.info("Creating MongoStatsStore:\n\tpath    : %s", path)
 
         self.path = Path(path)
 
@@ -45,67 +43,54 @@ class FileStatsStore(StatsStore):
                     logger.info(
                         "Updating training stats of run %s after iteration %d",
                         run_name,
-                        store_from_iteration)
+                        store_from_iteration,
+                    )
                 else:
                     # current stats are behind DB--drop DB
                     logger.warn(
-                        "Overwriting previous training stats for run %s",
-                        run_name)
+                        "Overwriting previous training stats for run %s", run_name
+                    )
                     self.__delete_training_stats(run_name)
 
         # store all new stats
         self.__store_training_stats(
-            stats,
-            store_from_iteration,
-            stats.trained_until(),
-            run_name)
+            stats, store_from_iteration, stats.trained_until(), run_name
+        )
 
     def retrieve_training_stats(self, run_name):
 
         return self.__read_training_stats(run_name)
 
-    def store_validation_scores(self, run_name, scores):
+    def store_validation_iteration_scores(self, run_name, scores):
 
-        existing_scores = self.__read_validation_scores(run_name)
-        existing_scores_until = existing_scores.validated_until()
+        existing_iteration_scores = self.__read_validation_iteration_scores(run_name)
+        store_from_iteration, drop_db = scores.compare(existing_iteration_scores)
 
-        store_from_iteration = 0
+        if drop_db:
+            # current scores are behind DB--drop DB
+            logger.warn("Overwriting previous validation scores for run %s", run_name)
+            self.__delete_validation_iteration_scores(run_name)
 
-        if existing_scores_until > 0:
+        if store_from_iteration > 0:
+            logger.info(
+                "Updating validation scores of run %s after iteration " "%d",
+                run_name,
+                store_from_iteration,
+            )
 
-            if scores.validated_until() > 0:
+        self.__store_validation_iteration_scores(
+            scores, store_from_iteration, scores.validated_until() + 1, run_name
+        )
 
-                # both current scores and DB contain data
-                if scores.validated_until() > existing_scores_until:
-                    # current scores go further than the one in DB
-                    store_from_iteration = existing_scores_until
-                    logger.info(
-                        "Updating validation scores of run %s after iteration "
-                        "%d",
-                        run_name,
-                        store_from_iteration)
-                else:
-                    # current scores are behind DB--drop DB
-                    logger.warn(
-                        "Overwriting previous validation scores for run %s",
-                        run_name)
-                    self.__delete_validation_scores(run_name)
+    def retrieve_validation_iteration_scores(self, run_name):
 
-        self.__store_validation_scores(
-            scores,
-            store_from_iteration,
-            scores.validated_until() + 1,
-            run_name)
-
-    def retrieve_validation_scores(self, run_name):
-
-        return self.__read_validation_scores(run_name)
+        return self.__read_validation_iteration_scores(run_name)
 
     def __store_training_stats(self, stats, begin, end, run_name):
 
         docs = converter.unstructure(stats.iteration_stats[begin:end])
         for doc in docs:
-            doc.update({'run_name': run_name})
+            doc.update({"run_name": run_name})
 
         if docs:
             file_store = self.training_stats / run_name
@@ -118,10 +103,7 @@ class FileStatsStore(StatsStore):
             docs = pickle.load(file_store.open("rb"))
         else:
             docs = []
-        stats = TrainingStats(
-            converter.structure(
-                docs,
-                List[TrainingIterationStats]))
+        stats = TrainingStats(converter.structure(docs, List[TrainingIterationStats]))
         return stats
 
     def __delete_training_stats(self, run_name):
@@ -130,39 +112,33 @@ class FileStatsStore(StatsStore):
         if file_store.exists():
             file_store.unlink()
 
-    def __store_validation_scores(
-            self,
-            validation_scores,
-            begin,
-            end,
-            run_name):
+    def __store_validation_iteration_scores(
+        self, validation_scores, begin, end, run_name
+    ):
 
         docs = [
             converter.unstructure(scores)
             for scores in validation_scores.iteration_scores
-            if scores.iteration >= begin and scores.iteration < end
+            if scores.iteration < end
         ]
         for doc in docs:
-            doc.update({'run_name': run_name})
+            doc.update({"run_name": run_name})
 
         if docs:
             file_store = self.validation_scores / run_name
             pickle.dump(docs, file_store.open("wb"))
 
-    def __read_validation_scores(self, run_name):
+    def __read_validation_iteration_scores(self, run_name):
 
         file_store = self.validation_scores / run_name
         if file_store.exists():
             docs = pickle.load(file_store.open("rb"))
         else:
             docs = []
-        scores = ValidationScores(
-            converter.structure(
-                docs,
-                List[ValidationIterationScores]))
+        scores = converter.structure(docs, List[ValidationIterationScores])
         return scores
 
-    def __delete_validation_scores(self, run_name):
+    def __delete_validation_iteration_scores(self, run_name):
 
         file_store = self.validation_scores / run_name
         if file_store.exists():
@@ -173,7 +149,7 @@ class FileStatsStore(StatsStore):
 
     def __open_collections(self):
 
-        self.training_stats = self.path / 'training_stats'
+        self.training_stats = self.path / "training_stats"
         self.training_stats.mkdir(exist_ok=True, parents=True)
-        self.validation_scores = self.path / 'validation_scores'
+        self.validation_scores = self.path / "validation_scores"
         self.validation_scores.mkdir(exist_ok=True, parents=True)

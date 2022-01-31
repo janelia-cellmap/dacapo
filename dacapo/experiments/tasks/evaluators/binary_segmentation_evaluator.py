@@ -3,8 +3,12 @@ from .binary_segmentation_evaluation_scores import (
     BinarySegmentationEvaluationScores,
     MultiChannelBinarySegmentationEvaluationScores,
 )
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 
+from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+from dacapo.experiments.datasplits.datasets import Dataset
+from dacapo.experiments.tasks.post_processors import PostProcessorParameters
+
+import xarray as xr
 import numpy as np
 import SimpleITK as sitk
 import cremi.evaluation
@@ -13,6 +17,7 @@ import scipy
 
 import itertools
 import logging
+from typing import Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +51,7 @@ class BinarySegmentationEvaluator(Evaluator):
             evaluation_data.shape == output_data.shape
         ), f"{evaluation_data.shape} vs {output_data.shape}"
         if "c" in evaluation_array.axes:
-            score_dict = {}
+            score_dict = []
             for indx, channel in enumerate(evaluation_array.channels):
                 evaluation_channel_data = evaluation_data.take(
                     indices=indx, axis=evaluation_array.axes.index("c")
@@ -65,28 +70,33 @@ class BinarySegmentationEvaluator(Evaluator):
                     },
                     resolution=evaluation_array.voxel_size,
                 )
-                score_dict[f"{channel}"] = BinarySegmentationEvaluationScores(
-                    dice=evaluator.dice(),
-                    jaccard=evaluator.jaccard(),
-                    hausdorff=evaluator.hausdorff(),
-                    false_negative_rate=evaluator.false_negative_rate(),
-                    false_negative_rate_with_tolerance=evaluator.false_negative_rate_with_tolerance(),
-                    false_positive_rate=evaluator.false_positive_rate(),
-                    false_discovery_rate=evaluator.false_discovery_rate(),
-                    false_positive_rate_with_tolerance=evaluator.false_positive_rate_with_tolerance(),
-                    voi=evaluator.voi(),
-                    mean_false_distance=evaluator.mean_false_distance(),
-                    mean_false_negative_distance=evaluator.mean_false_negative_distance(),
-                    mean_false_positive_distance=evaluator.mean_false_positive_distance(),
-                    mean_false_distance_clipped=evaluator.mean_false_distance_clipped(),
-                    mean_false_negative_distance_clipped=evaluator.mean_false_negative_distance_clipped(),
-                    mean_false_positive_distance_clipped=evaluator.mean_false_positive_distance_clipped(),
-                    precision_with_tolerance=evaluator.precision_with_tolerance(),
-                    recall_with_tolerance=evaluator.recall_with_tolerance(),
-                    f1_score_with_tolerance=evaluator.f1_score_with_tolerance(),
-                    precision=evaluator.precision(),
-                    recall=evaluator.recall(),
-                    f1_score=evaluator.f1_score(),
+                score_dict.append(
+                    (
+                        f"{channel}",
+                        BinarySegmentationEvaluationScores(
+                            dice=evaluator.dice(),
+                            jaccard=evaluator.jaccard(),
+                            hausdorff=evaluator.hausdorff(),
+                            false_negative_rate=evaluator.false_negative_rate(),
+                            false_negative_rate_with_tolerance=evaluator.false_negative_rate_with_tolerance(),
+                            false_positive_rate=evaluator.false_positive_rate(),
+                            false_discovery_rate=evaluator.false_discovery_rate(),
+                            false_positive_rate_with_tolerance=evaluator.false_positive_rate_with_tolerance(),
+                            voi=evaluator.voi(),
+                            mean_false_distance=evaluator.mean_false_distance(),
+                            mean_false_negative_distance=evaluator.mean_false_negative_distance(),
+                            mean_false_positive_distance=evaluator.mean_false_positive_distance(),
+                            mean_false_distance_clipped=evaluator.mean_false_distance_clipped(),
+                            mean_false_negative_distance_clipped=evaluator.mean_false_negative_distance_clipped(),
+                            mean_false_positive_distance_clipped=evaluator.mean_false_positive_distance_clipped(),
+                            precision_with_tolerance=evaluator.precision_with_tolerance(),
+                            recall_with_tolerance=evaluator.recall_with_tolerance(),
+                            f1_score_with_tolerance=evaluator.f1_score_with_tolerance(),
+                            precision=evaluator.precision(),
+                            recall=evaluator.recall(),
+                            f1_score=evaluator.f1_score(),
+                        ),
+                    )
                 )
             return MultiChannelBinarySegmentationEvaluationScores(score_dict)
 
@@ -126,6 +136,13 @@ class BinarySegmentationEvaluator(Evaluator):
                 f1_score=evaluator.f1_score(),
             )
 
+    @property
+    def score(self):
+        channel_scores = []
+        for channel in self.channels:
+            channel_scores.append((channel, BinarySegmentationEvaluationScores()))
+        return MultiChannelBinarySegmentationEvaluationScores(channel_scores)
+
     def _evaluate(self, output_data, evaluation_data, voxel_size):
         evaluator = Evaluator(
             evaluation_data,
@@ -162,57 +179,48 @@ class BinarySegmentationEvaluator(Evaluator):
             f1_score=evaluator.f1_score(),
         )
 
-    def is_best(self, iteration, parameter, score, criteria=None):
+    def is_best(
+        self,
+        dataset: Dataset,
+        parameter: PostProcessorParameters,
+        criterion: str,
+        score: float,
+    ):
         """
-        Check if the provided score is the best according to some criterion
+        Check if the provided score is the best for this dataset/parameter/criterion combo
         """
-        if criteria is None:
-            # check all criteria
-            criteria = self.criteria
-        replaced = []
-        for criterion in criteria:
-            if self._best_scores[criterion] is None:
-                replaced.append(criterion)
-            else:
-                ranks = self.compute_ranks(
-                    [score, self._best_scores[criterion][1]], criterion
-                )
-                if ranks[0] == 0:
-                    replaced.append(criterion)
-                    self._best_scores[criterion] = ((iteration, parameter), score)
-        return replaced
-
-    def set_best(self, iteration_scores):
-        self._best_scores = {}
-        if len(iteration_scores.iteration_scores) == 0:
-            iteration_parameters, scores = [], []
+        if self._best_scores[(dataset, parameter, criterion)] is None:
+            return True
         else:
-            iteration_parameters, scores = zip(
-                *[
-                    (
-                        (validation_scores.iteration, parameter_scores[0]),
-                        parameter_scores[1],
-                    )
-                    for validation_scores in iteration_scores.iteration_scores
-                    for parameter_scores in validation_scores.parameter_scores
-                ]
-            )
-        for criterion in self.criteria:
-            if len(scores) == 0:
-                self._best_scores[criterion] = None
-            else:
-                best_score = self.compute_ranks(scores, criterion)[0]
-                self._best_scores[criterion] = (
-                    iteration_parameters[best_score],
-                    scores[best_score],
-                )
+            return score.is_better(self._best_scores, criterion)
 
-    def compute_ranks(self, scores, criterion):
-        scores = [getattr(score, criterion) for score in scores]
-        return [
-            rank
-            for rank, _ in sorted(enumerate(scores), key=lambda x: x[1], reverse=True)
-        ]
+    def set_best(self, validation_scores):
+        """
+        Find the best iteration for each dataset/post_processing_parameter/criterion
+        """
+        self._best_scores = {}
+        scores = validation_scores.to_xarray()
+        for dataset, parameters, criterion in itertools.product(
+            scores.coords["datasets"].values,
+            scores.coords["parameters"].values,
+            scores.coords["criteria"].values,
+        ):
+            iteration_scores = scores.sel(
+                datasets=[dataset], parameters=[parameters], criteria=[criterion]
+            )
+            if iteration_scores.size == 0:
+                self._best_scores[(dataset, parameters, criterion)] = None
+            else:
+                # compute best
+                winner = validation_scores.best(iteration_scores)[0]
+                self._best_scores[
+                    (
+                        winner.coords["datasets"].item(),
+                        winner.coords["parameters"].item(),
+                        winner.coords["criteria"].item(),
+                    )
+                ] = (winner.coords["iteration"].item(), winner.item())
+
 
 
 class Evaluator:

@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from dacapo.experiments.tasks.evaluators.evaluation_scores import EvaluationScores
+
 
 class Evaluator(ABC):
     """Base class of all evaluators.
@@ -46,4 +48,9 @@ class Evaluator(ABC):
         that the best iteration/post processing parameters will be the same
         for all 3 of these criteria
         """
+        pass
+
+    @property
+    @abstractmethod
+    def score(self) -> EvaluationScores:
         pass

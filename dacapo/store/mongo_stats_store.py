@@ -67,42 +67,32 @@ class MongoStatsStore(StatsStore):
 
         return self.__read_training_stats(run_name, subsample=subsample)
 
-    def store_validation_scores(self, run_name, scores):
+    def store_validation_iteration_scores(self, run_name, scores):
 
-        existing_scores = self.__read_validation_scores(run_name)
-        existing_scores_until = existing_scores.validated_until()
+        existing_iteration_scores = self.__read_validation_iteration_scores(run_name)
 
-        store_from_iteration = 0
+        store_from_iteration, drop_db = scores.compare(existing_iteration_scores)
 
-        if existing_scores_until > 0:
+        if drop_db:
+            # current scores are behind DB--drop DB
+            logger.warn("Overwriting previous validation scores for run %s", run_name)
+            self.__delete_validation_scores(run_name)
 
-            if scores.validated_until() > 0:
+        if store_from_iteration > 0:
+            logger.info(
+                "Updating validation scores of run %s after iteration " "%d",
+                run_name,
+                store_from_iteration,
+            )
 
-                # both current scores and DB contain data
-                if scores.validated_until() > existing_scores_until:
-                    # current scores go further than the one in DB
-                    store_from_iteration = existing_scores_until
-                    logger.info(
-                        "Updating validation scores of run %s after iteration " "%d",
-                        run_name,
-                        store_from_iteration,
-                    )
-                else:
-                    # current scores are behind DB--drop DB
-                    logger.warn(
-                        "Overwriting previous validation scores for run %s", run_name
-                    )
-                    self.__delete_validation_scores(run_name)
-
-        self.__store_validation_scores(
+        self.__store_validation_iteration_scores(
             scores, store_from_iteration, scores.validated_until() + 1, run_name
         )
 
-    def retrieve_validation_scores(
+    def retrieve_validation_iteration_scores(
         self, run_name, subsample=False, validation_interval=None
     ):
-
-        return self.__read_validation_scores(
+        return self.__read_validation_iteration_scores(
             run_name, subsample=subsample, validation_interval=validation_interval
         )
 
@@ -147,7 +137,9 @@ class MongoStatsStore(StatsStore):
 
         self.training_stats.delete_many({"run_name": run_name})
 
-    def __store_validation_scores(self, validation_scores, begin, end, run_name):
+    def __store_validation_iteration_scores(
+        self, validation_scores, begin, end, run_name
+    ):
 
         docs = [
             converter.unstructure(scores)
@@ -160,7 +152,7 @@ class MongoStatsStore(StatsStore):
         if docs:
             self.validation_scores.insert_many(docs)
 
-    def __read_validation_scores(
+    def __read_validation_iteration_scores(
         self, run_name, subsample=False, validation_interval=None
     ):
         # TODO: using the converter to structure the training/validation stats is extremely slow.
@@ -184,9 +176,12 @@ class MongoStatsStore(StatsStore):
         docs = list(self.validation_scores.find(filters))
         if subsample and not docs[-1] == max_iteration:
             docs += [max_iteration]
-        scores = ValidationScores(
-            converter.structure(docs, List[ValidationIterationScores])
-        )
+        try:
+            scores = converter.structure(docs, List[ValidationIterationScores])
+        except TypeError as e:
+            # process each doc
+            raise ValueError(docs[0]) from e
+            scores = converter.structure(docs, List[ValidationIterationScores])
         return scores
 
     def __delete_validation_scores(self, run_name):

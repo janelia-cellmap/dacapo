@@ -17,3 +17,7 @@ class DummyEvaluator(Evaluator):
 
     def set_best(self, iteration_scores):
         pass
+
+    @property
+    def score(self) -> DummyEvaluationScores:
+        return DummyEvaluationScores()

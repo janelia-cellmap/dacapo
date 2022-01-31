@@ -4,6 +4,7 @@ from .validation_scores import ValidationScores
 
 import torch
 
+
 class Run:
     def __init__(self, run_config):
 
@@ -23,7 +24,9 @@ class Run:
         self.optimizer = self.trainer.create_optimizer(self.model)
 
         self.training_stats = TrainingStats()
-        self.validation_scores = ValidationScores()
+        self.validation_scores = ValidationScores(
+            self.task.parameters, self.datasplit.validate, self.task.evaluation_scores
+        )
 
     def move_optimizer(self, device, empty_cuda_cache=False):
         for state in self.optimizer.state.values():

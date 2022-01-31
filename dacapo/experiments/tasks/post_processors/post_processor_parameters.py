@@ -1,7 +1,7 @@
 import attr
 
 
-@attr.s
+@attr.s(frozen=True)
 class PostProcessorParameters:
     """Base class for post-processor parameters."""
 

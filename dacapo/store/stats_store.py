@@ -16,11 +16,11 @@ class StatsStore(ABC):
         pass
 
     @abstractmethod
-    def store_validation_scores(self, run_name, validation_scores):
-        """Store the validation scores of a given run."""
+    def store_validation_iteration_scores(self, run_name, validation_scores):
+        """Store the validation iteration scores of a given run."""
         pass
 
     @abstractmethod
-    def retrieve_validation_scores(self, run_name):
-        """Retrieve the validation scores for a given run."""
+    def retrieve_validation_iteration_scores(self, run_name):
+        """Retrieve the validation iteration scores for a given run."""
         pass

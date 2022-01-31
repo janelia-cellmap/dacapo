@@ -10,8 +10,8 @@ class ValidationIterationScores:
     iteration: int = attr.ib(
         metadata={"help_text": "The iteration associated with these validation scores."}
     )
-    scores: List[List[float]] = attr.ib(
+    scores: List[List[List[float]]] = attr.ib(
         metadata={
-            "help_text": "A list of scores per post processor parameters and evaluation criterion."
+            "help_text": "A list of scores per dataset, post processor parameters, and evaluation criterion."
         }
     )

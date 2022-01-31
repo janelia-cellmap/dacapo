@@ -32,7 +32,9 @@ def validate(run_name, iteration, compute_context=LocalTorch()):
 
     stats_store = create_stats_store()
     run.training_stats = stats_store.retrieve_training_stats(run_name)
-    run.validation_scores = stats_store.retrieve_validation_scores(run_name)
+    run.validation_scores.iteration_scores = (
+        stats_store.retrieve_validation_iteration_scores(run_name)
+    )
 
     # create weights store and read weights
     weights_store = create_weights_store()
@@ -126,9 +128,7 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
 
         post_processor.set_prediction(prediction_array_identifier)
 
-        # there can be multiple best iteration/parameter predictions
-        # The evaluator stores a record of them internally here
-        evaluator.set_best(run.validation_scores)
+        dataset_iteration_scores = []
 
         for parameters in post_processor.enumerate_parameters():
 
@@ -142,33 +142,43 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
 
             scores = evaluator.evaluate(output_array_identifier, validation_dataset.gt)
 
-            replaced = evaluator.is_best(iteration, parameters, scores, None)
-            for criterion in replaced:
+            for criterion in run.validation_scores.criteria:
                 # replace predictions in array with the new better predictions
-                best_array_identifier = array_store.best_validation_array(
-                    run.name, criterion, index=validation_dataset.name
-                )
-                best_array = ZarrArray.create_from_array_identifier(
-                    best_array_identifier,
-                    post_processed_array.axes,
-                    post_processed_array.roi,
-                    post_processed_array.num_channels,
-                    post_processed_array.voxel_size,
-                    post_processed_array.dtype,
-                )
-                best_array[best_array.roi] = post_processed_array[
-                    post_processed_array.roi
-                ]
-                weights_store.store_best(run, iteration, criterion)
+                if evaluator.is_best(
+                    validation_dataset,
+                    parameters,
+                    criterion,
+                    scores,
+                ):
+                    best_array_identifier = array_store.best_validation_array(
+                        run.name, criterion, index=validation_dataset.name
+                    )
+                    best_array = ZarrArray.create_from_array_identifier(
+                        best_array_identifier,
+                        post_processed_array.axes,
+                        post_processed_array.roi,
+                        post_processed_array.num_channels,
+                        post_processed_array.voxel_size,
+                        post_processed_array.dtype,
+                    )
+                    best_array[best_array.roi] = post_processed_array[
+                        post_processed_array.roi
+                    ]
+                    weights_store.store_best(run, iteration, criterion)
 
             # delete current output. We only keep the best outputs as determined by
             # the evaluator
             array_store.remove(output_array_identifier)
 
-            iteration_scores.parameter_scores.append((parameters, scores))
+            dataset_iteration_scores.append(
+                [getattr(scores, criterion) for criterion in scores.criteria]
+            )
 
+        iteration_scores.append(dataset_iteration_scores)
         array_store.remove(prediction_array_identifier)
 
-        run.validation_scores.add_iteration_scores(iteration_scores)
+    run.validation_scores.add_iteration_scores(
+        ValidationIterationScores(iteration, iteration_scores)
+    )
     stats_store = create_stats_store()
-    stats_store.store_validation_scores(run.name, run.validation_scores)
+    stats_store.store_validation_iteration_scores(run.name, run.validation_scores)
