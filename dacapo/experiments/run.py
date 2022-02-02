@@ -28,6 +28,18 @@ class Run:
             self.task.parameters, self.datasplit.validate, self.task.evaluation_scores
         )
 
+    @staticmethod
+    def get_validation_scores(run_config):
+        task_type = run_config.task_config.task_type
+        datasplit_type = run_config.datasplit_config.datasplit_type
+
+        task = task_type(run_config.task_config)
+        datasplit = datasplit_type(run_config.datasplit_config)
+
+        return ValidationScores(
+            task.parameters, datasplit.validate, task.evaluation_scores
+        )
+
     def move_optimizer(self, device, empty_cuda_cache=False):
         for state in self.optimizer.state.values():
             for k, v in state.items():
