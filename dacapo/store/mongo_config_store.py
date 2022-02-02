@@ -47,6 +47,9 @@ class MongoConfigStore(ConfigStore):
             {"name": run_name},
             projection={"_id": False})
         return converter.structure(run_doc, RunConfig)
+
+    def delete_run_config(self, run_name):
+        self.runs.delete_one({"name": run_name})
         
     def retrieve_run_config_names(
         self,

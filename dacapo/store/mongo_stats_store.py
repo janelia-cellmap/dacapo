@@ -184,9 +184,15 @@ class MongoStatsStore(StatsStore):
             scores = converter.structure(docs, List[ValidationIterationScores])
         return scores
 
+    def delete_validation_scores(self, run_name):
+        self.__delete_validation_scores(run_name)
+
     def __delete_validation_scores(self, run_name):
 
         self.validation_scores.delete_many({"run_name": run_name})
+
+    def delete_training_stats(self, run_name):
+        self.__delete_training_stats(run_name)
 
     def __init_db(self):
 
