@@ -3,8 +3,6 @@ import attr
 
 from typing import List, Tuple
 
-maximize = {True: float("-inf"), False: float("inf")}
-
 
 @attr.s
 class BinarySegmentationEvaluationScores(EvaluationScores):
@@ -54,6 +52,60 @@ class BinarySegmentationEvaluationScores(EvaluationScores):
         "f1_score",
     ]
 
+    @staticmethod
+    def higher_is_better(criterion: str) -> bool:
+        mapping = {
+            "dice": True,
+            "jaccard": True,
+            "hausdorff": False,
+            "false_negative_rate": False,
+            "false_negative_rate_with_tolerance": False,
+            "false_positive_rate": False,
+            "false_discovery_rate": False,
+            "false_positive_rate_with_tolerance": False,
+            "voi": False,
+            "mean_false_distance": False,
+            "mean_false_positive_distance": False,
+            "mean_false_negative_distance": False,
+            "mean_false_distance_clipped": False,
+            "mean_false_negative_distance_clipped": False,
+            "mean_false_positive_distance_clipped": False,
+            "precision_with_tolerance": True,
+            "recall_with_tolerance": True,
+            "f1_score_with_tolerance": True,
+            "precision": True,
+            "recall": True,
+            "f1_score": True,
+        }
+        return mapping[criterion]
+
+    @staticmethod
+    def bounds(criterion: str) -> Tuple[float, float]:
+        mapping = {
+            "dice": (0, 1),
+            "jaccard": (0, 1),
+            "hausdorff": (0, float("nan")),
+            "false_negative_rate": (0, 1),
+            "false_negative_rate_with_tolerance": (0, 1),
+            "false_positive_rate": (0, 1),
+            "false_discovery_rate": (0, 1),
+            "false_positive_rate_with_tolerance": (0, 1),
+            "voi": (0, 1),
+            "mean_false_distance": (0, float("nan")),
+            "mean_false_positive_distance": (0, float("nan")),
+            "mean_false_negative_distance": (0, float("nan")),
+            "mean_false_distance_clipped": (0, float("nan")),
+            "mean_false_negative_distance_clipped": (0, float("nan")),
+            "mean_false_positive_distance_clipped": (0, float("nan")),
+            "precision_with_tolerance": (0, 1),
+            "recall_with_tolerance": (0, 1),
+            "f1_score_with_tolerance": (0, 1),
+            "precision": (0, 1),
+            "recall": (0, 1),
+            "f1_score": (0, 1),
+        }
+        return mapping[criterion]
+
 
 @attr.s
 class MultiChannelBinarySegmentationEvaluationScores(EvaluationScores):
@@ -71,3 +123,13 @@ class MultiChannelBinarySegmentationEvaluationScores(EvaluationScores):
             for channel, _ in self.channel_scores
             for criteria in BinarySegmentationEvaluationScores.criteria
         ]
+
+    @staticmethod
+    def higher_is_better(criterion: str) -> bool:
+        _, criterion = criterion.split("__")
+        return BinarySegmentationEvaluationScores.higher_is_better(criterion)
+
+    @staticmethod
+    def bounds(criterion: str) -> Tuple[float, float]:
+        _, criterion = criterion.split("__")
+        return BinarySegmentationEvaluationScores.bounds(criterion)

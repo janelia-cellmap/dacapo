@@ -1,6 +1,7 @@
-from abc import ABC, abstractmethod
-
 from dacapo.experiments.tasks.evaluators.evaluation_scores import EvaluationScores
+
+from abc import ABC, abstractmethod
+from typing import Tuple
 
 
 class Evaluator(ABC):
@@ -11,10 +12,7 @@ class Evaluator(ABC):
     """
 
     @abstractmethod
-    def evaluate(
-            self,
-            output_array,
-            evaluation_dataset):
+    def evaluate(self, output_array, evaluation_dataset):
         """Compare an output dataset against ground-truth from an evaluation
         dataset.
 
@@ -49,6 +47,18 @@ class Evaluator(ABC):
         for all 3 of these criteria
         """
         pass
+
+    def higher_is_better(self, criterion: str) -> bool:
+        """
+        Wether or not higher is better for this criterion.
+        """
+        self.score.higher_is_better(criterion)
+
+    def bounds(self, criterion: str) -> Tuple[float, float]:
+        """
+        The bounds for this criterion
+        """
+        self.score.bounds(criterion)
 
     @property
     @abstractmethod
