@@ -3,6 +3,7 @@ from bokeh.embed.standalone import json_item
 from dacapo.store.create_store import create_config_store, create_stats_store
 from dacapo.store.converter import converter
 from dacapo.experiments.validation_iteration_scores import ValidationIterationScores
+from dacapo.experiments.run import Run
 
 from bokeh.palettes import Category20 as palette
 import bokeh.layouts
@@ -12,6 +13,7 @@ import numpy as np
 
 from collections import namedtuple
 import time
+import itertools
 
 
 def smooth_values(a, n, stride=1):
@@ -38,9 +40,7 @@ def smooth_values(a, n, stride=1):
     return m, s
 
 
-def get_runs_info(
-    run_config_names, validation_score_names, higher_is_betters, plot_losses
-):
+def get_runs_info(run_config_names, validation_score_names, plot_losses):
 
     config_store = create_config_store()
     stats_store = create_stats_store()
@@ -66,6 +66,10 @@ def get_runs_info(
     ):
         t1 = time.time()
         run_config = config_store.retrieve_run_config(run_config_name)
+        validation_scores = Run.get_validation_scores(run_config)
+        validation_scores.iteration_scores = (
+            stats_store.retrieve_validation_iteration_scores(run_config_name)
+        )
         t2 = time.time()
         run = RunInfo(
             run_config_name,
@@ -76,11 +80,7 @@ def get_runs_info(
             stats_store.retrieve_training_stats(run_config_name, subsample=True)
             if plot_loss
             else None,
-            stats_store.retrieve_validation_scores(
-                run_config_name,
-                subsample=True,
-                validation_interval=run_config.validation_interval,
-            ),
+            validation_scores,
             validation_score_name,
             plot_loss,
         )
@@ -101,9 +101,7 @@ def plot_runs(
     return_json=False,
 ):
     print("PLOTTING RUNS")
-    runs = get_runs_info(
-        run_config_base_names, validation_scores, higher_is_betters, plot_losses
-    )
+    runs = get_runs_info(run_config_base_names, validation_scores, plot_losses)
     print("GOT RUNS INFO")
 
     colors = itertools.cycle(palette[20])
@@ -123,6 +121,11 @@ def plot_runs(
     )
     loss_figure.background_fill_color = "#efefef"
 
+    validation_figures = {}
+    validation_datasets = set(
+        itertools.chain(*[list(run.validation_scores.datasets) for run in runs])
+    )
+
     if validation_scores:
         validation_score_names = set()
         validation_postprocessor_parameter_names = set()
@@ -136,7 +139,6 @@ def plot_runs(
                         set(r.validation_scores.parameter_names)
                     )
                 )
-
         validation_score_names = validation_score_names
         validation_postprocessor_parameter_names = (
             validation_postprocessor_parameter_names
@@ -153,14 +155,16 @@ def plot_runs(
             + [(name, "@" + name) for name in validation_score_names]
             + [(name, "@" + name) for name in validation_postprocessor_parameter_names]
         )
+        for dataset in validation_datasets:
 
-        validation_figure = bokeh.plotting.figure(
-            tools="pan, wheel_zoom, reset, save, hover",
-            x_axis_label="iterations",
-            tooltips=validation_tooltips,
-            plot_width=2048,
-        )
-        validation_figure.background_fill_color = "#efefef"
+            validation_figure = bokeh.plotting.figure(
+                tools="pan, wheel_zoom, reset, save, hover",
+                x_axis_label="iterations",
+                tooltips=validation_tooltips,
+                plot_width=2048,
+            )
+            validation_figure.background_fill_color = "#efefef"
+            validation_figures[dataset.name] = validation_figure
 
     print("VALIDATION SCORES TOOLTIP MADE")
 
@@ -194,6 +198,8 @@ def plot_runs(
         if run.plot_loss:
             iterations = [stat.iteration for stat in run.training_stats.iteration_stats]
             losses = [stat.loss for stat in run.training_stats.iteration_stats]
+
+            print(iterations, losses)
 
             if run.plot_loss:
                 include_loss_figure = True
@@ -231,44 +237,53 @@ def plot_runs(
         print("LOSS PLOTTED")
 
         if run.validation_score_name and run.validation_scores.validated_until() > 0:
-            include_validation_figure = True
-            x = [score.iteration for score in run.validation_scores.iteration_scores]
-            source_dict = {
-                "iteration": x,
-                "task": [run.task] * len(x),
-                "architecture": [run.architecture] * len(x),
-                "trainer": [run.trainer] * len(x),
-                "datasplit": [run.datasplit] * len(x),
-                "run": [run.name] * len(x),
-            }
-            # TODO: get_best: higher_is_better is not true for all scores
-            print(run.name)
-            validation_bests = run.validation_scores.get_best(run.validation_score_name)
-            best_validation_parameters = validation_bests[0]
-            best_validation_scores = validation_bests[1]
-
-            source_dict.update(
-                {
-                    name: np.array(best_validation_parameters[name])
-                    for name in run.validation_scores.get_postprocessor_parameter_names()
+            validation_score_data = run.validation_scores.to_xarray().sel(
+                criteria=run.validation_score_name
+            )
+            for dataset in run.validation_scores.datasets:
+                dataset_data = validation_score_data.sel(datasets=dataset.name)
+                include_validation_figure = True
+                x = [
+                    score.iteration for score in run.validation_scores.iteration_scores
+                ]
+                source_dict = {
+                    "iteration": x,
+                    "task": [run.task] * len(x),
+                    "architecture": [run.architecture] * len(x),
+                    "trainer": [run.trainer] * len(x),
+                    "datasplit": [run.datasplit] * len(x),
+                    "run": [run.name] * len(x),
                 }
-            )
-            source_dict.update(
-                {
-                    name: np.array(best_validation_scores[name])
-                    for name in run.validation_scores.get_score_names()
-                }
-            )
+                # TODO: get_best: higher_is_better is not true for all scores
+                print(dataset_data.coords)
+                best_parameters, best_scores = run.validation_scores.get_best(
+                    dataset_data, dim="parameters"
+                )
 
-            source = bokeh.plotting.ColumnDataSource(source_dict)
-            validation_figure.line(
-                "iteration",
-                run.validation_score_name,
-                legend_label=name + " " + run.validation_score_name,
-                source=source,
-                color=color,
-                alpha=0.7,
-            )
+                source_dict.update(
+                    {
+                        name: np.array(
+                            [
+                                getattr(best_parameter, name)
+                                for best_parameter in best_parameters.values
+                            ]
+                        )
+                        for name in run.validation_scores.parameter_names
+                    }
+                )
+                source_dict.update(
+                    {run.validation_score_name: np.array(best_scores.values)}
+                )
+
+                source = bokeh.plotting.ColumnDataSource(source_dict)
+                validation_figures[dataset.name].line(
+                    "iteration",
+                    run.validation_score_name,
+                    legend_label=name + " " + run.validation_score_name,
+                    source=source,
+                    color=color,
+                    alpha=0.7,
+                )
         print("VALIDATION PLOTTED")
 
     # Styling
