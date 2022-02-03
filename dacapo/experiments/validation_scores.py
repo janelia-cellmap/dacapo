@@ -105,7 +105,7 @@ class ValidationScores:
                     iteration_score.iteration
                     for iteration_score in self.iteration_scores
                 ],
-                "datasets": self.datasets,
+                "datasets": [d.name for d in self.datasets],
                 "parameters": self.parameters,
                 "criteria": self.criteria,
             },
@@ -134,39 +134,57 @@ class ValidationScores:
                         criterion_bests.append(current)
         return criterion_bests
 
-    def get_best(self, criterion=None, higher_is_better=True):
+    def get_best(
+        self, data: xr.DataArray, dim: str
+    ) -> Tuple[xr.DataArray, xr.DataArray]:
         """
-        return the best score according to this criterion
+        Compute the Best scores along dimension "dim" per criterion.
+        Returns both the index associated with the best value, and the
+        best value in two seperate arrays.
         """
+        if "criteria" in data.coords.keys():
+            if len(data.coords["criteria"].shape) == 1:
+                criteria_bests = []
+                for criterion in data.coords["criteria"]:
+                    if self.evaluation_scores.higher_is_better(criterion):
+                        criteria_bests.append(
+                            (
+                                data.sel(criteria=criterion).idxmax(
+                                    dim, skipna=True, fill_value=None
+                                ),
+                                data.sel(criteria=criterion).max(dim, skipna=True),
+                            )
+                        )
+                    else:
+                        criteria_bests.append(
+                            (
+                                data.sel(criteria=criterion).idxmin(
+                                    dim, skipna=True, fill_value=None
+                                ),
+                                data.sel(criteria=criterion).min(dim, skipna=True),
+                            )
+                        )
+                best_indexes, best_scores = zip(*criteria_bests)
+                return (
+                    xr.concat(best_indexes, dim=data.coords["criteria"]),
+                    xr.concat(best_scores, dim=data.coords["criteria"]),
+                )
+            else:
+                if self.evaluation_scores.higher_is_better(
+                    data.coords["criteria"].item()
+                ):
+                    return (
+                        data.idxmax(dim, skipna=True, fill_value=None),
+                        data.max(dim, skipna=True),
+                    )
+                else:
+                    return (
+                        data.idxmin(dim, skipna=True, fill_value=None),
+                        data.min(dim, skipna=True),
+                    )
 
-        names = self.get_score_names()
-        postprocessor_parameter_names = self.get_postprocessor_parameter_names()
-
-        best_scores = {name: [] for name in names}
-        best_score_parameters = {name: [] for name in postprocessor_parameter_names}
-
-        for iteration_score in self.iteration_scores:
-            ips = np.array(
-                [
-                    getattr(parameter_score[1], criterion, np.nan)
-                    for parameter_score in iteration_score.parameter_scores
-                ],
-                dtype=np.float32,
-            )
-            ips[np.isnan(ips)] = -np.inf if higher_is_better else np.inf
-            i = np.argmax(ips) if higher_is_better else np.argmin(ips)
-            best_score = iteration_score.parameter_scores[i]
-
-            for name in names:
-                try:
-                    best_scores[name].append(getattr(best_score[1], name))
-                except AttributeError as e:
-                    raise AttributeError(iteration_score.iteration) from e
-
-            for name in postprocessor_parameter_names:
-                best_score_parameters[name].append(getattr(best_score[0], name))
-
-        return (best_score_parameters, best_scores)
+        else:
+            raise ValueError("Cannot determine 'best' without knowing the criterion")
 
     def _get_best(self, criterion, dataset=None):
         """
