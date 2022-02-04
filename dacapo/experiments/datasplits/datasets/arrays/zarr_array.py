@@ -269,3 +269,8 @@ class ZarrArray(Array):
 
     def _source_name(self):
         return self.name
+
+    def add_metadata(self, metadata):
+        dataset = zarr.open(self.file_name, mode="a")[self.dataset]
+        for k, v in metadata.items():
+            dataset.attrs[k] = v

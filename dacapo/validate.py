@@ -164,6 +164,9 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
                     best_array[best_array.roi] = post_processed_array[
                         post_processed_array.roi
                     ]
+                    best_array.add_metadata(
+                        {"iteration": iteration, criterion: getattr(scores, criterion)}
+                    )
                     weights_store.store_best(run, iteration, criterion)
 
             # delete current output. We only keep the best outputs as determined by

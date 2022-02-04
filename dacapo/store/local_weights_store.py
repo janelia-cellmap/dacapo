@@ -1,7 +1,10 @@
 from .weights_store import WeightsStore
+
+import torch
+
+import json
 from pathlib import Path
 import logging
-import torch
 
 logger = logging.getLogger(__name__)
 
@@ -67,6 +70,8 @@ class LocalWeightsStore(WeightsStore):
         best_weights = weights_dir / criterion
 
         best_weights.write_bytes(iteration_weights.read_bytes())
+        with (weights_dir / f"{criterion}.json").open("w") as f:
+            f.write(json.dumps({"iteration": iteration}))
 
     def retrieve_best(self, run, criterion):
 
@@ -78,7 +83,6 @@ class LocalWeightsStore(WeightsStore):
 
         run.model.load_state_dict(weights["model"])
         run.optimizer.load_state_dict(weights["optimizer"])
-
 
     def retrieve_weights(self, run, iteration):
         """Retrieve the network weights of the given run."""
