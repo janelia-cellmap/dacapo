@@ -105,7 +105,7 @@ class ValidationScores:
                     iteration_score.iteration
                     for iteration_score in self.iteration_scores
                 ],
-                "datasets": [d.name for d in self.datasets],
+                "datasets": self.datasets,
                 "parameters": self.parameters,
                 "criteria": self.criteria,
             },
@@ -145,8 +145,8 @@ class ValidationScores:
         if "criteria" in data.coords.keys():
             if len(data.coords["criteria"].shape) == 1:
                 criteria_bests = []
-                for criterion in data.coords["criteria"]:
-                    if self.evaluation_scores.higher_is_better(criterion):
+                for criterion in data.coords["criteria"].values:
+                    if self.evaluation_scores.higher_is_better(criterion.item()):
                         criteria_bests.append(
                             (
                                 data.sel(criteria=criterion).idxmax(
