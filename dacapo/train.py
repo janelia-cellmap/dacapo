@@ -30,7 +30,7 @@ def train(run_name, compute_context=LocalTorch()):
 
     stats_store = create_stats_store()
     run.training_stats = stats_store.retrieve_training_stats(run_name)
-    run.validation_scores = stats_store.retrieve_validation_scores(run_name)
+    run.validation_scores.iteration_scores = stats_store.retrieve_validation_iteration_scores(run_name)
 
     train_until = run_config.num_iterations
     trained_until = run.training_stats.trained_until()
