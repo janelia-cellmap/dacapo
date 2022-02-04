@@ -35,7 +35,7 @@ def test_validate(
         trainer_config=trainer_config,
         datasplit_config=datasplit_config,
         repetition=0,
-        num_iterations=1,
+        num_iterations=3,
         validation_interval=1,
         snapshot_interval=5,
     )

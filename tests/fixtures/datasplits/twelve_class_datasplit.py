@@ -51,12 +51,12 @@ def mk_twelve_class_datasplit(tmp_path):
         [crop1_raw, crop2_raw, crop3_raw], [crop1_gt, crop2_gt, crop3_gt]
     ):
         raw_dataset = twelve_class_zarr.create_dataset(
-            raw.dataset, shape=(100, 100, 100), dtype=np.float32
+            raw.dataset, shape=(40, 20, 20), dtype=np.float32
         )
         gt_dataset = twelve_class_zarr.create_dataset(
-            gt.dataset, shape=(100, 100, 100), dtype=np.uint8
+            gt.dataset, shape=(40, 20, 20), dtype=np.uint8
         )
-        random_data = np.random.randn(100, 100, 100)
+        random_data = np.random.randn(40, 20, 20)
         # as intensities increase so does the class
         for i in list(np.linspace(random_data.min(), random_data.max(), 13))[1:]:
             gt_dataset[:] += random_data > i
@@ -161,12 +161,12 @@ def mk_six_class_distance_datasplit(tmp_path):
         [crop1_raw, crop2_raw, crop3_raw], [crop1_gt, crop2_gt, crop3_gt]
     ):
         raw_dataset = twelve_class_zarr.create_dataset(
-            raw.dataset, shape=(100, 100, 100), dtype=np.float32
+            raw.dataset, shape=(40, 20, 20), dtype=np.float32
         )
         gt_dataset = twelve_class_zarr.create_dataset(
-            gt.dataset, shape=(100, 100, 100), dtype=np.uint8
+            gt.dataset, shape=(40, 20, 20), dtype=np.uint8
         )
-        random_data = np.random.randn(100, 100, 100)
+        random_data = np.random.randn(40, 20, 20)
         # as intensities increase so does the class
         for i in list(np.linspace(random_data.min(), random_data.max(), 13))[1:]:
             gt_dataset[:] += random_data > i
