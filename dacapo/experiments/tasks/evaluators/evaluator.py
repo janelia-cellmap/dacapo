@@ -1,7 +1,11 @@
 from dacapo.experiments.tasks.evaluators.evaluation_scores import EvaluationScores
+from dacapo.experiments.datasplits.datasets import Dataset
+from dacapo.experiments.tasks.post_processors import PostProcessorParameters
 
 from abc import ABC, abstractmethod
 from typing import Tuple
+import math
+import itertools
 
 
 class Evaluator(ABC):
@@ -23,19 +27,71 @@ class Evaluator(ABC):
         """
         pass
 
-    @abstractmethod
-    def is_best(self, iteration, parameters, score, criterion):
+    def is_best(
+        self,
+        dataset: Dataset,
+        parameter: PostProcessorParameters,
+        criterion: str,
+        score: EvaluationScores,
+    ) -> bool:
         """
-        Check if the provided score is the best according to some criterion
+        Check if the provided score is the best for this dataset/parameter/criterion combo
         """
-        pass
+        if math.isnan(getattr(score, criterion)):
+            return False
+        elif self._best_scores[(dataset, parameter, criterion)] is None:
+            return True
+        else:
+            _, previous_best_score = self._best_scores[(dataset, parameter, criterion)]
+            if score.higher_is_better(criterion):
+                return getattr(score, criterion) > previous_best_score
+            else:
+                return getattr(score, criterion) < previous_best_score
 
-    @abstractmethod
-    def set_best(self, iteration_scores):
+    def set_best(self, validation_scores) -> None:
         """
-        Store a mapping from criterion to the best model according to that criterion
+        Find the best iteration for each dataset/post_processing_parameter/criterion
         """
-        pass
+        self._best_scores = {}
+        scores = validation_scores.to_xarray()
+        if len(validation_scores.iteration_scores) > 0:
+            best_indexes, best_scores = validation_scores.get_best(
+                scores, dim="iterations"
+            )
+        else:
+            best_indexes, best_scores = None, None
+        for dataset, parameters, criterion in itertools.product(
+            scores.coords["datasets"].values,
+            scores.coords["parameters"].values,
+            scores.coords["criteria"].values,
+        ):
+            if best_scores is None:
+                self._best_scores[(dataset, parameters, criterion)] = None
+            else:
+                winner_index, winner_score = (
+                    best_indexes.sel(
+                        datasets=dataset, parameters=parameters, criteria=criterion
+                    ),
+                    best_scores.sel(
+                        datasets=dataset, parameters=parameters, criteria=criterion
+                    ),
+                )
+                if math.isnan(winner_score.item()):
+                    self._best_scores[
+                        (
+                            dataset,
+                            parameters,
+                            criterion,
+                        )
+                    ] = None
+                else:
+                    self._best_scores[
+                        (
+                            dataset,
+                            parameters,
+                            criterion,
+                        )
+                    ] = (winner_index.item(), winner_score.item())
 
     @property
     @abstractmethod

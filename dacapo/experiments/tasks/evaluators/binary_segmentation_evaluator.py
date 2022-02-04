@@ -5,10 +5,7 @@ from .binary_segmentation_evaluation_scores import (
 )
 
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
-from dacapo.experiments.datasplits.datasets import Dataset
-from dacapo.experiments.tasks.post_processors import PostProcessorParameters
 
-import xarray as xr
 import numpy as np
 import SimpleITK as sitk
 import cremi.evaluation
@@ -17,7 +14,6 @@ import scipy
 
 import itertools
 import logging
-from typing import Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -178,49 +174,6 @@ class BinarySegmentationEvaluator(Evaluator):
             recall=evaluator.recall(),
             f1_score=evaluator.f1_score(),
         )
-
-    def is_best(
-        self,
-        dataset: Dataset,
-        parameter: PostProcessorParameters,
-        criterion: str,
-        score: float,
-    ):
-        """
-        Check if the provided score is the best for this dataset/parameter/criterion combo
-        """
-        if self._best_scores[(dataset, parameter, criterion)] is None:
-            return True
-        else:
-            return score.is_better(self._best_scores, criterion)
-
-    def set_best(self, validation_scores):
-        """
-        Find the best iteration for each dataset/post_processing_parameter/criterion
-        """
-        self._best_scores = {}
-        scores = validation_scores.to_xarray()
-        for dataset, parameters, criterion in itertools.product(
-            scores.coords["datasets"].values,
-            scores.coords["parameters"].values,
-            scores.coords["criteria"].values,
-        ):
-            iteration_scores = scores.sel(
-                datasets=[dataset], parameters=[parameters], criteria=[criterion]
-            )
-            if iteration_scores.size == 0:
-                self._best_scores[(dataset, parameters, criterion)] = None
-            else:
-                # compute best
-                winner = validation_scores.best(iteration_scores)[0]
-                self._best_scores[
-                    (
-                        winner.coords["datasets"].item(),
-                        winner.coords["parameters"].item(),
-                        winner.coords["criteria"].item(),
-                    )
-                ] = (winner.coords["iteration"].item(), winner.item())
-
 
 
 class Evaluator:
