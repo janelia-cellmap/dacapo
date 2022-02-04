@@ -129,13 +129,21 @@ class ZarrArray(Array):
         num_channels,
         voxel_size,
         dtype,
-        chunks=None,
+        write_size=None,
         name=None,
     ):
         """
         Create a new ZarrArray given an array identifier. It is assumed that
         this array_identifier points to a dataset that does not yet exist
         """
+        if write_size is None:
+            # total storage per block is approx c*x*y*z*dtype_size
+            # appropriate block size about 500MB.
+            axis_length = (
+                (1024 ** 2 * 500 / num_channels / np.dtype(dtype).itemsize)
+                ** (1 / voxel_size.dims)
+            ) // 1
+            write_size = Coordinate((axis_length,) * voxel_size.dims) * voxel_size
         zarr_container = zarr.open(array_identifier.container, "a")
         try:
             daisy.prepare_ds(
@@ -145,6 +153,7 @@ class ZarrArray(Array):
                 voxel_size,
                 dtype,
                 num_channels=num_channels if num_channels is not None else 1,
+                write_size=write_size,
             )
             zarr_dataset = zarr_container[array_identifier.dataset]
             zarr_dataset.attrs["offset"] = roi.offset
