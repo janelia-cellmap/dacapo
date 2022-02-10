@@ -237,7 +237,7 @@ def plot_runs(
                 criteria=run.validation_score_name
             )
             for dataset in run.validation_scores.datasets:
-                dataset_data = validation_score_data.sel(datasets=dataset.name)
+                dataset_data = validation_score_data.sel(datasets=dataset)
                 include_validation_figure = True
                 x = [
                     score.iteration for score in run.validation_scores.iteration_scores
