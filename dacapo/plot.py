@@ -195,8 +195,6 @@ def plot_runs(
             iterations = [stat.iteration for stat in run.training_stats.iteration_stats]
             losses = [stat.loss for stat in run.training_stats.iteration_stats]
 
-            print(iterations, losses)
-
             if run.plot_loss:
                 include_loss_figure = True
                 smooth = int(np.maximum(len(iterations) / 2500, 1))
@@ -251,7 +249,6 @@ def plot_runs(
                     "run": [run.name] * len(x),
                 }
                 # TODO: get_best: higher_is_better is not true for all scores
-                print(dataset_data.coords)
                 best_parameters, best_scores = run.validation_scores.get_best(
                     dataset_data, dim="parameters"
                 )
@@ -307,26 +304,27 @@ def plot_runs(
         figures.append(loss_figure)
 
     if include_validation_figure:
-        # validation
-        validation_figure.title.text_font_size = "25pt"
-        validation_figure.title.text = "Validation"
-        validation_figure.title.align = "center"
+        for dataset, validation_figure in validation_figures.items():
+            # validation
+            validation_figure.title.text_font_size = "25pt"
+            validation_figure.title.text = f"{dataset} Validation"
+            validation_figure.title.align = "center"
 
-        validation_figure.legend.label_text_font_size = "16pt"
+            validation_figure.legend.label_text_font_size = "16pt"
 
-        validation_figure.xaxis.axis_label = "Iterations"
-        validation_figure.xaxis.axis_label_text_font_size = "20pt"
-        validation_figure.xaxis.major_label_text_font_size = "16pt"
-        validation_figure.xaxis.axis_label_text_font = "times"
-        validation_figure.xaxis.axis_label_text_color = "black"
+            validation_figure.xaxis.axis_label = "Iterations"
+            validation_figure.xaxis.axis_label_text_font_size = "20pt"
+            validation_figure.xaxis.major_label_text_font_size = "16pt"
+            validation_figure.xaxis.axis_label_text_font = "times"
+            validation_figure.xaxis.axis_label_text_color = "black"
 
-        validation_figure.yaxis.axis_label = "Validation Score"
-        validation_figure.yaxis.axis_label_text_font_size = "20pt"
-        validation_figure.yaxis.major_label_text_font_size = "16pt"
-        validation_figure.yaxis.axis_label_text_font = "times"
-        validation_figure.yaxis.axis_label_text_color = "black"
-        validation_figure.sizing_mode = "scale_width"
-        figures.append(validation_figure)
+            validation_figure.yaxis.axis_label = "Validation Score"
+            validation_figure.yaxis.axis_label_text_font_size = "20pt"
+            validation_figure.yaxis.major_label_text_font_size = "16pt"
+            validation_figure.yaxis.axis_label_text_font = "times"
+            validation_figure.yaxis.axis_label_text_color = "black"
+            validation_figure.sizing_mode = "scale_width"
+            figures.append(validation_figure)
 
     plot = bokeh.layouts.column(*figures)
     plot.sizing_mode = "scale_width"
