@@ -108,7 +108,6 @@ class MongoStatsStore(StatsStore):
     def __read_training_stats(self, run_name, subsample=False):
         # TODO: using the converter to structure the training/validation stats is extremely slow.
         # (3e-5 seconds to get training stats, 6 seconds to convert)
-        t1 = time.time()
         filters = {"run_name": run_name}
         if subsample:
             # if possible subsample s.t. we get 1000 iterations
@@ -125,11 +124,7 @@ class MongoStatsStore(StatsStore):
         docs = list(self.training_stats.find(filters))
         if subsample and not docs[-1] == max_iteration:
             docs += [max_iteration]
-        t2 = time.time()
         stats = TrainingStats(converter.structure(docs, List[TrainingIterationStats]))
-        print(
-            f"Reading training stats took {t2-t1} seconds, converting took {time.time() - t2} seconds"
-        )
 
         return stats
 
