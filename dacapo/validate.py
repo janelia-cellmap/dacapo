@@ -165,7 +165,11 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
                         post_processed_array.roi
                     ]
                     best_array.add_metadata(
-                        {"iteration": iteration, criterion: getattr(scores, criterion)}
+                        {
+                            "iteration": iteration,
+                            criterion: getattr(scores, criterion),
+                            "parameters_id": parameters.id,
+                        }
                     )
                     weights_store.store_best(run, iteration, criterion)
 
