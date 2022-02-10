@@ -70,7 +70,6 @@ def get_runs_info(run_config_names, validation_score_names, plot_losses):
         validation_scores.iteration_scores = (
             stats_store.retrieve_validation_iteration_scores(run_config_name)
         )
-        t2 = time.time()
         run = RunInfo(
             run_config_name,
             run_config.task_config.name,
@@ -83,9 +82,6 @@ def get_runs_info(run_config_names, validation_score_names, plot_losses):
             validation_scores,
             validation_score_name,
             plot_loss,
-        )
-        print(
-            f"Getting config took: {t2-t1} seconds. Getting stats took: {time.time() - t2} seconds!"
         )
         runs.append(run)
 
