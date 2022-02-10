@@ -37,7 +37,7 @@ class Evaluator(ABC):
         """
         Check if the provided score is the best for this dataset/parameter/criterion combo
         """
-        if math.isnan(getattr(score, criterion)):
+        if not self.store_best(criterion) or math.isnan(getattr(score, criterion)):
             return False
         elif self._best_scores[(dataset, parameter, criterion)] is None:
             return True
@@ -65,6 +65,8 @@ class Evaluator(ABC):
             scores.coords["parameters"].values,
             scores.coords["criteria"].values,
         ):
+            if not self.store_best(criterion):
+                continue
             if best_scores is None:
                 self._best_scores[(dataset, parameters, criterion)] = None
             else:
@@ -115,6 +117,12 @@ class Evaluator(ABC):
         The bounds for this criterion
         """
         self.score.bounds(criterion)
+
+    def store_best(self, criterion: str) -> bool:
+        """
+        The bounds for this criterion
+        """
+        self.score.store_best(criterion)
 
     @property
     @abstractmethod

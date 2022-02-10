@@ -25,3 +25,7 @@ class DummyEvaluationScores(EvaluationScores):
             "blipp_score": (0.0, 1.0),
         }
         return mapping[criterion]
+
+    @staticmethod
+    def store_best(criterion: str) -> bool:
+        return True

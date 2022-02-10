@@ -23,3 +23,12 @@ class EvaluationScores:
         The bounds for this criterion
         """
         pass
+
+    @staticmethod
+    @abstractmethod
+    def store_best(criterion: str) -> bool:
+        """
+        Whether or not to save the best validation block and model
+        weights for this criterion.
+        """
+        pass

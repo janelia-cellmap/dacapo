@@ -53,6 +53,36 @@ class BinarySegmentationEvaluationScores(EvaluationScores):
     ]
 
     @staticmethod
+    def store_best(criterion: str) -> bool:
+        # Whether or not to store the best weights/validation blocks for this
+        # criterion.
+        mapping = {
+            "dice": False,
+            "jaccard": True,
+            "hausdorff": False,
+            "false_negative_rate": False,
+            "false_negative_rate_with_tolerance": False,
+            "false_positive_rate": False,
+            "false_discovery_rate": False,
+            "false_positive_rate_with_tolerance": False,
+            "voi": True,
+            "mean_false_distance": False,
+            "mean_false_positive_distance": False,
+            "mean_false_negative_distance": False,
+            "mean_false_distance_clipped": False,
+            "mean_false_negative_distance_clipped": False,
+            "mean_false_positive_distance_clipped": False,
+            "precision_with_tolerance": False,
+            "recall_with_tolerance": False,
+            "f1_score_with_tolerance": False,
+            "precision": False,
+            "recall": False,
+            "f1_score": True,
+        }
+        return mapping[criterion]
+
+
+    @staticmethod
     def higher_is_better(criterion: str) -> bool:
         mapping = {
             "dice": True,
@@ -128,6 +158,11 @@ class MultiChannelBinarySegmentationEvaluationScores(EvaluationScores):
     def higher_is_better(criterion: str) -> bool:
         _, criterion = criterion.split("__")
         return BinarySegmentationEvaluationScores.higher_is_better(criterion)
+
+    @staticmethod
+    def store_best(criterion: str) -> bool:
+        _, criterion = criterion.split("__")
+        return BinarySegmentationEvaluationScores.store_best(criterion)
 
     @staticmethod
     def bounds(criterion: str) -> Tuple[float, float]:
