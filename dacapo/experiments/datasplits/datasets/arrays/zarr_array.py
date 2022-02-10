@@ -140,7 +140,12 @@ class ZarrArray(Array):
             # total storage per block is approx c*x*y*z*dtype_size
             # appropriate block size about 500MB.
             axis_length = (
-                (1024 ** 2 * 500 / num_channels / np.dtype(dtype).itemsize)
+                (
+                    1024 ** 2
+                    * 500
+                    / (num_channels if num_channels is not None else 1)
+                    / np.dtype(dtype).itemsize
+                )
                 ** (1 / voxel_size.dims)
             ) // 1
             write_size = Coordinate((axis_length,) * voxel_size.dims) * voxel_size
