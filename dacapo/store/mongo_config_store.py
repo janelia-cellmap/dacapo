@@ -36,8 +36,7 @@ class MongoConfigStore(ConfigStore):
         self.__init_db()
 
     def store_run_config(self, run_config):
-        print("Storing run config!!!")
-
+        
         run_doc = converter.unstructure(run_config)
         self.__save_insert(self.runs, run_doc)
 
