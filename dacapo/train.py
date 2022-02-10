@@ -30,10 +30,19 @@ def train(run_name, compute_context=LocalTorch()):
 
     stats_store = create_stats_store()
     run.training_stats = stats_store.retrieve_training_stats(run_name)
-    run.validation_scores.iteration_scores = stats_store.retrieve_validation_iteration_scores(run_name)
+    run.validation_scores.iteration_scores = (
+        stats_store.retrieve_validation_iteration_scores(run_name)
+    )
 
     train_until = run_config.num_iterations
     trained_until = run.training_stats.trained_until()
+    validated_until = run.validation_scores.validated_until()
+    if validated_until > trained_until:
+        logger.info(
+            f"Trained until {trained_until}, but validated until {validated_until}! "
+            "Deleting extra validation stats"
+        )
+        run.validation_scores.delete_after(trained_until)
     validation_interval = run_config.validation_interval
 
     logger.info("Current state: trained until %d/%d", trained_until, train_until)
@@ -150,7 +159,9 @@ def train(run_name, compute_context=LocalTorch()):
                 iteration_stats.iteration + 1,
                 compute_context=compute_context,
             )
-            stats_store.store_validation_scores(run_name, run.validation_scores)
+            stats_store.store_validation_iteration_scores(
+                run_name, run.validation_scores
+            )
             stats_store.store_training_stats(run_name, run.training_stats)
 
             # make sure to move optimizer back to the correct device
