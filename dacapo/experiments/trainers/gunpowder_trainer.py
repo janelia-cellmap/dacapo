@@ -141,7 +141,7 @@ class GunpowderTrainer(Trainer):
 
         for iteration in range(self.iteration, self.iteration + num_iterations):
             raw, gt, target, weight, mask = self.next()
-            logger.info(
+            logger.debug(
                 f"Trainer fetch batch took {time.time() - t_start_fetch} seconds"
             )
 
@@ -217,7 +217,7 @@ class GunpowderTrainer(Trainer):
                     dataset.attrs["resolution"] = v.voxel_size
                     dataset.attrs["axes"] = v.axes
 
-            logger.info(f"Trainer step took {time.time() - t_start_prediction} seconds")
+            logger.debug(f"Trainer step took {time.time() - t_start_prediction} seconds")
             self.iteration += 1
             yield TrainingIterationStats(
                 loss=loss.item(),
