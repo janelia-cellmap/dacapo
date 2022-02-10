@@ -22,10 +22,14 @@ class DistanceTaskConfig(TaskConfig):
 
     channels: List[str] = attr.ib(metadata={"help_text": "A list of channel names."})
     clip_distance: float = attr.ib(
-        metadata={"help_text": ""},
+        metadata={
+            "help_text": "Maximum distance to consider for false positive/negatives."
+        },
     )
     tol_distance: float = attr.ib(
-        metadata={"help_text": ""},
+        metadata={
+            "help_text": "Tolerance distance for counting false positives/negatives"
+        },
     )
     scale_factor: float = attr.ib(
         default=1,
