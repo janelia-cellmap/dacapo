@@ -110,19 +110,19 @@ class Evaluator(ABC):
         """
         Wether or not higher is better for this criterion.
         """
-        self.score.higher_is_better(criterion)
+        return self.score.higher_is_better(criterion)
 
     def bounds(self, criterion: str) -> Tuple[float, float]:
         """
         The bounds for this criterion
         """
-        self.score.bounds(criterion)
+        return self.score.bounds(criterion)
 
     def store_best(self, criterion: str) -> bool:
         """
         The bounds for this criterion
         """
-        self.score.store_best(criterion)
+        return self.score.store_best(criterion)
 
     @property
     @abstractmethod
