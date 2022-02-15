@@ -159,7 +159,10 @@ class GunpowderTrainer(Trainer):
             loss.backward()
             optimizer.step()
 
-            if self.snapshot_iteration is not None and iteration % self.snapshot_iteration == 0:
+            if (
+                self.snapshot_iteration is not None
+                and iteration % self.snapshot_iteration == 0
+            ):
                 snapshot_zarr = zarr.open(self.snapshot_container.container, "a")
                 snapshot_arrays = {
                     "volumes/raw": raw,
