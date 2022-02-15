@@ -157,7 +157,7 @@ class ZarrArray(Array):
                 roi,
                 voxel_size,
                 dtype,
-                num_channels=num_channels if num_channels is not None else 1,
+                num_channels=num_channels,
                 write_size=write_size,
             )
             zarr_dataset = zarr_container[array_identifier.dataset]
