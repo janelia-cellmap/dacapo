@@ -61,11 +61,3 @@ class RunConfig:
     validation_interval: int = attr.ib(
         default=1000, metadata={"help_text": "How often to perform validation."}
     )
-
-    snapshot_interval: int = attr.ib(
-        default=0,
-        metadata={
-            "help_text": "How often to save a snapshot of a training batch for "
-            "manual inspection."
-        },
-    )
