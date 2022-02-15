@@ -97,5 +97,6 @@ class LocalWeightsStore(WeightsStore):
         run.optimizer.load_state_dict(weights["optimizer"])
 
     def __get_weights_dir(self, run):
+        run = run if isinstance(run, str) else run.name
 
-        return Path(self.basedir, run.name, "checkpoints")
+        return Path(self.basedir, run, "checkpoints")
