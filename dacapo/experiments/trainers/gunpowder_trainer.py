@@ -31,13 +31,9 @@ class GunpowderTrainer(Trainer):
         self.batch_size = trainer_config.batch_size
         self.num_data_fetchers = trainer_config.num_data_fetchers
         self.print_profiling = 100
-
-        self.simple_augment = trainer_config.simple_augment
-        self.elastic_augment = trainer_config.elastic_augment
-        self.intensity_augment = trainer_config.intensity_augment
-        self.gamma_augment = trainer_config.gamma_augment
-        self.intensity_scale_shift = trainer_config.intensity_scale_shift
         self.snapshot_iteration = trainer_config.snapshot_interval
+
+        self.augments = [trainer_config.augments]
 
     def create_optimizer(self, model):
         return torch.optim.Adam(lr=self.learning_rate, params=model.parameters())
@@ -78,16 +74,8 @@ class GunpowderTrainer(Trainer):
             dataset_sources.append(dataset_source)
         pipeline = tuple(dataset_sources) + gp.RandomProvider()
 
-        if self.simple_augment is not None:
-            pipeline += gp.SimpleAugment(**self.simple_augment)
-        if self.elastic_augment is not None:
-            pipeline += ElasticAugment(**self.elastic_augment)
-        if self.intensity_augment is not None:
-            pipeline += gp.IntensityAugment(raw_key, **self.intensity_augment)
-        if self.gamma_augment is not None:
-            pipeline += GammaAugment(raw_key, **self.gamma_augment)
-        if self.intensity_scale_shift is not None:
-            pipeline += gp.IntensityScaleShift(raw_key, **self.intensity_scale_shift)
+        for augment in self.augments:
+            pipeline += augment.node(raw_key, gt_key, mask_key)
 
         # Add predictor nodes to pipeline
         pipeline += DaCapoTargetFilter(

@@ -9,6 +9,7 @@ from dacapo.experiments.tasks import *
 from dacapo.experiments.tasks.evaluators import *
 from dacapo.experiments.tasks.post_processors import *
 from dacapo.experiments.trainers import *
+from dacapo.experiments.trainers.gp_augments import *
 
 from funlib.geometry import Coordinate
 
@@ -21,6 +22,7 @@ def register_hierarchy_hooks(converter):
     converter.register_hierarchy(TaskConfig, cls_fun)
     converter.register_hierarchy(ArchitectureConfig, cls_fun)
     converter.register_hierarchy(TrainerConfig, cls_fun)
+    converter.register_hierarchy(AugmentConfig, cls_fun)
     converter.register_hierarchy(DataSplitConfig, cls_fun)
     converter.register_hierarchy(DatasetConfig, cls_fun)
     converter.register_hierarchy(ArrayConfig, cls_fun)
