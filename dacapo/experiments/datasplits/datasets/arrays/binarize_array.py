@@ -7,14 +7,14 @@ import neuroglancer
 import numpy as np
 
 
-class CellMapArray(Array):
+class BinarizeArray(Array):
     """
     This is wrapper around a ZarrArray containing uint annotations.
     Because we often want to predict classes that are a combination
-    of a set of labels we wrap a ZarrArray with the CellMapArray
+    of a set of labels we wrap a ZarrArray with the BinarizeArray
     and provide something like `groupings=[("mito", [3,4,5])]`
     where 4 corresponds to mito_membrane, 5 is mito_ribos, and
-    3 is everything else that is part of a mitochondria. The CellMapArray
+    3 is everything else that is part of a mitochondria. The BinarizeArray
     will simply combine labels 3,4,5 into a single binary channel for th
     class of "mito".
     We use a single channel per class because some classes may overlap.
@@ -33,7 +33,7 @@ class CellMapArray(Array):
 
         assert (
             "c" not in self._source_array.axes
-        ), f"Cannot initialize a CellMapArray with a source array with channels"
+        ), f"Cannot initialize a BinarizeArray with a source array with channels"
 
         self._groupings = array_config.groupings
 
@@ -101,3 +101,4 @@ class CellMapArray(Array):
 
     def _source_name(self):
         return self._source_array._source_name()
+

@@ -1,18 +1,18 @@
 import attr
 
 from .array_config import ArrayConfig
-from .cellmap_array import CellMapArray
+from .binarize_array import BinarizeArray, CellMapArray
 from .array_config import ArrayConfig
 
 from typing import List, Tuple
 
 
 @attr.s
-class CellMapArrayConfig(ArrayConfig):
+class BinarizeArrayConfig(ArrayConfig):
     """This config class provides the necessary configuration for turning an Annotated dataset into a
     multi class binary classification problem"""
 
-    array_type = CellMapArray
+    array_type = BinarizeArray
 
     source_array_config: ArrayConfig = attr.ib(
         metadata={
