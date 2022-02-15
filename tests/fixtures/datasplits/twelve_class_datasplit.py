@@ -2,7 +2,7 @@ from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
 from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
 from dacapo.experiments.datasplits.datasets.arrays import (
     ZarrArrayConfig,
-    CellMapArrayConfig,
+    BinarizeArrayConfig,
 )
 
 import zarr
@@ -101,7 +101,7 @@ def mk_six_class_distance_datasplit(tmp_path):
         file_name=tmp_path / "twelve_class.zarr",
         dataset=f"volumes/crop1/gt",
     )
-    crop1_distances = CellMapArrayConfig(
+    crop1_distances = BinarizeArrayConfig(
         "crop1_distances",
         source_array_config=crop1_gt,
         groupings=[
@@ -123,7 +123,7 @@ def mk_six_class_distance_datasplit(tmp_path):
         file_name=tmp_path / "twelve_class.zarr",
         dataset=f"volumes/crop2/gt",
     )
-    crop2_distances = CellMapArrayConfig(
+    crop2_distances = BinarizeArrayConfig(
         "crop2_distances",
         source_array_config=crop2_gt,
         groupings=[
@@ -145,7 +145,7 @@ def mk_six_class_distance_datasplit(tmp_path):
         file_name=tmp_path / "twelve_class.zarr",
         dataset=f"volumes/crop3/gt",
     )
-    crop3_distances = CellMapArrayConfig(
+    crop3_distances = BinarizeArrayConfig(
         "crop3_distances",
         source_array_config=crop3_gt,
         groupings=[

@@ -1,6 +1,6 @@
 from dacapo.experiments.datasplits.datasets.arrays import (
     ZarrArrayConfig,
-    CellMapArrayConfig,
+    BinarizeArrayConfig,
 )
 
 import zarr
@@ -21,7 +21,7 @@ def mk_cellmap_array(temp_path):
     dataset.attrs["resolution"] = (1, 2, 4)
     dataset.attrs["axes"] = ["z", "y", "x"]
 
-    cellmap_array_config = CellMapArrayConfig(
+    cellmap_array_config = BinarizeArrayConfig(
         name="cellmap_zarr_array",
         source_array_config=zarr_array_config,
         groupings=[
