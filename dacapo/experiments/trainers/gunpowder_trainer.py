@@ -202,22 +202,21 @@ class GunpowderTrainer(Trainer):
                     # remove batch dimension. Everything has a batch
                     # and channel dim because of torch.
                     data = v[v.roi][0]
-                    if v.num_channels is None or v.num_channels == 1:
+                    if v.num_channels is None:
+                        # remove channel dimension
+                        assert data.shape[0] == 1, (
+                            f"Data for array {k} should not have channels but has shape: "
+                            f"{v.shape}. The first dimension is channels"
+                        )
                         data = data[0]
-                    print(
-                        k,
-                        v.roi,
-                        v.num_channels,
-                        v.voxel_size,
-                        dataset.shape,
-                        data.shape,
-                    )
                     dataset[:] = data
                     dataset.attrs["offset"] = v.roi.offset
                     dataset.attrs["resolution"] = v.voxel_size
                     dataset.attrs["axes"] = v.axes
 
-            logger.debug(f"Trainer step took {time.time() - t_start_prediction} seconds")
+            logger.debug(
+                f"Trainer step took {time.time() - t_start_prediction} seconds"
+            )
             self.iteration += 1
             yield TrainingIterationStats(
                 loss=loss.item(),
