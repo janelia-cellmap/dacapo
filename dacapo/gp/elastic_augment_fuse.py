@@ -129,10 +129,6 @@ class ElasticAugment(BatchFilter):
 
     Args:
 
-        voxel_size (``tuple`` of ``int`):
-
-            voxel size at which to generate deformation field.
-
         control_point_spacing (``tuple`` of ``int``):
 
             Distance between control points for the elastic deformation, in
@@ -156,15 +152,6 @@ class ElasticAugment(BatchFilter):
             of 4 can safely be used without noticeable changes. However, the
             default is 1 (i.e., no sub-sampling).
 
-        spatial_dims (``int``):
-
-            The number of spatial dimensions in arrays. Spatial dimensions are
-            assumed to be the last ones and cannot be more than 3 (default).
-            Set this value here to avoid treating channels as spacial
-            dimension. If, for example, your array is indexed as ``(c,y,x)``
-            (2D plus channels), you would want to set ``spatial_dims=2`` to
-            perform the elastic deformation only on x and y.
-
         seed (``int``):
 
             Set random state for reproducible results (tests only, do not use
@@ -173,44 +160,36 @@ class ElasticAugment(BatchFilter):
 
     def __init__(
         self,
-        voxel_size,
         control_point_spacing,
         control_point_displacement_sigma,
         rotation_interval,
         subsample=1,
-        spatial_dims=3,
         augmentation_probability=1.0,
         seed=None,
     ):
         super(BatchFilter, self).__init__()
-        self.voxel_size = Coordinate(voxel_size)
         self.control_point_spacing = control_point_spacing
         self.control_point_displacement_sigma = control_point_displacement_sigma
         self.rotation_start = rotation_interval[0]
         self.rotation_max_amount = rotation_interval[1] - rotation_interval[0]
         self.subsample = subsample
-        self.spatial_dims = spatial_dims
         self.augmentation_probability = augmentation_probability
         self.seed = seed
         self.do_augment = False
 
         logger.debug(
             "initialized with parameters "
-            "voxel_size=%s "
             "control_point_spacing=%s "
             "control_point_displacement_sigma=%s "
             "rotation_start=%f "
             "rotation_max_amount=%f "
             "subsample=%f "
-            "spatial_dims=%d "
             "seed=%d",
-            self.voxel_size,
             self.control_point_spacing,
             self.control_point_displacement_sigma,
             self.rotation_start,
             self.rotation_max_amount,
             self.subsample,
-            self.spatial_dims,
             self.seed,
         )
 
@@ -221,7 +200,13 @@ class ElasticAugment(BatchFilter):
         self.target_rois = {}
 
     def setup(self):
-        pass
+        self.voxel_size = Coordinate(
+            min(axis)
+            for axis in zip(
+                *[array_spec.voxel_size for array_spec in self.spec.array_specs]
+            )
+        )
+        self.spatial_dims = self.voxel_size.dims
 
     def prepare(self, request):
         logger.debug(
@@ -275,17 +260,21 @@ class ElasticAugment(BatchFilter):
 
             voxel_size = self.spec[key].voxel_size
             # Todo we could probably remove snap_to_grid, we already check spec.roi % voxel_size == 0
-            
+
             try:
                 target_roi = self._spatial_roi(spec.roi).snap_to_grid(voxel_size)
             except Exception as e:
-                raise Exception(f"SPEC: {spec.roi}, SPATIAL: {self._spatial_roi(spec.roi)} VS VOXEL_SIZE: {voxel_size}") from e
-            
+                raise Exception(
+                    f"SPEC: {spec.roi}, SPATIAL: {self._spatial_roi(spec.roi)} VS VOXEL_SIZE: {voxel_size}"
+                ) from e
+
             self.target_rois[key] = target_roi
             try:
                 target_roi_voxels = target_roi // voxel_size
             except Exception as e:
-                raise Exception(f"TARGET: {target_roi} VS VOXEL_SIZE: {voxel_size}") from e
+                raise Exception(
+                    f"TARGET: {target_roi} VS VOXEL_SIZE: {voxel_size}"
+                ) from e
 
             # get scale and offset to transform/interpolate master displacement to current spec
             vs_ratio = np.array(
@@ -389,7 +378,9 @@ class ElasticAugment(BatchFilter):
             )
 
             data_roi = request[key].roi / self.spec[key].voxel_size
-            array.data = data.reshape(array.data.shape[:-self.spatial_dims] + data_roi.get_shape())
+            array.data = data.reshape(
+                array.data.shape[: -self.spatial_dims] + data_roi.get_shape()
+            )
 
             # restore original ROIs
             array.spec.roi = request[key].roi
