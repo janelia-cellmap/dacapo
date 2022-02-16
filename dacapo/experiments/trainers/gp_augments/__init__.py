@@ -1,4 +1,3 @@
-from .augment import Augment
 from .augment_config import AugmentConfig
 from .elastic_config import ElasticAugmentConfig
 from .simple_config import SimpleAugmentConfig
