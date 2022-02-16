@@ -33,7 +33,7 @@ class GunpowderTrainer(Trainer):
         self.print_profiling = 100
         self.snapshot_iteration = trainer_config.snapshot_interval
 
-        self.augments = [trainer_config.augments]
+        self.augments = trainer_config.augments
 
     def create_optimizer(self, model):
         return torch.optim.Adam(lr=self.learning_rate, params=model.parameters())
