@@ -68,15 +68,38 @@ class Array(ABC):
         """
         pass
 
-    @abstractmethod
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        """
-        Get the provided data from this `Array` for the given `roi`.
-        """
-        pass
+        if not self.roi.contains(roi):
+            raise ValueError(f"Cannot fetch data from outside my roi: {self.roi}!")
+
+        assert roi.offset % self.voxel_size == Coordinate(
+            (0,) * self.dims
+        ), f"Given roi offset: {roi.offset} is not a multiple of voxel_size: {self.voxel_size}"
+        assert roi.shape % self.voxel_size == Coordinate(
+            (0,) * self.dims
+        ), f"Given roi shape: {roi.shape} is not a multiple of voxel_size: {self.voxel_size}"
+
+        slices = self._slices(roi)
+
+        return self.data[slices]
 
     def _can_neuroglance(self):
         return False
 
     def _neuroglancer_layer(self):
         pass
+
+    def _slices(self, roi):
+        offset = (roi.offset - self.roi.offset) / self.voxel_size
+        shape = roi.shape / self.voxel_size
+        spatial_slices = {
+            a: slice(o, o + s)
+            for o, s, a in zip(offset, shape, self.axes[-self.dims :])
+        }
+        slices = ()
+        for axis in self.axes:
+            if axis == "b" or axis == "c":
+                slices = slices + (slice(None, None),)
+            else:
+                slices = slices + (spatial_slices[axis],)
+        return slices

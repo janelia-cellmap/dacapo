@@ -43,19 +43,3 @@ class DummyArray(Array):
     @property
     def num_channels(self):
         return None
-
-    def __getitem__(self, roi: Roi) -> np.ndarray:
-        if not self.roi.contains(roi):
-            raise ValueError(f"Cannot fetch data from outside my roi: {self.roi}!")
-
-        assert roi.offset % self.voxel_size == Coordinate(
-            (0,) * self.dims
-        ), f"Given roi offset: {roi.offset} is not a multiple of voxel_size: {self.voxel_size}"
-        assert roi.shape % self.voxel_size == Coordinate(
-            (0,) * self.dims
-        ), f"Given roi shape: {roi.shape} is not a multiple of voxel_size: {self.voxel_size}"
-
-        offset = roi.offset / self.voxel_size
-        shape = roi.shape / self.voxel_size
-
-        return self.data[tuple(slice(o, o + s) for o, s in zip(offset, shape))]
