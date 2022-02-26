@@ -1,6 +1,8 @@
 from .augment_config import AugmentConfig
 from dacapo.gp.gamma_noise import GammaAugment
 
+import gunpowder as gp
+
 import attr
 
 from typing import Tuple
@@ -15,7 +17,7 @@ class GammaAugmentConfig(AugmentConfig):
         }
     )
 
-    def node(self, _raw_key=None, _gt_key=None, _mask_key=None):
+    def node(self, raw_key: gp.ArrayKey, _gt_key=None, _mask_key=None):
         return GammaAugment(
-            gamma_min=self.gamma_range[0], gamma_max=self.gamma_range[1]
+            [raw_key], gamma_min=self.gamma_range[0], gamma_max=self.gamma_range[1]
         )

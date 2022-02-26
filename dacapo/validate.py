@@ -9,6 +9,8 @@ from .store import (
     create_weights_store,
 )
 
+import torch
+
 from pathlib import Path
 import logging
 
@@ -48,6 +50,10 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
     load the weights of that iteration, it is assumed that the model is already
     loaded correctly. Returns the best parameters and scores for this
     iteration."""
+    # set benchmark flag to True for performance
+    torch.backends.cudnn.benchmark = True
+    run.model.eval()
+    
 
     if run.datasplit.validate[0].gt is None:
         logger.info("Cannot validate run %s. Continuing training!", run.name)

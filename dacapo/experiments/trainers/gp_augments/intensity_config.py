@@ -26,7 +26,7 @@ class IntensityAugmentConfig(AugmentConfig):
     )
 
     def node(self, raw_key: gp.ArrayKey, _gt_key=None, _mask_key=None):
-        return gp.intensity_augment(
+        return gp.IntensityAugment(
             raw_key,
             scale_min=self.scale[0],
             scale_max=self.scale[1],
