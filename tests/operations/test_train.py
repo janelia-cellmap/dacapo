@@ -37,7 +37,6 @@ def test_train(
         datasplit_config=datasplit_config,
         repetition=0,
         num_iterations=100,
-        snapshot_interval=5,
     )
 
     # create a store

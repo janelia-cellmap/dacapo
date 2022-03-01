@@ -37,7 +37,6 @@ def test_validate(
         repetition=0,
         num_iterations=3,
         validation_interval=1,
-        snapshot_interval=5,
     )
 
     # create a store
