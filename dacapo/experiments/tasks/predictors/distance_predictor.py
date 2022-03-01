@@ -6,11 +6,12 @@ from dacapo.utils.balance_weights import balance_weights
 
 from funlib.geometry import Coordinate
 
-from scipy.ndimage.morphology import distance_transform_edt
+from scipy.ndimage.morphology import distance_transform_edt, binary_erosion
+from scipy.ndimage import generate_binary_structure
 import numpy as np
 import torch
 
-from typing import List
+from typing import List, Optional
 import logging
 
 logger = logging.getLogger(__name__)
@@ -59,11 +60,15 @@ class DistancePredictor(Predictor):
             gt.axes,
         )
 
-    def create_weight(self, gt, target):
+    def create_weight(self, gt, target, mask):
         # balance weights independently for each channel
         if self.mask_distances:
             distance_mask = self.create_distance_mask(
-                target.data, target.voxel_size, self.norm, self.dt_scale_factor
+                target[target.roi],
+                mask[target.roi],
+                target.voxel_size,
+                self.norm,
+                self.dt_scale_factor,
             )
         else:
             distance_mask = np.ones_like(target.data)
@@ -83,32 +88,95 @@ class DistancePredictor(Predictor):
     def create_distance_mask(
         self,
         distances: np.ndarray,
+        mask: np.ndarray,
         voxel_size: Coordinate,
         normalize=None,
         normalize_args=None,
     ):
-
-        mask = np.zeros(distances.shape, dtype=bool)
-        boundary_distances = np.ones(distances.shape[1:], dtype=np.float32)
-        boundary_distances = np.pad(
-            boundary_distances, 1, mode="constant", constant_values=0
-        )
-        boundary_distances = distance_transform_edt(
-            boundary_distances, sampling=voxel_size
-        )
-        boundary_distances = boundary_distances[
-            tuple(slice(1, -1) for _ in range(len(boundary_distances.shape)))
-        ]
-        boundary_distances = boundary_distances.astype(np.float32)
-        if normalize is not None:
-            boundary_distances = self.__normalize(
-                boundary_distances, normalize, normalize_args
+        mask_output = mask.copy()
+        for i, (channel_distance, channel_mask) in enumerate(zip(distances, mask)):
+            tmp = np.zeros(
+                np.array(channel_mask.shape) + np.array((2,) * channel_mask.ndim),
+                dtype=channel_mask.dtype,
             )
+            slices = tmp.ndim * (slice(1, -1),)
+            tmp[slices] = channel_mask
+            boundary_distance = distance_transform_edt(
+                binary_erosion(
+                    tmp,
+                    border_value=1,
+                    structure=generate_binary_structure(tmp.ndim, tmp.ndim),
+                ),
+                sampling=voxel_size,
+            )
+            boundary_distance = boundary_distance[slices]
+            if self.max_distance is not None:
+                if self.epsilon is None:
+                    add = 0
+                else:
+                    add = self.epsilon
+                boundary_distance = np.clip(
+                    boundary_distance,
+                    -self.max_distance - add,
+                    self.max_distance - add,
+                )
 
-        for ii, channel in enumerate(distances):
-            mask[ii] = boundary_distances > (abs(channel) - self.epsilon)
-
-        return mask
+            channel_mask_output = mask_output[i]
+            if self.max_distance is not None:
+                logging.debug(
+                    "Total number of masked in voxels before distance masking {0:}".format(
+                        np.sum(channel_mask_output)
+                    )
+                )
+                channel_mask_output[
+                    (abs(channel_distance) >= boundary_distance)
+                    * (channel_distance >= 0)
+                    * (boundary_distance < self.max_distance - add)
+                ] = 0
+                logging.debug(
+                    "Total number of masked in voxels after postive distance masking {0:}".format(
+                        np.sum(channel_mask_output)
+                    )
+                )
+                channel_mask_output[
+                    (abs(channel_distance) >= boundary_distance + 1)
+                    * (channel_distance < 0)
+                    * (boundary_distance + 1 < self.max_distance - add)
+                ] = 0
+                logging.debug(
+                    "Total number of masked in voxels after negative distance masking {0:}".format(
+                        np.sum(channel_mask_output)
+                    )
+                )
+            else:
+                logging.debug(
+                    "Total number of masked in voxels before distance masking {0:}".format(
+                        np.sum(channel_mask_output)
+                    )
+                )
+                channel_mask_output[
+                    np.logical_and(
+                        abs(channel_distance) >= boundary_distance,
+                        channel_distance >= 0,
+                    )
+                ] = 0
+                logging.debug(
+                    "Total number of masked in voxels after postive distance masking {0:}".format(
+                        np.sum(channel_mask_output)
+                    )
+                )
+                channel_mask_output[
+                    np.logical_and(
+                        abs(channel_distance) >= boundary_distance + 1,
+                        channel_distance < 0,
+                    )
+                ] = 0
+                logging.debug(
+                    "Total number of masked in voxels after negative distance masking {0:}".format(
+                        np.sum(channel_mask_output)
+                    )
+                )
+        return mask_output
 
     def process(
         self,
@@ -214,3 +282,6 @@ class DistancePredictor(Predictor):
         else:
             gt_spec = target_spec
         return gt_spec
+
+    def padding(self, gt_voxel_size: Coordinate) -> Coordinate:
+        return Coordinate((self.max_distance,) * gt_voxel_size.dims)
