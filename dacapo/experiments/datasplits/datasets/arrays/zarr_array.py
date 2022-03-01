@@ -55,6 +55,10 @@ class ZarrArray(Array):
         self._axes = array_config._axes
 
     @property
+    def attrs(self):
+        return self.data.attrs
+
+    @property
     def axes(self):
         if self._axes is not None:
             return self._axes

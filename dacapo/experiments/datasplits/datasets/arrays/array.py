@@ -2,11 +2,19 @@ from funlib.geometry import Coordinate, Roi
 
 import numpy as np
 
-from typing import Optional
+from typing import Optional, Dict, Any
 from abc import ABC, abstractmethod
 
 
 class Array(ABC):
+    @property
+    @abstractmethod
+    def attrs(self) -> Dict[str, Any]:
+        """
+        Return a dictionary of metadata attributes stored on this array.
+        """
+        pass
+
     @property
     @abstractmethod
     def axes(self):

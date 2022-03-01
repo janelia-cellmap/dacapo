@@ -38,6 +38,10 @@ class BinarizeArray(Array):
         self._groupings = array_config.groupings
 
     @property
+    def attrs(self):
+        return self._source_array.attrs
+
+    @property
     def axes(self):
         return ["c"] + self._source_array.axes
 

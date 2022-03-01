@@ -23,6 +23,10 @@ class IntensitiesArray(Array):
         self._max = array_config.max
 
     @property
+    def attrs(self):
+        return self._source_array.attrs
+
+    @property
     def axes(self):
         return self._source_array.axes
 

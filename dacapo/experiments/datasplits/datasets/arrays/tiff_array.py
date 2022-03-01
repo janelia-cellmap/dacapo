@@ -23,6 +23,10 @@ class TiffArray(Array):
         self._axes = array_config.axes
 
     @property
+    def attrs(self):
+        raise NotImplementedError("Tiffs have tons of different locations for metadata.")
+
+    @property
     def axes(self):
         return self._axes
 

@@ -12,6 +12,11 @@ class NumpyArray(Array):
     def __init__(self, array_config):
         raise RuntimeError("Numpy Array cannot be built from a config file")
 
+    
+    @property
+    def attrs(self):
+        return dict()
+
     @classmethod
     def from_gp_array(cls, array: gp.Array):
         instance = cls.__new__(cls)

@@ -1,6 +1,3 @@
-from dacapo.experiments.datasplits.datasets.arrays.zarr_array import (
-    voxel_size_conventions,
-)
 from .array import Array
 
 import daisy
@@ -26,6 +23,10 @@ class ResampledArray(Array):
         assert (
             self.voxel_size * self.upsample
         ) / self.downsample == self._source_array.voxel_size
+
+    @property
+    def attrs(self):
+        return self._source_array.attrs
 
     @property
     def axes(self):

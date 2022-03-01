@@ -13,6 +13,10 @@ class DummyArray(Array):
         self._data = np.zeros((100, 50, 50))
 
     @property
+    def attrs(self):
+        return dict()
+
+    @property
     def axes(self):
         return ["z", "y", "x"]
 
