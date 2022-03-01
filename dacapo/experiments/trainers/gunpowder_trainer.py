@@ -7,7 +7,11 @@ from dacapo.gp import (
     GammaAugment,
     ElasticAugment,
 )
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray, ZarrArray
+from dacapo.experiments.datasplits.datasets.arrays import (
+    NumpyArray,
+    ZarrArray,
+    OnesArray,
+)
 
 from funlib.geometry import Coordinate
 import gunpowder as gp
@@ -42,6 +46,18 @@ class GunpowderTrainer(Trainer):
         input_shape = Coordinate(model.input_shape)
         output_shape = Coordinate(model.output_shape)
 
+        # get voxel sizes
+        raw_voxel_size = datasets[0].raw.voxel_size
+        prediction_voxel_size = model.scale(raw_voxel_size)
+
+        # define input and output size:
+        # switch to world units
+        input_size = raw_voxel_size * input_shape
+        output_size = prediction_voxel_size * output_shape
+
+        # padding of groundtruth/mask
+        gt_mask_padding = output_size + task.predictor.padding(prediction_voxel_size)
+
         # define keys:
         raw_key = gp.ArrayKey("RAW")
         gt_key = gp.ArrayKey("GT")
@@ -52,20 +68,23 @@ class GunpowderTrainer(Trainer):
 
         # Get source nodes
         dataset_sources = []
-        raw_voxel_size = datasets[0].raw.voxel_size
-        prediction_voxel_size = model.scale(raw_voxel_size)
         for dataset in datasets:
 
             raw_source = DaCapoArraySource(dataset.raw, raw_key)
+            raw_source += gp.Pad(raw_key, None, 0)
             gt_source = DaCapoArraySource(dataset.gt, gt_key)
-            array_sources = [raw_source, gt_source]
-            if mask_key is not None and dataset.mask is not None:
+            gt_source += gp.Pad(gt_key, gt_mask_padding, 0)
+            if dataset.mask is not None:
                 mask_source = DaCapoArraySource(dataset.mask, mask_key)
-                array_sources.append(mask_source)
             else:
-                # if any of the training datasets do not have a mask available,
-                # we cannot use it during training
-                mask_key = None
+                # Always provide a mask. By default it is simply an array
+                # of ones with the same shape/roi as gt. Avoids making us
+                # specially handle no mask case and allows padding of the
+                # ground truth without worrying about training on incorrect
+                # data.
+                mask_source = DaCapoArraySource(OnesArray.like(dataset.gt), mask_key)
+            mask_source += gp.Pad(mask_key, gt_mask_padding, 0)
+            array_sources = [raw_source, gt_source, mask_source]
 
             dataset_source = (
                 tuple(array_sources) + gp.MergeProvider() + gp.RandomLocation()
@@ -96,11 +115,6 @@ class GunpowderTrainer(Trainer):
         # print profiling stats
         pipeline += gp.PrintProfilingStats(every=self.print_profiling)
 
-        # define input and output size:
-        # switch to world units
-        input_size = raw_voxel_size * input_shape
-        output_size = prediction_voxel_size * output_shape
-
         # generate request for all necessary inputs to training
         request = gp.BatchRequest()
         request.add(raw_key, input_size)
@@ -108,8 +122,7 @@ class GunpowderTrainer(Trainer):
         request.add(weight_key, output_size)
         # request additional keys for snapshots
         request.add(gt_key, output_size)
-        if mask_key is not None:
-            request.add(mask_key, output_size)
+        request.add(mask_key, output_size)
 
         self._request = request
         self._pipeline = pipeline
