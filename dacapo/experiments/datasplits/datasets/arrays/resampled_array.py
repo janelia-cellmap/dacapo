@@ -42,7 +42,7 @@ class ResampledArray(Array):
 
     @property
     def roi(self) -> Roi:
-        return self._source_array.roi
+        return self._source_array.roi.snap_to_grid(self.voxel_size, mode="shrink")
 
     @property
     def writable(self) -> bool:
@@ -65,9 +65,7 @@ class ResampledArray(Array):
 
     @property
     def scale(self):
-        spatial_scales = tuple(
-            u / d for d, u in zip(self.downsample, self.upsample)
-        )
+        spatial_scales = tuple(u / d for d, u in zip(self.downsample, self.upsample))
         if "c" in self.axes:
             scales = list(spatial_scales)
             scales.insert(self.axes.index("c"), 1.0)
