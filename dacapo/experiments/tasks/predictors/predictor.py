@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 
+from funlib.geometry import Coordinate
+
 
 class Predictor(ABC):
-
     @abstractmethod
     def create_model(self, architecture):
         """Given a training architecture, create a model for this predictor.
@@ -34,7 +35,7 @@ class Predictor(ABC):
         pass
 
     @abstractmethod
-    def create_weight(self, gt, target):
+    def create_weight(self, gt, target, mask):
         """Create the weight array for training, given a ground-truth and
         associated target array.
         """
@@ -52,3 +53,6 @@ class Predictor(ABC):
         Overwrite this method to request ground-truth in a larger ROI, as
         needed."""
         return target_spec
+
+    def padding(self, gt_voxel_size: Coordinate) -> Coordinate:
+        return Coordinate((0,) * gt_voxel_size.dims)
