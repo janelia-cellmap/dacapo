@@ -19,29 +19,6 @@ import json
 logger = logging.getLogger(__name__)
 
 
-def voxel_size_conventions(attrs):
-    if "resolution" in attrs:
-        # Funkelab convention
-        return Coordinate(attrs["resolution"])
-    elif "pixelResolution" in attrs:
-        # cosem convention
-        return Coordinate(attrs["pixelResolution"]["dimensions"])
-    elif "transform" in attrs:
-        # also a cosem convention
-        return Coordinate(attrs["transform"]["scale"])
-    raise ValueError(
-        "DaCapo expects the voxel size to be stored in the zarr metadata!\n"
-        f"Attributes provided: {dict(attrs)}"
-    )
-
-
-def offset_conventions(attrs):
-    if "offset" in attrs:
-        # Funkelab convention
-        return Coordinate(attrs["offset"])
-    raise ValueError("DaCapo expects offset to tbe stored in the zarr metadata!")
-
-
 class ZarrArray(Array):
     """This is a zarr array"""
 
@@ -65,37 +42,28 @@ class ZarrArray(Array):
         try:
             return self._attributes["axes"]
         except KeyError as e:
-            raise KeyError(
+            logger.debug(
                 "DaCapo expects Zarr datasets to have an 'axes' attribute!\n"
-                f"Zarr {self.file_name} and dataset {self.dataset} has attributes: {self._attributes}",
-            ) from e
+                f"Zarr {self.file_name} and dataset {self.dataset} has attributes: {list(self._attributes.items())}\n"
+                f"Using default {['t', 'z', 'y', 'x'][-self.dims::]}",
+            )
+            return ["t", "z", "y", "x"][-self.dims : :]
 
     @property
     def dims(self) -> int:
         return self.voxel_size.dims
 
     @lazy_property.LazyProperty
+    def _daisy_array(self) -> daisy.Array:
+        return daisy.open_ds(f"{self.file_name}", self.dataset)
+
+    @lazy_property.LazyProperty
     def voxel_size(self) -> Coordinate:
-        try:
-            return voxel_size_conventions(self._attributes)
-        except KeyError as e:
-            raise KeyError(
-                "DaCapo expects Zarr datasets to have an 'resolution' attribute!\n"
-                f"Zarr {self.file_name} and dataset {self.dataset} has attributes: {self._attributes}",
-            ) from e
+        return self._daisy_array.voxel_size
 
     @lazy_property.LazyProperty
     def roi(self) -> Roi:
-        try:
-            offset = offset_conventions(self._attributes)
-        except ValueError:
-            offset = Coordinate((0,) * self.dims)
-            logger.warning(
-                "Using a default of 0 offset since there is no offset stored in the zarr metadata!\n"
-                f"Zarr {self.file_name} and dataset {self.dataset} has attributes: {dict(self._attributes)}"
-            )
-        shape = Coordinate(self.data.shape[-self.dims :]) * self.voxel_size
-        return Roi(offset, shape)
+        return self._daisy_array.roi
 
     @property
     def writable(self):
