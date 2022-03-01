@@ -1,4 +1,8 @@
 from .training_iteration_stats import TrainingIterationStats
+
+import xarray as xr
+import numpy as np
+
 from typing import List
 import attr
 
@@ -30,3 +34,16 @@ class TrainingStats:
         if not self.iteration_stats:
             return 0
         return self.iteration_stats[-1].iteration + 1
+
+    def to_xarray(self):
+        return xr.DataArray(
+            np.array(
+                [iteration_stat.loss for iteration_stat in self.iteration_stats]
+            ).reshape((-1,)),
+            dims=("iterations"),
+            coords={
+                "iterations": [
+                    iteration_stat.iteration for iteration_stat in self.iteration_stats
+                ],
+            },
+        )
