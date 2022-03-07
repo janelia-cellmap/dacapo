@@ -54,7 +54,7 @@ class ResampledArray(Array):
 
     @property
     def num_channels(self) -> int:
-        return len(self._groupings)
+        return self._source_array.num_channels
 
     @property
     def data(self):
