@@ -11,7 +11,6 @@ from scipy.ndimage import generate_binary_structure
 import numpy as np
 import torch
 
-from typing import List, Optional
 import logging
 
 logger = logging.getLogger(__name__)
@@ -43,9 +42,14 @@ class DistancePredictor(Predictor):
 
     def create_model(self, architecture):
 
-        head = torch.nn.Conv3d(
-            architecture.num_out_channels, self.embedding_dims, kernel_size=1
-        )
+        if architecture.dims == 2:
+            head = torch.nn.Conv2d(
+                architecture.num_out_channels, self.embedding_dims, kernel_size=1
+            )
+        elif architecture.dims == 3:
+            head = torch.nn.Conv3d(
+                architecture.num_out_channels, self.embedding_dims, kernel_size=1
+            )
 
         return Model(architecture, head)
 
@@ -109,73 +113,42 @@ class DistancePredictor(Predictor):
                 ),
                 sampling=voxel_size,
             )
-            boundary_distance = boundary_distance[slices]
-            if self.max_distance is not None:
-                if self.epsilon is None:
-                    add = 0
-                else:
-                    add = self.epsilon
-                boundary_distance = np.clip(
-                    boundary_distance,
-                    -self.max_distance - add,
-                    self.max_distance - add,
-                )
+            if self.epsilon is None:
+                add = 0
+            else:
+                add = self.epsilon
+            boundary_distance = self.__normalize(
+                boundary_distance[slices], normalize, normalize_args
+            )
 
             channel_mask_output = mask_output[i]
-            if self.max_distance is not None:
-                logging.debug(
-                    "Total number of masked in voxels before distance masking {0:}".format(
-                        np.sum(channel_mask_output)
-                    )
+            logging.debug(
+                "Total number of masked in voxels before distance masking {0:}".format(
+                    np.sum(channel_mask_output)
                 )
-                channel_mask_output[
-                    (abs(channel_distance) >= boundary_distance)
-                    * (channel_distance >= 0)
-                    * (boundary_distance < self.max_distance - add)
-                ] = 0
-                logging.debug(
-                    "Total number of masked in voxels after postive distance masking {0:}".format(
-                        np.sum(channel_mask_output)
-                    )
+            )
+            channel_mask_output[
+                np.logical_and(
+                    abs(channel_distance) >= boundary_distance + add,
+                    channel_distance >= 0,
                 )
-                channel_mask_output[
-                    (abs(channel_distance) >= boundary_distance + 1)
-                    * (channel_distance < 0)
-                    * (boundary_distance + 1 < self.max_distance - add)
-                ] = 0
-                logging.debug(
-                    "Total number of masked in voxels after negative distance masking {0:}".format(
-                        np.sum(channel_mask_output)
-                    )
+            ] = 0
+            logging.debug(
+                "Total number of masked in voxels after postive distance masking {0:}".format(
+                    np.sum(channel_mask_output)
                 )
-            else:
-                logging.debug(
-                    "Total number of masked in voxels before distance masking {0:}".format(
-                        np.sum(channel_mask_output)
-                    )
+            )
+            channel_mask_output[
+                np.logical_and(
+                    abs(channel_distance) >= boundary_distance + add,
+                    channel_distance < 0,
                 )
-                channel_mask_output[
-                    np.logical_and(
-                        abs(channel_distance) >= boundary_distance,
-                        channel_distance >= 0,
-                    )
-                ] = 0
-                logging.debug(
-                    "Total number of masked in voxels after postive distance masking {0:}".format(
-                        np.sum(channel_mask_output)
-                    )
+            ] = 0
+            logging.debug(
+                "Total number of masked in voxels after negative distance masking {0:}".format(
+                    np.sum(channel_mask_output)
                 )
-                channel_mask_output[
-                    np.logical_and(
-                        abs(channel_distance) >= boundary_distance + 1,
-                        channel_distance < 0,
-                    )
-                ] = 0
-                logging.debug(
-                    "Total number of masked in voxels after negative distance masking {0:}".format(
-                        np.sum(channel_mask_output)
-                    )
-                )
+            )
         return mask_output
 
     def process(
