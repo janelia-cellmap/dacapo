@@ -6,7 +6,7 @@ from funlib.geometry import Coordinate
 class Architecture(ABC):
     @property
     @abstractmethod
-    def input_shape(self):
+    def input_shape(self) -> Coordinate:
         """The spatial input shape (i.e., not accounting for channels and batch
         dimensions) of this architecture."""
         pass
@@ -29,6 +29,10 @@ class Architecture(ABC):
     def num_out_channels(self):
         """Return the number of output channels of this architecture."""
         pass
+
+    @property
+    def dims(self):
+        return self.input_shape.dims
 
     @abstractmethod
     def forward(self, x):
