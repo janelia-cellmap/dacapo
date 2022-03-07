@@ -18,6 +18,7 @@ import gunpowder as gp
 
 import zarr
 import torch
+import numpy as np
 
 import time
 import logging
@@ -198,14 +199,17 @@ class GunpowderTrainer(Trainer):
                             v.roi,
                             v.num_channels,
                             v.voxel_size,
-                            v.dtype,
+                            v.dtype if not v.dtype == bool else np.float32,
                         )
                         dataset = snapshot_zarr[k]
                     else:
                         dataset = snapshot_zarr[k]
                     # remove batch dimension. Everything has a batch
                     # and channel dim because of torch.
-                    data = v[v.roi][0]
+                    if not v.dtype == bool:
+                        data = v[v.roi][0]
+                    else:
+                        data = v[v.roi][0].astype(np.float32)
                     if v.num_channels is None:
                         # remove channel dimension
                         assert data.shape[0] == 1, (
