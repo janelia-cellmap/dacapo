@@ -64,7 +64,7 @@ class CNNectomeUNetConfig(ArchitectureConfig):
         },
     )
     upsample_factors: List[Coordinate] = attr.ib(
-        factory=lambda x: list(),
+        factory=lambda: list(),
         metadata={
             "help_text": "The amount by which to upsample the output of the UNet."
         },
