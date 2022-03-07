@@ -114,8 +114,6 @@ class CNNectomeUNetModule(torch.nn.Module):
         kernel_size_down=None,
         kernel_size_up=None,
         activation="ReLU",
-        fov=(1, 1, 1),
-        voxel_size=(1, 1, 1),
         num_fmaps_out=None,
         num_heads=1,
         constant_upsample=False,
@@ -240,13 +238,17 @@ class CNNectomeUNetModule(torch.nn.Module):
             else upsample_channel_contraction
         )
 
+        self.dims = len(downsample_factors[0])
+
         # default arguments
 
         if kernel_size_down is None:
-            kernel_size_down = [[(3, 3, 3), (3, 3, 3)]] * self.num_levels
+            kernel_size_down = [[(3,) * self.dims, (3,) * self.dims]] * self.num_levels
         self.kernel_size_down = kernel_size_down
         if kernel_size_up is None:
-            kernel_size_up = [[(3, 3, 3), (3, 3, 3)]] * (self.num_levels - 1)
+            kernel_size_up = [[(3,) * self.dims, (3,) * self.dims]] * (
+                self.num_levels - 1
+            )
         self.kernel_size_up = kernel_size_up
 
         # compute crop factors for translation equivariance
