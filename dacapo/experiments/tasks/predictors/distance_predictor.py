@@ -12,6 +12,7 @@ import numpy as np
 import torch
 
 import logging
+from typing import List
 
 logger = logging.getLogger(__name__)
 
@@ -76,13 +77,16 @@ class DistancePredictor(Predictor):
             )
         else:
             distance_mask = np.ones_like(target.data)
-        return balance_weights(
-            gt,
-            2,
-            slab=tuple(1 if c == "c" else -1 for c in gt.axes),
-            masks=[
-                NumpyArray.from_np_array(distance_mask, gt.roi, gt.voxel_size, gt.axes)
-            ],
+        return NumpyArray.from_np_array(
+            balance_weights(
+                gt[target.roi],
+                2,
+                slab=tuple(1 if c == "c" else -1 for c in gt.axes),
+                masks=[distance_mask],
+            ),
+            gt.roi,
+            gt.voxel_size,
+            gt.axes,
         )
 
     @property
