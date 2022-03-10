@@ -91,10 +91,13 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
             logger.info("Copying validation inputs!")
             input_voxel_size = validation_dataset.raw.voxel_size
             output_voxel_size = run.model.scale(input_voxel_size)
-            input_size = run.model.input_shape * input_voxel_size
-            output_size = run.model.output_shape * output_voxel_size
+            input_shape = run.model.eval_input_shape
+            input_size = input_voxel_size * input_shape
+            output_shape = run.model.compute_output_shape(input_shape)[1]
+            output_size = output_voxel_size * output_shape
             context = (input_size - output_size) / 2
             output_roi = validation_dataset.gt.roi
+            
             input_roi = output_roi.grow(context, context).intersect(
                 validation_dataset.raw.roi
             )
@@ -106,6 +109,7 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
                 validation_dataset.raw.voxel_size,
                 validation_dataset.raw.dtype,
                 name=f"{run.name}_validation_raw",
+                write_size=output_shape,
             )
             input_raw[input_roi] = validation_dataset.raw[input_roi]
             input_gt = ZarrArray.create_from_array_identifier(
@@ -116,6 +120,7 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
                 validation_dataset.gt.voxel_size,
                 validation_dataset.gt.dtype,
                 name=f"{run.name}_validation_gt",
+                write_size=output_shape,
             )
             input_gt[output_roi] = validation_dataset.gt[output_roi]
         else:
