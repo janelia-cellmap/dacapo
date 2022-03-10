@@ -7,6 +7,7 @@ tqdm
 simpleitk
 lazy-property
 neuroglancer
+torch
 git+git://github.com/funkelab/funlib.math
 git+git://github.com/funkelab/funlib.geometry
 git+git://github.com/cremi/cremi_python@python3
