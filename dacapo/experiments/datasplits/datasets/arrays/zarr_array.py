@@ -121,6 +121,9 @@ class ZarrArray(Array):
                 ** (1 / voxel_size.dims)
             ) // 1
             write_size = Coordinate((axis_length,) * voxel_size.dims) * voxel_size
+        write_size = Coordinate(
+            (min(a, b) for a, b in zip(write_size, roi.shape / voxel_size))
+        )
         zarr_container = zarr.open(array_identifier.container, "a")
         try:
             daisy.prepare_ds(
