@@ -4,11 +4,19 @@ from .watershed_post_processor_parameters import WatershedPostProcessorParameter
 from .post_processor import PostProcessor
 
 from funlib.geometry import Coordinate
-from affogato.segmentation import (
-    MWSGridGraph,
-    compute_mws_clustering,
-    compute_mws_segmentation_from_affinities,
-)
+
+try:
+    from affogato.segmentation import (
+        compute_mws_segmentation_from_affinities,
+    )
+except ImportError:
+
+    def compute_mws_segmentation_from_affinities(*args, **kwargs):
+        raise ImportError(
+            "Affogato is not installed. Please install via "
+            "`conda install -c conda-forge affogato`"
+        )
+
 
 import numpy as np
 import zarr
@@ -45,7 +53,7 @@ class WatershedPostProcessor(PostProcessor):
         # in its metadata.
 
         segmentation = compute_mws_segmentation_from_affinities(
-            self.prediction_array[self.prediction_array.roi][:len(self.offsets)],
+            self.prediction_array[self.prediction_array.roi][: len(self.offsets)],
             self.offsets,
             beta_parameter=parameters.bias,
         )
