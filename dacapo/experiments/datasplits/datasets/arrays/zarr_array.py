@@ -110,11 +110,11 @@ class ZarrArray(Array):
         """
         if write_size is None:
             # total storage per block is approx c*x*y*z*dtype_size
-            # appropriate block size about 500MB.
+            # appropriate block size about 5MB.
             axis_length = (
                 (
                     1024 ** 2
-                    * 500
+                    * 5
                     / (num_channels if num_channels is not None else 1)
                     / np.dtype(dtype).itemsize
                 )
