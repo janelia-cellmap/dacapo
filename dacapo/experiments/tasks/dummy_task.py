@@ -20,4 +20,3 @@ class DummyTask(Task):
         self.loss = DummyLoss()
         self.post_processor = DummyPostProcessor(task_config.detection_threshold)
         self.evaluator = DummyEvaluator()
-

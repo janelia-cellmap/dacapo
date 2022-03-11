@@ -56,10 +56,6 @@ def test_validate(
     # validate
 
     weights_store.store_weights(run, 0)
-    validate(
-        "test_run", 0, compute_context=compute_context
-    )
+    validate("test_run", 0, compute_context=compute_context)
     weights_store.store_weights(run, 1)
-    validate(
-        "test_run", 1, compute_context=compute_context
-    )
+    validate("test_run", 1, compute_context=compute_context)

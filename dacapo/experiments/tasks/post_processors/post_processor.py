@@ -19,9 +19,6 @@ class PostProcessor(ABC):
         pass
 
     @abstractmethod
-    def process(
-            self,
-            parameters,
-            output_array):
+    def process(self, parameters, output_array):
         """Convert predictions into the final output."""
         pass

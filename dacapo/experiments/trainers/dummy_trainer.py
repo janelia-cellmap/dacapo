@@ -16,9 +16,7 @@ class DummyTrainer(Trainer):
 
     def create_optimizer(self, model):
 
-        return torch.optim.Adam(
-            lr=self.learning_rate,
-            params=model.parameters())
+        return torch.optim.Adam(lr=self.learning_rate, params=model.parameters())
 
     def iterate(self, num_iterations, model, optimizer, device):
 
@@ -26,9 +24,8 @@ class DummyTrainer(Trainer):
 
         for self.iteration in range(self.iteration, target_iteration):
             yield TrainingIterationStats(
-                loss=1.0/(self.iteration + 1),
-                iteration=self.iteration,
-                time=0.1)
+                loss=1.0 / (self.iteration + 1), iteration=self.iteration, time=0.1
+            )
 
         self.iteration += 1
 

@@ -14,7 +14,7 @@ def mk_zarr_array(temp_path):
     dataset = zarr_container.create_dataset(
         "volumes/test", data=np.zeros((100, 50, 25))
     )
-    dataset.attrs["offset"] = (12,12,12)
+    dataset.attrs["offset"] = (12, 12, 12)
     dataset.attrs["resolution"] = (1, 2, 4)
     dataset.attrs["axes"] = "zyx"
     return zarr_array_config

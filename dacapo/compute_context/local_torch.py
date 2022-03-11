@@ -13,7 +13,7 @@ class LocalTorch(ComputeContext):
         metadata={
             "help_text": "The device to run on. One of: 'cuda', 'cpu'. Can also be left undefined. "
             "If undefined we will use 'cuda' if possible or fall back on 'cpu'."
-        }
+        },
     )
 
     @property

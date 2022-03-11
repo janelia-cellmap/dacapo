@@ -11,16 +11,6 @@ class DummyArchitectureConfig(ArchitectureConfig):
 
     architecture_type = DummyArchitecture
 
-    num_in_channels: int = attr.ib(
-        metadata={
-            "help_text":
-                "Dummy attribute."
-        }
-    )
+    num_in_channels: int = attr.ib(metadata={"help_text": "Dummy attribute."})
 
-    num_out_channels: int = attr.ib(
-        metadata={
-            "help_text":
-                "Dummy attribute."
-        }
-    )
+    num_out_channels: int = attr.ib(metadata={"help_text": "Dummy attribute."})

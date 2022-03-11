@@ -3,9 +3,11 @@ import attr
 from abc import abstractmethod
 from typing import Tuple
 
+
 @attr.s
 class EvaluationScores:
     """Base class for evaluation scores."""
+
     pass
 
     @staticmethod

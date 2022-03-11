@@ -203,7 +203,10 @@ class ElasticAugment(BatchFilter):
         self.voxel_size = Coordinate(
             min(axis)
             for axis in zip(
-                *[array_spec.voxel_size for array_spec in self.spec.array_specs.values()]
+                *[
+                    array_spec.voxel_size
+                    for array_spec in self.spec.array_specs.values()
+                ]
             )
         )
         self.spatial_dims = self.voxel_size.dims

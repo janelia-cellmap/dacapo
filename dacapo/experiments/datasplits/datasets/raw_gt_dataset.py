@@ -3,6 +3,7 @@ from .arrays import Array
 
 from typing import Optional
 
+
 class RawGTDataset(Dataset):
 
     raw: Array = None

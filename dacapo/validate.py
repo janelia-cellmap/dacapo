@@ -53,7 +53,6 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
     # set benchmark flag to True for performance
     torch.backends.cudnn.benchmark = True
     run.model.eval()
-    
 
     if run.datasplit.validate[0].gt is None:
         logger.info("Cannot validate run %s. Continuing training!", run.name)
@@ -97,7 +96,7 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
             output_size = output_voxel_size * output_shape
             context = (input_size - output_size) / 2
             output_roi = validation_dataset.gt.roi
-            
+
             input_roi = output_roi.grow(context, context).intersect(
                 validation_dataset.raw.roi
             )

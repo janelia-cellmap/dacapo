@@ -46,26 +46,19 @@ class TypedConverter(Converter):
             converter.structure(y, A)`` to recreate the concrete type of ``x``.
         """
 
-        self.register_unstructure_hook(
-            cls,
-            lambda obj: self.__typed_unstructure(obj)
-        )
+        self.register_unstructure_hook(cls, lambda obj: self.__typed_unstructure(obj))
 
         self.register_structure_hook(
-            cls,
-            lambda obj_data, cls: self.__typed_structure(
-                obj_data,
-                cls,
-                cls_fn)
+            cls, lambda obj_data, cls: self.__typed_structure(obj_data, cls, cls_fn)
         )
 
     def __typed_unstructure(self, obj):
         cls = type(obj)
         unstructure_fn = make_dict_unstructure_fn(cls, self)
-        return {'__type__': type(obj).__name__, **unstructure_fn(obj)}
+        return {"__type__": type(obj).__name__, **unstructure_fn(obj)}
 
     def __typed_structure(self, obj_data, cls, cls_fn):
-        cls = cls_fn(obj_data['__type__'])
+        cls = cls_fn(obj_data["__type__"])
         structure_fn = make_dict_structure_fn(cls, self)
         return structure_fn(obj_data, cls)
 

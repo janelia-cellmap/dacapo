@@ -72,7 +72,9 @@ class DaCapoTargetFilter(gp.BatchFilter):
         gt_array = NumpyArray.from_gp_array(batch[self.gt_key])
         target_array = self.predictor.create_target(gt_array)
         mask_array = NumpyArray.from_gp_array(batch[self.mask_key])
-        weight_array = self.predictor.create_weight(gt_array, target_array, mask=mask_array)
+        weight_array = self.predictor.create_weight(
+            gt_array, target_array, mask=mask_array
+        )
 
         request_spec = request[self.target_key]
         request_spec.voxel_size = gt_array.voxel_size

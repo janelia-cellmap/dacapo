@@ -10,7 +10,7 @@ class IntensitiesArray(Array):
     This is wrapper another array that will normalize intensities to
     the range (0, 1) and convert to float32. Use this if you have your
     intensities stored as uint8 or similar and want your model to
-    have floats as input.   
+    have floats as input.
     """
 
     def __init__(self, array_config):
@@ -63,7 +63,9 @@ class IntensitiesArray(Array):
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
         intensities = self._source_array[roi]
-        normalized = (intensities.astype(np.float32) - self._min) / (self._max - self._min)
+        normalized = (intensities.astype(np.float32) - self._min) / (
+            self._max - self._min
+        )
         return normalized
 
     def _can_neuroglance(self):

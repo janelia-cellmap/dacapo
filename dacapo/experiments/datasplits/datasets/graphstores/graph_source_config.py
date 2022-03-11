@@ -7,4 +7,5 @@ class GraphStoreConfig:
     `GraphStore` should have a corresponding config class derived from
     `GraphStoreConfig`.
     """
+
     pass

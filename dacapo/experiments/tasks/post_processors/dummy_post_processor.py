@@ -5,7 +5,6 @@ import zarr
 
 
 class DummyPostProcessor(PostProcessor):
-
     def __init__(self, detection_threshold):
         self.detection_threshold = detection_threshold
 
@@ -19,11 +18,8 @@ class DummyPostProcessor(PostProcessor):
     def set_prediction(self, prediction_array):
         pass
 
-    def process(
-            self,
-            parameters,
-            output_array_identifier):
+    def process(self, parameters, output_array_identifier):
 
         # store some dummy data
-        f = zarr.open(str(output_array_identifier.container), 'a')
+        f = zarr.open(str(output_array_identifier.container), "a")
         f[output_array_identifier.dataset] = np.ones((10, 10, 10)) * parameters.min_size

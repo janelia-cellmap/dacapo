@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 
 class Loss(ABC):
-
     @abstractmethod
     def compute(self, prediction, target, weight=None):
         """Compute the loss for the given prediction and target. Optionally, if

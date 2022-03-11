@@ -81,7 +81,6 @@ class BinarySegmentationEvaluationScores(EvaluationScores):
         }
         return mapping[criterion]
 
-
     @staticmethod
     def higher_is_better(criterion: str) -> bool:
         mapping = {

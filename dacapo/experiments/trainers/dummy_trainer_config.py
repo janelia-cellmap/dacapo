@@ -11,9 +11,4 @@ class DummyTrainerConfig(TrainerConfig):
 
     trainer_type = DummyTrainer
 
-    mirror_augment: bool = attr.ib(
-        metadata={
-            "help_text":
-                "Dummy attribute."
-        }
-    )
+    mirror_augment: bool = attr.ib(metadata={"help_text": "Dummy attribute."})

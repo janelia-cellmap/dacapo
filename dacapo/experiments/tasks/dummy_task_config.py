@@ -11,16 +11,6 @@ class DummyTaskConfig(TaskConfig):
 
     task_type = DummyTask
 
-    embedding_dims: int = attr.ib(
-        metadata={
-            "help_text":
-                "Dummy attribute."
-        }
-    )
+    embedding_dims: int = attr.ib(metadata={"help_text": "Dummy attribute."})
 
-    detection_threshold: float = attr.ib(
-        metadata={
-            "help_text":
-                "Dummy attribute."
-        }
-    )
+    detection_threshold: float = attr.ib(metadata={"help_text": "Dummy attribute."})

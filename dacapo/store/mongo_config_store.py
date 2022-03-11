@@ -25,7 +25,9 @@ class MongoConfigStore(ConfigStore):
 
         logger.info(
             "Creating MongoConfigStore:\n\thost    : %s\n\tdatabase: %s",
-            db_host, db_name)
+            db_host,
+            db_name,
+        )
 
         self.db_host = db_host
         self.db_name = db_name
@@ -36,20 +38,18 @@ class MongoConfigStore(ConfigStore):
         self.__init_db()
 
     def store_run_config(self, run_config):
-        
+
         run_doc = converter.unstructure(run_config)
         self.__save_insert(self.runs, run_doc)
 
     def retrieve_run_config(self, run_name):
 
-        run_doc = self.runs.find_one(
-            {"name": run_name},
-            projection={"_id": False})
+        run_doc = self.runs.find_one({"name": run_name}, projection={"_id": False})
         return converter.structure(run_doc, RunConfig)
 
     def delete_run_config(self, run_name):
         self.runs.delete_one({"name": run_name})
-        
+
     def retrieve_run_config_names(
         self,
         task_names=None,
@@ -77,16 +77,12 @@ class MongoConfigStore(ConfigStore):
 
     def retrieve_task_config(self, task_name):
 
-        task_doc = self.tasks.find_one(
-            {"name": task_name},
-            projection={"_id": False})
+        task_doc = self.tasks.find_one({"name": task_name}, projection={"_id": False})
         return converter.structure(task_doc, TaskConfig)
 
     def retrieve_task_config_names(self):
 
-        tasks = self.tasks.find(
-            {},
-            projection={"_id": False, "name": True})
+        tasks = self.tasks.find({}, projection={"_id": False, "name": True})
         return list([task["name"] for task in tasks])
 
     def store_architecture_config(self, architecture_config):
@@ -97,15 +93,15 @@ class MongoConfigStore(ConfigStore):
     def retrieve_architecture_config(self, architecture_name):
 
         architecture_doc = self.architectures.find_one(
-            {"name": architecture_name},
-            projection={"_id": False})
+            {"name": architecture_name}, projection={"_id": False}
+        )
         return converter.structure(architecture_doc, ArchitectureConfig)
 
     def retrieve_architecture_config_names(self):
 
         architectures = self.architectures.find(
-            {},
-            projection={"_id": False, "name": True})
+            {}, projection={"_id": False, "name": True}
+        )
         return list([architecture["name"] for architecture in architectures])
 
     def store_trainer_config(self, trainer_config):
@@ -116,15 +112,13 @@ class MongoConfigStore(ConfigStore):
     def retrieve_trainer_config(self, trainer_name):
 
         trainer_doc = self.trainers.find_one(
-            {"name": trainer_name},
-            projection={"_id": False})
+            {"name": trainer_name}, projection={"_id": False}
+        )
         return converter.structure(trainer_doc, TrainerConfig)
 
     def retrieve_trainer_config_names(self):
 
-        trainers = self.trainers.find(
-            {},
-            projection={"_id": False, "name": True})
+        trainers = self.trainers.find({}, projection={"_id": False, "name": True})
         return list([trainer["name"] for trainer in trainers])
 
     def store_datasplit_config(self, datasplit_config):
@@ -135,15 +129,13 @@ class MongoConfigStore(ConfigStore):
     def retrieve_datasplit_config(self, datasplit_name):
 
         datasplit_doc = self.datasplits.find_one(
-            {"name": datasplit_name},
-            projection={"_id": False})
+            {"name": datasplit_name}, projection={"_id": False}
+        )
         return converter.structure(datasplit_doc, DataSplitConfig)
 
     def retrieve_datasplit_config_names(self):
 
-        datasplits = self.datasplits.find(
-            {},
-            projection={"_id": False, "name": True})
+        datasplits = self.datasplits.find({}, projection={"_id": False, "name": True})
         return list([datasplit["name"] for datasplit in datasplits])
 
     def store_dataset_config(self, dataset_config):
@@ -154,15 +146,13 @@ class MongoConfigStore(ConfigStore):
     def retrieve_dataset_config(self, dataset_name):
 
         dataset_doc = self.datasets.find_one(
-            {"name": dataset_name},
-            projection={"_id": False})
+            {"name": dataset_name}, projection={"_id": False}
+        )
         return converter.structure(dataset_doc, DatasetConfig)
 
     def retrieve_dataset_config_names(self):
 
-        datasets = self.datasets.find(
-            {},
-            projection={"_id": False, "name": True})
+        datasets = self.datasets.find({}, projection={"_id": False, "name": True})
         return list([dataset["name"] for dataset in datasets])
 
     def store_array_config(self, array_config):
@@ -173,20 +163,18 @@ class MongoConfigStore(ConfigStore):
     def retrieve_array_config(self, array_name):
 
         array_doc = self.arrays.find_one(
-            {"name": array_name},
-            projection={"_id": False})
+            {"name": array_name}, projection={"_id": False}
+        )
         return converter.structure(array_doc, ArrayConfig)
 
     def retrieve_array_config_names(self):
 
-        arrays = self.arrays.find(
-            {},
-            projection={"_id": False, "name": True})
+        arrays = self.arrays.find({}, projection={"_id": False, "name": True})
         return list([array["name"] for array in arrays])
 
     def __save_insert(self, collection, data, ignore=None):
 
-        name = data['name']
+        name = data["name"]
 
         try:
 
@@ -194,9 +182,7 @@ class MongoConfigStore(ConfigStore):
 
         except DuplicateKeyError:
 
-            existing = collection.find(
-                {'name': name},
-                projection={'_id': False})[0]
+            existing = collection.find({"name": name}, projection={"_id": False})[0]
 
             if not self.__same_doc(existing, data, ignore):
 
@@ -216,7 +202,7 @@ class MongoConfigStore(ConfigStore):
                     del a[key]
                 if key in b:
                     del b[key]
-        
+
         bson_a = bson.encode(a)
         bson_b = bson.encode(b)
 
@@ -224,45 +210,25 @@ class MongoConfigStore(ConfigStore):
 
     def __init_db(self):
 
-        self.users.create_index(
-            [("username", ASCENDING)],
-            name="username",
-            unique=True)
+        self.users.create_index([("username", ASCENDING)], name="username", unique=True)
 
         self.runs.create_index(
             [("name", ASCENDING), ("repetition", ASCENDING)],
             name="name_rep",
-            unique=True)
+            unique=True,
+        )
 
-        self.tasks.create_index(
-            [("name", ASCENDING)],
-            name="name",
-            unique=True)
+        self.tasks.create_index([("name", ASCENDING)], name="name", unique=True)
 
-        self.datasplits.create_index(
-            [("name", ASCENDING)],
-            name="name",
-            unique=True)
+        self.datasplits.create_index([("name", ASCENDING)], name="name", unique=True)
 
-        self.datasets.create_index(
-            [("name", ASCENDING)],
-            name="name",
-            unique=True)
+        self.datasets.create_index([("name", ASCENDING)], name="name", unique=True)
 
-        self.arrays.create_index(
-            [("name", ASCENDING)],
-            name="name",
-            unique=True)
+        self.arrays.create_index([("name", ASCENDING)], name="name", unique=True)
 
-        self.architectures.create_index(
-            [("name", ASCENDING)],
-            name="name",
-            unique=True)
+        self.architectures.create_index([("name", ASCENDING)], name="name", unique=True)
 
-        self.trainers.create_index(
-            [("name", ASCENDING)],
-            name="name",
-            unique=True)
+        self.trainers.create_index([("name", ASCENDING)], name="name", unique=True)
 
     def __open_collections(self):
 

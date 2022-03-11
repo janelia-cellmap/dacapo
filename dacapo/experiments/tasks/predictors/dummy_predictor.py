@@ -22,7 +22,7 @@ class DummyPredictor(Predictor):
     def create_target(self, gt):
         # zeros
         return NumpyArray.from_np_array(
-            np.zeros((self.embedding_dims,) + gt.data.shape[-gt.dims:]),
+            np.zeros((self.embedding_dims,) + gt.data.shape[-gt.dims :]),
             gt.roi,
             gt.voxel_size,
             ["c"] + gt.axes,

@@ -3,6 +3,7 @@ import attr
 
 from typing import Tuple
 
+
 @attr.s
 class DummyEvaluationScores(EvaluationScores):
     criteria = ["frizz_level", "blipp_score"]

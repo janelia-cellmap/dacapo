@@ -8,6 +8,7 @@ from gunpowder.array_spec import ArraySpec
 
 import numpy as np
 
+
 class DaCapoArraySource(gp.BatchProvider):
     """A DaCapo Array source node
 

@@ -12,7 +12,6 @@ class NumpyArray(Array):
     def __init__(self, array_config):
         raise RuntimeError("Numpy Array cannot be built from a config file")
 
-    
     @property
     def attrs(self):
         return dict()
@@ -81,4 +80,3 @@ class NumpyArray(Array):
             return self.data.shape[channel_dim]
         except ValueError:
             return None
-

@@ -8,4 +8,5 @@ def apply(run_name, iteration, dataset_name):
         "Applying results from run %s at iteration %d to dataset %s",
         run_name,
         iteration,
-        dataset_name)
+        dataset_name,
+    )

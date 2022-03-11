@@ -5,6 +5,7 @@ from .task_config import TaskConfig
 
 from typing import List
 
+
 @attr.s
 class OneHotTaskConfig(TaskConfig):
     """This is a One Hot prediction task that outputs a probability vector

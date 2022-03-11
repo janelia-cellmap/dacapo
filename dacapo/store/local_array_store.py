@@ -71,9 +71,10 @@ class LocalArrayStore(ArrayStore):
         else:
             dataset_prefix = "inputs"
 
-        return LocalArrayIdentifier(
-            container, f"{dataset_prefix}/raw"
-        ), LocalArrayIdentifier(container, f"{dataset_prefix}/gt")
+        return (
+            LocalArrayIdentifier(container, f"{dataset_prefix}/raw"),
+            LocalArrayIdentifier(container, f"{dataset_prefix}/gt"),
+        )
 
     def snapshot_container(self, run_name):
         """

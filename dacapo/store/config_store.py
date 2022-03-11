@@ -6,8 +6,7 @@ class DuplicateNameError(Exception):
 
 
 class ConfigStore(ABC):
-    """Base class for configuration stores.
-    """
+    """Base class for configuration stores."""
 
     @abstractmethod
     def store_run_config(self, run_config):

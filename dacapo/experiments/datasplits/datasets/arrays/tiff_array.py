@@ -24,7 +24,9 @@ class TiffArray(Array):
 
     @property
     def attrs(self):
-        raise NotImplementedError("Tiffs have tons of different locations for metadata.")
+        raise NotImplementedError(
+            "Tiffs have tons of different locations for metadata."
+        )
 
     @property
     def axes(self):

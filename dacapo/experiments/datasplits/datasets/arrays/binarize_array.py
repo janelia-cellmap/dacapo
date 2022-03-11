@@ -105,4 +105,3 @@ class BinarizeArray(Array):
 
     def _source_name(self):
         return self._source_array._source_name()
-
