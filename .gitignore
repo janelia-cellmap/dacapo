@@ -10,6 +10,8 @@
 *.so
 *.coverage
 build
-.vscode
-runs/*
 dacapo.yaml
+
+# vscode stuff
+.vscode
+.mypy_cache
