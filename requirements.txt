@@ -16,8 +16,4 @@ git+git://github.com/funkelab/funlib.geometry
 git+git://github.com/cremi/cremi_python@python3
 git+git://github.com/funkey/gunpowder@v1.3-dev
 
-git+git://github.com/pattonw/lsd
-mahotas
-matplotlib
-git+git://github.com/funkelab/funlib.segment.git
-git+git://github.com/funkey/waterz.git
+git+git://github.com/pattonw/lsd@no-convenience-imports
