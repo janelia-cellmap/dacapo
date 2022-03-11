@@ -15,7 +15,7 @@ import itertools
 @attr.s
 class ValidationScores:
 
-    parameters: list[PostProcessorParameters] = attr.ib(
+    parameters: List[PostProcessorParameters] = attr.ib(
         metadata={"help_text": "The list of parameters that are being evaluated"}
     )
     datasets: List[Dataset] = attr.ib(
