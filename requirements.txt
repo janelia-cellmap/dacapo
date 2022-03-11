@@ -10,7 +10,7 @@ neuroglancer
 torch
 fibsem_tools
 git+git://github.com/funkelab/funlib.math
-https://github.com/pattonw/funlib.evaluate
+git+git://github.com/pattonw/funlib.evaluate
 git+git://github.com/funkelab/funlib.geometry
 git+git://github.com/cremi/cremi_python@python3
 git+git://github.com/funkelab/daisy@refactor
