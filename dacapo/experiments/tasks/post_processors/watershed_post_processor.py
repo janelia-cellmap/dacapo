@@ -5,6 +5,8 @@ from .post_processor import PostProcessor
 
 from funlib.geometry import Coordinate
 
+# TODO: handle requirements for specific features. esp requirements like
+# affogato that aren't simply pip installable
 try:
     from affogato.segmentation import (
         compute_mws_segmentation_from_affinities,
