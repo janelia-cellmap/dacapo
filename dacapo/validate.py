@@ -110,7 +110,7 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
                 validation_dataset.raw.voxel_size,
                 validation_dataset.raw.dtype,
                 name=f"{run.name}_validation_raw",
-                write_size=output_shape,
+                write_size=input_size,
             )
             input_raw[input_roi] = validation_dataset.raw[input_roi]
             input_gt = ZarrArray.create_from_array_identifier(
@@ -121,7 +121,7 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
                 validation_dataset.gt.voxel_size,
                 validation_dataset.gt.dtype,
                 name=f"{run.name}_validation_gt",
-                write_size=output_shape,
+                write_size=output_size,
             )
             input_gt[output_roi] = validation_dataset.gt[output_roi]
         else:
