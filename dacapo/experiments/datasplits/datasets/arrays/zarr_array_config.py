@@ -3,6 +3,8 @@ import attr
 from .array_config import ArrayConfig
 from .zarr_array import ZarrArray
 
+from funlib.geometry import Coordinate
+
 from pathlib import Path
 
 from typing import Optional, List
@@ -21,6 +23,12 @@ class ZarrArrayConfig(ArrayConfig):
         metadata={
             "help_text": "The name of your dataset. May include '/' characters for nested heirarchies"
         }
+    )
+    snap_to_grid: Optional[Coordinate] = attr.ib(
+        default=None,
+        metadata={
+            "help_text": "If you need to make sure your ROI's align with a specific voxel_size"
+        },
     )
     _axes: Optional[List[str]] = attr.ib(
         default=None, metadata={"help_text": "The axes of your data!"}

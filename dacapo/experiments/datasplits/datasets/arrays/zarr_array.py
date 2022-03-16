@@ -30,6 +30,7 @@ class ZarrArray(Array):
 
         self._attributes = self.data.attrs
         self._axes = array_config._axes
+        self.snap_to_grid = array_config.snap_to_grid
 
     @property
     def attrs(self):
@@ -63,7 +64,10 @@ class ZarrArray(Array):
 
     @lazy_property.LazyProperty
     def roi(self) -> Roi:
-        return self._daisy_array.roi
+        if self.snap_to_grid is not None:
+            return self._daisy_array.roi.snap_to_grid(self.snap_to_grid, mode="shrink")
+        else:
+            return self._daisy_array.roi
 
     @property
     def writable(self):
@@ -121,9 +125,7 @@ class ZarrArray(Array):
                 ** (1 / voxel_size.dims)
             ) // 1
             write_size = Coordinate((axis_length,) * voxel_size.dims) * voxel_size
-        write_size = Coordinate(
-            (min(a, b) for a, b in zip(write_size, roi.shape / voxel_size))
-        )
+        write_size = Coordinate((min(a, b) for a, b in zip(write_size, roi.shape)))
         zarr_container = zarr.open(array_identifier.container, "a")
         try:
             daisy.prepare_ds(
@@ -162,6 +164,7 @@ class ZarrArray(Array):
         zarr_array.dataset = array_identifier.dataset
         zarr_array._axes = None
         zarr_array._attributes = zarr_array.data.attrs
+        zarr_array.snap_to_grid = None
         return zarr_array
 
     @classmethod
@@ -172,6 +175,7 @@ class ZarrArray(Array):
         zarr_array.dataset = array_identifier.dataset
         zarr_array._axes = None
         zarr_array._attributes = zarr_array.data.attrs
+        zarr_array.snap_to_grid = None
         return zarr_array
 
     def _can_neuroglance(self):
