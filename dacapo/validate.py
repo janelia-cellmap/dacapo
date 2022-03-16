@@ -97,8 +97,10 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
             context = (input_size - output_size) / 2
             output_roi = validation_dataset.gt.roi
 
-            input_roi = output_roi.grow(context, context).intersect(
-                validation_dataset.raw.roi
+            input_roi = (
+                output_roi.grow(context, context)
+                .snap_to_grid(validation_dataset.raw.voxel_size, mode="grow")
+                .intersect(validation_dataset.raw.roi)
             )
             input_raw = ZarrArray.create_from_array_identifier(
                 input_raw_array_identifier,
