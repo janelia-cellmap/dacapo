@@ -31,7 +31,7 @@ def train(run_name):
 @cli.command()
 @click.option(
     "-r",
-    "--run",
+    "--run-name",
     required=True,
     type=str,
     help="The name of the run to validate."
