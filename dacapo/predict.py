@@ -70,6 +70,9 @@ def predict(
     pipeline += gp.Unsqueeze([raw])
     # raw: (1, c, d, h, w)
 
+    gt_padding = (output_size - output_roi.shape) % output_size
+    prediction_roi = output_roi.grow(gt_padding)
+
     # predict
     pipeline += gp_torch.Predict(
         model=model,
@@ -77,7 +80,7 @@ def predict(
         outputs={0: prediction},
         array_specs={
             prediction: gp.ArraySpec(
-                roi=output_roi, voxel_size=output_voxel_size, dtype=np.float32
+                roi=prediction_roi, voxel_size=output_voxel_size, dtype=np.float32
             )
         },
         spawn_subprocess=False,
