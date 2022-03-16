@@ -58,7 +58,7 @@ class BinarySegmentationEvaluationScores(EvaluationScores):
         # criterion.
         mapping = {
             "dice": False,
-            "jaccard": True,
+            "jaccard": False,
             "hausdorff": False,
             "false_negative_rate": False,
             "false_negative_rate_with_tolerance": False,
