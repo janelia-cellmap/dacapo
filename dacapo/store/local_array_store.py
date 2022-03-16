@@ -38,19 +38,19 @@ class LocalArrayStore(ArrayStore):
 
         return LocalArrayIdentifier(container, dataset)
 
-    def validation_prediction_array(self, run_name, iteration):
+    def validation_prediction_array(self, run_name, iteration, dataset):
         """Get the array identifier for a particular validation prediction."""
 
         container = self.validation_container(run_name).container
-        dataset = f"{iteration}/prediction"
+        dataset = f"{iteration}/{dataset.name}/prediction"
 
         return LocalArrayIdentifier(container, dataset)
 
-    def validation_output_array(self, run_name, iteration, parameters):
+    def validation_output_array(self, run_name, iteration, parameters, dataset):
         """Get the array identifier for a particular validation output."""
 
         container = self.validation_container(run_name).container
-        dataset = f"{iteration}/output/{parameters.id}"
+        dataset = f"{iteration}/{dataset.name}/output/{parameters.id}"
 
         return LocalArrayIdentifier(container, dataset)
 

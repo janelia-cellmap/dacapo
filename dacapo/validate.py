@@ -128,7 +128,7 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
             logger.info("validation inputs already copied!")
 
         prediction_array_identifier = array_store.validation_prediction_array(
-            run.name, iteration
+            run.name, iteration, validation_dataset
         )
         predict(
             run.model,
@@ -145,7 +145,7 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
         for parameters in post_processor.enumerate_parameters():
 
             output_array_identifier = array_store.validation_output_array(
-                run.name, iteration, parameters
+                run.name, iteration, parameters, validation_dataset
             )
 
             post_processed_array = post_processor.process(
