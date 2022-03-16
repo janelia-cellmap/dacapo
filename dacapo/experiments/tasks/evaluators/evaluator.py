@@ -3,9 +3,15 @@ from dacapo.experiments.datasplits.datasets import Dataset
 from dacapo.experiments.tasks.post_processors import PostProcessorParameters
 
 from abc import ABC, abstractmethod
-from typing import Tuple
+from typing import Tuple, Dict, Optional, Any
 import math
 import itertools
+
+# Custom types for improved readability
+OutputIdentifier = Tuple[Dataset, PostProcessorParameters, str]
+Iteration = int
+Score = float
+BestScore = Optional[Tuple[Iteration, Score]]
 
 
 class Evaluator(ABC):
@@ -27,6 +33,14 @@ class Evaluator(ABC):
         """
         pass
 
+    @property
+    def best_scores(
+        self,
+    ) -> Dict[OutputIdentifier, BestScore]:
+        if not hasattr(self, "_best_scores"):
+            self._best_scores: Dict[OutputIdentifier, BestScore] = {}
+        return self._best_scores
+
     def is_best(
         self,
         dataset: Dataset,
@@ -39,10 +53,11 @@ class Evaluator(ABC):
         """
         if not self.store_best(criterion) or math.isnan(getattr(score, criterion)):
             return False
-        elif self._best_scores[(dataset, parameter, criterion)] is None:
+        previous_best = self.best_scores[(dataset, parameter, criterion)]
+        if previous_best is None:
             return True
         else:
-            _, previous_best_score = self._best_scores[(dataset, parameter, criterion)]
+            _, previous_best_score = previous_best
             if score.higher_is_better(criterion):
                 return getattr(score, criterion) > previous_best_score
             else:
@@ -52,7 +67,6 @@ class Evaluator(ABC):
         """
         Find the best iteration for each dataset/post_processing_parameter/criterion
         """
-        self._best_scores = {}
         scores = validation_scores.to_xarray()
         if len(validation_scores.iteration_scores) > 0:
             best_indexes, best_scores = validation_scores.get_best(
@@ -68,7 +82,7 @@ class Evaluator(ABC):
             if not self.store_best(criterion):
                 continue
             if best_scores is None:
-                self._best_scores[(dataset, parameters, criterion)] = None
+                self.best_scores[(dataset, parameters, criterion)] = None
             else:
                 winner_index, winner_score = (
                     best_indexes.sel(
@@ -79,7 +93,7 @@ class Evaluator(ABC):
                     ),
                 )
                 if math.isnan(winner_score.item()):
-                    self._best_scores[
+                    self.best_scores[
                         (
                             dataset,
                             parameters,
@@ -87,7 +101,7 @@ class Evaluator(ABC):
                         )
                     ] = None
                 else:
-                    self._best_scores[
+                    self.best_scores[
                         (
                             dataset,
                             parameters,
