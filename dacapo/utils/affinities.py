@@ -8,9 +8,9 @@ from typing import List
 logger = logging.getLogger(__name__)
 
 
-def seg_to_affgraph(seg: np.ndarray, nhood: List[Coordinate]) -> np.ndarray:
+def seg_to_affgraph(seg: np.ndarray, neighborhood: List[Coordinate]) -> np.ndarray:
 
-    nhood = np.array(nhood)
+    nhood = np.array(neighborhood)
 
     # constructs an affinity graph from a segmentation
     # assume affinity graph is represented as:
