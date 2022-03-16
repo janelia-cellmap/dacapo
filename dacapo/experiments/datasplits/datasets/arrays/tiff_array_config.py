@@ -1,7 +1,7 @@
 import attr
 
 from .array_config import ArrayConfig
-from .zarr_array import TiffArray
+from .tiff_array import TiffArray
 
 from funlib.geometry import Coordinate
 
