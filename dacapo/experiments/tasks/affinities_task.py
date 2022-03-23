@@ -1,5 +1,5 @@
 from .evaluators import InstanceEvaluator
-from .losses import MSELoss
+from .losses import AffinitiesLoss
 from .post_processors import WatershedPostProcessor
 from .predictors import AffinitiesPredictor
 from .task import Task
@@ -19,6 +19,6 @@ class AffinitiesTask(Task):
         self.predictor = AffinitiesPredictor(
             neighborhood=task_config.neighborhood, lsds=task_config.lsds
         )
-        self.loss = MSELoss()
+        self.loss = AffinitiesLoss(len(task_config.neighborhood))
         self.post_processor = WatershedPostProcessor(offsets=task_config.neighborhood)
         self.evaluator = InstanceEvaluator()
