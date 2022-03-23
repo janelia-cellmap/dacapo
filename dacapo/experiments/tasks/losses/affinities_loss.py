@@ -18,5 +18,5 @@ class AffinitiesLoss(Loss):
         )
 
         return torch.nn.BCEWithLogitsLoss()(affs, affs_target) + torch.nn.MSELoss()(
-            aux * aux_weight, aux_target * aux_weight
+            torch.nn.Sigmoid()(aux) * aux_weight, aux_target * aux_weight
         )

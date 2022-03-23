@@ -71,9 +71,7 @@ class AffinitiesPredictor(Predictor):
                 f"AffinitiesPredictor not implemented for {self.dims} dimensions"
             )
 
-        activation = torch.nn.Sigmoid()
-
-        return Model(architecture, head)
+        return Model(architecture, head, eval_activation=torch.nn.Sigmoid())
 
     def create_target(self, gt):
         # zeros
