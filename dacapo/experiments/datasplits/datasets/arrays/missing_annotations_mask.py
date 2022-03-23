@@ -88,11 +88,16 @@ class MissingAnnotationsMask(Array):
         )
         labels = self._source_array[roi]
         grouped = np.ones((len(self._groupings), *labels.shape), dtype=np.bool)
+        grouped[:] = labels > 0
         for i, (_, ids) in enumerate(self._groupings):
             if any([id in present_not_annotated for id in ids]):
-                grouped[i] = False
-            else:
-                grouped[i] = labels > 0
+                # specially handle id 37
+                # TODO: find more general solution
+                if 37 in ids and 37 not in present_not_annotated:
+                    pass
+                else:
+                    for id in ids:
+                        grouped[i][labels == id] = 0
         return grouped
 
     def _can_neuroglance(self):
