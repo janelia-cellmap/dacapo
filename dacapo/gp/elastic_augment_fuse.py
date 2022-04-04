@@ -2,8 +2,10 @@ from __future__ import division
 
 import logging
 import math
+from random import uniform
 
 import scipy.ndimage
+from scipy.spatial.transform import Rotation as R
 
 import numpy as np
 
@@ -104,6 +106,42 @@ def _create_rotation_transformation(shape, angle, subsample=1, voxel_size=None):
     return augment.upscale_transformation(control_point_offsets, subsample_shape)
 
 
+def _create_uniform_3d_transformation(shape, rotation, subsample=1, voxel_size=None):
+
+    dims = len(shape)
+    subsample_shape = tuple(max(1, int(s / subsample)) for s in shape)
+    control_points = (2,) * dims
+
+    if voxel_size is None:
+        voxel_size = Coordinate((1,) * dims)
+
+    # map control points to world coordinates
+    control_point_scaling_factor = tuple(
+        float(s - 1) * vs for s, vs in zip(shape, voxel_size)
+    )
+
+    # rotate control points
+    center = np.array([0.5 * (d - 1) * vs for d, vs in zip(shape, voxel_size)])
+
+    # print("Creating rotation transformation with:")
+    # print("\tangle : " + str(angle))
+    # print("\tcenter: " + str(center))
+
+    control_point_offsets = np.zeros((dims,) + control_points, dtype=np.float32)
+    for control_point in np.ndindex(control_points):
+
+        point = np.array(control_point) * control_point_scaling_factor
+        center_offset = np.array(
+            [p - c for c, p in zip(center, point)], dtype=np.float32
+        )
+        rotated_offset = np.array(center_offset)
+        rotated_offset = rotation.apply(rotated_offset)
+        displacement = rotated_offset - center_offset
+        control_point_offsets[(slice(None),) + control_point] += displacement
+
+    return augment.upscale_transformation(control_point_offsets, subsample_shape)
+
+
 def _min_max_mean_std(ndarray, prefix=""):
     return ""
 
@@ -166,6 +204,7 @@ class ElasticAugment(BatchFilter):
         subsample=1,
         augmentation_probability=1.0,
         seed=None,
+        uniform_3d_rotation=False,
     ):
         super(BatchFilter, self).__init__()
         self.control_point_spacing = control_point_spacing
@@ -174,7 +213,7 @@ class ElasticAugment(BatchFilter):
         self.rotation_max_amount = rotation_interval[1] - rotation_interval[0]
         self.subsample = subsample
         self.augmentation_probability = augmentation_probability
-        self.seed = seed
+        self.uniform_3d_rotation = uniform_3d_rotation
         self.do_augment = False
 
         logger.debug(
@@ -190,7 +229,6 @@ class ElasticAugment(BatchFilter):
             self.rotation_start,
             self.rotation_max_amount,
             self.subsample,
-            self.seed,
         )
 
         assert isinstance(self.subsample, int), "subsample has to be integer"
@@ -222,9 +260,6 @@ class ElasticAugment(BatchFilter):
         total_roi = request.get_total_roi()
         master_roi = self._spatial_roi(total_roi)
         logger.debug("master roi is %s with voxel size %s", master_roi, self.voxel_size)
-
-        if self.seed is not None:
-            np.random.seed(self.seed)
 
         uniform_random_sample = np.random.rand()
         logger.debug(
@@ -417,10 +452,21 @@ class ElasticAugment(BatchFilter):
                 "elastic displacements statistics: %s", _min_max_mean_std(elastic)
             )
             transformation += elastic
-        rotation = np.random.random() * self.rotation_max_amount + self.rotation_start
-        if rotation != 0:
-            logger.debug("rotating with rotation=%f", rotation)
-            transformation += _create_rotation_transformation(
+        if not self.uniform_3d_rotation:
+            rotation = (
+                np.random.random() * self.rotation_max_amount + self.rotation_start
+            )
+            if rotation != 0:
+                logger.debug("rotating with rotation=%f", rotation)
+                transformation += _create_rotation_transformation(
+                    target_shape,
+                    rotation,
+                    voxel_size=self.voxel_size,
+                    subsample=self.subsample,
+                )
+        else:
+            rotation = R.random()
+            transformation += _create_uniform_3d_transformation(
                 target_shape,
                 rotation,
                 voxel_size=self.voxel_size,
