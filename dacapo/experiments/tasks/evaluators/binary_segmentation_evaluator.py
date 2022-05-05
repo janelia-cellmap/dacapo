@@ -265,7 +265,7 @@ class Evaluator:
         else:
             pred_pos = np.sum(self.test != 0)
             tp = pred_pos - (self.false_discovery_rate() * pred_pos)
-            return float(tp) / float(pred_pos)
+            return float(np.float32(tp) / np.float32(pred_pos))
 
     def recall(self):
         if self.truth_empty or self.test_empty:
@@ -273,7 +273,7 @@ class Evaluator:
         else:
             cond_pos = np.sum(self.truth != 0)
             tp = cond_pos - (self.false_negative_rate() * cond_pos)
-            return float(tp) / float(cond_pos)
+            return float(np.float32(tp) / np.float32(cond_pos))
 
     def f1_score(self):
         if self.truth_empty or self.test_empty:
@@ -406,7 +406,10 @@ class CremiEvaluator:
     @lazy_property.LazyProperty
     def false_positive_rate_with_tolerance(self):
         condition_negative = np.sum(self.truth_mask)
-        return float(self.false_positives_with_tolerance) / float(condition_negative)
+        return float(
+            np.float32(self.false_positives_with_tolerance)
+            / np.float32(condition_negative)
+        )
 
     @lazy_property.LazyProperty
     def false_negatives_with_tolerance(self):
@@ -415,7 +418,10 @@ class CremiEvaluator:
     @lazy_property.LazyProperty
     def false_negative_rate_with_tolerance(self):
         condition_positive = len(self.false_negative_distances)
-        return float(self.false_negatives_with_tolerance) / float(condition_positive)
+        return float(
+            np.float32(self.false_negatives_with_tolerance)
+            / np.float32(condition_positive)
+        )
 
     @lazy_property.LazyProperty
     def true_positives_with_tolerance(self):
@@ -428,14 +434,20 @@ class CremiEvaluator:
 
     @lazy_property.LazyProperty
     def precision_with_tolerance(self):
-        return float(self.true_positives_with_tolerance) / float(
-            self.true_positives_with_tolerance + self.false_positives_with_tolerance
+        return float(
+            np.float32(self.true_positives_with_tolerance)
+            / np.float32(
+                self.true_positives_with_tolerance + self.false_positives_with_tolerance
+            )
         )
 
     @lazy_property.LazyProperty
     def recall_with_tolerance(self):
-        return float(self.true_positives_with_tolerance) / float(
-            self.true_positives_with_tolerance + self.false_negatives_with_tolerance
+        return float(
+            np.float32(self.true_positives_with_tolerance)
+            / np.float32(
+                self.true_positives_with_tolerance + self.false_negatives_with_tolerance
+            )
         )
 
     @lazy_property.LazyProperty
