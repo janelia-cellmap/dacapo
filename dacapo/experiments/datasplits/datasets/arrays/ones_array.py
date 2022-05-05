@@ -11,7 +11,9 @@ class OnesArray(Array):
     with the same metadata as the `source_array`."""
 
     def __init__(self, array_config):
-        raise RuntimeError("Ones Array cannot be built from a config file")
+        self._source_array = array_config.source_array_config.array_type(
+            array_config.source_array_config
+        )
 
     @classmethod
     def like(cls, array: Array):

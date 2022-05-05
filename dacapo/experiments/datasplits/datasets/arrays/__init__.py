@@ -14,7 +14,14 @@ from .intensity_array import IntensitiesArray  # noqa
 from .intensity_array_config import IntensitiesArrayConfig  # noqa
 from .missing_annotations_mask import MissingAnnotationsMask  # noqa
 from .missing_annotations_mask_config import MissingAnnotationsMaskConfig  # noqa
+from .ones_array import OnesArray  # noqa
+from .ones_array_config import OnesArrayConfig  # noqa
+from .concat_array import ConcatArray  # noqa
+from .concat_array_config import ConcatArrayConfig  # noqa
+from .logical_or_array import LogicalOrArray  # noqa
+from .logical_or_array_config import LogicalOrArrayConfig  # noqa
 
 # nonconfigurable arrays (helpers)
 from .numpy_array import NumpyArray  # noqa
-from .ones_array import OnesArray  # noqa
+
+
