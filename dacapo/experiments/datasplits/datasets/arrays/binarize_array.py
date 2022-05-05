@@ -30,6 +30,7 @@ class BinarizeArray(Array):
         self._source_array = array_config.source_array_config.array_type(
             array_config.source_array_config
         )
+        self.background = array_config.background
 
         assert (
             "c" not in self._source_array.axes
@@ -84,6 +85,8 @@ class BinarizeArray(Array):
         labels = self._source_array[roi]
         grouped = np.zeros((len(self._groupings), *labels.shape), dtype=np.uint8)
         for i, (_, ids) in enumerate(self._groupings):
+            if len(ids) == 0:
+                grouped[i] += labels != self.background
             for id in ids:
                 grouped[i] += labels == id
         return grouped

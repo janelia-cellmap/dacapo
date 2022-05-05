@@ -23,6 +23,14 @@ class BinarizeArrayConfig(ArrayConfig):
     groupings: List[Tuple[str, List[int]]] = attr.ib(
         metadata={
             "help_text": "List of id groups with a symantic name. Each id group is a List of ids. "
-            "Group i found in groupings[i] will be binarized and placed in channel i."
+            "Group i found in groupings[i] will be binarized and placed in channel i. "
+            "An empty group will binarize all non background labels."
         }
+    )
+
+    background: int = attr.ib(
+        default=0,
+        metadata={
+            "help_text": "The id considered background. Will never be binarized to 1, defaults to 0."
+        },
     )
