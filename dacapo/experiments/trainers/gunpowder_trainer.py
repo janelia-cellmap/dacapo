@@ -4,8 +4,6 @@ from .trainer import Trainer
 from dacapo.gp import (
     DaCapoArraySource,
     DaCapoTargetFilter,
-    GammaAugment,
-    ElasticAugment,
 )
 from dacapo.experiments.datasplits.datasets.arrays import (
     NumpyArray,
@@ -37,11 +35,12 @@ class GunpowderTrainer(Trainer):
         self.num_data_fetchers = trainer_config.num_data_fetchers
         self.print_profiling = 100
         self.snapshot_iteration = trainer_config.snapshot_interval
+        self.min_masked = trainer_config.min_masked
 
         self.augments = trainer_config.augments
 
     def create_optimizer(self, model):
-        return torch.optim.Adam(lr=self.learning_rate, params=model.parameters())
+        return torch.optim.RAdam(lr=self.learning_rate, params=model.parameters())
 
     def build_batch_provider(self, datasets, model, task, snapshot_container=None):
         input_shape = Coordinate(model.input_shape)
@@ -96,6 +95,8 @@ class GunpowderTrainer(Trainer):
 
         for augment in self.augments:
             pipeline += augment.node(raw_key, gt_key, mask_key)
+
+        pipeline += gp.Reject(mask_key, min_masked=self.min_masked)
 
         # Add predictor nodes to pipeline
         pipeline += DaCapoTargetFilter(
@@ -186,7 +187,10 @@ class GunpowderTrainer(Trainer):
                 }
                 if mask is not None:
                     snapshot_arrays["volumes/mask"] = mask
-                logger.info("Saving Snapshot!")
+                logger.debug(
+                    f"Saving Snapshot. Iteration: {iteration}, "
+                    f"Loss: {loss.detach().cpu().numpy().item()}!"
+                )
                 for k, v in snapshot_arrays.items():
                     k = f"{iteration}/{k}"
                     if k not in snapshot_zarr:
