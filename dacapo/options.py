@@ -6,7 +6,7 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 # options files in order of precedence (highest first)
-options_files = [Path("./dacapo.yaml"), Path(expanduser("~/.config/dacapo"))]
+options_files = [Path("./dacapo.yaml"), Path(expanduser("~/.config/dacapo/dacapo.yaml"))]
 
 
 class Options:
@@ -56,6 +56,6 @@ class Options:
             "No options file found. Please create any of the following " "files:"
         )
         for path in options_files:
-            logger.error("\t%s", path)
+            logger.error("\t%s", path.absolute())
 
         raise RuntimeError("Could not find a DaCapo options file.")
