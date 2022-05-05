@@ -22,6 +22,9 @@ class CNNectomeUNet(torch.nn.Module, Architecture):
         self.constant_upsample = architecture_config.constant_upsample
         self.padding = architecture_config.padding
         self.upsample_factors = architecture_config.upsample_factors
+        self.upsample_factors = (
+            self.upsample_factors if not self.upsample_factors is None else []
+        )
 
         self.unet = self.module()
 
