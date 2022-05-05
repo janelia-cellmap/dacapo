@@ -1,6 +1,6 @@
 from dacapo.store.create_store import create_array_store
 from .experiments import Run
-from .compute_context import LocalTorch
+from .compute_context import LocalTorch, ComputeContext
 from .store import create_config_store, create_stats_store, create_weights_store
 from .validate import validate_run
 
@@ -12,7 +12,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def train(run_name, compute_context=LocalTorch()):
+def train(run_name, compute_context: ComputeContext = LocalTorch()):
     if compute_context.train(run_name):
         # if compute context runs train in some other process
         # we are done here.

@@ -32,6 +32,12 @@ class ZarrArray(Array):
         self._axes = array_config._axes
         self.snap_to_grid = array_config.snap_to_grid
 
+    def __str__(self):
+        return f"ZarrArray({self.file_name}, {self.dataset})"
+
+    def __repr__(self):
+        return f"ZarrArray({self.file_name}, {self.dataset})"
+
     @property
     def attrs(self):
         return self.data.attrs
