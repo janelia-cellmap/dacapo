@@ -36,6 +36,7 @@ class DistancePredictor(Predictor):
 
         self.max_distance = 1 * scale_factor
         self.epsilon = 5e-2
+        self.threshold = 0.8
 
     @property
     def embedding_dims(self):
@@ -82,7 +83,7 @@ class DistancePredictor(Predictor):
                 gt[target.roi],
                 2,
                 slab=tuple(1 if c == "c" else -1 for c in gt.axes),
-                masks=[distance_mask],
+                masks=[mask[target.roi], distance_mask],
             ),
             gt.roi,
             gt.voxel_size,
@@ -110,11 +111,7 @@ class DistancePredictor(Predictor):
             slices = tmp.ndim * (slice(1, -1),)
             tmp[slices] = channel_mask
             boundary_distance = distance_transform_edt(
-                binary_erosion(
-                    tmp,
-                    border_value=1,
-                    structure=generate_binary_structure(tmp.ndim, tmp.ndim),
-                ),
+                tmp,
                 sampling=voxel_size,
             )
             if self.epsilon is None:
@@ -133,7 +130,8 @@ class DistancePredictor(Predictor):
             )
             channel_mask_output[
                 np.logical_and(
-                    abs(channel_distance) >= boundary_distance + add,
+                    np.clip(abs(channel_distance) + add, 0, self.threshold)
+                    >= boundary_distance,
                     channel_distance >= 0,
                 )
             ] = 0
@@ -144,8 +142,9 @@ class DistancePredictor(Predictor):
             )
             channel_mask_output[
                 np.logical_and(
-                    abs(channel_distance) >= boundary_distance + add,
-                    channel_distance < 0,
+                    np.clip(abs(channel_distance) + add, 0, self.threshold)
+                    >= boundary_distance,
+                    channel_distance <= 0,
                 )
             ] = 0
             logging.debug(
