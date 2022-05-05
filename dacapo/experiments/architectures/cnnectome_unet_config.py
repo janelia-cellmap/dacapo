@@ -63,8 +63,8 @@ class CNNectomeUNetConfig(ArchitectureConfig):
             "gradients, the optimizer and the batch size."
         },
     )
-    upsample_factors: List[Coordinate] = attr.ib(
-        factory=lambda: list(),
+    upsample_factors: Optional[List[Coordinate]] = attr.ib(
+        default=None,
         metadata={
             "help_text": "The amount by which to upsample the output of the UNet."
         },
