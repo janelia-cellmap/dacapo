@@ -35,6 +35,14 @@ class ElasticAugmentConfig(AugmentConfig):
             "help_text": "Perform the elastic augmentation on a grid downsampled by this factor."
         },
     )
+    uniform_3d_rotation: bool = attr.ib(
+        default=False,
+        metadata={
+            "help_text": "Whether or not to perform rotations uniformly on a 3D sphere. This "
+            "ignores the rotation interval due to the difficulty of parameterizing "
+            "3D rotations."
+        },
+    )
 
     def node(self, _raw_key=None, _gt_key=None, _mask_key=None):
         return ElasticAugment(
@@ -42,4 +50,5 @@ class ElasticAugmentConfig(AugmentConfig):
             control_point_displacement_sigma=self.control_point_displacement_sigma,
             rotation_interval=self.rotation_interval,
             subsample=self.subsample,
+            uniform_3d_rotation=self.uniform_3d_rotation,
         )
