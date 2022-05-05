@@ -71,7 +71,7 @@ class MongoStatsStore(StatsStore):
 
         existing_iteration_scores = self.__read_validation_iteration_scores(run_name)
 
-        store_from_iteration, drop_db = scores.compare(existing_iteration_scores)
+        drop_db, store_from_iteration = scores.compare(existing_iteration_scores)
 
         if drop_db:
             # current scores are behind DB--drop DB
