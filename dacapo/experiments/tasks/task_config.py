@@ -1,5 +1,7 @@
 import attr
 
+from typing import Tuple
+
 
 @attr.s
 class TaskConfig:
@@ -14,3 +16,9 @@ class TaskConfig:
             "special characters."
         }
     )
+
+    def verify(self) -> Tuple[bool, str]:
+        """
+        Check whether this is a valid Task
+        """
+        return True, "No validation for this Task"

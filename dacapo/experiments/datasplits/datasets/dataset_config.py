@@ -1,5 +1,6 @@
 import attr
 
+from typing import Tuple
 
 @attr.s
 class DatasetConfig:
@@ -14,3 +15,10 @@ class DatasetConfig:
             "and avoid special characters."
         }
     )
+
+
+    def verify(self) -> Tuple[bool, str]:
+        """
+        Check whether this is a valid DataSet
+        """
+        return True, "No validation for this DataSet"

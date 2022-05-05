@@ -1,5 +1,7 @@
 import attr
 
+from typing import Tuple
+
 
 @attr.s
 class TrainerConfig:
@@ -25,3 +27,9 @@ class TrainerConfig:
     learning_rate: float = attr.ib(
         metadata={"help_text": "The learning rate of the optimizer."}
     )
+
+    def verify(self) -> Tuple[bool, str]:
+        """
+        Check whether this is a valid Trainer
+        """
+        return True, "No validation for this Trainer"

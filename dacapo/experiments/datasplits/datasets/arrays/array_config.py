@@ -1,5 +1,7 @@
 import attr
 
+from typing import Tuple
+
 
 @attr.s
 class ArrayConfig:
@@ -15,3 +17,9 @@ class ArrayConfig:
             "and avoid special characters."
         }
     )
+
+    def verify(self) -> Tuple[bool, str]:
+        """
+        Check whether this is a valid Array
+        """
+        return True, "No validation for this Array"
