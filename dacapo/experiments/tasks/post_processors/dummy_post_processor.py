@@ -5,7 +5,7 @@ import zarr
 
 
 class DummyPostProcessor(PostProcessor):
-    def __init__(self, detection_threshold):
+    def __init__(self, detection_threshold: float):
         self.detection_threshold = detection_threshold
 
     def enumerate_parameters(self):

@@ -14,6 +14,7 @@ import scipy
 
 import itertools
 import logging
+from typing import List
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ class BinarySegmentationEvaluator(Evaluator):
 
     criteria = ["jaccard", "voi"]
 
-    def __init__(self, clip_distance, tol_distance, channels):
+    def __init__(self, clip_distance: float, tol_distance: float, channels: List[str]):
         self.clip_distance = clip_distance
         self.tol_distance = tol_distance
         self.channels = channels
