@@ -169,7 +169,7 @@ def train(run_name, compute_context: ComputeContext = LocalTorch()):
             run.model.train()
 
             weights_store.store_weights(
-                run, run.training_stats.trained_until(), remove_old=True
+                run, run.training_stats.trained_until(), remove_old=False
             )
             stats_store.store_training_stats(run_name, run.training_stats)
             trained_until = run.training_stats.trained_until()

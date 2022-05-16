@@ -58,7 +58,7 @@ class LocalWeightsStore(WeightsStore):
         weights = self.__get_weights_dir(run) / "iterations" / str(iteration)
         weights.unlink()
 
-    def store_best(self, run, iteration, criterion):
+    def store_best(self, run, iteration: int, dataset: str, criterion: str):
         """
         Take the weights from run/iteration and store it
         in run/criterion.
@@ -67,10 +67,11 @@ class LocalWeightsStore(WeightsStore):
         # must exist since we must read run/iteration weights
         weights_dir = self.__get_weights_dir(run)
         iteration_weights = weights_dir / "iterations" / f"{iteration}"
-        best_weights = weights_dir / criterion
+        best_weights = weights_dir / dataset / criterion
+        best_weights_json = weights_dir / dataset / f"{criterion}.json"
 
-        best_weights.write_bytes(iteration_weights.read_bytes())
-        with (weights_dir / f"{criterion}.json").open("w") as f:
+        best_weights.symlink_to(iteration_weights)
+        with best_weights_json.open("w") as f:
             f.write(json.dumps({"iteration": iteration}))
 
     def retrieve_best(self, run, criterion):

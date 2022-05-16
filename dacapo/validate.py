@@ -183,7 +183,9 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
                             "parameters_id": parameters.id,
                         }
                     )
-                    weights_store.store_best(run, iteration, criterion)
+                    weights_store.store_best(
+                        run, iteration, validation_dataset.name, criterion
+                    )
 
             # delete current output. We only keep the best outputs as determined by
             # the evaluator
