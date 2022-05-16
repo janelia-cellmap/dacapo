@@ -12,7 +12,7 @@ fibsem_tools >= 0.2.11
 git+https://github.com/funkelab/daisy
 git+https://github.com/funkelab/funlib.math@0c623f71c083d33184cac40ef7b1b995216be8ef
 git+https://github.com/pattonw/funlib.evaluate
-git+https://github.com/funkelab/funlib.geometry
+git+https://github.com/funkelab/funlib.geometry@cf30e4d74eb860e46de40533c4f8278dc25147b1
 git+https://github.com/cremi/cremi_python@python3
 git+https://github.com/funkey/gunpowder@v1.3-dev
 
