@@ -3,16 +3,22 @@ from .array import Array
 from funlib.geometry import Coordinate, Roi
 
 import lazy_property
-import numpy as np
 import tifffile
 
 import logging
+from pathlib import Path
+from typing import List, Optional
 
 logger = logging.getLogger(__name__)
 
 
 class TiffArray(Array):
     """This is a tiff array"""
+
+    _offset: Coordinate
+    _file_name: Path
+    _voxel_size: Coordinate
+    _axes: List[str]
 
     def __init__(self, array_config):
         super().__init__()
@@ -29,7 +35,7 @@ class TiffArray(Array):
         )
 
     @property
-    def axes(self):
+    def axes(self) -> List[str]:
         return self._axes
 
     @property
@@ -42,10 +48,10 @@ class TiffArray(Array):
 
     @lazy_property.LazyProperty
     def roi(self) -> Roi:
-        return Roi(self.offset * self.shape)
+        return Roi(self._offset * self._shape)
 
     @property
-    def writable(self):
+    def writable(self) -> bool:
         return False
 
     @property
@@ -53,14 +59,14 @@ class TiffArray(Array):
         return self.data.dtype
 
     @property
-    def num_channels(self):
+    def num_channels(self) -> Optional[int]:
         if "c" in self.axes:
             return self.data.shape[self.axes.index("c")]
         else:
             return None
 
     @property
-    def spatial_axes(self):
+    def spatial_axes(self) -> List[str]:
         return [c for c in self.axes if c != "c"]
 
     @lazy_property.LazyProperty
