@@ -4,7 +4,9 @@ from .architectures import ArchitectureConfig
 from .datasplits import DataSplitConfig
 from .tasks import TaskConfig
 from .trainers import TrainerConfig
+from .starts import StartConfig
 
+from typing import Optional
 
 @attr.s
 class RunConfig:
@@ -60,4 +62,8 @@ class RunConfig:
 
     validation_interval: int = attr.ib(
         default=1000, metadata={"help_text": "How often to perform validation."}
+    )
+
+    start_config: Optional[StartConfig] = attr.ib(
+        default=None, metadata={"help_text": "A starting point for continued training."}
     )

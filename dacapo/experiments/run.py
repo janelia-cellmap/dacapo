@@ -1,6 +1,7 @@
 from .datasplits import DataSplit
 from .training_stats import TrainingStats
 from .validation_scores import ValidationScores
+from .starts import Start
 
 import torch
 
@@ -27,6 +28,14 @@ class Run:
         self.validation_scores = ValidationScores(
             self.task.parameters, self.datasplit.validate, self.task.evaluation_scores
         )
+
+        self.start = (
+            Start(run_config.start_config)
+            if run_config.start_config is not None
+            else None
+        )
+        if self.start is not None:
+            self.start.initialize_weights(self.model)
 
     @staticmethod
     def get_validation_scores(run_config):
