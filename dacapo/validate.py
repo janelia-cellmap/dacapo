@@ -72,7 +72,7 @@ def validate_run(run, iteration, compute_context=LocalTorch()):
 
     for validation_dataset in run.datasplit.validate:
         logger.info(
-            "Validating run %s on datasplit %s", run.name, validation_dataset.name
+            "Validating run %s on dataset %s", run.name, validation_dataset.name
         )
 
         (
