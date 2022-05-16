@@ -26,12 +26,12 @@ def smooth_values(a, n, stride=1):
     m = m[n - 1 :] / n
 
     # mean of squared values
-    m2 = np.cumsum(a ** 2)
+    m2 = np.cumsum(a**2)
     m2[n:] = m2[n:] - m2[:-n]
     m2 = m2[n - 1 :] / n
 
     # stddev
-    s = m2 - m ** 2
+    s = m2 - m**2
 
     if stride > 1:
         m = m[::stride]
