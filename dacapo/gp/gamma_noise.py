@@ -1,7 +1,7 @@
 import numpy as np
 
 from gunpowder.nodes.batch_filter import BatchFilter
-from collections import Iterable
+from collections.abc import Iterable
 
 import logging
 
