@@ -15,6 +15,7 @@ from collections import OrderedDict
 import logging
 from pathlib import Path
 import json
+from typing import Dict, Tuple, Any, Optional, List
 
 logger = logging.getLogger(__name__)
 
@@ -76,30 +77,33 @@ class ZarrArray(Array):
             return self._daisy_array.roi
 
     @property
-    def writable(self):
+    def writable(self) -> bool:
         return True
 
     @property
-    def dtype(self):
+    def dtype(self) -> Any:
         return self.data.dtype
 
     @property
-    def num_channels(self):
+    def num_channels(self) -> Optional[int]:
         return None if "c" not in self.axes else self.data.shape[self.axes.index("c")]
 
     @property
-    def spatial_axes(self):
+    def spatial_axes(self) -> List[str]:
         return [ax for ax in self.axes if ax not in set(["c", "b"])]
 
     @property
-    def data(self):
+    def data(self) -> Any:
         zarr_container = zarr.open(str(self.file_name))
         return zarr_container[self.dataset]
 
-    def __getitem__(self, roi: Roi) -> np.ndarray:
-        return daisy.Array(self.data, self.roi, self.voxel_size).to_ndarray(roi=roi)
+    def __getitem__(self, roi: Roi) -> np.ndarray[Any, Any]:
+        data: np.ndarray[Any, Any] = daisy.Array(
+            self.data, self.roi, self.voxel_size
+        ).to_ndarray(roi=roi)
+        return data
 
-    def __setitem__(self, roi: Roi, value: np.ndarray):
+    def __setitem__(self, roi: Roi, value: np.ndarray[Any, Any]):
         daisy.Array(self.data, self.roi, self.voxel_size)[roi] = value
 
     @classmethod
@@ -184,7 +188,7 @@ class ZarrArray(Array):
         zarr_array.snap_to_grid = None
         return zarr_array
 
-    def _can_neuroglance(self):
+    def _can_neuroglance(self) -> bool:
         return True
 
     def _neuroglancer_source(self):
@@ -226,7 +230,7 @@ class ZarrArray(Array):
         }
         return source
 
-    def _neuroglancer_layer(self):
+    def _neuroglancer_layer(self) -> Tuple[neuroglancer.ImageLayer, Dict[str, Any]]:
         # Generates an Image layer. May not be correct if this crop contains a segmentation
 
         layer = neuroglancer.ImageLayer(source=self._neuroglancer_source())
@@ -251,25 +255,25 @@ class ZarrArray(Array):
         else:
             return [[0] * i + [1] + [0] * (self.dims - i) for i in range(self.dims)]
 
-    def _output_dimensions(self):
+    def _output_dimensions(self) -> Dict[str, Tuple[float, str]]:
         is_zarr = self.file_name.name.endswith(".zarr")
         if is_zarr:
             spatial_dimensions = OrderedDict()
             if "c" in self.axes:
-                spatial_dimensions["c^"] = [1, ""]
+                spatial_dimensions["c^"] = (1, "")
             for dim, vox in zip(self.spatial_axes[::-1], self.voxel_size[::-1]):
-                spatial_dimensions[dim] = [vox * 1e-9, "m"]
+                spatial_dimensions[dim] = (vox * 1e-9, "m")
             return spatial_dimensions
         else:
             return {
-                dim: [vox * 1e-9, "m"]
+                dim: (vox * 1e-9, "m")
                 for dim, vox in zip(self.spatial_axes, self.voxel_size)
             }
 
-    def _source_name(self):
+    def _source_name(self) -> str:
         return self.name
 
-    def add_metadata(self, metadata):
+    def add_metadata(self, metadata: Dict[str, Any]) -> None:
         dataset = zarr.open(self.file_name, mode="a")[self.dataset]
         for k, v in metadata.items():
             dataset.attrs[k] = v
