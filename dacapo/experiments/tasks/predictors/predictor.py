@@ -1,11 +1,13 @@
 from funlib.geometry import Coordinate
 
+import torch
+
 from abc import ABC, abstractmethod
 
 
 class Predictor(ABC):
     @abstractmethod
-    def create_model(self, architecture):
+    def create_model(self, architecture: torch.nn.Module) -> torch.nn.Module:
         """Given a training architecture, create a model for this predictor.
         This is usually done by appending extra layers to the output of the
         architecture to get the output tensor of the architecture into the
