@@ -74,15 +74,20 @@ class LocalWeightsStore(WeightsStore):
             f.write(json.dumps({"iteration": iteration}))
 
     def retrieve_best(self, run, criterion):
+        run_name = run if isinstance(run, str) else run.name
 
-        logger.info("Retrieving weights for run %s, criterion %s", run.name, criterion)
+        logger.info("Retrieving weights for run %s, criterion %s", run_name, criterion)
 
         weights_name = self.__get_weights_dir(run) / criterion
 
         weights = torch.load(weights_name, map_location="cpu")
 
-        run.model.load_state_dict(weights["model"])
-        run.optimizer.load_state_dict(weights["optimizer"])
+        if isinstance(run, str):
+            return weights
+        else:
+            # load the model weights
+            run.model.load_state_dict(weights["model"])
+            run.optimizer.load_state_dict(weights["optimizer"])
 
     def retrieve_weights(self, run, iteration):
         """Retrieve the network weights of the given run."""
