@@ -5,6 +5,7 @@ from .architecture_config import ArchitectureConfig
 
 from typing import Tuple
 
+
 @attr.s
 class DummyArchitectureConfig(ArchitectureConfig):
     """This is just a dummy architecture config used for testing. None of the

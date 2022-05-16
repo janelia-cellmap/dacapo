@@ -5,6 +5,7 @@ from .trainer_config import TrainerConfig
 
 from typing import Tuple
 
+
 @attr.s
 class DummyTrainerConfig(TrainerConfig):
     """This is just a dummy trainer config used for testing. None of the

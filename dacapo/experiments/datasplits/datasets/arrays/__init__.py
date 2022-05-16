@@ -25,5 +25,3 @@ from .crop_array_config import CropArrayConfig  # noqa
 
 # nonconfigurable arrays (helpers)
 from .numpy_array import NumpyArray  # noqa
-
-

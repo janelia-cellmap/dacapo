@@ -6,7 +6,10 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 # options files in order of precedence (highest first)
-options_files = [Path("./dacapo.yaml"), Path(expanduser("~/.config/dacapo/dacapo.yaml"))]
+options_files = [
+    Path("./dacapo.yaml"),
+    Path(expanduser("~/.config/dacapo/dacapo.yaml")),
+]
 
 
 class Options:

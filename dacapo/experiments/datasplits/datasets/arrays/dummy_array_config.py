@@ -5,6 +5,7 @@ from .dummy_array import DummyArray
 
 from typing import Tuple
 
+
 @attr.s
 class DummyArrayConfig(ArrayConfig):
     """This is just a dummy array  config used for testing. None of the

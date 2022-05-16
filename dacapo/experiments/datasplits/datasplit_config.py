@@ -2,6 +2,7 @@ import attr
 
 from typing import Tuple
 
+
 @attr.s
 class DataSplitConfig:
     """Base class for datasplit configurations. Each subclass of an

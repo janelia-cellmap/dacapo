@@ -107,7 +107,7 @@ class MissingAnnotationsMask(Array):
 
                         # for id in ids:
                         #     grouped[i][labels == id] = 0
-    
+
         except KeyError as e:
             pass
         return grouped

@@ -4,6 +4,7 @@ import logging
 
 logger = logging.getLogger(__file__)
 
+
 class Start(ABC):
     def __init__(self, start_config):
         self.run = start_config.run
@@ -11,6 +12,7 @@ class Start(ABC):
 
     def initialize_weights(self, model):
         from dacapo.store.create_store import create_weights_store
+
         weights_store = create_weights_store()
         weights = weights_store.retrieve_best(self.run, self.criterion)
         logger.info(f"loading weights from run {self.run}, criterion: {self.criterion}")

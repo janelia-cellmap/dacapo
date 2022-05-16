@@ -2,6 +2,7 @@ import attr
 
 from typing import Tuple
 
+
 @attr.s
 class DatasetConfig:
     """Configuration class for datasets, to be used to create a ``Dataset``
@@ -15,7 +16,6 @@ class DatasetConfig:
             "and avoid special characters."
         }
     )
-
 
     def verify(self) -> Tuple[bool, str]:
         """

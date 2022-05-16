@@ -123,7 +123,7 @@ class ZarrArray(Array):
             # appropriate block size about 5MB.
             axis_length = (
                 (
-                    1024**2
+                    1024 ** 2
                     * 5
                     / (num_channels if num_channels is not None else 1)
                     / np.dtype(dtype).itemsize

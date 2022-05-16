@@ -10,8 +10,7 @@ import numpy as np
 
 
 class LogicalOrArray(Array):
-    """
-    """
+    """ """
 
     def __init__(self, array_config):
         self.name = array_config.name

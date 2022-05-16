@@ -57,7 +57,7 @@ class GammaAugment(BatchFilter):
         a_max = a.max()
         # apply gamma noise
         a = (a - a_min) / (a_max - a_min)
-        noisy_a = a**gamma
+        noisy_a = a ** gamma
         # undo normalization
         noisy_a = a * (a_max - a_min) + a_min
         return noisy_a

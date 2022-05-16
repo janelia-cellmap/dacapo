@@ -6,6 +6,7 @@ import attr
 
 from typing import Tuple
 
+
 @attr.s
 class DummyDatasetConfig(DatasetConfig):
     """This is just a dummy DataSplit config used for testing. None of the

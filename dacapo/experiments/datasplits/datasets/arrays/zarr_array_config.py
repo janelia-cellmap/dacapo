@@ -40,8 +40,10 @@ class ZarrArrayConfig(ArrayConfig):
         """
         if not self.file_name.exists():
             return False, f"{self.file_name} does not exist!"
-        elif not (self.file_name.name.endswith(".zarr") or self.file_name.name.endswith(".n5")):
+        elif not (
+            self.file_name.name.endswith(".zarr") or self.file_name.name.endswith(".n5")
+        ):
             return False, f"{self.file_name} is not a zarr or n5 container"
-        elif not (self.file_name/self.dataset).exists():
+        elif not (self.file_name / self.dataset).exists():
             return False, f"{self.dataset} is not contained in {self.file_name}"
         return True, "No validation for this Array"
