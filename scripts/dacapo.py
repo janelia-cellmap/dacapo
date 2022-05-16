@@ -2,15 +2,16 @@ import dacapo
 import click
 import logging
 
+from pathlib import Path
+
 
 @click.group()
 @click.option(
     "--log-level",
     type=click.Choice(
-        ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-        case_sensitive=False
+        ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], case_sensitive=False
     ),
-    default="INFO"
+    default="INFO",
 )
 def cli(log_level):
     logging.basicConfig(level=getattr(logging, log_level.upper()))
@@ -18,11 +19,7 @@ def cli(log_level):
 
 @cli.command()
 @click.option(
-    "-r",
-    "--run-name",
-    required=True,
-    type=str,
-    help="The NAME of the run to train."
+    "-r", "--run-name", required=True, type=str, help="The NAME of the run to train."
 )
 def train(run_name):
     dacapo.train(run_name)
@@ -30,18 +27,14 @@ def train(run_name):
 
 @cli.command()
 @click.option(
-    "-r",
-    "--run-name",
-    required=True,
-    type=str,
-    help="The name of the run to validate."
+    "-r", "--run-name", required=True, type=str, help="The name of the run to validate."
 )
 @click.option(
     "-i",
     "--iteration",
     required=True,
     type=int,
-    help="The iteration at which to validate the run."
+    help="The iteration at which to validate the run.",
 )
 def validate(run_name, iteration):
     dacapo.validate(run_name, iteration)
@@ -49,28 +42,21 @@ def validate(run_name, iteration):
 
 @cli.command()
 @click.option(
-    "-r",
-    "--run",
-    required=True,
-    type=str,
-    help="The name of the run to use."
+    "-r", "--run", required=True, type=str, help="The name of the run to use."
 )
 @click.option(
     "-i",
     "--iteration",
     required=True,
     type=int,
-    help="The iteration weights and parameters to use."
+    help="The iteration weights and parameters to use.",
 )
 @click.option(
     "-r",
     "--dataset",
     required=True,
     type=str,
-    help="The name of the dataset to apply the run to."
+    help="The name of the dataset to apply the run to.",
 )
-def apply(
-        run_name,
-        iteration,
-        dataset_name):
+def apply(run_name, iteration, dataset_name):
     dacapo.apply(run_name, iteration, dataset_name)

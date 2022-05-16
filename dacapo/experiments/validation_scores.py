@@ -8,7 +8,6 @@ from typing import List, Tuple, Optional
 import attr
 import numpy as np
 import xarray as xr
-import inspect
 import itertools
 
 
