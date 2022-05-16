@@ -260,7 +260,7 @@ class ZarrArray(Array):
         if is_zarr:
             spatial_dimensions = OrderedDict()
             if "c" in self.axes:
-                spatial_dimensions["c^"] = (1, "")
+                spatial_dimensions["c^"] = (1.0, "")
             for dim, vox in zip(self.spatial_axes[::-1], self.voxel_size[::-1]):
                 spatial_dimensions[dim] = (vox * 1e-9, "m")
             return spatial_dimensions

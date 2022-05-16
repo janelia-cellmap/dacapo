@@ -6,7 +6,6 @@ from .task import Task
 
 
 class OneHotTask(Task):
-
     def __init__(self, task_config):
         self.predictor = OneHotPredictor(classes=task_config.classes)
         self.loss = DummyLoss()

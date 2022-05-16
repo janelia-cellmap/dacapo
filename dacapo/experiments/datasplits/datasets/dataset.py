@@ -5,6 +5,10 @@ from typing import Optional
 
 
 class Dataset(ABC):
+    raw: Array
+    gt: Optional[Array] = None
+    mask: Optional[Array] = None
+
     def __eq__(self, other):
         return self.name == other.name
 
@@ -16,22 +20,6 @@ class Dataset(ABC):
 
     def __str__(self):
         return f"Dataset({self.name})"
-
-    @property
-    @abstractmethod
-    def raw(self) -> Array:
-        """The Input data to your model."""
-        pass
-
-    @property
-    def gt(self) -> Optional[Array]:
-        """The GT Array for `raw`"""
-        return None
-
-    @property
-    def mask(self) -> Optional[Array]:
-        """The Mask Array for `raw`"""
-        return None
 
     def _neuroglancer_layers(self, prefix="", exclude_layers=None):
         layers = {}

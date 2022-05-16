@@ -9,7 +9,6 @@ import torch
 
 
 class PretrainedTask(Task):
-
     def __init__(self, task_config):
 
         sub_task = task_config.sub_task_config.task_type(task_config.sub_task_config)
