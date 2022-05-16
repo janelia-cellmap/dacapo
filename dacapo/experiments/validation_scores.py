@@ -112,9 +112,10 @@ class ValidationScores:
 
     def best(self, array: xr.DataArray) -> List[Optional[xr.DataArray]]:
         """
-        For each criterion in the criteria dimension, return the best value. May return None if there is no best.
+        For each criterion in the criteria dimension, return the best value.
+        May return None if there is no best.
         """
-        criterion_bests = []
+        criterion_bests: List[Optional[xr.DataArray]] = []
         for criterion in array.coords["criteria"].values:
             sub_array = array.sel(criteria=criterion)
             result = sub_array.where(sub_array == sub_array.max(), drop=True).squeeze()
@@ -164,10 +165,11 @@ class ValidationScores:
                             )
                         )
                 best_indexes, best_scores = zip(*criteria_bests)
-                return (
+                best_indexes, best_scores = (
                     xr.concat(best_indexes, dim=data.coords["criteria"]),
                     xr.concat(best_scores, dim=data.coords["criteria"]),
                 )
+                return (best_indexes, best_scores)
             else:
                 if self.evaluation_scores.higher_is_better(
                     data.coords["criteria"].item()

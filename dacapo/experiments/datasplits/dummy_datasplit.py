@@ -6,8 +6,8 @@ from typing import List
 
 class DummyDataSplit(DataSplit):
 
-    train: List[Dataset] = None
-    validate: List[Dataset] = None
+    train: List[Dataset]
+    validate: List[Dataset]
 
     def __init__(self, datasplit_config):
 

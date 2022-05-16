@@ -43,12 +43,20 @@ class TiffArray(Array):
         return self.voxel_size.dims
 
     @lazy_property.LazyProperty
+    def shape(self) -> Coordinate:
+        data_shape = self.data.shape
+        spatial_shape = Coordinate(
+            [data_shape[self.axes.index(axis)] for axis in self.spatial_axes]
+        )
+        return spatial_shape
+
+    @lazy_property.LazyProperty
     def voxel_size(self) -> Coordinate:
         return self._voxel_size
 
     @lazy_property.LazyProperty
     def roi(self) -> Roi:
-        return Roi(self._offset * self._shape)
+        return Roi(self._offset * self.shape)
 
     @property
     def writable(self) -> bool:

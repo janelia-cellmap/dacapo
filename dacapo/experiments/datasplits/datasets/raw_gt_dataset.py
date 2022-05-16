@@ -6,9 +6,9 @@ from typing import Optional
 
 class RawGTDataset(Dataset):
 
-    raw: Array = None
-    gt: Array = None
-    mask: Optional[Array] = None
+    raw: Array
+    gt: Array
+    mask: Optional[Array]
 
     def __init__(self, dataset_config):
 

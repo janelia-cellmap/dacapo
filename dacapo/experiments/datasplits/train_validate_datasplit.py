@@ -1,11 +1,12 @@
 from .datasplit import DataSplit
 from .datasets import Dataset
 
+from typing import List
 
 class TrainValidateDataSplit(DataSplit):
 
-    train: Dataset = None
-    validate: Dataset = None
+    train: List[Dataset]
+    validate: List[Dataset]
 
     def __init__(self, datasplit_config):
 

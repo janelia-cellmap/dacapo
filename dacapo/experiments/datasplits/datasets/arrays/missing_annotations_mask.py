@@ -79,7 +79,7 @@ class MissingAnnotationsMask(Array):
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
         labels = self._source_array[roi]
-        grouped = np.ones((len(self._groupings), *labels.shape), dtype=np.bool)
+        grouped = np.ones((len(self._groupings), *labels.shape), dtype=bool)
         grouped[:] = labels > 0
         try:
             labels_list = LabelList.parse_obj({"labels": self.attrs["labels"]}).labels

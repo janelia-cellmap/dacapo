@@ -55,7 +55,7 @@ class BinarySegmentationEvaluator(Evaluator):
                 output_channel_data = output_data.take(
                     indices=indx, axis=output_array.axes.index("c")
                 )
-                evaluator = Evaluator(
+                evaluator = ArrayEvaluator(
                     evaluation_channel_data,
                     output_channel_data,
                     not evaluation_channel_data.any(),
@@ -176,7 +176,7 @@ class BinarySegmentationEvaluator(Evaluator):
         )
 
 
-class Evaluator:
+class ArrayEvaluator:
     def __init__(
         self,
         truth_binary,

@@ -4,7 +4,7 @@ from .arrays import Array
 
 class DummyDataset(Dataset):
 
-    raw: Array = None
+    raw: Array
 
     def __init__(self, dataset_config):
 

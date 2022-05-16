@@ -1,14 +1,14 @@
 from .task import Task
 
+from .predictors import Predictor
+from .losses import Loss
+from .post_processors import PostProcessor
+from .evaluators import Evaluator
+
 import torch
 
 
 class PretrainedTask(Task):
-
-    predictor = None
-    loss = None
-    post_processor = None
-    evaluator = None
 
     def __init__(self, task_config):
 

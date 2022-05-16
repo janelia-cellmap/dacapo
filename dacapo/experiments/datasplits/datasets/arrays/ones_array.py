@@ -62,4 +62,4 @@ class OnesArray(Array):
         return self.source_array.num_channels
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        return np.ones_like(self.source_array.__getitem__(roi), dtype=np.bool)
+        return np.ones_like(self.source_array.__getitem__(roi), dtype=bool)
