@@ -20,6 +20,8 @@ from .concat_array import ConcatArray  # noqa
 from .concat_array_config import ConcatArrayConfig  # noqa
 from .logical_or_array import LogicalOrArray  # noqa
 from .logical_or_array_config import LogicalOrArrayConfig  # noqa
+from .crop_array import CropArray  # noqa
+from .crop_array_config import CropArrayConfig  # noqa
 
 # nonconfigurable arrays (helpers)
 from .numpy_array import NumpyArray  # noqa
