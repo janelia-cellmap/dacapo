@@ -70,6 +70,11 @@ class LocalWeightsStore(WeightsStore):
         best_weights = weights_dir / dataset / criterion
         best_weights_json = weights_dir / dataset / f"{criterion}.json"
 
+        if not best_weights.parent.exists():
+            best_weights.parent.mkdir(parents=True)
+
+        if best_weights.exists():
+            best_weights.unlink()
         best_weights.symlink_to(iteration_weights)
         with best_weights_json.open("w") as f:
             f.write(json.dumps({"iteration": iteration}))
