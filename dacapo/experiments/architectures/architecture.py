@@ -1,9 +1,11 @@
-from abc import ABC, abstractmethod
-
 from funlib.geometry import Coordinate
 
+import torch
 
-class Architecture(ABC):
+from abc import ABC, abstractmethod
+
+
+class Architecture(torch.nn.Module, ABC):
     @property
     @abstractmethod
     def input_shape(self) -> Coordinate:

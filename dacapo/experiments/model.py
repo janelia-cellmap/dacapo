@@ -1,6 +1,10 @@
-import torch
+from dacapo.experiments.architectures.architecture import Architecture
 
 from funlib.geometry import Coordinate
+
+import torch
+
+from typing import Tuple
 
 
 class Model(torch.nn.Module):
@@ -15,7 +19,7 @@ class Model(torch.nn.Module):
 
     def __init__(
         self,
-        architecture: torch.nn.Module,
+        architecture: Architecture,
         prediction_head: torch.nn.Module,
         eval_activation: torch.nn.Module = None,
     ):
@@ -40,16 +44,16 @@ class Model(torch.nn.Module):
             result = self.eval_activation(result)
         return result
 
-    def compute_output_shape(self, input_shape):
+    def compute_output_shape(self, input_shape: Coordinate) -> Coordinate:
         """Compute the spatial shape (i.e., not accounting for channels and
         batch dimensions) of this model, when fed a tensor of the given spatial
         shape as input."""
 
         return self.__get_output_shape(input_shape, self.num_in_channels)
 
-    def __get_output_shape(self, input_shape, in_channels):
+    def __get_output_shape(self, input_shape: Coordinate, in_channels: int) -> Tuple[int, Coordinate]:
 
-        device = "cpu"
+        device = torch.device("cpu")
         for parameter in self.parameters():
             device = parameter.device
             break

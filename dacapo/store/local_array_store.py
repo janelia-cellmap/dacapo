@@ -1,25 +1,11 @@
-from .array_store import ArrayStore
+from .array_store import ArrayStore, LocalArrayIdentifier, LocalContainerIdentifier
+
 from pathlib import Path
-import attr
 import logging
 import shutil
+from typing import Optional, Tuple
 
 logger = logging.getLogger(__name__)
-
-
-@attr.s
-class LocalContainerIdentifier:
-    container: Path = attr.ib()
-
-    def array_identifier(self, dataset):
-        return LocalArrayIdentifier(self.container, dataset)
-
-
-@attr.s
-class LocalArrayIdentifier:
-
-    container: Path = attr.ib()
-    dataset: str = attr.ib()
 
 
 class LocalArrayStore(ArrayStore):
@@ -29,7 +15,9 @@ class LocalArrayStore(ArrayStore):
 
         self.basedir = basedir
 
-    def best_validation_array(self, run_name, criterion, index=None):
+    def best_validation_array(
+        self, run_name: str, criterion: str, index: Optional[str] = None
+    ) -> LocalArrayIdentifier:
         container = self.validation_container(run_name).container
         if index is None:
             dataset = f"{criterion}"
@@ -38,7 +26,9 @@ class LocalArrayStore(ArrayStore):
 
         return LocalArrayIdentifier(container, dataset)
 
-    def validation_prediction_array(self, run_name, iteration, dataset):
+    def validation_prediction_array(
+        self, run_name: str, iteration: int, dataset: str
+    ) -> LocalArrayIdentifier:
         """Get the array identifier for a particular validation prediction."""
 
         container = self.validation_container(run_name).container
@@ -46,7 +36,9 @@ class LocalArrayStore(ArrayStore):
 
         return LocalArrayIdentifier(container, dataset)
 
-    def validation_output_array(self, run_name, iteration, parameters, dataset):
+    def validation_output_array(
+        self, run_name: str, iteration: int, parameters: str, dataset: str
+    ) -> LocalArrayIdentifier:
         """Get the array identifier for a particular validation output."""
 
         container = self.validation_container(run_name).container
@@ -54,7 +46,9 @@ class LocalArrayStore(ArrayStore):
 
         return LocalArrayIdentifier(container, dataset)
 
-    def validation_input_arrays(self, run_name, index=None):
+    def validation_input_arrays(
+        self, run_name: str, index: Optional[str] = None
+    ) -> Tuple[LocalArrayIdentifier, LocalArrayIdentifier]:
         """
         Get an array identifiers for the validation input raw/gt.
 
@@ -76,7 +70,7 @@ class LocalArrayStore(ArrayStore):
             LocalArrayIdentifier(container, f"{dataset_prefix}/gt"),
         )
 
-    def snapshot_container(self, run_name):
+    def snapshot_container(self, run_name: str) -> LocalContainerIdentifier:
         """
         Get a container identifier for storage of a snapshot.
         """
@@ -84,7 +78,7 @@ class LocalArrayStore(ArrayStore):
             Path(self.__get_run_dir(run_name), "snapshot.zarr")
         )
 
-    def validation_container(self, run_name):
+    def validation_container(self, run_name: str) -> LocalContainerIdentifier:
         """
         Get a container identifier for storage of a snapshot.
         """
@@ -92,7 +86,7 @@ class LocalArrayStore(ArrayStore):
             Path(self.__get_run_dir(run_name), "validation.zarr")
         )
 
-    def remove(self, array_identifier):
+    def remove(self, array_identifier: LocalArrayIdentifier) -> None:
 
         container = array_identifier.container
         dataset = array_identifier.dataset
@@ -106,7 +100,7 @@ class LocalArrayStore(ArrayStore):
 
         if not path.exists():
             logger.warning(
-                "Asked to remove dataset %s in container %s, but doesn't " "exist.",
+                "Asked to remove dataset %s in container %s, but it doesn't exist.",
                 dataset,
                 container,
             )
@@ -114,7 +108,7 @@ class LocalArrayStore(ArrayStore):
 
         if not path.is_dir():
             logger.warning(
-                "Asked to remove dataset %s in container %s, but is not "
+                "Asked to remove dataset %s in container %s, but it is not "
                 "a directory. Will not delete.",
                 dataset,
                 container,
@@ -124,6 +118,6 @@ class LocalArrayStore(ArrayStore):
         logger.info("Removing dataset %s in container %s", dataset, container)
         shutil.rmtree(path)
 
-    def __get_run_dir(self, run_name):
+    def __get_run_dir(self, run_name: str) -> Path:
 
         return Path(self.basedir, run_name)

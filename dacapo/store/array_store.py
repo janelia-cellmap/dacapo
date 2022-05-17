@@ -2,10 +2,28 @@ from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 
 import zarr
 import neuroglancer
+import attr
 
 from abc import ABC, abstractmethod
 import itertools
 import json
+from pathlib import Path
+from typing import Optional, Tuple
+
+
+@attr.s
+class LocalArrayIdentifier:
+
+    container: Path = attr.ib()
+    dataset: str = attr.ib()
+
+
+@attr.s
+class LocalContainerIdentifier:
+    container: Path = attr.ib()
+
+    def array_identifier(self, dataset) -> LocalArrayIdentifier:
+        return LocalArrayIdentifier(self.container, dataset)
 
 
 class ArrayStore(ABC):
@@ -16,18 +34,51 @@ class ArrayStore(ABC):
     arrays)."""
 
     @abstractmethod
-    def validation_prediction_array(self, run_name, iteration):
+    def validation_prediction_array(
+        self, run_name: str, iteration: int, dataset: str
+    ) -> LocalArrayIdentifier:
         """Get the array identifier for a particular validation prediction."""
         pass
 
     @abstractmethod
-    def validation_output_array(self, run_name, iteration, parameters):
+    def validation_output_array(
+        self, run_name: str, iteration: int, parameters: str, dataset: str
+    ) -> LocalArrayIdentifier:
         """Get the array identifier for a particular validation output."""
         pass
 
     @abstractmethod
-    def remove(self, array_identifier):
+    def validation_input_arrays(
+        self, run_name: str, index: Optional[str] = None
+    ) -> Tuple[LocalArrayIdentifier, LocalArrayIdentifier]:
+        """
+        Get an array identifiers for the validation input raw/gt.
+
+        It would be nice to store raw/gt with the validation predictions/outputs.
+        If we don't store these we would have to look up the datasplit config
+        and figure out where to find the inputs for each run. If we write
+        the data then we don't need to search for it.
+        This convenience comes at the cost of some extra memory usage.
+        """
+        pass
+
+    @abstractmethod
+    def remove(self, array_identifier: LocalArrayIdentifier) -> None:
         """Remove an array by its identifier."""
+        pass
+
+    @abstractmethod
+    def snapshot_container(self, run_name: str) -> LocalContainerIdentifier:
+        """
+        Get a container identifier for storage of a snapshot.
+        """
+        pass
+
+    @abstractmethod
+    def validation_container(self, run_name: str) -> LocalContainerIdentifier:
+        """
+        Get a container identifier for storage of a snapshot.
+        """
         pass
 
     def _visualize_training(self, run):

@@ -1,5 +1,5 @@
 from .predict import predict
-from .compute_context import LocalTorch
+from .compute_context import LocalTorch, ComputeContext
 from .experiments import Run, ValidationIterationScores
 from .experiments.datasplits.datasets.arrays import ZarrArray
 from .store import (
@@ -17,7 +17,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def validate(run_name, iteration, compute_context=LocalTorch()):
+def validate(run_name: str, iteration: int, compute_context: ComputeContext=LocalTorch()):
     """Validate a run at a given iteration. Loads the weights from a previously
     stored checkpoint. Returns the best parameters and scores for this
     iteration."""
@@ -45,7 +45,7 @@ def validate(run_name, iteration, compute_context=LocalTorch()):
     return validate_run(run, iteration, compute_context=compute_context)
 
 
-def validate_run(run, iteration, compute_context=LocalTorch()):
+def validate_run(run: Run, iteration: int, compute_context: ComputeContext=LocalTorch()):
     """Validate an already loaded run at the given iteration. This does not
     load the weights of that iteration, it is assumed that the model is already
     loaded correctly. Returns the best parameters and scores for this

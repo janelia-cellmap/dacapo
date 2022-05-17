@@ -43,7 +43,7 @@ class Run:
             self.start.initialize_weights(self.model)
 
     @staticmethod
-    def get_validation_scores(run_config) -> None:
+    def get_validation_scores(run_config) -> ValidationScores:
         """
         Static method to avoid having to initialize model, optimizer, trainer, etc.
         """
@@ -57,7 +57,7 @@ class Run:
             task.parameters, datasplit.validate, task.evaluation_scores
         )
 
-    def move_optimizer(self, device: torch.Device, empty_cuda_cache: bool = False) -> None:
+    def move_optimizer(self, device: torch.device, empty_cuda_cache: bool = False) -> None:
         for state in self.optimizer.state.values():
             for k, v in state.items():
                 if torch.is_tensor(v):

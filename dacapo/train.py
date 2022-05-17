@@ -12,7 +12,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def train(run_name, compute_context: ComputeContext = LocalTorch()):
+def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
     if compute_context.train(run_name):
         # if compute context runs train in some other process
         # we are done here.

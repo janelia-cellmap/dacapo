@@ -6,7 +6,7 @@ import torch.nn as nn
 import math
 
 
-class CNNectomeUNet(torch.nn.Module, Architecture):
+class CNNectomeUNet(Architecture):
     def __init__(self, architecture_config):
         super().__init__()
 

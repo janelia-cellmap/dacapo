@@ -1,25 +1,30 @@
+from dacapo.compute_context.compute_context import ComputeContext
 from dacapo.gp import DaCapoArraySource
-from dacapo.compute_context import LocalTorch
+from dacapo.experiments.model import Model
+from dacapo.experiments.datasplits.datasets.arrays import Array
+from dacapo.store.local_array_store import LocalArrayIdentifier
+from dacapo.compute_context import LocalTorch, ComputeContext
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 
-from funlib.geometry import Coordinate
-import daisy
+from funlib.geometry import Coordinate, Roi
 import gunpowder as gp
 import gunpowder.torch as gp_torch
-import logging
 import numpy as np
 import zarr
+
+from typing import Optional
+import logging
 
 logger = logging.getLogger(__name__)
 
 
 def predict(
-    model,
-    raw_array,
-    prediction_array_identifier,
-    num_cpu_workers=4,
-    compute_context=LocalTorch(),
-    output_roi=None,
+    model: Model,
+    raw_array: Array,
+    prediction_array_identifier: LocalArrayIdentifier,
+    num_cpu_workers: int = 4,
+    compute_context: ComputeContext = LocalTorch(),
+    output_roi: Optional[Roi] = None,
 ):
     # get the model's input and output size
 

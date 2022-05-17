@@ -48,21 +48,21 @@ class ValidationScores:
         iteration_scores: ValidationIterationScores,
     ) -> None:
 
-        self.iteration_scores.append(iteration_scores)
+        self.scores.append(iteration_scores)
 
     def delete_after(self, iteration: int) -> None:
 
-        self.iteration_scores = [
-            scores for scores in self.iteration_scores if scores.iteration < iteration
+        self.scores = [
+            scores for scores in self.scores if scores.iteration < iteration
         ]
 
     def validated_until(self) -> int:
         """The number of iterations validated for (the maximum iteration plus
         one)."""
 
-        if not self.iteration_scores:
+        if not self.scores:
             return 0
-        return max([score.iteration for score in self.iteration_scores]) + 1
+        return max([score.iteration for score in self.scores]) + 1
 
     def compare(
         self, existing_iteration_scores: List[ValidationIterationScores]
@@ -96,7 +96,7 @@ class ValidationScores:
     def to_xarray(self) -> xr.DataArray:
         return xr.DataArray(
             np.array(
-                [iteration_score.scores for iteration_score in self.iteration_scores]
+                [iteration_score.scores for iteration_score in self.scores]
             ).reshape(
                 (-1, len(self.datasets), len(self.parameters), len(self.criteria))
             ),
@@ -104,7 +104,7 @@ class ValidationScores:
             coords={
                 "iterations": [
                     iteration_score.iteration
-                    for iteration_score in self.iteration_scores
+                    for iteration_score in self.scores
                 ],
                 "datasets": self.datasets,
                 "parameters": self.parameters,

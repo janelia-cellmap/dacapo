@@ -5,7 +5,7 @@ from funlib.geometry import Coordinate
 import torch
 
 
-class DummyArchitecture(torch.nn.Module, Architecture):
+class DummyArchitecture(Architecture):
     def __init__(self, architecture_config):
 
         super().__init__()

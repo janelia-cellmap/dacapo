@@ -1,14 +1,17 @@
 import attr
 
 from abc import abstractmethod
-from typing import Tuple
+from typing import Tuple, List
 
 
 @attr.s
 class EvaluationScores:
     """Base class for evaluation scores."""
 
-    pass
+    @property
+    @abstractmethod
+    def criteria(self) -> List[str]:
+        pass
 
     @staticmethod
     @abstractmethod
