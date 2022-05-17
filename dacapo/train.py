@@ -13,12 +13,14 @@ logger = logging.getLogger(__name__)
 
 
 def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
+    """Train a run"""
+
     if compute_context.train(run_name):
         # if compute context runs train in some other process
         # we are done here.
         return
 
-    logger.info("Starting/resuming training for run %s...", run_name)
+    logger.info("Training run %s", run_name)
 
     # create run
 
@@ -26,15 +28,27 @@ def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
 
+    return train_run(run)
+
+
+def train_run(
+    run: Run,
+    compute_context: ComputeContext = LocalTorch(),
+):
+
+    logger.info("Starting/resuming training for run %s...", run)
+
+    # create run
+
+    config_store = create_config_store()
     # read in previous training/validation stats
 
     stats_store = create_stats_store()
-    run.training_stats = stats_store.retrieve_training_stats(run_name)
+    run.training_stats = stats_store.retrieve_training_stats(run.name)
     run.validation_scores.iteration_scores = (
-        stats_store.retrieve_validation_iteration_scores(run_name)
+        stats_store.retrieve_validation_iteration_scores(run.name)
     )
 
-    train_until = run_config.num_iterations
     trained_until = run.training_stats.trained_until()
     validated_until = run.validation_scores.validated_until()
     if validated_until > trained_until:
@@ -43,9 +57,8 @@ def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
             "Deleting extra validation stats"
         )
         run.validation_scores.delete_after(trained_until)
-    validation_interval = run_config.validation_interval
 
-    logger.info("Current state: trained until %d/%d", trained_until, train_until)
+    logger.info("Current state: trained until %d/%d", trained_until, run.train_until)
 
     # read weights of the latest iteration
 
@@ -110,7 +123,7 @@ def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
     run.move_optimizer(compute_context.device)
 
     array_store = create_array_store()
-    run.trainer.set_iteration(trained_until)
+    run.trainer.iteration = trained_until
     run.trainer.build_batch_provider(
         run.datasplit.train,
         run.model,
@@ -119,10 +132,10 @@ def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
     )
 
     with run.trainer as trainer:
-        while trained_until < train_until:
+        while trained_until < run.train_until:
 
             # train for at most 100 iterations at a time, then store training stats
-            iterations = min(100, train_until - trained_until)
+            iterations = min(100, run.train_until - trained_until)
             iteration_stats = None
 
             for iteration_stats in tqdm(
@@ -138,13 +151,9 @@ def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
 
                 run.training_stats.add_iteration_stats(iteration_stats)
 
-                if (iteration_stats.iteration + 1) % validation_interval == 0:
+                if (iteration_stats.iteration + 1) % run.validation_interval == 0:
                     break
 
-            if iteration_stats is None or not (
-                (iteration_stats.iteration + 1) % validation_interval == 0
-            ):
-                stats_store.store_training_stats(run_name, run.training_stats)
                 trained_until = run.training_stats.trained_until()
                 continue
 
@@ -160,18 +169,15 @@ def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
                 compute_context=compute_context,
             )
             stats_store.store_validation_iteration_scores(
-                run_name, run.validation_scores
+                run.name, run.validation_scores
             )
-            stats_store.store_training_stats(run_name, run.training_stats)
+            stats_store.store_training_stats(run.name, run.training_stats)
 
             # make sure to move optimizer back to the correct device
             run.move_optimizer(compute_context.device)
             run.model.train()
 
-            weights_store.store_weights(
-                run, run.training_stats.trained_until(), remove_old=False
-            )
-            stats_store.store_training_stats(run_name, run.training_stats)
-            trained_until = run.training_stats.trained_until()
+            weights_store.store_weights(run, run.training_stats.trained_until())
+            stats_store.store_training_stats(run.name, run.training_stats)
 
     logger.info("Trained until %d, finished.", trained_until)
