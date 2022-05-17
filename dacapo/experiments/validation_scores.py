@@ -33,7 +33,9 @@ class ValidationScores:
         },
     )
 
-    def subscores(self, iteration_scores: List[ValidationIterationScores]):
+    def subscores(
+        self, iteration_scores: List[ValidationIterationScores]
+    ) -> "ValidationScores":
         return ValidationScores(
             self.parameters,
             self.datasets,
@@ -44,17 +46,17 @@ class ValidationScores:
     def add_iteration_scores(
         self,
         iteration_scores: ValidationIterationScores,
-    ):
+    ) -> None:
 
         self.iteration_scores.append(iteration_scores)
 
-    def delete_after(self, iteration):
+    def delete_after(self, iteration: int) -> None:
 
         self.iteration_scores = [
             scores for scores in self.iteration_scores if scores.iteration < iteration
         ]
 
-    def validated_until(self):
+    def validated_until(self) -> int:
         """The number of iterations validated for (the maximum iteration plus
         one)."""
 
@@ -84,14 +86,14 @@ class ValidationScores:
             return False, existing_iteration
 
     @property
-    def criteria(self):
+    def criteria(self) -> List[str]:
         return self.evaluation_scores.criteria
 
     @property
-    def parameter_names(self):
+    def parameter_names(self) -> List[str]:
         return self.parameters[0].parameter_names
 
-    def to_xarray(self):
+    def to_xarray(self) -> xr.DataArray:
         return xr.DataArray(
             np.array(
                 [iteration_score.scores for iteration_score in self.iteration_scores]
@@ -186,15 +188,3 @@ class ValidationScores:
 
         else:
             raise ValueError("Cannot determine 'best' without knowing the criterion")
-
-    def _get_best(self, criterion, dataset=None):
-        """
-        Get the best score according to this criterion.
-        return iteration, parameters, score
-        """
-        iteration_bests = []
-        for iteration_score in self.iteration_scores:
-            parameters, iteration_best = iteration_score._get_best(criterion)
-            iteration_bests.append(
-                (iteration_score.iteration, parameters, iteration_best)
-            )
