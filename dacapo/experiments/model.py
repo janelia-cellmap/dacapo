@@ -16,6 +16,8 @@ class Model(torch.nn.Module):
     like BCELossWithLogits, since you want to avoid applying softmax while training,
     but apply it during evaluation.
     """
+    num_out_channels: int
+    num_in_channels: int
 
     def __init__(
         self,

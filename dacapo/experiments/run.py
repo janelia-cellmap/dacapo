@@ -1,15 +1,36 @@
-from .datasplits import DataSplit
+from .datasplits.datasplit import DataSplit
+from .tasks.task import Task
+from .architectures.architecture import Architecture
+from .trainers.trainer import Trainer
 from .training_stats import TrainingStats
 from .validation_scores import ValidationScores
 from .starts import Start
+from .model import Model
 
 import torch
 
 
 class Run:
+    name: str
+    train_until: int
+    validation_interval: int
+
+    task: Task
+    architecture: Architecture
+    trainer: Trainer
+    datasplit: DataSplit
+
+    model: Model
+    optimizer: torch.optim.Optimizer
+
+    training_stats: TrainingStats
+    validation_scores: ValidationScores
+
     def __init__(self, run_config):
 
         self.name = run_config.name
+        self.train_until = run_config.num_iterations
+        self.validation_interval = run_config.validation_interval
 
         # config types
         task_type = run_config.task_config.task_type
@@ -57,7 +78,9 @@ class Run:
             task.parameters, datasplit.validate, task.evaluation_scores
         )
 
-    def move_optimizer(self, device: torch.device, empty_cuda_cache: bool = False) -> None:
+    def move_optimizer(
+        self, device: torch.device, empty_cuda_cache: bool = False
+    ) -> None:
         for state in self.optimizer.state.values():
             for k, v in state.items():
                 if torch.is_tensor(v):

@@ -1,24 +1,25 @@
 from .arrays import Array
 
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, Any
 
 
 class Dataset(ABC):
+    name: str
     raw: Array
     gt: Optional[Array] = None
     mask: Optional[Array] = None
 
-    def __eq__(self, other):
-        return self.name == other.name
+    def __eq__(self, other: Any) -> bool:
+        return isinstance(other, type(self)) and self.name == other.name
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.name)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Dataset({self.name})"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Dataset({self.name})"
 
     def _neuroglancer_layers(self, prefix="", exclude_layers=None):

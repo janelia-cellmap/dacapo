@@ -14,7 +14,7 @@ class Architecture(torch.nn.Module, ABC):
         pass
 
     @property
-    def eval_shape_increase(self):
+    def eval_shape_increase(self) -> Coordinate:
         """
         How much to increase the input shape during prediction.
         """
@@ -22,24 +22,19 @@ class Architecture(torch.nn.Module, ABC):
 
     @property
     @abstractmethod
-    def num_in_channels(self):
+    def num_in_channels(self) -> int:
         """Return the number of input channels this architecture expects."""
         pass
 
     @property
     @abstractmethod
-    def num_out_channels(self):
+    def num_out_channels(self) -> int:
         """Return the number of output channels of this architecture."""
         pass
 
     @property
-    def dims(self):
+    def dims(self) -> int:
         return self.input_shape.dims
-
-    @abstractmethod
-    def forward(self, x):
-        """Process an input tensor."""
-        pass
 
     def scale(self, input_voxel_size: Coordinate) -> Coordinate:
         return input_voxel_size
