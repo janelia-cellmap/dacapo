@@ -29,6 +29,7 @@ class DummyPredictor(Predictor):
         )
 
     def create_weight(self, gt, target, mask):
+        # ones
         return NumpyArray.from_np_array(
             np.ones(target.data.shape),
             target.roi,
