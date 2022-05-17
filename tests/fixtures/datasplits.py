@@ -1,4 +1,7 @@
-from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
+from dacapo.experiments.datasplits import (
+    TrainValidateDataSplitConfig,
+    DummyDataSplitConfig,
+)
 from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
 from dacapo.experiments.datasplits.datasets.arrays import (
     ZarrArrayConfig,
@@ -8,8 +11,16 @@ from dacapo.experiments.datasplits.datasets.arrays import (
 import zarr
 import numpy as np
 
+import pytest
 
-def mk_twelve_class_datasplit(tmp_path):
+
+@pytest.fixture()
+def dummy_datasplit():
+    yield DummyDataSplitConfig(name="dummy_datasplit")
+
+
+@pytest.fixture()
+def twelve_class_datasplit(tmp_path):
     """
     two crops for training, one for validation. Raw data is normally distributed
     around 0 with std 1.
@@ -77,10 +88,11 @@ def mk_twelve_class_datasplit(tmp_path):
         train_configs=[crop1],
         validate_configs=[crop2, crop3],
     )
-    return twelve_class_datasplit_config
+    yield twelve_class_datasplit_config
 
 
-def mk_six_class_distance_datasplit(tmp_path):
+@pytest.fixture()
+def six_class_datasplit(tmp_path):
     """
     two crops for training, one for validation. Raw data is normally distributed
     around 0 with std 1.

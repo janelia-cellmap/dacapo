@@ -1,13 +1,19 @@
-from ..fixtures.trainers import TRAINER_CONFIGS
-from ..fixtures.db import options
+from ..fixtures import *
 
-from dacapo import Options
 from dacapo.store import create_config_store
 
 import pytest
+from pytest_lazyfixture import lazy_fixture
 
 
-@pytest.mark.parametrize("trainer_config", TRAINER_CONFIGS)
+
+@pytest.mark.parametrize(
+    "trainer_config",
+    [
+        lazy_fixture("dummy_trainer"),
+        lazy_fixture("gunpowder_trainer"),
+    ],
+)
 def test_trainer(
     options,
     trainer_config,

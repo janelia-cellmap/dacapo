@@ -1,43 +1,31 @@
 from dacapo.store.create_store import create_stats_store
-from ..fixtures.runs import RUNS
-from ..fixtures.db import options
+from ..fixtures import *
 
-from dacapo.experiments import RunConfig
 from dacapo.compute_context import LocalTorch
 from dacapo.store import create_config_store
 from dacapo import train
 
 import pytest
+from pytest_lazyfixture import lazy_fixture
 
 import logging
-from pathlib import Path
 
 logging.basicConfig(level=logging.INFO)
 
 
 @pytest.mark.parametrize(
-    "datasplit_mkfunction, architecture_config, task_config, trainer_config",
-    RUNS,
+    "run_config",
+    [
+        lazy_fixture("distance_run"),
+        lazy_fixture("dummy_run"),
+        lazy_fixture("onehot_run"),
+    ],
 )
 def test_train(
     options,
-    datasplit_mkfunction,
-    architecture_config,
-    task_config,
-    trainer_config,
+    run_config,
 ):
     compute_context = LocalTorch(device="cpu")
-
-    datasplit_config = datasplit_mkfunction(Path(options.runs_base_dir) / "data")
-    run_config = RunConfig(
-        name="test_run",
-        task_config=task_config,
-        architecture_config=architecture_config,
-        trainer_config=trainer_config,
-        datasplit_config=datasplit_config,
-        repetition=0,
-        num_iterations=100,
-    )
 
     # create a store
 
@@ -52,10 +40,10 @@ def test_train(
 
     # train
 
-    train("test_run", compute_context=compute_context)
+    train(run_config.name, compute_context=compute_context)
 
     # assert train_stats and validation_scores are available
 
-    training_stats = stats_store.retrieve_training_stats("test_run")
+    training_stats = stats_store.retrieve_training_stats(run_config.name)
 
-    assert training_stats.trained_until() == 100
+    assert training_stats.trained_until() == run_config.num_iterations

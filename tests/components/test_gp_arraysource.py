@@ -1,17 +1,22 @@
-from ..fixtures.arrays import ARRAY_MK_FUNCTIONS
+from ..fixtures import *
 
 from dacapo.gp import DaCapoArraySource
 
 import gunpowder as gp
 
 import pytest
+from pytest_lazyfixture import lazy_fixture
 
 
-@pytest.mark.parametrize("array_mk_function", ARRAY_MK_FUNCTIONS)
-def test_gp_dacapo_array_source(tmp_path, array_mk_function):
-
-    # Initialize the dataset and get the array config
-    array_config = array_mk_function(tmp_path)
+@pytest.mark.parametrize(
+    "array_config",
+    [
+        lazy_fixture("cellmap_array"),
+        lazy_fixture("zarr_array"),
+        lazy_fixture("dummy_array"),
+    ],
+)
+def test_gp_dacapo_array_source(array_config):
 
     # Create Array from config
     array = array_config.array_type(array_config)

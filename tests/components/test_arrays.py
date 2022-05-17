@@ -1,20 +1,22 @@
-from ..fixtures.arrays import ARRAY_MK_FUNCTIONS
-from ..fixtures.db import options
+from ..fixtures import *
 
 from dacapo.store import create_config_store
 
 import pytest
+from pytest_lazyfixture import lazy_fixture
 
-from pathlib import Path
 
-
-@pytest.mark.parametrize("array_mk_function", ARRAY_MK_FUNCTIONS)
-def test_array_api(options, array_mk_function):
+@pytest.mark.parametrize(
+    "array_config",
+    [
+        lazy_fixture("cellmap_array"),
+        lazy_fixture("zarr_array"),
+        lazy_fixture("dummy_array"),
+    ],
+)
+def test_array_api(options, array_config):
     # create_config_store (uses options behind the scenes)
     store = create_config_store()
-
-    # Initialize the dataset and get the array config
-    array_config = array_mk_function(Path(options.runs_base_dir) / "data")
 
     # Test store/retrieve
     store.store_array_config(array_config)
