@@ -154,7 +154,7 @@ def train_run(
                 if (iteration_stats.iteration + 1) % run.validation_interval == 0:
                     break
 
-                trained_until = run.training_stats.trained_until()
+            trained_until = run.training_stats.trained_until()
 
             # If this is not a validation iteration or final iteration, skip validation
             no_its = iteration_stats is None  # No training steps run
