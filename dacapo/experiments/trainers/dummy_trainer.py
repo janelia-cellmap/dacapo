@@ -1,11 +1,12 @@
 from ..training_iteration_stats import TrainingIterationStats
 from .trainer import Trainer
+from dacapo.experiments.model import Model
+
 import torch
+import numpy as np
 
 
 class DummyTrainer(Trainer):
-    learning_rate = None
-    batch_size = None
     iteration = 0
 
     def __init__(self, trainer_config):
@@ -18,11 +19,22 @@ class DummyTrainer(Trainer):
 
         return torch.optim.Adam(lr=self.learning_rate, params=model.parameters())
 
-    def iterate(self, num_iterations, model, optimizer, device):
+    def iterate(self, num_iterations: int, model: Model, optimizer, device):
 
         target_iteration = self.iteration + num_iterations
 
         for self.iteration in range(self.iteration, target_iteration):
+            optimizer.zero_grad()
+            raw = torch.from_numpy(
+                np.random.randn(1, model.num_in_channels, *model.input_shape)
+            ).float()
+            target = torch.from_numpy(
+                np.zeros((1, model.num_out_channels, *model.output_shape))
+            ).float()
+            pred = model.forward(raw)
+            loss = self._loss.compute(pred, target)
+            loss.backward()
+            optimizer.step()
             yield TrainingIterationStats(
                 loss=1.0 / (self.iteration + 1), iteration=self.iteration, time=0.1
             )
@@ -30,7 +42,7 @@ class DummyTrainer(Trainer):
         self.iteration += 1
 
     def build_batch_provider(self, datasplit, architecture, task, snapshot_container):
-        pass
+        self._loss = task.loss
 
     def can_train(self, datasplit):
         return True
