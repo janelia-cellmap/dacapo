@@ -23,7 +23,7 @@ def mongo_db_available():
 
 
 @pytest.fixture(
-    params=[
+    params=(
         "files",
         pytest.param(
             "mongo",
@@ -31,7 +31,7 @@ def mongo_db_available():
                 not mongo_db_available(), reason="MongoDB not available!"
             ),
         ),
-    ]
+    )
 )
 def options(request, tmp_path):
     # TODO: Clean up this fixture. Its a bit clunky to use.
