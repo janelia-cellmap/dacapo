@@ -1,10 +1,13 @@
-from .weights_store import WeightsStore
+from .weights_store import WeightsStore, Weights
+from dacapo.experiments.run import Run
 
 import torch
 
 import json
 from pathlib import Path
 import logging
+from typing import Optional, Union
+
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +21,7 @@ class LocalWeightsStore(WeightsStore):
 
         self.basedir = basedir
 
-    def latest_iteration(self, run):
+    def latest_iteration(self, run: str) -> Optional[int]:
         """Return the latest iteration for which weights are available for the
         given run."""
 
@@ -31,10 +34,10 @@ class LocalWeightsStore(WeightsStore):
 
         return iterations[-1]
 
-    def store_weights(self, run, iteration, remove_old=False):
+    def store_weights(self, run: Run, iteration: int):
         """Store the network weights of the given run."""
 
-        logger.info("Storing weights for run %s, iteration %d", run.name, iteration)
+        logger.warning("Storing weights for run %s, iteration %d", run, iteration)
 
         weights_dir = self.__get_weights_dir(run) / "iterations"
         weights_name = weights_dir / str(iteration)
@@ -42,26 +45,30 @@ class LocalWeightsStore(WeightsStore):
         if not weights_dir.exists():
             weights_dir.mkdir(parents=True, exist_ok=True)
 
-        weights = {
-            "model": run.model.state_dict(),
-            "optimizer": run.optimizer.state_dict(),
-        }
-
-        if remove_old:
-            for checkpoint in list(weights_dir.iterdir()):
-                if int(checkpoint.name) < iteration:
-                    self.remove(run, int(checkpoint.name))
+        weights = Weights(run.model.state_dict(), run.optimizer.state_dict())
 
         torch.save(weights, weights_name)
 
-    def remove(self, run, iteration):
+    def retrieve_weights(self, run: str, iteration: int) -> Weights:
+        """Retrieve the network weights of the given run."""
+
+        logger.info("Retrieving weights for run %s, iteration %d", run, iteration)
+
+        weights_name = self.__get_weights_dir(run) / "iterations" / str(iteration)
+
+        weights: Weights = torch.load(weights_name, map_location="cpu")
+
+        return weights
+
+    def remove(self, run: str, iteration: int):
         weights = self.__get_weights_dir(run) / "iterations" / str(iteration)
         weights.unlink()
 
-    def store_best(self, run, iteration: int, dataset: str, criterion: str):
+    def store_best(self, run: str, iteration: int, dataset: str, criterion: str):
         """
-        Take the weights from run/iteration and store it
-        in run/criterion.
+        Store the best weights in a easy to find location.
+        Symlinks weights from appropriate iteration
+        # TODO: simply store a toml of dataset/criterion -> iteration/parameter id
         """
 
         # must exist since we must read run/iteration weights
@@ -79,35 +86,19 @@ class LocalWeightsStore(WeightsStore):
         with best_weights_json.open("w") as f:
             f.write(json.dumps({"iteration": iteration}))
 
-    def retrieve_best(self, run, criterion):
-        run_name = run if isinstance(run, str) else run.name
+    def retrieve_best(self, run: str, dataset: str, criterion: str) -> int:
 
-        logger.info("Retrieving weights for run %s, criterion %s", run_name, criterion)
+        logger.info("Retrieving weights for run %s, criterion %s", run, criterion)
 
-        weights_name = self.__get_weights_dir(run) / criterion
+        weights_info = json.loads(
+            (self.__get_weights_dir(run) / criterion / f"{dataset}.json")
+            .open("r")
+            .read()
+        )
 
-        weights = torch.load(weights_name, map_location="cpu")
+        return weights_info["iteration"]
 
-        if isinstance(run, str):
-            return weights
-        else:
-            # load the model weights
-            run.model.load_state_dict(weights["model"])
-            run.optimizer.load_state_dict(weights["optimizer"])
-
-    def retrieve_weights(self, run, iteration):
-        """Retrieve the network weights of the given run."""
-
-        logger.info("Retrieving weights for run %s, iteration %d", run.name, iteration)
-
-        weights_name = self.__get_weights_dir(run) / "iterations" / str(iteration)
-
-        weights = torch.load(weights_name, map_location="cpu")
-
-        run.model.load_state_dict(weights["model"])
-        run.optimizer.load_state_dict(weights["optimizer"])
-
-    def __get_weights_dir(self, run):
+    def __get_weights_dir(self, run: Union[str, Run]):
         run = run if isinstance(run, str) else run.name
 
         return Path(self.basedir, run, "checkpoints")
