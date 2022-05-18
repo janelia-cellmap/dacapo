@@ -1,9 +1,10 @@
 from dacapo.store.create_store import create_stats_store
 from ..fixtures import *
 
+from dacapo.experiments import Run
 from dacapo.compute_context import LocalTorch
-from dacapo.store import create_config_store
-from dacapo import train
+from dacapo.store import create_config_store, create_weights_store
+from dacapo.train import train_run
 
 import pytest
 from pytest_lazyfixture import lazy_fixture
@@ -31,16 +32,26 @@ def test_train(
 
     store = create_config_store()
     stats_store = create_stats_store()
+    weights_store = create_weights_store()
 
     # store the configs
 
     store.store_run_config(run_config)
+    run = Run(run_config)
 
     # -------------------------------------
 
     # train
 
-    train(run_config.name, compute_context=compute_context)
+    weights_store.store_weights(run, 0)
+    train_run(run, compute_context=compute_context)
+
+    init_weights = weights_store.retrieve_weights(run.name, 0)
+    final_weights = weights_store.retrieve_weights(run.name, run.train_until)
+
+    for name, weight in init_weights.model.items():
+        weight_diff = (weight - final_weights.model[name]).sum()
+        assert abs(weight_diff) > 1e-5, weight_diff
 
     # assert train_stats and validation_scores are available
 
