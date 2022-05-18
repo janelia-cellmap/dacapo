@@ -3,11 +3,17 @@ from funlib.geometry import Coordinate
 import torch
 
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from dacapo.experiments.architectures.architecture import Architecture
+    from dacapo.experiments.model import Model
+    from dacapo.experiments.datasplits.datasets.arrays import Array
 
 
 class Predictor(ABC):
     @abstractmethod
-    def create_model(self, architecture: torch.nn.Module) -> torch.nn.Module:
+    def create_model(self, architecture: "Architecture") -> "Model":
         """Given a training architecture, create a model for this predictor.
         This is usually done by appending extra layers to the output of the
         architecture to get the output tensor of the architecture into the
@@ -15,7 +21,7 @@ class Predictor(ABC):
         pass
 
     @abstractmethod
-    def create_target(self, gt):
+    def create_target(self, gt: "Array") -> "Array":
         """Create the target array for training, given a ground-truth array.
 
         In general, the target is different from the ground-truth.
@@ -37,7 +43,7 @@ class Predictor(ABC):
         pass
 
     @abstractmethod
-    def create_weight(self, gt, target, mask):
+    def create_weight(self, gt: "Array", target: "Array", mask: "Array") -> "Array":
         """Create the weight array for training, given a ground-truth and
         associated target array.
         """

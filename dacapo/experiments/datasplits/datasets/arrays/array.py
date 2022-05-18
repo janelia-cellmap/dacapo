@@ -76,7 +76,7 @@ class Array(ABC):
         """
         pass
 
-    def __getitem__(self, roi: Roi) -> np.ndarray:
+    def __getitem__(self, roi: Roi) -> np.ndarray[Any, Any]:
         if not self.roi.contains(roi):
             raise ValueError(f"Cannot fetch data from outside my roi: {self.roi}!")
 
@@ -97,7 +97,7 @@ class Array(ABC):
     def _neuroglancer_layer(self):
         pass
 
-    def _slices(self, roi) -> Iterable[slice]:
+    def _slices(self, roi: Roi) -> Iterable[slice]:
         offset = (roi.offset - self.roi.offset) / self.voxel_size
         shape = roi.shape / self.voxel_size
         spatial_slices: Dict[str, slice] = {

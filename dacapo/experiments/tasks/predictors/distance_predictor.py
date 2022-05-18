@@ -250,13 +250,13 @@ class DistancePredictor(Predictor):
 
     def gt_region_for_roi(self, target_spec):
         if self.mask_distances:
-            gt_spec = target_spec
+            gt_spec = target_spec.copy()
             gt_spec.roi = gt_spec.roi.grow(
                 Coordinate((self.max_distance,) * gt_spec.voxel_size.dims),
                 Coordinate((self.max_distance,) * gt_spec.voxel_size.dims),
             ).snap_to_grid(gt_spec.voxel_size, mode="shrink")
         else:
-            gt_spec = target_spec
+            gt_spec = target_spec.copy()
         return gt_spec
 
     def padding(self, gt_voxel_size: Coordinate) -> Coordinate:
