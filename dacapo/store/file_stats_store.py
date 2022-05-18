@@ -47,7 +47,7 @@ class FileStatsStore(StatsStore):
                     )
                 else:
                     # current stats are behind DB--drop DB
-                    logger.warn(
+                    logger.warning(
                         "Overwriting previous training stats for run %s", run_name
                     )
                     self.__delete_training_stats(run_name)
@@ -86,6 +86,9 @@ class FileStatsStore(StatsStore):
 
         return self.__read_validation_iteration_scores(run_name)
 
+    def delete_training_stats(self, run_name: str) -> None:
+        self.__delete_training_stats(run_name)
+
     def __store_training_stats(self, stats, begin, end, run_name):
 
         docs = converter.unstructure(stats.iteration_stats[begin:end])
@@ -113,12 +116,12 @@ class FileStatsStore(StatsStore):
             file_store.unlink()
 
     def __store_validation_iteration_scores(
-        self, validation_scores, begin, end, run_name
-    ):
+        self, validation_scores: ValidationScores, begin: int, end: int, run_name: str
+    ) -> None:
 
         docs = [
             converter.unstructure(scores)
-            for scores in validation_scores.iteration_scores
+            for scores in validation_scores.scores
             if scores.iteration < end
         ]
         for doc in docs:

@@ -1,14 +1,19 @@
-from dacapo.experiments.tasks.evaluators.evaluation_scores import EvaluationScores
-from dacapo.experiments.datasplits.datasets import Dataset
-from dacapo.experiments.tasks.post_processors import PostProcessorParameters
+import xarray as xr
 
 from abc import ABC, abstractmethod
-from typing import Tuple, Dict, Optional, Any
+from typing import Tuple, Dict, Optional, List, TYPE_CHECKING
 import math
 import itertools
 
+if TYPE_CHECKING:
+    from dacapo.experiments.tasks.evaluators.evaluation_scores import EvaluationScores
+    from dacapo.experiments.datasplits.datasets import Dataset
+    from dacapo.experiments.datasplits.datasets.arrays import Array
+    from dacapo.experiments.tasks.post_processors import PostProcessorParameters
+    from dacapo.experiments.validation_scores import ValidationScores
+
 # Custom types for improved readability
-OutputIdentifier = Tuple[Dataset, PostProcessorParameters, str]
+OutputIdentifier = Tuple["Dataset", "PostProcessorParameters", str]
 Iteration = int
 Score = float
 BestScore = Optional[Tuple[Iteration, Score]]
@@ -22,14 +27,10 @@ class Evaluator(ABC):
     """
 
     @abstractmethod
-    def evaluate(self, output_array, evaluation_dataset):
-        """Compare an output dataset against ground-truth from an evaluation
-        dataset.
-
-        The evaluation dataset is a dictionary mapping from ``DataKey`` to
-        ``ArraySource`` or ``GraphSource``.
-
-        Should return an instance of ``EvaluationScores``.
+    def evaluate(
+        self, output_array: "Array", eval_array: "Array"
+    ) -> "EvaluationScores":
+        """Compare an `output_array` against ground-truth `eval_array`
         """
         pass
 
@@ -43,10 +44,10 @@ class Evaluator(ABC):
 
     def is_best(
         self,
-        dataset: Dataset,
-        parameter: PostProcessorParameters,
+        dataset: "Dataset",
+        parameter: "PostProcessorParameters",
         criterion: str,
-        score: EvaluationScores,
+        score: "EvaluationScores",
     ) -> bool:
         """
         Check if the provided score is the best for this dataset/parameter/criterion combo
@@ -63,12 +64,17 @@ class Evaluator(ABC):
             else:
                 return getattr(score, criterion) < previous_best_score
 
-    def set_best(self, validation_scores) -> None:
+    def set_best(self, validation_scores: "ValidationScores") -> None:
         """
         Find the best iteration for each dataset/post_processing_parameter/criterion
         """
         scores = validation_scores.to_xarray()
-        if len(validation_scores.iteration_scores) > 0:
+
+        # type these variables for mypy
+        best_indexes: Optional[xr.DataArray]
+        best_scores: Optional[xr.DataArray]
+
+        if len(validation_scores.scores) > 0:
             best_indexes, best_scores = validation_scores.get_best(
                 scores, dim="iterations"
             )
@@ -81,7 +87,7 @@ class Evaluator(ABC):
         ):
             if not self.store_best(criterion):
                 continue
-            if best_scores is None:
+            if best_scores is None or best_indexes is None:
                 self.best_scores[(dataset, parameters, criterion)] = None
             else:
                 winner_index, winner_score = (
@@ -111,7 +117,7 @@ class Evaluator(ABC):
 
     @property
     @abstractmethod
-    def criteria(self):
+    def criteria(self) -> List[str]:
         """
         A list of all criteria for which a model might be "best". i.e. your
         criteria might be "precision", "recall", and "jaccard". It is unlikely
@@ -140,5 +146,5 @@ class Evaluator(ABC):
 
     @property
     @abstractmethod
-    def score(self) -> EvaluationScores:
+    def score(self) -> "EvaluationScores":
         pass

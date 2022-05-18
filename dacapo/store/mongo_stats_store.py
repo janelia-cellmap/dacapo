@@ -4,9 +4,9 @@ from .converter import converter
 from dacapo.experiments import TrainingStats, TrainingIterationStats
 from dacapo.experiments import ValidationScores, ValidationIterationScores
 from dacapo.experiments.tasks.evaluators import *
-from typing import List
+
 import logging
-import time
+from typing import List, Optional, Dict, Any
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class MongoStatsStore(StatsStore):
         self.__open_collections()
         self.__init_db()
 
-    def store_training_stats(self, run_name, stats):
+    def store_training_stats(self, run_name: str, stats: TrainingStats):
 
         existing_stats = self.__read_training_stats(run_name)
 
@@ -63,11 +63,15 @@ class MongoStatsStore(StatsStore):
             stats, store_from_iteration, stats.trained_until(), run_name
         )
 
-    def retrieve_training_stats(self, run_name, subsample=False):
+    def retrieve_training_stats(
+        self, run_name: str, subsample: bool = False
+    ) -> TrainingStats:
 
         return self.__read_training_stats(run_name, subsample=subsample)
 
-    def store_validation_iteration_scores(self, run_name, scores):
+    def store_validation_iteration_scores(
+        self, run_name: str, scores: ValidationScores
+    ):
 
         existing_iteration_scores = self.__read_validation_iteration_scores(run_name)
 
@@ -90,13 +94,18 @@ class MongoStatsStore(StatsStore):
         )
 
     def retrieve_validation_iteration_scores(
-        self, run_name, subsample=False, validation_interval=None
-    ):
+        self,
+        run_name: str,
+        subsample: bool = False,
+        validation_interval: Optional[int] = None,
+    ) -> List[ValidationIterationScores]:
         return self.__read_validation_iteration_scores(
             run_name, subsample=subsample, validation_interval=validation_interval
         )
 
-    def __store_training_stats(self, stats, begin, end, run_name):
+    def __store_training_stats(
+        self, stats: TrainingStats, begin: int, end: int, run_name: str
+    ) -> None:
 
         docs = converter.unstructure(stats.iteration_stats[begin:end])
         for doc in docs:
@@ -105,22 +114,22 @@ class MongoStatsStore(StatsStore):
         if docs:
             self.training_stats.insert_many(docs)
 
-    def __read_training_stats(self, run_name, subsample=False):
-        # TODO: using the converter to structure the training/validation stats is extremely slow.
-        # (3e-5 seconds to get training stats, 6 seconds to convert)
-        filters = {"run_name": run_name}
+    def __read_training_stats(
+        self, run_name: str, subsample: bool = False
+    ) -> TrainingStats:
+        filters: Dict[str, Any] = {"run_name": run_name}
         if subsample:
             # if possible subsample s.t. we get 1000 iterations
-            max_iteration = list(
+            iterations = list(
                 self.training_stats.find(filters).sort("iteration", -1).limit(1)
             )
-            if len(max_iteration) == 0:
+            if len(iterations) == 0:
                 return TrainingStats()
             else:
-                max_iteration = max_iteration[0]
-            filters["iteration"] = {
-                "$mod": [(max_iteration["iteration"] + 999) // 1000, 0]
-            }
+                max_iteration = iterations[0]
+                filters["iteration"] = {
+                    "$mod": [(max_iteration["iteration"] + 999) // 1000, 0]
+                }
         docs = list(self.training_stats.find(filters))
         if subsample and not docs[-1] == max_iteration:
             docs += [max_iteration]
@@ -128,17 +137,21 @@ class MongoStatsStore(StatsStore):
 
         return stats
 
-    def __delete_training_stats(self, run_name):
+    def __delete_training_stats(self, run_name: str) -> None:
 
         self.training_stats.delete_many({"run_name": run_name})
 
     def __store_validation_iteration_scores(
-        self, validation_scores, begin, end, run_name
-    ):
+        self,
+        validation_scores: ValidationScores,
+        begin: int,
+        end: int,
+        run_name: str,
+    ) -> None:
 
         docs = [
             converter.unstructure(scores)
-            for scores in validation_scores.iteration_scores
+            for scores in validation_scores.scores
             if scores.iteration >= begin and scores.iteration < end
         ]
         for doc in docs:
@@ -148,26 +161,27 @@ class MongoStatsStore(StatsStore):
             self.validation_scores.insert_many(docs)
 
     def __read_validation_iteration_scores(
-        self, run_name, subsample=False, validation_interval=None
-    ):
-        # TODO: using the converter to structure the training/validation stats is extremely slow.
-        # (5e-5 seconds to get validation stats, 3 seconds to convert)
-        filters = {"run_name": run_name}
+        self,
+        run_name: str,
+        subsample: bool = False,
+        validation_interval: Optional[int] = None,
+    ) -> List[ValidationIterationScores]:
+        filters: Dict[str, Any] = {"run_name": run_name}
         if subsample:
             # if possible subsample s.t. we get 1000 iterations
-            max_iteration = list(
+            iterations = list(
                 self.validation_scores.find(filters).sort("iteration", -1).limit(1)
             )
-            if len(max_iteration) == 0:
-                return ValidationScores()
+            if len(iterations) == 0:
+                return []
             else:
-                max_iteration = max_iteration[0]
-            divisor = (max_iteration["iteration"] + 999) // 1000
-            # round divisor down to nearest validation_interval
-            divisor -= divisor % validation_interval
-            # avoid using 0 as a divisor
-            divisor = max(divisor, validation_interval)
-            filters["iteration"] = {"$mod": [divisor, 0]}
+                max_iteration = iterations[0]
+                divisor = (max_iteration["iteration"] + 999) // 1000
+                # round divisor down to nearest validation_interval
+                divisor -= divisor % validation_interval
+                # avoid using 0 as a divisor
+                divisor = max(divisor, validation_interval)
+                filters["iteration"] = {"$mod": [divisor, 0]}
         docs = list(self.validation_scores.find(filters))
         if subsample and not docs[-1] == max_iteration:
             docs += [max_iteration]
@@ -179,14 +193,14 @@ class MongoStatsStore(StatsStore):
             scores = converter.structure(docs, List[ValidationIterationScores])
         return scores
 
-    def delete_validation_scores(self, run_name):
+    def delete_validation_scores(self, run_name: str) -> None:
         self.__delete_validation_scores(run_name)
 
-    def __delete_validation_scores(self, run_name):
+    def __delete_validation_scores(self, run_name: str) -> None:
 
         self.validation_scores.delete_many({"run_name": run_name})
 
-    def delete_training_stats(self, run_name):
+    def delete_training_stats(self, run_name: str) -> None:
         self.__delete_training_stats(run_name)
 
     def __init_db(self):
