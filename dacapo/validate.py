@@ -36,7 +36,7 @@ def validate(
 
     stats_store = create_stats_store()
     run.training_stats = stats_store.retrieve_training_stats(run_name)
-    run.validation_scores.iteration_scores = (
+    run.validation_scores.scores = (
         stats_store.retrieve_validation_iteration_scores(run_name)
     )
 

@@ -45,7 +45,7 @@ def train_run(
 
     stats_store = create_stats_store()
     run.training_stats = stats_store.retrieve_training_stats(run.name)
-    run.validation_scores.iteration_scores = (
+    run.validation_scores.scores = (
         stats_store.retrieve_validation_iteration_scores(run.name)
     )
 
