@@ -32,7 +32,7 @@ class LocalArrayStore(ArrayStore):
         """Get the array identifier for a particular validation prediction."""
 
         container = self.validation_container(run_name).container
-        dataset = f"{iteration}/{dataset.name}/prediction"
+        dataset = f"{iteration}/{dataset}/prediction"
 
         return LocalArrayIdentifier(container, dataset)
 
@@ -42,7 +42,7 @@ class LocalArrayStore(ArrayStore):
         """Get the array identifier for a particular validation output."""
 
         container = self.validation_container(run_name).container
-        dataset = f"{iteration}/{dataset.name}/output/{parameters.id}"
+        dataset = f"{iteration}/{dataset}/output/{parameters}"
 
         return LocalArrayIdentifier(container, dataset)
 
