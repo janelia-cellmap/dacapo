@@ -10,6 +10,7 @@ from dacapo.experiments.tasks.evaluators import *
 from dacapo.experiments.tasks.post_processors import *
 from dacapo.experiments.trainers import *
 from dacapo.experiments.trainers.gp_augments import *
+from dacapo.experiments.starts import *
 
 from funlib.geometry import Coordinate, Roi
 
@@ -29,6 +30,7 @@ def register_hierarchy_hooks(converter):
     converter.register_hierarchy(GraphStoreConfig, cls_fun)
     converter.register_hierarchy(EvaluationScores, cls_fun)
     converter.register_hierarchy(PostProcessorParameters, cls_fun)
+    converter.register_hierarchy(StartConfig, cls_fun)
 
 
 def register_hooks(converter):
