@@ -40,11 +40,11 @@ class ConcatArray(Array):
         for source_array in value.values():
             axes = attrs.get("axes", source_array.axes)
             assert source_array.axes == axes
-            assert axes[0] == "c"
+            assert axes[0] == "c" or "c" not in axes
             attrs["axes"] = axes
             roi = attrs.get("roi", source_array.roi)
-            assert source_array.roi == roi
-            attrs["roi"] = roi
+            assert not source_array.roi.intersect(roi).empty
+            attrs["roi"] = source_array.roi.intersect(roi)
             voxel_size = attrs.get("voxel_size", source_array.voxel_size)
             assert source_array.voxel_size == voxel_size
             attrs["voxel_size"] = voxel_size
@@ -56,7 +56,10 @@ class ConcatArray(Array):
 
     @property
     def axes(self):
-        return self.source_array.axes
+        source_axes = self.source_array.axes
+        if "c" not in source_axes:
+            source_axes = ["c"] + source_axes
+        return source_axes
 
     @property
     def dims(self):
@@ -100,12 +103,15 @@ class ConcatArray(Array):
         ]
         shapes = [array.shape for array in arrays]
         ndims = max([len(shape) for shape in shapes])
-        assert ndims == len(self.axes), f"{self.axes}, {ndims}"
-        shapes = [(1,) * (ndims - len(shape)) + shape for shape in shapes]
+        assert ndims <= len(self.axes), f"{self.axes}, {ndims}"
+        shapes = [(1,) * (len(self.axes) - len(shape)) + shape for shape in shapes]
         for axis_shapes in zip(*shapes):
             assert max(axis_shapes) == min(axis_shapes), f"{shapes}"
         arrays = [array.reshape(shapes[0]) for array in arrays]
-        return np.concatenate(
+        concatenated = np.concatenate(
             arrays,
             axis=0,
         )
+        if concatenated.shape[0] == 1:
+            raise Exception(f"{concatenated.shape}, shapes")
+        return concatenated
