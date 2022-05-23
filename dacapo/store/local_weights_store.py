@@ -57,6 +57,11 @@ class LocalWeightsStore(WeightsStore):
         weights_name = self.__get_weights_dir(run) / "iterations" / str(iteration)
 
         weights: Weights = torch.load(weights_name, map_location="cpu")
+        if not isinstance(weights, Weights):
+            # backwards compatibility
+            weights = Weights(weights["model"], weights["optimizer"])
+
+        return weights
 
         return weights
 
