@@ -30,7 +30,6 @@ def register_hierarchy_hooks(converter):
     converter.register_hierarchy(GraphStoreConfig, cls_fun)
     converter.register_hierarchy(EvaluationScores, cls_fun)
     converter.register_hierarchy(PostProcessorParameters, cls_fun)
-    converter.register_hierarchy(StartConfig, cls_fun)
 
 
 def register_hooks(converter):
