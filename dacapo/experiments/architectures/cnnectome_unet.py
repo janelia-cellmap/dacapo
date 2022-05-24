@@ -30,6 +30,8 @@ class CNNectomeUNet(Architecture):
 
     @property
     def eval_shape_increase(self):
+        if self._eval_shape_increase is None:
+            return super().eval_shape_increase
         return self._eval_shape_increase
 
     def module(self):

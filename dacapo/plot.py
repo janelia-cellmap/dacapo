@@ -14,6 +14,7 @@ import numpy as np
 from collections import namedtuple
 import time
 import itertools
+from typing import List
 
 
 def smooth_values(a, n, stride=1):
@@ -40,7 +41,9 @@ def smooth_values(a, n, stride=1):
     return m, s
 
 
-def get_runs_info(run_config_names, validation_score_names, plot_losses):
+def get_runs_info(
+    run_config_names: List[str], validation_score_names: List[str], plot_losses: bool
+) -> namedtuple:
 
     config_store = create_config_store()
     stats_store = create_stats_store()
@@ -67,8 +70,8 @@ def get_runs_info(run_config_names, validation_score_names, plot_losses):
         t1 = time.time()
         run_config = config_store.retrieve_run_config(run_config_name)
         validation_scores = Run.get_validation_scores(run_config)
-        validation_scores.iteration_scores = (
-            stats_store.retrieve_validation_iteration_scores(run_config_name)
+        validation_scores.scores = stats_store.retrieve_validation_iteration_scores(
+            run_config_name
         )
         run = RunInfo(
             run_config_name,
@@ -195,11 +198,16 @@ def plot_runs(
             iterations = [stat.iteration for stat in run.training_stats.iteration_stats]
             losses = [stat.loss for stat in run.training_stats.iteration_stats]
 
+            print(F"Run {run.name} has {len(losses)} iterations")
+
             if run.plot_loss:
                 include_loss_figure = True
                 smooth = int(np.maximum(len(iterations) / 2500, 1))
+                print(f"smoothing: {smooth}")
                 x, _ = smooth_values(iterations, smooth, stride=smooth)
                 y, s = smooth_values(losses, smooth, stride=smooth)
+                print(x, y)
+                print(f"plotting {(len(x), len(y))} points")
                 source = bokeh.plotting.ColumnDataSource(
                     {
                         "iteration": x,
@@ -238,7 +246,7 @@ def plot_runs(
                 dataset_data = validation_score_data.sel(datasets=dataset)
                 include_validation_figure = True
                 x = [
-                    score.iteration for score in run.validation_scores.iteration_scores
+                    score.iteration for score in run.validation_scores.scores
                 ]
                 source_dict = {
                     "iteration": x,
@@ -331,6 +339,7 @@ def plot_runs(
 
     print("PLOTTING DONE")
     if return_json:
+        print("Returning JSON")
         return json.dumps(json_item(plot, "myplot"))
     else:
         bokeh.plotting.output_file("performance_plots.html")

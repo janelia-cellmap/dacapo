@@ -55,9 +55,13 @@ class GammaAugment(BatchFilter):
         # normalize a
         a_min = a.min()
         a_max = a.max()
-        # apply gamma noise
-        a = (a - a_min) / (a_max - a_min)
-        noisy_a = a**gamma
-        # undo normalization
-        noisy_a = a * (a_max - a_min) + a_min
-        return noisy_a
+        if abs(a_min - a_max) > 1e-3:
+            # apply gamma noise
+            a = (a - a_min) / (a_max - a_min)
+            noisy_a = a**gamma
+            # undo normalization
+            noisy_a = a * (a_max - a_min) + a_min
+            return noisy_a
+        else:
+            logger.warning("Skipping gamma noise since denominator would be too small")
+            return a

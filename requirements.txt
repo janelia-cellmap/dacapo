@@ -10,6 +10,9 @@ neuroglancer >= 2.22
 torch >= 1.9.1
 fibsem_tools >= 0.2.11
 attrs >= 21.2.0
+bokeh==2.3.1
+jinja2==2.11.3
+MarkupSafe==2.0.1
 
 git+https://github.com/funkelab/daisy
 git+https://github.com/funkelab/funlib.math@0c623f71c083d33184cac40ef7b1b995216be8ef

@@ -46,6 +46,8 @@ class DaCapoArraySource(gp.BatchProvider):
         if "c" not in self.array.axes:
             # add a channel dimension
             data = np.expand_dims(data, 0)
+        if np.any(np.isnan(data)):
+            raise ValueError("INPUT DATA CAN'T BE NAN")
         output[self.key] = gp.Array(data, spec=spec)
 
         timing_provide.stop()

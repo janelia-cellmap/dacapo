@@ -16,7 +16,7 @@ class DataSplit(ABC):
 
     def _neuroglancer_link(self):
         options = Options.instance()
-        store_path = Path(options.runs_base_dir)
+        store_path = Path(options.runs_base_dir).expanduser()
 
         viewer = neuroglancer.Viewer()
         with viewer.txn() as s:

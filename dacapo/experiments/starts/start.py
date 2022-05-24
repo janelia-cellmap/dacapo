@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Iterable
+from typing import Iterable, List
 import logging
 
 logger = logging.getLogger(__file__)
@@ -14,7 +14,11 @@ class Start(ABC):
         from dacapo.store.create_store import create_weights_store
 
         weights_store = create_weights_store()
-        weights = weights_store.retrieve_best(self.run, self.criterion)
+        weights = weights_store._retrieve_weights(self.run, self.criterion)
         logger.info(f"loading weights from run {self.run}, criterion: {self.criterion}")
-        # load the model weights
-        model.load_state_dict(weights["model"])
+        
+        # load the model weights (taken from torch load_state_dict source)
+        try:
+            model.load_state_dict(weights.model)
+        except RuntimeError as e:
+            logger.warning(e)

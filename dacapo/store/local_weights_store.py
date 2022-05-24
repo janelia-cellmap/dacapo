@@ -63,6 +63,15 @@ class LocalWeightsStore(WeightsStore):
 
         return weights
 
+    def _retrieve_weights(self, run: str, key: str) -> Weights:
+
+        weights_name = self.__get_weights_dir(run) / key
+
+        weights: Weights = torch.load(weights_name, map_location="cpu")
+        if not isinstance(weights, Weights):
+            # backwards compatibility
+            weights = Weights(weights["model"], weights["optimizer"])
+
         return weights
 
     def remove(self, run: str, iteration: int):

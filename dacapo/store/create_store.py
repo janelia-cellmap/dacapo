@@ -23,7 +23,7 @@ def create_config_store():
         db_name = options.mongo_db_name
         return MongoConfigStore(db_host, db_name)
     elif store_type == "files":
-        store_path = Path(options.runs_base_dir)
+        store_path = Path(options.runs_base_dir).expanduser()
         return FileConfigStore(store_path / "configs")
 
 
@@ -41,7 +41,7 @@ def create_stats_store():
         db_name = options.mongo_db_name
         return MongoStatsStore(db_host, db_name)
     elif store_type == "files":
-        store_path = Path(options.runs_base_dir)
+        store_path = Path(options.runs_base_dir).expanduser()
         return FileStatsStore(store_path / "stats")
 
 
@@ -51,7 +51,7 @@ def create_weights_store():
     options = Options.instance()
 
     # currently, only the LocalWeightsStore is supported
-    base_dir = options.runs_base_dir
+    base_dir = Path(options.runs_base_dir).expanduser()
     return LocalWeightsStore(base_dir)
 
 
@@ -61,5 +61,5 @@ def create_array_store():
     options = Options.instance()
 
     # currently, only the LocalArrayStore is supported
-    base_dir = options.runs_base_dir
+    base_dir = Path(options.runs_base_dir).expanduser()
     return LocalArrayStore(base_dir)

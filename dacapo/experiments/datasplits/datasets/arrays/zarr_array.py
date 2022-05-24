@@ -194,17 +194,17 @@ class ZarrArray(Array):
     def _neuroglancer_source(self):
         source_type = "n5" if self.file_name.name.endswith(".n5") else "zarr"
         options = Options.instance()
-        base_dir = Path(options.runs_base_dir)
+        base_dir = Path(options.runs_base_dir).expanduser()
         try:
             relpath = self.file_name.relative_to(base_dir)
         except ValueError:
-            relpath = self.file_name.name
+            relpath = str(self.file_name.absolute())
         symlink_path = f"data_symlinks/{relpath}"
 
         # Check if data is symlinked to a servable location
         if not (base_dir / symlink_path).exists():
             if not (base_dir / symlink_path).parent.exists():
-                (base_dir / symlink_path).parent.mkdir()
+                (base_dir / symlink_path).parent.mkdir(parents=True)
             (base_dir / symlink_path).symlink_to(Path(self.file_name))
 
         dataset = self.dataset
@@ -221,13 +221,23 @@ class ZarrArray(Array):
             if "scales" in dataset_parent_attributes:
                 dataset = "/".join(self.dataset.split("/")[:-1])
 
+        file_server = options.file_server
+        try:
+            file_server = file_server.format(
+                username=options.file_server_user, password=options.file_server_pass
+            )
+        except RuntimeError as e:
+            # if options doesn't have a file_server user or password simply continue
+            # without authentications
+            pass
         source = {
-            "url": f"{source_type}://{options.file_server}/{symlink_path}/{dataset}",
+            "url": f"{source_type}://{file_server}/{symlink_path}/{dataset}",
             "transform": {
                 "matrix": self._transform_matrix(),
                 "outputDimensions": self._output_dimensions(),
             },
         }
+        logger.warning(source)
         return source
 
     def _neuroglancer_layer(self) -> Tuple[neuroglancer.ImageLayer, Dict[str, Any]]:
@@ -253,6 +263,15 @@ class ZarrArray(Array):
                 matrix = [[1] + [0] * (self.dims + 1)] + [[0] + row for row in matrix]
             return matrix
         else:
+            offset = self.roi.offset[::-1]
+            voxel_size = self.voxel_size[::-1]
+            matrix = [
+                [0] * (self.dims - i - 1) + [1] + [0] * i + [off]
+                for i, (vox, off) in enumerate(zip(voxel_size[::-1], offset[::-1]))
+            ]
+            if "c" in self.axes:
+                matrix = [[1] + [0] * (self.dims + 1)] + [[0] + row for row in matrix]
+            return matrix
             return [[0] * i + [1] + [0] * (self.dims - i) for i in range(self.dims)]
 
     def _output_dimensions(self) -> Dict[str, Tuple[float, str]]:
@@ -266,8 +285,8 @@ class ZarrArray(Array):
             return spatial_dimensions
         else:
             return {
-                dim: (vox * 1e-9, "m")
-                for dim, vox in zip(self.spatial_axes, self.voxel_size)
+                dim: (1e-9, "m")
+                for dim, vox in zip(self.spatial_axes[::-1], self.voxel_size[::-1])
             }
 
     def _source_name(self) -> str:

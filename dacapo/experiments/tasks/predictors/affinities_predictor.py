@@ -85,14 +85,14 @@ class AffinitiesPredictor(Predictor):
             label_data = label_data[0]
         else:
             axes = ["c"] + axes
-        affinities = seg_to_affgraph(label_data, self.neighborhood)
+        affinities = seg_to_affgraph(label_data, self.neighborhood).astype(np.float32)
         if self.lsds:
             descriptors = self.extractor(gt.voxel_size).get_descriptors(
                 segmentation=label_data,
                 voxel_size=gt.voxel_size,
             )
             return NumpyArray.from_np_array(
-                np.concatenate([affinities, descriptors], axis=0),
+                np.concatenate([affinities, descriptors], axis=0, dtype=np.float32),
                 gt.roi,
                 gt.voxel_size,
                 axes,

@@ -45,7 +45,10 @@ class MongoConfigStore(ConfigStore):
     def retrieve_run_config(self, run_name):
 
         run_doc = self.runs.find_one({"name": run_name}, projection={"_id": False})
-        return converter.structure(run_doc, RunConfig)
+        try:
+            return converter.structure(run_doc, RunConfig)
+        except TypeError as e:
+            raise TypeError(f"Could not structure run: {run_name} as RunConfig!") from e
 
     def delete_run_config(self, run_name):
         self.runs.delete_one({"name": run_name})
