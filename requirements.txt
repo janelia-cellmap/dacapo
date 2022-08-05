@@ -1,23 +1,5 @@
-numpy >= 1.22.2
-pyyaml >= 6.0
-zarr >= 2.10.3
-cattrs >= 1.8.0
-pymongo >= 3.12.0
-tqdm >= 4.62.3
-simpleitk >= 2.1.1
-lazy-property >= 0.0.1
-neuroglancer >= 2.22
-torch >= 1.9.1
-fibsem_tools >= 0.2.11
-attrs >= 21.2.0
-bokeh==2.3.1
-MarkupSafe==2.0.1
-
-git+https://github.com/funkelab/daisy
-git+https://github.com/funkelab/funlib.math@0c623f71c083d33184cac40ef7b1b995216be8ef
-git+https://github.com/pattonw/funlib.evaluate
-git+https://github.com/funkelab/funlib.geometry@cf30e4d74eb860e46de40533c4f8278dc25147b1
-git+https://github.com/cremi/cremi_python@python3
-git+https://github.com/funkey/gunpowder@v1.3-dev
-
-git+https://github.com/pattonw/lsd@no-convenience-imports
+black
+mypy
+pytest
+pytest-cov
+pytest-lazy-fixture
