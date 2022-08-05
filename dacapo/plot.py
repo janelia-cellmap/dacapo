@@ -42,7 +42,7 @@ def smooth_values(a, n, stride=1):
 
 
 def get_runs_info(
-    run_config_names: List[str], validation_score_names: List[str], plot_losses: bool
+    run_config_names: List[str], validation_score_names: List[str], plot_losses: List[bool]
 ) -> namedtuple:
 
     config_store = create_config_store()

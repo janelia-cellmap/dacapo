@@ -9,6 +9,12 @@ import numpy as np
 class NumpyArray(Array):
     """This is just a wrapper for a numpy array to make it fit the DaCapo Array interface."""
 
+    _data: np.ndarray
+    _dtype: np.dtype
+    _roi: Roi
+    _voxel_size: Coordinate
+    _axes: list[str]
+
     def __init__(self, array_config):
         raise RuntimeError("Numpy Array cannot be built from a config file")
 

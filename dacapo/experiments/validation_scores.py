@@ -164,11 +164,11 @@ class ValidationScores:
                             )
                         )
                 best_indexes, best_scores = zip(*criteria_bests)
-                best_indexes, best_scores = (
+                da_best_indexes, da_best_scores = (
                     xr.concat(best_indexes, dim=data.coords["criteria"]),
                     xr.concat(best_scores, dim=data.coords["criteria"]),
                 )
-                return (best_indexes, best_scores)
+                return (da_best_indexes, da_best_scores)
             else:
                 if self.evaluation_scores.higher_is_better(
                     data.coords["criteria"].item()
