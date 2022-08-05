@@ -31,6 +31,7 @@ RunInfo = namedtuple(
     ],
 )
 
+
 def smooth_values(a, n, stride=1):
 
     a = np.array(a)
@@ -64,7 +65,6 @@ def get_runs_info(
     config_store = create_config_store()
     stats_store = create_stats_store()
     runs = []
-
 
     for run_config_name, validation_score_name, plot_loss in zip(
         run_config_names, validation_score_names, plot_losses
