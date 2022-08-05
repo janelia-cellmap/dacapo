@@ -1,4 +1,8 @@
-from dacapo.experiments.tasks import DistanceTaskConfig, DummyTaskConfig, OneHotTaskConfig
+from dacapo.experiments.tasks import (
+    DistanceTaskConfig,
+    DummyTaskConfig,
+    OneHotTaskConfig,
+)
 import pytest
 
 

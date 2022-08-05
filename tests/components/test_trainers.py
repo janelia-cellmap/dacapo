@@ -6,7 +6,6 @@ import pytest
 from pytest_lazyfixture import lazy_fixture
 
 
-
 @pytest.mark.parametrize(
     "trainer_config",
     [

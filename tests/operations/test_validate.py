@@ -51,4 +51,4 @@ def test_validate(
 
     # test validating weights that don't exist
     with pytest.raises(FileNotFoundError):
-        validate(run_config.name, 2, compute_context=compute_context)    
+        validate(run_config.name, 2, compute_context=compute_context)
