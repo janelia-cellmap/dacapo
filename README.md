@@ -3,7 +3,7 @@
 ![tests](https://github.com/pattonw/dacapo/actions/workflows/tests.yaml/badge.svg)
 ![black](https://github.com/pattonw/dacapo/actions/workflows/black.yaml/badge.svg)
 ![mypy](https://github.com/pattonw/dacapo/actions/workflows/mypy.yaml/badge.svg)
-[![docs](https://readthedocs.org/projects/dacapo/badge/?version=latest&style=plastic)](https://dacapo.readthedocs.io/en/latest/)
+[![docs](https://readthedocs.org/projects/dacapo/badge/?version=latest&style=flat)](https://dacapo.readthedocs.io/en/latest/)
 
 A framework for easy application of establed machine learning techniques on large, multi-dimensional images.
 
