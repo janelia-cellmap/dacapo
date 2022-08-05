@@ -16,4 +16,4 @@ jobs:
       - name: mypy
         run: |
           pip install mypy
-          mypy dacapo --config-file ./mypy.ini
+          mypy dacapo
