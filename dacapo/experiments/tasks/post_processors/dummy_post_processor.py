@@ -6,6 +6,7 @@ import zarr
 
 from typing import Iterable
 
+
 class DummyPostProcessor(PostProcessor):
     def __init__(self, detection_threshold: float):
         self.detection_threshold = detection_threshold

@@ -198,7 +198,7 @@ def plot_runs(
             iterations = [stat.iteration for stat in run.training_stats.iteration_stats]
             losses = [stat.loss for stat in run.training_stats.iteration_stats]
 
-            print(F"Run {run.name} has {len(losses)} iterations")
+            print(f"Run {run.name} has {len(losses)} iterations")
 
             if run.plot_loss:
                 include_loss_figure = True
@@ -245,9 +245,7 @@ def plot_runs(
             for dataset in run.validation_scores.datasets:
                 dataset_data = validation_score_data.sel(datasets=dataset)
                 include_validation_figure = True
-                x = [
-                    score.iteration for score in run.validation_scores.scores
-                ]
+                x = [score.iteration for score in run.validation_scores.scores]
                 source_dict = {
                     "iteration": x,
                     "task": [run.task] * len(x),

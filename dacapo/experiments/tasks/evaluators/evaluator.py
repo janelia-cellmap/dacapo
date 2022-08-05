@@ -30,8 +30,7 @@ class Evaluator(ABC):
     def evaluate(
         self, output_array: "Array", eval_array: "Array"
     ) -> "EvaluationScores":
-        """Compare an `output_array` against ground-truth `eval_array`
-        """
+        """Compare an `output_array` against ground-truth `eval_array`"""
         pass
 
     @property

@@ -45,8 +45,8 @@ def train_run(
 
     stats_store = create_stats_store()
     run.training_stats = stats_store.retrieve_training_stats(run.name)
-    run.validation_scores.scores = (
-        stats_store.retrieve_validation_iteration_scores(run.name)
+    run.validation_scores.scores = stats_store.retrieve_validation_iteration_scores(
+        run.name
     )
 
     trained_until = run.training_stats.trained_until()
@@ -158,7 +158,9 @@ def train_run(
 
             # If this is not a validation iteration or final iteration, skip validation
             no_its = iteration_stats is None  # No training steps run
-            validation_it = (iteration_stats.iteration + 1) % run.validation_interval == 0
+            validation_it = (
+                iteration_stats.iteration + 1
+            ) % run.validation_interval == 0
             final_it = trained_until >= run.train_until
             if no_its or (not validation_it and not final_it):
                 stats_store.store_training_stats(run.name, run.training_stats)

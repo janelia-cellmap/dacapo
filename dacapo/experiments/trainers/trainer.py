@@ -1,5 +1,5 @@
 import torch
-    
+
 from abc import ABC, abstractmethod
 from typing import List, Iterator, TYPE_CHECKING
 
@@ -9,7 +9,6 @@ if TYPE_CHECKING:
     from dacapo.experiments.tasks.task import Task
     from dacapo.experiments.training_iteration_stats import TrainingIterationStats
     from dacapo.store.array_store import LocalContainerIdentifier
-
 
 
 class Trainer(ABC):

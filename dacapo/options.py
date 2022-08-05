@@ -11,6 +11,7 @@ options_files = [
     Path(expanduser("~/.config/dacapo/dacapo.yaml")),
 ]
 
+
 def parse_options():
     for path in options_files:
 

@@ -4,6 +4,7 @@ from .conversion_hooks import register_hooks
 
 from typing import Optional
 
+
 class TypedConverter(Converter):
     """A converter that stores and retrieves type information for selected
     class hierarchies. Used to reconstruct a concrete class from unstructured

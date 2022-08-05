@@ -52,9 +52,7 @@ class ValidationScores:
 
     def delete_after(self, iteration: int) -> None:
 
-        self.scores = [
-            scores for scores in self.scores if scores.iteration < iteration
-        ]
+        self.scores = [scores for scores in self.scores if scores.iteration < iteration]
 
     def validated_until(self) -> int:
         """The number of iterations validated for (the maximum iteration plus
@@ -103,8 +101,7 @@ class ValidationScores:
             dims=("iterations", "datasets", "parameters", "criteria"),
             coords={
                 "iterations": [
-                    iteration_score.iteration
-                    for iteration_score in self.scores
+                    iteration_score.iteration for iteration_score in self.scores
                 ],
                 "datasets": self.datasets,
                 "parameters": self.parameters,

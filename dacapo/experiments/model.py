@@ -16,6 +16,7 @@ class Model(torch.nn.Module):
     like BCELossWithLogits, since you want to avoid applying softmax while training,
     but apply it during evaluation.
     """
+
     num_out_channels: int
     num_in_channels: int
 
@@ -53,7 +54,9 @@ class Model(torch.nn.Module):
 
         return self.__get_output_shape(input_shape, self.num_in_channels)
 
-    def __get_output_shape(self, input_shape: Coordinate, in_channels: int) -> Tuple[int, Coordinate]:
+    def __get_output_shape(
+        self, input_shape: Coordinate, in_channels: int
+    ) -> Tuple[int, Coordinate]:
 
         device = torch.device("cpu")
         for parameter in self.parameters():
