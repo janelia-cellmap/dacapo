@@ -14,8 +14,22 @@ import numpy as np
 from collections import namedtuple
 import time
 import itertools
-from typing import List
+from typing import List, NamedTuple
 
+RunInfo = namedtuple(
+    "RunInfo",
+    [
+        "name",
+        "task",
+        "architecture",
+        "trainer",
+        "datasplit",
+        "training_stats",
+        "validation_scores",
+        "validation_score_name",
+        "plot_loss",
+    ],
+)
 
 def smooth_values(a, n, stride=1):
 
@@ -45,26 +59,12 @@ def get_runs_info(
     run_config_names: List[str],
     validation_score_names: List[str],
     plot_losses: List[bool],
-) -> namedtuple:
+) -> List[RunInfo]:
 
     config_store = create_config_store()
     stats_store = create_stats_store()
     runs = []
 
-    RunInfo = namedtuple(
-        "run_info",
-        [
-            "name",
-            "task",
-            "architecture",
-            "trainer",
-            "datasplit",
-            "training_stats",
-            "validation_scores",
-            "validation_score_name",
-            "plot_loss",
-        ],
-    )
 
     for run_config_name, validation_score_name, plot_loss in zip(
         run_config_names, validation_score_names, plot_losses
