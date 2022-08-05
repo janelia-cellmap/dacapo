@@ -16,4 +16,6 @@ jobs:
       - name: mypy
         run: |
           pip install mypy
+          pip install -r requirements.txt
+          pip install .
           mypy dacapo
