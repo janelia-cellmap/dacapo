@@ -24,7 +24,7 @@ setup(
         "fibsem_tools",
         "attrs",
         "bokeh",
-        "daisy @ git+https://github.com/funkelab/daisy",
+        "daisy @ git+https://github.com/pattonw/daisy@loosen-dependency-requirements",
         "funlib.math @ git+https://github.com/funkelab/funlib.math",
         "funlib.evaluate @ git+https://github.com/pattonw/funlib.evaluate",
         "funlib.geometry @ git+https://github.com/funkelab/funlib.geometry",
