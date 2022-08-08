@@ -2,8 +2,8 @@ default:
 	pip install .
 
 install-dev:
-	pip install -r requirements.txt
 	pip install -e .
+	pip install --upgrade -r requirements-dev.txt
 
 .PHONY: tests
 tests:
