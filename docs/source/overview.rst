@@ -33,7 +33,7 @@ Many machine learning experiments can be broken down into a few major components
   1. **DataSplit**: Where can you find your data? What format is it in? Does it need
   to be normalized? What data do you want to use for validation?
   
-  2. **Architecture**: Do you want to use a :class:`dacapo.experiments.architectures.UNet`?
+  2. **Architecture**: Do you want to use a :class:`dacapo.experiments.architectures.CNNectomeUNet`?
   How much do you want to downsample? How many convolutional layers do you want?
   All of these decisions are encoded into the
   :ref:`ArchitectureConfig<spec_api_architectureconfig>`.
