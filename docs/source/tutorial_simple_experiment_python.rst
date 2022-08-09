@@ -17,9 +17,7 @@ a *3D U-Net*.
 Installation
 ^^^^^^^^^^^^
 
-First, follow the installation
-guide:
-`pip install dacapo`
+First, follow the :ref:`installation guide<sec_install>`.
 
 Data Storage
 ^^^^^^^^^^^^

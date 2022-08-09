@@ -17,14 +17,8 @@ a *3D U-Net*.
 Installation
 ^^^^^^^^^^^^
 
-First, follow the installation
-guide:
-
-`pip install dacapo`
-
-Also install the dashboard:
-
-`pip install dacapo-dashboard`
+First, follow the :ref:`installation guide<sec_install>`. Make sure to
+install the optional gui.
 
 Data Storage
 ^^^^^^^^^^^^
