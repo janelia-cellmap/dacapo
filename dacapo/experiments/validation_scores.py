@@ -109,30 +109,6 @@ class ValidationScores:
             },
         )
 
-    def best(self, array: xr.DataArray) -> List[Optional[xr.DataArray]]:
-        """
-        For each criterion in the criteria dimension, return the best value.
-        May return None if there is no best.
-        """
-        criterion_bests: List[Optional[xr.DataArray]] = []
-        for criterion in array.coords["criteria"].values:
-            sub_array = array.sel(criteria=criterion)
-            result = sub_array.where(sub_array == sub_array.max(), drop=True).squeeze()
-            if result.size == 0:
-                criterion_bests.append(None)
-            if result.size == 1:
-                criterion_bests.append(result)
-            else:
-                for coord in itertools.product(
-                    *[coords.values for coords in result.coords]
-                ):
-                    current = result.sel(
-                        **{d: [c] for d, c in zip(result.coords.keys(), coord)}
-                    )
-                    if current.value != float("nan"):
-                        criterion_bests.append(current)
-        return criterion_bests
-
     def get_best(
         self, data: xr.DataArray, dim: str
     ) -> Tuple[xr.DataArray, xr.DataArray]:
