@@ -9,9 +9,11 @@
 *.cpp
 *.so
 *.coverage
+dist
 build
 dacapo.yaml
 
 # vscode stuff
 .vscode
 .mypy_cache
+
