@@ -1,7 +1,8 @@
 name: Publish
 
 on:
-  deployment
+  push:
+    tags: "*"
 
 jobs:
   build-n-publish:
