@@ -3,7 +3,7 @@
 [![tests](https://github.com/funkelab/dacapo/actions/workflows/tests.yaml/badge.svg)](https://github.com/funkelab/dacapo/actions/workflows/tests.yaml)
 [![black](https://github.com/funkelab/dacapo/actions/workflows/black.yaml/badge.svg)](https://github.com/funkelab/dacapo/actions/workflows/black.yaml)
 [![mypy](https://github.com/funkelab/dacapo/actions/workflows/mypy.yaml/badge.svg)](https://github.com/funkelab/dacapo/actions/workflows/mypy.yaml)
-[![docs](https://github.com/funkelab/dacapo/actions/workflows/docs.yaml/badge.svg)](https://github.com/funkelab/dacapo/actions/workflows/docs.yaml)
+[![docs](https://github.com/funkelab/dacapo/actions/workflows/docs.yaml/badge.svg)](https://funkelab.github.io/dacapo/)
 
 A framework for easy application of establed machine learning techniques on large, multi-dimensional images.
 
