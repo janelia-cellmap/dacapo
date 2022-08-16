@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="dacapo",
+    name="dacapo-ml",
     version="0.1",
     url="https://github.com/funkelab/dacapo",
     author="Jan Funke, Will Patton",
