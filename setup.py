@@ -2,6 +2,9 @@ from setuptools import setup, find_packages
 
 setup(
     name="dacapo-ml",
+    description="Framework for easy composition of volumetric machine learning jobs.",
+    long_description=open('README.md', 'r').read(),
+    long_description_content_type='text/markdown',
     version="0.1",
     url="https://github.com/funkelab/dacapo",
     author="Jan Funke, Will Patton",
