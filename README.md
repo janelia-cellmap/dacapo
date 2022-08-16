@@ -1,9 +1,9 @@
 ![DaCapo](docs/source/_static/dacapo.svg)
 
-[![tests](https://github.com/pattonw/dacapo/actions/workflows/tests.yaml/badge.svg)](https://github.com/pattonw/dacapo/actions/workflows/tests.yaml)
-[![black](https://github.com/pattonw/dacapo/actions/workflows/black.yaml/badge.svg)](https://github.com/pattonw/dacapo/actions/workflows/black.yaml)
-[![mypy](https://github.com/pattonw/dacapo/actions/workflows/mypy.yaml/badge.svg)](https://github.com/pattonw/dacapo/actions/workflows/mypy.yaml)
-[![docs](https://readthedocs.org/projects/dacapo/badge/?version=latest&style=flat)](https://dacapo.readthedocs.io/en/latest/)
+[![tests](https://github.com/funkelab/dacapo/actions/workflows/tests.yaml/badge.svg)](https://github.com/funkelab/dacapo/actions/workflows/tests.yaml)
+[![black](https://github.com/funkelab/dacapo/actions/workflows/black.yaml/badge.svg)](https://github.com/funkelab/dacapo/actions/workflows/black.yaml)
+[![mypy](https://github.com/funkelab/dacapo/actions/workflows/mypy.yaml/badge.svg)](https://github.com/funkelab/dacapo/actions/workflows/mypy.yaml)
+[![docs](https://github.com/funkelab/dacapo/actions/workflows/docs.yaml/badge.svg)](https://github.com/funkelab/dacapo/actions/workflows/docs.yaml)
 
 A framework for easy application of establed machine learning techniques on large, multi-dimensional images.
 
