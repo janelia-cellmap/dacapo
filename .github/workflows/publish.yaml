@@ -1,14 +1,7 @@
 name: Publish
 
 on:
-  workflow_run:
-    workflows:
-      - Python Black
-      - Pages
-      - Python mypy
-      - Test
-    types:
-      - completed
+  deployment
 
 jobs:
   build-n-publish:
