@@ -3,7 +3,7 @@ name: Python mypy
 on: [push, pull_request]
 
 jobs:
-  lint:
+  static-analysis:
     name: Python mypy
     runs-on: ubuntu-latest
     steps:

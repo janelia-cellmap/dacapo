@@ -4,8 +4,7 @@ on:
   push:
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
