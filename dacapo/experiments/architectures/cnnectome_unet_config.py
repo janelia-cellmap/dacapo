@@ -10,8 +10,11 @@ from typing import List, Optional
 
 @attr.s
 class CNNectomeUNetConfig(ArchitectureConfig):
-    """This is just a dummy architecture config used for testing. None of the
-    attributes have any particular meaning."""
+    """This class configures the CNNectomeUNet based on
+    https://github.com/saalfeldlab/CNNectome/blob/master/CNNectome/networks/unet_class.py
+    
+    Includes support for super resolution via the upsampling factors.
+    """
 
     architecture_type = CNNectomeUNet
 

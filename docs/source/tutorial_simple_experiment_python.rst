@@ -252,6 +252,7 @@ Finally your job should be running. The full script to run this tutorial is
 provided here:
 
 `dacapo.yaml`:
+
 .. code-block:: yaml
 
     mongodbhost: mongodb://dbuser:dbpass@dburl:dbport/
@@ -260,6 +261,7 @@ provided here:
 
 
 `train.py`:
+
 .. code-block:: python
 
     import dacapo

@@ -9,7 +9,7 @@ from typing import Dict, Any
 
 
 class ConcatArray(Array):
-    """This is a wrapper around other `source_array`s that concatenates
+    """This is a wrapper around other `source_arrays` that concatenates
     them along the channel dimension."""
 
     def __init__(self, array_config):

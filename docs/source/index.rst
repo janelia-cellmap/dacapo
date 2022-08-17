@@ -14,7 +14,6 @@ Welcome to DaCapo's documentation!
   install
   api
   tutorial_simple_experiment_python
-  tutorial_simple_experiment_dashboard
 
 Indices and tables
 ==================
