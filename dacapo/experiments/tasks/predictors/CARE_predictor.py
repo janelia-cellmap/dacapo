@@ -1,7 +1,7 @@
 from .predictor import Predictor
 from dacapo.experiments import Model
-from dacapo.experiments.arraytypes import IntensitiesArray
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+# from dacapo.experiments.arraytypes import ZarrArray
+from dacapo.experiments.datasplits.datasets.arrays import NumpyArray, ZarrArray
 
 from funlib.geometry import Coordinate  # TODO: pip install
 
@@ -10,25 +10,33 @@ import torch
 
 
 class CAREPredictor(Predictor):
-    def __init__(self, embedding_dims):
-        self.embedding_dims = embedding_dims
+    def __init__(self, num_channels):
+        self.num_channels = num_channels
 
     def create_model(self, architecture):
-        # edit architecture in MODEL
-        head = torch.nn.Conv3d(
-            architecture.num_out_channels, self.embedding_dims, kernel_size=3
-        )
+        if self.dims == 2:
+            head = torch.nn.Conv2d(
+                architecture.num_out_channels, self.num_channels, kernel_size=1
+            )
+        elif self.dims == 3:
+            head = torch.nn.Conv3d(
+                architecture.num_out_channels, self.num_channels, kernel_size=1
+            )
+        else:
+            raise NotImplementedError(
+                f"CAREPredictor not implemented for {self.dims} dimensions"
+            )
 
         return Model(architecture, head)
 
     def create_target(self, gt):
-        # zeros
-        return NumpyArray.from_np_array(
-            np.zeros((self.embedding_dims,) + gt.data.shape[-gt.dims :]),
-            gt.roi,
-            gt.voxel_size,
-            ["c"] + gt.axes,
-        )
+        # return NumpyArray.from_np_array(
+        #     np.zeros((self.num_channels,) + gt.data.shape[-gt.dims :]),
+        #     gt.roi,
+        #     gt.voxel_size,
+        #     ["c"] + gt.axes,
+        # )
+        return gt
 
     def create_weight(self, gt):
         # ones
@@ -41,7 +49,7 @@ class CAREPredictor(Predictor):
 
     @property
     def output_array_type(self):
-        return IntensitiesArray(self.embedding_dims)
+        return ZarrArray(self.num_channels)
     
     def gt_region_for_roi(self, target_spec):
         if self.mask_distances:

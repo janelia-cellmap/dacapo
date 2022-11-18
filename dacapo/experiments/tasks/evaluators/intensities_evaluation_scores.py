@@ -3,33 +3,30 @@ import attr
 
 from typing import Tuple
 
-
+# TODO check slack
 @attr.s
 class IntensitiesEvaluationScores(EvaluationScores):
-    criteria = ["voi_split", "voi_merge", "voi"]
+    criteria: property = ['ssim', 'psnr', 'nrmse']
 
-    voi_split: float = attr.ib(default=float("nan"))
-    voi_merge: float = attr.ib(default=float("nan"))
-
-    @property
-    def voi(self):
-        return (self.voi_split + self.voi_merge) / 2
+    ssim: float = attr.ib(default=float("nan"))
+    psnr: float = attr.ib(default=float("nan"))
+    nrmse: float = attr.ib(default=float("nan"))
 
     @staticmethod
     def higher_is_better(criterion: str) -> bool:
-        mapping = {
-            "voi_split": False,
-            "voi_merge": False,
-            "voi": False,
+        mapping: dict[str, bool] = {
+            "ssim": True,
+            "psnr": True,
+            "nrmse": False,
         }
         return mapping[criterion]
 
     @staticmethod
     def bounds(criterion: str) -> Tuple[float, float]:
-        mapping = {
-            "voi_split": (0, 1),
-            "voi_merge": (0, 1),
-            "voi": (0, 1),
+        mapping: dict[str, tuple] = {
+            "ssim": (0, None),
+            "psnr": (0, None),
+            "nrmse": (0, None),
         }
         return mapping[criterion]
 

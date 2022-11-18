@@ -1,14 +1,10 @@
 import xarray as xr
-from dacapo.experiments.datasplits.datasets.arrays import IntensitiesArray
+from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 import numpy as np
-
+from skimage.metrics import structural_similarity, peak_signal_noise_ratio, normalized_root_mse
 
 from .evaluator import Evaluator
-from .instance_evaluation_scores import IntensitiesEvaluationScores
-
-from funlib.evaluate import rand_voi
-
-import random
+from .intensities_evaluation_scores import IntensitiesEvaluationScores
 
 
 class IntensitiesEvaluator(Evaluator):
@@ -17,16 +13,17 @@ class IntensitiesEvaluator(Evaluator):
     An evaluator takes a post-processor's output and compares it against
     ground-truth.
     """
+    @staticmethod
+    def _evaluate(im_true, im_test) -> dict:
+        return {'ssim': structural_similarity(im_true, im_test), 'psnr': peak_signal_noise_ratio(im_true, im_test), 'nrmse': normalized_root_mse(im_true, im_test)}
 
-    def evaluate(self, output_array_identifier, evaluation_array):
-        output_array = IntensitiesArray.open_from_array_identifier(output_array_identifier)
+    def evaluate(self, output_array_identifier, evaluation_array) -> IntensitiesEvaluationScores:
+        output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
         evaluation_data = evaluation_array[evaluation_array.roi].astype(np.uint64)
         output_data = output_array[output_array.roi].astype(np.uint64)
-        results = rand_voi(evaluation_data, output_data)
+        results: dict = self._evaluate(evaluation_data, output_data)
 
-        return IntensitiesEvaluationScores(
-            voi_merge=results["voi_merge"], voi_split=results["voi_split"]
-        )
+        return IntensitiesEvaluationScores(**results)
 
     @property
     def score(self) -> IntensitiesEvaluationScores:
