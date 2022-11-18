@@ -9,3 +9,7 @@ from .binary_segmentation_evaluation_scores import (
 from .binary_segmentation_evaluator import BinarySegmentationEvaluator  # noqa
 from .instance_evaluation_scores import InstanceEvaluationScores  # noqa
 from .instance_evaluator import InstanceEvaluator  # noqa
+
+
+from .intensities_evaluation_scores import IntensitiesEvaluationScores # noqa
+from .intensities_evaluator import IntensitiesEvaluator # noqa

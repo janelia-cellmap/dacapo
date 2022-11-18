@@ -12,3 +12,6 @@ from .watershed_post_processor import WatershedPostProcessor  # noqa
 from .watershed_post_processor_parameters import (
     WatershedPostProcessorParameters,
 )  # noqa
+
+from .CARE_post_processor import CAREPostProcessor # noqa
+from .CARE_post_processor_parameters import CAREPostProcessorParameters  # noqa
