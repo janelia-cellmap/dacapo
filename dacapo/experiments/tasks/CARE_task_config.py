@@ -3,8 +3,6 @@ import attr
 from .CARE_task import CARETask
 from .task_config import TaskConfig
 
-from typing import List, Tuple
-
 
 @attr.s
 class CARETaskConfig(TaskConfig):
