@@ -31,7 +31,7 @@ class CycleGANPredictor(Predictor):
             raise NotImplementedError(
                 f"CycleGANPredictor not implemented for {self.dims} dimensions"
             )
-
+        # TODO:
         # return Model(architecture, head)
         pass
 
