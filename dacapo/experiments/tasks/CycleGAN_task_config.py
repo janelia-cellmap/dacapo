@@ -5,7 +5,7 @@ from .task_config import TaskConfig
 
 
 @attr.s
-class CARETaskConfig(TaskConfig):
+class CycleGANTaskConfig(TaskConfig):
     """This is a Affinities task config used for generating and
     evaluating voxel affinities for instance segmentations.
     """

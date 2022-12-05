@@ -15,3 +15,6 @@ from .watershed_post_processor_parameters import (
 
 from .CARE_post_processor import CAREPostProcessor # noqa
 from .CARE_post_processor_parameters import CAREPostProcessorParameters  # noqa
+
+from .CycleGAN_post_processor import CycleGANPostProcessor # noqa
+from .CycleGAN_post_processor_parameters import CycleGANPostProcessorParameters  # noqa

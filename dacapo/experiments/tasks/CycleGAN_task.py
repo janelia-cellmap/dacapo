@@ -1,7 +1,7 @@
 from .evaluators import IntensitiesEvaluator
 from .losses import MSELoss
-from .post_processors import CAREPostProcessor
-from .predictors import CAREPredictor
+from .post_processors import CycleGANPostProcessor
+from .predictors import CycleGANPredictor
 from .task import Task
 
 
