@@ -1,5 +1,5 @@
 from .evaluators import IntensitiesEvaluator
-from .losses import MSELoss
+from .losses import GANLoss
 from .post_processors import CycleGANPostProcessor
 from .predictors import CycleGANPredictor
 from .task import Task
@@ -12,6 +12,6 @@ class CycleGANTask(Task):
         """Create a `CycleGAN Task`."""
 
         self.predictor = CycleGANPredictor(num_channels=task_config.num_channels)
-        self.loss = LinkCycleLoss()
+        self.loss = GANLoss()
         self.post_processor = CycleGANPostProcessor()
         self.evaluator = IntensitiesEvaluator()

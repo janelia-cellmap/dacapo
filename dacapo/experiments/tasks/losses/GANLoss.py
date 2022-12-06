@@ -13,5 +13,5 @@ class GANLoss(Loss):
             case 'vanilla':
                 return torch.nn.BCEWithLogitsLoss().forward(prediction * weight, target * weight)
 
-        if self.gan_mode  in ['wgangp']:
+        if self.gan_mode in ['wgangp']:
             return None
