@@ -7,11 +7,12 @@ class GANLoss(Loss):
         self.gan_mode = gan_mode
 
     def compute(self, prediction, target, weight):            
-        match self.gan_mode: 
-            case 'lsgan':
-                return torch.nn.MSELoss().forward(prediction * weight, target * weight)
-            case 'vanilla':
-                return torch.nn.BCEWithLogitsLoss().forward(prediction * weight, target * weight)
+        # match self.gan_mode: 
+        #     case 'lsgan':
+        #         return torch.nn.MSELoss().forward(prediction * weight, target * weight)
+        #     case 'vanilla':
+        #         return torch.nn.BCEWithLogitsLoss().forward(prediction * weight, target * weight)
 
-        if self.gan_mode in ['wgangp']:
-            return None
+        # if self.gan_mode in ['wgangp']:
+        #     return None
+        pass

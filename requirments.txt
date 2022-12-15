@@ -13,7 +13,6 @@ Flask-SocketIO==4.3.1
 python-engineio==3.13.2
 python-socketio==4.6.0
 Werkzeug==2.0
-git+https://github.com/funkelab/dacapo
 
 # dacapo requirements.txt
 numpy >= 1.22.2
@@ -35,4 +34,4 @@ git+https://github.com/funkelab/funlib.geometry@cf30e4d74eb860e46de40533c4f8278d
 git+https://github.com/cremi/cremi_python@python3
 git+https://github.com/funkey/gunpowder@v1.3-dev
 
-git+https://github.com/pattonw/lsd@no-convenience-imports
+git+https://github.com/funkelab/lsd@publish

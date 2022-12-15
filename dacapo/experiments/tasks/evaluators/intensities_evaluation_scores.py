@@ -3,7 +3,6 @@ import attr
 
 from typing import Tuple
 
-# TODO check slack
 @attr.s
 class IntensitiesEvaluationScores(EvaluationScores):
     criteria: property = ['ssim', 'psnr', 'nrmse']

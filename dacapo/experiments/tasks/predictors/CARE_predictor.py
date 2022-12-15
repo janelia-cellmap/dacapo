@@ -30,16 +30,10 @@ class CAREPredictor(Predictor):
         return Model(architecture, head)
 
     def create_target(self, gt):
-        # return NumpyArray.from_np_array(
-        #     np.zeros((self.num_channels,) + gt.data.shape[-gt.dims :]),
-        #     gt.roi,
-        #     gt.voxel_size,
-        #     ["c"] + gt.axes,
-        # )
         return gt
 
     def create_weight(self, gt):
-        # ones
+        # array of ones
         return NumpyArray.from_np_array(
             np.ones(gt.data.shape),
             gt.roi,

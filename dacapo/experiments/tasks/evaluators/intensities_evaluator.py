@@ -13,18 +13,17 @@ class IntensitiesEvaluator(Evaluator):
     An evaluator takes a post-processor's output and compares it against
     ground-truth.
     """
-    @staticmethod
-    def _evaluate(im_true, im_test) -> dict:
-        return {'ssim': structural_similarity(im_true, im_test), 'psnr': peak_signal_noise_ratio(im_true, im_test), 'nrmse': normalized_root_mse(im_true, im_test)}
-
+    criteria = ["ssim", "psnr", "nrmse"]
+    
     def evaluate(self, output_array_identifier, evaluation_array) -> IntensitiesEvaluationScores:
         output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
         evaluation_data = evaluation_array[evaluation_array.roi].astype(np.uint64)
         output_data = output_array[output_array.roi].astype(np.uint64)
-        results: dict = self._evaluate(evaluation_data, output_data)
-
-        return IntensitiesEvaluationScores(**results)
+        return IntensitiesEvaluationScores(ssim=structural_similarity(evaluation_data, output_data), 
+                                           psnr=peak_signal_noise_ratio(evaluation_data, output_data),
+                                           nrmse=normalized_root_mse(evaluation_data, output_data))
 
     @property
     def score(self) -> IntensitiesEvaluationScores:
         return IntensitiesEvaluationScores()
+

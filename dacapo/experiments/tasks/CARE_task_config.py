@@ -11,9 +11,8 @@ class CARETaskConfig(TaskConfig):
     """
 
     task_type = CARETask
-
     num_channels: int = attr.ib(
-        default=1,
+        default=2,
         metadata={
             "help_text": "Number of output channels for the image. "
             "Number of ouptut channels should match the number of channels in the ground truth."
