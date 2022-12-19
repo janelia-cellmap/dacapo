@@ -62,7 +62,7 @@ class Array(ABC):
 
     @property
     @abstractmethod
-    def data(self) -> np.ndarray[Any, Any]:
+    def data(self) -> np.ndarray:
         """
         Get a numpy like readable and writable view into this array.
         """
@@ -76,7 +76,7 @@ class Array(ABC):
         """
         pass
 
-    def __getitem__(self, roi: Roi) -> np.ndarray[Any, Any]:
+    def __getitem__(self, roi: Roi) -> np.ndarray:
         if not self.roi.contains(roi):
             raise ValueError(f"Cannot fetch data from outside my roi: {self.roi}!")
 
