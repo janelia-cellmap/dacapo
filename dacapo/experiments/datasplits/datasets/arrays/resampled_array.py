@@ -22,7 +22,9 @@ class ResampledArray(Array):
 
         assert (
             self.voxel_size * self.upsample
-        ) / self.downsample == self._source_array.voxel_size
+        ) / self.downsample == self._source_array.voxel_size, (
+            f"{self.name}, {self._source_array.voxel_size}, {self.voxel_size}, {self.upsample}, {self.downsample}"
+        )
 
     @property
     def attrs(self):
