@@ -4,6 +4,8 @@ from .trainer import Trainer
 from dacapo.gp import (
     DaCapoArraySource,
     DaCapoTargetFilter,
+    RejectIfEmpty,
+    CopyMask,
 )
 from dacapo.experiments.datasplits.datasets.arrays import (
     NumpyArray,
@@ -37,6 +39,7 @@ class GunpowderTrainer(Trainer):
         self.min_masked = trainer_config.min_masked
 
         self.augments = trainer_config.augments
+        self.mask_integral_downsample_factor = 4
 
     def create_optimizer(self, model):
         return torch.optim.RAdam(lr=self.learning_rate, params=model.parameters())
@@ -62,6 +65,12 @@ class GunpowderTrainer(Trainer):
         gt_key = gp.ArrayKey("GT")
         mask_key = gp.ArrayKey("MASK")
 
+        # make requests such that the mask placeholder is not empty. request single voxel
+        # this means we can pad gt and mask as much as we want and not worry about
+        # never retrieving an empty gt.
+        # as long as the gt is large enough to accomidate one voxel we shouldn't have errors
+        mask_placeholder = gp.ArrayKey("MASK_PLACEHOLDER")
+
         target_key = gp.ArrayKey("TARGET")
         weight_key = gp.ArrayKey("WEIGHT")
 
@@ -70,9 +79,7 @@ class GunpowderTrainer(Trainer):
         for dataset in datasets:
 
             raw_source = DaCapoArraySource(dataset.raw, raw_key)
-            raw_source += gp.Pad(raw_key, None, 0)
             gt_source = DaCapoArraySource(dataset.gt, gt_key)
-            gt_source += gp.Pad(gt_key, gt_mask_padding, 0)
             if dataset.mask is not None:
                 mask_source = DaCapoArraySource(dataset.mask, mask_key)
             else:
@@ -82,20 +89,29 @@ class GunpowderTrainer(Trainer):
                 # ground truth without worrying about training on incorrect
                 # data.
                 mask_source = DaCapoArraySource(OnesArray.like(dataset.gt), mask_key)
-            mask_source += gp.Pad(mask_key, gt_mask_padding, 0)
             array_sources = [raw_source, gt_source, mask_source]
 
             dataset_source = (
-                tuple(array_sources) + gp.MergeProvider() + gp.RandomLocation()
+                tuple(array_sources)
+                + gp.MergeProvider()
+                + CopyMask(
+                    mask_key,
+                    mask_placeholder,
+                    drop_channels=True,
+                )
+                + gp.Pad(raw_key, None, 0)
+                + gp.Pad(gt_key, None, 0)
+                + gp.Pad(mask_key, None, 0)
+                + gp.RandomLocation()
+                + gp.Reject(mask_placeholder, 1e-6)
             )
+            dataset_source += RejectIfEmpty(gt_key, p=0.9, background=0)
 
             dataset_sources.append(dataset_source)
         pipeline = tuple(dataset_sources) + gp.RandomProvider()
 
         for augment in self.augments:
             pipeline += augment.node(raw_key, gt_key, mask_key)
-
-        pipeline += gp.Reject(mask_key, min_masked=self.min_masked)
 
         # Add predictor nodes to pipeline
         pipeline += DaCapoTargetFilter(
@@ -121,9 +137,16 @@ class GunpowderTrainer(Trainer):
         request.add(raw_key, input_size)
         request.add(target_key, output_size)
         request.add(weight_key, output_size)
+        request.add(
+            mask_placeholder,
+            prediction_voxel_size * self.mask_integral_downsample_factor,
+        )
         # request additional keys for snapshots
         request.add(gt_key, output_size)
         request.add(mask_key, output_size)
+        request[mask_placeholder].roi = request[mask_placeholder].roi.snap_to_grid(
+            prediction_voxel_size * self.mask_integral_downsample_factor
+        )
 
         self._request = request
         self._pipeline = pipeline
