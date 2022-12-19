@@ -97,13 +97,13 @@ class ZarrArray(Array):
         zarr_container = zarr.open(str(self.file_name))
         return zarr_container[self.dataset]
 
-    def __getitem__(self, roi: Roi) -> np.ndarray[Any, Any]:
-        data: np.ndarray[Any, Any] = daisy.Array(
+    def __getitem__(self, roi: Roi) -> np.ndarray:
+        data: np.ndarray = daisy.Array(
             self.data, self.roi, self.voxel_size
         ).to_ndarray(roi=roi)
         return data
 
-    def __setitem__(self, roi: Roi, value: np.ndarray[Any, Any]):
+    def __setitem__(self, roi: Roi, value: np.ndarray):
         daisy.Array(self.data, self.roi, self.voxel_size)[roi] = value
 
     @classmethod
