@@ -2,7 +2,9 @@ import dacapo
 import logging
 
 # CARE task specific elements
-from dacapo.datasplits import TrainValidateDataSplitConfig
+from dacapo.experiments.datasplits.datasets.arrays import ZarrArrayConfig
+from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
+from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
 from dacapo.experiments.architectures import CNNectomeUNetConfig
 from dacapo.experiments.tasks import CARETaskConfig
 
@@ -22,11 +24,29 @@ from dacapo.train import train
 # set basic login configs
 logging.basicConfig(level=logging.INFO)
 
+raw_array_config = ZarrArrayConfig(
+    name="raw",
+    file_name="/n/groups/htem/users/br128/data/CBvBottom/CBxs_lobV_bottomp100um_training_0.n5",
+    dataset="volumes/raw_30nm",
+)
+
+gt_array_config = ZarrArrayConfig(
+    name="gt",
+    file_name="/n/groups/htem/users/br128/data/CBvBottom/CBxs_lobV_bottomp100um_training_0.n5",
+    dataset="volumes/volumes/interpolated_90nm_aligned",
+)
+
+dataset_config = RawGTDatasetConfig(
+    name="CBxs_lobV_bottomp100um_CARE_0",
+    raw_config=raw_array_config,
+    gt_config=gt_array_config,
+)
+
 # TODO: check datasplit config, this honestly might work
 datasplit_config = TrainValidateDataSplitConfig(
     name="CBxs_lobV_bottomp100um_training_0.n5",
-    train_configs = ['/n/groups/htem/users/br128/data/CBvBottom/CBxs_lobV_bottomp100um_training_0.n5/volumes/raw_30nm'],
-    validate_configs = ['/n/groups/htem/users/br128/data/CBvBottom/CBxs_lobV_bottomp100um_training_0.n5/volumes/interpolated_90nm_aligned']
+    train_configs=[dataset_config],
+    validate_configs=[dataset_config],
 )
 
 
@@ -45,10 +65,7 @@ architecture_config = CNNectomeUNetConfig(
 
 
 # CARE task
-task_config = CARETaskConfig(
-    name="CAREModel",
-    num_channels=2
-)
+task_config = CARETaskConfig(name="CAREModel", num_channels=2)
 
 
 # trainier
@@ -69,7 +86,7 @@ trainer_config = GunpowderTrainerConfig(
             scale=(0.25, 1.75),
             shift=(-0.5, 0.35),
             clip=False,
-        )
+        ),
     ],
     num_data_fetchers=20,
     snapshot_interval=10000,
@@ -78,7 +95,7 @@ trainer_config = GunpowderTrainerConfig(
 )
 
 
-# run config 
+# run config
 run_config = RunConfig(
     name="CARE_train",
     task_config=task_config,
