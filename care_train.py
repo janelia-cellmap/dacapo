@@ -1,5 +1,6 @@
 import dacapo
 import logging
+import math
 
 # CARE task specific elements
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArrayConfig
@@ -33,7 +34,7 @@ raw_array_config = ZarrArrayConfig(
 gt_array_config = ZarrArrayConfig(
     name="gt",
     file_name="/n/groups/htem/users/br128/data/CBvBottom/CBxs_lobV_bottomp100um_training_0.n5",
-    dataset="volumes/volumes/interpolated_90nm_aligned",
+    dataset="volumes/interpolated_90nm_aligned",
 )
 
 dataset_config = RawGTDatasetConfig(
@@ -59,13 +60,13 @@ architecture_config = CNNectomeUNetConfig(
     num_fmaps=8,
     fmaps_out=32,
     fmap_inc_factor=4,
-    downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],
+    downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)], # TODO: extra number of tuples?
     constant_upsample=True,
 )
 
 
 # CARE task
-task_config = CARETaskConfig(name="CAREModel", num_channels=2)
+task_config = CARETaskConfig(name="CAREModel", num_channels=2, dims=2)
 
 
 # trainier
@@ -91,7 +92,6 @@ trainer_config = GunpowderTrainerConfig(
     num_data_fetchers=20,
     snapshot_interval=10000,
     min_masked=0.15,
-    min_labelled=0.1,
 )
 
 

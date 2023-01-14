@@ -3,15 +3,16 @@ from dacapo.experiments import Model
 # from dacapo.experiments.arraytypes import ZarrArray
 from dacapo.experiments.datasplits.datasets.arrays import NumpyArray, ZarrArray
 
-from funlib.geometry import Coordinate  # TODO: pip install
+from funlib.geometry import Coordinate
 
 import numpy as np
 import torch
 
 
 class CAREPredictor(Predictor):
-    def __init__(self, num_channels):
+    def __init__(self, num_channels, dims):
         self.num_channels = num_channels
+        self.dims = dims
 
     def create_model(self, architecture):
         if self.dims == 2:

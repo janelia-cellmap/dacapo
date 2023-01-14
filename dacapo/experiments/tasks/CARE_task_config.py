@@ -16,5 +16,12 @@ class CARETaskConfig(TaskConfig):
         metadata={
             "help_text": "Number of output channels for the image. "
             "Number of ouptut channels should match the number of channels in the ground truth."
+        })
+        
+    dims: int = attr.ib(
+        default=2,
+        metadata={
+            "help_text": "Number of UNet dimensions. "
+            "Number of dimensions should match the number of channels in the ground truth."
         }
     )
