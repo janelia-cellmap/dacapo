@@ -1,9 +1,11 @@
 import dacapo
 import logging
 import math
+import torch
+from torchsummary import summary
 
 # CARE task specific elements
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArrayConfig
+from dacapo.experiments.datasplits.datasets.arrays import ZarrArrayConfig, IntensitiesArrayConfig
 from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
 from dacapo.experiments.architectures import CNNectomeUNetConfig
@@ -25,22 +27,36 @@ from dacapo.train import train
 # set basic login configs
 logging.basicConfig(level=logging.INFO)
 
-raw_array_config = ZarrArrayConfig(
+raw_array_config_zarr = ZarrArrayConfig(
     name="raw",
     file_name="/n/groups/htem/users/br128/data/CBvBottom/CBxs_lobV_bottomp100um_training_0.n5",
     dataset="volumes/raw_30nm",
 )
 
-gt_array_config = ZarrArrayConfig(
+gt_array_config_zarr = ZarrArrayConfig(
     name="gt",
     file_name="/n/groups/htem/users/br128/data/CBvBottom/CBxs_lobV_bottomp100um_training_0.n5",
     dataset="volumes/interpolated_90nm_aligned",
 )
 
+raw_array_config_int = IntensitiesArrayConfig(
+    name="raw_norm",
+    source_array_config = raw_array_config_zarr,
+    min = 0.,
+    max = 1.
+)
+
+gt_array_config_int = IntensitiesArrayConfig(
+    name="gt_norm",
+    source_array_config = gt_array_config_zarr,
+    min = 0.,
+    max = 1.
+)
+
 dataset_config = RawGTDatasetConfig(
     name="CBxs_lobV_bottomp100um_CARE_0",
-    raw_config=raw_array_config,
-    gt_config=gt_array_config,
+    raw_config=raw_array_config_int,
+    gt_config=gt_array_config_int,
 )
 
 # TODO: check datasplit config, this honestly might work
@@ -49,24 +65,30 @@ datasplit_config = TrainValidateDataSplitConfig(
     train_configs=[dataset_config],
     validate_configs=[dataset_config],
 )
+"""
+kernel size 3
+2 conv passes per block
 
-
+1 -- 100%, lose 4 pix - 286 pix
+2 -- 50%, lose 8 pix - 142 pix
+3 -- 25%, lose 16 pix - 32 pix
+"""
 # UNET config
 architecture_config = CNNectomeUNetConfig(
     name="small_unet",
-    input_shape=Coordinate(216, 216, 216),
-    eval_shape_increase=Coordinate(72, 72, 72),
+    input_shape=Coordinate(156, 156, 156),
+    # eval_shape_increase=Coordinate(72, 72, 72),
     fmaps_in=1,
     num_fmaps=8,
     fmaps_out=32,
     fmap_inc_factor=4,
-    downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)], # TODO: extra number of tuples?
+    downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],
     constant_upsample=True,
 )
 
 
 # CARE task
-task_config = CARETaskConfig(name="CAREModel", num_channels=2, dims=2)
+task_config = CARETaskConfig(name="CAREModel", num_channels=1, dims=3)
 
 
 # trainier
@@ -109,8 +131,8 @@ run_config = RunConfig(
 
 run = Run(run_config)
 
-# run summary
-print(torch.summary(run.model, (1, 216, 216, 216)))
+# run summary TODO create issue
+print(summary(run.model, (1, 156, 156, 156)))
 
 
 # store configs, then train
@@ -126,3 +148,8 @@ config_store.store_run_config(run_config)
 train(run_config.name)
 
 # CLI dacapo train -r {run_config.name}
+
+
+""" 
+RuntimeError: Can not downsample shape torch.Size([1, 128, 47, 47, 47]) with factor (2, 2, 2), mismatch in spatial dimension 2
+"""

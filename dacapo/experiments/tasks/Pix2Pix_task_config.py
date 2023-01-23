@@ -1,16 +1,16 @@
 import attr
 
-from .CARE_task import CARETask
+from .Pix2Pix_task import Pix2PixTask
 from .task_config import TaskConfig
 
 
 @attr.s
-class CARETaskConfig(TaskConfig):
-    """This is a CARE task config used for generating and
+class Pix2PixTaskConfig(TaskConfig):
+    """This is a Pix2Pix task config used for generating and
     evaluating voxel affinities for instance segmentations.
     """
 
-    task_type = CARETask
+    task_type = Pix2PixTask
     num_channels: int = attr.ib(
         default=2,
         metadata={

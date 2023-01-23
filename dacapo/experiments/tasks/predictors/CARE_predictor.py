@@ -1,6 +1,6 @@
 from .predictor import Predictor
 from dacapo.experiments import Model
-# from dacapo.experiments.arraytypes import ZarrArray
+from dacapo.experiments.arraytypes import IntensitiesArray
 from dacapo.experiments.datasplits.datasets.arrays import NumpyArray, ZarrArray
 
 from funlib.geometry import Coordinate
@@ -33,31 +33,20 @@ class CAREPredictor(Predictor):
     def create_target(self, gt):
         return gt
 
-    def create_weight(self, gt):
-        # array of ones
-        return NumpyArray.from_np_array(
-            np.ones(gt.data.shape),
-            gt.roi,
-            gt.voxel_size,
-            gt.axes,
-        )
+    def create_weight(self, gt, target=None, mask=None):
+        if mask is None:
+            # array of ones
+            return NumpyArray.from_np_array(
+                np.ones(gt.data.shape),
+                gt.roi,
+                gt.voxel_size,
+                gt.axes,
+            )
+        else:
+            return mask
 
     @property
     def output_array_type(self):
-        return ZarrArray(self.num_channels)
-    
-    def gt_region_for_roi(self, target_spec):
-        if self.mask_distances:
-            gt_spec = target_spec.copy()
-            gt_spec.roi = gt_spec.roi.grow(
-                Coordinate((self.max_distance,) * gt_spec.voxel_size.dims),
-                Coordinate((self.max_distance,) * gt_spec.voxel_size.dims),
-            ).snap_to_grid(gt_spec.voxel_size, mode="shrink")
-        else:
-            gt_spec = target_spec.copy()
-        return gt_spec
-
-    def padding(self, gt_voxel_size: Coordinate) -> Coordinate:
-        return Coordinate((self.max_distance,) * gt_voxel_size.dims)
+        return IntensitiesArray({"channels": {n: str(n) for n in range(self.num_channels)}}, min=0., max=1.)
 
 
