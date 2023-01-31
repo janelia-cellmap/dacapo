@@ -11,7 +11,7 @@ import numpy as np
 
 import augment
 
-from gunpowder import BatchFilter, Roi, ArrayKey, Coordinate
+from gunpowder import BatchFilter, Roi, ArrayKey, Coordinate, GraphKey
 
 logger = logging.getLogger(__name__)
 
@@ -290,29 +290,22 @@ class ElasticAugment(BatchFilter):
 
         for key, spec in request.items():
 
-            assert isinstance(
-                key, ArrayKey
-            ), "Only ArrayKey supported but got %s in request" % type(key)
+            assert isinstance(key, ArrayKey) or isinstance(
+                key, GraphKey
+            ), "Only ArrayKey/GraphKey supported but got %s in request" % type(key)
 
             logger.debug("key %s: preparing with spec %s", key, spec)
 
-            voxel_size = self.spec[key].voxel_size
+            if isinstance(key, ArrayKey):
+                voxel_size = self.spec[key].voxel_size
+            else:
+                voxel_size = Coordinate((1,) * spec.roi.dims)
             # Todo we could probably remove snap_to_grid, we already check spec.roi % voxel_size == 0
 
-            try:
-                target_roi = self._spatial_roi(spec.roi).snap_to_grid(voxel_size)
-            except Exception as e:
-                raise Exception(
-                    f"SPEC: {spec.roi}, SPATIAL: {self._spatial_roi(spec.roi)} VS VOXEL_SIZE: {voxel_size}"
-                ) from e
+            target_roi = spec.roi.snap_to_grid(voxel_size)
 
             self.target_rois[key] = target_roi
-            try:
-                target_roi_voxels = target_roi // voxel_size
-            except Exception as e:
-                raise Exception(
-                    f"TARGET: {target_roi} VS VOXEL_SIZE: {voxel_size}"
-                ) from e
+            target_roi_voxels = target_roi // voxel_size
 
             # get scale and offset to transform/interpolate master displacement to current spec
             vs_ratio = np.array(
@@ -375,6 +368,12 @@ class ElasticAugment(BatchFilter):
             return
 
         for key, _ in request.items():
+            if isinstance(key, GraphKey):
+                # restore original ROIs
+                logger.warning("GRAPHS NOT PROPERLY SUPPORTED!")
+                batch[key].spec.roi = request[key].roi
+                continue
+
             assert key in batch.arrays, "only arrays supported but got %s" % key
             array = batch.arrays[key]
 

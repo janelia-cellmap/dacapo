@@ -1,7 +1,9 @@
 from .dataset import Dataset
 from .arrays import Array
 
-from typing import Optional
+from funlib.geometry import Coordinate
+
+from typing import Optional, List
 
 
 class RawGTDataset(Dataset):
@@ -9,6 +11,7 @@ class RawGTDataset(Dataset):
     raw: Array
     gt: Array
     mask: Optional[Array]
+    sample_points: Optional[List[Coordinate]]
 
     def __init__(self, dataset_config):
 
@@ -20,3 +23,4 @@ class RawGTDataset(Dataset):
             if dataset_config.mask_config is not None
             else None
         )
+        self.sample_points = dataset_config.sample_points

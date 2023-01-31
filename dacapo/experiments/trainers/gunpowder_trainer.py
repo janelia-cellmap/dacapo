@@ -3,6 +3,7 @@ from .trainer import Trainer
 
 from dacapo.gp import (
     DaCapoArraySource,
+    GraphSource,
     DaCapoTargetFilter,
     RejectIfEmpty,
     CopyMask,
@@ -73,6 +74,7 @@ class GunpowderTrainer(Trainer):
 
         target_key = gp.ArrayKey("TARGET")
         weight_key = gp.ArrayKey("WEIGHT")
+        sample_points_key = gp.GraphKey("SAMPLE_POINTS")
 
         # Get source nodes
         dataset_sources = []
@@ -80,6 +82,22 @@ class GunpowderTrainer(Trainer):
 
             raw_source = DaCapoArraySource(dataset.raw, raw_key)
             gt_source = DaCapoArraySource(dataset.gt, gt_key)
+            sample_points = dataset.sample_points
+            points_source = None
+            if sample_points is not None:
+                for loc in sample_points:
+                    assert dataset.gt.roi.contains(
+                        Coordinate(loc[::-1])
+                    ), f"{dataset.gt.roi}, {Coordinate(loc)}"
+                graph = gp.Graph(
+                    [
+                        gp.Node(i, np.array(loc[::-1]))
+                        for i, loc in enumerate(sample_points)
+                    ],
+                    [],
+                    gp.GraphSpec(dataset.gt.roi),
+                )
+                points_source = GraphSource(sample_points_key, graph)
             if dataset.mask is not None:
                 mask_source = DaCapoArraySource(dataset.mask, mask_key)
             else:
@@ -89,7 +107,9 @@ class GunpowderTrainer(Trainer):
                 # ground truth without worrying about training on incorrect
                 # data.
                 mask_source = DaCapoArraySource(OnesArray.like(dataset.gt), mask_key)
-            array_sources = [raw_source, gt_source, mask_source]
+            array_sources = [raw_source, gt_source, mask_source] + (
+                [points_source] if points_source is not None else []
+            )
 
             dataset_source = (
                 tuple(array_sources)
@@ -102,7 +122,11 @@ class GunpowderTrainer(Trainer):
                 + gp.Pad(raw_key, None, 0)
                 + gp.Pad(gt_key, None, 0)
                 + gp.Pad(mask_key, None, 0)
-                + gp.RandomLocation()
+                + gp.RandomLocation(
+                    ensure_nonempty=sample_points_key
+                    if points_source is not None
+                    else None,
+                )
                 + gp.Reject(mask_placeholder, 1e-6)
             )
             dataset_source += RejectIfEmpty(gt_key, p=0.9, background=0)
@@ -141,6 +165,11 @@ class GunpowderTrainer(Trainer):
             mask_placeholder,
             prediction_voxel_size * self.mask_integral_downsample_factor,
         )
+        if points_source is not None:
+            request.add(
+                sample_points_key,
+                output_size,
+            )
         # request additional keys for snapshots
         request.add(gt_key, output_size)
         request.add(mask_key, output_size)
