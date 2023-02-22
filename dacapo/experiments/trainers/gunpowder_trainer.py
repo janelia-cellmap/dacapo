@@ -5,7 +5,6 @@ from dacapo.gp import (
     DaCapoArraySource,
     GraphSource,
     DaCapoTargetFilter,
-    RejectIfEmpty,
     CopyMask,
 )
 from dacapo.experiments.datasplits.datasets.arrays import (
@@ -132,6 +131,9 @@ class GunpowderTrainer(Trainer):
                 + gp.Pad(mask_key, None, 0)
                 + gp.RandomLocation(
                     ensure_nonempty=sample_points_key
+                    if points_source is not None
+                    else None,
+                    ensure_centered=sample_points_key
                     if points_source is not None
                     else None,
                 )
