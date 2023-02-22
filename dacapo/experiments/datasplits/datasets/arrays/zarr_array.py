@@ -3,6 +3,7 @@ from .array import Array
 from dacapo import Options
 
 from funlib.geometry import Coordinate, Roi
+import funlib.persistence
 import daisy
 
 import neuroglancer
@@ -62,8 +63,8 @@ class ZarrArray(Array):
         return self.voxel_size.dims
 
     @lazy_property.LazyProperty
-    def _daisy_array(self) -> daisy.Array:
-        return daisy.open_ds(f"{self.file_name}", self.dataset)
+    def _daisy_array(self) -> funlib.persistence.Array:
+        return funlib.persistence.open_ds(f"{self.file_name}", self.dataset)
 
     @lazy_property.LazyProperty
     def voxel_size(self) -> Coordinate:
@@ -98,13 +99,13 @@ class ZarrArray(Array):
         return zarr_container[self.dataset]
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        data: np.ndarray = daisy.Array(
+        data: np.ndarray = funlib.persistence.Array(
             self.data, self.roi, self.voxel_size
         ).to_ndarray(roi=roi)
         return data
 
     def __setitem__(self, roi: Roi, value: np.ndarray):
-        daisy.Array(self.data, self.roi, self.voxel_size)[roi] = value
+        funlib.persistence.Array(self.data, self.roi, self.voxel_size)[roi] = value
 
     @classmethod
     def create_from_array_identifier(
@@ -138,7 +139,7 @@ class ZarrArray(Array):
         write_size = Coordinate((min(a, b) for a, b in zip(write_size, roi.shape)))
         zarr_container = zarr.open(array_identifier.container, "a")
         try:
-            daisy.prepare_ds(
+            funlib.persistence.prepare_ds(
                 f"{array_identifier.container}",
                 array_identifier.dataset,
                 roi,

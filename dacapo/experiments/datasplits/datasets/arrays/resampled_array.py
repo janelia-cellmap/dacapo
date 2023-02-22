@@ -1,6 +1,7 @@
 from .array import Array
 
 import daisy
+import funlib.persistence
 from funlib.geometry import Coordinate, Roi
 
 import numpy as np
@@ -77,7 +78,7 @@ class ResampledArray(Array):
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
         snapped_roi = roi.snap_to_grid(self._source_array.voxel_size, mode="grow")
-        resampled_array = daisy.Array(
+        resampled_array = funlib.persistence.Array(
             rescale(
                 self._source_array[snapped_roi].astype(np.float32),
                 self.scale,

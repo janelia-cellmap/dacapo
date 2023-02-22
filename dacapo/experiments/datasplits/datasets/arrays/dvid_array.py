@@ -10,6 +10,7 @@ except ImportError as e:
     fetch_labelmap_voxels = NoSuchModule("neuclease.dvid.fetch_labelmap_voxels")
 
 from funlib.geometry import Coordinate, Roi
+import funlib.persistence
 import daisy
 
 import neuroglancer
@@ -50,7 +51,7 @@ class DVIDArray(Array):
         return self.voxel_size.dims
 
     @lazy_property.LazyProperty
-    def _daisy_array(self) -> daisy.Array:
+    def _daisy_array(self) -> funlib.persistence.Array:
         raise NotImplementedError()
 
     @lazy_property.LazyProperty
