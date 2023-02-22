@@ -8,6 +8,7 @@ from dacapo.utils.balance_weights import balance_weights
 from funlib.geometry import Coordinate
 from lsd.local_shape_descriptor import LsdExtractor
 
+from scipy import ndimage
 import numpy as np
 import torch
 
@@ -84,7 +85,7 @@ class AffinitiesPredictor(Predictor):
             "Cannot create affinities from ground truth with multiple channels.\n"
             f"GT axes: {gt.axes} with {gt.num_channels} channels"
         )
-        label_data = gt[gt.roi]
+        label_data = self._grow_boundaries(gt[gt.roi])
         axes = gt.axes
         if gt.num_channels is not None:
             label_data = label_data[0]
@@ -92,14 +93,12 @@ class AffinitiesPredictor(Predictor):
             axes = ["c"] + axes
         t1 = time.time()
         affinities = seg_to_affgraph(label_data, self.neighborhood).astype(np.float32)
-        print("aff extraction took ", time.time() - t1, "seconds")
         if self.lsds:
             t1 = time.time()
             descriptors = self.extractor(gt.voxel_size).get_descriptors(
                 segmentation=label_data,
                 voxel_size=gt.voxel_size,
             )
-            print("lsd extraction took ", time.time() - t1, "seconds")
             return NumpyArray.from_np_array(
                 np.concatenate([affinities, descriptors], axis=0, dtype=np.float32),
                 gt.roi,
@@ -112,6 +111,28 @@ class AffinitiesPredictor(Predictor):
             gt.voxel_size,
             axes,
         )
+
+    def _grow_boundaries(self, gt):
+
+        # get all foreground voxels by erosion of each component
+        foreground = np.zeros(shape=gt.shape, dtype=np.bool)
+        masked = None
+        for label in np.unique(gt):
+            if label == 0:
+                continue
+            label_mask = gt==label
+            # Assume that masked out values are the same as the label we are
+            # eroding in this iteration. This ensures that at the boundary to
+            # a masked region the value blob is not shrinking.
+            if masked is not None:
+                label_mask = np.logical_or(label_mask, masked)
+            eroded_label_mask = ndimage.binary_erosion(label_mask, iterations=1, border_value=1)
+            foreground = np.logical_or(eroded_label_mask, foreground)
+
+        # label new background
+        background = np.logical_not(foreground)
+        gt[background] = 0
+        return gt
 
     def create_weight(self, gt, target, mask):
         aff_weights, self.moving_class_counts = balance_weights(
