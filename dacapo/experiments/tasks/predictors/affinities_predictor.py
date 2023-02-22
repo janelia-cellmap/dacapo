@@ -32,6 +32,10 @@ class AffinitiesPredictor(Predictor):
         else:
             self.num_lsds = 0
 
+        self.moving_class_counts = None
+        self.moving_lsd_class_counts = None
+        self.running_ratio_weight = 0.01
+
     def extractor(self, voxel_size):
         if self._extractor is None:
             self._extractor = LsdExtractor(self.sigma(voxel_size))
@@ -110,20 +114,26 @@ class AffinitiesPredictor(Predictor):
         )
 
     def create_weight(self, gt, target, mask):
-        aff_weights = balance_weights(
+        aff_weights, self.moving_class_counts = balance_weights(
             target[target.roi][: self.num_channels - self.num_lsds].astype(np.uint8),
             2,
             slab=tuple(1 if c == "c" else -1 for c in target.axes),
             masks=[mask[target.roi]],
+            moving_counts=self.moving_class_counts,
+            update_rate=self.running_ratio_weight,
         )
         if self.lsds:
-            lsd_weights = (
-                np.ones(
-                    (self.num_lsds,) + aff_weights.shape[1:], dtype=aff_weights.dtype
-                )
-                * aff_weights[0]
-                > 0
+            lsd_weights, self.moving_lsd_class_counts = balance_weights(
+                (gt[target.roi] > 0).astype(np.uint8),
+                2,
+                slab=(-1,) * len(gt.axes),
+                masks=[mask[target.roi]],
+                moving_counts=self.moving_lsd_class_counts,
+                update_rate=self.running_ratio_weight,
             )
+            lsd_weights = np.ones(
+                (self.num_lsds,) + aff_weights.shape[1:], dtype=aff_weights.dtype
+            ) * lsd_weights.reshape((1,) + aff_weights.shape[1:])
             return NumpyArray.from_np_array(
                 np.concatenate([aff_weights, lsd_weights], axis=0),
                 target.roi,

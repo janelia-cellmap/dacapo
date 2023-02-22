@@ -38,6 +38,11 @@ class DistancePredictor(Predictor):
         self.epsilon = 5e-2
         self.threshold = 0.8
 
+        # When balancing weights, account for previous
+        # balancing ratios when setting new weights.
+        self.moving_class_counts = None
+        self.running_ratio_weight = 0.01
+
     @property
     def embedding_dims(self):
         return len(self.channels)
@@ -78,13 +83,17 @@ class DistancePredictor(Predictor):
             )
         else:
             distance_mask = np.ones_like(target.data)
+
+        weights, self.moving_class_counts = balance_weights(
+            gt[target.roi],
+            2,
+            slab=tuple(1 if c == "c" else -1 for c in gt.axes),
+            masks=[mask[target.roi], distance_mask],
+            moving_counts=self.moving_class_counts,
+            update_rate=self.running_ratio_weight,
+        )
         return NumpyArray.from_np_array(
-            balance_weights(
-                gt[target.roi],
-                2,
-                slab=tuple(1 if c == "c" else -1 for c in gt.axes),
-                masks=[mask[target.roi], distance_mask],
-            ),
+            weights,
             gt.roi,
             gt.voxel_size,
             gt.axes,
