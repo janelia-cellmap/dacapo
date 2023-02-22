@@ -41,6 +41,7 @@ class GunpowderTrainer(Trainer):
 
         self.augments = trainer_config.augments
         self.mask_integral_downsample_factor = 4
+        self.clip_raw = trainer_config.clip_raw
 
     def create_optimizer(self, model):
         return torch.optim.RAdam(lr=self.learning_rate, params=model.parameters())
@@ -84,6 +85,10 @@ class GunpowderTrainer(Trainer):
             assert isinstance(dataset.weight, int), dataset
 
             raw_source = DaCapoArraySource(dataset.raw, raw_key)
+            if self.clip_raw:
+                raw_source += gp.Crop(
+                    raw_key, dataset.gt.roi.snap_to_grid(dataset.raw.voxel_size)
+                )
             gt_source = DaCapoArraySource(dataset.gt, gt_key)
             sample_points = dataset.sample_points
             points_source = None
