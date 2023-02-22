@@ -1,6 +1,6 @@
 import attr
 
-from typing import Tuple
+from typing import Tuple, Optional
 
 
 @attr.s
@@ -15,6 +15,13 @@ class DatasetConfig:
             "and others can find and reuse this dataset. Keep it short "
             "and avoid special characters."
         }
+    )
+    weight: int = attr.ib(
+        metadata={
+            "help_text": "A weight to indicate this dataset should be sampled from more "
+            "heavily"
+        },
+        default=1,
     )
 
     def verify(self) -> Tuple[bool, str]:

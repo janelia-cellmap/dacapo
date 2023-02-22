@@ -7,8 +7,9 @@ from typing import Optional, Any
 class Dataset(ABC):
     name: str
     raw: Array
-    gt: Optional[Array] = None
-    mask: Optional[Array] = None
+    gt: Optional[Array]
+    mask: Optional[Array]
+    weight: Optional[int]
 
     def __eq__(self, other: Any) -> bool:
         return isinstance(other, type(self)) and self.name == other.name

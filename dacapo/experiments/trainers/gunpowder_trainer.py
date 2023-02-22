@@ -78,7 +78,10 @@ class GunpowderTrainer(Trainer):
 
         # Get source nodes
         dataset_sources = []
+        weights = []
         for dataset in datasets:
+            weights.append(dataset.weight)
+            assert isinstance(dataset.weight, int), dataset
 
             raw_source = DaCapoArraySource(dataset.raw, raw_key)
             gt_source = DaCapoArraySource(dataset.gt, gt_key)
@@ -129,10 +132,9 @@ class GunpowderTrainer(Trainer):
                 )
                 + gp.Reject(mask_placeholder, 1e-6)
             )
-            dataset_source += RejectIfEmpty(gt_key, p=0.9, background=0)
 
             dataset_sources.append(dataset_source)
-        pipeline = tuple(dataset_sources) + gp.RandomProvider()
+        pipeline = tuple(dataset_sources) + gp.RandomProvider(weights)
 
         for augment in self.augments:
             pipeline += augment.node(raw_key, gt_key, mask_key)

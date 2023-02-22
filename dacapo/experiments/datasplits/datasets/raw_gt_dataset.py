@@ -24,3 +24,4 @@ class RawGTDataset(Dataset):
             else None
         )
         self.sample_points = dataset_config.sample_points
+        self.weight = dataset_config.weight
