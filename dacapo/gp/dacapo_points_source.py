@@ -13,7 +13,8 @@ class GraphSource(gp.BatchProvider):
 
     def provide(self, request):
         outputs = gp.Batch()
-        outputs[self.key] = copy.deepcopy(
-            self.graph.crop(request[self.key].roi).trim(request[self.key].roi)
-        )
+        if self.key in request:
+            outputs[self.key] = copy.deepcopy(
+                self.graph.crop(request[self.key].roi).trim(request[self.key].roi)
+            )
         return outputs
