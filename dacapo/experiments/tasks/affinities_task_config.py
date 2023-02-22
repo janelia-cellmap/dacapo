@@ -24,6 +24,7 @@ class AffinitiesTaskConfig(TaskConfig):
         }
     )
     lsds: bool = attr.ib(
+        default=False,
         metadata={
             "help_text": "Whether or not to train lsds along with your affinities. "
             "It has been shown that lsds as an auxiliary task can help affinity predictions."
