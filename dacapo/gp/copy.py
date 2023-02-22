@@ -16,6 +16,7 @@ class CopyMask(gp.BatchFilter):
         self.drop_channels = drop_channels
 
     def setup(self):
+        self.enable_autoskip()
         self.provides(self.copy_key, self.spec[self.array_key].copy())
 
     def prepare(self, request):
