@@ -167,11 +167,6 @@ class GunpowderTrainer(Trainer):
             mask_placeholder,
             prediction_voxel_size * self.mask_integral_downsample_factor,
         )
-        if points_source is not None:
-            request.add(
-                sample_points_key,
-                output_size,
-            )
         # request additional keys for snapshots
         request.add(gt_key, output_size)
         request.add(mask_key, output_size)
