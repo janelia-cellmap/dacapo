@@ -55,7 +55,7 @@ class OnesArray(Array):
 
     @property
     def dtype(self):
-        return np.bool
+        return bool
 
     @property
     def num_channels(self):

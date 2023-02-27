@@ -87,7 +87,7 @@ class ConcatArray(Array):
 
     @property
     def dtype(self):
-        return np.bool
+        return self.source_array.dtype
 
     @property
     def num_channels(self):

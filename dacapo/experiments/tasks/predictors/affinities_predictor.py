@@ -115,7 +115,7 @@ class AffinitiesPredictor(Predictor):
     def _grow_boundaries(self, gt):
 
         # get all foreground voxels by erosion of each component
-        foreground = np.zeros(shape=gt.shape, dtype=np.bool)
+        foreground = np.zeros(shape=gt.shape, dtype=bool)
         masked = None
         for label in np.unique(gt):
             if label == 0:
