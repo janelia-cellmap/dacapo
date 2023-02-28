@@ -58,7 +58,11 @@ def validate_run(
     torch.backends.cudnn.benchmark = True
     run.model.eval()
 
-    if run.datasplit.validate is None or run.datasplit.validate[0].gt is None:
+    if (
+        run.datasplit.validate is None
+        or len(run.datasplit.validate) == 0
+        or run.datasplit.validate[0].gt is None
+    ):
         logger.info("Cannot validate run %s. Continuing training!", run.name)
         return None, None
 

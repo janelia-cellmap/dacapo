@@ -16,6 +16,4 @@ class DummyDataSplit(DataSplit):
         self.train = [
             datasplit_config.train_config.dataset_type(datasplit_config.train_config)
         ]
-        self.validate = [
-            datasplit_config.train_config.dataset_type(datasplit_config.train_config)
-        ]
+        self.validate = []
