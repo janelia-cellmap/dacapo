@@ -29,7 +29,7 @@ setup(
         "bokeh",
         "daisy>=1.0",
         "funlib.math>=0.1",
-        "funlib.geometry>=0.2",
+        "funlib.geometry",
         "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence",
         "funlib.evaluate @ git+https://github.com/pattonw/funlib.evaluate",
         "cremi @ git+https://github.com/cremi/cremi_python@python3",
