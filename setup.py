@@ -11,7 +11,7 @@ setup(
     author_email="funkej@janelia.hhmi.org, pattonw@janelia.hhmi.org",
     license="MIT",
     packages=find_packages(),
-    entry_points={"console_scripts": ["dacapo=scripts.dacapo:cli"]},
+    entry_points={"console_scripts": ["dacapo=dacapo.cli:cli"]},
     include_package_data=True,
     install_requires=[
         "numpy",
