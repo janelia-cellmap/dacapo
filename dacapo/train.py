@@ -40,9 +40,6 @@ def train_run(
 
     # create run
 
-    config_store = create_config_store()
-    # read in previous training/validation stats
-
     stats_store = create_stats_store()
     run.training_stats = stats_store.retrieve_training_stats(run.name)
     run.validation_scores.scores = stats_store.retrieve_validation_iteration_scores(

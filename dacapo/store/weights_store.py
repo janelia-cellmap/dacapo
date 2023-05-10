@@ -3,7 +3,7 @@ from dacapo.experiments.run import Run
 import torch
 
 from abc import ABC, abstractmethod
-from typing import Optional, Any, Dict
+from typing import Optional
 from collections import OrderedDict
 
 

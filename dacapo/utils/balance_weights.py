@@ -1,5 +1,3 @@
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
-
 import numpy as np
 
 import itertools
@@ -73,7 +71,6 @@ def balance_weights(
         w_sparse = total_frac / float(num_classes) / fracs
         w = np.zeros(num_classes)
         w[classes] = w_sparse
-
 
         # if labels_slab are uint64 take gets very upset
         labels_slab = labels_slab.astype(np.int64)

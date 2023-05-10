@@ -1,5 +1,7 @@
 from .arrays import Array
 
+from funlib.geometry import Coordinate
+
 from abc import ABC, abstractmethod
 from typing import Optional, Any
 
@@ -10,6 +12,8 @@ class Dataset(ABC):
     gt: Optional[Array]
     mask: Optional[Array]
     weight: Optional[int]
+
+    sample_points: Optional[list[Coordinate]]
 
     def __eq__(self, other: Any) -> bool:
         return isinstance(other, type(self)) and self.name == other.name

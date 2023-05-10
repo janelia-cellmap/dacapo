@@ -6,8 +6,6 @@ from dacapo.experiments.datasplits import DataSplitConfig
 from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
 from dacapo.experiments.tasks import TaskConfig
 from dacapo.experiments.trainers import TrainerConfig
-from pymongo import MongoClient, ASCENDING
-from pymongo.errors import DuplicateKeyError
 
 import logging
 import pickle

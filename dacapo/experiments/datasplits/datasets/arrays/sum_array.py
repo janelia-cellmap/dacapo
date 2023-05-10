@@ -60,7 +60,9 @@ class SumArray(Array):
         return self._source_array.attrs
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        return np.sum([source_array[roi] for source_array in self._source_arrays], axis=0)
+        return np.sum(
+            [source_array[roi] for source_array in self._source_arrays], axis=0
+        )
 
     def _can_neuroglance(self):
         return self._source_array._can_neuroglance()

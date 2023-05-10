@@ -3,7 +3,6 @@ from pymongo import MongoClient, ASCENDING
 from .converter import converter
 from dacapo.experiments import TrainingStats, TrainingIterationStats
 from dacapo.experiments import ValidationScores, ValidationIterationScores
-from dacapo.experiments.tasks.evaluators import *
 
 import logging
 from typing import List, Optional, Dict, Any

@@ -81,7 +81,7 @@ def validate_run(
     for validation_dataset in run.datasplit.validate:
         assert (
             validation_dataset.gt is not None
-        ), f"We do not yet support validating on datasets without ground truth"
+        ), "We do not yet support validating on datasets without ground truth"
         logger.info(
             "Validating run %s on dataset %s", run.name, validation_dataset.name
         )

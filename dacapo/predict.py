@@ -1,4 +1,3 @@
-from dacapo.compute_context.compute_context import ComputeContext
 from dacapo.gp import DaCapoArraySource
 from dacapo.experiments.model import Model
 from dacapo.experiments.datasplits.datasets.arrays import Array

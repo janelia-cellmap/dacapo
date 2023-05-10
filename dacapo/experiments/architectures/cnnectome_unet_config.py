@@ -12,7 +12,7 @@ from typing import List, Optional
 class CNNectomeUNetConfig(ArchitectureConfig):
     """This class configures the CNNectomeUNet based on
     https://github.com/saalfeldlab/CNNectome/blob/master/CNNectome/networks/unet_class.py
-    
+
     Includes support for super resolution via the upsampling factors.
     """
 

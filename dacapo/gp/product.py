@@ -25,7 +25,8 @@ class Product(gp.BatchFilter):
         outputs = gp.Batch()
 
         outputs[self.y_key] = gp.Array(
-            batch[self.x1_key].data * batch[self.x2_key].data, batch[self.x1_key].spec.copy()
+            batch[self.x1_key].data * batch[self.x2_key].data,
+            batch[self.x1_key].spec.copy(),
         )
 
         return outputs

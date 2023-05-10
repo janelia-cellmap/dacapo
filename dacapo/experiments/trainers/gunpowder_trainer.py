@@ -96,10 +96,7 @@ class GunpowderTrainer(Trainer):
             points_source = None
             if sample_points is not None:
                 graph = gp.Graph(
-                    [
-                        gp.Node(i, np.array(loc))
-                        for i, loc in enumerate(sample_points)
-                    ],
+                    [gp.Node(i, np.array(loc)) for i, loc in enumerate(sample_points)],
                     [],
                     gp.GraphSpec(dataset.gt.roi),
                 )
@@ -295,6 +292,7 @@ class GunpowderTrainer(Trainer):
                 f"Trainer step took {time.time() - t_start_prediction} seconds"
             )
             self.iteration += 1
+            self.scheduler.step()
             yield TrainingIterationStats(
                 loss=loss.item(),
                 iteration=iteration,
