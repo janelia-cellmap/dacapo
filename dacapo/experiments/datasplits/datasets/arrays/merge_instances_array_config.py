@@ -8,7 +8,6 @@ from typing import List
 
 @attr.s
 class MergeInstancesArrayConfig(ArrayConfig):
-
     array_type = MergeInstancesArray
 
     source_array_configs: List[ArrayConfig] = attr.ib(

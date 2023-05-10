@@ -21,7 +21,6 @@ class OneHotPredictor(Predictor):
         return len(self.classes)
 
     def create_model(self, architecture):
-
         head = torch.nn.Conv3d(
             architecture.num_out_channels, self.embedding_dims, kernel_size=3
         )

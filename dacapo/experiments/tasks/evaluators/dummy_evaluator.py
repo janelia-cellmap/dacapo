@@ -8,7 +8,6 @@ class DummyEvaluator(Evaluator):
     criteria = ["frizz_level", "blipp_score"]
 
     def evaluate(self, output_array, evaluation_dataset):
-
         return DummyEvaluationScores(
             frizz_level=random.random(), blipp_score=random.random()
         )

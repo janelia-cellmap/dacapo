@@ -9,7 +9,6 @@ from typing import Tuple
 
 @attr.s
 class IntensityAugmentConfig(AugmentConfig):
-
     scale: Tuple[float, float] = attr.ib(
         metadata={"help_text": "A range within which to choose a random scale factor."}
     )

@@ -22,7 +22,6 @@ class RejectIfEmpty(BatchFilter):
     """
 
     def __init__(self, gt=None, p=0.5, background=0):
-
         self.gt = gt
         self.p = p
         self.background = 0
@@ -45,7 +44,6 @@ class RejectIfEmpty(BatchFilter):
 
         have_good_batch = random.random() < self.p
         while True:
-
             batch = self.upstream_provider.request_batch(request)
 
             gt_data = batch.arrays[self.gt].data

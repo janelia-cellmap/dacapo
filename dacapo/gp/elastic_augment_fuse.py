@@ -16,7 +16,6 @@ logger = logging.getLogger(__name__)
 
 
 def _create_identity_transformation(shape, voxel_size=None, offset=None, subsample=1):
-
     dims = len(shape)
 
     if voxel_size is None:
@@ -41,7 +40,6 @@ def _create_identity_transformation(shape, voxel_size=None, offset=None, subsamp
 def _upscale_transformation(
     transformation, output_shape, interpolate_order=1, dtype=np.float32
 ):
-
     input_shape = transformation.shape[1:]
 
     dims = len(output_shape)
@@ -61,7 +59,6 @@ def _upscale_transformation(
 
 
 def _rotate(point, angle):
-
     res = np.array(point)
     res[0] = math.sin(angle) * point[1] + math.cos(angle) * point[0]
     res[1] = -math.sin(angle) * point[0] + math.cos(angle) * point[1]
@@ -70,7 +67,6 @@ def _rotate(point, angle):
 
 
 def _create_rotation_transformation(shape, angle, subsample=1, voxel_size=None):
-
     dims = len(shape)
     subsample_shape = tuple(max(1, int(s / subsample)) for s in shape)
     control_points = (2,) * dims
@@ -92,7 +88,6 @@ def _create_rotation_transformation(shape, angle, subsample=1, voxel_size=None):
 
     control_point_offsets = np.zeros((dims,) + control_points, dtype=np.float32)
     for control_point in np.ndindex(control_points):
-
         point = np.array(control_point) * control_point_scaling_factor
         center_offset = np.array(
             [p - c for c, p in zip(center, point)], dtype=np.float32
@@ -106,7 +101,6 @@ def _create_rotation_transformation(shape, angle, subsample=1, voxel_size=None):
 
 
 def _create_uniform_3d_transformation(shape, rotation, subsample=1, voxel_size=None):
-
     dims = len(shape)
     subsample_shape = tuple(max(1, int(s / subsample)) for s in shape)
     control_points = (2,) * dims
@@ -128,7 +122,6 @@ def _create_uniform_3d_transformation(shape, rotation, subsample=1, voxel_size=N
 
     control_point_offsets = np.zeros((dims,) + control_points, dtype=np.float32)
     for control_point in np.ndindex(control_points):
-
         point = np.array(control_point) * control_point_scaling_factor
         center_offset = np.array(
             [p - c for c, p in zip(center, point)], dtype=np.float32
@@ -274,7 +267,6 @@ class ElasticAugment(BatchFilter):
         )
 
         for key, spec in request.items():
-
             assert isinstance(key, ArrayKey) or isinstance(
                 key, GraphKey
             ), "Only ArrayKey/GraphKey supported but got %s in request" % type(key)
@@ -344,7 +336,6 @@ class ElasticAugment(BatchFilter):
             )
 
     def process(self, batch, request):
-
         if not self.do_augment:
             logger.debug(
                 "Process: Randomly not augmenting at all. (probabilty to augment: %f)",
@@ -408,7 +399,6 @@ class ElasticAugment(BatchFilter):
             array.spec.roi = request[key].roi
 
     def _create_transformation(self, target_shape, offset):
-
         logger.debug(
             "creating displacement for shape %s, subsample %d",
             target_shape,
@@ -513,7 +503,6 @@ class ElasticAugment(BatchFilter):
             transformation[d] += shift[d]
 
     def _get_source_roi(self, transformation):
-
         dims = transformation.shape[0]
 
         # get bounding box of needed data for transformation

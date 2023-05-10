@@ -7,7 +7,6 @@ import attr
 
 @attr.s
 class IntensityScaleShiftAugmentConfig(AugmentConfig):
-
     scale: float = attr.ib(
         metadata={"help_text": "A constant to scale your intensities."}
     )

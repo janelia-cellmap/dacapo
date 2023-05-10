@@ -17,7 +17,6 @@ class FileStatsStore(StatsStore):
     """
 
     def __init__(self, path):
-
         logger.info("Creating MongoStatsStore:\n\tpath    : %s", path)
 
         self.path = Path(path)
@@ -26,15 +25,12 @@ class FileStatsStore(StatsStore):
         self.__init_db()
 
     def store_training_stats(self, run_name, stats):
-
         existing_stats = self.__read_training_stats(run_name)
 
         store_from_iteration = 0
 
         if existing_stats.trained_until() > 0:
-
             if stats.trained_until() > 0:
-
                 # both current stats and DB contain data
                 if stats.trained_until() > existing_stats.trained_until():
                     # current stats go further than the one in DB
@@ -57,11 +53,9 @@ class FileStatsStore(StatsStore):
         )
 
     def retrieve_training_stats(self, run_name):
-
         return self.__read_training_stats(run_name)
 
     def store_validation_iteration_scores(self, run_name, scores):
-
         existing_iteration_scores = self.__read_validation_iteration_scores(run_name)
         store_from_iteration, drop_db = scores.compare(existing_iteration_scores)
 
@@ -82,14 +76,12 @@ class FileStatsStore(StatsStore):
         )
 
     def retrieve_validation_iteration_scores(self, run_name):
-
         return self.__read_validation_iteration_scores(run_name)
 
     def delete_training_stats(self, run_name: str) -> None:
         self.__delete_training_stats(run_name)
 
     def __store_training_stats(self, stats, begin, end, run_name):
-
         docs = converter.unstructure(stats.iteration_stats[begin:end])
         for doc in docs:
             doc.update({"run_name": run_name})
@@ -99,7 +91,6 @@ class FileStatsStore(StatsStore):
             pickle.dump(docs, file_store.open("wb"))
 
     def __read_training_stats(self, run_name):
-
         file_store = self.training_stats / run_name
         if file_store.exists():
             docs = pickle.load(file_store.open("rb"))
@@ -109,7 +100,6 @@ class FileStatsStore(StatsStore):
         return stats
 
     def __delete_training_stats(self, run_name):
-
         file_store = self.training_stats / run_name
         if file_store.exists():
             file_store.unlink()
@@ -117,7 +107,6 @@ class FileStatsStore(StatsStore):
     def __store_validation_iteration_scores(
         self, validation_scores: ValidationScores, begin: int, end: int, run_name: str
     ) -> None:
-
         docs = [
             converter.unstructure(scores)
             for scores in validation_scores.scores
@@ -131,7 +120,6 @@ class FileStatsStore(StatsStore):
             pickle.dump(docs, file_store.open("wb"))
 
     def __read_validation_iteration_scores(self, run_name):
-
         file_store = self.validation_scores / run_name
         if file_store.exists():
             docs = pickle.load(file_store.open("rb"))
@@ -141,7 +129,6 @@ class FileStatsStore(StatsStore):
         return scores
 
     def __delete_validation_iteration_scores(self, run_name):
-
         file_store = self.validation_scores / run_name
         if file_store.exists():
             file_store.unlink()
@@ -150,7 +137,6 @@ class FileStatsStore(StatsStore):
         pass
 
     def __open_collections(self):
-
         self.training_stats = self.path / "training_stats"
         self.training_stats.mkdir(exist_ok=True, parents=True)
         self.validation_scores = self.path / "validation_scores"

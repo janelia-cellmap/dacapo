@@ -154,7 +154,6 @@ def validate_run(
         dataset_iteration_scores = []
 
         for parameters in post_processor.enumerate_parameters():
-
             output_array_identifier = array_store.validation_output_array(
                 run.name, iteration, parameters, validation_dataset
             )

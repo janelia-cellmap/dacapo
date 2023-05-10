@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 def seg_to_affgraph(seg: np.ndarray, neighborhood: List[Coordinate]) -> np.ndarray:
-
     nhood = np.array(neighborhood)
 
     # constructs an affinity graph from a segmentation
@@ -22,7 +21,6 @@ def seg_to_affgraph(seg: np.ndarray, neighborhood: List[Coordinate]) -> np.ndarr
     aff = np.zeros((nEdge,) + shape, dtype=np.int32)
 
     if dims == 2:
-
         for e in range(nEdge):
             aff[
                 e,
@@ -56,7 +54,6 @@ def seg_to_affgraph(seg: np.ndarray, neighborhood: List[Coordinate]) -> np.ndarr
             )
 
     elif dims == 3:
-
         for e in range(nEdge):
             aff[
                 e,
@@ -95,7 +92,6 @@ def seg_to_affgraph(seg: np.ndarray, neighborhood: List[Coordinate]) -> np.ndarr
             )
 
     else:
-
         raise RuntimeError(f"AddAffinities works only in 2 or 3 dimensions, not {dims}")
 
     return aff

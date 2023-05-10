@@ -15,7 +15,6 @@ class DataSplit(ABC):
     def _neuroglancer_link(self):
         viewer = neuroglancer.Viewer()
         with viewer.txn() as s:
-
             train_layers = {}
             for i, dataset in enumerate(self.train):
                 train_layers.update(

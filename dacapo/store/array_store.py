@@ -13,7 +13,6 @@ from typing import Optional, Tuple
 
 @attr.s
 class LocalArrayIdentifier:
-
     container: Path = attr.ib()
     dataset: str = attr.ib()
 
@@ -107,7 +106,6 @@ class ArrayStore(ABC):
 
         viewer = neuroglancer.Viewer()
         with viewer.txn() as s:
-
             snapshot_layers = {}
             for snapshot in snapshots:
                 snapshot_layers[snapshot] = ZarrArray.open_from_array_identifier(

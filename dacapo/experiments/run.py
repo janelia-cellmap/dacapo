@@ -27,7 +27,6 @@ class Run:
     validation_scores: ValidationScores
 
     def __init__(self, run_config):
-
         self.name = run_config.name
         self.train_until = run_config.num_iterations
         self.validation_interval = run_config.validation_interval

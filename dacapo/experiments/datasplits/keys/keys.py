@@ -7,7 +7,6 @@ class DataKey(Enum):
 
 @unique
 class ArrayKey(DataKey):
-
     RAW = "raw"
     GT = "gt"
     MASK = "mask"
@@ -16,5 +15,4 @@ class ArrayKey(DataKey):
 
 @unique
 class GraphKey(DataKey):
-
     SPECIFIED_LOCATIONS = "specified_locations"

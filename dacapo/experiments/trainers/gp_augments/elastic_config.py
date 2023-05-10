@@ -8,7 +8,6 @@ from typing import List, Tuple
 
 @attr.s
 class ElasticAugmentConfig(AugmentConfig):
-
     control_point_spacing: List[int] = attr.ib(
         metadata={
             "help_text": (

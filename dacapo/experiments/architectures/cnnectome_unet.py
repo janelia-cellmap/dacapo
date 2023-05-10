@@ -342,7 +342,6 @@ class CNNectomeUNetModule(torch.nn.Module):
         )
 
     def rec_forward(self, level, f_in):
-
         # index of level in layer arrays
         i = self.num_levels - level - 1
 
@@ -351,11 +350,9 @@ class CNNectomeUNetModule(torch.nn.Module):
 
         # end of recursion
         if level == 0:
-
             fs_out = [f_left] * self.num_heads
 
         else:
-
             # down
             g_in = self.l_down[i](f_left)
 
@@ -373,7 +370,6 @@ class CNNectomeUNetModule(torch.nn.Module):
         return fs_out
 
     def forward(self, x):
-
         y = self.rec_forward(self.num_levels - 1, x)
 
         if self.num_heads == 1:
@@ -386,7 +382,6 @@ class ConvPass(torch.nn.Module):
     def __init__(
         self, in_channels, out_channels, kernel_sizes, activation, padding="valid"
     ):
-
         super(ConvPass, self).__init__()
 
         if activation is not None:
@@ -395,7 +390,6 @@ class ConvPass(torch.nn.Module):
         layers = []
 
         for kernel_size in kernel_sizes:
-
             self.dims = len(kernel_size)
 
             conv = {
@@ -421,13 +415,11 @@ class ConvPass(torch.nn.Module):
         self.conv_pass = torch.nn.Sequential(*layers)
 
     def forward(self, x):
-
         return self.conv_pass(x)
 
 
 class Downsample(torch.nn.Module):
     def __init__(self, downsample_factor):
-
         super(Downsample, self).__init__()
 
         self.dims = len(downsample_factor)
@@ -442,7 +434,6 @@ class Downsample(torch.nn.Module):
         self.down = pool(downsample_factor, stride=downsample_factor)
 
     def forward(self, x):
-
         for d in range(1, self.dims + 1):
             if x.size()[-d] % self.downsample_factor[-d] != 0:
                 raise RuntimeError(
@@ -465,7 +456,6 @@ class Upsample(torch.nn.Module):
         next_conv_kernel_sizes=None,
         activation=None,
     ):
-
         super(Upsample, self).__init__()
 
         if activation is not None:
@@ -482,7 +472,6 @@ class Upsample(torch.nn.Module):
         layers = []
 
         if mode == "transposed_conv":
-
             up = {2: torch.nn.ConvTranspose2d, 3: torch.nn.ConvTranspose3d}[self.dims]
 
             layers.append(
@@ -495,7 +484,6 @@ class Upsample(torch.nn.Module):
             )
 
         else:
-
             layers.append(torch.nn.Upsample(scale_factor=scale_factor, mode=mode))
             conv = {2: torch.nn.Conv2d, 3: torch.nn.Conv3d}[self.dims]
             layers.append(
@@ -553,7 +541,6 @@ class Upsample(torch.nn.Module):
         )
 
         if target_spatial_shape != spatial_shape:
-
             assert all(
                 ((t > c) for t, c in zip(target_spatial_shape, convolution_crop))
             ), (
@@ -578,7 +565,6 @@ class Upsample(torch.nn.Module):
         return x[slices]
 
     def forward(self, g_out, f_left=None):
-
         g_up = self.up(g_out)
 
         if self.next_conv_kernel_sizes is not None:

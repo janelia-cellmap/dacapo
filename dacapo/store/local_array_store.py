@@ -12,7 +12,6 @@ class LocalArrayStore(ArrayStore):
     """A local array store that uses zarr containers."""
 
     def __init__(self, basedir):
-
         self.basedir = basedir
 
     def best_validation_array(
@@ -87,7 +86,6 @@ class LocalArrayStore(ArrayStore):
         )
 
     def remove(self, array_identifier: LocalArrayIdentifier) -> None:
-
         container = array_identifier.container
         dataset = array_identifier.dataset
 
@@ -119,5 +117,4 @@ class LocalArrayStore(ArrayStore):
         shutil.rmtree(path)
 
     def __get_run_dir(self, run_name: str) -> Path:
-
         return Path(self.basedir, run_name)

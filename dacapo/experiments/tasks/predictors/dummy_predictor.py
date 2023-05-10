@@ -12,7 +12,6 @@ class DummyPredictor(Predictor):
         self.embedding_dims = embedding_dims
 
     def create_model(self, architecture):
-
         head = torch.nn.Conv3d(
             architecture.num_out_channels, self.embedding_dims, kernel_size=3
         )

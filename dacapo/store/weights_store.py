@@ -8,7 +8,6 @@ from collections import OrderedDict
 
 
 class Weights:
-
     optimizer: OrderedDict[str, torch.Tensor]
     model: OrderedDict[str, torch.Tensor]
 

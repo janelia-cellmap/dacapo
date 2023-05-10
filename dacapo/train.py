@@ -35,7 +35,6 @@ def train_run(
     run: Run,
     compute_context: ComputeContext = LocalTorch(),
 ):
-
     logger.info("Starting/resuming training for run %s...", run)
 
     # create run
@@ -63,9 +62,7 @@ def train_run(
     latest_weights_iteration = weights_store.latest_iteration(run)
 
     if trained_until > 0:
-
         if latest_weights_iteration is None:
-
             logger.warning(
                 "Run %s was previously trained until %d, but no weights are "
                 "stored. Will restart training from scratch.",
@@ -78,7 +75,6 @@ def train_run(
             run.validation_scores.delete_after(0)
 
         elif latest_weights_iteration < trained_until:
-
             logger.warning(
                 "Run %s was previously trained until %d, but the latest "
                 "weights are stored for iteration %d. Will resume training "
@@ -95,13 +91,11 @@ def train_run(
             weights_store.retrieve_weights(run, iteration=trained_until)
 
         elif latest_weights_iteration == trained_until:
-
             logger.info("Resuming training from iteration %d", trained_until)
 
             weights_store.retrieve_weights(run, iteration=trained_until)
 
         elif latest_weights_iteration > trained_until:
-
             raise RuntimeError(
                 f"Found weights for iteration {latest_weights_iteration}, but "
                 f"run {run.name} was only trained until {trained_until}."
@@ -130,7 +124,6 @@ def train_run(
 
     with run.trainer as trainer:
         while trained_until < run.train_until:
-
             # train for at most 100 iterations at a time, then store training stats
             iterations = min(100, run.train_until - trained_until)
             iteration_stats = None
@@ -145,7 +138,6 @@ def train_run(
                 "training",
                 iterations,
             ):
-
                 run.training_stats.add_iteration_stats(iteration_stats)
 
                 if (iteration_stats.iteration + 1) % run.validation_interval == 0:
