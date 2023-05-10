@@ -29,7 +29,6 @@ RunInfo = namedtuple(
 
 
 def smooth_values(a, n, stride=1):
-
     a = np.array(a)
 
     # mean
@@ -57,7 +56,6 @@ def get_runs_info(
     validation_score_names: List[str],
     plot_losses: List[bool],
 ) -> List[RunInfo]:
-
     config_store = create_config_store()
     stats_store = create_stats_store()
     runs = []
@@ -152,7 +150,6 @@ def plot_runs(
             + [(name, "@" + name) for name in validation_postprocessor_parameter_names]
         )
         for dataset in validation_datasets:
-
             validation_figure = bokeh.plotting.figure(
                 tools="pan, wheel_zoom, reset, save, hover",
                 x_axis_label="iterations",

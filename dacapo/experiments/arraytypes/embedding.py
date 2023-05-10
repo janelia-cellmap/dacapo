@@ -3,7 +3,6 @@ from .arraytype import ArrayType
 import attr
 
 
-
 @attr.s
 class EmbeddingArray(ArrayType):
     """

@@ -4,7 +4,6 @@ from .array_config import ArrayConfig
 from .intensity_array import IntensitiesArray
 
 
-
 @attr.s
 class IntensitiesArrayConfig(ArrayConfig):
     """This config class provides the necessary configuration for turning an Annotated dataset into a

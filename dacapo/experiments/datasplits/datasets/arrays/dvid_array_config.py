@@ -4,7 +4,6 @@ from .array_config import ArrayConfig
 from .dvid_array import DVIDArray
 
 
-
 from typing import Tuple
 
 

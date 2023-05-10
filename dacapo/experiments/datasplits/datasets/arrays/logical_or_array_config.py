@@ -4,7 +4,6 @@ from .array_config import ArrayConfig
 from .logical_or_array import LogicalOrArray
 
 
-
 @attr.s
 class LogicalOrArrayConfig(ArrayConfig):
     """This config class takes a source array and performs a logical or over the channels.

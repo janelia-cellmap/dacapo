@@ -4,7 +4,6 @@ from .array_config import ArrayConfig
 from .ones_array import OnesArray
 
 
-
 @attr.s
 class OnesArrayConfig(ArrayConfig):
     """This array read data from the source array and then return a np.ones_like() version."""
