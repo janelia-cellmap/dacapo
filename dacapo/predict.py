@@ -106,6 +106,7 @@ def predict(
         {prediction: prediction_array_identifier.dataset},
         prediction_array_identifier.container.parent,
         prediction_array_identifier.container.name,
+        dataset_dtypes={prediction: np.float32},
     )
 
     # create reference batch request
