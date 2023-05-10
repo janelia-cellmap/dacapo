@@ -149,9 +149,19 @@ class ZarrArray(Array):
                 write_size=write_size,
             )
             zarr_dataset = zarr_container[array_identifier.dataset]
-            zarr_dataset.attrs["offset"] = roi.offset
-            zarr_dataset.attrs["resolution"] = voxel_size
-            zarr_dataset.attrs["axes"] = axes
+            zarr_dataset.attrs["offset"] = (
+                roi.offset[::-1]
+                if array_identifier.container.name.endswith("n5")
+                else roi.offset
+            )
+            zarr_dataset.attrs["resolution"] = (
+                voxel_size[::-1]
+                if array_identifier.container.name.endswith("n5")
+                else voxel_size
+            )
+            zarr_dataset.attrs["axes"] = (
+                axes[::-1] if array_identifier.container.name.endswith("n5") else axes
+            )
         except zarr.errors.ContainsArrayError:
             zarr_dataset = zarr_container[array_identifier.dataset]
             assert (
