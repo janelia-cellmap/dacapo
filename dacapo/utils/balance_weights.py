@@ -1,7 +1,7 @@
 import numpy as np
 
 import itertools
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Tuple
 
 
 def balance_weights(
@@ -11,7 +11,7 @@ def balance_weights(
     slab=None,
     clipmin: float = 0.05,
     clipmax: float = 0.95,
-    moving_counts: Optional[List[Dict[int, tuple[int, int]]]] = None,
+    moving_counts: Optional[List[Dict[int, Tuple[int, int]]]] = None,
 ):
     if moving_counts is None:
         moving_counts = []

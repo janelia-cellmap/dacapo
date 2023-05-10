@@ -111,7 +111,7 @@ class LocalWeightsStore(WeightsStore):
 
         return weights_info["iteration"]
 
-    def _load_best(self, run: str, criterion: str):
+    def _load_best(self, run: Run, criterion: str):
         logger.info("Retrieving weights for run %s, criterion %s", run, criterion)
 
         weights_name = self.__get_weights_dir(run) / f"{criterion}"

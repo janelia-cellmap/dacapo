@@ -13,7 +13,7 @@ class DVIDArrayConfig(ArrayConfig):
 
     array_type = DVIDArray
 
-    source: tuple[str, str, str] = attr.ib(
+    source: Tuple[str, str, str] = attr.ib(
         metadata={"help_text": "The source strings."}
     )
 
