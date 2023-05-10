@@ -1,7 +1,5 @@
 import attr
 
-from typing import Tuple
-
 
 @attr.s
 class StartConfig:

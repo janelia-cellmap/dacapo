@@ -1,10 +1,9 @@
 from .arraytype import ArrayType
 
-import numpy as np
 
 import attr
 
-from typing import Dict, Union
+from typing import Dict
 
 
 @attr.s

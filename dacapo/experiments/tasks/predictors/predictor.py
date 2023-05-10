@@ -1,7 +1,5 @@
 from funlib.geometry import Coordinate
 
-import torch
-
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any
 

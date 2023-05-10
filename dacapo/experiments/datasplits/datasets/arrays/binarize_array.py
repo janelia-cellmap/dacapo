@@ -34,7 +34,7 @@ class BinarizeArray(Array):
 
         assert (
             "c" not in self._source_array.axes
-        ), f"Cannot initialize a BinarizeArray with a source array with channels"
+        ), "Cannot initialize a BinarizeArray with a source array with channels"
 
         self._groupings = array_config.groupings
 

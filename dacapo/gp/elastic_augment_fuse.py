@@ -2,7 +2,6 @@ from __future__ import division
 
 import logging
 import math
-from random import uniform
 
 import scipy.ndimage
 from scipy.spatial.transform import Rotation as R
@@ -144,20 +143,6 @@ def _create_uniform_3d_transformation(shape, rotation, subsample=1, voxel_size=N
 
 def _min_max_mean_std(ndarray, prefix=""):
     return ""
-
-    def mins(x):
-        return tuple(map(np.min, x))
-
-    def maxs(x):
-        return tuple(map(np.max, x))
-
-    def means(x):
-        return tuple(map(np.mean, x))
-
-    def stds(x):
-        return tuple(map(np.std, x))
-
-    pattern = prefix + " ".join(("%s",) * 4)
 
 
 class ElasticAugment(BatchFilter):

@@ -2,7 +2,6 @@ import attr
 
 from .array_config import ArrayConfig
 from .sum_array import SumArray
-from .array_config import ArrayConfig
 
 from typing import List
 

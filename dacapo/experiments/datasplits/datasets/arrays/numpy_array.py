@@ -1,7 +1,7 @@
 from .array import Array
 
 import gunpowder as gp
-from funlib.geometry import Coordinate, Roi, roi
+from funlib.geometry import Coordinate, Roi
 
 import numpy as np
 

@@ -1,6 +1,6 @@
 import attr
 
-from typing import Tuple, Optional
+from typing import Tuple
 
 
 @attr.s

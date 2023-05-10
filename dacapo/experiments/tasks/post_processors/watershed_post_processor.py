@@ -21,7 +21,6 @@ except ImportError:
 
 
 import numpy as np
-import zarr
 
 from typing import List
 

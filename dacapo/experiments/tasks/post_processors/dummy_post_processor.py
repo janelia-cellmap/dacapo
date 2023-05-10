@@ -1,6 +1,6 @@
-from typing import Iterable
 from .dummy_post_processor_parameters import DummyPostProcessorParameters
 from .post_processor import PostProcessor
+
 import numpy as np
 import zarr
 

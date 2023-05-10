@@ -2,7 +2,6 @@ from .arraytype import ArrayType
 
 import attr
 
-from typing import Dict
 
 
 @attr.s

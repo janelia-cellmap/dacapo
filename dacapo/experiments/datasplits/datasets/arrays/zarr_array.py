@@ -1,10 +1,8 @@
-from os import symlink
 from .array import Array
 from dacapo import Options
 
 from funlib.geometry import Coordinate, Roi
 import funlib.persistence
-import daisy
 
 import neuroglancer
 
@@ -50,7 +48,7 @@ class ZarrArray(Array):
             return self._axes
         try:
             return self._attributes["axes"]
-        except KeyError as e:
+        except KeyError:
             logger.debug(
                 "DaCapo expects Zarr datasets to have an 'axes' attribute!\n"
                 f"Zarr {self.file_name} and dataset {self.dataset} has attributes: {list(self._attributes.items())}\n"
@@ -237,7 +235,7 @@ class ZarrArray(Array):
             file_server = file_server.format(
                 username=options.file_server_user, password=options.file_server_pass
             )
-        except RuntimeError as e:
+        except RuntimeError:
             # if options doesn't have a file_server user or password simply continue
             # without authentications
             pass

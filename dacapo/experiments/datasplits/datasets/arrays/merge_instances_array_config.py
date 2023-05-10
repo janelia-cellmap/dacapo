@@ -2,7 +2,6 @@ import attr
 
 from .array_config import ArrayConfig
 from .merge_instances_array import MergeInstancesArray
-from .array_config import ArrayConfig
 
 from typing import List
 

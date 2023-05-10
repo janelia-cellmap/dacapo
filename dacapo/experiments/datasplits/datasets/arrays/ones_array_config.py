@@ -2,9 +2,7 @@ import attr
 
 from .array_config import ArrayConfig
 from .ones_array import OnesArray
-from .array_config import ArrayConfig
 
-from funlib.geometry import Coordinate
 
 
 @attr.s

@@ -2,9 +2,7 @@ import attr
 
 from .array_config import ArrayConfig
 from .logical_or_array import LogicalOrArray
-from .array_config import ArrayConfig
 
-from typing import List, Tuple
 
 
 @attr.s

@@ -2,7 +2,6 @@ import attr
 
 from .array_config import ArrayConfig
 from .crop_array import CropArray
-from .array_config import ArrayConfig
 
 from funlib.geometry import Roi
 

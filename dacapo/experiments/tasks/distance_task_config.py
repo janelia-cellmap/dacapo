@@ -3,7 +3,7 @@ import attr
 from .distance_task import DistanceTask
 from .task_config import TaskConfig
 
-from typing import List, Tuple
+from typing import List
 
 
 @attr.s

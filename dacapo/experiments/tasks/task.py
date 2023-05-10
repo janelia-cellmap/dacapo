@@ -3,7 +3,7 @@ from .losses import Loss
 from .evaluators import Evaluator, EvaluationScores
 from .post_processors import PostProcessor, PostProcessorParameters
 
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import Iterable
 
 

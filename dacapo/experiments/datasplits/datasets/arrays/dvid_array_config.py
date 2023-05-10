@@ -3,11 +3,9 @@ import attr
 from .array_config import ArrayConfig
 from .dvid_array import DVIDArray
 
-from funlib.geometry import Coordinate
 
-from pathlib import Path
 
-from typing import Optional, List, Tuple
+from typing import Tuple
 
 
 @attr.s

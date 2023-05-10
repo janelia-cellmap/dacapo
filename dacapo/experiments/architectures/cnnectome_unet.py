@@ -23,7 +23,7 @@ class CNNectomeUNet(Architecture):
         self.padding = architecture_config.padding
         self.upsample_factors = architecture_config.upsample_factors
         self.upsample_factors = (
-            self.upsample_factors if not self.upsample_factors is None else []
+            self.upsample_factors if self.upsample_factors is not None else []
         )
 
         self.unet = self.module()

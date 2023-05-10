@@ -28,7 +28,6 @@ logger = logging.getLogger(__name__)
 
 
 class GunpowderTrainer(Trainer):
-
     iteration = 0
 
     def __init__(self, trainer_config):
@@ -58,9 +57,6 @@ class GunpowderTrainer(Trainer):
         # switch to world units
         input_size = raw_voxel_size * input_shape
         output_size = prediction_voxel_size * output_shape
-
-        # padding of groundtruth/mask
-        gt_mask_padding = output_size + task.predictor.padding(prediction_voxel_size)
 
         # define keys:
         raw_key = gp.ArrayKey("RAW")

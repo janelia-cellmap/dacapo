@@ -6,8 +6,7 @@ from dacapo.utils.balance_weights import balance_weights
 
 from funlib.geometry import Coordinate
 
-from scipy.ndimage.morphology import distance_transform_edt, binary_erosion
-from scipy.ndimage import generate_binary_structure
+from scipy.ndimage.morphology import distance_transform_edt
 import numpy as np
 import torch
 
@@ -213,7 +212,6 @@ class DistancePredictor(Predictor):
         dims = len(labels.shape)
         in_shape = labels.shape
         out_shape = tuple(2 * s - 1 for s in in_shape)
-        out_slices = tuple(slice(0, s) for s in out_shape)
 
         boundaries = np.zeros(out_shape, dtype=bool)
 

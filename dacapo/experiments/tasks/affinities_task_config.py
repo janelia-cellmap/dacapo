@@ -5,7 +5,7 @@ from .task_config import TaskConfig
 
 from funlib.geometry import Coordinate
 
-from typing import List, Tuple
+from typing import List
 
 
 @attr.s

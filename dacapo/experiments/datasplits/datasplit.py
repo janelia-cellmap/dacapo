@@ -3,7 +3,7 @@ from dacapo.experiments.datasplits.datasets import Dataset
 
 import neuroglancer
 
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import List, Optional
 from pathlib import Path
 import json

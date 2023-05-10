@@ -1,6 +1,5 @@
 from .array import Array
 
-import daisy
 import funlib.persistence
 from funlib.geometry import Coordinate, Roi
 

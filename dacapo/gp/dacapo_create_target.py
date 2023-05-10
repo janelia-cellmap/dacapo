@@ -1,5 +1,5 @@
 from dacapo.experiments.tasks.predictors import Predictor
-from dacapo.experiments.datasplits.datasets.arrays import Array, NumpyArray
+from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
 
 import gunpowder as gp
 

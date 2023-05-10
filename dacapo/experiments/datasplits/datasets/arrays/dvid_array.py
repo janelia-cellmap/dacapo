@@ -1,17 +1,14 @@
-from os import symlink
 from .array import Array
-from dacapo import Options
 from dacapo.ext import NoSuchModule
 
 try:
     from neuclease.dvid import fetch_info, fetch_labelmap_voxels, fetch_raw
-except ImportError as e:
+except ImportError:
     fetch_info = NoSuchModule("neuclease.dvid.fetch_info")
     fetch_labelmap_voxels = NoSuchModule("neuclease.dvid.fetch_labelmap_voxels")
 
 from funlib.geometry import Coordinate, Roi
 import funlib.persistence
-import daisy
 
 import neuroglancer
 

@@ -4,12 +4,11 @@ from .gp_augments import AugmentConfig
 from .gunpowder_trainer import GunpowderTrainer
 from .trainer_config import TrainerConfig
 
-from typing import Optional, Dict, Any, List
+from typing import Optional, List
 
 
 @attr.s
 class GunpowderTrainerConfig(TrainerConfig):
-
     trainer_type = GunpowderTrainer
 
     num_data_fetchers: int = attr.ib(

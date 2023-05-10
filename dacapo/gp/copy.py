@@ -1,7 +1,5 @@
 import gunpowder as gp
 
-import numpy as np
-
 
 class CopyMask(gp.BatchFilter):
     """

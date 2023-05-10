@@ -2,7 +2,7 @@ from .array import Array
 
 from funlib.geometry import Coordinate, Roi
 
-from fibsem_tools.metadata.groundtruth import Label, LabelList
+from fibsem_tools.metadata.groundtruth import LabelList
 
 import neuroglancer
 
@@ -30,7 +30,7 @@ class MissingAnnotationsMask(Array):
 
         assert (
             "c" not in self._source_array.axes
-        ), f"Cannot initialize a BinarizeArray with a source array with channels"
+        ), "Cannot initialize a BinarizeArray with a source array with channels"
 
         self._groupings = array_config.groupings
 
@@ -108,7 +108,7 @@ class MissingAnnotationsMask(Array):
                         # for id in ids:
                         #     grouped[i][labels == id] = 0
 
-        except KeyError as e:
+        except KeyError:
             pass
         return grouped
 
