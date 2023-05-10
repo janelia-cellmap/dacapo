@@ -87,10 +87,8 @@ class AffinitiesPredictor(Predictor):
             label_data = label_data[0]
         else:
             axes = ["c"] + axes
-        t1 = time.time()
         affinities = seg_to_affgraph(label_data, self.neighborhood).astype(np.float32)
         if self.lsds:
-            t1 = time.time()
             descriptors = self.extractor(gt.voxel_size).get_descriptors(
                 segmentation=label_data,
                 voxel_size=gt.voxel_size,

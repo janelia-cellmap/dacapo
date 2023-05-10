@@ -42,8 +42,18 @@ class GunpowderTrainer(Trainer):
         self.mask_integral_downsample_factor = 4
         self.clip_raw = trainer_config.clip_raw
 
+        self.scheduler = None
+
     def create_optimizer(self, model):
-        return torch.optim.RAdam(lr=self.learning_rate, params=model.parameters())
+        optimizer = torch.optim.RAdam(lr=self.learning_rate, params=model.parameters())
+        self.scheduler = torch.optim.lr_scheduler.LinearLR(
+            optimizer,
+            start_factor=0.01,
+            end_factor=1.0,
+            total_iters=1000,
+            last_epoch=-1,
+        )
+        return optimizer
 
     def build_batch_provider(self, datasets, model, task, snapshot_container=None):
         input_shape = Coordinate(model.input_shape)
