@@ -33,7 +33,7 @@ setup(
         "mwatershed @ git+https://github.com/pattonw/mwatershed",
         "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence",
         "funlib.evaluate @ git+https://github.com/pattonw/funlib.evaluate",
-        "funlib.segment @ git+https://github.com/funkelab/funlib.segment"
+        "funlib.segment @ git+https://github.com/funkelab/funlib.segment",
         "gunpowder>=1.3",
         "lsd @ git+https://github.com/pattonw/lsd@no-convenience-imports",
     ],
