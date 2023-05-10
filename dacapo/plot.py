@@ -9,7 +9,6 @@ import bokeh.plotting
 import numpy as np
 
 from collections import namedtuple
-import time
 import itertools
 from typing import List
 

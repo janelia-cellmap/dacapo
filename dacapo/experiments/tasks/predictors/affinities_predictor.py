@@ -14,7 +14,6 @@ import torch
 import itertools
 
 from typing import List
-import time
 
 
 class AffinitiesPredictor(Predictor):
