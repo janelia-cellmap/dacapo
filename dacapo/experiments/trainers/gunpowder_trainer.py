@@ -6,6 +6,7 @@ from dacapo.gp import (
     GraphSource,
     DaCapoTargetFilter,
     CopyMask,
+    Product,
 )
 from dacapo.experiments.datasplits.datasets.arrays import (
     NumpyArray,
@@ -73,6 +74,8 @@ class GunpowderTrainer(Trainer):
         mask_placeholder = gp.ArrayKey("MASK_PLACEHOLDER")
 
         target_key = gp.ArrayKey("TARGET")
+        dataset_weight_key = gp.ArrayKey("DATASET_WEIGHT")
+        datasets_weight_key = gp.ArrayKey("DATASETS_WEIGHT")
         weight_key = gp.ArrayKey("WEIGHT")
         sample_points_key = gp.GraphKey("SAMPLE_POINTS")
 
@@ -92,13 +95,9 @@ class GunpowderTrainer(Trainer):
             sample_points = dataset.sample_points
             points_source = None
             if sample_points is not None:
-                for loc in sample_points:
-                    assert dataset.gt.roi.contains(
-                        Coordinate(loc[::-1])
-                    ), f"{dataset.gt.roi}, {Coordinate(loc)}"
                 graph = gp.Graph(
                     [
-                        gp.Node(i, np.array(loc[::-1]))
+                        gp.Node(i, np.array(loc))
                         for i, loc in enumerate(sample_points)
                     ],
                     [],
@@ -137,23 +136,34 @@ class GunpowderTrainer(Trainer):
                     if points_source is not None
                     else None,
                 )
-                + gp.Reject(mask_placeholder, 1e-6)
+            )
+
+            dataset_source += gp.Reject(mask_placeholder, 1e-6)
+
+            for augment in self.augments:
+                dataset_source += augment.node(raw_key, gt_key, mask_key)
+
+            # Add predictor nodes to dataset_source
+            dataset_source += DaCapoTargetFilter(
+                task.predictor,
+                gt_key=gt_key,
+                weights_key=dataset_weight_key,
+                mask_key=mask_key,
             )
 
             dataset_sources.append(dataset_source)
         pipeline = tuple(dataset_sources) + gp.RandomProvider(weights)
-
-        for augment in self.augments:
-            pipeline += augment.node(raw_key, gt_key, mask_key)
 
         # Add predictor nodes to pipeline
         pipeline += DaCapoTargetFilter(
             task.predictor,
             gt_key=gt_key,
             target_key=target_key,
-            weights_key=weight_key,
+            weights_key=datasets_weight_key,
             mask_key=mask_key,
         )
+
+        pipeline += Product(dataset_weight_key, datasets_weight_key, weight_key)
 
         # Trainer attributes:
         if self.num_data_fetchers > 1:

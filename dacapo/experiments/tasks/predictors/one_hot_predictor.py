@@ -37,13 +37,13 @@ class OneHotPredictor(Predictor):
             gt.axes,
         )
 
-    def create_weight(self, gt, target, mask):
+    def create_weight(self, gt, target, mask, moving_class_counts=None):
         return NumpyArray.from_np_array(
             np.ones(target.data.shape),
             target.roi,
             target.voxel_size,
             target.axes,
-        )
+        ), None
 
     @property
     def output_array_type(self):

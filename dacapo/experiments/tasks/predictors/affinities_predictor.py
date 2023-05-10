@@ -11,6 +11,7 @@ from lsd.local_shape_descriptor import LsdExtractor
 from scipy import ndimage
 import numpy as np
 import torch
+import itertools
 
 from typing import List
 import time
@@ -32,10 +33,6 @@ class AffinitiesPredictor(Predictor):
                 )
         else:
             self.num_lsds = 0
-
-        self.moving_class_counts = None
-        self.moving_lsd_class_counts = None
-        self.running_ratio_weight = 0.01
 
     def extractor(self, voxel_size):
         if self._extractor is None:
@@ -63,7 +60,6 @@ class AffinitiesPredictor(Predictor):
         return len(self.neighborhood) + self.num_lsds
 
     def create_model(self, architecture):
-
         if self.dims == 2:
             head = torch.nn.Conv2d(
                 architecture.num_out_channels, self.num_channels, kernel_size=1
@@ -85,7 +81,7 @@ class AffinitiesPredictor(Predictor):
             "Cannot create affinities from ground truth with multiple channels.\n"
             f"GT axes: {gt.axes} with {gt.num_channels} channels"
         )
-        label_data = self._grow_boundaries(gt[gt.roi])
+        label_data = gt[gt.roi]
         axes = gt.axes
         if gt.num_channels is not None:
             label_data = label_data[0]
@@ -112,45 +108,49 @@ class AffinitiesPredictor(Predictor):
             axes,
         )
 
-    def _grow_boundaries(self, gt):
-
+    def _grow_boundaries(self, mask, slab):
         # get all foreground voxels by erosion of each component
-        foreground = np.zeros(shape=gt.shape, dtype=bool)
+        foreground = np.zeros(shape=mask.shape, dtype=bool)
         masked = None
-        for label in np.unique(gt):
-            if label == 0:
-                continue
-            label_mask = gt==label
-            # Assume that masked out values are the same as the label we are
-            # eroding in this iteration. This ensures that at the boundary to
-            # a masked region the value blob is not shrinking.
-            if masked is not None:
-                label_mask = np.logical_or(label_mask, masked)
-            eroded_label_mask = ndimage.binary_erosion(label_mask, iterations=1, border_value=1)
-            foreground = np.logical_or(eroded_label_mask, foreground)
+
+        # slab with -1 replaced by shape
+        slab = tuple(m if s == -1 else s for m, s in zip(mask.shape, slab))
+        slab_ranges = (range(0, m, s) for m, s in zip(mask.shape, slab))
+
+        for ind, start in enumerate(itertools.product(*slab_ranges)):
+            slices = tuple(
+                slice(start[d], start[d] + slab[d]) for d in range(len(slab))
+            )
+            mask_slab = mask[slices]
+            dilated_mask_slab = ndimage.binary_dilation(mask_slab, iterations=1)
+            foreground[slices] = dilated_mask_slab
 
         # label new background
         background = np.logical_not(foreground)
-        gt[background] = 0
-        return gt
+        mask[background] = 0
+        return mask
 
-    def create_weight(self, gt, target, mask):
-        aff_weights, self.moving_class_counts = balance_weights(
+    def create_weight(self, gt, target, mask, moving_class_counts=None):
+        (moving_class_counts, moving_lsd_class_counts) = (
+            moving_class_counts if moving_class_counts is not None else (None, None)
+        )
+        mask_data = self._grow_boundaries(
+            mask[target.roi], slab=tuple(1 if c == "c" else -1 for c in target.axes)
+        )
+        aff_weights, moving_class_counts = balance_weights(
             target[target.roi][: self.num_channels - self.num_lsds].astype(np.uint8),
             2,
             slab=tuple(1 if c == "c" else -1 for c in target.axes),
-            masks=[mask[target.roi]],
-            moving_counts=self.moving_class_counts,
-            update_rate=self.running_ratio_weight,
+            masks=[mask_data],
+            moving_counts=moving_class_counts,
         )
         if self.lsds:
-            lsd_weights, self.moving_lsd_class_counts = balance_weights(
+            lsd_weights, moving_lsd_class_counts = balance_weights(
                 (gt[target.roi] > 0).astype(np.uint8),
                 2,
                 slab=(-1,) * len(gt.axes),
-                masks=[mask[target.roi]],
-                moving_counts=self.moving_lsd_class_counts,
-                update_rate=self.running_ratio_weight,
+                masks=[mask_data],
+                moving_counts=moving_lsd_class_counts,
             )
             lsd_weights = np.ones(
                 (self.num_lsds,) + aff_weights.shape[1:], dtype=aff_weights.dtype
@@ -160,13 +160,13 @@ class AffinitiesPredictor(Predictor):
                 target.roi,
                 target.voxel_size,
                 target.axes,
-            )
+            ), (moving_class_counts, moving_lsd_class_counts)
         return NumpyArray.from_np_array(
             aff_weights,
             target.roi,
             target.voxel_size,
             target.axes,
-        )
+        ), (moving_class_counts, moving_lsd_class_counts)
 
     def gt_region_for_roi(self, target_spec):
         gt_spec = target_spec.copy()

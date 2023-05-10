@@ -13,8 +13,7 @@ def balance_weights(
     slab=None,
     clipmin: float = 0.05,
     clipmax: float = 0.95,
-    moving_counts: Optional[List[Dict[int, int]]] = None,
-    update_rate: float = 0.01,
+    moving_counts: Optional[List[Dict[int, tuple[int, int]]]] = None,
 ):
     if moving_counts is None:
         moving_counts = []
@@ -46,13 +45,8 @@ def balance_weights(
 
     for ind, start in enumerate(itertools.product(*slab_ranges)):
         if ind + 1 > len(moving_counts):
-            moving_counts.append(
-                dict([(i, 1 / num_classes) for i in range(num_classes)])
-            )
-        slab_fracs = moving_counts[ind]
-        for class_id, frac in slab_fracs.items():
-            # degrade old fractions (assuming each class has 0 instances)
-            slab_fracs[class_id] = frac * (1 - update_rate)
+            moving_counts.append(dict([(i, (0, 1)) for i in range(num_classes)]))
+        slab_counts = moving_counts[ind]
         slices = tuple(slice(start[d], start[d] + slab[d]) for d in range(len(slab)))
         # operate on slab independently
         scale_slab = error_scale[slices]
@@ -63,13 +57,13 @@ def balance_weights(
             labels_slab[np.nonzero(scale_slab)], return_counts=True
         )
         updated_fracs = []
-        fracs = (
-            counts.astype(float) / masked_in if masked_in > 0 else np.zeros(counts.size)
-        )
-        for class_id, frac in zip(classes, fracs):
+        for key, (num, den) in slab_counts.items():
+            slab_counts[key] = (num, den + masked_in)
+        for class_id, num in zip(classes, counts):
             # update moving fraction rate to account for present instances
-            slab_fracs[class_id] += frac * update_rate
-            updated_fracs.append(slab_fracs[class_id])
+            (old_num, den) = slab_counts[class_id]
+            slab_counts[class_id] = (num + old_num, den)
+            updated_fracs.append(slab_counts[class_id][0] / slab_counts[class_id][1])
         fracs = np.array(updated_fracs)
         if clipmin is not None or clipmax is not None:
             np.clip(fracs, clipmin, clipmax, fracs)
@@ -79,6 +73,7 @@ def balance_weights(
         w_sparse = total_frac / float(num_classes) / fracs
         w = np.zeros(num_classes)
         w[classes] = w_sparse
+
 
         # if labels_slab are uint64 take gets very upset
         labels_slab = labels_slab.astype(np.int64)
