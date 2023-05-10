@@ -17,6 +17,8 @@ from .merge_instances_array_config import (
     MergeInstancesArray,
     MergeInstancesArrayConfig,
 )  # noqa
+from .dvid_array_config import DVIDArray, DVIDArrayConfig
+from .sum_array_config import SumArray, SumArrayConfig
 
 # nonconfigurable arrays (helpers)
 from .numpy_array import NumpyArray  # noqa
