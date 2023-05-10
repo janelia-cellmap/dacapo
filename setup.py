@@ -30,10 +30,11 @@ setup(
         "daisy>=1.0",
         "funlib.math>=0.1",
         "funlib.geometry",
+        "mwatershed @ git+https://github.com/pattonw/mwatershed",
         "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence",
         "funlib.evaluate @ git+https://github.com/pattonw/funlib.evaluate",
-        "cremi @ git+https://github.com/cremi/cremi_python@python3",
-        "gunpowder @ git+https://github.com/funkey/gunpowder@v1.3-dev",
+        "funlib.segment @ git+https://github.com/funkelab/funlib.segment"
+        "gunpowder>=1.3",
         "lsd @ git+https://github.com/pattonw/lsd@no-convenience-imports",
     ],
 )

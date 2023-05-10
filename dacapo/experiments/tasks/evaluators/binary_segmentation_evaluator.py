@@ -1,3 +1,4 @@
+from dacapo.utils.voi import voi
 from .evaluator import Evaluator
 from .binary_segmentation_evaluation_scores import (
     BinarySegmentationEvaluationScores,
@@ -8,7 +9,6 @@ from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 
 import numpy as np
 import SimpleITK as sitk
-import cremi.evaluation
 import lazy_property
 import scipy
 
@@ -291,7 +291,7 @@ class ArrayEvaluator:
         if self.truth_empty or self.test_empty:
             return np.nan
         else:
-            voi_split, voi_merge = cremi.evaluation.voi(
+            voi_split, voi_merge = voi(
                 self.test + 1, self.truth + 1, ignore_groundtruth=[]
             )
             return voi_split + voi_merge
