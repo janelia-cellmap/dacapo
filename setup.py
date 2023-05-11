@@ -31,7 +31,7 @@ setup(
         "daisy>=1.0",
         "funlib.math>=0.1",
         "funlib.geometry>=0.2",
-        "mwatershed @ git+https://github.com/pattonw/mwatershed",
+        "mwatershed",
         "funlib.persistence>=0.1",
         "funlib.evaluate @ git+https://github.com/pattonw/funlib.evaluate",
         "gunpowder>=1.3",
