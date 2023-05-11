@@ -31,10 +31,10 @@ setup(
         "daisy>=1.0",
         "funlib.math>=0.1",
         "funlib.geometry>=0.2",
-        "mwatershed",
+        "mwatershed>=0.1",
         "funlib.persistence>=0.1",
         "funlib.evaluate @ git+https://github.com/pattonw/funlib.evaluate",
         "gunpowder>=1.3",
-        "lsd @ git+https://github.com/pattonw/lsd@no-convenience-imports",
+        "lsds>=0.1.3",
     ],
 )
