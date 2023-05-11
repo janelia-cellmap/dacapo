@@ -4,7 +4,7 @@ from .watershed_post_processor_parameters import WatershedPostProcessorParameter
 from .post_processor import PostProcessor
 
 from funlib.geometry import Coordinate
-from funlib.segment.arrays import replace_values
+import numpy_indexed as npi
 
 import mwatershed as mws
 
@@ -64,7 +64,7 @@ class WatershedPostProcessor(PostProcessor):
 
         filtered_fragments = np.array(filtered_fragments, dtype=segmentation.dtype)
         replace = np.zeros_like(filtered_fragments)
-        replace_values(segmentation, filtered_fragments, replace, inplace=True)
+        segmentation = npi.remap(segmentation, filtered_fragments, replace)
 
         output_array[self.prediction_array.roi] = segmentation
 
