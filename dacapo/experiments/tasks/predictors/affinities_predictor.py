@@ -130,9 +130,10 @@ class AffinitiesPredictor(Predictor):
         (moving_class_counts, moving_lsd_class_counts) = (
             moving_class_counts if moving_class_counts is not None else (None, None)
         )
-        mask_data = self._grow_boundaries(
-            mask[target.roi], slab=tuple(1 if c == "c" else -1 for c in target.axes)
-        )
+        # mask_data = self._grow_boundaries(
+        #     mask[target.roi], slab=tuple(1 if c == "c" else -1 for c in target.axes)
+        # )
+        mask_data = mask[target.roi]
         aff_weights, moving_class_counts = balance_weights(
             target[target.roi][: self.num_channels - self.num_lsds].astype(np.uint8),
             2,
