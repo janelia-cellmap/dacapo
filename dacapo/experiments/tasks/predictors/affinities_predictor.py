@@ -6,7 +6,7 @@ from dacapo.utils.affinities import seg_to_affgraph, padding as aff_padding
 from dacapo.utils.balance_weights import balance_weights
 
 from funlib.geometry import Coordinate
-from lsd.local_shape_descriptor import LsdExtractor
+from lsd.train import LsdExtractor
 
 from scipy import ndimage
 import numpy as np
