@@ -1,6 +1,6 @@
-from typing import Iterable
 from .dummy_post_processor_parameters import DummyPostProcessorParameters
 from .post_processor import PostProcessor
+
 import numpy as np
 import zarr
 
@@ -22,7 +22,6 @@ class DummyPostProcessor(PostProcessor):
         pass
 
     def process(self, parameters, output_array_identifier):
-
         # store some dummy data
         f = zarr.open(str(output_array_identifier.container), "a")
         f[output_array_identifier.dataset] = np.ones((10, 10, 10)) * parameters.min_size

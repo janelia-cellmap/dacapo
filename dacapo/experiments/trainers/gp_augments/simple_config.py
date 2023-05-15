@@ -4,8 +4,6 @@ import gunpowder as gp
 
 import attr
 
-from typing import Tuple
-
 
 @attr.s
 class SimpleAugmentConfig(AugmentConfig):

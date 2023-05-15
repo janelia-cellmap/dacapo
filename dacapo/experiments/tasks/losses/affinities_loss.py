@@ -7,9 +7,10 @@ class AffinitiesLoss(Loss):
         self.num_affinities = num_affinities
 
     def compute(self, prediction, target, weight):
-        affs, affs_target = (
+        affs, affs_target, affs_weight = (
             prediction[:, 0 : self.num_affinities, ...],
             target[:, 0 : self.num_affinities, ...],
+            weight[:, 0 : self.num_affinities, ...],
         )
         aux, aux_target, aux_weight = (
             prediction[:, self.num_affinities :, ...],
@@ -17,6 +18,10 @@ class AffinitiesLoss(Loss):
             weight[:, self.num_affinities :, ...],
         )
 
-        return torch.nn.BCEWithLogitsLoss()(affs, affs_target) + torch.nn.MSELoss()(
-            torch.nn.Sigmoid()(aux) * aux_weight, aux_target * aux_weight
-        )
+        return (
+            torch.nn.BCEWithLogitsLoss(reduction="none")(affs, affs_target)
+            * affs_weight
+        ).mean() + (
+            torch.nn.MSELoss(reduction="none")(torch.nn.Sigmoid()(aux), aux_target)
+            * aux_weight
+        ).mean()

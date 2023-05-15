@@ -12,7 +12,6 @@ class DummyPredictor(Predictor):
         self.embedding_dims = embedding_dims
 
     def create_model(self, architecture):
-
         head = torch.nn.Conv3d(
             architecture.num_out_channels, self.embedding_dims, kernel_size=3
         )
@@ -28,13 +27,16 @@ class DummyPredictor(Predictor):
             ["c"] + gt.axes,
         )
 
-    def create_weight(self, gt, target, mask):
+    def create_weight(self, gt, target, mask, moving_class_counts=None):
         # ones
-        return NumpyArray.from_np_array(
-            np.ones(target.data.shape),
-            target.roi,
-            target.voxel_size,
-            target.axes,
+        return (
+            NumpyArray.from_np_array(
+                np.ones(target.data.shape),
+                target.roi,
+                target.voxel_size,
+                target.axes,
+            ),
+            None,
         )
 
     @property

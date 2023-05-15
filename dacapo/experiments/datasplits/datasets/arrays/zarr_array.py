@@ -1,9 +1,8 @@
-from os import symlink
 from .array import Array
 from dacapo import Options
 
 from funlib.geometry import Coordinate, Roi
-import daisy
+import funlib.persistence
 
 import neuroglancer
 
@@ -49,7 +48,7 @@ class ZarrArray(Array):
             return self._axes
         try:
             return self._attributes["axes"]
-        except KeyError as e:
+        except KeyError:
             logger.debug(
                 "DaCapo expects Zarr datasets to have an 'axes' attribute!\n"
                 f"Zarr {self.file_name} and dataset {self.dataset} has attributes: {list(self._attributes.items())}\n"
@@ -62,8 +61,8 @@ class ZarrArray(Array):
         return self.voxel_size.dims
 
     @lazy_property.LazyProperty
-    def _daisy_array(self) -> daisy.Array:
-        return daisy.open_ds(f"{self.file_name}", self.dataset)
+    def _daisy_array(self) -> funlib.persistence.Array:
+        return funlib.persistence.open_ds(f"{self.file_name}", self.dataset)
 
     @lazy_property.LazyProperty
     def voxel_size(self) -> Coordinate:
@@ -97,14 +96,14 @@ class ZarrArray(Array):
         zarr_container = zarr.open(str(self.file_name))
         return zarr_container[self.dataset]
 
-    def __getitem__(self, roi: Roi) -> np.ndarray[Any, Any]:
-        data: np.ndarray[Any, Any] = daisy.Array(
+    def __getitem__(self, roi: Roi) -> np.ndarray:
+        data: np.ndarray = funlib.persistence.Array(
             self.data, self.roi, self.voxel_size
         ).to_ndarray(roi=roi)
         return data
 
-    def __setitem__(self, roi: Roi, value: np.ndarray[Any, Any]):
-        daisy.Array(self.data, self.roi, self.voxel_size)[roi] = value
+    def __setitem__(self, roi: Roi, value: np.ndarray):
+        funlib.persistence.Array(self.data, self.roi, self.voxel_size)[roi] = value
 
     @classmethod
     def create_from_array_identifier(
@@ -138,7 +137,7 @@ class ZarrArray(Array):
         write_size = Coordinate((min(a, b) for a, b in zip(write_size, roi.shape)))
         zarr_container = zarr.open(array_identifier.container, "a")
         try:
-            daisy.prepare_ds(
+            funlib.persistence.prepare_ds(
                 f"{array_identifier.container}",
                 array_identifier.dataset,
                 roi,
@@ -148,9 +147,19 @@ class ZarrArray(Array):
                 write_size=write_size,
             )
             zarr_dataset = zarr_container[array_identifier.dataset]
-            zarr_dataset.attrs["offset"] = roi.offset
-            zarr_dataset.attrs["resolution"] = voxel_size
-            zarr_dataset.attrs["axes"] = axes
+            zarr_dataset.attrs["offset"] = (
+                roi.offset[::-1]
+                if array_identifier.container.name.endswith("n5")
+                else roi.offset
+            )
+            zarr_dataset.attrs["resolution"] = (
+                voxel_size[::-1]
+                if array_identifier.container.name.endswith("n5")
+                else voxel_size
+            )
+            zarr_dataset.attrs["axes"] = (
+                axes[::-1] if array_identifier.container.name.endswith("n5") else axes
+            )
         except zarr.errors.ContainsArrayError:
             zarr_dataset = zarr_container[array_identifier.dataset]
             assert (
@@ -226,7 +235,7 @@ class ZarrArray(Array):
             file_server = file_server.format(
                 username=options.file_server_user, password=options.file_server_pass
             )
-        except RuntimeError as e:
+        except RuntimeError:
             # if options doesn't have a file_server user or password simply continue
             # without authentications
             pass

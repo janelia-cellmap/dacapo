@@ -7,7 +7,6 @@ import torch
 
 class DummyArchitecture(Architecture):
     def __init__(self, architecture_config):
-
         super().__init__()
 
         self.channels_in = architecture_config.num_in_channels

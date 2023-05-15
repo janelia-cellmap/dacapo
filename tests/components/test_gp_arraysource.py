@@ -17,7 +17,6 @@ from pytest_lazyfixture import lazy_fixture
     ],
 )
 def test_gp_dacapo_array_source(array_config):
-
     # Create Array from config
     array = array_config.array_type(array_config)
 

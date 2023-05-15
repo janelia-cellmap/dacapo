@@ -1,5 +1,4 @@
-from abc import ABC, abstractmethod
-from typing import Iterable, List
+from abc import ABC
 import logging
 
 logger = logging.getLogger(__file__)

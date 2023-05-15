@@ -4,7 +4,7 @@ from .datasets import DatasetConfig, DummyDatasetConfig
 
 import attr
 
-from typing import List, Tuple
+from typing import Tuple
 
 
 @attr.s

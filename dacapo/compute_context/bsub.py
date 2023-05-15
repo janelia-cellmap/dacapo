@@ -1,6 +1,5 @@
 from .compute_context import ComputeContext
 
-import torch
 import attr
 
 import subprocess
@@ -13,7 +12,8 @@ class Bsub(ComputeContext):
     num_gpus: int = attr.ib(
         default=1,
         metadata={
-            "help_text": "The number of gpus to train on. Currently only 1 gpu can be used."
+            "help_text": "The number of gpus to train on. "
+            "Currently only 1 gpu can be used."
         },
     )
     num_cpus: int = attr.ib(

@@ -1,4 +1,3 @@
-from dacapo.compute_context.compute_context import ComputeContext
 from dacapo.gp import DaCapoArraySource
 from dacapo.experiments.model import Model
 from dacapo.experiments.datasplits.datasets.arrays import Array
@@ -106,6 +105,7 @@ def predict(
         {prediction: prediction_array_identifier.dataset},
         prediction_array_identifier.container.parent,
         prediction_array_identifier.container.name,
+        dataset_dtypes={prediction: np.float32},
     )
 
     # create reference batch request

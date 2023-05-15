@@ -12,7 +12,6 @@ if TYPE_CHECKING:
 
 
 class Trainer(ABC):
-
     iteration: int
     batch_size: int
     learning_rate: float

@@ -6,8 +6,7 @@ from dacapo.utils.balance_weights import balance_weights
 
 from funlib.geometry import Coordinate
 
-from scipy.ndimage.morphology import distance_transform_edt, binary_erosion
-from scipy.ndimage import generate_binary_structure
+from scipy.ndimage.morphology import distance_transform_edt
 import numpy as np
 import torch
 
@@ -43,7 +42,6 @@ class DistancePredictor(Predictor):
         return len(self.channels)
 
     def create_model(self, architecture):
-
         if architecture.dims == 2:
             head = torch.nn.Conv2d(
                 architecture.num_out_channels, self.embedding_dims, kernel_size=1
@@ -66,7 +64,7 @@ class DistancePredictor(Predictor):
             gt.axes,
         )
 
-    def create_weight(self, gt, target, mask):
+    def create_weight(self, gt, target, mask, moving_class_counts=None):
         # balance weights independently for each channel
         if self.mask_distances:
             distance_mask = self.create_distance_mask(
@@ -78,16 +76,22 @@ class DistancePredictor(Predictor):
             )
         else:
             distance_mask = np.ones_like(target.data)
-        return NumpyArray.from_np_array(
-            balance_weights(
-                gt[target.roi],
-                2,
-                slab=tuple(1 if c == "c" else -1 for c in gt.axes),
-                masks=[mask[target.roi], distance_mask],
+
+        weights, moving_class_counts = balance_weights(
+            gt[target.roi],
+            2,
+            slab=tuple(1 if c == "c" else -1 for c in gt.axes),
+            masks=[mask[target.roi], distance_mask],
+            moving_counts=moving_class_counts,
+        )
+        return (
+            NumpyArray.from_np_array(
+                weights,
+                gt.roi,
+                gt.voxel_size,
+                gt.axes,
             ),
-            gt.roi,
-            gt.voxel_size,
-            gt.axes,
+            moving_class_counts,
         )
 
     @property
@@ -161,7 +165,6 @@ class DistancePredictor(Predictor):
         normalize=None,
         normalize_args=None,
     ):
-
         all_distances = np.zeros(labels.shape, dtype=np.float32) - 1
         for ii, channel in enumerate(labels):
             boundaries = self.__find_boundaries(channel)
@@ -178,7 +181,6 @@ class DistancePredictor(Predictor):
                 else:
                     distances = np.ones(channel.shape, dtype=np.float32) * max_distance
             else:
-
                 # get distances (voxel_size/2 because image is doubled)
                 distances = distance_transform_edt(
                     boundaries, sampling=tuple(float(v) / 2 for v in voxel_size)
@@ -200,7 +202,6 @@ class DistancePredictor(Predictor):
         return all_distances
 
     def __find_boundaries(self, labels):
-
         # labels: 1 1 1 1 0 0 2 2 2 2 3 3       n
         # shift :   1 1 1 1 0 0 2 2 2 2 3       n - 1
         # diff  :   0 0 0 1 0 1 0 0 0 1 0       n - 1
@@ -211,14 +212,12 @@ class DistancePredictor(Predictor):
         dims = len(labels.shape)
         in_shape = labels.shape
         out_shape = tuple(2 * s - 1 for s in in_shape)
-        out_slices = tuple(slice(0, s) for s in out_shape)
 
         boundaries = np.zeros(out_shape, dtype=bool)
 
         logger.debug("boundaries shape is %s", boundaries.shape)
 
         for d in range(dims):
-
             logger.debug("processing dimension %d", d)
 
             shift_p = [slice(None)] * dims
@@ -241,7 +240,6 @@ class DistancePredictor(Predictor):
         return boundaries
 
     def __normalize(self, distances, norm, normalize_args):
-
         if norm == "tanh":
             scale = normalize_args
             return np.tanh(distances / scale)

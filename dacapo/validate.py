@@ -58,7 +58,11 @@ def validate_run(
     torch.backends.cudnn.benchmark = True
     run.model.eval()
 
-    if run.datasplit.validate is None or run.datasplit.validate[0].gt is None:
+    if (
+        run.datasplit.validate is None
+        or len(run.datasplit.validate) == 0
+        or run.datasplit.validate[0].gt is None
+    ):
         logger.info("Cannot validate run %s. Continuing training!", run.name)
         return None, None
 
@@ -77,7 +81,7 @@ def validate_run(
     for validation_dataset in run.datasplit.validate:
         assert (
             validation_dataset.gt is not None
-        ), f"We do not yet support validating on datasets without ground truth"
+        ), "We do not yet support validating on datasets without ground truth"
         logger.info(
             "Validating run %s on dataset %s", run.name, validation_dataset.name
         )
@@ -150,7 +154,6 @@ def validate_run(
         dataset_iteration_scores = []
 
         for parameters in post_processor.enumerate_parameters():
-
             output_array_identifier = array_store.validation_output_array(
                 run.name, iteration, parameters, validation_dataset
             )

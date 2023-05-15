@@ -26,7 +26,6 @@ class Model(torch.nn.Module):
         prediction_head: torch.nn.Module,
         eval_activation: torch.nn.Module = None,
     ):
-
         super().__init__()
 
         self.architecture = architecture
@@ -57,7 +56,6 @@ class Model(torch.nn.Module):
     def __get_output_shape(
         self, input_shape: Coordinate, in_channels: int
     ) -> Tuple[int, Coordinate]:
-
         device = torch.device("cpu")
         for parameter in self.parameters():
             device = parameter.device

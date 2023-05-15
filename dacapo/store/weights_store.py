@@ -3,12 +3,11 @@ from dacapo.experiments.run import Run
 import torch
 
 from abc import ABC, abstractmethod
-from typing import Optional, Any, Dict
+from typing import Optional
 from collections import OrderedDict
 
 
 class Weights:
-
     optimizer: OrderedDict[str, torch.Tensor]
     model: OrderedDict[str, torch.Tensor]
 

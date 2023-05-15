@@ -1,11 +1,9 @@
-from dacapo import Options
 from dacapo.experiments.datasplits.datasets import Dataset
 
 import neuroglancer
 
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import List, Optional
-from pathlib import Path
 import json
 import itertools
 
@@ -15,12 +13,8 @@ class DataSplit(ABC):
     validate: Optional[List[Dataset]]
 
     def _neuroglancer_link(self):
-        options = Options.instance()
-        store_path = Path(options.runs_base_dir).expanduser()
-
         viewer = neuroglancer.Viewer()
         with viewer.txn() as s:
-
             train_layers = {}
             for i, dataset in enumerate(self.train):
                 train_layers.update(

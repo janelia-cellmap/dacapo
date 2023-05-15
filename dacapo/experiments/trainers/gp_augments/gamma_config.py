@@ -10,7 +10,6 @@ from typing import Tuple
 
 @attr.s
 class GammaAugmentConfig(AugmentConfig):
-
     gamma_range: Tuple[float, float] = attr.ib(
         metadata={
             "help_text": "The range (min/max) of gamma noise to apply to your data."

@@ -2,7 +2,6 @@ import attr
 
 from .array_config import ArrayConfig
 from .missing_annotations_mask import MissingAnnotationsMask
-from .array_config import ArrayConfig
 
 from typing import List, Tuple
 

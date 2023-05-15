@@ -2,9 +2,6 @@ import attr
 
 from .array_config import ArrayConfig
 from .intensity_array import IntensitiesArray
-from .array_config import ArrayConfig
-
-from typing import List, Tuple
 
 
 @attr.s

@@ -4,24 +4,14 @@ from .watershed_post_processor_parameters import WatershedPostProcessorParameter
 from .post_processor import PostProcessor
 
 from funlib.geometry import Coordinate
+import numpy_indexed as npi
 
-# TODO: handle requirements for specific features. esp requirements like
-# affogato that aren't simply pip installable
-try:
-    from affogato.segmentation import (
-        compute_mws_segmentation_from_affinities,
-    )
-except ImportError:
+import mwatershed as mws
 
-    def compute_mws_segmentation_from_affinities(*args, **kwargs):
-        raise ImportError(
-            "Affogato is not installed. Please install via "
-            "`conda install -c conda-forge affogato`"
-        )
+from scipy.ndimage import measurements
 
 
 import numpy as np
-import zarr
 
 from typing import List
 
@@ -53,12 +43,28 @@ class WatershedPostProcessor(PostProcessor):
         )
         # if a previous segmentation is provided, it must have a "grid graph"
         # in its metadata.
-
-        segmentation = compute_mws_segmentation_from_affinities(
-            self.prediction_array[self.prediction_array.roi][: len(self.offsets)],
+        pred_data = self.prediction_array[self.prediction_array.roi]
+        affs = pred_data[: len(self.offsets)]
+        segmentation = mws.agglom(
+            affs - 0.5,
             self.offsets,
-            beta_parameter=parameters.bias,
         )
+        # filter fragments
+        average_affs = np.mean(affs, axis=0)
+
+        filtered_fragments = []
+
+        fragment_ids = np.unique(segmentation)
+
+        for fragment, mean in zip(
+            fragment_ids, measurements.mean(average_affs, segmentation, fragment_ids)
+        ):
+            if mean < 0.5:
+                filtered_fragments.append(fragment)
+
+        filtered_fragments = np.array(filtered_fragments, dtype=segmentation.dtype)
+        replace = np.zeros_like(filtered_fragments)
+        segmentation = npi.remap(segmentation, filtered_fragments, replace)
 
         output_array[self.prediction_array.roi] = segmentation
 

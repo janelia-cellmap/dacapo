@@ -1,19 +1,16 @@
-from importlib.metadata import metadata
 from .validation_iteration_scores import ValidationIterationScores
 from .tasks.evaluators import EvaluationScores
 from .tasks.post_processors import PostProcessorParameters
 from .datasplits.datasets import Dataset
 
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 import attr
 import numpy as np
 import xarray as xr
-import itertools
 
 
 @attr.s
 class ValidationScores:
-
     parameters: List[PostProcessorParameters] = attr.ib(
         metadata={"help_text": "The list of parameters that are being evaluated"}
     )
@@ -47,11 +44,9 @@ class ValidationScores:
         self,
         iteration_scores: ValidationIterationScores,
     ) -> None:
-
         self.scores.append(iteration_scores)
 
     def delete_after(self, iteration: int) -> None:
-
         self.scores = [scores for scores in self.scores if scores.iteration < iteration]
 
     def validated_until(self) -> int:
@@ -119,7 +114,7 @@ class ValidationScores:
         """
         if "criteria" in data.coords.keys():
             if len(data.coords["criteria"].shape) == 1:
-                criteria_bests = []
+                criteria_bests: List[Tuple[xr.DataArray, xr.DataArray]] = []
                 for criterion in data.coords["criteria"].values:
                     if self.evaluation_scores.higher_is_better(criterion.item()):
                         criteria_bests.append(

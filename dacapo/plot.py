@@ -1,20 +1,16 @@
 import json
 from bokeh.embed.standalone import json_item
 from dacapo.store.create_store import create_config_store, create_stats_store
-from dacapo.store.converter import converter
-from dacapo.experiments.validation_iteration_scores import ValidationIterationScores
 from dacapo.experiments.run import Run
 
 from bokeh.palettes import Category20 as palette
 import bokeh.layouts
 import bokeh.plotting
-import itertools
 import numpy as np
 
 from collections import namedtuple
-import time
 import itertools
-from typing import List, NamedTuple
+from typing import List
 
 RunInfo = namedtuple(
     "RunInfo",
@@ -33,7 +29,6 @@ RunInfo = namedtuple(
 
 
 def smooth_values(a, n, stride=1):
-
     a = np.array(a)
 
     # mean
@@ -61,7 +56,6 @@ def get_runs_info(
     validation_score_names: List[str],
     plot_losses: List[bool],
 ) -> List[RunInfo]:
-
     config_store = create_config_store()
     stats_store = create_stats_store()
     runs = []
@@ -69,7 +63,6 @@ def get_runs_info(
     for run_config_name, validation_score_name, plot_loss in zip(
         run_config_names, validation_score_names, plot_losses
     ):
-        t1 = time.time()
         run_config = config_store.retrieve_run_config(run_config_name)
         validation_scores = Run.get_validation_scores(run_config)
         validation_scores.scores = stats_store.retrieve_validation_iteration_scores(
@@ -157,7 +150,6 @@ def plot_runs(
             + [(name, "@" + name) for name in validation_postprocessor_parameter_names]
         )
         for dataset in validation_datasets:
-
             validation_figure = bokeh.plotting.figure(
                 tools="pan, wheel_zoom, reset, save, hover",
                 x_axis_label="iterations",

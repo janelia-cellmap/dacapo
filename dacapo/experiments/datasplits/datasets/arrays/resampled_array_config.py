@@ -2,7 +2,6 @@ import attr
 
 from .array_config import ArrayConfig
 from .resampled_array import ResampledArray
-from .array_config import ArrayConfig
 
 from funlib.geometry import Coordinate
 

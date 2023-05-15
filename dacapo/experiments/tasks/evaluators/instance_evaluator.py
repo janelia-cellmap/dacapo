@@ -7,8 +7,6 @@ from funlib.evaluate import rand_voi
 
 import numpy as np
 
-import random
-
 
 class InstanceEvaluator(Evaluator):
     criteria = ["voi_merge", "voi_split", "voi"]

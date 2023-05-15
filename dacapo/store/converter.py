@@ -2,8 +2,6 @@ from cattr import Converter
 from cattr.gen import make_dict_unstructure_fn, make_dict_structure_fn
 from .conversion_hooks import register_hooks
 
-from typing import Optional
-
 
 class TypedConverter(Converter):
     """A converter that stores and retrieves type information for selected

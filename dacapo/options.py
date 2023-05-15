@@ -14,7 +14,6 @@ options_files = [
 
 def parse_options():
     for path in options_files:
-
         if not path.exists():
             continue
 
@@ -23,7 +22,6 @@ def parse_options():
 
 
 class Options:
-
     _instance = None
 
     def __init__(self):
@@ -31,7 +29,6 @@ class Options:
 
     @classmethod
     def instance(cls, **kwargs):
-
         if cls._instance is None:
             cls._instance = cls.__new__(cls)
             cls._instance.__parse_options(**kwargs)
@@ -39,7 +36,6 @@ class Options:
         return cls._instance
 
     def __getattr__(self, name):
-
         try:
             return self.__options[name]
         except KeyError:
@@ -55,7 +51,6 @@ class Options:
             return
 
         for path in options_files:
-
             if not path.exists():
                 continue
 

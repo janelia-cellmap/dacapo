@@ -9,7 +9,6 @@ import attr
 
 @attr.s
 class TrainingStats:
-
     iteration_stats: List[TrainingIterationStats] = attr.ib(
         default=attr.Factory(list),
         metadata={"help_text": "A ordered list of training stats."},
@@ -22,7 +21,6 @@ class TrainingStats:
         self.iteration_stats.append(iteration_stats)
 
     def delete_after(self, iteration: int) -> None:
-
         self.iteration_stats = [
             stats for stats in self.iteration_stats if stats.iteration < iteration
         ]

@@ -1,9 +1,7 @@
 from funlib.geometry import Coordinate
 
-import torch
-
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Tuple
 
 if TYPE_CHECKING:
     from dacapo.experiments.architectures.architecture import Architecture
@@ -43,7 +41,13 @@ class Predictor(ABC):
         pass
 
     @abstractmethod
-    def create_weight(self, gt: "Array", target: "Array", mask: "Array") -> "Array":
+    def create_weight(
+        self,
+        gt: "Array",
+        target: "Array",
+        mask: "Array",
+        moving_class_counts: Any,
+    ) -> Tuple["Array", Any]:
         """Create the weight array for training, given a ground-truth and
         associated target array.
         """

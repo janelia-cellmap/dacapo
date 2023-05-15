@@ -21,7 +21,6 @@ class OneHotPredictor(Predictor):
         return len(self.classes)
 
     def create_model(self, architecture):
-
         head = torch.nn.Conv3d(
             architecture.num_out_channels, self.embedding_dims, kernel_size=3
         )
@@ -37,12 +36,15 @@ class OneHotPredictor(Predictor):
             gt.axes,
         )
 
-    def create_weight(self, gt, target, mask):
-        return NumpyArray.from_np_array(
-            np.ones(target.data.shape),
-            target.roi,
-            target.voxel_size,
-            target.axes,
+    def create_weight(self, gt, target, mask, moving_class_counts=None):
+        return (
+            NumpyArray.from_np_array(
+                np.ones(target.data.shape),
+                target.roi,
+                target.voxel_size,
+                target.axes,
+            ),
+            None,
         )
 
     @property

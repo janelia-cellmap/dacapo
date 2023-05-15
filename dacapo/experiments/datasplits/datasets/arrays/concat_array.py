@@ -1,7 +1,6 @@
 from .array import Array
 
-import gunpowder as gp
-from funlib.geometry import Coordinate, Roi, roi
+from funlib.geometry import Roi
 
 import numpy as np
 
@@ -13,6 +12,7 @@ class ConcatArray(Array):
     them along the channel dimension."""
 
     def __init__(self, array_config):
+        self.name = array_config.name
         self.channels = array_config.channels
         self.source_arrays = {
             channel: source_array_config.array_type(source_array_config)
@@ -43,7 +43,10 @@ class ConcatArray(Array):
             assert axes[0] == "c" or "c" not in axes
             attrs["axes"] = axes
             roi = attrs.get("roi", source_array.roi)
-            assert not source_array.roi.intersect(roi).empty
+            assert not (not roi.empty and source_array.roi.intersect(roi).empty), (
+                self.name,
+                [x.roi for x in self._source_arrays.values()],
+            )
             attrs["roi"] = source_array.roi.intersect(roi)
             voxel_size = attrs.get("voxel_size", source_array.voxel_size)
             assert source_array.voxel_size == voxel_size
@@ -83,7 +86,7 @@ class ConcatArray(Array):
 
     @property
     def dtype(self):
-        return np.bool
+        return self.source_array.dtype
 
     @property
     def num_channels(self):

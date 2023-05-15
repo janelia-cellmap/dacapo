@@ -1,7 +1,6 @@
 from .array import Array
 
-import gunpowder as gp
-from funlib.geometry import Coordinate, Roi, roi
+from funlib.geometry import Roi
 
 import numpy as np
 
@@ -55,7 +54,7 @@ class OnesArray(Array):
 
     @property
     def dtype(self):
-        return np.bool
+        return bool
 
     @property
     def num_channels(self):

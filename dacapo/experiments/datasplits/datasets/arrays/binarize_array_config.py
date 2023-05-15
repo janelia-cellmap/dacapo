@@ -2,7 +2,6 @@ import attr
 
 from .array_config import ArrayConfig
 from .binarize_array import BinarizeArray
-from .array_config import ArrayConfig
 
 from typing import List, Tuple
 

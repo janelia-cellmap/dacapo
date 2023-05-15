@@ -119,7 +119,7 @@ Now lets create some configs.
       from dacapo.experiments.architectures import CNNectomeUNetConfig
       architecture_config = CNNectomeUNetConfig(
           name="small_unet",
-          input_shape=Coordinate(216, 216, 216),
+          input_shape=Coordinate(212, 212, 212),
           eval_shape_increase=Coordinate(72, 72, 72),
           fmaps_in=1,
           num_fmaps=8,
@@ -189,6 +189,8 @@ combine them into a run and start training.
     from dacapo.experiments.run_config import RunConfig
     from dacapo.experiments.run import Run
 
+    from torchsummary import summary
+
 
     run_config = RunConfig(
         name="tutorial_run",
@@ -204,7 +206,7 @@ combine them into a run and start training.
     run = Run(run_config)
 
     # if you want a summary of the model you can print that here
-    print(torch.summary(run.model, (1, 216, 216, 216)))
+    print(summary(run.model, (1, 212, 212, 212)))
 
 Start the Run
 ^^^^^^^^^^^^^
@@ -283,13 +285,14 @@ provided here:
     logging.basicConfig(level=logging.INFO)
    
     # TODO: create datasplit config
+    train_array
     datasplit_config = ...
 
 
     # Create Architecture Config
     architecture_config = CNNectomeUNetConfig(
         name="small_unet",
-        input_shape=Coordinate(216, 216, 216),
+        input_shape=Coordinate(212, 212, 212),
         eval_shape_increase=Coordinate(72, 72, 72),
         fmaps_in=1,
         num_fmaps=8,

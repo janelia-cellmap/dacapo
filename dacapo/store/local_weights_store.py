@@ -16,7 +16,6 @@ class LocalWeightsStore(WeightsStore):
     """A local store for network weights."""
 
     def __init__(self, basedir):
-
         logger.info("Creating local weights store in directory %s", basedir)
 
         self.basedir = basedir
@@ -64,8 +63,9 @@ class LocalWeightsStore(WeightsStore):
         return weights
 
     def _retrieve_weights(self, run: str, key: str) -> Weights:
-
         weights_name = self.__get_weights_dir(run) / key
+        if not weights_name.exists():
+            weights_name = self.__get_weights_dir(run) / "iterations" / key
 
         weights: Weights = torch.load(weights_name, map_location="cpu")
         if not isinstance(weights, Weights):
@@ -101,7 +101,6 @@ class LocalWeightsStore(WeightsStore):
             f.write(json.dumps({"iteration": iteration}))
 
     def retrieve_best(self, run: str, dataset: str, criterion: str) -> int:
-
         logger.info("Retrieving weights for run %s, criterion %s", run, criterion)
 
         weights_info = json.loads(
@@ -111,6 +110,17 @@ class LocalWeightsStore(WeightsStore):
         )
 
         return weights_info["iteration"]
+
+    def _load_best(self, run: Run, criterion: str):
+        logger.info("Retrieving weights for run %s, criterion %s", run, criterion)
+
+        weights_name = self.__get_weights_dir(run) / f"{criterion}"
+
+        weights: Weights = torch.load(weights_name, map_location="cpu")
+        if not isinstance(weights, Weights):
+            # backwards compatibility
+            weights = Weights(weights["model"], weights["optimizer"])
+        run.model.load_state_dict(weights.model)
 
     def __get_weights_dir(self, run: Union[str, Run]):
         run = run if isinstance(run, str) else run.name

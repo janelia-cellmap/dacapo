@@ -42,7 +42,10 @@ class DaCapoArraySource(gp.BatchProvider):
         spec = self.array_spec.copy()
         spec.roi = request[self.key].roi
 
-        data = self.array[spec.roi]
+        if spec.roi.empty:
+            data = np.zeros((0,) * len(self.array.axes))
+        else:
+            data = self.array[spec.roi]
         if "c" not in self.array.axes:
             # add a channel dimension
             data = np.expand_dims(data, 0)

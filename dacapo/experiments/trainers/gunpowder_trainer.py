@@ -3,7 +3,10 @@ from .trainer import Trainer
 
 from dacapo.gp import (
     DaCapoArraySource,
+    GraphSource,
     DaCapoTargetFilter,
+    CopyMask,
+    Product,
 )
 from dacapo.experiments.datasplits.datasets.arrays import (
     NumpyArray,
@@ -25,7 +28,6 @@ logger = logging.getLogger(__name__)
 
 
 class GunpowderTrainer(Trainer):
-
     iteration = 0
 
     def __init__(self, trainer_config):
@@ -37,9 +39,21 @@ class GunpowderTrainer(Trainer):
         self.min_masked = trainer_config.min_masked
 
         self.augments = trainer_config.augments
+        self.mask_integral_downsample_factor = 4
+        self.clip_raw = trainer_config.clip_raw
+
+        self.scheduler = None
 
     def create_optimizer(self, model):
-        return torch.optim.RAdam(lr=self.learning_rate, params=model.parameters())
+        optimizer = torch.optim.RAdam(lr=self.learning_rate, params=model.parameters())
+        self.scheduler = torch.optim.lr_scheduler.LinearLR(
+            optimizer,
+            start_factor=0.01,
+            end_factor=1.0,
+            total_iters=1000,
+            last_epoch=-1,
+        )
+        return optimizer
 
     def build_batch_provider(self, datasets, model, task, snapshot_container=None):
         input_shape = Coordinate(model.input_shape)
@@ -54,25 +68,45 @@ class GunpowderTrainer(Trainer):
         input_size = raw_voxel_size * input_shape
         output_size = prediction_voxel_size * output_shape
 
-        # padding of groundtruth/mask
-        gt_mask_padding = output_size + task.predictor.padding(prediction_voxel_size)
-
         # define keys:
         raw_key = gp.ArrayKey("RAW")
         gt_key = gp.ArrayKey("GT")
         mask_key = gp.ArrayKey("MASK")
 
+        # make requests such that the mask placeholder is not empty. request single voxel
+        # this means we can pad gt and mask as much as we want and not worry about
+        # never retrieving an empty gt.
+        # as long as the gt is large enough to accomidate one voxel we shouldn't have errors
+        mask_placeholder = gp.ArrayKey("MASK_PLACEHOLDER")
+
         target_key = gp.ArrayKey("TARGET")
+        dataset_weight_key = gp.ArrayKey("DATASET_WEIGHT")
+        datasets_weight_key = gp.ArrayKey("DATASETS_WEIGHT")
         weight_key = gp.ArrayKey("WEIGHT")
+        sample_points_key = gp.GraphKey("SAMPLE_POINTS")
 
         # Get source nodes
         dataset_sources = []
+        weights = []
         for dataset in datasets:
+            weights.append(dataset.weight)
+            assert isinstance(dataset.weight, int), dataset
 
             raw_source = DaCapoArraySource(dataset.raw, raw_key)
-            raw_source += gp.Pad(raw_key, None, 0)
+            if self.clip_raw:
+                raw_source += gp.Crop(
+                    raw_key, dataset.gt.roi.snap_to_grid(dataset.raw.voxel_size)
+                )
             gt_source = DaCapoArraySource(dataset.gt, gt_key)
-            gt_source += gp.Pad(gt_key, gt_mask_padding, 0)
+            sample_points = dataset.sample_points
+            points_source = None
+            if sample_points is not None:
+                graph = gp.Graph(
+                    [gp.Node(i, np.array(loc)) for i, loc in enumerate(sample_points)],
+                    [],
+                    gp.GraphSpec(dataset.gt.roi),
+                )
+                points_source = GraphSource(sample_points_key, graph)
             if dataset.mask is not None:
                 mask_source = DaCapoArraySource(dataset.mask, mask_key)
             else:
@@ -82,29 +116,57 @@ class GunpowderTrainer(Trainer):
                 # ground truth without worrying about training on incorrect
                 # data.
                 mask_source = DaCapoArraySource(OnesArray.like(dataset.gt), mask_key)
-            mask_source += gp.Pad(mask_key, gt_mask_padding, 0)
-            array_sources = [raw_source, gt_source, mask_source]
+            array_sources = [raw_source, gt_source, mask_source] + (
+                [points_source] if points_source is not None else []
+            )
 
             dataset_source = (
-                tuple(array_sources) + gp.MergeProvider() + gp.RandomLocation()
+                tuple(array_sources)
+                + gp.MergeProvider()
+                + CopyMask(
+                    mask_key,
+                    mask_placeholder,
+                    drop_channels=True,
+                )
+                + gp.Pad(raw_key, None, 0)
+                + gp.Pad(gt_key, None, 0)
+                + gp.Pad(mask_key, None, 0)
+                + gp.RandomLocation(
+                    ensure_nonempty=sample_points_key
+                    if points_source is not None
+                    else None,
+                    ensure_centered=sample_points_key
+                    if points_source is not None
+                    else None,
+                )
+            )
+
+            dataset_source += gp.Reject(mask_placeholder, 1e-6)
+
+            for augment in self.augments:
+                dataset_source += augment.node(raw_key, gt_key, mask_key)
+
+            # Add predictor nodes to dataset_source
+            dataset_source += DaCapoTargetFilter(
+                task.predictor,
+                gt_key=gt_key,
+                weights_key=dataset_weight_key,
+                mask_key=mask_key,
             )
 
             dataset_sources.append(dataset_source)
-        pipeline = tuple(dataset_sources) + gp.RandomProvider()
-
-        for augment in self.augments:
-            pipeline += augment.node(raw_key, gt_key, mask_key)
-
-        pipeline += gp.Reject(mask_key, min_masked=self.min_masked)
+        pipeline = tuple(dataset_sources) + gp.RandomProvider(weights)
 
         # Add predictor nodes to pipeline
         pipeline += DaCapoTargetFilter(
             task.predictor,
             gt_key=gt_key,
             target_key=target_key,
-            weights_key=weight_key,
+            weights_key=datasets_weight_key,
             mask_key=mask_key,
         )
+
+        pipeline += Product(dataset_weight_key, datasets_weight_key, weight_key)
 
         # Trainer attributes:
         if self.num_data_fetchers > 1:
@@ -121,9 +183,16 @@ class GunpowderTrainer(Trainer):
         request.add(raw_key, input_size)
         request.add(target_key, output_size)
         request.add(weight_key, output_size)
+        request.add(
+            mask_placeholder,
+            prediction_voxel_size * self.mask_integral_downsample_factor,
+        )
         # request additional keys for snapshots
         request.add(gt_key, output_size)
         request.add(mask_key, output_size)
+        request[mask_placeholder].roi = request[mask_placeholder].roi.snap_to_grid(
+            prediction_voxel_size * self.mask_integral_downsample_factor
+        )
 
         self._request = request
         self._pipeline = pipeline
@@ -229,6 +298,7 @@ class GunpowderTrainer(Trainer):
                 f"Trainer step took {time.time() - t_start_prediction} seconds"
             )
             self.iteration += 1
+            self.scheduler.step()
             yield TrainingIterationStats(
                 loss=loss.item(),
                 iteration=iteration,

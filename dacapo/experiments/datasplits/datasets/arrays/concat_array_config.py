@@ -2,7 +2,6 @@ import attr
 
 from .array_config import ArrayConfig
 from .concat_array import ConcatArray
-from .array_config import ArrayConfig
 
 from typing import List, Dict, Optional
 
