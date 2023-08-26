@@ -12,6 +12,7 @@ from .store import (
 import torch
 
 from pathlib import Path
+from reloading import reloading
 import logging
 
 logger = logging.getLogger(__name__)
@@ -47,6 +48,7 @@ def validate(
     return validate_run(run, iteration, compute_context=compute_context)
 
 
+@reloading
 def validate_run(
     run: Run, iteration: int, compute_context: ComputeContext = LocalTorch()
 ):
@@ -213,3 +215,14 @@ def validate_run(
     )
     stats_store = create_stats_store()
     stats_store.store_validation_iteration_scores(run.name, run.validation_scores)
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("run_name", type=str)
+    parser.add_argument("iteration", type=int)
+    args = parser.parse_args()
+
+    validate(args.run_name, args.iteration)

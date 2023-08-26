@@ -123,6 +123,13 @@ def train_run(
     )
 
     with run.trainer as trainer:
+        bar = tqdm(
+            total=run.train_until,
+            initial=trained_until,
+            desc="training",
+            # unit="iteration",
+            position=0,
+        )
         while trained_until < run.train_until:
             # train for at most 100 iterations at a time, then store training stats
             iterations = min(100, run.train_until - trained_until)
@@ -139,6 +146,8 @@ def train_run(
                 iterations,
             ):
                 run.training_stats.add_iteration_stats(iteration_stats)
+                bar.update(1)
+                bar.set_postfix_str(s=f"loss = {iteration_stats['loss']}")
 
                 if (iteration_stats.iteration + 1) % run.validation_interval == 0:
                     break
@@ -161,14 +170,21 @@ def train_run(
             run.move_optimizer(torch.device("cpu"), empty_cuda_cache=True)
 
             weights_store.store_weights(run, iteration_stats.iteration + 1)
-            validate_run(
-                run,
-                iteration_stats.iteration + 1,
-                compute_context=compute_context,
-            )
-            stats_store.store_validation_iteration_scores(
-                run.name, run.validation_scores
-            )
+            try:
+                validate_run(
+                    run,
+                    iteration_stats.iteration + 1,
+                    compute_context=compute_context,
+                )
+                stats_store.store_validation_iteration_scores(
+                    run.name, run.validation_scores
+                )
+            except Exception as e:
+                logger.error(
+                    f"Validation failed for run {run.name} at iteration "
+                    f"{iteration_stats.iteration + 1}.",
+                    exc_info=e,
+                )
             stats_store.store_training_stats(run.name, run.training_stats)
 
             # make sure to move optimizer back to the correct device
