@@ -27,7 +27,7 @@ class DistancePredictor(Predictor):
     in the channels argument.
     """
 
-    def __init__(self, channels: List[str], scale_factor: float, mask_distances=bool):
+    def __init__(self, channels: List[str], scale_factor: float, mask_distances: bool):
         self.channels = channels
         self.norm = "tanh"
         self.dt_scale_factor = scale_factor
