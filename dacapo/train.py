@@ -10,6 +10,7 @@ from tqdm import tqdm
 import logging
 
 logger = logging.getLogger(__name__)
+logger.setLevel("INFO")
 
 
 def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
@@ -129,6 +130,7 @@ def train_run(
             desc="training",
             # unit="iteration",
             position=0,
+            leave=True,
         )
         while trained_until < run.train_until:
             # train for at most 100 iterations at a time, then store training stats
@@ -142,8 +144,9 @@ def train_run(
                     run.optimizer,
                     compute_context.device,
                 ),
-                "training",
+                "training inner loop",
                 iterations,
+                position=1,
             ):
                 run.training_stats.add_iteration_stats(iteration_stats)
                 bar.update(1)
