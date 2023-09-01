@@ -124,33 +124,24 @@ def train_run(
     )
 
     with run.trainer as trainer:
-        bar = tqdm(
-            total=run.train_until,
-            initial=trained_until,
-            desc="training",
-            # unit="iteration",
-            position=0,
-            leave=True,
-        )
         while trained_until < run.train_until:
             # train for at most 100 iterations at a time, then store training stats
             iterations = min(100, run.train_until - trained_until)
             iteration_stats = None
-
-            for iteration_stats in tqdm(
+            bar = tqdm(
                 trainer.iterate(
                     iterations,
                     run.model,
                     run.optimizer,
                     compute_context.device,
                 ),
-                "training inner loop",
-                iterations,
-                position=1,
-            ):
+                desc=f"training until {iterations + trained_until}",
+                total=run.train_until,
+                initial=trained_until,
+            )
+            for iteration_stats in bar:
                 run.training_stats.add_iteration_stats(iteration_stats)
-                bar.update(1)
-                bar.set_postfix_str(s=f"loss = {iteration_stats['loss']}")
+                bar.set_postfix({"loss": iteration_stats.loss})
 
                 if (iteration_stats.iteration + 1) % run.validation_interval == 0:
                     break

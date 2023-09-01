@@ -255,7 +255,7 @@ class GunpowderTrainer(Trainer):
                 }
                 if mask is not None:
                     snapshot_arrays["volumes/mask"] = mask
-                logger.warning(
+                logger.info(
                     f"Saving Snapshot. Iteration: {iteration}, "
                     f"Loss: {loss.detach().cpu().numpy().item()}!"
                 )
