@@ -81,9 +81,12 @@ def validate_run(
     evaluator.set_best(run.validation_scores)
 
     for validation_dataset in run.datasplit.validate:
-        assert (
-            validation_dataset.gt is not None
-        ), "We do not yet support validating on datasets without ground truth"
+        if validation_dataset.gt is None:
+            logger.error(
+                "We do not yet support validating on datasets without ground truth"
+            )
+            raise NotImplementedError
+
         logger.info(
             "Validating run %s on dataset %s", run.name, validation_dataset.name
         )
@@ -166,6 +169,7 @@ def validate_run(
 
             scores = evaluator.evaluate(output_array_identifier, validation_dataset.gt)
 
+            any_best = False
             for criterion in run.validation_scores.criteria:
                 # replace predictions in array with the new better predictions
                 if evaluator.is_best(
@@ -174,6 +178,7 @@ def validate_run(
                     criterion,
                     scores,
                 ):
+                    any_best = True
                     best_array_identifier = array_store.best_validation_array(
                         run.name, criterion, index=validation_dataset.name
                     )
@@ -201,7 +206,8 @@ def validate_run(
 
             # delete current output. We only keep the best outputs as determined by
             # the evaluator
-            array_store.remove(output_array_identifier)
+            if not any_best:
+                array_store.remove(output_array_identifier)
 
             dataset_iteration_scores.append(
                 [getattr(scores, criterion) for criterion in scores.criteria]
