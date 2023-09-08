@@ -76,7 +76,7 @@ def predict(
 
     gt_padding = (output_size - output_roi.shape) % output_size
     prediction_roi = output_roi.grow(gt_padding)
-
+    # TODO: Add cache node?
     # predict
     pipeline += gp_torch.Predict(
         model=model,
@@ -97,8 +97,6 @@ def predict(
     pipeline += gp.Squeeze([raw, prediction])
     # raw: (c, d, h, w)
     # prediction: (c, d, h, w)
-    # raw: (c, d, h, w)
-    # prediction: (c, d, h, w)
 
     # write to zarr
     pipeline += gp.ZarrWrite(
@@ -112,7 +110,9 @@ def predict(
     ref_request = gp.BatchRequest()
     ref_request.add(raw, input_size)
     ref_request.add(prediction, output_size)
-    pipeline += gp.Scan(ref_request)
+    pipeline += gp.Scan(
+        ref_request
+    )  # TODO: This is a slow implementation for rendering
 
     # build pipeline and predict in complete output ROI
 
