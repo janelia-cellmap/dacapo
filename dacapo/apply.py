@@ -1,13 +1,15 @@
 import logging
 from funlib.geometry import Roi
 
-from dacapo.experiments.tasks.post_processors.post_processor_parameters import PostProcessorParameters
+from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
+    PostProcessorParameters,
+)
 from dacapo.store.array_store import LocalArrayIdentifier
-from .predict import predict
-from .compute_context import LocalTorch, ComputeContext
-from .experiments import Run, ValidationIterationScores
-from .experiments.datasplits.datasets.arrays import ZarrArray
-from .store import (
+from dacapo.predict import predict
+from dacapo.compute_context import LocalTorch, ComputeContext
+from dacapo.experiments import Run, ValidationIterationScores
+from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+from dacapo.store import (
     create_array_store,
     create_config_store,
     create_stats_store,
@@ -60,17 +62,17 @@ def apply(
     scores = [s for s in run.validation_scores.scores if s.iteration == iteration + 1][
         0
     ].scores
-    paremeters = ... scores[criterion]???
+    # paremeters = ... scores[criterion]???
 
-    # make array identifiers for input, predictions and outputs
-    array_store = create_array_store()
-    input_array_identifier = ...
-    prediction_array_identifier = LocalArrayIdentifier(
-        output_path, dataset_name, "prediction"...
-    )
-    output_array_identifier = LocalArrayIdentifier(
-        output_path, dataset_name, "output", parameters...
-    )
+    # # make array identifiers for input, predictions and outputs
+    # array_store = create_array_store()
+    # input_array_identifier = ...
+    # prediction_array_identifier = LocalArrayIdentifier(
+    #     output_path, dataset_name, "prediction"...
+    # )
+    # output_array_identifier = LocalArrayIdentifier(
+    #     output_path, dataset_name, "output", parameters...
+    # )
 
     logger.info(
         "Applying best results from run %s at iteration %i to dataset %s",
@@ -78,7 +80,15 @@ def apply(
         iteration,
         dataset_name,
     )
-    return apply_run(run, dataset_name, prediction_array_identifier, output_array_identifier, parameters, roi, compute_context)
+    return apply_run(
+        run,
+        dataset_name,
+        prediction_array_identifier,
+        output_array_identifier,
+        parameters,
+        roi,
+        compute_context,
+    )
 
 
 def apply_run(
@@ -97,5 +107,5 @@ def apply_run(
     # set benchmark flag to True for performance
     torch.backends.cudnn.benchmark = True
     run.model.eval()
-    
+
     ...

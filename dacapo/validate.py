@@ -158,6 +158,17 @@ def validate_run(
 
         dataset_iteration_scores = []
 
+        # set up dict for overall best scores
+        overall_best_scores = {}
+        for criterion in run.validation_scores.criteria:
+            overall_best_scores[criterion] = evaluator.get_overall_best(
+                validation_dataset,
+                criterion,
+                run.validation_scores.evaluation_scores.higher_is_better(
+                    criterion
+                ),  # TODO: should be in evaluator
+            )
+
         for parameters in post_processor.enumerate_parameters():
             output_array_identifier = array_store.validation_output_array(
                 run.name, iteration, parameters, validation_dataset
@@ -168,8 +179,6 @@ def validate_run(
             )
 
             scores = evaluator.evaluate(output_array_identifier, validation_dataset.gt)
-
-            any_best = False
             for criterion in run.validation_scores.criteria:
                 # replace predictions in array with the new better predictions
                 if evaluator.is_best(
@@ -178,35 +187,56 @@ def validate_run(
                     criterion,
                     scores,
                 ):
-                    any_best = True
-                    best_array_identifier = array_store.best_validation_array(
-                        run.name, criterion, index=validation_dataset.name
-                    )
-                    best_array = ZarrArray.create_from_array_identifier(
-                        best_array_identifier,
-                        post_processed_array.axes,
-                        post_processed_array.roi,
-                        post_processed_array.num_channels,
-                        post_processed_array.voxel_size,
-                        post_processed_array.dtype,
-                    )
-                    best_array[best_array.roi] = post_processed_array[
-                        post_processed_array.roi
-                    ]
-                    best_array.add_metadata(
-                        {
-                            "iteration": iteration,
-                            criterion: getattr(scores, criterion),
-                            "parameters_id": parameters.id,
-                        }
-                    )
-                    weights_store.store_best(
-                        run, iteration, validation_dataset.name, criterion
-                    )
+                    # then this is the current best score for this parameter, but not necessarily the overall best
+                    higher_is_better = scores.higher_is_better(criterion)
+                    # initial_best_score = overall_best_scores[criterion]
+                    current_score = getattr(scores, criterion)
+                    if not overall_best_scores[
+                        criterion
+                    ] or (  # TODO: should be in evaluator
+                        (
+                            higher_is_better
+                            and current_score > overall_best_scores[criterion]
+                        )
+                        or (
+                            not higher_is_better
+                            and current_score < overall_best_scores[criterion]
+                        )
+                    ):
+                        overall_best_scores[criterion] = current_score
 
-            # delete current output. We only keep the best outputs as determined by
-            # the evaluator
-            array_store.remove(output_array_identifier)
+                        # For example, if parameter 2 did better this round than it did in other rounds, but it was still worse than parameter 1
+                        # the code would have overwritten it below since all parameters write to the same file. Now each parameter will be its own file
+                        # Either we do that, or we only write out the overall best, regardless of parameters
+                        best_array_identifier = array_store.best_validation_array(
+                            run.name, criterion, index=validation_dataset.name
+                        )
+                        best_array = ZarrArray.create_from_array_identifier(
+                            best_array_identifier,
+                            post_processed_array.axes,
+                            post_processed_array.roi,
+                            post_processed_array.num_channels,
+                            post_processed_array.voxel_size,
+                            post_processed_array.dtype,
+                        )
+                        best_array[best_array.roi] = post_processed_array[
+                            post_processed_array.roi
+                        ]
+                        best_array.add_metadata(
+                            {
+                                "iteration": iteration,
+                                criterion: getattr(scores, criterion),
+                                "parameters_id": parameters.id,
+                            }
+                        )
+                        weights_store.store_best(
+                            run, iteration, validation_dataset.name, criterion
+                        )
+                    else:
+                        # delete current output. We only keep the best outputs as determined by
+                        # the evaluator
+                        # remove deletion for now since we have to rerun later to double check things anyway
+                        array_store.remove(output_array_identifier)
 
             dataset_iteration_scores.append(
                 [getattr(scores, criterion) for criterion in scores.criteria]

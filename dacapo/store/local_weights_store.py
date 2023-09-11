@@ -106,7 +106,7 @@ class LocalWeightsStore(WeightsStore):
         logger.info("Retrieving weights for run %s, criterion %s", run, criterion)
 
         weights_info = json.loads(
-            (self.__get_weights_dir(run) / criterion / f"{dataset}.json")
+            (self.__get_weights_dir(run) / dataset / f"{criterion}.json")
             .open("r")
             .read()
         )
