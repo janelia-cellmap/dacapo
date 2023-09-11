@@ -113,7 +113,7 @@ class ValidationScores:
         best value in two seperate arrays.
         """
         if "criteria" in data.coords.keys():
-            if len(data.coords["criteria"].shape) == 1:
+            if len(data.coords["criteria"].shape) > 1:
                 criteria_bests: List[Tuple[xr.DataArray, xr.DataArray]] = []
                 for criterion in data.coords["criteria"].values:
                     if self.evaluation_scores.higher_is_better(criterion.item()):

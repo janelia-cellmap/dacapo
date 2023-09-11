@@ -24,7 +24,8 @@ def predict(
     num_cpu_workers: int = 4,
     compute_context: ComputeContext = LocalTorch(),
     output_roi: Optional[Roi] = None,
-):
+    output_dtype: Optional[np.dtype or torch.dtype] = np.uint8,
+):  # TODO: Add dtype argument
     # get the model's input and output size
 
     input_voxel_size = Coordinate(raw_array.voxel_size)

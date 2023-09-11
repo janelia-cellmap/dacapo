@@ -162,11 +162,7 @@ def validate_run(
         overall_best_scores = {}
         for criterion in run.validation_scores.criteria:
             overall_best_scores[criterion] = evaluator.get_overall_best(
-                validation_dataset,
-                criterion,
-                run.validation_scores.evaluation_scores.higher_is_better(
-                    criterion
-                ),  # TODO: should be in evaluator
+                validation_dataset, criterion
             )
 
         for parameters in post_processor.enumerate_parameters():

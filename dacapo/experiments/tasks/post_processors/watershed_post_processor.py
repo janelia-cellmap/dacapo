@@ -32,7 +32,9 @@ class WatershedPostProcessor(PostProcessor):
             prediction_array_identifier
         )
 
-    def process(self, parameters, output_array_identifier):
+    def process(
+        self, parameters, output_array_identifier
+    ):  # TODO: will probably break with large arrays...
         output_array = ZarrArray.create_from_array_identifier(
             output_array_identifier,
             [axis for axis in self.prediction_array.axes if axis != "c"],
