@@ -76,24 +76,22 @@ def validate(run_name, iteration):
 @click.option("-dt", "--output_dtype", type=str, default="uint8")
 def apply(
     run_name: str,
-    input_container: str,
+    input_container: Path or str,
     input_dataset: str,
-    output_path: str,
-    validation_dataset: Optional[str or Dataset] = None,
+    output_container: Path or str,
+    validation_dataset: Optional[Dataset or str] = None,
     criterion: Optional[str] = "voi",
     iteration: Optional[int] = None,
-    parameters: Optional[PostProcessorParameters] = None,
-    roi: Optional[Roi] = None,
+    parameters: Optional[PostProcessorParameters or str] = None,
+    roi: Optional[Roi or str] = None,
     num_cpu_workers: int = 4,
     output_dtype: Optional[np.dtype or str] = np.uint8,
 ):
-    if isinstance(output_dtype, str):
-        output_dtype = np.dtype(output_dtype)
     dacapo.apply(
         run_name,
         input_container,
         input_dataset,
-        output_path,
+        output_container,
         validation_dataset,
         criterion,
         iteration,

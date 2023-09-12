@@ -1,6 +1,6 @@
 import logging
 from typing import Optional
-from funlib.geometry import Roi
+from funlib.geometry import Roi, Coordinate
 import numpy as np
 from dacapo.experiments.datasplits.datasets.dataset import Dataset
 
@@ -28,19 +28,33 @@ logger = logging.getLogger(__name__)
 
 def apply(
     run_name: str,
-    input_container: str or Path,
+    input_container: Path or str,
     input_dataset: str,
-    output_container: str or Path,
-    validation_dataset: Optional[str or Dataset] = None,
+    output_container: Path or str,
+    validation_dataset: Optional[Dataset or str] = None,
     criterion: Optional[str] = "voi",
     iteration: Optional[int] = None,
-    parameters: Optional[PostProcessorParameters] = None,
-    roi: Optional[Roi] = None,
+    parameters: Optional[PostProcessorParameters or str] = None,
+    roi: Optional[Roi or str] = None,
     num_cpu_workers: int = 4,
-    output_dtype: Optional[np.dtype or torch.dtype] = np.uint8,
+    output_dtype: Optional[np.dtype or str] = np.uint8,
     compute_context: ComputeContext = LocalTorch(),
 ):
     """Load weights and apply a model to a dataset. If iteration is None, the best iteration based on the criterion is used. If roi is None, the whole input dataset is used."""
+    if isinstance(output_dtype, str):
+        output_dtype = np.dtype(output_dtype)
+
+    if isinstance(roi, str):
+        start, end = zip(
+            *[
+                tuple(int(coord) for coord in axis.split(":"))
+                for axis in roi.strip("[]").split(",")
+            ]
+        )
+        roi = Roi(
+            Coordinate(start),
+            Coordinate(end) - Coordinate(start),
+        )
 
     assert (validation_dataset is not None and isinstance(criterion, str)) or (
         isinstance(iteration, int)
