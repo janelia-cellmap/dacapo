@@ -28,12 +28,13 @@ logger = logging.getLogger(__name__)
 
 def apply(
     run_name: str,
-    input_container: str,
+    input_container: str or Path,
     input_dataset: str,
-    output_path: str,
+    output_container: str or Path,
     validation_dataset: Optional[str or Dataset] = None,
     criterion: Optional[str] = "voi",
     iteration: Optional[int] = None,
+    parameters: Optional[PostProcessorParameters] = None,
     roi: Optional[Roi] = None,
     num_cpu_workers: int = 4,
     output_dtype: Optional[np.dtype or torch.dtype] = np.uint8,
@@ -42,7 +43,7 @@ def apply(
     """Load weights and apply a model to a dataset. If iteration is None, the best iteration based on the criterion is used. If roi is None, the whole input dataset is used."""
 
     assert (validation_dataset is not None and isinstance(criterion, str)) or (
-        iteration is not None
+        isinstance(iteration, int)
     ), "Either validation_dataset and criterion, or iteration must be provided."
 
     # retrieving run
@@ -76,14 +77,15 @@ def apply(
             dataset for dataset in run.datasplit.validate if dataset.name == val_ds_name
         ][0]
     logger.info("Finding best parameters for validation dataset %s", validation_dataset)
-    parameters = run.task.evaluator.get_overall_best_parameters(
-        validation_dataset, criterion
-    )
+    if parameters is None:
+        parameters = run.task.evaluator.get_overall_best_parameters(
+            validation_dataset, criterion
+        )
 
     # make array identifiers for input, predictions and outputs
     array_store = create_array_store()
     input_array_identifier = LocalArrayIdentifier(input_container, input_dataset)
-    output_container = Path(output_path, Path(input_container).name)
+    output_container = Path(output_container, Path(input_container).name)
     prediction_array_identifier = LocalArrayIdentifier(
         output_container, f"prediction_{run_name}_{iteration}_{parameters}"
     )
@@ -100,7 +102,7 @@ def apply(
     return apply_run(
         run,
         parameters,
-        input_array_identifier
+        input_array_identifier,
         prediction_array_identifier,
         output_array_identifier,
         roi,
@@ -125,15 +127,21 @@ def apply_run(
 
     # render prediction dataset
     logger.info("Predicting on dataset %s", prediction_array_identifier)
-    predict(run.model, input_array_identifier, prediction_array_identifier, output_roi=roi, num_cpu_workers=num_cpu_workers, output_dtype=output_dtype compute_context=compute_context)
+    predict(
+        run.model,
+        input_array_identifier,
+        prediction_array_identifier,
+        output_roi=roi,
+        num_cpu_workers=num_cpu_workers,
+        output_dtype=output_dtype,
+        compute_context=compute_context,
+    )
 
     # post-process the output
     logger.info("Post-processing output to dataset %s", output_array_identifier)
     post_processor = run.task.post_processor
     post_processor.set_prediction(prediction_array_identifier)
-    post_processed_array = post_processor.process(
-                parameters, output_array_identifier
-            )
-    
+    post_processed_array = post_processor.process(parameters, output_array_identifier)
+
     logger.info("Done")
     return
