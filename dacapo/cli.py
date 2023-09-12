@@ -1,6 +1,15 @@
+from typing import Optional
+
+from funlib.geometry import Roi
+import numpy as np
 import dacapo
 import click
 import logging
+from dacapo.experiments.datasplits.datasets.dataset import Dataset
+
+from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
+    PostProcessorParameters,
+)
 
 
 @click.group()
@@ -76,7 +85,7 @@ def apply(
     parameters: Optional[PostProcessorParameters] = None,
     roi: Optional[Roi] = None,
     num_cpu_workers: int = 4,
-    output_dtype: Optional[np.dtype or torch.dtype or str] = np.uint8,
+    output_dtype: Optional[np.dtype or str] = np.uint8,
 ):
     if isinstance(output_dtype, str):
         output_dtype = np.dtype(output_dtype)
