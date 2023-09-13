@@ -3,23 +3,21 @@ from typing import Optional
 from funlib.geometry import Roi, Coordinate
 import numpy as np
 from dacapo.experiments.datasplits.datasets.dataset import Dataset
+from dacapo.experiments.run import Run
 
 from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
     PostProcessorParameters,
 )
+import dacapo.experiments.tasks.post_processors as post_processors
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.predict import predict
 from dacapo.compute_context import LocalTorch, ComputeContext
-from dacapo.experiments import Run, ValidationIterationScores
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from dacapo.store import (
-    create_array_store,
     create_config_store,
     create_stats_store,
     create_weights_store,
 )
-
-import torch
 
 from pathlib import Path
 
@@ -30,7 +28,7 @@ def apply(
     run_name: str,
     input_container: Path or str,
     input_dataset: str,
-    output_container: Path or str,
+    output_path: Path or str,
     validation_dataset: Optional[Dataset or str] = None,
     criterion: Optional[str] = "voi",
     iteration: Optional[int] = None,
@@ -66,13 +64,12 @@ def apply(
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
 
-    # read in previous training/validation stats TODO: is this necessary?
-
-    stats_store = create_stats_store()
-    run.training_stats = stats_store.retrieve_training_stats(run_name)
-    run.validation_scores.scores = stats_store.retrieve_validation_iteration_scores(
-        run_name
-    )
+    # # read in previous training/validation stats TODO: is this necessary?
+    # stats_store = create_stats_store()
+    # run.training_stats = stats_store.retrieve_training_stats(run_name)
+    # run.validation_scores.scores = stats_store.retrieve_validation_iteration_scores(
+    #     run_name
+    # )
 
     # create weights store
     weights_store = create_weights_store()
@@ -95,13 +92,48 @@ def apply(
         parameters = run.task.evaluator.get_overall_best_parameters(
             validation_dataset, criterion
         )
+        assert (
+            parameters is not None
+        ), "Unable to retieve parameters. Parameters must be provided explicitly."
+
+    elif isinstance(parameters, str):
+        try:
+            post_processor_name = parameters.split("(")[0]
+            post_processor_kwargs = parameters.split("(")[1].strip(")").split(",")
+            post_processor_kwargs = {
+                key.strip(): value.strip()
+                for key, value in [arg.split("=") for arg in post_processor_kwargs]
+            }
+            for key, value in post_processor_kwargs.items():
+                if value.isdigit():
+                    post_processor_kwargs[key] = int(value)
+                elif value.replace(".", "", 1).isdigit():
+                    post_processor_kwargs[key] = float(value)
+        except:
+            raise ValueError(
+                f"Could not parse parameters string {parameters}. Must be of the form 'post_processor_name(arg1=val1, arg2=val2, ...)'"
+            )
+        try:
+            parameters = getattr(post_processors, post_processor_name)(
+                **post_processor_kwargs
+            )
+        except Exception as e:
+            logger.error(
+                f"Could not instantiate post-processor {post_processor_name} with arguments {post_processor_kwargs}.",
+                exc_info=True,
+            )
+            raise e
+
+    assert isinstance(
+        parameters, PostProcessorParameters
+    ), "Parameters must be parsable to a PostProcessorParameters object."
 
     # make array identifiers for input, predictions and outputs
-    array_store = create_array_store()
     input_array_identifier = LocalArrayIdentifier(input_container, input_dataset)
-    output_container = Path(output_container, Path(input_container).name)
+    input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+    output_container = Path(output_path, Path(input_container).name)
     prediction_array_identifier = LocalArrayIdentifier(
-        output_container, f"prediction_{run_name}_{iteration}_{parameters}"
+        output_container, f"prediction_{run_name}_{iteration}"
     )
     output_array_identifier = LocalArrayIdentifier(
         output_container, f"output_{run_name}_{iteration}_{parameters}"
@@ -116,7 +148,7 @@ def apply(
     return apply_run(
         run,
         parameters,
-        input_array_identifier,
+        input_array,
         prediction_array_identifier,
         output_array_identifier,
         roi,
@@ -129,12 +161,12 @@ def apply(
 def apply_run(
     run: Run,
     parameters: PostProcessorParameters,
-    input_array_identifier: LocalArrayIdentifier,
+    input_array: ZarrArray,
     prediction_array_identifier: LocalArrayIdentifier,
     output_array_identifier: LocalArrayIdentifier,
     roi: Optional[Roi] = None,
     num_cpu_workers: int = 4,
-    output_dtype: Optional[np.dtype or torch.dtype] = np.uint8,
+    output_dtype: Optional[np.dtype] = np.uint8,
     compute_context: ComputeContext = LocalTorch(),
 ):
     """Apply the model to a dataset. If roi is None, the whole input dataset is used. Assumes model is already loaded."""
@@ -143,7 +175,7 @@ def apply_run(
     logger.info("Predicting on dataset %s", prediction_array_identifier)
     predict(
         run.model,
-        input_array_identifier,
+        input_array,
         prediction_array_identifier,
         output_roi=roi,
         num_cpu_workers=num_cpu_workers,

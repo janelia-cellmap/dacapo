@@ -1,15 +1,8 @@
 from typing import Optional
 
-from funlib.geometry import Roi
-import numpy as np
 import dacapo
 import click
 import logging
-from dacapo.experiments.datasplits.datasets.dataset import Dataset
-
-from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
-    PostProcessorParameters,
-)
 
 
 @click.group()
@@ -49,7 +42,7 @@ def validate(run_name, iteration):
 
 @cli.command()
 @click.option(
-    "-r", "--run", required=True, type=str, help="The name of the run to use."
+    "-r", "--run_name", required=True, type=str, help="The name of the run to use."
 )
 @click.option(
     "-ic",
@@ -58,9 +51,7 @@ def validate(run_name, iteration):
     type=click.Path(exists=True, file_okay=False),
 )
 @click.option("-id", "--input_dataset", required=True, type=str)
-@click.option(
-    "-oc", "--output_container", required=True, type=click.Path(file_okay=False)
-)
+@click.option("-op", "--output_path", required=True, type=click.Path(file_okay=False))
 @click.option("-vd", "--validation_dataset", type=str, default=None)
 @click.option("-c", "--criterion", default="voi")
 @click.option("-i", "--iteration", type=int, default=None)
@@ -76,22 +67,22 @@ def validate(run_name, iteration):
 @click.option("-dt", "--output_dtype", type=str, default="uint8")
 def apply(
     run_name: str,
-    input_container: Path or str,
+    input_container: str,
     input_dataset: str,
-    output_container: Path or str,
-    validation_dataset: Optional[Dataset or str] = None,
+    output_path: str,
+    validation_dataset: Optional[str] = None,
     criterion: Optional[str] = "voi",
     iteration: Optional[int] = None,
-    parameters: Optional[PostProcessorParameters or str] = None,
-    roi: Optional[Roi or str] = None,
+    parameters: Optional[str] = None,
+    roi: Optional[str] = None,
     num_cpu_workers: int = 4,
-    output_dtype: Optional[np.dtype or str] = np.uint8,
+    output_dtype: Optional[str] = "uint8",
 ):
     dacapo.apply(
         run_name,
         input_container,
         input_dataset,
-        output_container,
+        output_path,
         validation_dataset,
         criterion,
         iteration,
