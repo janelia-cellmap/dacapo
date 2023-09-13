@@ -75,7 +75,7 @@ def apply(
     iteration: Optional[int] = None,
     parameters: Optional[str] = None,
     roi: Optional[str] = None,
-    num_cpu_workers: int = 4,
+    num_cpu_workers: int = 30,
     output_dtype: Optional[str] = "uint8",
 ):
     dacapo.apply(

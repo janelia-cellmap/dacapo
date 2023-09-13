@@ -2,6 +2,7 @@ import logging
 from typing import Optional
 from funlib.geometry import Roi, Coordinate
 import numpy as np
+from dacapo.experiments.datasplits.datasets.arrays.array import Array
 from dacapo.experiments.datasplits.datasets.dataset import Dataset
 from dacapo.experiments.run import Run
 
@@ -15,7 +16,6 @@ from dacapo.compute_context import LocalTorch, ComputeContext
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from dacapo.store import (
     create_config_store,
-    create_stats_store,
     create_weights_store,
 )
 
@@ -34,9 +34,10 @@ def apply(
     iteration: Optional[int] = None,
     parameters: Optional[PostProcessorParameters or str] = None,
     roi: Optional[Roi or str] = None,
-    num_cpu_workers: int = 4,
+    num_cpu_workers: int = 30,
     output_dtype: Optional[np.dtype or str] = np.uint8,
     compute_context: ComputeContext = LocalTorch(),
+    overwrite: bool = True,
 ):
     """Load weights and apply a model to a dataset. If iteration is None, the best iteration based on the criterion is used. If roi is None, the whole input dataset is used."""
     if isinstance(output_dtype, str):
@@ -63,13 +64,6 @@ def apply(
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
-
-    # # read in previous training/validation stats TODO: is this necessary?
-    # stats_store = create_stats_store()
-    # run.training_stats = stats_store.retrieve_training_stats(run_name)
-    # run.validation_scores.scores = stats_store.retrieve_validation_iteration_scores(
-    #     run_name
-    # )
 
     # create weights store
     weights_store = create_weights_store()
@@ -131,6 +125,9 @@ def apply(
     # make array identifiers for input, predictions and outputs
     input_array_identifier = LocalArrayIdentifier(input_container, input_dataset)
     input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+    roi = roi.snap_to_grid(input_array.voxel_size, mode="grow").intersect(
+        input_array.roi
+    )
     output_container = Path(output_path, Path(input_container).name)
     prediction_array_identifier = LocalArrayIdentifier(
         output_container, f"prediction_{run_name}_{iteration}"
@@ -155,21 +152,24 @@ def apply(
         num_cpu_workers,
         output_dtype,
         compute_context,
+        overwrite,
     )
 
 
 def apply_run(
     run: Run,
     parameters: PostProcessorParameters,
-    input_array: ZarrArray,
+    input_array: Array,
     prediction_array_identifier: LocalArrayIdentifier,
     output_array_identifier: LocalArrayIdentifier,
     roi: Optional[Roi] = None,
-    num_cpu_workers: int = 4,
+    num_cpu_workers: int = 30,
     output_dtype: Optional[np.dtype] = np.uint8,
     compute_context: ComputeContext = LocalTorch(),
+    overwrite: bool = True,
 ):
     """Apply the model to a dataset. If roi is None, the whole input dataset is used. Assumes model is already loaded."""
+    run.model.eval()
 
     # render prediction dataset
     logger.info("Predicting on dataset %s", prediction_array_identifier)
@@ -181,13 +181,16 @@ def apply_run(
         num_cpu_workers=num_cpu_workers,
         output_dtype=output_dtype,
         compute_context=compute_context,
+        overwrite=overwrite,
     )
 
     # post-process the output
     logger.info("Post-processing output to dataset %s", output_array_identifier)
     post_processor = run.task.post_processor
     post_processor.set_prediction(prediction_array_identifier)
-    post_processed_array = post_processor.process(parameters, output_array_identifier)
+    post_processed_array = post_processor.process(
+        parameters, output_array_identifier, overwrite=overwrite
+    )
 
     logger.info("Done")
     return

@@ -24,8 +24,9 @@ def predict(
     num_cpu_workers: int = 4,
     compute_context: ComputeContext = LocalTorch(),
     output_roi: Optional[Roi] = None,
-    output_dtype: Optional[np.dtype or torch.dtype] = np.uint8,
-):  # TODO: Add dtype argument
+    output_dtype: Optional[np.dtype] = np.uint8,
+    overwrite: bool = False,
+):
     # get the model's input and output size
 
     input_voxel_size = Coordinate(raw_array.voxel_size)
@@ -57,7 +58,8 @@ def predict(
         output_roi,
         model.num_out_channels,
         output_voxel_size,
-        np.float32,
+        output_dtype,
+        overwrite=overwrite,
     )
 
     # create gunpowder keys
@@ -69,6 +71,7 @@ def predict(
 
     # prepare data source
     pipeline = DaCapoArraySource(raw_array, raw)
+    pipeline += gp.Normalize(raw)
     # raw: (c, d, h, w)
     pipeline += gp.Pad(raw, Coordinate((None,) * input_voxel_size.dims))
     # raw: (c, d, h, w)
@@ -85,7 +88,9 @@ def predict(
         outputs={0: prediction},
         array_specs={
             prediction: gp.ArraySpec(
-                roi=prediction_roi, voxel_size=output_voxel_size, dtype=np.float32
+                roi=prediction_roi,
+                voxel_size=output_voxel_size,
+                dtype=np.float32,  # assumes network output is float32
             )
         },
         spawn_subprocess=False,
@@ -99,12 +104,17 @@ def predict(
     # raw: (c, d, h, w)
     # prediction: (c, d, h, w)
 
+    # convert to uint8 if necessary:
+    if output_dtype == np.uint8:
+        pipeline += gp.IntensityScaleShift(prediction, scale=255.0, shift=0.0)
+        pipeline += gp.AsType(prediction, output_dtype)
+
     # write to zarr
     pipeline += gp.ZarrWrite(
         {prediction: prediction_array_identifier.dataset},
         prediction_array_identifier.container.parent,
         prediction_array_identifier.container.name,
-        dataset_dtypes={prediction: np.float32},
+        dataset_dtypes={prediction: output_dtype},
     )
 
     # create reference batch request

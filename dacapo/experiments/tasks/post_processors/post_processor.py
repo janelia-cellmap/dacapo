@@ -33,6 +33,7 @@ class PostProcessor(ABC):
         self,
         parameters: "PostProcessorParameters",
         output_array_identifier: "LocalArrayIdentifier",
+        overwrite: "bool",
     ) -> "Array":
         """Convert predictions into the final output."""
         pass

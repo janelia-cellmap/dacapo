@@ -33,7 +33,7 @@ class WatershedPostProcessor(PostProcessor):
         )
 
     def process(
-        self, parameters, output_array_identifier
+        self, parameters, output_array_identifier, overwrite: bool = False
     ):  # TODO: will probably break with large arrays...
         output_array = ZarrArray.create_from_array_identifier(
             output_array_identifier,
@@ -42,6 +42,7 @@ class WatershedPostProcessor(PostProcessor):
             None,
             self.prediction_array.voxel_size,
             np.uint64,
+            overwrite=overwrite,
         )
         # if a previous segmentation is provided, it must have a "grid graph"
         # in its metadata.

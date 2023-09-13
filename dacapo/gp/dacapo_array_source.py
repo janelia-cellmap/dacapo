@@ -26,7 +26,7 @@ class DaCapoArraySource(gp.BatchProvider):
     def __init__(self, array: Array, key: gp.ArrayKey):
         self.array = array
         self.array_spec = ArraySpec(
-            roi=self.array.roi, voxel_size=self.array.voxel_size
+            roi=self.array.roi, voxel_size=self.array.voxel_size, dtype=self.array.dtype
         )
         self.key = key
 

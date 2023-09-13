@@ -116,6 +116,7 @@ class ZarrArray(Array):
         dtype,
         write_size=None,
         name=None,
+        overwrite=False,
     ):
         """
         Create a new ZarrArray given an array identifier. It is assumed that
@@ -145,6 +146,7 @@ class ZarrArray(Array):
                 dtype,
                 num_channels=num_channels,
                 write_size=write_size,
+                delete=overwrite,
             )
             zarr_dataset = zarr_container[array_identifier.dataset]
             zarr_dataset.attrs["offset"] = (
