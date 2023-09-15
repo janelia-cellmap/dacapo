@@ -38,6 +38,7 @@ def apply(
     output_dtype: Optional[np.dtype or str] = np.uint8,
     compute_context: ComputeContext = LocalTorch(),
     overwrite: bool = True,
+    file_format: str = "zarr",
 ):
     """Load weights and apply a model to a dataset. If iteration is None, the best iteration based on the criterion is used. If roi is None, the whole input dataset is used."""
     if isinstance(output_dtype, str):
@@ -128,7 +129,10 @@ def apply(
     roi = roi.snap_to_grid(input_array.voxel_size, mode="grow").intersect(
         input_array.roi
     )
-    output_container = Path(output_path, Path(input_container).name)
+    output_container = Path(
+        output_path,
+        "".join(Path(input_container).name.split(".")[:-1]) + f".{file_format}",
+    )
     prediction_array_identifier = LocalArrayIdentifier(
         output_container, f"prediction_{run_name}_{iteration}"
     )

@@ -137,21 +137,48 @@ class ZarrArray(Array):
             write_size = Coordinate((axis_length,) * voxel_size.dims) * voxel_size
         write_size = Coordinate((min(a, b) for a, b in zip(write_size, roi.shape)))
         zarr_container = zarr.open(array_identifier.container, "a")
-        funlib.persistence.prepare_ds(
-            f"{array_identifier.container}",
-            array_identifier.dataset,
-            roi,
-            voxel_size,
-            dtype,
-            num_channels=num_channels,
-            write_size=write_size,
-            delete=overwrite,
-        )
-        zarr_dataset = zarr_container[array_identifier.dataset]
-        zarr_dataset.attrs["axes"] = (
-            # axes[::-1] if array_identifier.container.name.endswith("n5") else axes
-            axes
-        )
+        try:
+            funlib.persistence.prepare_ds(
+                f"{array_identifier.container}",
+                array_identifier.dataset,
+                roi,
+                voxel_size,
+                dtype,
+                num_channels=num_channels,
+                write_size=write_size,
+                delete=overwrite,
+            )
+            zarr_dataset = zarr_container[array_identifier.dataset]
+            zarr_dataset.attrs["offset"] = (
+                roi.offset[::-1]
+                if array_identifier.container.name.endswith("n5")
+                else roi.offset
+            )
+            zarr_dataset.attrs["resolution"] = (
+                voxel_size[::-1]
+                if array_identifier.container.name.endswith("n5")
+                else voxel_size
+            )
+            zarr_dataset.attrs["axes"] = (
+                axes[::-1] if array_identifier.container.name.endswith("n5") else axes
+            )
+        except zarr.errors.ContainsArrayError:
+            zarr_dataset = zarr_container[array_identifier.dataset]
+            assert (
+                tuple(zarr_dataset.attrs["offset"]) == roi.offset
+            ), f"{zarr_dataset.attrs['offset']}, {roi.offset}"
+            assert (
+                tuple(zarr_dataset.attrs["resolution"]) == voxel_size
+            ), f"{zarr_dataset.attrs['resolution']}, {voxel_size}"
+            assert tuple(zarr_dataset.attrs["axes"]) == tuple(
+                axes
+            ), f"{zarr_dataset.attrs['axes']}, {axes}"
+            assert (
+                zarr_dataset.shape
+                == ((num_channels,) if num_channels is not None else ())
+                + roi.shape / voxel_size
+            ), f"{zarr_dataset.shape}, {((num_channels,) if num_channels is not None else ()) + roi.shape / voxel_size}"
+            zarr_dataset[:] = np.zeros(zarr_dataset.shape, dtype)
 
         zarr_array = cls.__new__(cls)
         zarr_array.file_name = array_identifier.container
