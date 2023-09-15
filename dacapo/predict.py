@@ -51,7 +51,12 @@ def predict(
     logger.info("Total input ROI: %s, output ROI: %s", input_roi, output_roi)
 
     # prepare prediction dataset
-    axes = ["c"] + [axis for axis in raw_array.axes if axis != "c"]
+    if raw_array.file_name.endswith(
+        "zarr"
+    ) == prediction_array_identifier.container.name.endswith("zarr"):
+        axes = ["c"] + [axis for axis in raw_array.axes if axis != "c"]
+    else:
+        axes = ["c"] + [axis for axis in raw_array.axes[::-1] if axis != "c"]
     ZarrArray.create_from_array_identifier(
         prediction_array_identifier,
         axes,
@@ -79,7 +84,7 @@ def predict(
     # raw: (1, c, d, h, w)
 
     gt_padding = (output_size - output_roi.shape) % output_size
-    prediction_roi = output_roi.grow(gt_padding)
+    prediction_roi = output_roi.grow(gt_padding)  # TODO: are we sure this makes sense?
     # TODO: Add cache node?
     # predict
     pipeline += gp_torch.Predict(
@@ -106,7 +111,9 @@ def predict(
 
     # convert to uint8 if necessary:
     if output_dtype == np.uint8:
-        pipeline += gp.IntensityScaleShift(prediction, scale=255.0, shift=0.0)
+        pipeline += gp.IntensityScaleShift(
+            prediction, scale=255.0, shift=0.0
+        )  # assumes float32 is [0,1]
         pipeline += gp.AsType(prediction, output_dtype)
 
     # write to zarr

@@ -149,7 +149,8 @@ class ZarrArray(Array):
         )
         zarr_dataset = zarr_container[array_identifier.dataset]
         zarr_dataset.attrs["axes"] = (
-            axes[::-1] if array_identifier.container.name.endswith("n5") else axes
+            # axes[::-1] if array_identifier.container.name.endswith("n5") else axes
+            axes
         )
 
         zarr_array = cls.__new__(cls)

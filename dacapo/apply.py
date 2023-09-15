@@ -188,8 +188,8 @@ def apply_run(
     logger.info("Post-processing output to dataset %s", output_array_identifier)
     post_processor = run.task.post_processor
     post_processor.set_prediction(prediction_array_identifier)
-    post_processed_array = post_processor.process(
-        parameters, output_array_identifier, overwrite=overwrite
+    post_processor.process(
+        parameters, output_array_identifier, overwrite=overwrite, blockwise=True
     )
 
     logger.info("Done")
