@@ -24,7 +24,9 @@ class WatershedPostProcessor(PostProcessor):
         """Enumerate all possible parameters of this post-processor. Should
         return instances of ``PostProcessorParameters``."""
 
-        for i, bias in enumerate([0.1, 0.3, 0.5, 0.7, 0.9]):
+        for i, bias in enumerate(
+            [0.1, 0.3, 0.5, 0.7, 0.9]
+        ):  # TODO: add this to the config
             yield WatershedPostProcessorParameters(id=i, bias=bias)
 
     def set_prediction(self, prediction_array_identifier):

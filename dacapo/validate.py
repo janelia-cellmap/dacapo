@@ -80,7 +80,7 @@ def validate_run(
     # Initialize the evaluator with the best scores seen so far
     evaluator.set_best(run.validation_scores)
 
-    for validation_dataset in run.datasplit.validate:
+    for validation_dataset in reloading(run.datasplit.validate):
         if validation_dataset.gt is None:
             logger.error(
                 "We do not yet support validating on datasets without ground truth"
@@ -165,11 +165,13 @@ def validate_run(
                 validation_dataset, criterion
             )
 
-        for parameters in post_processor.enumerate_parameters():
+        any_overall_best = False
+        output_array_identifiers = []
+        for parameters in reloading(post_processor.enumerate_parameters()):
             output_array_identifier = array_store.validation_output_array(
                 run.name, iteration, parameters, validation_dataset
             )
-
+            output_array_identifiers.append(output_array_identifier)
             post_processed_array = post_processor.process(
                 parameters, output_array_identifier
             )
@@ -199,6 +201,7 @@ def validate_run(
                             and current_score < overall_best_scores[criterion]
                         )
                     ):
+                        any_overall_best = True
                         overall_best_scores[criterion] = current_score
 
                         # For example, if parameter 2 did better this round than it did in other rounds, but it was still worse than parameter 1
@@ -228,15 +231,15 @@ def validate_run(
                         weights_store.store_best(
                             run, iteration, validation_dataset.name, criterion
                         )
-                    else:
-                        # delete current output. We only keep the best outputs as determined by
-                        # the evaluator
-                        # remove deletion for now since we have to rerun later to double check things anyway
-                        array_store.remove(output_array_identifier)
 
             dataset_iteration_scores.append(
                 [getattr(scores, criterion) for criterion in scores.criteria]
             )
+
+        if not any_overall_best:
+            # We only keep the best outputs as determined by the evaluator
+            for output_array_identifier in output_array_identifiers:
+                array_store.remove(output_array_identifier)
 
         iteration_scores.append(dataset_iteration_scores)
         array_store.remove(prediction_array_identifier)

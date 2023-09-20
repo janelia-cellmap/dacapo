@@ -81,7 +81,7 @@ class ZarrArray(Array):
 
     @property
     def dtype(self) -> Any:
-        return self.data.dtype
+        return self.data.dtype  # TODO: why not use self._daisy_array.dtype?
 
     @property
     def num_channels(self) -> Optional[int]:
@@ -92,7 +92,7 @@ class ZarrArray(Array):
         return [ax for ax in self.axes if ax not in set(["c", "b"])]
 
     @property
-    def data(self) -> Any:
+    def data(self) -> Any:  # TODO: why not use self._daisy_array.data?
         zarr_container = zarr.open(str(self.file_name))
         return zarr_container[self.dataset]
 

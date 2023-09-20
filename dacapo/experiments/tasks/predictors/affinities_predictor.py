@@ -17,9 +17,16 @@ from typing import List
 
 
 class AffinitiesPredictor(Predictor):
-    def __init__(self, neighborhood: List[Coordinate], lsds: bool = True):
+    def __init__(
+        self,
+        neighborhood: List[Coordinate],
+        lsds: bool = True,
+        num_voxels: int = 20,
+        downsample_lsds: int = 1,
+    ):
         self.neighborhood = neighborhood
         self.lsds = lsds
+        self.num_voxels = num_voxels
         if lsds:
             self._extractor = None
             if self.dims == 2:
@@ -30,12 +37,15 @@ class AffinitiesPredictor(Predictor):
                 raise ValueError(
                     f"Cannot compute lsds on volumes with {self.dims} dimensions"
                 )
+            self.downsample_lsds = downsample_lsds
         else:
             self.num_lsds = 0
 
     def extractor(self, voxel_size):
         if self._extractor is None:
-            self._extractor = LsdExtractor(self.sigma(voxel_size))
+            self._extractor = LsdExtractor(
+                self.sigma(voxel_size), downsample=self.downsample_lsds
+            )
 
         return self._extractor
 
@@ -45,8 +55,7 @@ class AffinitiesPredictor(Predictor):
 
     def sigma(self, voxel_size):
         voxel_dist = max(voxel_size)  # arbitrarily chosen
-        num_voxels = 10  # arbitrarily chosen
-        sigma = voxel_dist * num_voxels
+        sigma = voxel_dist * self.num_voxels  # arbitrarily chosen
         return Coordinate((sigma,) * self.dims)
 
     def lsd_pad(self, voxel_size):

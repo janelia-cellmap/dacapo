@@ -51,12 +51,7 @@ def predict(
     logger.info("Total input ROI: %s, output ROI: %s", input_roi, output_roi)
 
     # prepare prediction dataset
-    if raw_array.file_name.endswith(
-        "zarr"
-    ) == prediction_array_identifier.container.name.endswith("zarr"):
-        axes = ["c"] + [axis for axis in raw_array.axes if axis != "c"]
-    else:
-        axes = ["c"] + [axis for axis in raw_array.axes[::-1] if axis != "c"]
+    axes = ["c"] + [axis for axis in raw_array.axes if axis != "c"]
     ZarrArray.create_from_array_identifier(
         prediction_array_identifier,
         axes,

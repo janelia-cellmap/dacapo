@@ -37,6 +37,8 @@ class GunpowderTrainer(Trainer):
         self.print_profiling = 100
         self.snapshot_iteration = trainer_config.snapshot_interval
         self.min_masked = trainer_config.min_masked
+        self.reject_probability = trainer_config.reject_probability
+        self.weighted_reject = trainer_config.weighted_reject
 
         self.augments = trainer_config.augments
         self.mask_integral_downsample_factor = 4
@@ -88,7 +90,7 @@ class GunpowderTrainer(Trainer):
         # Get source nodes
         dataset_sources = []
         weights = []
-        for dataset in datasets:
+        for dataset in datasets:  # TODO: add automatic resampling?
             weights.append(dataset.weight)
             assert isinstance(dataset.weight, int), dataset
 
@@ -141,24 +143,44 @@ class GunpowderTrainer(Trainer):
                 )
             )
 
-            dataset_source += gp.Reject(mask_placeholder, 1e-6)
-
             for augment in self.augments:
                 dataset_source += augment.node(raw_key, gt_key, mask_key)
+            if self.weighted_reject:
+                # Add predictor nodes to dataset_source
+                dataset_source += DaCapoTargetFilter(  # TODO: could we add this above reject, and use weights to determine if we should reject?
+                    task.predictor,
+                    gt_key=gt_key,
+                    weights_key=dataset_weight_key,
+                    mask_key=mask_key,
+                )
 
-            # Add predictor nodes to dataset_source
-            dataset_source += DaCapoTargetFilter(
-                task.predictor,
-                gt_key=gt_key,
-                weights_key=dataset_weight_key,
-                mask_key=mask_key,
-            )
+                dataset_source += gp.Reject(
+                    mask=dataset_weight_key,
+                    min_masked=self.min_masked,
+                    reject_probability=self.reject_probability,
+                )
+            else:
+                dataset_source += gp.Reject(
+                    mask=mask_placeholder,
+                    min_masked=self.min_masked,
+                    reject_probability=self.reject_probability,
+                )
+                # for augment in self.augments:
+                #     dataset_source += augment.node(raw_key, gt_key, mask_key)
+
+                # Add predictor nodes to dataset_source
+                dataset_source += DaCapoTargetFilter(  # TODO: could we add this above reject, and use weights to determine if we should reject?
+                    task.predictor,
+                    gt_key=gt_key,
+                    weights_key=dataset_weight_key,
+                    mask_key=mask_key,
+                )
 
             dataset_sources.append(dataset_source)
         pipeline = tuple(dataset_sources) + gp.RandomProvider(weights)
 
         # Add predictor nodes to pipeline
-        pipeline += DaCapoTargetFilter(
+        pipeline += DaCapoTargetFilter(  # TODO: why are there two of these?
             task.predictor,
             gt_key=gt_key,
             target_key=target_key,

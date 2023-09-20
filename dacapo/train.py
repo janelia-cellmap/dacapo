@@ -1,3 +1,4 @@
+from copy import deepcopy
 from dacapo.store.create_store import create_array_store
 from .experiments import Run
 from .compute_context import LocalTorch, ComputeContext
@@ -97,10 +98,19 @@ def train_run(
             weights_store.retrieve_weights(run, iteration=trained_until)
 
         elif latest_weights_iteration > trained_until:
-            raise RuntimeError(
+            logger.warn(
                 f"Found weights for iteration {latest_weights_iteration}, but "
-                f"run {run.name} was only trained until {trained_until}."
+                f"run {run.name} was only trained until {trained_until}. "
+                "Filling stats with last observed values."
             )
+            last_iteration_stats = run.training_stats.iteration_stats[-1]
+            for i in range(
+                last_iteration_stats.iteration, latest_weights_iteration - 1
+            ):
+                new_iteration_stats = deepcopy(last_iteration_stats)
+                new_iteration_stats.iteration = i + 1
+                run.training_stats.add_iteration_stats(new_iteration_stats)
+                trained_until = run.training_stats.trained_until()
 
     # start/resume training
 
@@ -163,6 +173,7 @@ def train_run(
             run.model = run.model.to(torch.device("cpu"))
             run.move_optimizer(torch.device("cpu"), empty_cuda_cache=True)
 
+            stats_store.store_training_stats(run.name, run.training_stats)
             weights_store.store_weights(run, iteration_stats.iteration + 1)
             try:
                 validate_run(
@@ -179,13 +190,9 @@ def train_run(
                     f"{iteration_stats.iteration + 1}.",
                     exc_info=e,
                 )
-            stats_store.store_training_stats(run.name, run.training_stats)
 
             # make sure to move optimizer back to the correct device
             run.move_optimizer(compute_context.device)
             run.model.train()
-
-            weights_store.store_weights(run, run.training_stats.trained_until())
-            stats_store.store_training_stats(run.name, run.training_stats)
 
     logger.info("Trained until %d, finished.", trained_until)
