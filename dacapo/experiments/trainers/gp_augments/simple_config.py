@@ -1,3 +1,4 @@
+from typing import List
 from .augment_config import AugmentConfig
 
 import gunpowder as gp
@@ -7,16 +8,48 @@ import attr
 
 @attr.s
 class SimpleAugmentConfig(AugmentConfig):
+    mirror_only: List[int] = attr.ib(
+        default=None,
+        metadata={
+            "help_text": (
+                "If set, only mirror between the given axes. This is useful to exclude channels that have a set direction, like time."
+            )
+        },
+    )
+    transpose_only: List[int] = attr.ib(
+        default=None,
+        metadata={
+            "help_text": (
+                "If set, only transpose between the given axes. This is useful to exclude channels that have a set direction, like time."
+            )
+        },
+    )
+    mirror_probs: List[float] = attr.ib(
+        default=None,
+        metadata={
+            "help_text": (
+                "Probability of mirroring along each axis. Defaults to 0.5 for each axis."
+            )
+        },
+    )
+    transpose_probs: List[float] = attr.ib(
+        default=None,
+        metadata={
+            "help_text": (
+                "Probability of transposing along each axis. Defaults to 0.5 for each axis."
+            )
+        },
+    )
+
     def node(
         self,
         _raw_key=None,
         _gt_key=None,
         _mask_key=None,
-        mirror_only=None,
-        transpose_only=None,
-        mirror_probs=None,
-        transpose_probs=None,
     ):
         return gp.SimpleAugment(
-            mirror_only, transpose_only, mirror_probs, transpose_probs
+            self.mirror_only,
+            self.transpose_only,
+            self.mirror_probs,
+            self.transpose_probs,
         )
