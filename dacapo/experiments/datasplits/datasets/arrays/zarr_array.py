@@ -49,16 +49,16 @@ class ZarrArray(Array):
         try:
             return self._attributes["axes"]
         except KeyError:
-            logger.debug(
+            logger.info(
                 "DaCapo expects Zarr datasets to have an 'axes' attribute!\n"
                 f"Zarr {self.file_name} and dataset {self.dataset} has attributes: {list(self._attributes.items())}\n"
-                f"Using default {['t', 'z', 'y', 'x'][-self.dims::]}",
+                f"Using default {['c', 'z', 'y', 'x'][-self.dims::]}",
             )
-            return ["t", "z", "y", "x"][-self.dims : :]
+            return ["c", "z", "y", "x"][-self.dims : :]
 
     @property
     def dims(self) -> int:
-        return self.voxel_size.dims
+        return len(self.data.shape)
 
     @lazy_property.LazyProperty
     def _daisy_array(self) -> funlib.persistence.Array:

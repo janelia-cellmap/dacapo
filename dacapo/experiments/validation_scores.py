@@ -142,7 +142,10 @@ class ValidationScores:
                 return (da_best_indexes, da_best_scores)
             else:
                 if self.evaluation_scores.higher_is_better(
-                    data.coords["criteria"].item()
+                    list(data.coords["criteria"].values())[
+                        0
+                    ]  # TODO: what is the intended behavior here? (hot fix in place)
+                    # data.coords["criteria"].item()
                 ):
                     return (
                         data.idxmax(dim, skipna=True, fill_value=None),

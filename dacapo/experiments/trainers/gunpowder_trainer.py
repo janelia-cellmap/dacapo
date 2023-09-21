@@ -48,12 +48,14 @@ class GunpowderTrainer(Trainer):
 
     def create_optimizer(self, model):
         optimizer = torch.optim.RAdam(lr=self.learning_rate, params=model.parameters())
-        self.scheduler = torch.optim.lr_scheduler.LinearLR(
-            optimizer,
-            start_factor=0.01,
-            end_factor=1.0,
-            total_iters=1000,
-            last_epoch=-1,
+        self.scheduler = (
+            torch.optim.lr_scheduler.LinearLR(  # TODO: add scheduler to config
+                optimizer,
+                start_factor=0.01,
+                end_factor=1.0,
+                total_iters=1000,
+                last_epoch=-1,
+            )
         )
         return optimizer
 
@@ -62,7 +64,9 @@ class GunpowderTrainer(Trainer):
         output_shape = Coordinate(model.output_shape)
 
         # get voxel sizes
-        raw_voxel_size = datasets[0].raw.voxel_size
+        raw_voxel_size = datasets[
+            0
+        ].raw.voxel_size  # TODO: make dataset specific / resample
         prediction_voxel_size = model.scale(raw_voxel_size)
 
         # define input and output size:
@@ -143,19 +147,21 @@ class GunpowderTrainer(Trainer):
                 )
             )
 
-            for augment in self.augments:
-                dataset_source += augment.node(raw_key, gt_key, mask_key)
             if self.weighted_reject:
                 # Add predictor nodes to dataset_source
-                dataset_source += DaCapoTargetFilter(  # TODO: could we add this above reject, and use weights to determine if we should reject?
+                for augment in self.augments:
+                    dataset_source += augment.node(raw_key, gt_key, mask_key)
+
+                dataset_source += DaCapoTargetFilter(
                     task.predictor,
                     gt_key=gt_key,
-                    weights_key=dataset_weight_key,
+                    weights_key=weight_key,
+                    target_key=target_key,
                     mask_key=mask_key,
                 )
 
                 dataset_source += gp.Reject(
-                    mask=dataset_weight_key,
+                    mask=weight_key,
                     min_masked=self.min_masked,
                     reject_probability=self.reject_probability,
                 )
@@ -165,30 +171,21 @@ class GunpowderTrainer(Trainer):
                     min_masked=self.min_masked,
                     reject_probability=self.reject_probability,
                 )
-                # for augment in self.augments:
-                #     dataset_source += augment.node(raw_key, gt_key, mask_key)
+
+                for augment in self.augments:
+                    dataset_source += augment.node(raw_key, gt_key, mask_key)
 
                 # Add predictor nodes to dataset_source
-                dataset_source += DaCapoTargetFilter(  # TODO: could we add this above reject, and use weights to determine if we should reject?
+                dataset_source += DaCapoTargetFilter(
                     task.predictor,
                     gt_key=gt_key,
-                    weights_key=dataset_weight_key,
+                    weights_key=weight_key,
+                    target_key=target_key,
                     mask_key=mask_key,
                 )
 
             dataset_sources.append(dataset_source)
         pipeline = tuple(dataset_sources) + gp.RandomProvider(weights)
-
-        # Add predictor nodes to pipeline
-        pipeline += DaCapoTargetFilter(  # TODO: why are there two of these?
-            task.predictor,
-            gt_key=gt_key,
-            target_key=target_key,
-            weights_key=datasets_weight_key,
-            mask_key=mask_key,
-        )
-
-        pipeline += Product(dataset_weight_key, datasets_weight_key, weight_key)
 
         # Trainer attributes:
         if self.num_data_fetchers > 1:
