@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from .augment_config import AugmentConfig
 
 import gunpowder as gp
@@ -8,7 +8,7 @@ import attr
 
 @attr.s
 class SimpleAugmentConfig(AugmentConfig):
-    mirror_only: List[int] = attr.ib(
+    mirror_only: Optional[List[int]] = attr.ib(
         default=None,
         metadata={
             "help_text": (
@@ -16,7 +16,7 @@ class SimpleAugmentConfig(AugmentConfig):
             )
         },
     )
-    transpose_only: List[int] = attr.ib(
+    transpose_only: Optional[List[int]] = attr.ib(
         default=None,
         metadata={
             "help_text": (
@@ -24,7 +24,7 @@ class SimpleAugmentConfig(AugmentConfig):
             )
         },
     )
-    mirror_probs: List[float] = attr.ib(
+    mirror_probs: Optional[List[float]] = attr.ib(
         default=None,
         metadata={
             "help_text": (
@@ -32,7 +32,7 @@ class SimpleAugmentConfig(AugmentConfig):
             )
         },
     )
-    transpose_probs: List[float] = attr.ib(
+    transpose_probs: Optional[List[float]] = attr.ib(
         default=None,
         metadata={
             "help_text": (
