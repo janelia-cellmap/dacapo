@@ -44,6 +44,10 @@ class HotDistancePredictor(Predictor):
     def embedding_dims(self):
         return len(self.channels)
 
+    @property
+    def classes(self):
+        return len(self.channels) // 2
+
     def create_model(self, architecture):
         if architecture.dims == 2:
             head = torch.nn.Conv2d(
@@ -67,9 +71,17 @@ class HotDistancePredictor(Predictor):
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
         # balance weights independently for each channel
+        one_hot_weights, one_hot_moving_class_counts = balance_weights(
+            gt[target.roi],
+            2,
+            slab=tuple(1 if c == "c" else -1 for c in gt.axes),
+            masks=[mask[target.roi]],
+            moving_counts=moving_class_counts[: self.classes],
+        )
+
         if self.mask_distances:
             distance_mask = self.create_distance_mask(
-                target[target.roi],
+                target[target.roi][-self.classes :],
                 mask[target.roi],
                 target.voxel_size,
                 self.norm,
@@ -78,12 +90,17 @@ class HotDistancePredictor(Predictor):
         else:
             distance_mask = np.ones_like(target.data)
 
-        weights, moving_class_counts = balance_weights(
+        distance_weights, distance_moving_class_counts = balance_weights(
             gt[target.roi],
             2,
             slab=tuple(1 if c == "c" else -1 for c in gt.axes),
             masks=[mask[target.roi], distance_mask],
-            moving_counts=moving_class_counts,
+            moving_counts=moving_class_counts[-self.classes :],
+        )
+
+        weights = np.concatenate((one_hot_weights, distance_weights))
+        moving_class_counts = np.concatenate(
+            (one_hot_moving_class_counts, distance_moving_class_counts)
         )
         return (
             NumpyArray.from_np_array(
@@ -168,10 +185,6 @@ class HotDistancePredictor(Predictor):
         normalize_args=None,
     ):
         all_distances = np.zeros(labels.shape, dtype=np.float32) - 1
-        one_hots = np.zeros(
-            (self.embedding_dims // 2,) + labels.shape[1:], dtype=np.uint8
-        )
-        # TODO: Assumes labels has a singleton channel dim and channel dim is first
         for ii, channel in enumerate(labels):
             boundaries = self.__find_boundaries(channel)
 
@@ -204,9 +217,8 @@ class HotDistancePredictor(Predictor):
                 distances = self.__normalize(distances, normalize, normalize_args)
 
             all_distances[ii] = distances
-            one_hots[ii] += labels[0] == ii
 
-        return np.concatenate(all_distances, one_hots)
+        return np.concatenate((labels, all_distances))
 
     def __find_boundaries(self, labels):
         # labels: 1 1 1 1 0 0 2 2 2 2 3 3       n

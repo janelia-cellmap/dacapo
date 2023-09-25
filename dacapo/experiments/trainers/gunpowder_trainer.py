@@ -86,7 +86,7 @@ class GunpowderTrainer(Trainer):
         mask_placeholder = gp.ArrayKey("MASK_PLACEHOLDER")
 
         target_key = gp.ArrayKey("TARGET")
-        dataset_weight_key = gp.ArrayKey("DATASET_WEIGHT")
+        dataset_weight_key = gp.ArrayKey("DATASET_WEIGHT")  # TODO: put these back in
         datasets_weight_key = gp.ArrayKey("DATASETS_WEIGHT")
         weight_key = gp.ArrayKey("WEIGHT")
         sample_points_key = gp.GraphKey("SAMPLE_POINTS")
