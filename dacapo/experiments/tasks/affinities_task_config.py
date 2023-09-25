@@ -43,3 +43,10 @@ class AffinitiesTaskConfig(TaskConfig):
             "This is useful for speeding up training and inference."
         },
     )
+    grow_boundary_iterations: int = attr.ib(
+        default=0,
+        metadata={
+            "help_text": "The number of iterations to run the grow boundaries algorithm. "
+            "This is useful for refining the boundaries of the affinities, and reducing merging of adjacent objects."
+        },
+    )

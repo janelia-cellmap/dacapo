@@ -16,6 +16,7 @@ class AffinitiesTask(Task):
             lsds=task_config.lsds,
             num_voxels=task_config.num_voxels,
             downsample_lsds=task_config.downsample_lsds,
+            grow_boundary_iterations=task_config.grow_boundary_iterations,
         )
         self.loss = AffinitiesLoss(len(task_config.neighborhood))
         self.post_processor = WatershedPostProcessor(offsets=task_config.neighborhood)
