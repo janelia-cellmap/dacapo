@@ -13,8 +13,9 @@ class HotDistanceLoss(Loss):
         return self.hot_loss(prediction_hot, target_hot, weight_hot) + self.distance_loss(prediction_distance, target_distance, weight_distance)
     
     def hot_loss(self, prediction, target, weight):
-        loss = torch.nn.BCELoss()
-        return loss(prediction * weight, target * weight)
+        loss = torch.nn.BCEWithLogitsLoss(reduction='none')
+        return torch.mean(loss(prediction , target) * weight)
+        # return abs(prediction * weight - target * weight).sum()
     
     def distance_loss(self, prediction, target, weight):
         loss = torch.nn.MSELoss()
