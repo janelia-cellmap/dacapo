@@ -5,7 +5,7 @@
 [![mypy](https://github.com/funkelab/dacapo/actions/workflows/mypy.yaml/badge.svg)](https://github.com/funkelab/dacapo/actions/workflows/mypy.yaml)
 [![docs](https://github.com/funkelab/dacapo/actions/workflows/docs.yaml/badge.svg)](https://funkelab.github.io/dacapo/)
 
-A framework for easy application of establed machine learning techniques on large, multi-dimensional images.
+A framework for easy application of established machine learning techniques on large, multi-dimensional images.
 
 `dacapo` allows you to configure machine learning jobs as combinations of
 [DataSplits](http://docs/api.html#datasplits),
