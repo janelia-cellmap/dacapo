@@ -155,13 +155,12 @@ class GunpowderTrainer(Trainer):
                 dataset_source += DaCapoTargetFilter(
                     task.predictor,
                     gt_key=gt_key,
-                    weights_key=weight_key,
-                    target_key=target_key,
+                    weights_key=dataset_weight_key,
                     mask_key=mask_key,
                 )
 
                 dataset_source += gp.Reject(
-                    mask=weight_key,
+                    mask=dataset_weight_key,
                     min_masked=self.min_masked,
                     reject_probability=self.reject_probability,
                 )
@@ -179,13 +178,23 @@ class GunpowderTrainer(Trainer):
                 dataset_source += DaCapoTargetFilter(
                     task.predictor,
                     gt_key=gt_key,
-                    weights_key=weight_key,
-                    target_key=target_key,
+                    weights_key=dataset_weight_key,
                     mask_key=mask_key,
                 )
 
             dataset_sources.append(dataset_source)
         pipeline = tuple(dataset_sources) + gp.RandomProvider(weights)
+
+        # Add predictor nodes to pipeline
+        pipeline += DaCapoTargetFilter(  # TODO: why are there two of these?
+            task.predictor,
+            gt_key=gt_key,
+            target_key=target_key,
+            weights_key=datasets_weight_key,
+            mask_key=mask_key,
+        )
+
+        pipeline += Product(dataset_weight_key, datasets_weight_key, weight_key)
 
         # Trainer attributes:
         if self.num_data_fetchers > 1:
