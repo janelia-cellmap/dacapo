@@ -121,7 +121,7 @@ def train_run(
     # loading weights directly from a checkpoint into cuda
     # can allocate twice the memory of loading to cpu before
     # moving to cuda.
-    run.model = torch.compile(run.model.to(compute_context.device))
+    run.model = run.model.to(compute_context.device)
     run.move_optimizer(compute_context.device)
 
     array_store = create_array_store()
