@@ -24,14 +24,20 @@ class InstanceEvaluator(Evaluator):
         output_data = output_array[output_array.roi].astype(np.uint64)
         results = rand_voi(evaluation_data, output_data)
         if iou:
-            output_data, _ = relabel(output_data)
-            results.update(
-                detection_scores(
-                    evaluation_data,
-                    output_data,
-                    matching_score="iou",
+            try:
+                output_data, _ = relabel(output_data)
+                results.update(
+                    detection_scores(
+                        evaluation_data,
+                        output_data,
+                        matching_score="iou",
+                    )
                 )
-            )
+            except Exception:
+                results["avg_iou"] = 0
+                logger.warning(
+                    "Could not compute IoU because of an unknown error. Sorry about that."
+                )
         else:
             results["avg_iou"] = 0
 

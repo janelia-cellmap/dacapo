@@ -64,9 +64,8 @@ class GunpowderTrainer(Trainer):
         output_shape = Coordinate(model.output_shape)
 
         # get voxel sizes
-        raw_voxel_size = datasets[
-            0
-        ].raw.voxel_size  # TODO: make dataset specific / resample
+        # TODO: make dataset specific / resample
+        raw_voxel_size = datasets[0].raw.voxel_size
         prediction_voxel_size = model.scale(raw_voxel_size)
 
         # define input and output size:
