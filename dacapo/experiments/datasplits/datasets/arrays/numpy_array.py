@@ -35,7 +35,7 @@ class NumpyArray(Array):
             ((["b", "c"] if len(array.data.shape) == instance.dims + 2 else []))
             + (["c"] if len(array.data.shape) == instance.dims + 1 else [])
             + [
-                "t",
+                "c",
                 "z",
                 "y",
                 "x",
