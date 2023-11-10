@@ -48,7 +48,7 @@ def validate(
     return validate_run(run, iteration, compute_context=compute_context)
 
 
-@reloading  # allows us to fix validation bugs without interrupting training
+# @reloading  # allows us to fix validation bugs without interrupting training
 def validate_run(
     run: Run, iteration: int, compute_context: ComputeContext = LocalTorch()
 ):
