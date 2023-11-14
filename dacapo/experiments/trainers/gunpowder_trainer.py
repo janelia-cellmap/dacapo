@@ -42,10 +42,24 @@ class GunpowderTrainer(Trainer):
         self.mask_integral_downsample_factor = 4
         self.clip_raw = trainer_config.clip_raw
 
+        # Testing out if calculating multiple times and multiplying is necessary
+        self.add_predictor_nodes_to_dataset = trainer_config.add_predictor_nodes_to_dataset
+        self.finetune_head_only = trainer_config.finetune_head_only
+
         self.scheduler = None
 
     def create_optimizer(self, model):
-        optimizer = torch.optim.RAdam(lr=self.learning_rate, params=model.parameters())
+        if self.finetune_head_only:
+            logger.warning("Finetuning head only")
+            parameters = []
+            for key in model.state_dict().keys():
+                if "prediction_head" in key:
+                    parameters.append(model.state_dict()[key])
+                else:
+                    model.state_dict()[key].requires_grad = False
+        else:
+            parameters = model.parameters()
+        optimizer = torch.optim.RAdam(lr=self.learning_rate, params=parameters)
         self.scheduler = torch.optim.lr_scheduler.LinearLR(
             optimizer,
             start_factor=0.01,
@@ -146,13 +160,14 @@ class GunpowderTrainer(Trainer):
             for augment in self.augments:
                 dataset_source += augment.node(raw_key, gt_key, mask_key)
 
-            # Add predictor nodes to dataset_source
-            dataset_source += DaCapoTargetFilter(
-                task.predictor,
-                gt_key=gt_key,
-                weights_key=dataset_weight_key,
-                mask_key=mask_key,
-            )
+            if self.add_predictor_nodes_to_dataset:
+                # Add predictor nodes to dataset_source
+                dataset_source += DaCapoTargetFilter(
+                    task.predictor,
+                    gt_key=gt_key,
+                    weights_key=dataset_weight_key,
+                    mask_key=mask_key,
+                )
 
             dataset_sources.append(dataset_source)
         pipeline = tuple(dataset_sources) + gp.RandomProvider(weights)
@@ -162,11 +177,12 @@ class GunpowderTrainer(Trainer):
             task.predictor,
             gt_key=gt_key,
             target_key=target_key,
-            weights_key=datasets_weight_key,
+            weights_key=datasets_weight_key if self.add_predictor_nodes_to_dataset else weight_key,
             mask_key=mask_key,
         )
 
-        pipeline += Product(dataset_weight_key, datasets_weight_key, weight_key)
+        if self.add_predictor_nodes_to_dataset:
+            pipeline += Product(dataset_weight_key, datasets_weight_key, weight_key)
 
         # Trainer attributes:
         if self.num_data_fetchers > 1:
@@ -209,6 +225,11 @@ class GunpowderTrainer(Trainer):
         t_start_fetch = time.time()
 
         logger.info("Starting iteration!")
+        if self.finetune_head_only:
+            logger.warning("Finetuning head only")
+            for key in model.state_dict().keys():
+                if "prediction_head" not in key:
+                    model.state_dict()[key].requires_grad = False
 
         for iteration in range(self.iteration, self.iteration + num_iterations):
             raw, gt, target, weight, mask = self.next()
@@ -227,6 +248,7 @@ class GunpowderTrainer(Trainer):
                 torch.as_tensor(target[target.roi]).to(device).float(),
                 torch.as_tensor(weight[weight.roi]).to(device).float(),
             )
+
             loss.backward()
             optimizer.step()
 
