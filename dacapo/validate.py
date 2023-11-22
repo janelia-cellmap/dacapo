@@ -79,6 +79,7 @@ def validate_run(
     evaluator.set_best(run.validation_scores)
 
     for validation_dataset in run.datasplit.validate:
+        logger.warning("Validating on dataset %s", validation_dataset.name)
         assert (
             validation_dataset.gt is not None
         ), "We do not yet support validating on datasets without ground truth"
@@ -98,7 +99,7 @@ def validate_run(
                 f"{input_gt_array_identifier.container}/{input_gt_array_identifier.dataset}"
             ).exists()
         ):
-            logger.info("Copying validation inputs!")
+            logger.warning("Copying validation inputs!")
             input_voxel_size = validation_dataset.raw.voxel_size
             output_voxel_size = run.model.scale(input_voxel_size)
             input_shape = run.model.eval_input_shape
@@ -136,11 +137,12 @@ def validate_run(
             )
             input_gt[output_roi] = validation_dataset.gt[output_roi]
         else:
-            logger.info("validation inputs already copied!")
+            logger.warning("validation inputs already copied!")
 
         prediction_array_identifier = array_store.validation_prediction_array(
             run.name, iteration, validation_dataset
         )
+        logger.warning("Predicting on dataset %s", validation_dataset.name)
         predict(
             run.model,
             validation_dataset.raw,
@@ -148,6 +150,7 @@ def validate_run(
             compute_context=compute_context,
             output_roi=validation_dataset.gt.roi,
         )
+        logger.warning("Predicted on dataset %s", validation_dataset.name)
 
         post_processor.set_prediction(prediction_array_identifier)
 

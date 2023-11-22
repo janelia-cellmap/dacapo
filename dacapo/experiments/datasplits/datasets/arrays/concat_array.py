@@ -5,7 +5,9 @@ from funlib.geometry import Roi
 import numpy as np
 
 from typing import Dict, Any
+import logging
 
+logger = logging.getLogger(__file__)
 
 class ConcatArray(Array):
     """This is a wrapper around other `source_arrays` that concatenates
@@ -93,6 +95,7 @@ class ConcatArray(Array):
         return len(self.channels)
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
+        logger.info(f"Concat Array: Get Item {self.name} {roi}")
         default = (
             np.zeros_like(self.source_array[roi])
             if self.default_array is None
@@ -116,5 +119,6 @@ class ConcatArray(Array):
             axis=0,
         )
         if concatenated.shape[0] == 1:
-            raise Exception(f"{concatenated.shape}, shapes")
+            logger.info(f"Concatenated array has only one channel: {self.name} {concatenated.shape}")
+            # raise Exception(f"{concatenated.shape}, shapes")
         return concatenated
