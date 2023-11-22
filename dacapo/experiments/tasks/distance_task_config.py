@@ -46,3 +46,10 @@ class DistanceTaskConfig(TaskConfig):
             "is less than the distance to object boundary."
         },
     )
+
+    extra_conv: bool = attr.ib(
+        default=False,
+        metadata={
+            "help_text": "Whether or not to add an extra conv layer before the head"
+        },
+    )

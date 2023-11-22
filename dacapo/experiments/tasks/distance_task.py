@@ -15,6 +15,7 @@ class DistanceTask(Task):
             channels=task_config.channels,
             scale_factor=task_config.scale_factor,
             mask_distances=task_config.mask_distances,
+            extra_conv=task_config.extra_conv,
         )
         self.loss = MSELoss()
         self.post_processor = ThresholdPostProcessor()
