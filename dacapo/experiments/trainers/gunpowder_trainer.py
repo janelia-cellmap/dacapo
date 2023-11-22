@@ -52,11 +52,11 @@ class GunpowderTrainer(Trainer):
         if self.finetune_head_only:
             logger.warning("Finetuning head only")
             parameters = []
-            for key in model.state_dict().keys():
-                if "prediction_head" in key:
-                    parameters.append(model.state_dict()[key])
+            for name, param in model.named_parameters():
+                if "prediction_head" in name:
+                    parameters.append(param)
                 else:
-                    model.state_dict()[key].requires_grad = False
+                    param.requires_grad = False
         else:
             parameters = model.parameters()
         optimizer = torch.optim.RAdam(lr=self.learning_rate, params=parameters)
@@ -224,20 +224,13 @@ class GunpowderTrainer(Trainer):
     def iterate(self, num_iterations, model, optimizer, device):
         t_start_fetch = time.time()
 
-        logger.info("Starting iteration!")
-        if self.finetune_head_only:
-            logger.warning("Finetuning head only")
-            for key in model.state_dict().keys():
-                if "prediction_head" not in key:
-                    model.state_dict()[key].requires_grad = False
-
         for iteration in range(self.iteration, self.iteration + num_iterations):
             raw, gt, target, weight, mask = self.next()
             logger.debug(
                 f"Trainer fetch batch took {time.time() - t_start_fetch} seconds"
             )
 
-            for param in model.parameters():
+            for param in model.parameters(): #  TODO: get parameters from optimizer instead
                 param.grad = None
 
             t_start_prediction = time.time()
