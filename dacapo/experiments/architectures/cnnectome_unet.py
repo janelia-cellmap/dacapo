@@ -320,17 +320,31 @@ class CNNectomeUNetModule(torch.nn.Module):
                 for _ in range(num_heads)
             ]
         )
-
+#  if num_fmaps_out is None or level != self.num_levels-1 else num_fmaps_out
         if self.use_attention:
             self.attention = nn.ModuleList(
+            [
+                nn.ModuleList(
                 [
                     AttentionBlockModule(
-                        F_g=num_fmaps * fmap_inc_factor ** (self.num_levels - level ),
-                        F_l=num_fmaps * fmap_inc_factor ** (self.num_levels - level -1 ),
-                        F_int=num_fmaps * fmap_inc_factor ** (self.num_levels - level -1 ),
+                        F_g=num_fmaps * fmap_inc_factor ** (level + 1),
+                        F_l=num_fmaps
+                            * fmap_inc_factor
+                            ** level,
+                        F_int=num_fmaps
+                            * fmap_inc_factor
+                            ** (level + (1 - upsample_channel_contraction[level]))
+                            if num_fmaps_out is None or level != 0
+                            else num_fmaps_out,
                         dims=self.dims,
-                    )for level in range(1,self.num_levels)
-                ])
+                        upsample_factor=downsample_factors[level],
+                    )
+                    for level in range(self.num_levels - 1)
+                ]
+            )
+            for _ in range(num_heads)
+            ]
+        )
 
         # right convolutional passes
         self.r_conv = nn.ModuleList(
@@ -375,7 +389,7 @@ class CNNectomeUNetModule(torch.nn.Module):
             gs_out = self.rec_forward(level - 1, g_in)
 
             if self.use_attention:
-                f_left_attented = [self.attention[i-1](gs_out[h],f_left) for h in range(self.num_heads)]
+                f_left_attented = [self.attention[h][i](gs_out[h],f_left) for h in range(self.num_heads)]
                 fs_right = [
                     self.r_up[h][i](gs_out[h], f_left_attented[h])
                     for h in range(self.num_heads)
@@ -605,7 +619,7 @@ class Upsample(torch.nn.Module):
 
 
 class AttentionBlockModule(nn.Module):
-    def __init__(self, F_g, F_l, F_int, dims):
+    def __init__(self, F_g, F_l, F_int, dims, upsample_factor=None):
         """Attention Block Module::
 
         The attention block takes two inputs: 'g' (gating signal) and 'x' (input features).
@@ -645,7 +659,10 @@ class AttentionBlockModule(nn.Module):
         super(AttentionBlockModule, self).__init__()
         self.dims = dims
         self.kernel_sizes = [(1,) * self.dims, (1,) * self.dims]
-        print("kernel_sizes:", self.kernel_sizes)
+        if upsample_factor is not None:
+            self.upsample_factor = upsample_factor
+        else:
+            self.upsample_factor = (2,)*self.dims
 
         self.W_g = ConvPass(
             F_g, F_int, kernel_sizes=self.kernel_sizes, activation=None, padding="same")
@@ -653,7 +670,7 @@ class AttentionBlockModule(nn.Module):
         self.W_x = nn.Sequential(
             ConvPass(F_l, F_int, kernel_sizes=self.kernel_sizes,
                      activation=None, padding="same"),
-            Downsample((2,)*self.dims)
+            Downsample(upsample_factor)
         )
 
         self.psi = ConvPass(
@@ -661,7 +678,7 @@ class AttentionBlockModule(nn.Module):
 
         up_mode = {2: 'bilinear', 3: 'trilinear'}[self.dims]
 
-        self.up = nn.Upsample(scale_factor=2, mode=up_mode, align_corners=True)
+        self.up = nn.Upsample(scale_factor=upsample_factor, mode=up_mode, align_corners=True)
 
         self.relu = nn.ReLU(inplace=True)
 
