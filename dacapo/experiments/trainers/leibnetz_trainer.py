@@ -27,7 +27,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class GunpowderTrainer(Trainer):
+class LeibNetzTrainer(Trainer):
     iteration = 0
 
     def __init__(self, trainer_config):
@@ -40,7 +40,8 @@ class GunpowderTrainer(Trainer):
         self.reject_probability = trainer_config.reject_probability
         self.weighted_reject = trainer_config.weighted_reject
 
-        self.augments = trainer_config.augments
+        # self.augments = trainer_config.augments # TODO: all augments must be applied uniformly across scales...
+        self.augments = []
         self.mask_integral_downsample_factor = 4  # TODO: remove all hard coded values
         self.clip_raw = trainer_config.clip_raw
 
