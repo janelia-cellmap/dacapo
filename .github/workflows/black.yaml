@@ -14,7 +14,4 @@ jobs:
       - name: Lint with Black
         run: |
           pip install black
-          # black -v --check dacapo tests
-          black -v dacapo tests
-          git commit -am "Automated Black linting"
-          git push
+          black -v --check dacapo tests
