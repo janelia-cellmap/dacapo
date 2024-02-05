@@ -22,6 +22,6 @@ class ResampledArrayConfig(ArrayConfig):
     downsample: Coordinate = attr.ib(
         metadata={"help_text": "The amount by which to downsample!"}
     )
-    interp_order: bool = attr.ib(
+    interp_order: int = attr.ib(
         metadata={"help_text": "The order of the interpolation!"}
     )

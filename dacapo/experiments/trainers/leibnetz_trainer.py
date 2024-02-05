@@ -34,7 +34,7 @@ class LeibNetzTrainer(Trainer):
         self.learning_rate = trainer_config.learning_rate
         self.batch_size = trainer_config.batch_size
         self.num_data_fetchers = trainer_config.num_data_fetchers
-        self.print_profiling = 100
+        self.print_profiling = 100  # TODO: remove all hard coded values
         self.snapshot_iteration = trainer_config.snapshot_interval
         self.min_masked = trainer_config.min_masked
         self.reject_probability = trainer_config.reject_probability
@@ -47,7 +47,7 @@ class LeibNetzTrainer(Trainer):
 
         self.scheduler = None
 
-    def create_optimizer(self, model):
+    def create_optimizer(self, model):  # TODO: add optimizer to config
         optimizer = torch.optim.RAdam(lr=self.learning_rate, params=model.parameters())
         self.scheduler = (
             torch.optim.lr_scheduler.LinearLR(  # TODO: add scheduler to config

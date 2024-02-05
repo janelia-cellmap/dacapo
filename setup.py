@@ -32,10 +32,10 @@ setup(
         "funlib.math>=0.1",
         "funlib.geometry>=0.2",
         "mwatershed>=0.1",
-        "funlib.persistence>=0.1",
+        "funlib.persistence @ git+https://github.com/janelia-cellmap/funlib.persistence.git@ome-zarr-reading",
         "funlib.evaluate @ git+https://github.com/pattonw/funlib.evaluate",
         "gunpowder>=1.3",
-        "lsds>=0.1.3",
+        # "lsds>=0.1.3",
         "reloading",
     ],
 )
