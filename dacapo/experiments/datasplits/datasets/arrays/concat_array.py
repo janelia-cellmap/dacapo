@@ -9,6 +9,7 @@ import logging
 
 logger = logging.getLogger(__file__)
 
+
 class ConcatArray(Array):
     """This is a wrapper around other `source_arrays` that concatenates
     them along the channel dimension."""
@@ -118,5 +119,7 @@ class ConcatArray(Array):
             axis=0,
         )
         if concatenated.shape[0] == 1:
-            logger.info(f"Concatenated array has only one channel: {self.name} {concatenated.shape}")
+            logger.info(
+                f"Concatenated array has only one channel: {self.name} {concatenated.shape}"
+            )
         return concatenated

@@ -178,7 +178,7 @@ def train_run(
             stats_store.store_training_stats(run.name, run.training_stats)
 
             # make sure to move optimizer back to the correct device
-            run.move_optimizer(compute_context.device)            
+            run.move_optimizer(compute_context.device)
             run.model.train()
 
             weights_store.store_weights(run, run.training_stats.trained_until())
