@@ -95,7 +95,6 @@ class ConcatArray(Array):
         return len(self.channels)
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        logger.info(f"Concat Array: Get Item {self.name} {roi}")
         default = (
             np.zeros_like(self.source_array[roi])
             if self.default_array is None
@@ -120,5 +119,4 @@ class ConcatArray(Array):
         )
         if concatenated.shape[0] == 1:
             logger.info(f"Concatenated array has only one channel: {self.name} {concatenated.shape}")
-            # raise Exception(f"{concatenated.shape}, shapes")
         return concatenated
