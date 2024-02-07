@@ -16,6 +16,7 @@ def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
     """Train a run"""
 
     if compute_context.train(run_name):
+        logger.error("Run %s is already being trained", run_name)
         # if compute context runs train in some other process
         # we are done here.
         return
@@ -96,10 +97,15 @@ def train_run(
             weights_store.retrieve_weights(run, iteration=trained_until)
 
         elif latest_weights_iteration > trained_until:
-            raise RuntimeError(
+            weights_store.retrieve_weights(run, iteration=latest_weights_iteration)
+            logger.error(
                 f"Found weights for iteration {latest_weights_iteration}, but "
                 f"run {run.name} was only trained until {trained_until}."
             )
+            # raise RuntimeError(
+            #     f"Found weights for iteration {latest_weights_iteration}, but "
+            #     f"run {run.name} was only trained until {trained_until}."
+            # )
 
     # start/resume training
 
@@ -157,7 +163,7 @@ def train_run(
 
             run.model.eval()
             # free up optimizer memory to allow larger validation blocks
-            run.model = run.model.to(torch.device("cpu"))
+            # run.model = run.model.to(torch.device("cpu"))
             run.move_optimizer(torch.device("cpu"), empty_cuda_cache=True)
 
             weights_store.store_weights(run, iteration_stats.iteration + 1)
