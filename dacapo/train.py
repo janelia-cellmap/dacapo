@@ -159,7 +159,7 @@ def train_run(
 
             run.model.eval()
             # free up optimizer memory to allow larger validation blocks
-            # run.model = run.model.to(torch.device("cpu"))
+            run.model = run.model.to(torch.device("cpu"))
             run.move_optimizer(torch.device("cpu"), empty_cuda_cache=True)
 
             weights_store.store_weights(run, iteration_stats.iteration + 1)
