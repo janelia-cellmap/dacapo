@@ -102,10 +102,6 @@ def train_run(
                 f"Found weights for iteration {latest_weights_iteration}, but "
                 f"run {run.name} was only trained until {trained_until}."
             )
-            # raise RuntimeError(
-            #     f"Found weights for iteration {latest_weights_iteration}, but "
-            #     f"run {run.name} was only trained until {trained_until}."
-            # )
 
     # start/resume training
 
