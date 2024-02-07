@@ -36,5 +36,9 @@ setup(
         "funlib.evaluate @ git+https://github.com/pattonw/funlib.evaluate",
         "gunpowder>=1.3",
         "lsds>=0.1.3",
+        "xarray",
+        "cattrs",
+        "numpy-indexed",
+        "click",
     ],
 )

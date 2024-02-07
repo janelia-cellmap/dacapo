@@ -54,7 +54,7 @@ class ZarrArray(Array):
                 f"Zarr {self.file_name} and dataset {self.dataset} has attributes: {list(self._attributes.items())}\n"
                 f"Using default {['t', 'z', 'y', 'x'][-self.dims::]}",
             )
-            return ["t", "z", "y", "x"][-self.dims : :]
+            return ["c", "z", "y", "x"][-self.dims : :]
 
     @property
     def dims(self) -> int:
