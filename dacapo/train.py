@@ -12,7 +12,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def train(run_name: str, compute_context: ComputeContext = LocalTorch(), force_cuda = False):
+def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
     """Train a run"""
 
     if compute_context.train(run_name):
