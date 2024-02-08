@@ -42,7 +42,7 @@ def validate(run_name, iteration):
 
 @cli.command()
 @click.option(
-    "-r", "--run_name", required=True, type=str, help="The name of the run to use."
+    "-r", "--run-name", required=True, type=str, help="The name of the run to apply."
 )
 @click.option(
     "-ic",
