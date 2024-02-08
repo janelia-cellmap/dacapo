@@ -1,3 +1,4 @@
+from copy import deepcopy
 from dacapo.store.create_store import create_array_store
 from .experiments import Run
 from .compute_context import LocalTorch, ComputeContext
@@ -10,6 +11,7 @@ from tqdm import tqdm
 import logging
 
 logger = logging.getLogger(__name__)
+logger.setLevel("INFO")
 
 
 def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
@@ -100,8 +102,17 @@ def train_run(
             weights_store.retrieve_weights(run, iteration=latest_weights_iteration)
             logger.error(
                 f"Found weights for iteration {latest_weights_iteration}, but "
-                f"run {run.name} was only trained until {trained_until}."
+                f"run {run.name} was only trained until {trained_until}. "
+                "Filling stats with last observed values."
             )
+            last_iteration_stats = run.training_stats.iteration_stats[-1]
+            for i in range(
+                last_iteration_stats.iteration, latest_weights_iteration - 1
+            ):
+                new_iteration_stats = deepcopy(last_iteration_stats)
+                new_iteration_stats.iteration = i + 1
+                run.training_stats.add_iteration_stats(new_iteration_stats)
+                trained_until = run.training_stats.trained_until()
 
     # start/resume training
 
@@ -129,18 +140,20 @@ def train_run(
             # train for at most 100 iterations at a time, then store training stats
             iterations = min(100, run.train_until - trained_until)
             iteration_stats = None
-
-            for iteration_stats in tqdm(
+            bar = tqdm(
                 trainer.iterate(
                     iterations,
                     run.model,
                     run.optimizer,
                     compute_context.device,
                 ),
-                "training",
-                iterations,
-            ):
+                desc=f"training until {iterations + trained_until}",
+                total=run.train_until,
+                initial=trained_until,
+            )
+            for iteration_stats in bar:
                 run.training_stats.add_iteration_stats(iteration_stats)
+                bar.set_postfix({"loss": iteration_stats.loss})
 
                 if (iteration_stats.iteration + 1) % run.validation_interval == 0:
                     break
@@ -162,22 +175,26 @@ def train_run(
             run.model = run.model.to(torch.device("cpu"))
             run.move_optimizer(torch.device("cpu"), empty_cuda_cache=True)
 
-            weights_store.store_weights(run, iteration_stats.iteration + 1)
-            validate_run(
-                run,
-                iteration_stats.iteration + 1,
-                compute_context=compute_context,
-            )
-            stats_store.store_validation_iteration_scores(
-                run.name, run.validation_scores
-            )
             stats_store.store_training_stats(run.name, run.training_stats)
+            weights_store.store_weights(run, iteration_stats.iteration + 1)
+            try:
+                validate_run(
+                    run,
+                    iteration_stats.iteration + 1,
+                    compute_context=compute_context,
+                )
+                stats_store.store_validation_iteration_scores(
+                    run.name, run.validation_scores
+                )
+            except Exception as e:
+                logger.error(
+                    f"Validation failed for run {run.name} at iteration "
+                    f"{iteration_stats.iteration + 1}.",
+                    exc_info=e,
+                )
 
             # make sure to move optimizer back to the correct device
             run.move_optimizer(compute_context.device)
             run.model.train()
-
-            weights_store.store_weights(run, run.training_stats.trained_until())
-            stats_store.store_training_stats(run.name, run.training_stats)
 
     logger.info("Trained until %d, finished.", trained_until)
