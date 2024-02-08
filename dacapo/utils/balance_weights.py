@@ -75,11 +75,11 @@ def balance_weights(
         scale_slab *= np.take(w, labels_slab)
 
     if cross_class:
-        # get maximum error scale using first dimension 
+        # get maximum error scale using first dimension
         shape = error_scale.shape
         error_scale = np.max(error_scale, axis=0)
         error_scale = np.broadcast_to(error_scale, shape)
-    
+
     # set error_scale to 0 in masked-out areas
     for mask in masks:
         error_scale = error_scale * mask

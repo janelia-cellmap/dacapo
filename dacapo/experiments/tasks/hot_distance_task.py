@@ -4,6 +4,7 @@ from .post_processors import ThresholdPostProcessor
 from .predictors import HotDistancePredictor
 from .task import Task
 
+
 class HotDistanceTask(Task):
     """This is just a Hot Distance Task that combine Binary and distance prediction."""
 
