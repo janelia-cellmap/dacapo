@@ -24,7 +24,7 @@ class Model(torch.nn.Module):
         self,
         architecture: Architecture,
         prediction_head: torch.nn.Module,
-        eval_activation: torch.nn.Module = None,
+        eval_activation: torch.nn.Module | None = None,
     ):
         super().__init__()
 

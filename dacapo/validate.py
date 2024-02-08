@@ -148,12 +148,30 @@ def validate_run(
             prediction_array_identifier = array_store.validation_prediction_array(
                 run.name, iteration, validation_dataset
             )
-            predict(
-                run.model,
-                validation_dataset.raw,
-                prediction_array_identifier,
-                compute_context=compute_context,
-                output_roi=validation_dataset.gt.roi,
+            input_gt[output_roi] = validation_dataset.gt[output_roi]
+        else:
+            logger.info("validation inputs already copied!")
+
+        prediction_array_identifier = array_store.validation_prediction_array(
+            run.name, iteration, validation_dataset
+        )
+        logger.info("Predicting on dataset %s", validation_dataset.name)
+        predict(
+            run.model,
+            validation_dataset.raw,
+            prediction_array_identifier,
+            compute_context=compute_context,
+            output_roi=validation_dataset.gt.roi,
+        )
+        logger.info("Predicted on dataset %s", validation_dataset.name)
+
+        post_processor.set_prediction(prediction_array_identifier)
+
+        dataset_iteration_scores = []
+
+        for parameters in post_processor.enumerate_parameters():
+            output_array_identifier = array_store.validation_output_array(
+                run.name, iteration, parameters, validation_dataset
             )
 
             post_processor.set_prediction(prediction_array_identifier)
