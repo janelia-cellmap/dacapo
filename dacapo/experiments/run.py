@@ -11,6 +11,7 @@ import torch
 
 logger = logging.getLogger(__file__)
 
+
 class Run:
     name: str
     train_until: int
@@ -58,27 +59,33 @@ class Run:
             return
         try:
             from ..store import create_config_store
+
             start_config_store = create_config_store()
-            starter_config = start_config_store.retrieve_run_config(run_config.start_config.run)
+            starter_config = start_config_store.retrieve_run_config(
+                run_config.start_config.run
+            )
         except Exception as e:
-            logger.error(f"could not load start config: {e} Should be added to the database config store RUN")
+            logger.error(
+                f"could not load start config: {e} Should be added to the database config store RUN"
+            )
             raise e
-        
+
         # preloaded weights from previous run
         if run_config.task_config.name == starter_config.task_config.name:
             self.start = Start(run_config.start_config)
         else:
             # Match labels between old and new head
-            if hasattr(run_config.task_config,"channels"):
+            if hasattr(run_config.task_config, "channels"):
                 # Map old head and new head
                 old_head = starter_config.task_config.channels
                 new_head = run_config.task_config.channels
-                self.start = Start(run_config.start_config,old_head=old_head,new_head=new_head)
+                self.start = Start(
+                    run_config.start_config, old_head=old_head, new_head=new_head
+                )
             else:
                 logger.warning("Not implemented channel match for this task")
-                self.start = Start(run_config.start_config,remove_head=True)
+                self.start = Start(run_config.start_config, remove_head=True)
         self.start.initialize_weights(self.model)
-
 
     @staticmethod
     def get_validation_scores(run_config) -> ValidationScores:
