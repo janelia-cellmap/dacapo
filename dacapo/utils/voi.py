@@ -10,6 +10,7 @@ import numpy as np
 import scipy.sparse as sparse
 
 
+# TODO: Why are we not using this?
 def voi(reconstruction, groundtruth, ignore_reconstruction=[], ignore_groundtruth=[0]):
     """Return the conditional entropies of the variation of information metric. [1]
 

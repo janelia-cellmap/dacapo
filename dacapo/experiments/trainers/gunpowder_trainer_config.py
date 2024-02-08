@@ -27,5 +27,7 @@ class GunpowderTrainerConfig(TrainerConfig):
         default=None,
         metadata={"help_text": "Number of iterations before saving a new snapshot."},
     )
-    min_masked: Optional[float] = attr.ib(default=0.15)
-    clip_raw: bool = attr.ib(default=True)
+    min_masked: Optional[float] = attr.ib(default=1e-6)
+    reject_probability: Optional[float or None] = attr.ib(default=1)
+    weighted_reject: bool = attr.ib(default=False)
+    clip_raw: bool = attr.ib(default=False)

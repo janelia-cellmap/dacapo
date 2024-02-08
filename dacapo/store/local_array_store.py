@@ -55,7 +55,7 @@ class LocalArrayStore(ArrayStore):
         If we don't store these we would have to look up the datasplit config
         and figure out where to find the inputs for each run. If we write
         the data then we don't need to search for it.
-        This convenience comes at the cost of some extra memory usage.
+        This convenience comes at the cost of extra memory usage. #TODO: FIX THIS - refactor
         """
 
         container = self.validation_container(run_name).container

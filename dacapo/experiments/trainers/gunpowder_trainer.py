@@ -37,6 +37,8 @@ class GunpowderTrainer(Trainer):
         self.print_profiling = 100
         self.snapshot_iteration = trainer_config.snapshot_interval
         self.min_masked = trainer_config.min_masked
+        self.reject_probability = trainer_config.reject_probability
+        self.weighted_reject = trainer_config.weighted_reject
 
         self.augments = trainer_config.augments
         self.mask_integral_downsample_factor = 4
@@ -46,12 +48,14 @@ class GunpowderTrainer(Trainer):
 
     def create_optimizer(self, model):
         optimizer = torch.optim.RAdam(lr=self.learning_rate, params=model.parameters())
-        self.scheduler = torch.optim.lr_scheduler.LinearLR(
-            optimizer,
-            start_factor=0.01,
-            end_factor=1.0,
-            total_iters=1000,
-            last_epoch=-1,
+        self.scheduler = (
+            torch.optim.lr_scheduler.LinearLR(  # TODO: add scheduler to config
+                optimizer,
+                start_factor=0.01,
+                end_factor=1.0,
+                total_iters=1000,
+                last_epoch=-1,
+            )
         )
         return optimizer
 
@@ -60,6 +64,7 @@ class GunpowderTrainer(Trainer):
         output_shape = Coordinate(model.output_shape)
 
         # get voxel sizes
+        # TODO: make dataset specific / resample
         raw_voxel_size = datasets[0].raw.voxel_size
         prediction_voxel_size = model.scale(raw_voxel_size)
 
@@ -80,7 +85,7 @@ class GunpowderTrainer(Trainer):
         mask_placeholder = gp.ArrayKey("MASK_PLACEHOLDER")
 
         target_key = gp.ArrayKey("TARGET")
-        dataset_weight_key = gp.ArrayKey("DATASET_WEIGHT")
+        dataset_weight_key = gp.ArrayKey("DATASET_WEIGHT")  # TODO: put these back in
         datasets_weight_key = gp.ArrayKey("DATASETS_WEIGHT")
         weight_key = gp.ArrayKey("WEIGHT")
         sample_points_key = gp.GraphKey("SAMPLE_POINTS")
@@ -88,7 +93,7 @@ class GunpowderTrainer(Trainer):
         # Get source nodes
         dataset_sources = []
         weights = []
-        for dataset in datasets:
+        for dataset in datasets:  # TODO: add automatic resampling?
             weights.append(dataset.weight)
             assert isinstance(dataset.weight, int), dataset
 
@@ -141,24 +146,46 @@ class GunpowderTrainer(Trainer):
                 )
             )
 
-            dataset_source += gp.Reject(mask_placeholder, 1e-6)
+            if self.weighted_reject:
+                # Add predictor nodes to dataset_source
+                for augment in self.augments:
+                    dataset_source += augment.node(raw_key, gt_key, mask_key)
 
-            for augment in self.augments:
-                dataset_source += augment.node(raw_key, gt_key, mask_key)
+                dataset_source += DaCapoTargetFilter(
+                    task.predictor,
+                    gt_key=gt_key,
+                    weights_key=dataset_weight_key,
+                    mask_key=mask_key,
+                )
 
-            # Add predictor nodes to dataset_source
-            dataset_source += DaCapoTargetFilter(
-                task.predictor,
-                gt_key=gt_key,
-                weights_key=dataset_weight_key,
-                mask_key=mask_key,
-            )
+                dataset_source += gp.Reject(
+                    mask=dataset_weight_key,
+                    min_masked=self.min_masked,
+                    reject_probability=self.reject_probability,
+                )
+            else:
+                dataset_source += gp.Reject(
+                    mask=mask_placeholder,
+                    min_masked=self.min_masked,
+                    reject_probability=self.reject_probability,
+                )
+
+                for augment in self.augments:
+                    dataset_source += augment.node(raw_key, gt_key, mask_key)
+
+                # Add predictor nodes to dataset_source
+                dataset_source += DaCapoTargetFilter(
+                    task.predictor,
+                    gt_key=gt_key,
+                    weights_key=dataset_weight_key,
+                    mask_key=mask_key,
+                )
 
             dataset_sources.append(dataset_source)
         pipeline = tuple(dataset_sources) + gp.RandomProvider(weights)
 
         # Add predictor nodes to pipeline
-        pipeline += DaCapoTargetFilter(
+        pipeline += DaCapoTargetFilter(  # TODO: why are there two of these?
             task.predictor,
             gt_key=gt_key,
             target_key=target_key,
@@ -255,7 +282,7 @@ class GunpowderTrainer(Trainer):
                 }
                 if mask is not None:
                     snapshot_arrays["volumes/mask"] = mask
-                logger.warning(
+                logger.info(
                     f"Saving Snapshot. Iteration: {iteration}, "
                     f"Loss: {loss.detach().cpu().numpy().item()}!"
                 )
