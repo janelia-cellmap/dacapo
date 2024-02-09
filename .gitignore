@@ -1,0 +1,19 @@
+*.sw[pmno]
+*.hdf
+*.h5
+*.ipynb
+*.pyc
+*.egg-info
+*.dat
+*.lock
+*.cpp
+*.so
+*.coverage
+dist
+build
+dacapo.yaml
+
+# vscode stuff
+.vscode
+.mypy_cache
+
