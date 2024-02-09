@@ -32,5 +32,7 @@ class GunpowderTrainerConfig(TrainerConfig):
 
     add_predictor_nodes_to_dataset: Optional[bool] = attr.ib(
         default=True,
-        metadata={"help_text": "Whether to add a predictor node to dataset_source and apply product of weights"}
+        metadata={
+            "help_text": "Whether to add a predictor node to dataset_source and apply product of weights"
+        },
     )

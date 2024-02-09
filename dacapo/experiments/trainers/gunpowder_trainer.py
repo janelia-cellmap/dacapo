@@ -43,7 +43,9 @@ class GunpowderTrainer(Trainer):
         self.clip_raw = trainer_config.clip_raw
 
         # Testing out if calculating multiple times and multiplying is necessary
-        self.add_predictor_nodes_to_dataset = trainer_config.add_predictor_nodes_to_dataset
+        self.add_predictor_nodes_to_dataset = (
+            trainer_config.add_predictor_nodes_to_dataset
+        )
 
         self.scheduler = None
 
@@ -166,7 +168,9 @@ class GunpowderTrainer(Trainer):
             task.predictor,
             gt_key=gt_key,
             target_key=target_key,
-            weights_key=datasets_weight_key if self.add_predictor_nodes_to_dataset else weight_key,
+            weights_key=datasets_weight_key
+            if self.add_predictor_nodes_to_dataset
+            else weight_key,
             mask_key=mask_key,
         )
 
