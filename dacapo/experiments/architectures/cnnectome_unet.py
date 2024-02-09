@@ -320,31 +320,29 @@ class CNNectomeUNetModule(torch.nn.Module):
                 for _ in range(num_heads)
             ]
         )
-#  if num_fmaps_out is None or level != self.num_levels-1 else num_fmaps_out
+        #  if num_fmaps_out is None or level != self.num_levels-1 else num_fmaps_out
         if self.use_attention:
             self.attention = nn.ModuleList(
-            [
-                nn.ModuleList(
                 [
-                    AttentionBlockModule(
-                        F_g=num_fmaps * fmap_inc_factor ** (level + 1),
-                        F_l=num_fmaps
-                            * fmap_inc_factor
-                            ** level,
-                        F_int=num_fmaps
-                            * fmap_inc_factor
-                            ** (level + (1 - upsample_channel_contraction[level]))
-                            if num_fmaps_out is None or level != 0
-                            else num_fmaps_out,
-                        dims=self.dims,
-                        upsample_factor=downsample_factors[level],
+                    nn.ModuleList(
+                        [
+                            AttentionBlockModule(
+                                F_g=num_fmaps * fmap_inc_factor ** (level + 1),
+                                F_l=num_fmaps * fmap_inc_factor**level,
+                                F_int=num_fmaps
+                                * fmap_inc_factor
+                                ** (level + (1 - upsample_channel_contraction[level]))
+                                if num_fmaps_out is None or level != 0
+                                else num_fmaps_out,
+                                dims=self.dims,
+                                upsample_factor=downsample_factors[level],
+                            )
+                            for level in range(self.num_levels - 1)
+                        ]
                     )
-                    for level in range(self.num_levels - 1)
+                    for _ in range(num_heads)
                 ]
             )
-            for _ in range(num_heads)
-            ]
-        )
 
         # right convolutional passes
         self.r_conv = nn.ModuleList(
@@ -389,12 +387,15 @@ class CNNectomeUNetModule(torch.nn.Module):
             gs_out = self.rec_forward(level - 1, g_in)
 
             if self.use_attention:
-                f_left_attented = [self.attention[h][i](gs_out[h],f_left) for h in range(self.num_heads)]
+                f_left_attented = [
+                    self.attention[h][i](gs_out[h], f_left)
+                    for h in range(self.num_heads)
+                ]
                 fs_right = [
                     self.r_up[h][i](gs_out[h], f_left_attented[h])
                     for h in range(self.num_heads)
                 ]
-            else:            # up, concat, and crop
+            else:  # up, concat, and crop
                 fs_right = [
                     self.r_up[h][i](gs_out[h], f_left) for h in range(self.num_heads)
                 ]
@@ -617,44 +618,43 @@ class Upsample(torch.nn.Module):
             return g_cropped
 
 
-
 class AttentionBlockModule(nn.Module):
     def __init__(self, F_g, F_l, F_int, dims, upsample_factor=None):
         """Attention Block Module::
 
-        The attention block takes two inputs: 'g' (gating signal) and 'x' (input features).
+            The attention block takes two inputs: 'g' (gating signal) and 'x' (input features).
 
-            [g] --> W_g --\                 /--> psi --> * --> [output]
-                            \               /     
-            [x] --> W_x --> [+] --> relu --      
+                [g] --> W_g --\                 /--> psi --> * --> [output]
+                                \               /
+                [x] --> W_x --> [+] --> relu --
 
-    Where:
-    - W_g and W_x are 1x1 Convolution followed by Batch Normalization
-    - [+] indicates element-wise addition
-    - relu is the Rectified Linear Unit activation function
-    - psi is a sequence of 1x1 Convolution, Batch Normalization, and Sigmoid activation
-    - * indicates element-wise multiplication between the output of psi and input feature 'x'
-    - [output] has the same dimensions as input 'x', selectively emphasized by attention weights
+        Where:
+        - W_g and W_x are 1x1 Convolution followed by Batch Normalization
+        - [+] indicates element-wise addition
+        - relu is the Rectified Linear Unit activation function
+        - psi is a sequence of 1x1 Convolution, Batch Normalization, and Sigmoid activation
+        - * indicates element-wise multiplication between the output of psi and input feature 'x'
+        - [output] has the same dimensions as input 'x', selectively emphasized by attention weights
 
-    Args:
-    F_g (int): The number of feature channels in the gating signal (g). 
-               This is the input channel dimension for the W_g convolutional layer.
+        Args:
+        F_g (int): The number of feature channels in the gating signal (g).
+                   This is the input channel dimension for the W_g convolutional layer.
 
-    F_l (int): The number of feature channels in the input features (x). 
-               This is the input channel dimension for the W_x convolutional layer.
+        F_l (int): The number of feature channels in the input features (x).
+                   This is the input channel dimension for the W_x convolutional layer.
 
-    F_int (int): The number of intermediate feature channels. 
-                 This represents the output channel dimension of the W_g and W_x convolutional layers 
-                 and the input channel dimension for the psi layer. Typically, F_int is smaller 
-                 than F_g and F_l, as it serves to compress the feature representations before 
-                 applying the attention mechanism.
+        F_int (int): The number of intermediate feature channels.
+                     This represents the output channel dimension of the W_g and W_x convolutional layers
+                     and the input channel dimension for the psi layer. Typically, F_int is smaller
+                     than F_g and F_l, as it serves to compress the feature representations before
+                     applying the attention mechanism.
 
-    The AttentionBlock uses two separate pathways to process 'g' and 'x', combines them,
-    and applies a sigmoid activation to generate an attention map. This map is then used 
-    to scale the input features 'x', resulting in an output that focuses on important 
-    features as dictated by the gating signal 'g'.
+        The AttentionBlock uses two separate pathways to process 'g' and 'x', combines them,
+        and applies a sigmoid activation to generate an attention map. This map is then used
+        to scale the input features 'x', resulting in an output that focuses on important
+        features as dictated by the gating signal 'g'.
 
-           """
+        """
 
         super(AttentionBlockModule, self).__init__()
         self.dims = dims
@@ -662,23 +662,36 @@ class AttentionBlockModule(nn.Module):
         if upsample_factor is not None:
             self.upsample_factor = upsample_factor
         else:
-            self.upsample_factor = (2,)*self.dims
+            self.upsample_factor = (2,) * self.dims
 
         self.W_g = ConvPass(
-            F_g, F_int, kernel_sizes=self.kernel_sizes, activation=None, padding="same")
+            F_g, F_int, kernel_sizes=self.kernel_sizes, activation=None, padding="same"
+        )
 
         self.W_x = nn.Sequential(
-            ConvPass(F_l, F_int, kernel_sizes=self.kernel_sizes,
-                     activation=None, padding="same"),
-            Downsample(upsample_factor)
+            ConvPass(
+                F_l,
+                F_int,
+                kernel_sizes=self.kernel_sizes,
+                activation=None,
+                padding="same",
+            ),
+            Downsample(upsample_factor),
         )
 
         self.psi = ConvPass(
-            F_int, 1, kernel_sizes=self.kernel_sizes, activation="Sigmoid", padding="same")
+            F_int,
+            1,
+            kernel_sizes=self.kernel_sizes,
+            activation="Sigmoid",
+            padding="same",
+        )
 
-        up_mode = {2: 'bilinear', 3: 'trilinear'}[self.dims]
+        up_mode = {2: "bilinear", 3: "trilinear"}[self.dims]
 
-        self.up = nn.Upsample(scale_factor=upsample_factor, mode=up_mode, align_corners=True)
+        self.up = nn.Upsample(
+            scale_factor=upsample_factor, mode=up_mode, align_corners=True
+        )
 
         self.relu = nn.ReLU(inplace=True)
 
@@ -702,8 +715,7 @@ class AttentionBlockModule(nn.Module):
         padding = padding[::-1]
 
         # Apply symmetric padding
-        return nn.functional.pad(smaller_tensor, padding, mode='constant', value=0)
-
+        return nn.functional.pad(smaller_tensor, padding, mode="constant", value=0)
 
     def forward(self, g, x):
         g1 = self.W_g(g)
