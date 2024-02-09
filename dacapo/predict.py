@@ -24,7 +24,7 @@ def predict(
     num_cpu_workers: int = 4,
     compute_context: ComputeContext = LocalTorch(),
     output_roi: Optional[Roi] = None,
-    output_dtype: np.dtype = np.float32,   # type: ignore
+    output_dtype: np.dtype = np.float32,  # type: ignore
     overwrite: bool = False,
 ):
     # get the model's input and output size
