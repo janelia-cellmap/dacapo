@@ -14,6 +14,8 @@ class AffinitiesTask(Task):
         self.predictor = AffinitiesPredictor(
             neighborhood=task_config.neighborhood, lsds=task_config.lsds
         )
-        self.loss = AffinitiesLoss(len(task_config.neighborhood), task_config.lsds_to_affs_weight_ratio)
+        self.loss = AffinitiesLoss(
+            len(task_config.neighborhood), task_config.lsds_to_affs_weight_ratio
+        )
         self.post_processor = WatershedPostProcessor(offsets=task_config.neighborhood)
         self.evaluator = InstanceEvaluator()
