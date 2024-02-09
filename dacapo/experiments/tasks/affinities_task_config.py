@@ -30,3 +30,23 @@ class AffinitiesTaskConfig(TaskConfig):
             "It has been shown that lsds as an auxiliary task can help affinity predictions."
         },
     )
+    num_voxels: int = attr.ib(
+        default=20,
+        metadata={
+            "help_text": "The number of voxels to use for the gaussian sigma when computing lsds."
+        },
+    )
+    downsample_lsds: int = attr.ib(
+        default=1,
+        metadata={
+            "help_text": "The amount to downsample the lsds. "
+            "This is useful for speeding up training and inference."
+        },
+    )
+    grow_boundary_iterations: int = attr.ib(
+        default=0,
+        metadata={
+            "help_text": "The number of iterations to run the grow boundaries algorithm. "
+            "This is useful for refining the boundaries of the affinities, and reducing merging of adjacent objects."
+        },
+    )

@@ -142,7 +142,8 @@ def validate_run(
         prediction_array_identifier = array_store.validation_prediction_array(
             run.name, iteration, validation_dataset
         )
-        logger.warning("Predicting on dataset %s", validation_dataset.name)
+        logger.info("Predicting on dataset %s", validation_dataset.name)
+        
         predict(
             run.model,
             validation_dataset.raw,
@@ -150,7 +151,7 @@ def validate_run(
             compute_context=compute_context,
             output_roi=validation_dataset.gt.roi,
         )
-        logger.warning("Predicted on dataset %s", validation_dataset.name)
+        logger.info("Predicted on dataset %s", validation_dataset.name)
 
         post_processor.set_prediction(prediction_array_identifier)
 

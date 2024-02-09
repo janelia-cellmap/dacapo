@@ -119,6 +119,7 @@ class ConcatArray(Array):
             axis=0,
         )
         if concatenated.shape[0] == 1:
-            logger.info(f"Concatenated array has only one channel: {self.name} {concatenated.shape}")
-            # raise Exception(f"{concatenated.shape}, shapes")
+          logger.info(
+                f"Concatenated array has only one channel: {self.name} {concatenated.shape}"
+            )
         return concatenated
