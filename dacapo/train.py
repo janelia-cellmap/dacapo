@@ -12,7 +12,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def train(run_name: str, compute_context: ComputeContext = LocalTorch(), force_cuda = False):
+def train(
+    run_name: str, compute_context: ComputeContext = LocalTorch(), force_cuda=False
+):
     """Train a run"""
 
     if compute_context.train(run_name):
@@ -187,7 +189,7 @@ def train_run(
                 )
 
             # make sure to move optimizer back to the correct device
-            run.move_optimizer(compute_context.device)            
+            run.move_optimizer(compute_context.device)
             run.model.train()
 
     logger.info("Trained until %d, finished.", trained_until)

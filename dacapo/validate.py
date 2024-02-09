@@ -143,7 +143,7 @@ def validate_run(
             run.name, iteration, validation_dataset
         )
         logger.info("Predicting on dataset %s", validation_dataset.name)
-        
+
         predict(
             run.model,
             validation_dataset.raw,

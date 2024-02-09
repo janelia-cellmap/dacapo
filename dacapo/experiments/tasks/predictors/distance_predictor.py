@@ -27,7 +27,13 @@ class DistancePredictor(Predictor):
     in the channels argument.
     """
 
-    def __init__(self, channels: List[str], scale_factor: float, mask_distances: bool,extra_conv :bool):
+    def __init__(
+        self,
+        channels: List[str],
+        scale_factor: float,
+        mask_distances: bool,
+        extra_conv: bool,
+    ):
         self.channels = channels
         self.norm = "tanh"
         self.dt_scale_factor = scale_factor
@@ -37,7 +43,7 @@ class DistancePredictor(Predictor):
         self.epsilon = 5e-2
         self.threshold = 0.8
         self.extra_conv = extra_conv
-        self.extra_conv_dims =len(self.channels) *2
+        self.extra_conv_dims = len(self.channels) * 2
 
     @property
     def embedding_dims(self):
