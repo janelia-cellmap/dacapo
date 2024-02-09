@@ -62,7 +62,9 @@ class LocalWeightsStore(WeightsStore):
 
         return weights
 
-    def _retrieve_weights(self, run: str, key: str) -> Weights:
+    def _retrieve_weights(
+        self, run: str, key: str
+    ) -> Weights:  # TODO: redundant with above?
         weights_name = self.__get_weights_dir(run) / key
         if not weights_name.exists():
             weights_name = self.__get_weights_dir(run) / "iterations" / key
@@ -104,14 +106,14 @@ class LocalWeightsStore(WeightsStore):
         logger.info("Retrieving weights for run %s, criterion %s", run, criterion)
 
         weights_info = json.loads(
-            (self.__get_weights_dir(run) / criterion / f"{dataset}.json")
+            (self.__get_weights_dir(run) / dataset / f"{criterion}.json")
             .open("r")
             .read()
         )
 
         return weights_info["iteration"]
 
-    def _load_best(self, run: Run, criterion: str):
+    def _load_best(self, run: Run, criterion: str):  # TODO: probably won't work
         logger.info("Retrieving weights for run %s, criterion %s", run, criterion)
 
         weights_name = self.__get_weights_dir(run) / f"{criterion}"

@@ -19,7 +19,7 @@ class ArgmaxPostProcessor(PostProcessor):
             prediction_array_identifier
         )
 
-    def process(self, parameters, output_array_identifier):
+    def process(self, parameters, output_array_identifier, overwrite: bool = False):
         output_array = ZarrArray.create_from_array_identifier(
             output_array_identifier,
             [dim for dim in self.prediction_array.axes if dim != "c"],
@@ -27,6 +27,7 @@ class ArgmaxPostProcessor(PostProcessor):
             None,
             self.prediction_array.voxel_size,
             np.uint8,
+            overwrite=overwrite,
         )
 
         output_array[self.prediction_array.roi] = np.argmax(
