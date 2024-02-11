@@ -1,5 +1,5 @@
 black
 mypy
-pytest
+pytest==7.4.4
 pytest-cov
 pytest-lazy-fixture
