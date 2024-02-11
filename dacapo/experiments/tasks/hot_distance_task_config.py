@@ -5,6 +5,7 @@ from .task_config import TaskConfig
 
 from typing import List
 
+
 @attr.s
 class HotDistanceTaskConfig(TaskConfig):
     """This is a Hot Distance task config used for generating and

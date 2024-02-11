@@ -14,17 +14,19 @@ class HotDistanceLoss(Loss):
         return self.hot_loss(
             prediction_hot, target_hot, weight_hot
         ) + self.distance_loss(prediction_distance, target_distance, weight_distance)
-    
+
     def hot_loss(self, prediction, target, weight):
-        loss = torch.nn.BCEWithLogitsLoss(reduction='none')
-        return torch.mean(loss(prediction , target) * weight)
-    
+        loss = torch.nn.BCEWithLogitsLoss(reduction="none")
+        return torch.mean(loss(prediction, target) * weight)
+
     def distance_loss(self, prediction, target, weight):
         loss = torch.nn.MSELoss()
         return loss(prediction * weight, target * weight)
-    
+
     def split(self, x):
         # Shape[0] is the batch size and Shape[1] is the number of channels.
-        assert x.shape[1] % 2 == 0, f"First dimension (Channels) of target {x.shape} must be even to be splitted in hot and distance."
+        assert (
+            x.shape[1] % 2 == 0
+        ), f"First dimension (Channels) of target {x.shape} must be even to be splitted in hot and distance."
         mid = x.shape[1] // 2
-        return torch.split(x,mid,dim=1)
+        return torch.split(x, mid, dim=1)

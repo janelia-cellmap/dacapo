@@ -98,7 +98,7 @@ def train_run(
 
             weights_store.retrieve_weights(run, iteration=trained_until)
 
-        elif latest_weights_iteration > trained_until:          
+        elif latest_weights_iteration > trained_until:
             logger.warn(
                 f"Found weights for iteration {latest_weights_iteration}, but "
                 f"run {run.name} was only trained until {trained_until}. "
