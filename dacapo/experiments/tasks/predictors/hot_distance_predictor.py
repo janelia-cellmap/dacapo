@@ -76,7 +76,9 @@ class HotDistancePredictor(Predictor):
             2,
             slab=tuple(1 if c == "c" else -1 for c in gt.axes),
             masks=[mask[target.roi]],
-            moving_counts=None if moving_class_counts is None else moving_class_counts[: self.classes],
+            moving_counts=None
+            if moving_class_counts is None
+            else moving_class_counts[: self.classes],
         )
 
         if self.mask_distances:
@@ -95,7 +97,9 @@ class HotDistancePredictor(Predictor):
             2,
             slab=tuple(1 if c == "c" else -1 for c in gt.axes),
             masks=[mask[target.roi], distance_mask],
-            moving_counts=None if moving_class_counts is None else moving_class_counts[-self.classes :],
+            moving_counts=None
+            if moving_class_counts is None
+            else moving_class_counts[-self.classes :],
         )
 
         weights = np.concatenate((one_hot_weights, distance_weights))
