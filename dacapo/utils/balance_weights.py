@@ -12,6 +12,7 @@ def balance_weights(
     clipmin: float = 0.05,
     clipmax: float = 0.95,
     moving_counts: Optional[List[Dict[int, Tuple[int, int]]]] = None,
+    cross_class: bool = True,
 ):
     if moving_counts is None:
         moving_counts = []
@@ -28,10 +29,6 @@ def balance_weights(
 
     # initialize error scale with 1s
     error_scale = np.ones(label_data.shape, dtype=np.float32)
-
-    # set error_scale to 0 in masked-out areas
-    for mask in masks:
-        error_scale = error_scale * mask
 
     if slab is None:
         slab = error_scale.shape
@@ -76,5 +73,15 @@ def balance_weights(
         labels_slab = labels_slab.astype(np.int64)
         # scale_slab the masked-in scale_slab with the class weights
         scale_slab *= np.take(w, labels_slab)
+
+    if cross_class:
+        # get maximum error scale using first dimension
+        shape = error_scale.shape
+        error_scale = np.max(error_scale, axis=0)
+        error_scale = np.broadcast_to(error_scale, shape)
+
+    # set error_scale to 0 in masked-out areas
+    for mask in masks:
+        error_scale = error_scale * mask
 
     return error_scale, moving_counts
