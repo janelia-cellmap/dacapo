@@ -70,6 +70,7 @@ def predict(
 
     # prepare data source
     pipeline = DaCapoArraySource(raw_array, raw)
+    pipeline += gp.Normalize(raw)
     # raw: (c, d, h, w)
     pipeline += gp.Pad(raw, Coordinate((None,) * input_voxel_size.dims))
     # raw: (c, d, h, w)

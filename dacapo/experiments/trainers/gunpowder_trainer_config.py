@@ -28,7 +28,7 @@ class GunpowderTrainerConfig(TrainerConfig):
         metadata={"help_text": "Number of iterations before saving a new snapshot."},
     )
     min_masked: Optional[float] = attr.ib(default=0.15)
-    clip_raw: bool = attr.ib(default=True)
+    clip_raw: bool = attr.ib(default=False)
 
     add_predictor_nodes_to_dataset: Optional[bool] = attr.ib(
         default=True,

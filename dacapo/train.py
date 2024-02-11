@@ -1,3 +1,4 @@
+from copy import deepcopy
 from dacapo.store.create_store import create_array_store
 from .experiments import Run
 from .compute_context import LocalTorch, ComputeContext
@@ -10,6 +11,7 @@ from tqdm import tqdm
 import logging
 
 logger = logging.getLogger(__name__)
+logger.setLevel("INFO")
 
 
 def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
@@ -96,12 +98,20 @@ def train_run(
 
             weights_store.retrieve_weights(run, iteration=trained_until)
 
-        elif latest_weights_iteration > trained_until:
-            weights_store.retrieve_weights(run, iteration=latest_weights_iteration)
-            logger.error(
+        elif latest_weights_iteration > trained_until:          
+            logger.warn(
                 f"Found weights for iteration {latest_weights_iteration}, but "
                 f"run {run.name} was only trained until {trained_until}. "
+                "Filling stats with last observed values."
             )
+            last_iteration_stats = run.training_stats.iteration_stats[-1]
+            for i in range(
+                last_iteration_stats.iteration, latest_weights_iteration - 1
+            ):
+                new_iteration_stats = deepcopy(last_iteration_stats)
+                new_iteration_stats.iteration = i + 1
+                run.training_stats.add_iteration_stats(new_iteration_stats)
+                trained_until = run.training_stats.trained_until()
 
     # start/resume training
 
