@@ -5,6 +5,9 @@ from funlib.geometry import Roi
 import numpy as np
 
 from typing import Dict, Any
+import logging
+
+logger = logging.getLogger(__file__)
 
 
 class ConcatArray(Array):
@@ -116,5 +119,7 @@ class ConcatArray(Array):
             axis=0,
         )
         if concatenated.shape[0] == 1:
-            raise Exception(f"{concatenated.shape}, shapes")
+            logger.info(
+                f"Concatenated array has only one channel: {self.name} {concatenated.shape}"
+            )
         return concatenated

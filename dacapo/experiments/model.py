@@ -24,7 +24,7 @@ class Model(torch.nn.Module):
         self,
         architecture: Architecture,
         prediction_head: torch.nn.Module,
-        eval_activation: torch.nn.Module = None,
+        eval_activation: torch.nn.Module | None = None,
     ):
         super().__init__()
 
@@ -46,7 +46,7 @@ class Model(torch.nn.Module):
             result = self.eval_activation(result)
         return result
 
-    def compute_output_shape(self, input_shape: Coordinate) -> Coordinate:
+    def compute_output_shape(self, input_shape: Coordinate) -> Tuple[int, Coordinate]:
         """Compute the spatial shape (i.e., not accounting for channels and
         batch dimensions) of this model, when fed a tensor of the given spatial
         shape as input."""
