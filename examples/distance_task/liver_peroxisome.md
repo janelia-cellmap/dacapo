@@ -21,7 +21,13 @@ mongodbhost: mongodb://dbuser:dbpass@dburl:dbport/
 mongodbname: dacapo
 runs_base_dir: /path/to/my/data/storage
 ```
-The `runs_base_dir` defines where your on-disk data will be stored. The `mongodbhost` and `mongodbname` define the mongodb host and database that will store your cloud data. If you want to store everything on disk, replace `mongodbhost` and `mongodbname` with a single type: files and everything will be saved to disk.
+
+The `runs_base_dir` defines where your on-disk data will be stored. The `mongodbhost` and `mongodbname` define the mongodb host and database that will store your cloud data. If you want to store everything on disk, replace `mongodbhost` and `mongodbname` with a single type: files and everything will be saved to disk:
+
+```yaml 
+type: files
+runs_base_dir: /path/to/my/data/storage
+```
 
 
 ```python
@@ -325,10 +331,14 @@ from dacapo.experiments.starts import StartConfig
 from dacapo.experiments import RunConfig
 from dacapo.experiments.run import Run
 
-start_config = StartConfig(
-    "setup04",
-    "best",
-)
+start_config = None
+
+# Uncomment to start from a pretrained model
+# start_config = StartConfig(
+#     "setup04",
+#     "best",
+# )
+
 iterations = 200000
 validation_interval = 5000
 repetitions = 3
@@ -359,9 +369,9 @@ for i in range(repetitions):
     config_store.store_run_config(run_config)
 ```
 
-    example_finetuned_example_jrc_mus-livers_peroxisome_8nm_example_distances_8nm_peroxisome_example_attention-upsample-unet_example_default_one_label_finetuning__0
-    example_finetuned_example_jrc_mus-livers_peroxisome_8nm_example_distances_8nm_peroxisome_example_attention-upsample-unet_example_default_one_label_finetuning__1
-    example_finetuned_example_jrc_mus-livers_peroxisome_8nm_example_distances_8nm_peroxisome_example_attention-upsample-unet_example_default_one_label_finetuning__2
+    example_scratch_example_jrc_mus-livers_peroxisome_8nm_example_distances_8nm_peroxisome_example_attention-upsample-unet_example_default_one_label_finetuning__0
+    example_scratch_example_jrc_mus-livers_peroxisome_8nm_example_distances_8nm_peroxisome_example_attention-upsample-unet_example_default_one_label_finetuning__1
+    example_scratch_example_jrc_mus-livers_peroxisome_8nm_example_distances_8nm_peroxisome_example_attention-upsample-unet_example_default_one_label_finetuning__2
 
 
 ## Train
@@ -372,15 +382,8 @@ To train one of the runs, you can either do it by first creating a **Run** direc
 ```python
 from dacapo.train import train_run
 
-run = Run(run_config)
+run = Run(config_store.retrieve_run_config(run_config.name))
 train_run(run)
-```
-
-Or - since we already stored the configs - we can start the run via just the run name:
-
-
-```python
-train_run(run_config.name)
 ```
 
 If you want to start your run on some compute cluster, you might want to use the command line interface: dacapo train -r {run_config.name}. This makes it particularly convenient to run on compute nodes where you can specify specific compute requirements.
