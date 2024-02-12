@@ -1,3 +1,4 @@
+from dacapo.experiments.datasplits.datasets.dataset import Dataset
 from .weights_store import WeightsStore, Weights
 from dacapo.experiments.run import Run
 
@@ -100,7 +101,7 @@ class LocalWeightsStore(WeightsStore):
         with best_weights_json.open("w") as f:
             f.write(json.dumps({"iteration": iteration}))
 
-    def retrieve_best(self, run: str, dataset: str, criterion: str) -> int:
+    def retrieve_best(self, run: str, dataset: str | Dataset, criterion: str) -> int:
         logger.info("Retrieving weights for run %s, criterion %s", run, criterion)
 
         weights_info = json.loads(
