@@ -25,9 +25,6 @@ class Start(ABC):
             model_dict = model.state_dict()
             common_layers = set(model_dict.keys()) & set(weights.model.keys())
             for layer in common_layers:
-                if model_dict[layer].shape == weights.model[layer].shape:
-                    model_dict[layer] = weights.model[layer]
-                else:
-                    logger.warning(f"layer {layer} has different shape, not loading")
+                model_dict[layer] = weights.model[layer]
             model.load_state_dict(model_dict)
             logger.warning(f"loaded only common layers from weights")
