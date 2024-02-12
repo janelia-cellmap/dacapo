@@ -13,6 +13,29 @@ DaCapo has 4 major configurable components:
 
 These are then combined in a single **dacapo.experiments.Run** that includes your starting point (whether you want to start training from scratch or continue off of a previously trained model) and stopping criterion (the number of iterations you want to train).
 
+## Environment setup
+If you have not already done so, you will need to install DaCapo. We recommend you do this by first creating a new environment and then installing DaCapo using pip.
+
+```bash
+conda create -n dacapo python=3.10
+conda activate dacapo
+```
+
+Then, you can install DaCapo using pip, via GitHub:
+
+```bash
+pip install git+https://github.com/janelia-cellmap/dacapo.git
+```
+
+Or you can clone the repository and install it locally:
+
+```bash
+git clone https://github.com/janelia-cellmap/dacapo.git
+cd dacapo
+pip install -e .
+```
+
+
 ## Config Store
 
 To define where the data goes, create a dacapo.yaml configuration file. Here is a template:
