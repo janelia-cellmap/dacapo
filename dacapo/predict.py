@@ -24,7 +24,7 @@ def predict(  # TODO: MAKE THIS CLI ACCESSIBLE
     num_cpu_workers: int = 4,
     compute_context: ComputeContext = LocalTorch(),
     output_roi: Optional[Roi] = None,
-    output_dtype: np.dtype = np.float32,  # type: ignore
+    output_dtype: Optional[np.dtype] = np.uint8,  # type: ignore
     overwrite: bool = False,
 ):
     # get the model's input and output size
@@ -112,7 +112,7 @@ def predict(  # TODO: MAKE THIS CLI ACCESSIBLE
     # write to zarr
     pipeline += gp.ZarrWrite(
         {prediction: prediction_array_identifier.dataset},
-        prediction_array_identifier.container.parent,
+        str(prediction_array_identifier.container.parent),
         prediction_array_identifier.container.name,
         dataset_dtypes={prediction: output_dtype},
     )
@@ -130,8 +130,8 @@ def predict(  # TODO: MAKE THIS CLI ACCESSIBLE
     with gp.build(pipeline):
         pipeline.request_batch(gp.BatchRequest())
 
-    container = zarr.open(prediction_array_identifier.container)
+    container = zarr.open(str(prediction_array_identifier.container))
     dataset = container[prediction_array_identifier.dataset]
-    dataset.attrs["axes"] = (
+    dataset.attrs["axes"] = (  # type: ignore
         raw_array.axes if "c" in raw_array.axes else ["c"] + raw_array.axes
     )
