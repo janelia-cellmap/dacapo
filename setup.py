@@ -14,7 +14,7 @@ setup(
     entry_points={"console_scripts": ["dacapo=dacapo.cli:cli"]},
     include_package_data=True,
     install_requires=[
-        "numpy==1.22.3",
+        "numpy",
         "pyyaml",
         "zarr",
         "cattrs",
