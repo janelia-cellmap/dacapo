@@ -29,30 +29,30 @@ class Bsub(ComputeContext):
     def device(self):
         return None
 
-    def command(self, run_name):
-        return [
-            "bsub",
-            "-q",
-            f"{self.queue}",
-            "-n",
-            f"{self.num_cpus}",
-            "-gpu",
-            f"num={self.num_gpus}",
-            "-J",
-            run_name,
-            "-o",
-            f"{run_name}_train.out",
-            "-e",
-            f"{run_name}_train.err",
-        ] + (
+    def wrap_command(self, command):
+        return (
             [
-                "-P",
-                f"{self.billing}",
+                "bsub",
+                "-q",
+                f"{self.queue}",
+                "-n",
+                f"{self.num_cpus}",
+                "-gpu",
+                f"num={self.num_gpus}",
+                # "-J",
+                # "dacapo",
+                # "-o",
+                # f"{run_name}_train.out",
+                # "-e",
+                # f"{run_name}_train.err",
             ]
-            if self.billing is not None
-            else []
+            + (
+                [
+                    "-P",
+                    f"{self.billing}",
+                ]
+                if self.billing is not None
+                else []
+            )
+            + command
         )
-
-    def train(self, run_name):
-        subprocess.run(self.command(run_name) + ["dacapo", "train", "-r", run_name])
-        return True

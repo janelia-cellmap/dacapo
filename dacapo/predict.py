@@ -17,7 +17,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def predict(
+def predict(  # TODO: MAKE THIS CLI ACCESSIBLE
     model: Model,
     raw_array: Array,
     prediction_array_identifier: LocalArrayIdentifier,
