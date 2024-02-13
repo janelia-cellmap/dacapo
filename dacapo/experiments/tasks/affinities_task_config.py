@@ -36,3 +36,19 @@ class AffinitiesTaskConfig(TaskConfig):
             "help_text": "If training with lsds, set how much they should be weighted compared to affs."
         },
     )
+    affs_weight_clipmin: float = attr.ib(
+        default=0.05,
+        metadata={"help_text": "The minimum value for affinities weights."},
+    )
+    affs_weight_clipmax: float = attr.ib(
+        default=0.95,
+        metadata={"help_text": "The maximum value for affinities weights."},
+    )
+    lsd_weight_clipmin: float = attr.ib(
+        default=0.05,
+        metadata={"help_text": "The minimum value for lsds weights."},
+    )
+    lsd_weight_clipmax: float = attr.ib(
+        default=0.95,
+        metadata={"help_text": "The maximum value for lsds weights."},
+    )

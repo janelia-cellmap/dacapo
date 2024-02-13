@@ -12,7 +12,12 @@ class AffinitiesTask(Task):
         """Create a `DummyTask` from a `DummyTaskConfig`."""
 
         self.predictor = AffinitiesPredictor(
-            neighborhood=task_config.neighborhood, lsds=task_config.lsds
+            neighborhood=task_config.neighborhood,
+            lsds=task_config.lsds,
+            affs_weight_clipmin=task_config.affs_weight_clipmin,
+            affs_weight_clipmax=task_config.affs_weight_clipmax,
+            lsd_weight_clipmin=task_config.lsd_weight_clipmin,
+            lsd_weight_clipmax=task_config.lsd_weight_clipmax,
         )
         self.loss = AffinitiesLoss(
             len(task_config.neighborhood), task_config.lsds_to_affs_weight_ratio
