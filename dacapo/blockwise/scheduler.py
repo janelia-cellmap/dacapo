@@ -1,12 +1,8 @@
-from datetime import datetime
-from importlib.machinery import SourceFileLoader
 from pathlib import Path
-from typing import Callable, Optional
 import daisy
-from funlib.geometry import Roi, Coordinate
+from funlib.geometry import Roi
 
-from dacapo.compute_context import ComputeContext, LocalTorch, Bsub
-
+from dacapo.compute_context import ComputeContext
 from dacapo.blockwise import DaCapoBlockwiseTask
 
 
