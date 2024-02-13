@@ -35,7 +35,7 @@ def apply(
     parameters: Optional[PostProcessorParameters or str] = None,
     roi: Optional[Roi or str] = None,
     num_cpu_workers: int = 30,
-    output_dtype: Optional[np.dtype or str] = np.uint8,  # type: ignore
+    output_dtype: Optional[np.dtype | str] = np.uint8,  # type: ignore
     compute_context: ComputeContext = LocalTorch(),
     overwrite: bool = True,
     file_format: str = "zarr",

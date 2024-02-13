@@ -237,22 +237,22 @@ def spawn_worker(
     """
     # Make the command for the worker to run
     command = [  # TODO
-        "dacapo",
-        "predict",
-        "--name",
-        model.name,
-        "--criterion",
-        "best",
-        "--channels",
-        "0",
-        "--out_container",
-        prediction_array_identifier.container,
-        "--out_dataset",
-        prediction_array_identifier.dataset,
-        "--in_container",
-        raw_array.container,
-        "--in_dataset",
-        raw_array.dataset,
+        # "dacapo",
+        # "predict",
+        # "--name",
+        # model.name,
+        # "--criterion",
+        # "best",
+        # "--channels",
+        # "0",
+        # "--out_container",
+        # prediction_array_identifier.container,
+        # "--out_dataset",
+        # prediction_array_identifier.dataset,
+        # "--in_container",
+        # raw_array.container,
+        # "--in_dataset",
+        # raw_array.dataset,
     ]
 
     def run_worker():
