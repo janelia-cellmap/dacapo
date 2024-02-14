@@ -1,14 +1,14 @@
 import attr
 
-from .distance_task import DistanceTask
+from .hot_distance_task import HotDistanceTask
 from .task_config import TaskConfig
 
 from typing import List
 
 
 @attr.s
-class DistanceTaskConfig(TaskConfig):
-    """This is a Distance task config used for generating and
+class HotDistanceTaskConfig(TaskConfig):
+    """This is a Hot Distance task config used for generating and
     evaluating signed distance transforms as a way of generating
     segmentations.
 
@@ -18,7 +18,7 @@ class DistanceTaskConfig(TaskConfig):
     distinct objects, this cannot happen with distances.
     """
 
-    task_type = DistanceTask
+    task_type = HotDistanceTask
 
     channels: List[str] = attr.ib(metadata={"help_text": "A list of channel names."})
     clip_distance: float = attr.ib(
@@ -45,12 +45,4 @@ class DistanceTaskConfig(TaskConfig):
             "object boundary cannot be known. This is anywhere that the distance to crop boundary "
             "is less than the distance to object boundary."
         },
-    )
-    clipmin: float = attr.ib(
-        default=0.05,
-        metadata={"help_text": "The minimum value for distance weights."},
-    )
-    clipmax: float = attr.ib(
-        default=0.95,
-        metadata={"help_text": "The maximum value for distance weights."},
     )

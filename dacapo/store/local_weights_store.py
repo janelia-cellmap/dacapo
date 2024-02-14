@@ -103,11 +103,10 @@ class LocalWeightsStore(WeightsStore):
     def retrieve_best(self, run: str, dataset: str, criterion: str) -> int:
         logger.info("Retrieving weights for run %s, criterion %s", run, criterion)
 
-        weights_info = json.loads(
-            (self.__get_weights_dir(run) / criterion / f"{dataset}.json")
-            .open("r")
-            .read()
-        )
+        with (self.__get_weights_dir(run) / criterion / f"{dataset}.json").open(
+            "r"
+        ) as fd:
+            weights_info = json.load(fd)
 
         return weights_info["iteration"]
 

@@ -9,3 +9,4 @@ from .inner_distance_task_config import (
     InnerDistanceTaskConfig,
     InnerDistanceTask,
 )  # noqa
+from .hot_distance_task_config import HotDistanceTaskConfig, HotDistanceTask  # noqa
