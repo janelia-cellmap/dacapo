@@ -4,7 +4,7 @@ from funlib.geometry import Coordinate
 
 import torch
 
-from typing import Tuple
+from typing import Tuple, Optional
 
 
 class Model(torch.nn.Module):
@@ -18,7 +18,7 @@ class Model(torch.nn.Module):
     """
 
     num_out_channels: int
-    num_in_channels: int
+    num_in_channels: Optional[int]
 
     def __init__(
         self,
@@ -41,17 +41,26 @@ class Model(torch.nn.Module):
         self.eval_activation = eval_activation
 
     def forward(self, x):
-        result = self.chain(x)
+        b, c, *spatial = x.shape
+        if self.num_in_channels is None:
+            # channel agnostic model
+            x = x.view(b * c, 1, *spatial)
+        output = self.chain(x)
+        _, _, *out_spatial = output.shape
+        if self.num_in_channels is None:
+            output, _ = torch.min(output.view(b, c, -1, *out_spatial), dim=1)
         if not self.training and self.eval_activation is not None:
-            result = self.eval_activation(result)
-        return result
+            output = self.eval_activation(output)
+        return output
 
     def compute_output_shape(self, input_shape: Coordinate) -> Tuple[int, Coordinate]:
         """Compute the spatial shape (i.e., not accounting for channels and
         batch dimensions) of this model, when fed a tensor of the given spatial
         shape as input."""
 
-        return self.__get_output_shape(input_shape, self.num_in_channels)
+        return self.__get_output_shape(
+            input_shape, self.num_in_channels if self.num_in_channels is not None else 1
+        )
 
     def __get_output_shape(
         self, input_shape: Coordinate, in_channels: int
