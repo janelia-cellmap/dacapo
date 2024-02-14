@@ -23,8 +23,13 @@ class Start(ABC):
             # if the model is not the same, we can try to load the weights
             # of the common layers
             model_dict = model.state_dict()
-            common_layers = set(model_dict.keys()) & set(weights.model.keys())
-            for layer in common_layers:
-                model_dict[layer] = weights.model[layer]
+            pretrained_dict = {
+                k: v
+                for k, v in weights.model.items()
+                if k in model_dict and v.size() == model_dict[k].size()
+            }
+            model_dict.update(
+                pretrained_dict
+            )  # update only the existing and matching layers
             model.load_state_dict(model_dict)
             logger.warning(f"loaded only common layers from weights")
