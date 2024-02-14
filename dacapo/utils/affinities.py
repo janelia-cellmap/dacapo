@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 def seg_to_affgraph(seg: np.ndarray, neighborhood: List[Coordinate]) -> np.ndarray:
-    nhood : np.ndarray = np.array(neighborhood)
+    nhood: np.ndarray = np.array(neighborhood)
 
     # constructs an affinity graph from a segmentation
     # assume affinity graph is represented as:
