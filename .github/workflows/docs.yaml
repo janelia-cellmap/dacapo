@@ -1,7 +1,8 @@
-name: Generate Pages
-
-on: [push, pull_request]
-
+name: Pages
+on:
+  push:
+    branches:
+    - master
 jobs:
   docs:
     runs-on: ubuntu-latest

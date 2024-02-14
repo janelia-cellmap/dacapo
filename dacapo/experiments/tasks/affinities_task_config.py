@@ -30,9 +30,3 @@ class AffinitiesTaskConfig(TaskConfig):
             "It has been shown that lsds as an auxiliary task can help affinity predictions."
         },
     )
-    lsds_to_affs_weight_ratio: float = attr.ib(
-        default=1,
-        metadata={
-            "help_text": "If training with lsds, set how much they should be weighted compared to affs."
-        },
-    )

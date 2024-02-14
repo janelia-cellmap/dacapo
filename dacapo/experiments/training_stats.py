@@ -16,9 +16,7 @@ class TrainingStats:
 
     def add_iteration_stats(self, iteration_stats: TrainingIterationStats) -> None:
         if len(self.iteration_stats) > 0:
-            assert (
-                iteration_stats.iteration == self.iteration_stats[-1].iteration + 1
-            ), f"Expected iteration {self.iteration_stats[-1].iteration + 1}, got {iteration_stats.iteration}"
+            assert iteration_stats.iteration == self.iteration_stats[-1].iteration + 1
 
         self.iteration_stats.append(iteration_stats)
 

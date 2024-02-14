@@ -40,7 +40,7 @@ def validate(run_name, iteration):
 
 @cli.command()
 @click.option(
-    "-r", "--run-name", required=True, type=str, help="The name of the run to use."
+    "-r", "--run", required=True, type=str, help="The name of the run to use."
 )
 @click.option(
     "-i",

@@ -1,4 +1,4 @@
-# DaCapo ![DaCapo](docs/source/_static/icon_dacapo.png) 
+![DaCapo](docs/source/_static/dacapo.svg)
 
 [![tests](https://github.com/funkelab/dacapo/actions/workflows/tests.yaml/badge.svg)](https://github.com/funkelab/dacapo/actions/workflows/tests.yaml)
 [![black](https://github.com/funkelab/dacapo/actions/workflows/black.yaml/badge.svg)](https://github.com/funkelab/dacapo/actions/workflows/black.yaml)

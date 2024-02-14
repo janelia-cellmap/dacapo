@@ -16,7 +16,6 @@ def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
     """Train a run"""
 
     if compute_context.train(run_name):
-        logger.error("Run %s is already being trained", run_name)
         # if compute context runs train in some other process
         # we are done here.
         return
@@ -97,10 +96,9 @@ def train_run(
             weights_store.retrieve_weights(run, iteration=trained_until)
 
         elif latest_weights_iteration > trained_until:
-            weights_store.retrieve_weights(run, iteration=latest_weights_iteration)
-            logger.error(
+            raise RuntimeError(
                 f"Found weights for iteration {latest_weights_iteration}, but "
-                f"run {run.name} was only trained until {trained_until}. "
+                f"run {run.name} was only trained until {trained_until}."
             )
 
     # start/resume training
@@ -129,20 +127,18 @@ def train_run(
             # train for at most 100 iterations at a time, then store training stats
             iterations = min(100, run.train_until - trained_until)
             iteration_stats = None
-            bar = tqdm(
+
+            for iteration_stats in tqdm(
                 trainer.iterate(
                     iterations,
                     run.model,
                     run.optimizer,
                     compute_context.device,
                 ),
-                desc=f"training until {iterations + trained_until}",
-                total=run.train_until,
-                initial=trained_until,
-            )
-            for iteration_stats in bar:
+                "training",
+                iterations,
+            ):
                 run.training_stats.add_iteration_stats(iteration_stats)
-                bar.set_postfix({"loss": iteration_stats.loss})
 
                 if (iteration_stats.iteration + 1) % run.validation_interval == 0:
                     break
@@ -164,26 +160,22 @@ def train_run(
             run.model = run.model.to(torch.device("cpu"))
             run.move_optimizer(torch.device("cpu"), empty_cuda_cache=True)
 
-            stats_store.store_training_stats(run.name, run.training_stats)
             weights_store.store_weights(run, iteration_stats.iteration + 1)
-            try:
-                validate_run(
-                    run,
-                    iteration_stats.iteration + 1,
-                    compute_context=compute_context,
-                )
-                stats_store.store_validation_iteration_scores(
-                    run.name, run.validation_scores
-                )
-            except Exception as e:
-                logger.error(
-                    f"Validation failed for run {run.name} at iteration "
-                    f"{iteration_stats.iteration + 1}.",
-                    exc_info=e,
-                )
+            validate_run(
+                run,
+                iteration_stats.iteration + 1,
+                compute_context=compute_context,
+            )
+            stats_store.store_validation_iteration_scores(
+                run.name, run.validation_scores
+            )
+            stats_store.store_training_stats(run.name, run.training_stats)
 
             # make sure to move optimizer back to the correct device
             run.move_optimizer(compute_context.device)
             run.model.train()
+
+            weights_store.store_weights(run, run.training_stats.trained_until())
+            stats_store.store_training_stats(run.name, run.training_stats)
 
     logger.info("Trained until %d, finished.", trained_until)

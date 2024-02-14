@@ -3,9 +3,8 @@ import torch
 
 
 class AffinitiesLoss(Loss):
-    def __init__(self, num_affinities: int, lsds_to_affs_weight_ratio: float):
+    def __init__(self, num_affinities: int):
         self.num_affinities = num_affinities
-        self.lsds_to_affs_weight_ratio = lsds_to_affs_weight_ratio
 
     def compute(self, prediction, target, weight):
         affs, affs_target, affs_weight = (
@@ -22,7 +21,7 @@ class AffinitiesLoss(Loss):
         return (
             torch.nn.BCEWithLogitsLoss(reduction="none")(affs, affs_target)
             * affs_weight
-        ).mean() + self.lsds_to_affs_weight_ratio * (
+        ).mean() + (
             torch.nn.MSELoss(reduction="none")(torch.nn.Sigmoid()(aux), aux_target)
             * aux_weight
         ).mean()

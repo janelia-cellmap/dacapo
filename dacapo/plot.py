@@ -74,9 +74,11 @@ def get_runs_info(
             run_config.architecture_config.name,
             run_config.trainer_config.name,
             run_config.datasplit_config.name,
-            stats_store.retrieve_training_stats(run_config_name, subsample=True)
-            if plot_loss
-            else None,
+            (
+                stats_store.retrieve_training_stats(run_config_name, subsample=True)
+                if plot_loss
+                else None
+            ),
             validation_scores,
             validation_score_name,
             plot_loss,

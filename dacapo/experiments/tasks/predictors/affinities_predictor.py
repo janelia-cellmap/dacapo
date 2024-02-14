@@ -17,17 +17,9 @@ from typing import List
 
 
 class AffinitiesPredictor(Predictor):
-    def __init__(
-        self,
-        neighborhood: List[Coordinate],
-        lsds: bool = True,
-        num_voxels: int = 20,
-        downsample_lsds: int = 1,
-        grow_boundary_iterations: int = 0,
-    ):
+    def __init__(self, neighborhood: List[Coordinate], lsds: bool = True):
         self.neighborhood = neighborhood
         self.lsds = lsds
-        self.num_voxels = num_voxels
         if lsds:
             self._extractor = None
             if self.dims == 2:
@@ -38,16 +30,12 @@ class AffinitiesPredictor(Predictor):
                 raise ValueError(
                     f"Cannot compute lsds on volumes with {self.dims} dimensions"
                 )
-            self.downsample_lsds = downsample_lsds
         else:
             self.num_lsds = 0
-        self.grow_boundary_iterations = grow_boundary_iterations
 
     def extractor(self, voxel_size):
         if self._extractor is None:
-            self._extractor = LsdExtractor(
-                self.sigma(voxel_size), downsample=self.downsample_lsds
-            )
+            self._extractor = LsdExtractor(self.sigma(voxel_size))
 
         return self._extractor
 
@@ -57,7 +45,8 @@ class AffinitiesPredictor(Predictor):
 
     def sigma(self, voxel_size):
         voxel_dist = max(voxel_size)  # arbitrarily chosen
-        sigma = voxel_dist * self.num_voxels  # arbitrarily chosen
+        num_voxels = 10  # arbitrarily chosen
+        sigma = voxel_dist * num_voxels
         return Coordinate((sigma,) * self.dims)
 
     def lsd_pad(self, voxel_size):
@@ -129,9 +118,7 @@ class AffinitiesPredictor(Predictor):
                 slice(start[d], start[d] + slab[d]) for d in range(len(slab))
             )
             mask_slab = mask[slices]
-            dilated_mask_slab = ndimage.binary_dilation(
-                mask_slab, iterations=self.grow_boundary_iterations
-            )
+            dilated_mask_slab = ndimage.binary_dilation(mask_slab, iterations=1)
             foreground[slices] = dilated_mask_slab
 
         # label new background
@@ -143,12 +130,10 @@ class AffinitiesPredictor(Predictor):
         (moving_class_counts, moving_lsd_class_counts) = (
             moving_class_counts if moving_class_counts is not None else (None, None)
         )
-        if self.grow_boundary_iterations > 0:
-            mask_data = self._grow_boundaries(
-                mask[target.roi], slab=tuple(1 if c == "c" else -1 for c in target.axes)
-            )
-        else:
-            mask_data = mask[target.roi]
+        # mask_data = self._grow_boundaries(
+        #     mask[target.roi], slab=tuple(1 if c == "c" else -1 for c in target.axes)
+        # )
+        mask_data = mask[target.roi]
         aff_weights, moving_class_counts = balance_weights(
             target[target.roi][: self.num_channels - self.num_lsds].astype(np.uint8),
             2,

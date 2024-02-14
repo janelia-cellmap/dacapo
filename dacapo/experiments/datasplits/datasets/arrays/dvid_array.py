@@ -41,7 +41,7 @@ class DVIDArray(Array):
 
     @property
     def axes(self):
-        return ["c", "z", "y", "x"][-self.dims :]
+        return ["t", "z", "y", "x"][-self.dims :]
 
     @property
     def dims(self) -> int:
