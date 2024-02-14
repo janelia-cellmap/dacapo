@@ -98,10 +98,12 @@ class FileConfigStore(ConfigStore):
 
         file_store = collection / name
         if not file_store.exists():
-            pickle.dump(dict(data), file_store.open("wb"))
+            with file_store.open("wb") as fd:
+                pickle.dump(dict(data), fd)
 
         else:
-            existing = pickle.load(file_store.open("rb"))
+            with file_store.open("rb") as fd:
+                existing = pickle.load(fd)
 
             if not self.__same_doc(existing, data, ignore):
                 raise DuplicateNameError(
@@ -113,7 +115,8 @@ class FileConfigStore(ConfigStore):
     def __load(self, collection, name):
         file_store = collection / name
         if file_store.exists():
-            return pickle.load(file_store.open("rb"))
+            with file_store.open("rb") as fd: 
+                return pickle.load(fd)
         else:
             raise ValueError(f"No config with name: {name} in collection: {collection}")
 
