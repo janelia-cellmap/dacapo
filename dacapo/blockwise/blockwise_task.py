@@ -4,13 +4,14 @@ from pathlib import Path
 from typing import Callable, Optional
 from daisy import Task, Roi
 from dacapo.compute_context import ComputeContext, LocalTorch, Bsub
+import dacapo.compute_context
 
 
 class DaCapoBlockwiseTask(Task):
     def __init__(
         self,
         worker_file: str or Path,
-        compute_context: ComputeContext,
+        compute_context: ComputeContext or str,
         total_roi: Roi,
         read_roi: Roi,
         write_roi: Roi,
@@ -21,6 +22,9 @@ class DaCapoBlockwiseTask(Task):
         *args,
         **kwargs
     ):
+        if isinstance(compute_context, str):
+            compute_context = getattr(dacapo.compute_context, compute_context)()
+
         # Make the task_id unique
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         task_id = worker_file + timestamp

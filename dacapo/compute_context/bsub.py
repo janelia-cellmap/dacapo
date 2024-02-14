@@ -27,7 +27,10 @@ class Bsub(ComputeContext):  # TODO: Load defaults from dacapo.yaml
 
     @property
     def device(self):
-        return None
+        if self.num_gpus > 0:
+            return "cuda"
+        else:
+            return "cpu"
 
     def wrap_command(self, command):
         return (

@@ -6,9 +6,9 @@ from dacapo.compute_context import ComputeContext
 from dacapo.blockwise import DaCapoBlockwiseTask
 
 
-def blockwise(
+def run_blockwise(
     worker_file: str or Path,
-    compute_context: ComputeContext,
+    compute_context: ComputeContext | str,
     total_roi: Roi,
     read_roi: Roi,
     write_roi: Roi,

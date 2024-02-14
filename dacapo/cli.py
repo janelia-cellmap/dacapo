@@ -137,12 +137,12 @@ def apply(
 @click.option("-op", "--output_path", required=True, type=click.Path(file_okay=False))
 @click.option(
     "-roi",
-    "--roi",
+    "--output_roi",
     type=str,
     required=False,
     help="The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]",
 )
-@click.option("-w", "--num_cpu_workers", type=int, default=30)
+@click.option("-w", "--num_workers", type=int, default=30)
 @click.option("-dt", "--output_dtype", type=str, default="uint8")
 @click.option(
     "-cc",
@@ -158,66 +158,21 @@ def predict(
     input_container: Path or str,
     input_dataset: str,
     output_path: Path or str,
-    roi: Optional[str | Roi] = None,
-    num_cpu_workers: int = 30,
-    output_dtype: Optional[np.dtype | str] = np.uint8,  # type: ignore
-    compute_context: Optional[ComputeContext | str] = LocalTorch(),
+    output_roi: Optional[str | Roi] = None,
+    num_workers: int = 30,
+    output_dtype: np.dtype | str = np.uint8,  # type: ignore
+    compute_context: ComputeContext | str = LocalTorch(),
     overwrite: bool = True,
 ):
-    # retrieving run
-    config_store = create_config_store()
-    run_config = config_store.retrieve_run_config(run_name)
-    run = Run(run_config)
-
-    # create weights store
-    weights_store = create_weights_store()
-
-    # load weights
-    weights_store.retrieve_weights(run_name, iteration)
-
-    # get arrays
-    input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
-    output_container = Path(
-        output_path,
-        "".join(Path(input_container).name.split(".")[:-1]) + f".zarr",
-    )  # TODO: zarr hardcoded
-    prediction_array_identifier = LocalArrayIdentifier(
-        output_container, f"prediction_{run_name}_{iteration}"
-    )
-
-    if isinstance(roi, str):
-        start, end = zip(
-            *[
-                tuple(int(coord) for coord in axis.split(":"))
-                for axis in roi.strip("[]").split(",")
-            ]
-        )
-        roi = Roi(
-            Coordinate(start),
-            Coordinate(end) - Coordinate(start),
-        )
-
-    if roi is None:
-        roi = input_array.roi
-    else:
-        roi = roi.snap_to_grid(input_array.voxel_size, mode="grow").intersect(
-            input_array.roi
-        )
-
-    if isinstance(output_dtype, str):
-        output_dtype = np.dtype(output_dtype)
-
-    if isinstance(compute_context, str):
-        compute_context = getattr(compute_context, compute_context)()
-
     dacapo.predict(
-        run.model,
-        input_array,
-        prediction_array_identifier,
-        output_roi=roi,
-        num_cpu_workers=num_cpu_workers,
-        output_dtype=output_dtype,
-        compute_context=compute_context,  # type: ignore
-        overwrite=overwrite,
+        run_name,
+        iteration,
+        input_container,
+        input_dataset,
+        output_path,
+        output_roi,
+        num_workers,
+        output_dtype,
+        compute_context,
+        overwrite,
     )

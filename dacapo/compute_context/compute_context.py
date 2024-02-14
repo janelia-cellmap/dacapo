@@ -8,14 +8,6 @@ class ComputeContext(ABC):
     def device(self):
         pass
 
-    def train(self, run_name):
-        # A helper method to run train in some other context.
-        # This can be on a cluster, in a cloud, through bsub,
-        # etc.
-        # If training should be done locally, return False,
-        # else return True.
-        return False
-
     def wrap_command(self, command):
         # A helper method to wrap a command in the context
         # specific command.

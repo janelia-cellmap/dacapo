@@ -192,7 +192,7 @@ def apply_run(
         input_array,
         prediction_array_identifier,
         output_roi=roi,
-        num_cpu_workers=num_cpu_workers,
+        num_workers=num_cpu_workers,
         output_dtype=output_dtype,
         compute_context=compute_context,
         overwrite=overwrite,
