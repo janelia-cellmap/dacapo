@@ -42,6 +42,11 @@ class GunpowderTrainer(Trainer):
         self.mask_integral_downsample_factor = 4
         self.clip_raw = trainer_config.clip_raw
 
+        # Testing out if calculating multiple times and multiplying is necessary
+        self.add_predictor_nodes_to_dataset = (
+            trainer_config.add_predictor_nodes_to_dataset
+        )
+
         self.scheduler = None
 
     def create_optimizer(self, model):
@@ -128,9 +133,9 @@ class GunpowderTrainer(Trainer):
                     mask_placeholder,
                     drop_channels=True,
                 )
-                + gp.Pad(raw_key, None, 0)
-                + gp.Pad(gt_key, None, 0)
-                + gp.Pad(mask_key, None, 0)
+                + gp.Pad(raw_key, None)
+                + gp.Pad(gt_key, None)
+                + gp.Pad(mask_key, None)
                 + gp.RandomLocation(
                     ensure_nonempty=sample_points_key
                     if points_source is not None
@@ -146,13 +151,14 @@ class GunpowderTrainer(Trainer):
             for augment in self.augments:
                 dataset_source += augment.node(raw_key, gt_key, mask_key)
 
-            # Add predictor nodes to dataset_source
-            dataset_source += DaCapoTargetFilter(
-                task.predictor,
-                gt_key=gt_key,
-                weights_key=dataset_weight_key,
-                mask_key=mask_key,
-            )
+            if self.add_predictor_nodes_to_dataset:
+                # Add predictor nodes to dataset_source
+                dataset_source += DaCapoTargetFilter(
+                    task.predictor,
+                    gt_key=gt_key,
+                    weights_key=dataset_weight_key,
+                    mask_key=mask_key,
+                )
 
             dataset_sources.append(dataset_source)
         pipeline = tuple(dataset_sources) + gp.RandomProvider(weights)
@@ -162,11 +168,14 @@ class GunpowderTrainer(Trainer):
             task.predictor,
             gt_key=gt_key,
             target_key=target_key,
-            weights_key=datasets_weight_key,
+            weights_key=datasets_weight_key
+            if self.add_predictor_nodes_to_dataset
+            else weight_key,
             mask_key=mask_key,
         )
 
-        pipeline += Product(dataset_weight_key, datasets_weight_key, weight_key)
+        if self.add_predictor_nodes_to_dataset:
+            pipeline += Product(dataset_weight_key, datasets_weight_key, weight_key)
 
         # Trainer attributes:
         if self.num_data_fetchers > 1:

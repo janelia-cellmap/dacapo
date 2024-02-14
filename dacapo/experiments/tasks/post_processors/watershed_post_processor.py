@@ -24,7 +24,7 @@ class WatershedPostProcessor(PostProcessor):
         """Enumerate all possible parameters of this post-processor. Should
         return instances of ``PostProcessorParameters``."""
 
-        for i, bias in enumerate([0.1, 0.5, 0.9]):
+        for i, bias in enumerate([0.1, 0.25, 0.5, 0.75, 0.9]):
             yield WatershedPostProcessorParameters(id=i, bias=bias)
 
     def set_prediction(self, prediction_array_identifier):
@@ -44,9 +44,9 @@ class WatershedPostProcessor(PostProcessor):
         # if a previous segmentation is provided, it must have a "grid graph"
         # in its metadata.
         pred_data = self.prediction_array[self.prediction_array.roi]
-        affs = pred_data[: len(self.offsets)]
+        affs = pred_data[: len(self.offsets)].astype(np.float64)
         segmentation = mws.agglom(
-            affs - 0.5,
+            affs - parameters.bias,
             self.offsets,
         )
         # filter fragments
@@ -59,12 +59,17 @@ class WatershedPostProcessor(PostProcessor):
         for fragment, mean in zip(
             fragment_ids, measurements.mean(average_affs, segmentation, fragment_ids)
         ):
-            if mean < 0.5:
+            if mean < parameters.bias:
                 filtered_fragments.append(fragment)
 
         filtered_fragments = np.array(filtered_fragments, dtype=segmentation.dtype)
         replace = np.zeros_like(filtered_fragments)
-        segmentation = npi.remap(segmentation, filtered_fragments, replace)
+
+        # DGA: had to add in flatten and reshape since remap (in particular indices) didn't seem to work with ndarrays for the input
+        if filtered_fragments.size > 0:
+            segmentation = npi.remap(
+                segmentation.flatten(), filtered_fragments, replace
+            ).reshape(segmentation.shape)
 
         output_array[self.prediction_array.roi] = segmentation
 

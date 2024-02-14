@@ -24,7 +24,7 @@ def predict(
     num_cpu_workers: int = 4,
     compute_context: ComputeContext = LocalTorch(),
     output_roi: Optional[Roi] = None,
-    output_dtype: Optional[np.dtype] = np.float32,  # add necessary type conversions
+    output_dtype: np.dtype = np.float32,  # type: ignore
     overwrite: bool = False,
 ):
     # get the model's input and output size
@@ -59,7 +59,6 @@ def predict(
         model.num_out_channels,
         output_voxel_size,
         output_dtype,
-        overwrite=overwrite,
     )
 
     # create gunpowder keys
