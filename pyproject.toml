@@ -72,6 +72,11 @@ docs = [
     "sphinx-autodoc-typehints",
     "sphinx-material",
 ]
+examples = [
+    "ipython",
+    "ipykernel",
+    "jupyter",
+]
 
 [project.urls]
 homepage = "https://github.com/janelia-cellmap/dacapo"
