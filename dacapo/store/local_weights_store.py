@@ -96,7 +96,12 @@ class LocalWeightsStore(WeightsStore):
 
         if best_weights.exists():
             best_weights.unlink()
-        best_weights.symlink_to(iteration_weights)
+        try:
+            best_weights.symlink_to(iteration_weights)
+        except FileExistsError:
+            best_weights.unlink()
+            best_weights.symlink_to(iteration_weights)
+
         with best_weights_json.open("w") as f:
             f.write(json.dumps({"iteration": iteration}))
 
