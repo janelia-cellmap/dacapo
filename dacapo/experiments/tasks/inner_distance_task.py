@@ -4,6 +4,7 @@ from .post_processors import ThresholdPostProcessor
 from .predictors import InnerDistancePredictor
 from .task import Task
 
+
 # Goal is have a distance task but with distance inside the forground only
 class InnerDistanceTask(Task):
     """This is just a dummy task for testing."""

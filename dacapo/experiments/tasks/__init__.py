@@ -5,4 +5,7 @@ from .distance_task_config import DistanceTaskConfig, DistanceTask  # noqa
 from .one_hot_task_config import OneHotTaskConfig, OneHotTask  # noqa
 from .pretrained_task_config import PretrainedTaskConfig, PretrainedTask  # noqa
 from .affinities_task_config import AffinitiesTaskConfig, AffinitiesTask  # noqa
-from .inner_distance_task_config import InnerDistanceTaskConfig, InnerDistanceTask  # noqa
+from .inner_distance_task_config import (
+    InnerDistanceTaskConfig,
+    InnerDistanceTask,
+)  # noqa
