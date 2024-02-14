@@ -1,6 +1,12 @@
 name: Python mypy
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
 
 jobs:
   static-analysis:

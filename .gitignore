@@ -1,7 +1,7 @@
 *.sw[pmno]
 *.hdf
 *.h5
-*.ipynb
+# *.ipynb
 *.pyc
 *.egg-info
 *.dat
@@ -12,6 +12,7 @@
 dist
 build
 dacapo.yaml
+__pycache__
 
 # vscode stuff
 .vscode
