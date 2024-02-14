@@ -138,7 +138,7 @@ def _min_max_mean_std(ndarray, prefix=""):
     return ""
 
 
-class ElasticAugment(BatchFilter):  # TODO: replace DeformAugment node from gunpowder
+class ElasticAugment(BatchFilter):
     """
     Elasticly deform a batch. Requests larger batches upstream to avoid data
     loss due to rotation and jitter.

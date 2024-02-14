@@ -84,9 +84,7 @@ class DaCapoTargetFilter(gp.BatchFilter):
 
         gt_array = NumpyArray.from_gp_array(batch[self.gt_key])
         target_array = self.predictor.create_target(gt_array)
-        mask_array = NumpyArray.from_gp_array(
-            batch[self.mask_key]
-        )  # TODO: doesn't this require mask_key to be set?
+        mask_array = NumpyArray.from_gp_array(batch[self.mask_key])
 
         if self.target_key is not None:
             request_spec = request[self.target_key]

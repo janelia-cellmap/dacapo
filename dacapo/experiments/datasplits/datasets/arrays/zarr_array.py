@@ -49,7 +49,7 @@ class ZarrArray(Array):
         try:
             return self._attributes["axes"]
         except KeyError:
-            logger.info(
+            logger.debug(
                 "DaCapo expects Zarr datasets to have an 'axes' attribute!\n"
                 f"Zarr {self.file_name} and dataset {self.dataset} has attributes: {list(self._attributes.items())}\n"
                 f"Using default {['c', 'z', 'y', 'x'][-self.dims::]}",
@@ -58,7 +58,7 @@ class ZarrArray(Array):
 
     @property
     def dims(self) -> int:
-        return len(self.data.shape)
+        return self.voxel_size.dims
 
     @lazy_property.LazyProperty
     def _daisy_array(self) -> funlib.persistence.Array:
@@ -81,7 +81,7 @@ class ZarrArray(Array):
 
     @property
     def dtype(self) -> Any:
-        return self.data.dtype  # TODO: why not use self._daisy_array.dtype?
+        return self.data.dtype
 
     @property
     def num_channels(self) -> Optional[int]:
@@ -92,7 +92,7 @@ class ZarrArray(Array):
         return [ax for ax in self.axes if ax not in set(["c", "b"])]
 
     @property
-    def data(self) -> Any:  # TODO: why not use self._daisy_array.data?
+    def data(self) -> Any:
         zarr_container = zarr.open(str(self.file_name))
         return zarr_container[self.dataset]
 
@@ -116,7 +116,6 @@ class ZarrArray(Array):
         dtype,
         write_size=None,
         name=None,
-        overwrite=False,
     ):
         """
         Create a new ZarrArray given an array identifier. It is assumed that
@@ -146,7 +145,6 @@ class ZarrArray(Array):
                 dtype,
                 num_channels=num_channels,
                 write_size=write_size,
-                delete=overwrite,
             )
             zarr_dataset = zarr_container[array_identifier.dataset]
             zarr_dataset.attrs["offset"] = (

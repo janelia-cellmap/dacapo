@@ -3,7 +3,7 @@ from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from .evaluator import Evaluator
 from .instance_evaluation_scores import InstanceEvaluationScores
 
-from funlib.evaluate import rand_voi, detection_scores
+from funlib.evaluate import rand_voi
 
 import numpy as np
 
@@ -16,19 +16,9 @@ class InstanceEvaluator(Evaluator):
         evaluation_data = evaluation_array[evaluation_array.roi].astype(np.uint64)
         output_data = output_array[output_array.roi].astype(np.uint64)
         results = rand_voi(evaluation_data, output_data)
-        results.update(
-            detection_scores(
-                evaluation_data,
-                output_data,
-                matching_score="iou",
-                voxel_size=output_array.voxel_size,
-            )
-        )
 
         return InstanceEvaluationScores(
-            voi_merge=results["voi_merge"],
-            voi_split=results["voi_split"],
-            avg_iou=results["avg_iou"],
+            voi_merge=results["voi_merge"], voi_split=results["voi_split"]
         )
 
     @property

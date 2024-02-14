@@ -28,7 +28,6 @@ class ThresholdPostProcessor(PostProcessor):
         self,
         parameters: "PostProcessorParameters",
         output_array_identifier: "LocalArrayIdentifier",
-        overwrite: bool = False,
     ) -> ZarrArray:
         # TODO: Investigate Liskov substitution princple and whether it is a problem here
         # OOP theory states the super class should always be replaceable with its subclasses
@@ -48,7 +47,6 @@ class ThresholdPostProcessor(PostProcessor):
             self.prediction_array.num_channels,
             self.prediction_array.voxel_size,
             np.uint8,
-            overwrite=overwrite,
         )
 
         output_array[self.prediction_array.roi] = (
