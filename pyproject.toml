@@ -69,6 +69,10 @@ dev = [
     "rich",
     "ruff",
 ]
+docs = [
+    "sphinx-autodoc-typehints",
+    "sphinx-material",
+]
 
 [project.urls]
 homepage = "https://github.com/janelia-cellmap/dacapo"
@@ -114,8 +118,10 @@ select = [
 [tool.pytest.ini_options]
 minversion = "6.0"
 testpaths = ["tests"]
-filterwarnings = ["error",
-"ignore::DeprecationWarning"]
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning",
+    ]
 
 
 # https://mypy.readthedocs.io/en/stable/config_file.html
