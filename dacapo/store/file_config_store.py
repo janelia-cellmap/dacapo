@@ -8,7 +8,7 @@ from dacapo.experiments.tasks import TaskConfig
 from dacapo.experiments.trainers import TrainerConfig
 
 import logging
-import pickle
+import toml
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ class FileConfigStore(ConfigStore):
         return converter.structure(run_doc, RunConfig)
 
     def retrieve_run_config_names(self):
-        return [f.name for f in self.runs.iterdir()]
+        return [f.name[:-5] for f in self.runs.iterdir()]
 
     def store_task_config(self, task_config):
         task_doc = converter.unstructure(task_config)
@@ -47,7 +47,7 @@ class FileConfigStore(ConfigStore):
         return converter.structure(task_doc, TaskConfig)
 
     def retrieve_task_config_names(self):
-        return [f.name for f in self.tasks.iterdir()]
+        return [f.name[:-5] for f in self.tasks.iterdir()]
 
     def store_architecture_config(self, architecture_config):
         architecture_doc = converter.unstructure(architecture_config)
@@ -58,7 +58,7 @@ class FileConfigStore(ConfigStore):
         return converter.structure(architecture_doc, ArchitectureConfig)
 
     def retrieve_architecture_config_names(self):
-        return [f.name for f in self.architectures.iterdir()]
+        return [f.name[:-5] for f in self.architectures.iterdir()]
 
     def store_trainer_config(self, trainer_config):
         trainer_doc = converter.unstructure(trainer_config)
@@ -69,7 +69,7 @@ class FileConfigStore(ConfigStore):
         return converter.structure(trainer_doc, TrainerConfig)
 
     def retrieve_trainer_config_names(self):
-        return [f.name for f in self.trainers.iterdir()]
+        return [f.name[:-5] for f in self.trainers.iterdir()]
 
     def store_datasplit_config(self, datasplit_config):
         datasplit_doc = converter.unstructure(datasplit_config)
@@ -80,7 +80,7 @@ class FileConfigStore(ConfigStore):
         return converter.structure(datasplit_doc, DataSplitConfig)
 
     def retrieve_datasplit_config_names(self):
-        return [f.name for f in self.datasplits.iterdir()]
+        return [f.name[:-5] for f in self.datasplits.iterdir()]
 
     def store_array_config(self, array_config):
         array_doc = converter.unstructure(array_config)
@@ -91,19 +91,17 @@ class FileConfigStore(ConfigStore):
         return converter.structure(array_doc, ArrayConfig)
 
     def retrieve_array_config_names(self):
-        return [f.name for f in self.arrays.iterdir()]
+        return [f.name[:-5] for f in self.arrays.iterdir()]
 
     def __save_insert(self, collection, data, ignore=None):
         name = data["name"]
 
-        file_store = collection / name
+        file_store = collection / f"{name}.toml"
         if not file_store.exists():
-            with file_store.open("wb") as fd:
-                pickle.dump(dict(data), fd)
+            toml.dump(dict(data), file_store.open("w"))
 
         else:
-            with file_store.open("rb") as fd:
-                existing = pickle.load(fd)
+            existing = toml.load(file_store.open("r"))
 
             if not self.__same_doc(existing, data, ignore):
                 raise DuplicateNameError(
@@ -113,10 +111,9 @@ class FileConfigStore(ConfigStore):
                 )
 
     def __load(self, collection, name):
-        file_store = collection / name
+        file_store = collection / f"{name}.toml"
         if file_store.exists():
-            with file_store.open("rb") as fd:
-                return pickle.load(fd)
+            return toml.load(file_store.open("r"))
         else:
             raise ValueError(f"No config with name: {name} in collection: {collection}")
 
@@ -138,17 +135,45 @@ class FileConfigStore(ConfigStore):
         pass
 
     def __open_collections(self):
-        self.users = self.path / "users"
         self.users.mkdir(exist_ok=True, parents=True)
-        self.runs = self.path / "runs"
         self.runs.mkdir(exist_ok=True, parents=True)
-        self.tasks = self.path / "tasks"
         self.tasks.mkdir(exist_ok=True, parents=True)
-        self.datasplits = self.path / "datasplits"
         self.datasplits.mkdir(exist_ok=True, parents=True)
-        self.arrays = self.path / "arrays"
         self.arrays.mkdir(exist_ok=True, parents=True)
-        self.architectures = self.path / "architectures"
         self.architectures.mkdir(exist_ok=True, parents=True)
-        self.trainers = self.path / "trainers"
         self.trainers.mkdir(exist_ok=True, parents=True)
+
+    @property
+    def users(self) -> Path:
+        return self.path / "users"
+
+    @property
+    def runs(self) -> Path:
+        return self.path / "runs"
+
+    @property
+    def tasks(self) -> Path:
+        return self.path / "tasks"
+
+    @property
+    def datasplits(self) -> Path:
+        return self.path / "datasplits"
+
+    @property
+    def arrays(self) -> Path:
+        return self.path / "arrays"
+
+    @property
+    def architectures(self) -> Path:
+        return self.path / "architectures"
+
+    @property
+    def trainers(self) -> Path:
+        return self.path / "trainers"
+
+    @property
+    def datasets(self) -> Path:
+        return self.path / "datasets"
+
+    def delete_config(self, database: Path, config_name: str) -> None:
+        (database / f"{config_name}.toml").unlink()
