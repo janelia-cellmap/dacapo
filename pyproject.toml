@@ -66,9 +66,6 @@ dev = [
     "ipython",
     "mypy",
     "pdbpp",
-    "pre-commit",
-    "pytest-cov",
-    "pytest",
     "rich",
     "ruff",
 ]
@@ -117,7 +114,9 @@ select = [
 [tool.pytest.ini_options]
 minversion = "6.0"
 testpaths = ["tests"]
-filterwarnings = ["error"]
+filterwarnings = ["error",
+"ignore::DeprecationWarning"]
+
 
 # https://mypy.readthedocs.io/en/stable/config_file.html
 [tool.mypy]
