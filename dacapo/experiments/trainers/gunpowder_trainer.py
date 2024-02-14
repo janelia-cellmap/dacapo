@@ -42,11 +42,6 @@ class GunpowderTrainer(Trainer):
         self.mask_integral_downsample_factor = 4
         self.clip_raw = trainer_config.clip_raw
 
-        # Testing out if calculating multiple times and multiplying is necessary
-        self.add_predictor_nodes_to_dataset = (
-            trainer_config.add_predictor_nodes_to_dataset
-        )
-
         self.scheduler = None
 
     def create_optimizer(self, model):
@@ -85,8 +80,6 @@ class GunpowderTrainer(Trainer):
         mask_placeholder = gp.ArrayKey("MASK_PLACEHOLDER")
 
         target_key = gp.ArrayKey("TARGET")
-        dataset_weight_key = gp.ArrayKey("DATASET_WEIGHT")
-        datasets_weight_key = gp.ArrayKey("DATASETS_WEIGHT")
         weight_key = gp.ArrayKey("WEIGHT")
         sample_points_key = gp.GraphKey("SAMPLE_POINTS")
 
@@ -137,12 +130,12 @@ class GunpowderTrainer(Trainer):
                 + gp.Pad(gt_key, None)
                 + gp.Pad(mask_key, None)
                 + gp.RandomLocation(
-                    ensure_nonempty=sample_points_key
-                    if points_source is not None
-                    else None,
-                    ensure_centered=sample_points_key
-                    if points_source is not None
-                    else None,
+                    ensure_nonempty=(
+                        sample_points_key if points_source is not None else None
+                    ),
+                    ensure_centered=(
+                        sample_points_key if points_source is not None else None
+                    ),
                 )
             )
 
@@ -150,15 +143,6 @@ class GunpowderTrainer(Trainer):
 
             for augment in self.augments:
                 dataset_source += augment.node(raw_key, gt_key, mask_key)
-
-            if self.add_predictor_nodes_to_dataset:
-                # Add predictor nodes to dataset_source
-                dataset_source += DaCapoTargetFilter(
-                    task.predictor,
-                    gt_key=gt_key,
-                    weights_key=dataset_weight_key,
-                    mask_key=mask_key,
-                )
 
             dataset_sources.append(dataset_source)
         pipeline = tuple(dataset_sources) + gp.RandomProvider(weights)
@@ -168,14 +152,9 @@ class GunpowderTrainer(Trainer):
             task.predictor,
             gt_key=gt_key,
             target_key=target_key,
-            weights_key=datasets_weight_key
-            if self.add_predictor_nodes_to_dataset
-            else weight_key,
+            weights_key=weight_key,
             mask_key=mask_key,
         )
-
-        if self.add_predictor_nodes_to_dataset:
-            pipeline += Product(dataset_weight_key, datasets_weight_key, weight_key)
 
         # Trainer attributes:
         if self.num_data_fetchers > 1:
@@ -332,9 +311,11 @@ class GunpowderTrainer(Trainer):
             NumpyArray.from_gp_array(batch[self._gt_key]),
             NumpyArray.from_gp_array(batch[self._target_key]),
             NumpyArray.from_gp_array(batch[self._weight_key]),
-            NumpyArray.from_gp_array(batch[self._mask_key])
-            if self._mask_key is not None
-            else None,
+            (
+                NumpyArray.from_gp_array(batch[self._mask_key])
+                if self._mask_key is not None
+                else None
+            ),
         )
 
     def __enter__(self):
