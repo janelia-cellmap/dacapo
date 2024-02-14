@@ -133,9 +133,9 @@ class GunpowderTrainer(Trainer):
                     mask_placeholder,
                     drop_channels=True,
                 )
-                + gp.Pad(raw_key, None, 0)
-                + gp.Pad(gt_key, None, 0)
-                + gp.Pad(mask_key, None, 0)
+                + gp.Pad(raw_key, None)
+                + gp.Pad(gt_key, None)
+                + gp.Pad(mask_key, None)
                 + gp.RandomLocation(
                     ensure_nonempty=sample_points_key
                     if points_source is not None
