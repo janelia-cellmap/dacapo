@@ -13,7 +13,6 @@ if TYPE_CHECKING:
     from dacapo.experiments.tasks.post_processors import PostProcessorParameters
 
 
-
 class CAREPostProcessor(PostProcessor):
     def __init__(self) -> None:
         super().__init__()
@@ -23,7 +22,9 @@ class CAREPostProcessor(PostProcessor):
 
         yield CAREPostProcessorParameters(id=1)
 
-    def set_prediction(self, prediction_array_identifier: "LocalArrayIdentifier"): # TODO
+    def set_prediction(
+        self, prediction_array_identifier: "LocalArrayIdentifier"
+    ):  # TODO
         self.prediction_array = ZarrArray.open_from_array_identifier(
             prediction_array_identifier
         )
@@ -32,7 +33,7 @@ class CAREPostProcessor(PostProcessor):
         self,
         parameters: "PostProcessorParameters",
         output_array_identifier: "LocalArrayIdentifier",
-        ) -> ZarrArray:
+    ) -> ZarrArray:
 
         output_array: ZarrArray = ZarrArray.create_from_array_identifier(
             output_array_identifier,

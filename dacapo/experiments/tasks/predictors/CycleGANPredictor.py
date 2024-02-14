@@ -50,7 +50,7 @@ class CycleGANPredictor(Predictor):
     @property
     def output_array_type(self):
         return ZarrArray(self.num_channels)
-    
+
     def gt_region_for_roi(self, target_spec):
         if self.mask_distances:
             gt_spec = target_spec.copy()
@@ -64,5 +64,3 @@ class CycleGANPredictor(Predictor):
 
     def padding(self, gt_voxel_size: Coordinate) -> Coordinate:
         return Coordinate((self.max_distance,) * gt_voxel_size.dims)
-
-

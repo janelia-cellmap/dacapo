@@ -17,5 +17,5 @@ class CycleGANTaskConfig(TaskConfig):
         metadata={
             "help_text": "Number of output channels for the image. "
             "Number of ouptut channels should match the number of channels in the ground truth."
-        }
+        },
     )

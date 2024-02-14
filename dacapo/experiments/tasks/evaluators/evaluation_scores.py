@@ -1,4 +1,3 @@
-
 import attr
 
 from abc import abstractmethod

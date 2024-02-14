@@ -273,9 +273,11 @@ class CNNectomeUNetModule(torch.nn.Module):
         self.l_conv = nn.ModuleList(
             [
                 ConvPass(
-                    in_channels
-                    if level == 0
-                    else num_fmaps * fmap_inc_factor ** (level - 1),
+                    (
+                        in_channels
+                        if level == 0
+                        else num_fmaps * fmap_inc_factor ** (level - 1)
+                    ),
                     num_fmaps * fmap_inc_factor**level,
                     kernel_size_down[level],
                     activation=activation,
@@ -327,9 +329,11 @@ class CNNectomeUNetModule(torch.nn.Module):
                             + num_fmaps
                             * fmap_inc_factor
                             ** (level + (1 - upsample_channel_contraction[level])),
-                            num_fmaps * fmap_inc_factor**level
-                            if num_fmaps_out is None or level != 0
-                            else num_fmaps_out,
+                            (
+                                num_fmaps * fmap_inc_factor**level
+                                if num_fmaps_out is None or level != 0
+                                else num_fmaps_out
+                            ),
                             kernel_size_up[level],
                             activation=activation,
                             padding=padding,

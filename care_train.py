@@ -5,7 +5,10 @@ import torch
 from torchsummary import summary
 
 # CARE task specific elements
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArrayConfig, IntensitiesArrayConfig
+from dacapo.experiments.datasplits.datasets.arrays import (
+    ZarrArrayConfig,
+    IntensitiesArrayConfig,
+)
 from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
 from dacapo.experiments.architectures import CNNectomeUNetConfig
@@ -40,17 +43,11 @@ gt_array_config_zarr = ZarrArrayConfig(
 )
 
 raw_array_config_int = IntensitiesArrayConfig(
-    name="raw_norm",
-    source_array_config = raw_array_config_zarr,
-    min = 0.,
-    max = 1.
+    name="raw_norm", source_array_config=raw_array_config_zarr, min=0.0, max=1.0
 )
 
 gt_array_config_int = IntensitiesArrayConfig(
-    name="gt_norm",
-    source_array_config = gt_array_config_zarr,
-    min = 0.,
-    max = 1.
+    name="gt_norm", source_array_config=gt_array_config_zarr, min=0.0, max=1.0
 )
 
 dataset_config = RawGTDatasetConfig(

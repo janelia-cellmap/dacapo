@@ -3,9 +3,10 @@ import attr
 
 from typing import Tuple
 
+
 @attr.s
 class IntensitiesEvaluationScores(EvaluationScores):
-    criteria: property = ['ssim', 'psnr', 'nrmse']
+    criteria: property = ["ssim", "psnr", "nrmse"]
 
     ssim: float = attr.ib(default=float("nan"))
     psnr: float = attr.ib(default=float("nan"))

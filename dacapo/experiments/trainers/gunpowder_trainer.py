@@ -132,12 +132,12 @@ class GunpowderTrainer(Trainer):
                 + gp.Pad(gt_key, None, 0)
                 + gp.Pad(mask_key, None, 0)
                 + gp.RandomLocation(
-                    ensure_nonempty=sample_points_key
-                    if points_source is not None
-                    else None,
-                    ensure_centered=sample_points_key
-                    if points_source is not None
-                    else None,
+                    ensure_nonempty=(
+                        sample_points_key if points_source is not None else None
+                    ),
+                    ensure_centered=(
+                        sample_points_key if points_source is not None else None
+                    ),
                 )
             )
 
@@ -323,9 +323,11 @@ class GunpowderTrainer(Trainer):
             NumpyArray.from_gp_array(batch[self._gt_key]),
             NumpyArray.from_gp_array(batch[self._target_key]),
             NumpyArray.from_gp_array(batch[self._weight_key]),
-            NumpyArray.from_gp_array(batch[self._mask_key])
-            if self._mask_key is not None
-            else None,
+            (
+                NumpyArray.from_gp_array(batch[self._mask_key])
+                if self._mask_key is not None
+                else None
+            ),
         )
 
     def __enter__(self):

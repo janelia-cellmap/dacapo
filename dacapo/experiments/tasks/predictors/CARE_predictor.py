@@ -47,6 +47,8 @@ class CAREPredictor(Predictor):
 
     @property
     def output_array_type(self):
-        return IntensitiesArray({"channels": {n: str(n) for n in range(self.num_channels)}}, min=0., max=1.)
-
-
+        return IntensitiesArray(
+            {"channels": {n: str(n) for n in range(self.num_channels)}},
+            min=0.0,
+            max=1.0,
+        )
