@@ -18,6 +18,7 @@ class AffinitiesTask(Task):
             affs_weight_clipmax=task_config.affs_weight_clipmax,
             lsd_weight_clipmin=task_config.lsd_weight_clipmin,
             lsd_weight_clipmax=task_config.lsd_weight_clipmax,
+            background_as_object=task_config.background_as_object,
         )
         self.loss = AffinitiesLoss(
             len(task_config.neighborhood), task_config.lsds_to_affs_weight_ratio
