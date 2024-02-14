@@ -56,7 +56,7 @@ class TiffArray(Array):
 
     @lazy_property.LazyProperty
     def roi(self) -> Roi:
-        return Roi(self._offset * self.shape)
+        return Roi(self._offset, self.shape)
 
     @property
     def writable(self) -> bool:
