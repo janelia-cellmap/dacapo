@@ -41,7 +41,5 @@ setup(
         "cattrs",
         "numpy-indexed",
         "click",
-        "ipykernel",
-        "jupyter",
     ],
 )

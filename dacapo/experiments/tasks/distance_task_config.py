@@ -46,3 +46,11 @@ class DistanceTaskConfig(TaskConfig):
             "is less than the distance to object boundary."
         },
     )
+    clipmin: float = attr.ib(
+        default=0.05,
+        metadata={"help_text": "The minimum value for distance weights."},
+    )
+    clipmax: float = attr.ib(
+        default=0.95,
+        metadata={"help_text": "The maximum value for distance weights."},
+    )
