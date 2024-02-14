@@ -115,7 +115,7 @@ class FileConfigStore(ConfigStore):
     def __load(self, collection, name):
         file_store = collection / name
         if file_store.exists():
-            with file_store.open("rb") as fd: 
+            with file_store.open("rb") as fd:
                 return pickle.load(fd)
         else:
             raise ValueError(f"No config with name: {name} in collection: {collection}")

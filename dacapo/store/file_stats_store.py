@@ -94,7 +94,7 @@ class FileStatsStore(StatsStore):
     def __read_training_stats(self, run_name):
         file_store = self.training_stats / run_name
         if file_store.exists():
-            with file_store.open("rb") as fd: 
+            with file_store.open("rb") as fd:
                 docs = pickle.load(fd)
         else:
             docs = []
