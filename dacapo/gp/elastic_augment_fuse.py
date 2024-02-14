@@ -486,10 +486,15 @@ class ElasticAugment(BatchFilter):  # TODO: replace DeformAugment node from gunp
         """
         ndim = array.shape[0]
         output = np.empty((ndim,) + target_roi.get_shape(), dtype=dtype)
+        # Create a diagonal matrix if scale is a 1-D array
+        if np.isscalar(scale) or np.ndim(scale) == 1:
+            transform_matrix = np.diag(scale)
+        else:
+            transform_matrix = scale
         for d in range(ndim):
             scipy.ndimage.affine_transform(
                 input=array[d],
-                matrix=scale,
+                matrix=transform_matrix,
                 offset=offset,
                 output=output[d],
                 output_shape=output[d].shape,
