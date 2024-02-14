@@ -8,7 +8,7 @@ build-backend = "hatchling.build"
 name = "dacapo-ml"
 description = "Framework for easy composition of volumetric machine learning jobs."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 # license = { text = "BSD 3-Clause License" }
 authors = [
     { email = "rhoadesj@hhmi.org", name = "Jeff Rhoades" },
@@ -21,8 +21,6 @@ classifiers = [
     "License :: OSI Approved :: BSD License",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Typing :: Typed",
@@ -96,7 +94,7 @@ sources = ["dacapo"]
 # https://github.com/charliermarsh/ruff
 [tool.ruff]
 line-length = 88
-target-version = "py38"
+target-version = "py310"
 src = ["dacapo"]
 # https://beta.ruff.rs/docs/rules/
 select = [
