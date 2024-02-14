@@ -9,7 +9,7 @@ class AffinitiesTask(Task):
     """This is a task for generating voxel affinities."""
 
     def __init__(self, task_config):
-        """Create a `DummyTask` from a `DummyTaskConfig`."""
+        """Create a `AffinitiesTask` from a `AffinitiesTaskConfig`."""
 
         self.predictor = AffinitiesPredictor(
             neighborhood=task_config.neighborhood,

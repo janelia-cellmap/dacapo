@@ -8,8 +8,14 @@ from pathlib import Path
 
 @attr.s
 class PretrainedTaskConfig(TaskConfig):
-    """ """
+    """
+    Configuration class for a task that starts with pretrained weights.
 
+    Attributes:
+        task_type (Task): The type of the task.
+        sub_task_config (TaskConfig): The configuration for the sub-task to run.
+        weights (Path): A checkpoint containing pretrained model weights.
+    """
     task_type = PretrainedTask
 
     sub_task_config: TaskConfig = attr.ib(
