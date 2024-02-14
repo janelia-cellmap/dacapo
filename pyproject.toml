@@ -29,7 +29,7 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = [
-        "numpy==1.22.3",
+        "numpy",
         "pyyaml",
         "zarr",
         "cattrs",
@@ -68,6 +68,7 @@ dev = [
     "pdbpp",
     "rich",
     "ruff",
+    "pre-commit",
 ]
 docs = [
     "sphinx-autodoc-typehints",
