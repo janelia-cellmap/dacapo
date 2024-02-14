@@ -6,10 +6,8 @@ from .training_stats import TrainingStats
 from .validation_scores import ValidationScores
 from .starts import Start
 from .model import Model
-import logging
-import torch
 
-logger = logging.getLogger(__file__)
+import torch
 
 
 class Run:
@@ -55,37 +53,14 @@ class Run:
             self.task.parameters, self.datasplit.validate, self.task.evaluation_scores
         )
 
-        if run_config.start_config is None:
-            return
-        try:
-            from ..store import create_config_store
-
-            start_config_store = create_config_store()
-            starter_config = start_config_store.retrieve_run_config(
-                run_config.start_config.run
-            )
-        except Exception as e:
-            logger.error(
-                f"could not load start config: {e} Should be added to the database config store RUN"
-            )
-            raise e
-
         # preloaded weights from previous run
-        if run_config.task_config.name == starter_config.task_config.name:
-            self.start = Start(run_config.start_config)
-        else:
-            # Match labels between old and new head
-            if hasattr(run_config.task_config, "channels"):
-                # Map old head and new head
-                old_head = starter_config.task_config.channels
-                new_head = run_config.task_config.channels
-                self.start = Start(
-                    run_config.start_config, old_head=old_head, new_head=new_head
-                )
-            else:
-                logger.warning("Not implemented channel match for this task")
-                self.start = Start(run_config.start_config, remove_head=True)
-        self.start.initialize_weights(self.model)
+        self.start = (
+            Start(run_config.start_config)
+            if run_config.start_config is not None
+            else None
+        )
+        if self.start is not None:
+            self.start.initialize_weights(self.model)
 
     @staticmethod
     def get_validation_scores(run_config) -> ValidationScores:

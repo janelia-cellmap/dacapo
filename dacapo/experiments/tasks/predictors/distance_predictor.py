@@ -27,13 +27,7 @@ class DistancePredictor(Predictor):
     in the channels argument.
     """
 
-    def __init__(
-        self,
-        channels: List[str],
-        scale_factor: float,
-        mask_distances: bool,
-        extra_conv: bool,
-    ):
+    def __init__(self, channels: List[str], scale_factor: float, mask_distances: bool):
         self.channels = channels
         self.norm = "tanh"
         self.dt_scale_factor = scale_factor
@@ -42,52 +36,20 @@ class DistancePredictor(Predictor):
         self.max_distance = 1 * scale_factor
         self.epsilon = 5e-2
         self.threshold = 0.8
-        self.extra_conv = extra_conv
-        self.extra_conv_dims = len(self.channels) * 2
 
     @property
     def embedding_dims(self):
         return len(self.channels)
 
     def create_model(self, architecture):
-        if self.extra_conv:
-            if architecture.dims == 2:
-                head = torch.nn.Sequential(
-                    torch.nn.Conv2d(
-                        architecture.num_out_channels,
-                        self.extra_conv_dims,
-                        kernel_size=3,
-                        padding=1,
-                    ),
-                    torch.nn.Conv2d(
-                        self.extra_conv_dims,
-                        self.embedding_dims,
-                        kernel_size=1,
-                    ),
-                )
-            elif architecture.dims == 3:
-                head = torch.nn.Sequential(
-                    torch.nn.Conv3d(
-                        architecture.num_out_channels,
-                        self.extra_conv_dims,
-                        kernel_size=3,
-                        padding=1,
-                    ),
-                    torch.nn.Conv3d(
-                        self.extra_conv_dims,
-                        self.embedding_dims,
-                        kernel_size=1,
-                    ),
-                )
-        else:
-            if architecture.dims == 2:
-                head = torch.nn.Conv2d(
-                    architecture.num_out_channels, self.embedding_dims, kernel_size=1
-                )
-            elif architecture.dims == 3:
-                head = torch.nn.Conv3d(
-                    architecture.num_out_channels, self.embedding_dims, kernel_size=1
-                )
+        if architecture.dims == 2:
+            head = torch.nn.Conv2d(
+                architecture.num_out_channels, self.embedding_dims, kernel_size=1
+            )
+        elif architecture.dims == 3:
+            head = torch.nn.Conv3d(
+                architecture.num_out_channels, self.embedding_dims, kernel_size=1
+            )
 
         return Model(architecture, head)
 

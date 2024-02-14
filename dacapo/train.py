@@ -12,9 +12,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def train(
-    run_name: str, compute_context: ComputeContext = LocalTorch(), force_cuda=False
-):
+def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
     """Train a run"""
 
     if compute_context.train(run_name):
@@ -104,10 +102,6 @@ def train_run(
                 f"Found weights for iteration {latest_weights_iteration}, but "
                 f"run {run.name} was only trained until {trained_until}. "
             )
-            # raise RuntimeError(
-            #     f"Found weights for iteration {latest_weights_iteration}, but "
-            #     f"run {run.name} was only trained until {trained_until}."
-            # )
 
     # start/resume training
 
@@ -167,7 +161,7 @@ def train_run(
 
             run.model.eval()
             # free up optimizer memory to allow larger validation blocks
-            # run.model = run.model.to(torch.device("cpu"))
+            run.model = run.model.to(torch.device("cpu"))
             run.move_optimizer(torch.device("cpu"), empty_cuda_cache=True)
 
             stats_store.store_training_stats(run.name, run.training_stats)

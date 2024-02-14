@@ -46,22 +46,11 @@ class GunpowderTrainer(Trainer):
         self.add_predictor_nodes_to_dataset = (
             trainer_config.add_predictor_nodes_to_dataset
         )
-        self.finetune_head_only = trainer_config.finetune_head_only
 
         self.scheduler = None
 
     def create_optimizer(self, model):
-        if self.finetune_head_only:
-            logger.warning("Finetuning head only")
-            parameters = []
-            for name, param in model.named_parameters():
-                if "prediction_head" in name:
-                    parameters.append(param)
-                else:
-                    param.requires_grad = False
-        else:
-            parameters = model.parameters()
-        optimizer = torch.optim.RAdam(lr=self.learning_rate, params=parameters)
+        optimizer = torch.optim.RAdam(lr=self.learning_rate, params=model.parameters())
         self.scheduler = torch.optim.lr_scheduler.LinearLR(
             optimizer,
             start_factor=0.01,
@@ -228,15 +217,15 @@ class GunpowderTrainer(Trainer):
     def iterate(self, num_iterations, model, optimizer, device):
         t_start_fetch = time.time()
 
+        logger.info("Starting iteration!")
+
         for iteration in range(self.iteration, self.iteration + num_iterations):
             raw, gt, target, weight, mask = self.next()
             logger.debug(
                 f"Trainer fetch batch took {time.time() - t_start_fetch} seconds"
             )
 
-            for (
-                param
-            ) in model.parameters():  #  TODO: get parameters from optimizer instead
+            for param in model.parameters():
                 param.grad = None
 
             t_start_prediction = time.time()
@@ -247,7 +236,6 @@ class GunpowderTrainer(Trainer):
                 torch.as_tensor(target[target.roi]).to(device).float(),
                 torch.as_tensor(weight[weight.roi]).to(device).float(),
             )
-
             loss.backward()
             optimizer.step()
 
