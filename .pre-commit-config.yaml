@@ -32,7 +32,7 @@ repos:
     rev: v1.8.0
     hooks:
       - id: mypy
-        files: "^src/"
+        files: "^dacapo/"
         # # you have to add the things you want to type check against here
         # additional_dependencies:
         #   - numpy
