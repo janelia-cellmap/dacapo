@@ -411,8 +411,3 @@ train_run(run)
 ```
 
 If you want to start your run on some compute cluster, you might want to use the command line interface: dacapo train -r {run_config.name}. This makes it particularly convenient to run on compute nodes where you can specify specific compute requirements.
-
-
-```python
-
-```
