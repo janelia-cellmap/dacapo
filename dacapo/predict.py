@@ -3,17 +3,13 @@ from pathlib import Path
 import click
 from dacapo.blockwise import run_blockwise
 from dacapo.experiments import Run
-from dacapo.gp import DaCapoArraySource
-from dacapo.experiments import Model
-from dacapo.store.create_store import create_config_store, create_weights_store
+from dacapo.store.create_store import create_config_store
 from dacapo.store.local_array_store import LocalArrayIdentifier
 from dacapo.compute_context import LocalTorch, ComputeContext
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray, Array
+from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from dacapo.cli import cli
 
 from funlib.geometry import Coordinate, Roi
-import gunpowder as gp
-import gunpowder.torch as gp_torch
 import numpy as np
 import zarr
 
@@ -62,15 +58,29 @@ logger = logging.getLogger(__name__)
 def predict(
     run_name: str,
     iteration: int,
-    input_container: Path or str,
+    input_container: Path | str,
     input_dataset: str,
-    output_path: Path or str,
-    output_roi: Optional[str | Roi] = None,
+    output_path: Path | str,
+    output_roi: Optional[str] = None,
     num_workers: int = 30,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     compute_context: ComputeContext | str = LocalTorch(),
     overwrite: bool = True,
 ):
+    """_summary_
+
+    Args:
+        run_name (str): _description_
+        iteration (int): _description_
+        input_container (Path | str): _description_
+        input_dataset (str): _description_
+        output_path (Path | str): _description_
+        output_roi (Optional[str], optional): Defaults to None. If output roi is None,
+            it will be set to the raw roi.
+        num_workers (int, optional): _description_. Defaults to 30.
+        output_dtype (np.dtype | str, optional): _description_. Defaults to np.uint8.
+        overwrite (bool, optional): _description_. Defaults to True.
+    """
     # retrieving run
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(run_name)
@@ -81,28 +91,26 @@ def predict(
     raw_array = ZarrArray.open_from_array_identifier(raw_array_identifier)
     output_container = Path(
         output_path,
-        "".join(Path(input_container).name.split(".")[:-1]) + f".zarr",
+        "".join(Path(input_container).name.split(".")[:-1]) + ".zarr",
     )  # TODO: zarr hardcoded
     prediction_array_identifier = LocalArrayIdentifier(
         output_container, f"prediction_{run_name}_{iteration}"
     )
 
-    if isinstance(output_roi, str):
+    if output_roi is None:
+        _output_roi = raw_array.roi
+    else:
         start, end = zip(
             *[
                 tuple(int(coord) for coord in axis.split(":"))
                 for axis in output_roi.strip("[]").split(",")
             ]
         )
-        output_roi = Roi(
+        _output_roi = Roi(
             Coordinate(start),
             Coordinate(end) - Coordinate(start),
         )
-
-    if output_roi is None:
-        output_roi = raw_array.roi
-    else:
-        output_roi = output_roi.snap_to_grid(
+        _output_roi = _output_roi.snap_to_grid(
             raw_array.voxel_size, mode="grow"
         ).intersect(raw_array.roi)
 
@@ -126,20 +134,16 @@ def predict(
     # calculate input and output rois
 
     context = (input_size - output_size) / 2
-    if output_roi is None:
-        input_roi = raw_array.roi
-        output_roi = input_roi.grow(-context, -context)
-    else:
-        input_roi = output_roi.grow(context, context)
+    _input_roi = _output_roi.grow(context, context)
 
-    logger.info("Total input ROI: %s, output ROI: %s", input_roi, output_roi)
+    logger.info("Total input ROI: %s, output ROI: %s", _input_roi, _output_roi)
 
     # prepare prediction dataset
     axes = ["c"] + [axis for axis in raw_array.axes if axis != "c"]
     ZarrArray.create_from_array_identifier(
         prediction_array_identifier,
         axes,
-        output_roi,
+        _output_roi,
         model.num_out_channels,
         output_voxel_size,
         output_dtype,
