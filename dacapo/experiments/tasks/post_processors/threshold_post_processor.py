@@ -20,7 +20,7 @@ class ThresholdPostProcessor(PostProcessor):
     def __init__(self):
         pass
 
-    def enumerate_parameters(self) -> Iterable[ThresholdPostProcessorParameters]:
+    def enumerate_parameters(self) -> Iterable["ThresholdPostProcessorParameters"]:
         """Enumerate all possible parameters of this post-processor."""
         for i, threshold in enumerate([-0.1, 0.0, 0.1]):
             yield ThresholdPostProcessorParameters(id=i, threshold=threshold)

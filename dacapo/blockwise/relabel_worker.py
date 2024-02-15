@@ -3,11 +3,11 @@ import os
 import daisy
 from dacapo.compute_context import ComputeContext, LocalTorch
 from dacapo.store.array_store import LocalArrayIdentifier
-from funlib.segment.arrays.impl import find_components
-from funlib.segment.arrays.replace_values import replace_values
+from scipy.cluster.hierarchy import DisjointSet
 from funlib.persistence import open_ds
 
 import numpy as np
+import numpy_indexed as npi
 
 import logging
 import click
@@ -46,6 +46,7 @@ def start_worker(
     nodes, edges = read_cross_block_merges(tmpdir)
 
     components = find_components(nodes, edges)
+    components = DisjointSet(nodes, edges)
 
     while True:
         with client.acquire_block() as block:
@@ -57,8 +58,18 @@ def start_worker(
 
 def relabel_in_block(array_out, old_values, new_values, block):
     a = array_out.to_ndarray(block.write_roi)
-    replace_values(a, old_values, new_values, inplace=True)
+    # DGA: had to add in flatten and reshape since remap (in particular indices) didn't seem to work with ndarrays for the input
+    if old_values.size > 0:
+        a = npi.remap(a.flatten(), old_values, new_values).reshape(a.shape)
     array_out[block.write_roi] = a
+
+
+def find_components(nodes, edges):
+    # scipy
+    disjoint_set = DisjointSet(nodes)
+    for edge in edges:
+        disjoint_set.merge(edge[0], edge[1])
+    return [disjoint_set[n] for n in nodes]
 
 
 def read_cross_block_merges(tmpdir):

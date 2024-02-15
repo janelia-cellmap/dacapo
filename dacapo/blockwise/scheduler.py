@@ -89,7 +89,7 @@ def run_blockwise(
 
 def segment_blockwise(
     segment_function_file: str or Path,
-    compute_context: ComputeContext or str,
+    compute_context: ComputeContext | str,
     context: Coordinate,
     total_roi: Roi,
     read_roi: Roi,

@@ -15,11 +15,12 @@ logger = logging.getLogger(__name__)
 def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
     """Train a run"""
 
-    if compute_context.train(run_name):
-        logger.error("Run %s is already being trained", run_name)
-        # if compute context runs train in some other process
-        # we are done here.
-        return
+    # check config store to see if run is already being trained TODO
+    # if ...:
+    #     logger.error("Run %s is already being trained", run_name)
+    #     # if compute context runs train in some other process
+    #     # we are done here.
+    #     return
 
     logger.info("Training run %s", run_name)
 
@@ -29,7 +30,7 @@ def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
 
-    return train_run(run)
+    return train_run(run, compute_context=compute_context)
 
 
 def train_run(

@@ -36,7 +36,7 @@ def cli(log_level):
     "-r", "--run-name", required=True, type=str, help="The NAME of the run to train."
 )
 def train(run_name):
-    dacapo.train(run_name)
+    dacapo.train(run_name)  # TODO: run with compute_context
 
 
 @cli.command()
