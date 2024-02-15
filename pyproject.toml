@@ -69,6 +69,7 @@ dev = [
     "ruff",
     "pre-commit",
     "jupyter",
+    "pytest"
 ]
 docs = [
     "sphinx-autodoc-typehints",
