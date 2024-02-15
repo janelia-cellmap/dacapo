@@ -2,7 +2,7 @@ from .predict import predict
 from .compute_context import LocalTorch, ComputeContext
 from .experiments import Run, ValidationIterationScores
 from .experiments.datasplits.datasets.arrays import ZarrArray
-from .store import (
+from .store.create_store import (
     create_array_store,
     create_config_store,
     create_stats_store,

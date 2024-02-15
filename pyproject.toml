@@ -54,7 +54,9 @@ dependencies = [
         "xarray",
         "cattrs",
         "numpy-indexed",
-        "click",]
+        "click",
+        "toml",
+        ]
 
 # extras
 # https://peps.python.org/pep-0621/#dependencies-optional-dependencies
@@ -72,7 +74,10 @@ dev = [
 ]
 docs = [
     "sphinx-autodoc-typehints",
-    "sphinx-material",
+    "sphinx-autoapi",
+    "sphinx-click",
+    "sphinx-rtd-theme",
+    "myst-parser",
 ]
 examples = [
     "ipython",
