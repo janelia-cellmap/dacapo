@@ -17,7 +17,7 @@ def create_config_store():
     try:
         store_type = options.type
     except RuntimeError:
-        store_type = "mongo"
+        store_type = "files"
     if store_type == "mongo":
         db_host = options.mongo_db_host
         db_name = options.mongo_db_name
