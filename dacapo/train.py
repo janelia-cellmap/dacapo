@@ -13,8 +13,17 @@ logger = logging.getLogger(__name__)
 
 
 def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
-    """Train a run"""
+    """
+    Trains a model with the given run name using the specified compute context.
 
+    Args:
+        run_name (str): The name of the run.
+        compute_context (ComputeContext, optional): The compute context to use for training. Defaults to LocalTorch(),
+        Can be set to distribute Bsub() to using LSF cluster.
+
+    Returns:
+        The trained model.
+    """
     if compute_context.train(run_name):
         logger.error("Run %s is already being trained", run_name)
         # if compute context runs train in some other process
@@ -36,6 +45,15 @@ def train_run(
     run: Run,
     compute_context: ComputeContext = LocalTorch(),
 ):
+    """
+    Trains the model for a given run.
+
+    Args:
+        run (Run): The run object containing the model, optimizer, and other training parameters.
+        compute_context (ComputeContext, optional): The compute context for training. Defaults to LocalTorch(), 
+        Can be set to distribute Bsub() to using LSF cluster.
+
+    """
     logger.info("Starting/resuming training for run %s...", run)
 
     # create run
