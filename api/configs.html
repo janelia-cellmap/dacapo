@@ -185,11 +185,7 @@
   <ul class="md-nav__list" data-md-scrollfix="">
         <li class="md-nav__item"><a href="#api-configs--page-root" class="md-nav__link">Configs</a><nav class="md-nav">
               <ul class="md-nav__list">
-        <li class="md-nav__item"><a href="#runconfig" class="md-nav__link">RunConfig</a><nav class="md-nav">
-              <ul class="md-nav__list">
-        <li class="md-nav__item"><a href="#dacapo.experiments.RunConfig" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">RunConfig</span></code></a>
-        </li></ul>
-            </nav>
+        <li class="md-nav__item"><a href="#runconfig" class="md-nav__link">RunConfig</a>
         </li>
         <li class="md-nav__item"><a href="#datasplitconfigs" class="md-nav__link">DataSplitConfigs</a><nav class="md-nav">
               <ul class="md-nav__list">
@@ -211,27 +207,7 @@
         </li></ul>
             </nav>
         </li>
-        <li class="md-nav__item"><a href="#taskconfigs" class="md-nav__link">TaskConfigs</a><nav class="md-nav">
-              <ul class="md-nav__list">
-        <li class="md-nav__item"><a href="#dacapo.experiments.tasks.OneHotTaskConfig" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">OneHotTaskConfig</span></code></a><nav class="md-nav">
-              <ul class="md-nav__list">
-        <li class="md-nav__item"><a href="#dacapo.experiments.tasks.OneHotTaskConfig.task_type" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">OneHotTaskConfig.task_type</span></code></a>
-        </li></ul>
-            </nav>
-        </li>
-        <li class="md-nav__item"><a href="#dacapo.experiments.tasks.AffinitiesTaskConfig" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">AffinitiesTaskConfig</span></code></a><nav class="md-nav">
-              <ul class="md-nav__list">
-        <li class="md-nav__item"><a href="#dacapo.experiments.tasks.AffinitiesTaskConfig.task_type" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">AffinitiesTaskConfig.task_type</span></code></a>
-        </li></ul>
-            </nav>
-        </li>
-        <li class="md-nav__item"><a href="#dacapo.experiments.tasks.DistanceTaskConfig" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">DistanceTaskConfig</span></code></a><nav class="md-nav">
-              <ul class="md-nav__list">
-        <li class="md-nav__item"><a href="#dacapo.experiments.tasks.DistanceTaskConfig.task_type" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">DistanceTaskConfig.task_type</span></code></a>
-        </li></ul>
-            </nav>
-        </li></ul>
-            </nav>
+        <li class="md-nav__item"><a href="#taskconfigs" class="md-nav__link">TaskConfigs</a>
         </li>
         <li class="md-nav__item"><a href="#trainerconfigs" class="md-nav__link">TrainerConfigs</a><nav class="md-nav">
               <ul class="md-nav__list">
@@ -263,12 +239,6 @@
 <span id="sec-api-run"></span><h1 id="api-configs--page-root">Configs<a class="headerlink" href="#api-configs--page-root" title="Link to this heading">¶</a></h1>
 <section id="runconfig">
 <h2 id="runconfig">RunConfig<a class="headerlink" href="#runconfig" title="Link to this heading">¶</a></h2>
-<blockquote>
-<div><dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.RunConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.</span></span><span class="sig-name descname"><span class="pre">RunConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">architecture_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainer_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasplit_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repetition</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_iterations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.RunConfig" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-</div></blockquote>
 </section>
 <section id="datasplitconfigs">
 <h2 id="datasplitconfigs">DataSplitConfigs<a class="headerlink" href="#datasplitconfigs" title="Link to this heading">¶</a></h2>
@@ -304,49 +274,6 @@
 </section>
 <section id="taskconfigs">
 <h2 id="taskconfigs">TaskConfigs<a class="headerlink" href="#taskconfigs" title="Link to this heading">¶</a></h2>
-<blockquote>
-<div><dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.OneHotTaskConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.</span></span><span class="sig-name descname"><span class="pre">OneHotTaskConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.OneHotTaskConfig" title="Link to this definition">¶</a></dt>
-<dd><p>This is a One Hot prediction task that outputs a probability vector
-of length <cite>c</cite> for each voxel where <cite>c</cite> is the number of classes.
-Each voxel prediction has all positive values an l1 norm equal to 1.</p>
-<p>Post processing is extremely easy, the class of each voxel is
-simply the argmax over the vector of output probabilities.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.OneHotTaskConfig.task_type">
-<span class="sig-name descname"><span class="pre">task_type</span></span><a class="headerlink" href="#dacapo.experiments.tasks.OneHotTaskConfig.task_type" title="Link to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="components/task.html#dacapo.experiments.tasks.OneHotTask" title="dacapo.experiments.tasks.one_hot_task.OneHotTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">OneHotTask</span></code></a></p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.AffinitiesTaskConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.</span></span><span class="sig-name descname"><span class="pre">AffinitiesTaskConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neighborhood</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lsds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lsds_to_affs_weight_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affs_weight_clipmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affs_weight_clipmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lsd_weight_clipmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lsd_weight_clipmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_as_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.AffinitiesTaskConfig" title="Link to this definition">¶</a></dt>
-<dd><p>This is a Affinities task config used for generating and
-evaluating voxel affinities for instance segmentations.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.AffinitiesTaskConfig.task_type">
-<span class="sig-name descname"><span class="pre">task_type</span></span><a class="headerlink" href="#dacapo.experiments.tasks.AffinitiesTaskConfig.task_type" title="Link to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="components/task.html#dacapo.experiments.tasks.AffinitiesTask" title="dacapo.experiments.tasks.affinities_task.AffinitiesTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">AffinitiesTask</span></code></a></p>
-</dd></dl>
-</dd></dl>
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.DistanceTaskConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.</span></span><span class="sig-name descname"><span class="pre">DistanceTaskConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_distances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clipmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clipmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.DistanceTaskConfig" title="Link to this definition">¶</a></dt>
-<dd><p>This is a Distance task config used for generating and
-evaluating signed distance transforms as a way of generating
-segmentations.</p>
-<p>The advantage of generating distance transforms over regular
-affinities is you can get a denser signal, i.e. 1 misclassified
-pixel in an affinity prediction could merge 2 otherwise very
-distinct objects, this cannot happen with distances.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.DistanceTaskConfig.task_type">
-<span class="sig-name descname"><span class="pre">task_type</span></span><a class="headerlink" href="#dacapo.experiments.tasks.DistanceTaskConfig.task_type" title="Link to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="components/task.html#dacapo.experiments.tasks.DistanceTask" title="dacapo.experiments.tasks.distance_task.DistanceTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">DistanceTask</span></code></a></p>
-</dd></dl>
-</dd></dl>
-</div></blockquote>
 </section>
 <section id="trainerconfigs">
 <h2 id="trainerconfigs">TrainerConfigs<a class="headerlink" href="#trainerconfigs" title="Link to this heading">¶</a></h2>
