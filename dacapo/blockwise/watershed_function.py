@@ -4,14 +4,14 @@ import mwatershed as mws
 from scipy.ndimage import measurements
 
 
-def segment_function(input_array, block, parameters):
+def segment_function(input_array, block, offsets, bias):
     # if a previous segmentation is provided, it must have a "grid graph"
     # in its metadata.
     pred_data = input_array[block.read_roi]
-    affs = pred_data[: len(parameters["offsets"])].astype(np.float64)
+    affs = pred_data[: len(offsets)].astype(np.float64)
     segmentation = mws.agglom(
-        affs - parameters["bias"],
-        parameters["offsets"],  # type: ignore
+        affs - bias,
+        offsets,
     )
     # filter fragments
     average_affs = np.mean(affs, axis=0)
@@ -23,7 +23,7 @@ def segment_function(input_array, block, parameters):
     for fragment, mean in zip(
         fragment_ids, measurements.mean(average_affs, segmentation, fragment_ids)
     ):
-        if mean < parameters["bias"]:
+        if mean < bias:
             filtered_fragments.append(fragment)
 
     filtered_fragments = np.array(filtered_fragments, dtype=segmentation.dtype)

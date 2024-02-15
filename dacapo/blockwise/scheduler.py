@@ -3,6 +3,7 @@ import tempfile
 import time
 import daisy
 from funlib.geometry import Roi, Coordinate
+import yaml
 
 from dacapo.compute_context import ComputeContext
 from dacapo.blockwise import DaCapoBlockwiseTask
@@ -102,6 +103,11 @@ def segment_blockwise(
     **kwargs,
 ):
     with tempfile.TemporaryDirectory(prefix=tmp_prefix) as tmpdir:
+        # write parameters to tmpdir
+        if "parameters" in locals():
+            with open(Path(tmpdir, "parameters.yaml"), "w") as f:
+                yaml.dump(locals()["parameters"], f)
+
         # Make the task
         task = DaCapoBlockwiseTask(
             str(Path(Path(__file__).parent, "segment_worker.py")),

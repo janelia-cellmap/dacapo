@@ -7,6 +7,7 @@ import daisy
 from funlib.persistence import Array
 
 import numpy as np
+import yaml
 from dacapo.compute_context import ComputeContext, LocalTorch
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 
@@ -43,7 +44,6 @@ def start_worker(
     output_dataset: str,
     tmpdir: str,
     function_path: str,
-    **parameters,
 ):
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
@@ -59,6 +59,17 @@ def start_worker(
     function = SourceFileLoader(function_name, str(function_path)).load_module()
     segment_function = function.segment_function
 
+    # load default parameters
+    if hasattr(function, "default_parameters"):
+        parameters = function.default_parameters
+    else:
+        parameters = {}
+
+    # load parameters saved in tmpdir
+    if os.path.exists(os.path.join(tmpdir, "parameters.yaml")):
+        with open(os.path.join(tmpdir, "parameters.yaml"), "r") as f:
+            parameters.update(yaml.safe_load(f))
+
     # wait for blocks to run pipeline
     client = daisy.Client()
     num_voxels_in_block = None
@@ -70,7 +81,7 @@ def start_worker(
             if num_voxels_in_block is None:
                 num_voxels_in_block = np.prod(block.write_roi.size)
 
-            segmentation = segment_function(input_array, block, parameters)
+            segmentation = segment_function(input_array, block, **parameters)
 
             assert segmentation.dtype == np.uint64
 
