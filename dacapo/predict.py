@@ -151,8 +151,8 @@ def predict(
         worker_file=str(Path(Path(__file__).parent, "blockwise", "predict_worker.py")),
         compute_context=compute_context,
         total_roi=output_roi,
-        read_roi=input_roi,
-        write_roi=output_roi,
+        read_roi=Roi((0, 0, 0), input_size),
+        write_roi=Roi((0, 0, 0), output_size),
         num_workers=num_workers,
         max_retries=2,  # TODO: make this an option
         timeout=None,  # TODO: make this an option

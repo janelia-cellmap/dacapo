@@ -1,27 +1,19 @@
 from pathlib import Path
-import subprocess
-from typing import Optional
-import dacapo
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
-from dacapo.experiments.model import Model
 from dacapo.gp.dacapo_array_source import DaCapoArraySource
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.experiments import Run
-from dacapo.compute_context import ComputeContext, LocalTorch, Bsub
+from dacapo.compute_context import ComputeContext, LocalTorch
 import gunpowder as gp
 import gunpowder.torch as gp_torch
 
 import daisy
-from daisy import Roi, Coordinate
-from funlib.persistence import open_ds, Array
+from daisy import Coordinate
 
-from skimage.transform import rescale  # TODO
 import numpy as np
-import torch
 import click
 
-import sys
 import logging
 
 logger = logging.getLogger(__file__)
@@ -191,7 +183,7 @@ def spawn_worker(
         compute_context (ComputeContext, optional): The compute context to use. Defaults to LocalTorch().
     """
     # Make the command for the worker to run
-    command = [  # TODO
+    command = [
         "python",
         __file__,
         "start-worker",
