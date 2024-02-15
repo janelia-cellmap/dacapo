@@ -8,7 +8,7 @@ from typing import Iterable
 
 class Task(ABC):
     """
-    Abstract base class for tasks in a machine learning or data processing pipeline.
+    Abstract base class for DaCapo tasks.
 
     This class provides a structure for tasks that involve prediction, loss calculation,
     evaluation, and post-processing. It is designed to be extended by specific task

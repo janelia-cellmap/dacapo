@@ -6,6 +6,20 @@ from typing import List, Tuple
 
 @attr.s
 class BinarySegmentationEvaluationScores(EvaluationScores):
+    """
+    BinarySegmentationEvaluationScores represents various evaluation scores for binary segmentation tasks. 
+    It includes standard metrics like Dice, Jaccard, Hausdorff distances, precision, recall, 
+    F1 score, and various rates and distances related to false positives and negatives.
+
+    Attributes:
+        dice, jaccard, hausdorff, false_negative_rate, false_negative_rate_with_tolerance, 
+        false_positive_rate, false_discovery_rate, false_positive_rate_with_tolerance, 
+        voi, mean_false_distance, mean_false_negative_distance, mean_false_positive_distance,
+        mean_false_distance_clipped, mean_false_negative_distance_clipped, 
+        mean_false_positive_distance_clipped, precision_with_tolerance, recall_with_tolerance,
+        f1_score_with_tolerance, precision, recall, f1_score: 
+        Float attributes for each evaluation score, initialized with NaN.
+    """
     dice: float = attr.ib(default=float("nan"))
     jaccard: float = attr.ib(default=float("nan"))
     hausdorff: float = attr.ib(default=float("nan"))
@@ -138,15 +152,27 @@ class BinarySegmentationEvaluationScores(EvaluationScores):
 
 @attr.s
 class MultiChannelBinarySegmentationEvaluationScores(EvaluationScores):
+    """
+    MultiChannelBinarySegmentationEvaluationScores handle evaluation scores for multi-channel binary segmentation tasks. 
+    It manages scores for each channel separately.
+
+    Attributes:
+        channel_scores (List[Tuple[str, BinarySegmentationEvaluationScores]]): 
+        A list of tuples containing channel names and their corresponding 
+        BinarySegmentationEvaluationScores.
+    """
+
     channel_scores: List[Tuple[str, BinarySegmentationEvaluationScores]] = attr.ib()
 
     def __attrs_post_init__(self):
+        """Post-initialization to set attributes for each criteria per channel."""
         for channel, scores in self.channel_scores:
             for criteria in BinarySegmentationEvaluationScores.criteria:
                 setattr(self, f"{channel}__{criteria}", getattr(scores, criteria))
 
     @property
     def criteria(self):
+        """Returns a list of criteria names for all channels."""
         return [
             f"{channel}__{criteria}"
             for channel, _ in self.channel_scores
