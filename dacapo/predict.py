@@ -19,61 +19,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-@click.group()
-@click.option(
-    "--log-level",
-    type=click.Choice(
-        ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], case_sensitive=False
-    ),
-    default="INFO",
-)
-def cli(log_level):
-    logging.basicConfig(level=getattr(logging, log_level.upper()))
-
-
-@cli.command()
-@click.option(
-    "-r", "--run-name", required=True, type=str, help="The name of the run to apply."
-)
-@click.option(
-    "-i",
-    "--iteration",
-    required=True,
-    type=int,
-    help="The training iteration of the model to use for prediction.",
-)
-@click.option(
-    "-ic",
-    "--input_container",
-    required=True,
-    type=click.Path(exists=True, file_okay=False),
-)
-@click.option("-id", "--input_dataset", required=True, type=str)
-@click.option("-op", "--output_path", required=True, type=click.Path(file_okay=False))
-@click.option(
-    "-roi",
-    "--output_roi",
-    type=str,
-    required=False,
-    help="The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]",
-)
-@click.option("-w", "--num_workers", type=int, default=30)
-@click.option("-dt", "--output_dtype", type=str, default="uint8")
-@click.option(
-    "-cc",
-    "--compute_context",
-    type=str,
-    default="LocalTorch",
-    help="The compute context to use for prediction. Must be the name of a subclass of ComputeContext.",
-)
-@click.option("-ow", "--overwrite", is_flag=True)
 def predict(
     run_name: str,
     iteration: int,
     input_container: Path | str,
     input_dataset: str,
     output_path: Path | str,
-    output_roi: Optional[str] = None,
+    output_roi: Optional[Roi | str] = None,
     num_workers: int = 30,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     compute_context: ComputeContext | str = LocalTorch(),
@@ -110,19 +62,19 @@ def predict(
     )
 
     if output_roi is None:
-        _output_roi = raw_array.roi
-    else:
+        output_roi = raw_array.roi
+    elif isinstance(output_roi, str):
         start, end = zip(
             *[
                 tuple(int(coord) for coord in axis.split(":"))
                 for axis in output_roi.strip("[]").split(",")
             ]
         )
-        _output_roi = Roi(
+        output_roi = Roi(
             Coordinate(start),
             Coordinate(end) - Coordinate(start),
         )
-        _output_roi = _output_roi.snap_to_grid(
+        output_roi = output_roi.snap_to_grid(
             raw_array.voxel_size, mode="grow"
         ).intersect(raw_array.roi)
 
@@ -146,16 +98,16 @@ def predict(
     # calculate input and output rois
 
     context = (input_size - output_size) / 2
-    _input_roi = _output_roi.grow(context, context)
+    _input_roi = output_roi.grow(context, context)
 
-    logger.info("Total input ROI: %s, output ROI: %s", _input_roi, _output_roi)
+    logger.info("Total input ROI: %s, output ROI: %s", _input_roi, output_roi)
 
     # prepare prediction dataset
     axes = ["c"] + [axis for axis in raw_array.axes if axis != "c"]
     ZarrArray.create_from_array_identifier(
         prediction_array_identifier,
         axes,
-        _output_roi,
+        output_roi,
         model.num_out_channels,
         output_voxel_size,
         output_dtype,
