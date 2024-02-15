@@ -19,6 +19,18 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+@click.group()
+@click.option(
+    "--log-level",
+    type=click.Choice(
+        ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], case_sensitive=False
+    ),
+    default="INFO",
+)
+def cli(log_level):
+    logging.basicConfig(level=getattr(logging, log_level.upper()))
+
+
 @cli.command()
 @click.option(
     "-r", "--run-name", required=True, type=str, help="The name of the run to apply."

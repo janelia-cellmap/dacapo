@@ -20,7 +20,7 @@ class ThresholdPostProcessor(PostProcessor):
     def __init__(self):
         pass
 
-    def enumerate_parameters(self) -> Iterable[ThresholdPostProcessorParameters]:
+    def enumerate_parameters(self) -> Iterable["ThresholdPostProcessorParameters"]:
         """Enumerate all possible parameters of this post-processor."""
         for i, threshold in enumerate([-0.1, 0.0, 0.1]):
             yield ThresholdPostProcessorParameters(id=i, threshold=threshold)
@@ -36,7 +36,7 @@ class ThresholdPostProcessor(PostProcessor):
         output_array_identifier: "LocalArrayIdentifier",
         compute_context: ComputeContext | str = LocalTorch(),
         num_workers: int = 16,
-        chunk_size: Coordinate = Coordinate((64, 64, 64)),
+        block_size: Coordinate = Coordinate((64, 64, 64)),
     ) -> ZarrArray:
         # TODO: Investigate Liskov substitution princple and whether it is a problem here
         # OOP theory states the super class should always be replaceable with its subclasses
@@ -58,7 +58,7 @@ class ThresholdPostProcessor(PostProcessor):
             np.uint8,
         )
 
-        read_roi = Roi((0, 0, 0), self.prediction_array.voxel_size * chunk_size)
+        read_roi = Roi((0, 0, 0), self.prediction_array.voxel_size * block_size)
         # run blockwise prediction
         run_blockwise(
             worker_file=str(
