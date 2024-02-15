@@ -19,7 +19,7 @@ framework, but currently only supports [`torch`](https://pytorch.org/) with
 plans to support [`tensorflow`](https://www.tensorflow.org/).
 
 ## Installation and Setup
-Currently, only python 3.10 is supported. We recommend creating a new conda environment for dacapo with python 3.10.
+Currently, python>=3.10 is supported. We recommend creating a new conda environment for dacapo with python 3.10.
 ```
 conda create -n dacapo python=3.10
 ```
@@ -30,12 +30,16 @@ git clone git@github.com:janelia-cellmap/dacapo.git
 cd dacapo
 pip install .
 ```
-This will install the minimum required dependencies. However, having acess to a MongoDB server for storing outputs is strongly recommended for smoothest performance.
+This will install the minimum required dependencies. However, having access to a MongoDB server for storing outputs is strongly recommended for smoothest performance.
 
 To install and run MongoDB locally, refer to the MongoDB documentation [here](https://www.mongodb.com/docs/manual/installation/).
 
 ## Functionality Overview
 
-Tasks we support
-
-Networks we have for those tasks
+Tasks we support and approaches for those tasks:
+ - Instance Segmentation
+    - Affinities
+    - Local Shape Descriptors
+ - Semantic segmentation
+    - Signed distances
+    - One-hot encoding of different types of objects
