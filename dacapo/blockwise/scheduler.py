@@ -17,7 +17,7 @@ def run_blockwise(
     timeout=None,
     upstream_tasks=None,
     *args,
-    **kwargs
+    **kwargs,
 ):
     """Run a function in parallel over a large volume.
 
@@ -78,7 +78,7 @@ def run_blockwise(
         timeout,
         upstream_tasks,
         *args,
-        **kwargs
+        **kwargs,
     )
 
     return daisy.run_blockwise([task])
