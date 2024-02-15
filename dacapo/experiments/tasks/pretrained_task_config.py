@@ -16,6 +16,7 @@ class PretrainedTaskConfig(TaskConfig):
         sub_task_config (TaskConfig): The configuration for the sub-task to run.
         weights (Path): A checkpoint containing pretrained model weights.
     """
+
     task_type = PretrainedTask
 
     sub_task_config: TaskConfig = attr.ib(

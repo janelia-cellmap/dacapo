@@ -10,17 +10,18 @@ import numpy as np
 
 class InstanceEvaluator(Evaluator):
     """
-    InstanceEvaluator is an evaluator that computes scores for instance 
+    InstanceEvaluator is an evaluator that computes scores for instance
     segmentation tasks using Variation of Information (VOI) metrics.
 
-    It calculates two key metrics: [VOI merge] and [VOI split], to evaluate the quality of instance 
-    segmentation. These metrics are particularly useful for comparing the segmentation of objects 
+    It calculates two key metrics: [VOI merge] and [VOI split], to evaluate the quality of instance
+    segmentation. These metrics are particularly useful for comparing the segmentation of objects
     where each instance is uniquely labeled.
 
     Attributes:
-        criteria (list): A list of criteria names used for evaluation. Defaults to 
+        criteria (list): A list of criteria names used for evaluation. Defaults to
                          ["voi_merge", "voi_split", "voi"].
     """
+
     criteria = ["voi_merge", "voi_split", "voi"]
 
     def evaluate(self, output_array_identifier, evaluation_array):

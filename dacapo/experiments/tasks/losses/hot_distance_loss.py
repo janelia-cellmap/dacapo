@@ -17,24 +17,24 @@ class HotDistanceLoss(Loss):
     """
 
     def compute(self, prediction, target, weight):
-            """
-            Computes the loss given the prediction, target, and weight 
-            by summing the BCELoss for the hot maps and the MSELoss for the distance maps.
+        """
+        Computes the loss given the prediction, target, and weight
+        by summing the BCELoss for the hot maps and the MSELoss for the distance maps.
 
-            Args:
-                prediction (Tensor): The predicted values.
-                target (Tensor): The target values.
-                weight (Tensor): The weight values.
+        Args:
+            prediction (Tensor): The predicted values.
+            target (Tensor): The target values.
+            weight (Tensor): The weight values.
 
-            Returns:
-                Tensor: The computed loss.
-            """
-            target_hot, target_distance = self._split(target)
-            prediction_hot, prediction_distance = self._split(prediction)
-            weight_hot, weight_distance = self._split(weight)
-            return self._hot_loss(
-                prediction_hot, target_hot, weight_hot
-            ) + self._distance_loss(prediction_distance, target_distance, weight_distance)
+        Returns:
+            Tensor: The computed loss.
+        """
+        target_hot, target_distance = self._split(target)
+        prediction_hot, prediction_distance = self._split(prediction)
+        weight_hot, weight_distance = self._split(weight)
+        return self._hot_loss(
+            prediction_hot, target_hot, weight_hot
+        ) + self._distance_loss(prediction_distance, target_distance, weight_distance)
 
     def _hot_loss(self, prediction, target, weight):
         """

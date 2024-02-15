@@ -6,6 +6,7 @@ from .post_processors import PostProcessor, PostProcessorParameters
 from abc import ABC
 from typing import Iterable
 
+
 class Task(ABC):
     """
     Abstract base class for DaCapo tasks.
@@ -44,7 +45,7 @@ class Task(ABC):
         """
         A property that returns the evaluation scores.
 
-        This method accesses the score attribute of the evaluator to provide an 
+        This method accesses the score attribute of the evaluator to provide an
         assessment of the model's performance.
 
         Returns:
@@ -56,8 +57,8 @@ class Task(ABC):
         """
         Creates a model based on the specified architecture.
 
-        This method utilizes the predictor's method to create a model with the given architecture. 
-        It abstracts the model creation process, allowing different implementations based on the 
+        This method utilizes the predictor's method to create a model with the given architecture.
+        It abstracts the model creation process, allowing different implementations based on the
         predictor's type.
 
         Args:
@@ -67,4 +68,3 @@ class Task(ABC):
             A model instance created based on the specified architecture.
         """
         return self.predictor.create_model(architecture=architecture)
-
