@@ -88,12 +88,14 @@ class FileStatsStore(StatsStore):
 
         if docs:
             file_store = self.training_stats / run_name
-            pickle.dump(docs, file_store.open("wb"))
+            with file_store.open("wb") as fd:
+                pickle.dump(docs, fd)
 
     def __read_training_stats(self, run_name):
         file_store = self.training_stats / run_name
         if file_store.exists():
-            docs = pickle.load(file_store.open("rb"))
+            with file_store.open("rb") as fd:
+                docs = pickle.load(fd)
         else:
             docs = []
         stats = TrainingStats(converter.structure(docs, List[TrainingIterationStats]))
@@ -117,12 +119,14 @@ class FileStatsStore(StatsStore):
 
         if docs:
             file_store = self.validation_scores / run_name
-            pickle.dump(docs, file_store.open("wb"))
+            with file_store.open("wb") as fd:
+                pickle.dump(docs, fd)
 
     def __read_validation_iteration_scores(self, run_name):
         file_store = self.validation_scores / run_name
         if file_store.exists():
-            docs = pickle.load(file_store.open("rb"))
+            with file_store.open("rb") as fd:
+                docs = pickle.load(fd)
         else:
             docs = []
         scores = converter.structure(docs, List[ValidationIterationScores])

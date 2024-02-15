@@ -1,3 +1,4 @@
+from dacapo.experiments.datasplits.datasets.dataset import Dataset
 from .weights_store import WeightsStore, Weights
 from dacapo.experiments.run import Run
 
@@ -96,18 +97,22 @@ class LocalWeightsStore(WeightsStore):
 
         if best_weights.exists():
             best_weights.unlink()
-        best_weights.symlink_to(iteration_weights)
+        try:
+            best_weights.symlink_to(iteration_weights)
+        except FileExistsError:
+            best_weights.unlink()
+            best_weights.symlink_to(iteration_weights)
+
         with best_weights_json.open("w") as f:
             f.write(json.dumps({"iteration": iteration}))
 
-    def retrieve_best(self, run: str, dataset: str, criterion: str) -> int:
+    def retrieve_best(self, run: str, dataset: str | Dataset, criterion: str) -> int:
         logger.info("Retrieving weights for run %s, criterion %s", run, criterion)
 
-        weights_info = json.loads(
-            (self.__get_weights_dir(run) / criterion / f"{dataset}.json")
-            .open("r")
-            .read()
-        )
+        with (self.__get_weights_dir(run) / criterion / f"{dataset}.json").open(
+            "r"
+        ) as fd:
+            weights_info = json.load(fd)
 
         return weights_info["iteration"]
 

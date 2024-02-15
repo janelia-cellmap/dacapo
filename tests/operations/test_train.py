@@ -3,7 +3,7 @@ from ..fixtures import *
 
 from dacapo.experiments import Run
 from dacapo.compute_context import LocalTorch
-from dacapo.store import create_config_store, create_weights_store
+from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.train import train_run
 
 import pytest
