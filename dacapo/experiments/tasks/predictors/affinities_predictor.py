@@ -24,6 +24,11 @@ class AffinitiesPredictor(Predictor):
         num_voxels: int = 20,
         downsample_lsds: int = 1,
         grow_boundary_iterations: int = 0,
+        affs_weight_clipmin: float = 0.05,
+        affs_weight_clipmax: float = 0.95,
+        lsd_weight_clipmin: float = 0.05,
+        lsd_weight_clipmax: float = 0.95,
+        background_as_object: bool = False,
     ):
         self.neighborhood = neighborhood
         self.lsds = lsds
@@ -42,6 +47,12 @@ class AffinitiesPredictor(Predictor):
         else:
             self.num_lsds = 0
         self.grow_boundary_iterations = grow_boundary_iterations
+        self.affs_weight_clipmin = affs_weight_clipmin
+        self.affs_weight_clipmax = affs_weight_clipmax
+        self.lsd_weight_clipmin = lsd_weight_clipmin
+        self.lsd_weight_clipmax = lsd_weight_clipmax
+
+        self.background_as_object = background_as_object
 
     def extractor(self, voxel_size):
         if self._extractor is None:
@@ -97,10 +108,12 @@ class AffinitiesPredictor(Predictor):
             label_data = label_data[0]
         else:
             axes = ["c"] + axes
-        affinities = seg_to_affgraph(label_data, self.neighborhood).astype(np.float32)
+        affinities = seg_to_affgraph(
+            label_data + int(self.background_as_object), self.neighborhood
+        ).astype(np.float32)
         if self.lsds:
             descriptors = self.extractor(gt.voxel_size).get_descriptors(
-                segmentation=label_data,
+                segmentation=label_data + int(self.background_as_object),
                 voxel_size=gt.voxel_size,
             )
             return NumpyArray.from_np_array(
@@ -155,6 +168,8 @@ class AffinitiesPredictor(Predictor):
             slab=tuple(1 if c == "c" else -1 for c in target.axes),
             masks=[mask_data],
             moving_counts=moving_class_counts,
+            clipmin=self.affs_weight_clipmin,
+            clipmax=self.affs_weight_clipmax,
         )
         if self.lsds:
             lsd_weights, moving_lsd_class_counts = balance_weights(
@@ -163,6 +178,8 @@ class AffinitiesPredictor(Predictor):
                 slab=(-1,) * len(gt.axes),
                 masks=[mask_data],
                 moving_counts=moving_lsd_class_counts,
+                clipmin=self.lsd_weight_clipmin,
+                clipmax=self.lsd_weight_clipmax,
             )
             lsd_weights = np.ones(
                 (self.num_lsds,) + aff_weights.shape[1:], dtype=aff_weights.dtype
@@ -196,7 +213,9 @@ class AffinitiesPredictor(Predictor):
                     for a, b in zip(pad_pos, self.lsd_pad(target_spec.voxel_size))
                 ]
             )
-        gt_spec.roi = gt_spec.roi.grow(pad_neg, pad_pos)
+        gt_spec.roi = gt_spec.roi.grow(pad_neg, pad_pos).snap_to_grid(
+            target_spec.voxel_size
+        )
         gt_spec.dtype = None
         return gt_spec
 

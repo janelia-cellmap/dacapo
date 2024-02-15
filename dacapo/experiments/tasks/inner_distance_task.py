@@ -1,22 +1,20 @@
 from .evaluators import BinarySegmentationEvaluator
 from .losses import MSELoss
 from .post_processors import ThresholdPostProcessor
-from .predictors import DistancePredictor
+from .predictors import InnerDistancePredictor
 from .task import Task
 
 
-class DistanceTask(Task):
+# Goal is have a distance task but with distance inside the forground only
+class InnerDistanceTask(Task):
     """This is just a dummy task for testing."""
 
     def __init__(self, task_config):
         """Create a `DummyTask` from a `DummyTaskConfig`."""
 
-        self.predictor = DistancePredictor(
+        self.predictor = InnerDistancePredictor(
             channels=task_config.channels,
             scale_factor=task_config.scale_factor,
-            mask_distances=task_config.mask_distances,
-            clipmin=task_config.clipmin,
-            clipmax=task_config.clipmax,
         )
         self.loss = MSELoss()
         self.post_processor = ThresholdPostProcessor()

@@ -1,3 +1,4 @@
+from dacapo.experiments.arraytypes.probabilities import ProbabilityArray
 from .predictor import Predictor
 from dacapo.experiments import Model
 from dacapo.experiments.arraytypes import DistanceArray
@@ -16,9 +17,9 @@ from typing import List
 logger = logging.getLogger(__name__)
 
 
-class DistancePredictor(Predictor):
+class HotDistancePredictor(Predictor):
     """
-    Predict signed distances for a binary segmentation task.
+    Predict signed distances and one hot embedding (as a proxy task) for a binary segmentation task.
     Distances deep within background are pushed to -inf, distances deep within
     the foreground object are pushed to inf. After distances have been
     calculated they are passed through a tanh so that distances saturate at +-1.
@@ -27,47 +28,42 @@ class DistancePredictor(Predictor):
     in the channels argument.
     """
 
-    def __init__(
-        self,
-        channels: List[str],
-        scale_factor: float,
-        mask_distances: bool,
-        clipmin: float = 0.05,
-        clipmax: float = 0.95,
-    ):
-        self.channels = channels
+    def __init__(self, channels: List[str], scale_factor: float, mask_distances: bool):
+        self.channels = (
+            channels * 2
+        )  # one hot + distance (TODO: add hot/distance to channel names)
         self.norm = "tanh"
         self.dt_scale_factor = scale_factor
         self.mask_distances = mask_distances
 
         self.max_distance = 1 * scale_factor
-        self.epsilon = 5e-2
-        self.threshold = 0.8
-        self.clipmin = clipmin
-        self.clipmax = clipmax
+        self.epsilon = 5e-2  # TODO: should be a config parameter
+        self.threshold = 0.8  # TODO: should be a config parameter
 
     @property
     def embedding_dims(self):
         return len(self.channels)
 
+    @property
+    def classes(self):
+        return len(self.channels) // 2
+
     def create_model(self, architecture):
         if architecture.dims == 2:
             head = torch.nn.Conv2d(
-                architecture.num_out_channels, self.embedding_dims, kernel_size=1
+                architecture.num_out_channels, self.embedding_dims, kernel_size=3
             )
         elif architecture.dims == 3:
             head = torch.nn.Conv3d(
-                architecture.num_out_channels, self.embedding_dims, kernel_size=1
+                architecture.num_out_channels, self.embedding_dims, kernel_size=3
             )
 
         return Model(architecture, head)
 
     def create_target(self, gt):
-        distances = self.process(
-            gt.data, gt.voxel_size, self.norm, self.dt_scale_factor
-        )
+        target = self.process(gt.data, gt.voxel_size, self.norm, self.dt_scale_factor)
         return NumpyArray.from_np_array(
-            distances,
+            target,
             gt.roi,
             gt.voxel_size,
             gt.axes,
@@ -75,9 +71,19 @@ class DistancePredictor(Predictor):
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
         # balance weights independently for each channel
+        one_hot_weights, one_hot_moving_class_counts = balance_weights(
+            gt[target.roi],
+            2,
+            slab=tuple(1 if c == "c" else -1 for c in gt.axes),
+            masks=[mask[target.roi]],
+            moving_counts=None
+            if moving_class_counts is None
+            else moving_class_counts[: self.classes],
+        )
+
         if self.mask_distances:
             distance_mask = self.create_distance_mask(
-                target[target.roi],
+                target[target.roi][-self.classes :],
                 mask[target.roi],
                 target.voxel_size,
                 self.norm,
@@ -86,14 +92,19 @@ class DistancePredictor(Predictor):
         else:
             distance_mask = np.ones_like(target.data)
 
-        weights, moving_class_counts = balance_weights(
+        distance_weights, distance_moving_class_counts = balance_weights(
             gt[target.roi],
             2,
             slab=tuple(1 if c == "c" else -1 for c in gt.axes),
             masks=[mask[target.roi], distance_mask],
-            moving_counts=moving_class_counts,
-            clipmin=self.clipmin,
-            clipmax=self.clipmax,
+            moving_counts=None
+            if moving_class_counts is None
+            else moving_class_counts[-self.classes :],
+        )
+
+        weights = np.concatenate((one_hot_weights, distance_weights))
+        moving_class_counts = np.concatenate(
+            (one_hot_moving_class_counts, distance_moving_class_counts)
         )
         return (
             NumpyArray.from_np_array(
@@ -107,7 +118,8 @@ class DistancePredictor(Predictor):
 
     @property
     def output_array_type(self):
-        return DistanceArray(self.embedding_dims)
+        # technically this is a probability array + distance array, but it is only ever referenced for interpolatability (which is true for both) (TODO)
+        return ProbabilityArray(self.embedding_dims)
 
     def create_distance_mask(
         self,
@@ -210,7 +222,7 @@ class DistancePredictor(Predictor):
 
             all_distances[ii] = distances
 
-        return all_distances
+        return np.concatenate((labels, all_distances))
 
     def __find_boundaries(self, labels):
         # labels: 1 1 1 1 0 0 2 2 2 2 3 3       n

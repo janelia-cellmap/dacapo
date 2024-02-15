@@ -16,9 +16,10 @@ from typing import List
 logger = logging.getLogger(__name__)
 
 
-class DistancePredictor(Predictor):
+class InnerDistancePredictor(Predictor):
     """
     Predict signed distances for a binary segmentation task.
+
     Distances deep within background are pushed to -inf, distances deep within
     the foreground object are pushed to inf. After distances have been
     calculated they are passed through a tanh so that distances saturate at +-1.
@@ -27,24 +28,14 @@ class DistancePredictor(Predictor):
     in the channels argument.
     """
 
-    def __init__(
-        self,
-        channels: List[str],
-        scale_factor: float,
-        mask_distances: bool,
-        clipmin: float = 0.05,
-        clipmax: float = 0.95,
-    ):
+    def __init__(self, channels: List[str], scale_factor: float):
         self.channels = channels
         self.norm = "tanh"
         self.dt_scale_factor = scale_factor
-        self.mask_distances = mask_distances
 
         self.max_distance = 1 * scale_factor
         self.epsilon = 5e-2
         self.threshold = 0.8
-        self.clipmin = clipmin
-        self.clipmax = clipmax
 
     @property
     def embedding_dims(self):
@@ -75,25 +66,13 @@ class DistancePredictor(Predictor):
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
         # balance weights independently for each channel
-        if self.mask_distances:
-            distance_mask = self.create_distance_mask(
-                target[target.roi],
-                mask[target.roi],
-                target.voxel_size,
-                self.norm,
-                self.dt_scale_factor,
-            )
-        else:
-            distance_mask = np.ones_like(target.data)
 
         weights, moving_class_counts = balance_weights(
             gt[target.roi],
             2,
             slab=tuple(1 if c == "c" else -1 for c in gt.axes),
-            masks=[mask[target.roi], distance_mask],
+            masks=[mask[target.roi]],
             moving_counts=moving_class_counts,
-            clipmin=self.clipmin,
-            clipmax=self.clipmax,
         )
         return (
             NumpyArray.from_np_array(
@@ -108,66 +87,6 @@ class DistancePredictor(Predictor):
     @property
     def output_array_type(self):
         return DistanceArray(self.embedding_dims)
-
-    def create_distance_mask(
-        self,
-        distances: np.ndarray,
-        mask: np.ndarray,
-        voxel_size: Coordinate,
-        normalize=None,
-        normalize_args=None,
-    ):
-        mask_output = mask.copy()
-        for i, (channel_distance, channel_mask) in enumerate(zip(distances, mask)):
-            tmp = np.zeros(
-                np.array(channel_mask.shape) + np.array((2,) * channel_mask.ndim),
-                dtype=channel_mask.dtype,
-            )
-            slices = tmp.ndim * (slice(1, -1),)
-            tmp[slices] = channel_mask
-            boundary_distance = distance_transform_edt(
-                tmp,
-                sampling=voxel_size,
-            )
-            if self.epsilon is None:
-                add = 0
-            else:
-                add = self.epsilon
-            boundary_distance = self.__normalize(
-                boundary_distance[slices], normalize, normalize_args
-            )
-
-            channel_mask_output = mask_output[i]
-            logging.debug(
-                "Total number of masked in voxels before distance masking {0:}".format(
-                    np.sum(channel_mask_output)
-                )
-            )
-            channel_mask_output[
-                np.logical_and(
-                    np.clip(abs(channel_distance) + add, 0, self.threshold)
-                    >= boundary_distance,
-                    channel_distance >= 0,
-                )
-            ] = 0
-            logging.debug(
-                "Total number of masked in voxels after postive distance masking {0:}".format(
-                    np.sum(channel_mask_output)
-                )
-            )
-            channel_mask_output[
-                np.logical_and(
-                    np.clip(abs(channel_distance) + add, 0, self.threshold)
-                    >= boundary_distance,
-                    channel_distance <= 0,
-                )
-            ] = 0
-            logging.debug(
-                "Total number of masked in voxels after negative distance masking {0:}".format(
-                    np.sum(channel_mask_output)
-                )
-            )
-        return mask_output
 
     def process(
         self,
@@ -210,7 +129,7 @@ class DistancePredictor(Predictor):
 
             all_distances[ii] = distances
 
-        return all_distances
+        return all_distances * labels
 
     def __find_boundaries(self, labels):
         # labels: 1 1 1 1 0 0 2 2 2 2 3 3       n
