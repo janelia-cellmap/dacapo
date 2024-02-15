@@ -1,22 +1,27 @@
 # Contributor Guide
 
 ## Development Installation
-- currently, pip install -r requirements-dev.txt
-and then pip install -e .
-TODO: set up pip install -e .[dev]
+`pip install -e .[dev,test]`
 
 ## Style and Pre-Commit
-- TODO: pre-commit with black mypy
-- do use ruff and black
-- do have typing, developers should supply types
+To set up pre-commit:
+```
+pre-commit autoupdate
+pre-commit install
+```
+Then any time you write a commit, it will run ruff, black, mypy, and validate the pyproject.toml. 
+To skip the pre-commit step, use:
+`git commit --no-verify`
+
+Ruff, black, and mypy settings are specified in the pyproject.toml. Currently they are not very strict, but this may change in the future.
 
 ## Testing
-- Unittest your functions
-- Pytest run automatically on PR, and so is codcov (maybe)
-TODO: codecov
+To run tests with coverage locally:
+`pytest tests --color=yes --cov --cov-report=term-missing`
+This will also be run automatically when a PR is made to master and a codecov report will be generated telling you if your PR increased or decreased coverage.
 
 
 ## Branching and PRs
 - Users that have been added to the CellMap organization and the DaCapo project should be able to develop directly into the CellMap fork of DaCapo. Other users will need to create a fork.
 - For a completely new feature, make a branch off of the `main` branch of CellMap's fork of DaCapo with a name describing the feature. If you are collaborating on a feature that already has a branch, you can branch off that feature branch.
-- Currently, you should make your PRs into the main branch of CellMap's fork, or the feature branch you branched off of. Once the PR is merged, the feature branch should be deleted. 
+- Currently, you should make your PRs into the main branch of CellMap's fork, or the feature branch you branched off of. PRs currently require one maintainer's approval before merging. Once the PR is merged, the feature branch should be deleted. 
