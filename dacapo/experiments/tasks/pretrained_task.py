@@ -2,10 +2,11 @@ from .task import Task
 
 import torch
 
+
 class PretrainedTask(Task):
     """
     PretrainedTask is a specialized task that initializes a model weights using a pretrained model.
-    
+
     This task uses a pretrained model weights which can have a different head channels
     and then loads pretrained weights into the model created by the predictor.
 
@@ -25,7 +26,7 @@ class PretrainedTask(Task):
         task configuration and then loading the pretrained weights.
 
         Args:
-            task_config: A configuration object for the task, which includes the sub-task 
+            task_config: A configuration object for the task, which includes the sub-task
                          configuration and the path to the pretrained weights.
         """
         sub_task = task_config.sub_task_config.task_type(task_config.sub_task_config)

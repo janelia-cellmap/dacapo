@@ -50,7 +50,7 @@ def train_run(
 
     Args:
         run (Run): The run object containing the model, optimizer, and other training parameters.
-        compute_context (ComputeContext, optional): The compute context for training. Defaults to LocalTorch(), 
+        compute_context (ComputeContext, optional): The compute context for training. Defaults to LocalTorch(),
         Can be set to distribute Bsub() to using LSF cluster.
 
     """

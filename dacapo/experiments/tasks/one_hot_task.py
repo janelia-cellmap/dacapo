@@ -7,8 +7,8 @@ from .task import Task
 
 class OneHotTask(Task):
     """
-    OneHotTask is a specialized implementation of a Task that performs one-hot encoding 
-    for a given set of classes. It integrates various components like a predictor, loss function, 
+    OneHotTask is a specialized implementation of a Task that performs one-hot encoding
+    for a given set of classes. It integrates various components like a predictor, loss function,
     post-processor, and evaluator, which are configured based on the provided task configuration.
 
     Attributes:
@@ -36,4 +36,3 @@ class OneHotTask(Task):
         self.loss = DummyLoss()
         self.post_processor = ArgmaxPostProcessor()
         self.evaluator = DummyEvaluator()
-

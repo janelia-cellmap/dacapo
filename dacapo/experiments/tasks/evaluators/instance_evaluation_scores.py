@@ -7,14 +7,15 @@ from typing import Tuple
 @attr.s
 class InstanceEvaluationScores(EvaluationScores):
     """
-    InstanceEvaluationScores is for storing and computing VOI (Variation of Information) related evaluation 
-    scores for instance segmentation tasks. It handles VOI split and merge scores and 
+    InstanceEvaluationScores is for storing and computing VOI (Variation of Information) related evaluation
+    scores for instance segmentation tasks. It handles VOI split and merge scores and
     provides utility methods for score analysis and comparison.
 
     Attributes:
         voi_split (float): Score for the VOI split metric.
         voi_merge (float): Score for the VOI merge metric.
     """
+
     criteria = ["voi_split", "voi_merge", "voi"]
 
     voi_split: float = attr.ib(default=float("nan"))
