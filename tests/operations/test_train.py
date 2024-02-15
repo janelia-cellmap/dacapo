@@ -14,6 +14,9 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
+@pytest.mark.filterwarning(
+    "ignore:*Skipping device Apple Paravirtual device that does not support Metal 2.0*:UserWarning"
+)
 @pytest.mark.parametrize(
     "run_config",
     [
