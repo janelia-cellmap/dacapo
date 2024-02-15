@@ -52,3 +52,13 @@ class AffinitiesTaskConfig(TaskConfig):
         default=0.95,
         metadata={"help_text": "The maximum value for lsds weights."},
     )
+    background_as_object: bool = attr.ib(
+        default=False,
+        metadata={
+            "help_text": (
+                "Whether to treat the background as a separate object. "
+                "If set to false background should get an affinity near 0. If "
+                "set to true, the background should also have high affinity with other background."
+            )
+        },
+    )
