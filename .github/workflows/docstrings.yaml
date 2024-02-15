@@ -20,9 +20,10 @@ jobs:
         with:
           python-version: "3.10"
           cache: "pip"
+      - run: pip install -r .github/docstrings/requirements.txt
 
       - name: Run add_docstring script
-        run: bash .github/run_add_docstring.sh .github/add_docstring.py
+        run: bash .github/docstrings/run_add_docstring.sh .github/docstrings/add_docstring.py
         env:
           # Pass the OpenAI API key as an environment variable
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
