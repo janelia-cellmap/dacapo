@@ -35,7 +35,7 @@ class WatershedPostProcessor(PostProcessor):
     def process(
         self,
         parameters: WatershedPostProcessorParameters,
-        output_array_identifier: 'LocalArrayIdentifier',
+        output_array_identifier: "LocalArrayIdentifier",
     ):
         output_array = ZarrArray.create_from_array_identifier(
             output_array_identifier,

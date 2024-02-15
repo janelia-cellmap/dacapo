@@ -174,8 +174,8 @@ def apply_run(
     run: Run,
     parameters: PostProcessorParameters,
     input_array: Array,
-    prediction_array_identifier: 'LocalArrayIdentifier',
-    output_array_identifier: 'LocalArrayIdentifier',
+    prediction_array_identifier: "LocalArrayIdentifier",
+    output_array_identifier: "LocalArrayIdentifier",
     roi: Optional[Roi] = None,
     num_cpu_workers: int = 30,
     output_dtype: Optional[np.dtype] = np.uint8,  # type: ignore
