@@ -1,0 +1,50 @@
+name: GPT4 generate docstrings
+
+on:
+  pull_request:
+    branches:
+      - dev/main
+  push:
+    branches:
+      - dev/main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python and install dependencies
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: Run add_docstring script
+        run: bash .github/run_add_docstring.sh .github/add_docstring.py
+        env:
+          # Pass the OpenAI API key as an environment variable
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+      # Step 4: Check if any changes were made
+      - name: Check for changes
+        id: changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::set-output name=has_changes::true"
+          fi
+          
+      # Step 5: Commit and push changes to the code repository if any changes were made
+      - name: Create pull request
+        if: steps.changes.outputs.has_changes
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "GPT4 - auto docstrings"
+          commit-message: ":alien: GPT Generated DocStrings"
+          body: |
+            There appear to be some missing docs in ${{ github.sha }}. This pull request
+            uses the GPT to generate docstrings.
+          base: ${{ github.head_ref }} # Creates pull request onto pull request or commit branch
+          branch: gpt_docstrings
