@@ -12,8 +12,6 @@ from dacapo.compute_context import LocalTorch, ComputeContext
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray, Array
 
 from funlib.geometry import Coordinate, Roi
-import gunpowder as gp
-import gunpowder.torch as gp_torch
 import numpy as np
 import zarr
 
@@ -21,6 +19,18 @@ from typing import Optional
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+@click.group()
+@click.option(
+    "--log-level",
+    type=click.Choice(
+        ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], case_sensitive=False
+    ),
+    default="INFO",
+)
+def cli(log_level):
+    logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
 @cli.command()

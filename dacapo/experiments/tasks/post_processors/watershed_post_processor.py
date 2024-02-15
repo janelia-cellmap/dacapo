@@ -38,7 +38,6 @@ class WatershedPostProcessor(PostProcessor):
         compute_context: ComputeContext | str = LocalTorch(),
         num_workers: int = 16,
         block_size: Coordinate = Coordinate((64, 64, 64)),
-        context: Coordinate = Coordinate((32, 32, 32)),
     ):
         output_array = ZarrArray.create_from_array_identifier(
             output_array_identifier,
@@ -54,15 +53,16 @@ class WatershedPostProcessor(PostProcessor):
         pars = {
             "offsets": self.offsets,
             "bias": parameters.bias,
+            "context": parameters.context,
         }
         segment_blockwise(
             segment_function_file=str(
                 Path(Path(__file__).parent, "blockwise", "watershed_function.py")
             ),
             compute_context=compute_context,
-            context=context,
+            context=parameters.context,
             total_roi=self.prediction_array.roi,
-            read_roi=read_roi.grow(context, context),
+            read_roi=read_roi.grow(parameters.context, parameters.context),
             write_roi=read_roi,
             num_workers=num_workers,
             max_retries=2,  # TODO: make this an option
