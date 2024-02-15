@@ -1,4 +1,5 @@
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+from dacapo.store.array_store import LocalArrayIdentifier
 
 from .watershed_post_processor_parameters import WatershedPostProcessorParameters
 from .post_processor import PostProcessor

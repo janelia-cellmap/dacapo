@@ -6,7 +6,7 @@ from dacapo.store.create_store import (
 )
 from dacapo.experiments import Run
 from dacapo.compute_context import LocalTorch, ComputeContext
-from .validate import validate_run
+from dacapo.validate import validate_run
 
 import torch
 from tqdm import tqdm
