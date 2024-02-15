@@ -54,7 +54,8 @@ dependencies = [
         "cattrs",
         "numpy-indexed",
         "click",
-        "toml"]
+        "toml",
+        ]
 
 # extras
 # https://peps.python.org/pep-0621/#dependencies-optional-dependencies

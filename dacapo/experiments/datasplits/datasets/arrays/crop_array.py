@@ -35,7 +35,7 @@ class CropArray(Array):
 
     @property
     def roi(self) -> Roi:
-        return self.crop_roi
+        return self.crop_roi.intersect(self._source_array.roi)
 
     @property
     def writable(self) -> bool:
