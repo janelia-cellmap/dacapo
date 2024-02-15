@@ -73,8 +73,8 @@ def start_worker(
 
 
 def spawn_worker(
-    input_array_identifier: LocalArrayIdentifier,
-    output_array_identifier: LocalArrayIdentifier,
+    input_array_identifier: 'LocalArrayIdentifier',
+    output_array_identifier: 'LocalArrayIdentifier',
     threshold: float = 0.0,
     compute_context: ComputeContext = LocalTorch(),
 ):

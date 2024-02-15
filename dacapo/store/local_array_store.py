@@ -85,7 +85,7 @@ class LocalArrayStore(ArrayStore):
             Path(self.__get_run_dir(run_name), "validation.zarr")
         )
 
-    def remove(self, array_identifier: LocalArrayIdentifier) -> None:
+    def remove(self, array_identifier: 'LocalArrayIdentifier') -> None:
         container = array_identifier.container
         dataset = array_identifier.dataset
 

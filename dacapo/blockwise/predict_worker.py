@@ -170,8 +170,8 @@ def start_worker(
 def spawn_worker(
     run_name: str,
     iteration: int,
-    raw_array_identifier: LocalArrayIdentifier,
-    prediction_array_identifier: LocalArrayIdentifier,
+    raw_array_identifier: 'LocalArrayIdentifier',
+    prediction_array_identifier: 'LocalArrayIdentifier',
     compute_context: ComputeContext = LocalTorch(),
 ):
     """Spawn a worker to predict on a given dataset.

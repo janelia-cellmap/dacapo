@@ -2,7 +2,6 @@ from pathlib import Path
 from dacapo.blockwise.scheduler import run_blockwise
 from dacapo.compute_context import ComputeContext, LocalTorch
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
-from dacapo.store.array_store import LocalArrayIdentifier
 from .argmax_post_processor_parameters import ArgmaxPostProcessorParameters
 from .post_processor import PostProcessor
 import numpy as np
