@@ -6,16 +6,11 @@ import numpy as np
 import dacapo
 import click
 import logging
-from daisy import Roi, Coordinate
-from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
+from daisy import Roi
 from dacapo.experiments.datasplits.datasets.dataset import Dataset
-from dacapo.experiments.run import Run
 from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
     PostProcessorParameters,
 )
-from dacapo.store.array_store import LocalArrayIdentifier
-from dacapo.store.create_store import create_config_store, create_weights_store
-from dacapo import compute_context
 from dacapo.compute_context import ComputeContext, LocalTorch
 
 
@@ -83,14 +78,14 @@ def validate(run_name, iteration):
 @click.option("-cc", "--compute_context", type=str, default="LocalTorch")
 def apply(
     run_name: str,
-    input_container: Path or str,
+    input_container: Path | str,
     input_dataset: str,
-    output_path: Path or str,
-    validation_dataset: Optional[Dataset or str] = None,
-    criterion: Optional[str] = "voi",
+    output_path: Path | str,
+    validation_dataset: Optional[Dataset | str] = None,
+    criterion: str = "voi",
     iteration: Optional[int] = None,
-    parameters: Optional[PostProcessorParameters or str] = None,
-    roi: Optional[Roi or str] = None,
+    parameters: Optional[PostProcessorParameters | str] = None,
+    roi: Optional[Roi | str] = None,
     num_workers: int = 30,
     output_dtype: Optional[np.dtype | str] = "uint8",
     overwrite: bool = True,
@@ -155,9 +150,9 @@ def apply(
 def predict(
     run_name: str,
     iteration: int,
-    input_container: Path or str,
+    input_container: Path | str,
     input_dataset: str,
-    output_path: Path or str,
+    output_path: Path | str,
     output_roi: Optional[str | Roi] = None,
     num_workers: int = 30,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore

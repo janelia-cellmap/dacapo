@@ -6,6 +6,7 @@ from dacapo.store.array_store import LocalArrayIdentifier
 
 from .watershed_post_processor_parameters import WatershedPostProcessorParameters
 from .post_processor import PostProcessor
+from dacapo.compute_context import ComputeContext, LocalTorch
 
 from funlib.geometry import Coordinate, Roi
 
@@ -33,7 +34,7 @@ class WatershedPostProcessor(PostProcessor):
 
     def process(
         self,
-        parameters: WatershedPostProcessorParameters,
+        parameters: WatershedPostProcessorParameters,  # type: ignore[override]
         output_array_identifier: "LocalArrayIdentifier",
         compute_context: ComputeContext | str = LocalTorch(),
         num_workers: int = 16,

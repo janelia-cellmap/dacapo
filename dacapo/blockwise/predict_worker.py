@@ -62,9 +62,9 @@ def cli(log_level):
 def start_worker(
     run_name: str,
     iteration: int,
-    input_container: Path or str,
+    input_container: Path | str,
     input_dataset: str,
-    output_container: Path or str,
+    output_container: Path | str,
     output_dataset: str,
     device: str = "cuda",
 ):
