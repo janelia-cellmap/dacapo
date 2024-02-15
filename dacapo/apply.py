@@ -26,14 +26,14 @@ logger = logging.getLogger(__name__)
 
 def apply(
     run_name: str,
-    input_container: Path or str,
+    input_container: Path | str,
     input_dataset: str,
-    output_path: Path or str,
-    validation_dataset: Optional[Dataset or str] = None,
-    criterion: Optional[str] = "voi",
+    output_path: Path | str,
+    validation_dataset: Optional[Dataset | str] = None,
+    criterion: str = "voi",
     iteration: Optional[int] = None,
-    parameters: Optional[PostProcessorParameters or str] = None,
-    roi: Optional[Roi or str] = None,
+    parameters: Optional[PostProcessorParameters | str] = None,
+    roi: Optional[Roi | str] = None,
     num_cpu_workers: int = 30,
     output_dtype: Optional[np.dtype | str] = np.uint8,  # type: ignore
     compute_context: ComputeContext = LocalTorch(),
@@ -75,24 +75,27 @@ def apply(
     logger.info("Loading weights for iteration %i", iteration)
     weights_store.retrieve_weights(run_name, iteration)
 
-    # find the best parameters
-    if isinstance(validation_dataset, str) and run.datasplit.validate is not None:
-        val_ds_name = validation_dataset
-        validation_dataset = [
-            dataset for dataset in run.datasplit.validate if dataset.name == val_ds_name
-        ][0]
-    elif isinstance(validation_dataset, Dataset) or parameters is not None:
-        pass
-    else:
-        raise ValueError(
-            "validation_dataset must be a dataset name or a Dataset object, or parameters must be provided explicitly."
-        )
     if parameters is None:
+        # find the best parameters
+        _validation_dataset: Dataset
+        if isinstance(validation_dataset, str) and run.datasplit.validate is not None:
+            val_ds_name = validation_dataset
+            _validation_dataset = [
+                dataset
+                for dataset in run.datasplit.validate
+                if dataset.name == val_ds_name
+            ][0]
+        elif isinstance(validation_dataset, Dataset):
+            _validation_dataset = validation_dataset
+        else:
+            raise ValueError(
+                "validation_dataset must be a dataset name or a Dataset object, or parameters must be provided explicitly."
+            )
         logger.info(
-            "Finding best parameters for validation dataset %s", validation_dataset
+            "Finding best parameters for validation dataset %s", _validation_dataset
         )
         parameters = run.task.evaluator.get_overall_best_parameters(  # TODO
-            validation_dataset, criterion
+            _validation_dataset, criterion
         )
         assert (
             parameters is not None
