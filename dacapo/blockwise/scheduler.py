@@ -1,6 +1,9 @@
 from pathlib import Path
+import tempfile
+import time
 import daisy
-from funlib.geometry import Roi
+from funlib.geometry import Roi, Coordinate
+import yaml
 
 from dacapo.compute_context import ComputeContext
 from dacapo.blockwise import DaCapoBlockwiseTask
@@ -8,7 +11,7 @@ from dacapo.blockwise import DaCapoBlockwiseTask
 
 def run_blockwise(
     worker_file: str or Path,
-    compute_context: ComputeContext | str,
+    compute_context: ComputeContext or str,
     total_roi: Roi,
     read_roi: Roi,
     write_roi: Roi,
@@ -82,3 +85,68 @@ def run_blockwise(
     )
 
     return daisy.run_blockwise([task])
+
+
+def segment_blockwise(
+    segment_function_file: str or Path,
+    compute_context: ComputeContext | str,
+    context: Coordinate,
+    total_roi: Roi,
+    read_roi: Roi,
+    write_roi: Roi,
+    num_workers: int = 16,
+    max_retries: int = 2,
+    timeout=None,
+    upstream_tasks=None,
+    tmp_prefix="tmp",
+    *args,
+    **kwargs,
+):
+    with tempfile.TemporaryDirectory(prefix=tmp_prefix) as tmpdir:
+        # write parameters to tmpdir
+        if "parameters" in locals():
+            with open(Path(tmpdir, "parameters.yaml"), "w") as f:
+                yaml.dump(locals()["parameters"], f)
+
+        # Make the task
+        task = DaCapoBlockwiseTask(
+            str(Path(Path(__file__).parent, "segment_worker.py")),
+            compute_context,
+            total_roi.grow(context, context),
+            read_roi,
+            write_roi,
+            num_workers,
+            max_retries,
+            timeout,
+            upstream_tasks,
+            tmpdir=tmpdir,
+            function_path=segment_function_file,
+            *args,
+            **kwargs,
+        )
+
+        daisy.run_blockwise([task])
+
+        # give a second for the fist task to finish
+        time.sleep(1)
+        read_roi = write_roi
+
+        success = daisy.run_blockwise([task])
+
+        # Make the task
+        task = DaCapoBlockwiseTask(
+            str(Path(Path(__file__).parent, "relabel_worker.py")),
+            compute_context,
+            total_roi,
+            read_roi,
+            write_roi,
+            num_workers,
+            max_retries,
+            timeout,
+            upstream_tasks,
+            tmpdir=tmpdir,
+            *args,
+            **kwargs,
+        )
+
+        return success and daisy.run_blockwise([task])

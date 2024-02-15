@@ -1,4 +1,6 @@
 from pathlib import Path
+
+import torch
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from dacapo.gp.dacapo_array_source import DaCapoArraySource
 from dacapo.store.array_store import LocalArrayIdentifier
@@ -85,6 +87,9 @@ def start_worker(
         Path(output_container), output_dataset
     )
     output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
+
+    # set benchmark flag to True for performance
+    torch.backends.cudnn.benchmark = True
 
     # get the model's input and output size
     model = run.model.eval()

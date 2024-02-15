@@ -17,7 +17,3 @@ class ComputeContext(ABC):
         # A helper method to run a command in the context
         # specific way.
         return subprocess.run(self.wrap_command(command))
-
-    def train(self, run_name):
-        subprocess.run(self.wrap_command(["dacapo", "train", "-r", run_name]))
-        return True
