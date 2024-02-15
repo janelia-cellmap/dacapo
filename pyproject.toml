@@ -69,6 +69,7 @@ dev = [
     "rich",
     "ruff",
     "pre-commit",
+    "jupyter",
 ]
 docs = [
     "sphinx-autodoc-typehints",
@@ -105,22 +106,27 @@ dacapo = "dacapo.cli:cli"
 line-length = 88
 target-version = "py310"
 src = ["dacapo"]
+
+[tool.ruff.lint]
 # https://beta.ruff.rs/docs/rules/
+# We may want to enable some of these options later
 select = [
     "E",    # style errors
-    "W",    # style warnings
+#    "W",    # style warnings
     "F",    # flakes
-    "D",    # pydocstyle
-    "I",    # isort
-    "UP",   # pyupgrade
-    "C4",   # flake8-comprehensions
-    "B",    # flake8-bugbear
-    "A001", # flake8-builtins
-    "RUF",  # ruff-specific rules
+#    "D",    # pydocstyle
+#    "I",    # isort
+#    "UP",   # pyupgrade
+#    "C4",   # flake8-comprehensions
+#    "B",    # flake8-bugbear
+#    "A001", # flake8-builtins
+#    "RUF",  # ruff-specific rules
 ]
+extend-ignore = ["E501"]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "tests/*.py" = ["D", "S"]
+"__init__.py" = ["F401"]
 
 # https://docs.pytest.org/en/6.2.x/customize.html
 [tool.pytest.ini_options]
@@ -131,20 +137,85 @@ filterwarnings = [
     "ignore::DeprecationWarning",
     ]
 
-
 # https://mypy.readthedocs.io/en/stable/config_file.html
 [tool.mypy]
 files = "dacapo/**/"
-strict = true
+strict = false
 disallow_any_generics = false
 disallow_subclassing_any = false
 show_error_codes = true
 pretty = true
 
 # # module specific overrides
-# [[tool.mypy.overrides]]
-# module = ["numpy.*",]
-# ignore_errors = true
+[[tool.mypy.overrides]]
+module = ["funlib.*",]
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = ["gunpowder.*"]
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "scipy.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "augment.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module="tifffile.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "daisy.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "lazy_property.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "skimage.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "fibsem_tools.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "neuroglancer.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "tqdm.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "zarr.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "pymongo.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "bson.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "affogato.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "SimpleITK.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "bokeh.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "lsd.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "yaml.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "pytest_lazyfixture.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "neuclease.dvid.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "mwatershed.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "numpy_indexed.*"
+ignore_missing_imports = true
 
 
 # https://coverage.readthedocs.io/en/6.4/config.html
