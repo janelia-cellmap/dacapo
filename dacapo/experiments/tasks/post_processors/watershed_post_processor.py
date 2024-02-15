@@ -3,6 +3,7 @@ from dacapo.store.array_store import LocalArrayIdentifier
 
 from .watershed_post_processor_parameters import WatershedPostProcessorParameters
 from .post_processor import PostProcessor
+from dacapo.compute_context import ComputeContext, LocalTorch
 
 from funlib.geometry import Coordinate
 import numpy_indexed as npi
@@ -35,8 +36,11 @@ class WatershedPostProcessor(PostProcessor):
 
     def process(
         self,
-        parameters: WatershedPostProcessorParameters,
+        parameters: WatershedPostProcessorParameters,  # type: ignore[override]
         output_array_identifier: "LocalArrayIdentifier",
+        compute_context: ComputeContext | str = LocalTorch(),
+        num_workers: int = 16,
+        chunk_size: Coordinate = Coordinate((64, 64, 64)),
     ):
         output_array = ZarrArray.create_from_array_identifier(
             output_array_identifier,
@@ -57,7 +61,7 @@ class WatershedPostProcessor(PostProcessor):
         # filter fragments
         average_affs = np.mean(affs, axis=0)
 
-        filtered_fragments = []
+        _filtered_fragments = []
 
         fragment_ids = np.unique(segmentation)
 
@@ -65,9 +69,9 @@ class WatershedPostProcessor(PostProcessor):
             fragment_ids, measurements.mean(average_affs, segmentation, fragment_ids)
         ):
             if mean < parameters.bias:
-                filtered_fragments.append(fragment)
+                _filtered_fragments.append(fragment)
 
-        filtered_fragments = np.array(filtered_fragments, dtype=segmentation.dtype)
+        filtered_fragments = np.array(_filtered_fragments, dtype=segmentation.dtype)
         replace = np.zeros_like(filtered_fragments)
 
         # DGA: had to add in flatten and reshape since remap (in particular indices) didn't seem to work with ndarrays for the input

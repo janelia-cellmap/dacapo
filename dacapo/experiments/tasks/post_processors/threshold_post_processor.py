@@ -32,7 +32,7 @@ class ThresholdPostProcessor(PostProcessor):
 
     def process(
         self,
-        parameters: "ThresholdPostProcessorParameters",
+        parameters: "ThresholdPostProcessorParameters",  # type: ignore[override]
         output_array_identifier: "LocalArrayIdentifier",
         compute_context: ComputeContext | str = LocalTorch(),
         num_workers: int = 16,
