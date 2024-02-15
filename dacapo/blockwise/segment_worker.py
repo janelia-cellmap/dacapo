@@ -43,6 +43,7 @@ def start_worker(
     output_dataset: str,
     tmpdir: str,
     function_path: str,
+    **parameters,
 ):
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
@@ -69,7 +70,7 @@ def start_worker(
             if num_voxels_in_block is None:
                 num_voxels_in_block = np.prod(block.write_roi.size)
 
-            segmentation = segment_function(input_array, block)
+            segmentation = segment_function(input_array, block, parameters)
 
             assert segmentation.dtype == np.uint64
 

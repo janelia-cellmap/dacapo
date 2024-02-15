@@ -1,7 +1,8 @@
 from glob import glob
 import os
-import sys
 import daisy
+from dacapo.compute_context import ComputeContext, LocalTorch
+from dacapo.store.array_store import LocalArrayIdentifier
 from funlib.segment.arrays.impl import find_components
 from funlib.segment.arrays.replace_values import replace_values
 from funlib.persistence import open_ds
@@ -32,7 +33,13 @@ read_write_conflict = False
 @click.option("--output_container", type=str, help="Output container")
 @click.option("--output_dataset", type=str, help="Output dataset")
 @click.option("--tmpdir", type=str, help="Temporary directory")
-def start_worker(output_container, output_dataset, tmpdir):
+def start_worker(
+    output_container,
+    output_dataset,
+    tmpdir,
+    *args,
+    **kwargs,
+):
     client = daisy.Client()
     array_out = open_ds(output_container, output_dataset, mode="a")
 
@@ -40,20 +47,12 @@ def start_worker(output_container, output_dataset, tmpdir):
 
     components = find_components(nodes, edges)
 
-    print(f"Num nodes: {len(nodes)}")
-    print(f"Num edges: {len(edges)}")
-    print(f"Num components: {len(components)}")
-
     while True:
-        print("getting block")
         with client.acquire_block() as block:
             if block is None:
                 break
 
-            print(f"Segmenting in block {block}")
-
             relabel_in_block(array_out, nodes, components, block)
-    print("worker finished.")
 
 
 def relabel_in_block(array_out, old_values, new_values, block):
@@ -73,6 +72,40 @@ def read_cross_block_merges(tmpdir):
         edges.append(b["edges"])
 
     return np.concatenate(nodes), np.concatenate(edges)
+
+
+def spawn_worker(
+    output_array_identifier: LocalArrayIdentifier,
+    tmpdir: str,
+    compute_context: ComputeContext = LocalTorch(),
+    *args,
+    **kwargs,
+):
+    """Spawn a worker to predict on a given dataset.
+
+    Args:
+        output_array_identifier (LocalArrayIdentifier): The output array identifier
+        tmpdir (str): The temporary directory
+        compute_context (ComputeContext, optional): The compute context. Defaults to LocalTorch().
+    """
+    # Make the command for the worker to run
+    command = [
+        "python",
+        __file__,
+        "start-worker",
+        "--output_container",
+        output_array_identifier.container,
+        "--output_dataset",
+        output_array_identifier.dataset,
+        "--tmpdir",
+        tmpdir,
+    ]
+
+    def run_worker():
+        # Run the worker in the given compute context
+        compute_context.execute(command)
+
+    return run_worker
 
 
 if __name__ == "__main__":

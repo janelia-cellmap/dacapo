@@ -19,7 +19,7 @@ def run_blockwise(
     timeout=None,
     upstream_tasks=None,
     *args,
-    **kwargs
+    **kwargs,
 ):
     """Run a function in parallel over a large volume.
 
@@ -80,7 +80,7 @@ def run_blockwise(
         timeout,
         upstream_tasks,
         *args,
-        **kwargs
+        **kwargs,
     )
 
     return daisy.run_blockwise([task])
@@ -99,8 +99,8 @@ def segment_blockwise(
     upstream_tasks=None,
     tmp_prefix="tmp",
     *args,
-    **kwargs
-    ):
+    **kwargs,
+):
     with tempfile.TemporaryDirectory(prefix=tmp_prefix) as tmpdir:
         # Make the task
         task = DaCapoBlockwiseTask(
@@ -113,8 +113,10 @@ def segment_blockwise(
             max_retries,
             timeout,
             upstream_tasks,
+            tmpdir=tmpdir,
+            function_path=segment_function_file,
             *args,
-            **kwargs
+            **kwargs,
         )
 
         daisy.run_blockwise([task])
@@ -123,64 +125,22 @@ def segment_blockwise(
         time.sleep(1)
         read_roi = write_roi
 
-        def start_worker():
-            worker_id = daisy.Context.from_env()["worker_id"]
-            task_id = daisy.Context.from_env()["task_id"]
-
-            log_file_path = f"./daisy_logs/{task_id}/worker_{worker_id}"
-            # subprocess.run(["python", "./segment_worker.py"])
-
-            # do the same on a cluster node:
-            # num_cpus_per_worker = 4
-            subprocess.run(
-                [
-                    "bsub",
-                    "-K",
-                    "-P",
-                    "cellmap",
-                    "-J",
-                    f"relabel_worker_{worker_id}",
-                    "-n",
-                    str(num_cpus),
-                    "-e",
-                    f"{log_file_path}.err",
-                    "-o",
-                    f"{log_file_path}.out",
-                    "python",
-                    "./relabel_worker.py",
-                    tmpdir,
-                ]
-            )
-
-        task = daisy.Task(
-            "relabel_blockwise",
-            total_roi,
-            read_roi,
-            write_roi,
-            process_function=start_worker,
-            num_workers=num_workers,
-            fit="shrink",
-            timeout=10,
-            read_write_conflict=False,
-        )
-
-        daisy.run_blockwise([task])
+        success = daisy.run_blockwise([task])
 
         # Make the task
         task = DaCapoBlockwiseTask(
             str(Path(Path(__file__).parent, "relabel_worker.py")),
             compute_context,
-            total_roi.grow(context, context),
+            total_roi,
             read_roi,
             write_roi,
             num_workers,
             max_retries,
             timeout,
             upstream_tasks,
+            tmpdir=tmpdir,
             *args,
-            **kwargs
+            **kwargs,
         )
 
-        daisy.run_blockwise([task])
-
-    .")
+        return success and daisy.run_blockwise([task])
