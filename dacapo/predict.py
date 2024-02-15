@@ -1,13 +1,15 @@
-from dacapo.gp import DaCapoArraySource
-from dacapo.experiments.model import Model
-from dacapo.experiments.datasplits.datasets.arrays import Array
+from pathlib import Path
+
+import click
+from dacapo.blockwise import run_blockwise
+from dacapo.experiments import Run
+from dacapo.store.create_store import create_config_store
 from dacapo.store.local_array_store import LocalArrayIdentifier
 from dacapo.compute_context import LocalTorch, ComputeContext
-from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
+from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+from dacapo.cli import cli
 
 from funlib.geometry import Coordinate, Roi
-import gunpowder as gp
-import gunpowder.torch as gp_torch
 import numpy as np
 import zarr
 
@@ -17,16 +19,106 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+@cli.command()
+@click.option(
+    "-r", "--run-name", required=True, type=str, help="The name of the run to apply."
+)
+@click.option(
+    "-i",
+    "--iteration",
+    required=True,
+    type=int,
+    help="The training iteration of the model to use for prediction.",
+)
+@click.option(
+    "-ic",
+    "--input_container",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+)
+@click.option("-id", "--input_dataset", required=True, type=str)
+@click.option("-op", "--output_path", required=True, type=click.Path(file_okay=False))
+@click.option(
+    "-roi",
+    "--output_roi",
+    type=str,
+    required=False,
+    help="The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]",
+)
+@click.option("-w", "--num_workers", type=int, default=30)
+@click.option("-dt", "--output_dtype", type=str, default="uint8")
+@click.option(
+    "-cc",
+    "--compute_context",
+    type=str,
+    default="LocalTorch",
+    help="The compute context to use for prediction. Must be the name of a subclass of ComputeContext.",
+)
+@click.option("-ow", "--overwrite", is_flag=True)
 def predict(
-    model: Model,
-    raw_array: Array,
-    prediction_array_identifier: LocalArrayIdentifier,
-    num_cpu_workers: int = 4,
-    compute_context: ComputeContext = LocalTorch(),
-    output_roi: Optional[Roi] = None,
-    output_dtype: np.dtype = np.float32,  # type: ignore
-    overwrite: bool = False,
+    run_name: str,
+    iteration: int,
+    input_container: Path | str,
+    input_dataset: str,
+    output_path: Path | str,
+    output_roi: Optional[str] = None,
+    num_workers: int = 30,
+    output_dtype: np.dtype | str = np.uint8,  # type: ignore
+    compute_context: ComputeContext | str = LocalTorch(),
+    overwrite: bool = True,
 ):
+    """_summary_
+
+    Args:
+        run_name (str): _description_
+        iteration (int): _description_
+        input_container (Path | str): _description_
+        input_dataset (str): _description_
+        output_path (Path | str): _description_
+        output_roi (Optional[str], optional): Defaults to None. If output roi is None,
+            it will be set to the raw roi.
+        num_workers (int, optional): _description_. Defaults to 30.
+        output_dtype (np.dtype | str, optional): _description_. Defaults to np.uint8.
+        overwrite (bool, optional): _description_. Defaults to True.
+    """
+    # retrieving run
+    config_store = create_config_store()
+    run_config = config_store.retrieve_run_config(run_name)
+    run = Run(run_config)
+
+    # get arrays
+    raw_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
+    raw_array = ZarrArray.open_from_array_identifier(raw_array_identifier)
+    output_container = Path(
+        output_path,
+        "".join(Path(input_container).name.split(".")[:-1]) + ".zarr",
+    )  # TODO: zarr hardcoded
+    prediction_array_identifier = LocalArrayIdentifier(
+        output_container, f"prediction_{run_name}_{iteration}"
+    )
+
+    if output_roi is None:
+        _output_roi = raw_array.roi
+    else:
+        start, end = zip(
+            *[
+                tuple(int(coord) for coord in axis.split(":"))
+                for axis in output_roi.strip("[]").split(",")
+            ]
+        )
+        _output_roi = Roi(
+            Coordinate(start),
+            Coordinate(end) - Coordinate(start),
+        )
+        _output_roi = _output_roi.snap_to_grid(
+            raw_array.voxel_size, mode="grow"
+        ).intersect(raw_array.roi)
+
+    if isinstance(output_dtype, str):
+        output_dtype = np.dtype(output_dtype)
+
+    model = run.model.eval()
+
     # get the model's input and output size
 
     input_voxel_size = Coordinate(raw_array.voxel_size)
@@ -42,96 +134,41 @@ def predict(
     # calculate input and output rois
 
     context = (input_size - output_size) / 2
-    if output_roi is None:
-        input_roi = raw_array.roi
-        output_roi = input_roi.grow(-context, -context)
-    else:
-        input_roi = output_roi.grow(context, context)
+    _input_roi = _output_roi.grow(context, context)
 
-    logger.info("Total input ROI: %s, output ROI: %s", input_roi, output_roi)
+    logger.info("Total input ROI: %s, output ROI: %s", _input_roi, _output_roi)
 
     # prepare prediction dataset
     axes = ["c"] + [axis for axis in raw_array.axes if axis != "c"]
     ZarrArray.create_from_array_identifier(
         prediction_array_identifier,
         axes,
-        output_roi,
+        _output_roi,
         model.num_out_channels,
         output_voxel_size,
         output_dtype,
+        overwrite=overwrite,
     )
 
-    # create gunpowder keys
-
-    raw = gp.ArrayKey("RAW")
-    prediction = gp.ArrayKey("PREDICTION")
-
-    # assemble prediction pipeline
-
-    # prepare data source
-    pipeline = DaCapoArraySource(raw_array, raw)
-    # raw: (c, d, h, w)
-    pipeline += gp.Pad(raw, Coordinate((None,) * input_voxel_size.dims))
-    # raw: (c, d, h, w)
-    pipeline += gp.Unsqueeze([raw])
-    # raw: (1, c, d, h, w)
-
-    gt_padding = (output_size - output_roi.shape) % output_size
-    prediction_roi = output_roi.grow(gt_padding)  # TODO: are we sure this makes sense?
-    # TODO: Add cache node?
-    # predict
-    pipeline += gp_torch.Predict(
-        model=model,
-        inputs={"x": raw},
-        outputs={0: prediction},
-        array_specs={
-            prediction: gp.ArraySpec(
-                roi=prediction_roi,
-                voxel_size=output_voxel_size,
-                dtype=np.float32,  # assumes network output is float32
-            )
-        },
-        spawn_subprocess=False,
-        device=str(compute_context.device),
-    )
-    # raw: (1, c, d, h, w)
-    # prediction: (1, [c,] d, h, w)
-
-    # prepare writing
-    pipeline += gp.Squeeze([raw, prediction])
-    # raw: (c, d, h, w)
-    # prediction: (c, d, h, w)
-
-    # convert to uint8 if necessary:
-    if output_dtype == np.uint8:
-        pipeline += gp.IntensityScaleShift(
-            prediction, scale=255.0, shift=0.0
-        )  # assumes float32 is [0,1]
-        pipeline += gp.AsType(prediction, output_dtype)
-
-    # write to zarr
-    pipeline += gp.ZarrWrite(
-        {prediction: prediction_array_identifier.dataset},
-        prediction_array_identifier.container.parent,
-        prediction_array_identifier.container.name,
-        dataset_dtypes={prediction: output_dtype},
+    # run blockwise prediction
+    run_blockwise(
+        worker_file=str(Path(Path(__file__).parent, "blockwise", "predict_worker.py")),
+        compute_context=compute_context,
+        total_roi=output_roi,
+        read_roi=Roi((0, 0, 0), input_size),
+        write_roi=Roi((0, 0, 0), output_size),
+        num_workers=num_workers,
+        max_retries=2,  # TODO: make this an option
+        timeout=None,  # TODO: make this an option
+        ######
+        run_name=run_name,
+        iteration=iteration,
+        raw_array_identifier=raw_array_identifier,
+        prediction_array_identifier=prediction_array_identifier,
     )
 
-    # create reference batch request
-    ref_request = gp.BatchRequest()
-    ref_request.add(raw, input_size)
-    ref_request.add(prediction, output_size)
-    pipeline += gp.Scan(
-        ref_request
-    )  # TODO: This is a slow implementation for rendering
-
-    # build pipeline and predict in complete output ROI
-
-    with gp.build(pipeline):
-        pipeline.request_batch(gp.BatchRequest())
-
-    container = zarr.open(prediction_array_identifier.container)
+    container = zarr.open(str(prediction_array_identifier.container))
     dataset = container[prediction_array_identifier.dataset]
-    dataset.attrs["axes"] = (
+    dataset.attrs["axes"] = (  # type: ignore
         raw_array.axes if "c" in raw_array.axes else ["c"] + raw_array.axes
     )

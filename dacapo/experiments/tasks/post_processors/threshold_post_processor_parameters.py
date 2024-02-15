@@ -4,4 +4,4 @@ import attr
 
 @attr.s(frozen=True)
 class ThresholdPostProcessorParameters(PostProcessorParameters):
-    pass
+    threshold: float = attr.ib(default=0.0)

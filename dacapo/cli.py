@@ -1,6 +1,17 @@
+from pathlib import Path
+from typing import Optional
+
+import numpy as np
+
 import dacapo
 import click
 import logging
+from daisy import Roi
+from dacapo.experiments.datasplits.datasets.dataset import Dataset
+from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
+    PostProcessorParameters,
+)
+from dacapo.compute_context import ComputeContext, LocalTorch
 
 
 @click.group()
@@ -40,21 +51,123 @@ def validate(run_name, iteration):
 
 @cli.command()
 @click.option(
-    "-r", "--run-name", required=True, type=str, help="The name of the run to use."
+    "-r", "--run-name", required=True, type=str, help="The name of the run to apply."
+)
+@click.option(
+    "-ic",
+    "--input_container",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+)
+@click.option("-id", "--input_dataset", required=True, type=str)
+@click.option("-op", "--output_path", required=True, type=click.Path(file_okay=False))
+@click.option("-vd", "--validation_dataset", type=str, default=None)
+@click.option("-c", "--criterion", default="voi")
+@click.option("-i", "--iteration", type=int, default=None)
+@click.option("-p", "--parameters", type=str, default=None)
+@click.option(
+    "-roi",
+    "--roi",
+    type=str,
+    required=False,
+    help="The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]",
+)
+@click.option("-w", "--num_cpu_workers", type=int, default=30)
+@click.option("-dt", "--output_dtype", type=str, default="uint8")
+@click.option("-ow", "--overwrite", is_flag=True)
+@click.option("-cc", "--compute_context", type=str, default="LocalTorch")
+def apply(
+    run_name: str,
+    input_container: Path | str,
+    input_dataset: str,
+    output_path: Path | str,
+    validation_dataset: Optional[Dataset | str] = None,
+    criterion: str = "voi",
+    iteration: Optional[int] = None,
+    parameters: Optional[PostProcessorParameters | str] = None,
+    roi: Optional[Roi | str] = None,
+    num_cpu_workers: int = 30,
+    output_dtype: Optional[np.dtype | str] = "uint8",
+    overwrite: bool = True,
+    compute_context: Optional[ComputeContext | str] = LocalTorch(),
+):
+    if isinstance(compute_context, str):
+        compute_context = getattr(compute_context, compute_context)()
+
+    dacapo.apply(
+        run_name,
+        input_container,
+        input_dataset,
+        output_path,
+        validation_dataset,
+        criterion,
+        iteration,
+        parameters,
+        roi,
+        num_cpu_workers,
+        output_dtype,
+        overwrite=overwrite,
+        compute_context=compute_context,  # type: ignore
+    )
+
+
+@cli.command()
+@click.option(
+    "-r", "--run-name", required=True, type=str, help="The name of the run to apply."
 )
 @click.option(
     "-i",
     "--iteration",
     required=True,
     type=int,
-    help="The iteration weights and parameters to use.",
+    help="The training iteration of the model to use for prediction.",
 )
 @click.option(
-    "-r",
-    "--dataset",
+    "-ic",
+    "--input_container",
     required=True,
-    type=str,
-    help="The name of the dataset to apply the run to.",
+    type=click.Path(exists=True, file_okay=False),
 )
-def apply(run_name, iteration, dataset_name):
-    dacapo.apply(run_name, iteration, dataset_name)
+@click.option("-id", "--input_dataset", required=True, type=str)
+@click.option("-op", "--output_path", required=True, type=click.Path(file_okay=False))
+@click.option(
+    "-roi",
+    "--output_roi",
+    type=str,
+    required=False,
+    help="The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]",
+)
+@click.option("-w", "--num_workers", type=int, default=30)
+@click.option("-dt", "--output_dtype", type=str, default="uint8")
+@click.option(
+    "-cc",
+    "--compute_context",
+    type=str,
+    default="LocalTorch",
+    help="The compute context to use for prediction. Must be the name of a subclass of ComputeContext.",
+)
+@click.option("-ow", "--overwrite", is_flag=True)
+def predict(
+    run_name: str,
+    iteration: int,
+    input_container: Path | str,
+    input_dataset: str,
+    output_path: Path | str,
+    output_roi: Optional[str | Roi] = None,
+    num_workers: int = 30,
+    output_dtype: np.dtype | str = np.uint8,  # type: ignore
+    compute_context: ComputeContext | str = LocalTorch(),
+    overwrite: bool = True,
+):
+    dacapo.predict(
+        run_name,
+        iteration,
+        input_container,
+        input_dataset,
+        output_path,
+        output_roi,
+        num_workers,
+        output_dtype,
+        compute_context,
+        overwrite,
+    )
