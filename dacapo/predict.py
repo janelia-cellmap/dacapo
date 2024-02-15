@@ -5,8 +5,7 @@ from dacapo.blockwise import run_blockwise
 from dacapo.experiments import Run
 from dacapo.gp import DaCapoArraySource
 from dacapo.experiments import Model
-from dacapo.store import create_config_store
-from dacapo.store import create_weights_store
+from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.store.local_array_store import LocalArrayIdentifier
 from dacapo.compute_context import LocalTorch, ComputeContext
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray, Array

@@ -14,7 +14,7 @@ from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.predict import predict
 from dacapo.compute_context import LocalTorch, ComputeContext
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
-from dacapo.store import (
+from dacapo.store.create_store import (
     create_config_store,
     create_weights_store,
 )
@@ -174,8 +174,8 @@ def apply_run(
     run: Run,
     parameters: PostProcessorParameters,
     input_array: Array,
-    prediction_array_identifier: 'LocalArrayIdentifier',
-    output_array_identifier: 'LocalArrayIdentifier',
+    prediction_array_identifier: "LocalArrayIdentifier",
+    output_array_identifier: "LocalArrayIdentifier",
     roi: Optional[Roi] = None,
     num_cpu_workers: int = 30,
     output_dtype: Optional[np.dtype] = np.uint8,  # type: ignore
