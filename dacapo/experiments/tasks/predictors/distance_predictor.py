@@ -27,7 +27,14 @@ class DistancePredictor(Predictor):
     in the channels argument.
     """
 
-    def __init__(self, channels: List[str], scale_factor: float, mask_distances: bool):
+    def __init__(
+        self,
+        channels: List[str],
+        scale_factor: float,
+        mask_distances: bool,
+        clipmin: float = 0.05,
+        clipmax: float = 0.95,
+    ):
         self.channels = channels
         self.norm = "tanh"
         self.dt_scale_factor = scale_factor
@@ -36,6 +43,8 @@ class DistancePredictor(Predictor):
         self.max_distance = 1 * scale_factor
         self.epsilon = 5e-2
         self.threshold = 0.8
+        self.clipmin = clipmin
+        self.clipmax = clipmax
 
     @property
     def embedding_dims(self):
@@ -83,6 +92,8 @@ class DistancePredictor(Predictor):
             slab=tuple(1 if c == "c" else -1 for c in gt.axes),
             masks=[mask[target.roi], distance_mask],
             moving_counts=moving_class_counts,
+            clipmin=self.clipmin,
+            clipmax=self.clipmax,
         )
         return (
             NumpyArray.from_np_array(

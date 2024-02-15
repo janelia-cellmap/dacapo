@@ -17,7 +17,7 @@ def create_config_store():
     try:
         store_type = options.type
     except RuntimeError:
-        store_type = "mongo"
+        store_type = "files"
     if store_type == "mongo":
         db_host = options.mongo_db_host
         db_name = options.mongo_db_name
@@ -25,6 +25,8 @@ def create_config_store():
     elif store_type == "files":
         store_path = Path(options.runs_base_dir).expanduser()
         return FileConfigStore(store_path / "configs")
+    else:
+        raise ValueError(f"Unknown store type {store_type}")
 
 
 def create_stats_store():
