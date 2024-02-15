@@ -1,7 +1,7 @@
 from pathlib import Path
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from dacapo.store.array_store import LocalArrayIdentifier
-from dacapo.compute_context import ComputeContext, LocalTorch, Bsub
+from dacapo.compute_context import ComputeContext, LocalTorch
 
 import daisy
 
@@ -41,9 +41,9 @@ def cli(log_level):
 )
 @click.option("-od", "--output_dataset", required=True, type=str)
 def start_worker(
-    input_container: Path or str,
+    input_container: Path | str,
     input_dataset: str,
-    output_container: Path or str,
+    output_container: Path | str,
     output_dataset: str,
 ):
     # get arrays

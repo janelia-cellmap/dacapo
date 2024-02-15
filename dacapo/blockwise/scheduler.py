@@ -7,7 +7,7 @@ from dacapo.blockwise import DaCapoBlockwiseTask
 
 
 def run_blockwise(
-    worker_file: str or Path,
+    worker_file: str | Path,
     compute_context: ComputeContext | str,
     total_roi: Roi,
     read_roi: Roi,
