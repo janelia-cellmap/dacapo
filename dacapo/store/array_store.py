@@ -62,7 +62,7 @@ class ArrayStore(ABC):
         pass
 
     @abstractmethod
-    def remove(self, array_identifier: LocalArrayIdentifier) -> None:
+    def remove(self, array_identifier: "LocalArrayIdentifier") -> None:
         """Remove an array by its identifier."""
         pass
 
