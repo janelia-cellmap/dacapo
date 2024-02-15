@@ -54,7 +54,7 @@ dependencies = [
         "cattrs",
         "numpy-indexed",
         "click",
-        "toml",
+        "yaml",
         ]
 
 # extras
