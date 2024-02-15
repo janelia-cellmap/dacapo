@@ -25,6 +25,8 @@ def create_config_store():
     elif store_type == "files":
         store_path = Path(options.runs_base_dir).expanduser()
         return FileConfigStore(store_path / "configs")
+    else:
+        raise ValueError(f"Unknown store type {store_type}")
 
 
 def create_stats_store():

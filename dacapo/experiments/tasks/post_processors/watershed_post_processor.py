@@ -1,4 +1,5 @@
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+from dacapo.store.array_store import LocalArrayIdentifier
 
 from .watershed_post_processor_parameters import WatershedPostProcessorParameters
 from .post_processor import PostProcessor
@@ -32,7 +33,11 @@ class WatershedPostProcessor(PostProcessor):
             prediction_array_identifier
         )
 
-    def process(self, parameters, output_array_identifier):
+    def process(
+        self,
+        parameters: WatershedPostProcessorParameters,
+        output_array_identifier: LocalArrayIdentifier,
+    ):
         output_array = ZarrArray.create_from_array_identifier(
             output_array_identifier,
             [axis for axis in self.prediction_array.axes if axis != "c"],
@@ -47,7 +52,7 @@ class WatershedPostProcessor(PostProcessor):
         affs = pred_data[: len(self.offsets)].astype(np.float64)
         segmentation = mws.agglom(
             affs - parameters.bias,
-            self.offsets,
+            self.offsets,  # type: ignore
         )
         # filter fragments
         average_affs = np.mean(affs, axis=0)
