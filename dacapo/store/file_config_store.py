@@ -98,10 +98,12 @@ class FileConfigStore(ConfigStore):
 
         file_store = collection / f"{name}.toml"
         if not file_store.exists():
-            toml.dump(dict(data), file_store.open("w"))
+            with file_store.open("w") as f:
+                toml.dump(dict(data), f)
 
         else:
-            existing = toml.load(file_store.open("r"))
+            with file_store.open("r") as f:
+                existing = toml.load(f)
 
             if not self.__same_doc(existing, data, ignore):
                 raise DuplicateNameError(
@@ -113,7 +115,8 @@ class FileConfigStore(ConfigStore):
     def __load(self, collection, name):
         file_store = collection / f"{name}.toml"
         if file_store.exists():
-            return toml.load(file_store.open("r"))
+            with file_store.open("r") as f:
+                return toml.load(f)
         else:
             raise ValueError(f"No config with name: {name} in collection: {collection}")
 
