@@ -34,7 +34,7 @@ class WatershedPostProcessor(PostProcessor):
     def process(
         self,
         parameters: WatershedPostProcessorParameters,
-        output_array_identifier: LocalArrayIdentifier,
+        output_array_identifier: "LocalArrayIdentifier",
         compute_context: ComputeContext | str = LocalTorch(),
         num_workers: int = 16,
         block_size: Coordinate = Coordinate((64, 64, 64)),

@@ -20,7 +20,7 @@ class DaCapoBlockwiseTask(Task):
         timeout=None,
         upstream_tasks=None,
         *args,
-        **kwargs
+        **kwargs,
     ):
         if isinstance(compute_context, str):
             compute_context = getattr(dacapo.compute_context, compute_context)()
