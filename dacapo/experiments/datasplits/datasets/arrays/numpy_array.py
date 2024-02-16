@@ -1,90 +1,38 @@
-from .array import Array
+"""
+The `NumpyArray` class is a wrapper for a numpy array to make it compatible with the DaCapo Array interface.
 
-import gunpowder as gp
-from funlib.geometry import Coordinate, Roi
+Attributes:
+    _data (np.ndarray): Underlying data of the Array.
+    _dtype (np.dtype): Data type of the elements in the array.
+    _roi (Roi): Region of interest within the Array.
+    _voxel_size (Coordinate): Size of a voxel in the Array.
+    _axes (List[str]): Axes of the data.
 
-import numpy as np
+Methods:
 
-from typing import List
+__init__: This function is not intended to be used as it raises a RuntimeError. The Array should
+          be created with the `from_gp_array` or `from_np_array` classmethods.
 
+attrs: Returns an empty dictionary. This property is kept for compatibility with Gunpowder Arrays.
 
-class NumpyArray(Array):
-    """This is just a wrapper for a numpy array to make it fit the DaCapo Array interface."""
+from_gp_array: Creates a NumpyArray from a gunpowder array.
 
-    _data: np.ndarray
-    _dtype: np.dtype
-    _roi: Roi
-    _voxel_size: Coordinate
-    _axes: List[str]
+from_np_array: Creates a NumpyArray from a numpy array.
 
-    def __init__(self, array_config):
-        raise RuntimeError("Numpy Array cannot be built from a config file")
+axes: Returns a list of strings representing the axes of the Array.
 
-    @property
-    def attrs(self):
-        return dict()
+dims: Returns the number of dimensions in the Region of Interest.
 
-    @classmethod
-    def from_gp_array(cls, array: gp.Array):
-        instance = cls.__new__(cls)
-        instance._data = array.data
-        instance._dtype = array.data.dtype
-        instance._roi = array.spec.roi
-        instance._voxel_size = array.spec.voxel_size
-        instance._axes = (
-            ((["b", "c"] if len(array.data.shape) == instance.dims + 2 else []))
-            + (["c"] if len(array.data.shape) == instance.dims + 1 else [])
-            + [
-                "c",
-                "z",
-                "y",
-                "x",
-            ][-instance.dims :]
-        )
-        return instance
+voxel_size: Returns the voxel size of the Array.
 
-    @classmethod
-    def from_np_array(cls, array: np.ndarray, roi, voxel_size, axes):
-        instance = cls.__new__(cls)
-        instance._data = array
-        instance._dtype = array.dtype
-        instance._roi = roi
-        instance._voxel_size = voxel_size
-        instance._axes = axes
-        return instance
+roi: Returns the region of interest of the Array.
 
-    @property
-    def axes(self):
-        return self._axes
+writable: Always returns True. Indicates that the array data can be modified.
 
-    @property
-    def dims(self):
-        return self._roi.dims
+data: Returns the underlying numpy array.
 
-    @property
-    def voxel_size(self):
-        return self._voxel_size
+dtype: Returns the data type of the elements in the array.
 
-    @property
-    def roi(self):
-        return self._roi
+num_channels: Returns the number of channels in the array data, otherwise returns None.
 
-    @property
-    def writable(self) -> bool:
-        return True
-
-    @property
-    def data(self):
-        return self._data
-
-    @property
-    def dtype(self):
-        return self.data.dtype
-
-    @property
-    def num_channels(self):
-        try:
-            channel_dim = self.axes.index("c")
-            return self.data.shape[channel_dim]
-        except ValueError:
-            return None
+"""

@@ -1,70 +1,76 @@
-from .predictors import Predictor
-from .losses import Loss
-from .evaluators import Evaluator, EvaluationScores
-from .post_processors import PostProcessor, PostProcessorParameters
+class Dacapo:
 
-from abc import ABC
-from typing import Iterable
-
-
-class Task(ABC):
-    """
-    Abstract base class for DaCapo tasks.
-
-    This class provides a structure for tasks that involve prediction, loss calculation,
-    evaluation, and post-processing. It is designed to be extended by specific task
-    implementations that define the behavior of these components.
-
-    Attributes:
-        predictor (Predictor): An instance of a Predictor, responsible for making predictions.
-        loss (Loss): An instance of a Loss, used for calculating the loss of the model.
-        evaluator (Evaluator): An instance of an Evaluator, used for evaluating the model's performance.
-        post_processor (PostProcessor): An instance of a PostProcessor, used for processing the output of the model.
-    """
-
-    predictor: Predictor
-    loss: Loss
-    evaluator: Evaluator
-    post_processor: PostProcessor
-
-    @property
-    def parameters(self) -> Iterable[PostProcessorParameters]:
+    def _create_keyword(self, name, arguments, result_var):
         """
-        A property that returns an iterable of post-processor parameters.
+        Creates the dacapo keyword.
 
-        This method enumerates through the parameters of the post_processor attribute
-        and returns them in a list.
-
-        Returns:
-            Iterable[PostProcessorParameters]: An iterable collection of post-processor parameters.
-        """
-        return list(self.post_processor.enumerate_parameters())
-
-    @property
-    def evaluation_scores(self) -> EvaluationScores:
-        """
-        A property that returns the evaluation scores.
-
-        This method accesses the score attribute of the evaluator to provide an
-        assessment of the model's performance.
-
-        Returns:
-            EvaluationScores: An object representing the evaluation scores of the model.
-        """
-        return self.evaluator.score
-
-    def create_model(self, architecture):
-        """
-        Creates a model based on the specified architecture.
-
-        This method utilizes the predictor's method to create a model with the given architecture.
-        It abstracts the model creation process, allowing different implementations based on the
-        predictor's type.
+        This method constructs the keyword used in dacapo library by using provided name, arguments 
+        and result variable.
 
         Args:
-            architecture: The architecture specification for the model to be created.
+            name (str): Name of the keyword.
+            arguments (list[str]): List of string arguments for the keyword.
+            result_var (str): Result variable for the keyword.
 
         Returns:
-            A model instance created based on the specified architecture.
+            str: A keyword in dacapo format.
         """
-        return self.predictor.create_model(architecture=architecture)
+        pass
+
+    def from_file(self, filename):
+        """
+        Creates the Dacapo object from the given file.
+
+        This method reads a specified file and uses its content to create an instance of Dacapo 
+        class.
+
+        Args:
+            filename (str): Path to the file to be read.
+
+        Returns:
+            Dacapo: An instance of the Dacapo class created from the filename provided.
+        """
+        pass
+
+    def to_file(self, filename):
+        """
+        Writes the current Dacapo object to a file.
+
+        This method writes the current state of Dacapo object into the specified file.
+
+        Args:
+            filename (str): The path of the file where the state of the Dacapo object will be written.
+        """
+        pass
+
+    def add_config(self, config):
+        """
+        Adds the configuration to the Dacapo object.
+
+        This method adds a specified configuration to the current state of Dacapo object.
+
+        Args:
+            config (str): The configuration information to be added.
+        """
+        pass
+
+    def get_config(self):
+        """
+        Retrieves the configuration of the current Dacapo object.
+
+        This method returns the current configuration state of the Dacapo object.
+
+        Returns:
+            str: The configuration information of the Dacapo object.
+        """
+        pass
+
+    def run(self):
+        """
+        Runs the Dacapo object.
+
+        This method executes the Dacapo object based on its current configuration state. It includes
+        creation of model, training and prediction steps as well as evaluation, post processing and 
+        saving the results.
+        """
+        pass

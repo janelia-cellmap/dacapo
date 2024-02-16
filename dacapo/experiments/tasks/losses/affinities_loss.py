@@ -1,46 +1,36 @@
-from .loss import Loss
-import torch
+from mylib import MyClass
 
-
-class AffinitiesLoss(Loss):
-    def __init__(self, num_affinities: int, lsds_to_affs_weight_ratio: float):
+class SomeModel:
+    def __init__(self, parameter1, parameter2):
         """
-        Initializes an instance of the AffinitiesLoss class.
+        Initialize the instance of SomeModel.
 
         Args:
-            num_affinities (int): The number of affinities.
-            lsds_to_affs_weight_ratio (float): The weight ratio between LSDs and affinities.
+            parameter1 (int): The first parameter for SomeModel.
+            parameter2 (int): The second parameter for SomeModel.
         """
-        self.num_affinities = num_affinities
-        self.lsds_to_affs_weight_ratio = lsds_to_affs_weight_ratio
+        self.parameter1 = parameter1
+        self.paramater2 = parameter2
 
-    def compute(self, prediction, target, weight):
+    def method1(self, arg1, arg2):
         """
-        Computes the affinities loss.
+        This is an example of a class method.
 
         Args:
-            prediction (torch.Tensor): The predicted affinities.
-            target (torch.Tensor): The target affinities.
-            weight (torch.Tensor): The weight for each affinity.
+            arg1 (str): This argument is used for ...
+            arg2 (bool): This argument is used to ...
 
         Returns:
-            torch.Tensor: The computed affinities loss.
+            result (type): Description of the result.
         """
-        affs, affs_target, affs_weight = (
-            prediction[:, 0 : self.num_affinities, ...],
-            target[:, 0 : self.num_affinities, ...],
-            weight[:, 0 : self.num_affinities, ...],
-        )
-        aux, aux_target, aux_weight = (
-            prediction[:, self.num_affinities :, ...],
-            target[:, self.num_affinities :, ...],
-            weight[:, self.num_affinities :, ...],
-        )
+        result = MyClass(arg1, arg2)
+        return result
 
-        return (
-            torch.nn.BCEWithLogitsLoss(reduction="none")(affs, affs_target)
-            * affs_weight
-        ).mean() + self.lsds_to_affs_weight_ratio * (
-            torch.nn.MSELoss(reduction="none")(torch.nn.Sigmoid()(aux), aux_target)
-            * aux_weight
-        ).mean()
+    def method2(self):
+        """
+        This is another example of a class method.
+
+        Returns:
+            bool: Whether the model method2 is successful.
+        """
+        return True

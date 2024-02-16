@@ -1,20 +1,23 @@
 from funlib.geometry import Coordinate
-
 import numpy as np
-
 import logging
 from typing import List
 
 logger = logging.getLogger(__name__)
 
-
 def seg_to_affgraph(seg: np.ndarray, neighborhood: List[Coordinate]) -> np.ndarray:
-    nhood: np.ndarray = np.array(neighborhood)
+    """
+    Construct an affinity graph from a given segmentation image.
 
-    # constructs an affinity graph from a segmentation
-    # assume affinity graph is represented as:
-    # shape = (e, z, y, x)
-    # nhood.shape = (edges, 3)
+    Args:
+        seg (np.ndarray): A segmented image for which an affinity graph is to be created.
+        neighborhood (List[Coordinate]): List of neighborhood coordinates for the affinity graph.
+
+    Returns:
+        np.ndarray: An affinity graph represented as an n-dimensional array with shape (e, z, y, x) .
+    """
+
+    nhood: np.ndarray = np.array(neighborhood)
     shape = seg.shape
     nEdge = nhood.shape[0]
     dims = nhood.shape[1]
@@ -96,10 +99,16 @@ def seg_to_affgraph(seg: np.ndarray, neighborhood: List[Coordinate]) -> np.ndarr
 
     return aff
 
-
 def padding(neighborhood, voxel_size):
     """
-    Get the appropriate padding to make sure all provided affinities are "True"
+    Get the appropriate padding for a given neighborhood and voxel size.
+
+    Args:
+        neighborhood: Neighborhood for which padding is to be found.
+        voxel_size: Size of the voxel for which padding is to be found.
+
+    Returns:
+        Tuple: A tuple containing the negative and positive padding.
     """
     dims = voxel_size.dims
     padding_neg = (

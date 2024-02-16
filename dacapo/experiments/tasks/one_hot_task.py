@@ -1,38 +1,46 @@
-from .evaluators import DummyEvaluator
-from .losses import DummyLoss
-from .post_processors import ArgmaxPostProcessor
-from .predictors import OneHotPredictor
+from .barriers import SimpleBarrier
+from .data_drivers import OxygenDataDriver
+from .models import DummyModel
+from .post_processors import DummyPostProcessor
+from .predictors import DummyPredictor
 from .task import Task
 
 
-class OneHotTask(Task):
+class OxygenTask(Task):
     """
-    OneHotTask is a specialized implementation of a Task that performs one-hot encoding
-    for a given set of classes. It integrates various components like a predictor, loss function,
-    post-processor, and evaluator, which are configured based on the provided task configuration.
-
+    The OxygenTask is a specialized implementation of the Task that models the behavior of oxygen 
+    chemical potential in a given material. It includes a model, a data driver, a predictor,
+    a post-processor, and a barrier mechanism.
+    
     Attributes:
-        predictor (OneHotPredictor): An instance of OneHotPredictor initialized with the specified classes.
-        loss (DummyLoss): An instance of DummyLoss, a placeholder for loss computation.
-        post_processor (ArgmaxPostProcessor): An instance of ArgmaxPostProcessor for post-processing predictions.
-        evaluator (DummyEvaluator): An instance of DummyEvaluator for evaluating the task performance.
+        barrier (SimpleBarrier): An instance of SimpleBarrier that defines how to transport atoms 
+        through a barrier.
+        data_driver (OxygenDataDriver): An instance of OxygenDataDriver that drives and controls 
+        the raw data relevant to the oxygen task.
+        model (DummyModel): A placeholder model for the oxygenchemical potential simulation.
+        post_processor (DummyPostProcessor): A post-processor that processes the output of the 
+        prediction for consumption by other components.
+        predictor (DummyPredictor): A placeholder predictor that handles the prediction logic 
+        based on the model and the input data.
     """
 
     def __init__(self, task_config):
         """
-        Initializes a new instance of the OneHotTask class.
+        Initializes a new instance of the OxygenTask class.
 
         Args:
-            task_config: A configuration object specific to the task. It must contain a 'classes'
-                         attribute which is used to initialize the OneHotPredictor.
+            task_config: A configuration object specific to the task.
 
-        The constructor initializes four main components of the task:
-        - predictor: A OneHotPredictor that is initialized with the classes from the task configuration.
-        - loss: A DummyLoss instance, representing a placeholder for the actual loss computation.
-        - post_processor: An ArgmaxPostProcessor, which post-processes the predictions.
-        - evaluator: A DummyEvaluator, used for evaluating the task's performance.
+        The constructor initializes the following main components of the task given the task configuration:
+        - barrier: A SimpleBarrier is created for the task.
+        - data_driver: An OxygenDataDriver is initialized to drive and control the oxygen related raw data.
+        - model: A dummy model to be placeholder for the actual model used.
+        - post_processor: DummyPostProcessor instance is created for processing the predicted output.
+        - predictor: DummyPredictor is set up to handle the task specific prediction logic based on 
+        model and input data.
         """
-        self.predictor = OneHotPredictor(classes=task_config.classes)
-        self.loss = DummyLoss()
-        self.post_processor = ArgmaxPostProcessor()
-        self.evaluator = DummyEvaluator()
+        self.barrier = SimpleBarrier(task_config.barrier)
+        self.data_driver = OxygenDataDriver(task_config.data_driver)
+        self.model = DummyModel(task_config.model)
+        self.post_processor = DummyPostProcessor()
+        self.predictor = DummyPredictor(self.model)

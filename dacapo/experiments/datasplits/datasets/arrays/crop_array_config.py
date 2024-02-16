@@ -8,9 +8,19 @@ from funlib.geometry import Roi
 
 @attr.s
 class CropArrayConfig(ArrayConfig):
-    """This config class provides the necessary configuration for cropping an
-    Array to a smaller ROI. Especially useful for validation volumes that may
-    be too large for quick evaluation"""
+    """
+    A subclass of ArrayConfig that represents configurations for array cropping.
+
+    This configuration class provides the necessary details for cropping an Array 
+    to a smaller Region of Interest(ROI) especially useful for validation volumes 
+    that might be too huge for quick evaluation
+
+    Attributes:
+        array_type (CropArray): a CropArray instance.
+        source_array_config (ArrayConfig): the Array that is to be cropped.
+        roi (Roi): the Region Of Interest to crop the array to.
+
+    """
 
     array_type = CropArray
 

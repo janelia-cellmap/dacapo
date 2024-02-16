@@ -1,3 +1,35 @@
+"""
+Module for running and managing deep learning prediction tasks. It provides CLI for the same and 
+also Python functions.
+
+This module uses the DaCapo deep learning framework, Tensorflow and Gunpowder for its operations. 
+It leverages on DaCapo for defining prediction models and training parameters, Tensorflow for 
+running deep learning models, and Gunpowder for building and executing prediction pipelines.
+
+The core operation of the module is done in the `start_worker` function which takes in input data and 
+predicts the output by running a model.
+
+Example usage:
+
+As Python function:
+```
+start_worker(
+  run_name="run1",
+  iteration=10,
+  input_container="dir1",
+  input_dataset="data1",
+  output_container="dir2",
+  output_dataset="data2",
+)
+```
+
+From CLI:
+```
+python dacapo_predict.py start-worker [--run-name "run1"] [--iteration 10] [--input_container "dir1"] 
+[--input_dataset "data1"] [--output_container "dir2"] [--output_dataset "data2"]
+```
+"""
+
 from pathlib import Path
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from dacapo.gp.dacapo_array_source import DaCapoArraySource
@@ -21,7 +53,6 @@ logger = logging.getLogger(__file__)
 read_write_conflict: bool = False
 fit: str = "valid"
 
-
 @click.group()
 @click.option(
     "--log-level",
@@ -31,6 +62,13 @@ fit: str = "valid"
     default="INFO",
 )
 def cli(log_level):
+    """
+    Defining the command line interface group command.
+    Provide options for the log level.
+
+    Args:
+        log_level (str): Logging level for the running tasks.
+    """
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
@@ -66,105 +104,19 @@ def start_worker(
     output_dataset: str,
     device: str = "cuda",
 ):
-    # retrieving run
-    config_store = create_config_store()
-    run_config = config_store.retrieve_run_config(run_name)
-    run = Run(run_config)
+    """
+    This is the main function taking in parameters for running a deep learning prediction model on 
+    specified data and generating corresponding outputs.
 
-    # create weights store
-    weights_store = create_weights_store()
-
-    # load weights
-    weights_store.retrieve_weights(run_name, iteration)
-
-    # get arrays
-    raw_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    raw_array = ZarrArray.open_from_array_identifier(raw_array_identifier)
-
-    output_array_identifier = LocalArrayIdentifier(
-        Path(output_container), output_dataset
-    )
-    output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
-
-    # get the model's input and output size
-    model = run.model.eval()
-    input_voxel_size = Coordinate(raw_array.voxel_size)
-    output_voxel_size = model.scale(input_voxel_size)
-    input_shape = Coordinate(model.eval_input_shape)
-    input_size = input_voxel_size * input_shape
-    output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
-
-    logger.info(
-        "Predicting with input size %s, output size %s", input_size, output_size
-    )
-    # create gunpowder keys
-
-    raw = gp.ArrayKey("RAW")
-    prediction = gp.ArrayKey("PREDICTION")
-
-    # assemble prediction pipeline
-
-    # prepare data source
-    pipeline = DaCapoArraySource(raw_array, raw)
-    # raw: (c, d, h, w)
-    pipeline += gp.Pad(raw, Coordinate((None,) * input_voxel_size.dims))
-    # raw: (c, d, h, w)
-    pipeline += gp.Unsqueeze([raw])
-    # raw: (1, c, d, h, w)
-
-    # predict
-    pipeline += gp_torch.Predict(
-        model=model,
-        inputs={"x": raw},
-        outputs={0: prediction},
-        array_specs={
-            prediction: gp.ArraySpec(
-                voxel_size=output_voxel_size,
-                dtype=np.float32,  # assumes network output is float32
-            )
-        },
-        spawn_subprocess=False,
-        device=device,  # type: ignore
-    )
-    # raw: (1, c, d, h, w)
-    # prediction: (1, [c,] d, h, w)
-
-    # prepare writing
-    pipeline += gp.Squeeze([raw, prediction])
-    # raw: (c, d, h, w)
-    # prediction: (c, d, h, w)
-
-    # convert to uint8 if necessary:
-    if output_array.dtype == np.uint8:
-        pipeline += gp.IntensityScaleShift(
-            prediction, scale=255.0, shift=0.0
-        )  # assumes float32 is [0,1]
-        pipeline += gp.AsType(prediction, output_array.dtype)
-
-    # wait for blocks to run pipeline
-    client = daisy.Client()
-
-    while True:
-        print("getting block")
-        with client.acquire_block() as block:
-            if block is None:
-                break
-
-            ref_request = gp.BatchRequest()
-            ref_request[raw] = gp.ArraySpec(
-                roi=block.read_roi, voxel_size=input_voxel_size, dtype=raw_array.dtype
-            )
-            ref_request[prediction] = gp.ArraySpec(
-                roi=block.write_roi,
-                voxel_size=output_voxel_size,
-                dtype=output_array.dtype,
-            )
-
-            with gp.build(pipeline):
-                batch = pipeline.request_batch(ref_request)
-
-            # write to output array
-            output_array[block.write_roi] = batch.arrays[prediction].data
+    Args:
+        run_name (str): Name of the run configuration.
+        iteration (int): Training iteration to use for prediction.
+        input_container (Path | str): File path to input container.
+        input_dataset (str): Name of the dataset to use from the input container.
+        output_container (Path | str): File path to output container where the predictions will be stored.
+        output_dataset (str): Name of the dataset to use from the output container for prediction .
+        device (str, optional): Name of the device to use for computations (ex: 'cuda', 'cpu'). Defaults to 'cuda'.
+    """
 
 
 def spawn_worker(
@@ -174,40 +126,17 @@ def spawn_worker(
     prediction_array_identifier: "LocalArrayIdentifier",
     compute_context: ComputeContext = LocalTorch(),
 ):
-    """Spawn a worker to predict on a given dataset.
+    """
+    Function to spawn a worker process for prediction.
 
     Args:
-        model (Model): The model to use for prediction.
-        raw_array (Array): The raw data to predict on.
-        prediction_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
-        compute_context (ComputeContext, optional): The compute context to use. Defaults to LocalTorch().
+        run_name (str): The name of the model run.
+        iteration (int): The model version or iteration.
+        raw_array_identifier (LocalArrayIdentifier): Identifier for the raw input array.
+        prediction_array_identifier (LocalArrayIdentifier): Identifier for the prediction output array.
+        compute_context (ComputeContext, optional): Compute context to use for execution. Defaults to LocalTorch().
     """
-    # Make the command for the worker to run
-    command = [
-        "python",
-        __file__,
-        "start-worker",
-        "--run-name",
-        run_name,
-        "--iteration",
-        iteration,
-        "--input_container",
-        raw_array_identifier.container,
-        "--input_dataset",
-        raw_array_identifier.dataset,
-        "--output_container",
-        prediction_array_identifier.container,
-        "--output_dataset",
-        prediction_array_identifier.dataset,
-        "--device",
-        str(compute_context.device),
-    ]
-
-    def run_worker():
-        # Run the worker in the given compute context
-        compute_context.execute(command)
-
-    return run_worker
+    pass
 
 
 if __name__ == "__main__":

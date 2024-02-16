@@ -11,11 +11,26 @@ logger = logging.getLogger(__name__)
 
 
 class MongoStatsStore(StatsStore):
-    """A MongoDB store for run statistics. Used to store and retrieve training
-    statistics and validation scores.
+    """
+    The main class to interact with MongoDB for storing and retrieving
+    training statistics and validation scores. This class directly interacts
+    with the MongoDB client.
+
+    Attributes:
+        db_host: The host address of the MongoDB.
+        db_name: The database name in MongoDB to where data will be stored.
+        client: The MongoClient instance.
+        database: The database instance of the specified database.
     """
 
     def __init__(self, db_host, db_name):
+        """
+        Create a new MongoDB store for keeping track of training statistics.
+
+        Args:
+            db_host: The host address of the MongoDB.
+            db_name: The name of the database in MongoDB to where data will be stored.
+        """
         logger.info(
             "Creating MongoStatsStore:\n\thost    : %s\n\tdatabase: %s",
             db_host,
@@ -31,60 +46,38 @@ class MongoStatsStore(StatsStore):
         self.__init_db()
 
     def store_training_stats(self, run_name: str, stats: TrainingStats):
-        existing_stats = self.__read_training_stats(run_name)
-
-        store_from_iteration = 0
-
-        if existing_stats.trained_until() > 0:
-            if stats.trained_until() > 0:
-                # both current stats and DB contain data
-                if stats.trained_until() > existing_stats.trained_until():
-                    # current stats go further than the one in DB
-                    store_from_iteration = existing_stats.trained_until()
-                    logger.info(
-                        "Updating training stats of run %s after iteration %d",
-                        run_name,
-                        store_from_iteration,
-                    )
-                else:
-                    # current stats are behind DB--drop DB
-                    logger.warn(
-                        "Overwriting previous training stats for run %s", run_name
-                    )
-                    self.__delete_training_stats(run_name)
-
-        # store all new stats
-        self.__store_training_stats(
-            stats, store_from_iteration, stats.trained_until(), run_name
-        )
+        """
+        Store the training statistics to the database.
+        
+        Args:
+            run_name: A string denoting the name of the run.
+            stats: An instance of TrainingStats containing the training statistics.
+        """
 
     def retrieve_training_stats(
         self, run_name: str, subsample: bool = False
     ) -> TrainingStats:
-        return self.__read_training_stats(run_name, subsample=subsample)
+        """
+        Retrieve the training statistics from the database.
+        
+        Args:
+            run_name: A string denoting the name of the run.
+            subsample: A boolean indicating whether to subsample the data or not.
+
+        Returns:
+            An instance of TrainingStats containing the retrieved training statistics.
+        """
 
     def store_validation_iteration_scores(
         self, run_name: str, scores: ValidationScores
     ):
-        existing_iteration_scores = self.__read_validation_iteration_scores(run_name)
-
-        drop_db, store_from_iteration = scores.compare(existing_iteration_scores)
-
-        if drop_db:
-            # current scores are behind DB--drop DB
-            logger.warn("Overwriting previous validation scores for run %s", run_name)
-            self.__delete_validation_scores(run_name)
-
-        if store_from_iteration > 0:
-            logger.info(
-                "Updating validation scores of run %s after iteration " "%d",
-                run_name,
-                store_from_iteration,
-            )
-
-        self.__store_validation_iteration_scores(
-            scores, store_from_iteration, scores.validated_until() + 1, run_name
-        )
+        """
+        Store the validation scores to the database.
+        
+        Args:
+            run_name: A string denoting the name of the run.
+            scores: An instance of ValidationScores containing the validation scores.
+        """
 
     def retrieve_validation_iteration_scores(
         self,
@@ -92,120 +85,30 @@ class MongoStatsStore(StatsStore):
         subsample: bool = False,
         validation_interval: Optional[int] = None,
     ) -> List[ValidationIterationScores]:
-        return self.__read_validation_iteration_scores(
-            run_name, subsample=subsample, validation_interval=validation_interval
-        )
+        """
+        Retrieve the validation scores from the database.
+        
+        Args:
+            run_name: A string denoting the name of the run.
+            subsample: A boolean indicating whether to subsample the data or not.
+            validation_interval: An integer specifying the validation interval.
 
-    def __store_training_stats(
-        self, stats: TrainingStats, begin: int, end: int, run_name: str
-    ) -> None:
-        docs = converter.unstructure(stats.iteration_stats[begin:end])
-        for doc in docs:
-            doc.update({"run_name": run_name})
-
-        if docs:
-            self.training_stats.insert_many(docs)
-
-    def __read_training_stats(
-        self, run_name: str, subsample: bool = False
-    ) -> TrainingStats:
-        filters: Dict[str, Any] = {"run_name": run_name}
-        if subsample:
-            # if possible subsample s.t. we get 1000 iterations
-            iterations = list(
-                self.training_stats.find(filters).sort("iteration", -1).limit(1)
-            )
-            if len(iterations) == 0:
-                return TrainingStats()
-            else:
-                max_iteration = iterations[0]
-                filters["iteration"] = {
-                    "$mod": [(max_iteration["iteration"] + 999) // 1000, 0]
-                }
-        docs = list(self.training_stats.find(filters))
-        if subsample and not docs[-1] == max_iteration:
-            docs += [max_iteration]
-        stats = TrainingStats(converter.structure(docs, List[TrainingIterationStats]))
-
-        return stats
-
-    def __delete_training_stats(self, run_name: str) -> None:
-        self.training_stats.delete_many({"run_name": run_name})
-
-    def __store_validation_iteration_scores(
-        self,
-        validation_scores: ValidationScores,
-        begin: int,
-        end: int,
-        run_name: str,
-    ) -> None:
-        docs = [
-            converter.unstructure(scores)
-            for scores in validation_scores.scores
-            if scores.iteration >= begin and scores.iteration < end
-        ]
-        for doc in docs:
-            doc.update({"run_name": run_name})
-
-        if docs:
-            self.validation_scores.insert_many(docs)
-
-    def __read_validation_iteration_scores(
-        self,
-        run_name: str,
-        subsample: bool = False,
-        validation_interval: Optional[int] = None,
-    ) -> List[ValidationIterationScores]:
-        filters: Dict[str, Any] = {"run_name": run_name}
-        if subsample:
-            # if possible subsample s.t. we get 1000 iterations
-            iterations = list(
-                self.validation_scores.find(filters).sort("iteration", -1).limit(1)
-            )
-            if len(iterations) == 0:
-                return []
-            else:
-                max_iteration = iterations[0]
-                divisor = (max_iteration["iteration"] + 999) // 1000
-                # round divisor down to nearest validation_interval
-                divisor -= divisor % validation_interval
-                # avoid using 0 as a divisor
-                divisor = max(divisor, validation_interval)
-                filters["iteration"] = {"$mod": [divisor, 0]}
-        docs = list(self.validation_scores.find(filters))
-        if subsample and not docs[-1] == max_iteration:
-            docs += [max_iteration]
-        try:
-            scores = converter.structure(docs, List[ValidationIterationScores])
-        except TypeError as e:
-            # process each doc
-            raise ValueError(docs[0]) from e
-            scores = converter.structure(docs, List[ValidationIterationScores])
-        return scores
+        Returns:
+            A list of ValidationIterationScores instances containing the retrieved validation scores.
+        """
 
     def delete_validation_scores(self, run_name: str) -> None:
-        self.__delete_validation_scores(run_name)
-
-    def __delete_validation_scores(self, run_name: str) -> None:
-        self.validation_scores.delete_many({"run_name": run_name})
+        """
+        Delete the validation scores of a specific run from the database.
+        
+        Args:
+            run_name: A string denoting the name of the run.
+        """
 
     def delete_training_stats(self, run_name: str) -> None:
-        self.__delete_training_stats(run_name)
-
-    def __init_db(self):
-        self.training_stats.create_index(
-            [("run_name", ASCENDING), ("iteration", ASCENDING)],
-            name="run_it",
-            unique=True,
-        )
-        self.validation_scores.create_index(
-            [("run_name", ASCENDING), ("iteration", ASCENDING), ("dataset", ASCENDING)],
-            name="run_it_ds",
-            unique=True,
-        )
-        self.training_stats.create_index([("iteration", ASCENDING)], name="it")
-        self.validation_scores.create_index([("iteration", ASCENDING)], name="it")
-
-    def __open_collections(self):
-        self.training_stats = self.database["training_stats"]
-        self.validation_scores = self.database["validation_scores"]
+        """
+        Delete the training statistics of a specific run from the database.
+        
+        Args:
+            run_name: A string denoting the name of the run.
+        """

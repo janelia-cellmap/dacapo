@@ -10,33 +10,26 @@ import numpy as np
 
 class InstanceEvaluator(Evaluator):
     """
-    InstanceEvaluator is an evaluator that computes scores for instance
-    segmentation tasks using Variation of Information (VOI) metrics.
-
-    It calculates two key metrics: [VOI merge] and [VOI split], to evaluate the quality of instance
-    segmentation. These metrics are particularly useful for comparing the segmentation of objects
-    where each instance is uniquely labeled.
+    A subclass of Evaluator that specifically evaluates instance segmentation tasks. This class 
+    extends the base Evaluator class from dacapo library.
 
     Attributes:
-        criteria (list): A list of criteria names used for evaluation. Defaults to
-                         ["voi_merge", "voi_split", "voi"].
+        criteria (list[str]): A list of metric names that are used in this evaluation process.      
     """
-
+    
     criteria = ["voi_merge", "voi_split", "voi"]
 
     def evaluate(self, output_array_identifier, evaluation_array):
         """
-        Evaluates the segmentation quality by computing VOI metrics.
-
-        This method opens the output array from a given identifier, retrieves the relevant data
-        from both output and evaluation arrays, and computes the VOI metrics.
+        Evaluate the segmentation predictions with the ground truth data.
 
         Args:
-            output_array_identifier: An identifier for the Zarr array containing the output data.
-            evaluation_array: An array containing the ground truth data for evaluation.
+            output_array_identifier: A unique id that refers to the array that contains 
+                                     predicted labels from the segmentation.
+            evaluation_array: The ground truth labels to compare the predicted labels with.
 
         Returns:
-            InstanceEvaluationScores: An object containing the calculated VOI merge and split scores.
+            InstanceEvaluationScores: An object that includes the segmentation evaluation results.
         """
         output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
         evaluation_data = evaluation_array[evaluation_array.roi].astype(np.uint64)
@@ -50,12 +43,10 @@ class InstanceEvaluator(Evaluator):
     @property
     def score(self) -> InstanceEvaluationScores:
         """
-        A property that returns the evaluation scores.
-
-        Note: This implementation currently returns an empty InstanceEvaluationScores object.
-        This should be overridden to return the actual scores computed from the evaluate method.
+        Property that returns the evaluation scores. However, currently, it only returns 
+        an empty InstanceEvaluationScores object.
 
         Returns:
-            InstanceEvaluationScores: An object representing the evaluation scores.
+            InstanceEvaluationScores: An object that supposedly contains evaluation scores.
         """
         return InstanceEvaluationScores()

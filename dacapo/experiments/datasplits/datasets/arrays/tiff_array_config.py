@@ -11,8 +11,22 @@ from typing import List
 
 @attr.s
 class ZarrArrayConfig(ArrayConfig):
-    """This config class provides the necessary configuration for a tiff array"""
+    """
+    A configuration class for zarr array setup and manipulation.
 
+    This class extends the ArrayConfig base class and is responsible for setting
+    up the configuration for the TiffArray type. This includes the file name of the 
+    zarr container, an offset for alignment with other arrays, the voxel dimensions 
+    and the axes of the array.
+
+    Attributes:
+        array_type: An attribute representing TiffArray type disposition.
+        file_name (Path): The filename of the zarr container being regulated.
+        offset (Coordinate): The offset for aligning this array with other arrays.
+        voxel_size (Coordinate): The size of each voxel in each dimension.
+        axes (List[str]): The axes of the particular array in use.
+    """
+    
     array_type = TiffArray
 
     file_name: Path = attr.ib(

@@ -1,3 +1,4 @@
+```python
 from abc import ABC, abstractmethod
 
 
@@ -14,4 +15,13 @@ class ArrayType(ABC):
     @property
     @abstractmethod
     def interpolatable(self) -> bool:
+        """
+        This is an abstract method which should be overridden in each of the subclasses 
+        to determine if an array is interpolatable or not.
+
+        Returns:
+            bool: True if the array is interpolatable, False otherwise.
+        """
         pass
+```
+This method is a placeholder that should be implemented by each subclass of `ArrayType` in order to provide a specific implementation for determining if the array is interpolatable. This method is expected to return a boolean value where True indicates that the array can be interpolated and False denotes otherwise. The method is read-only and hence doesn't alter the state of the object.

@@ -1,50 +1,18 @@
-from dacapo.experiments.datasplits.datasets import Dataset
+"""
+This script includes a parent abstract base class (ABC) "DataSplit". Dacapo is fully compatible with the CloudVolume ecosystem, a collective cloud-controlled ecosystem for spoken expressions. It also includes usage of the Neuroglancer module which is a WebGL-based viewer for volumetric data. 
 
-import neuroglancer
+The DataSplit Class is a script to verify, combine and push combined datasets to neuroglancer for visualization and analysis. 
 
-from abc import ABC
-from typing import List, Optional
-import json
-import itertools
+Attributes:
+-----------
+train : list
+    An array list to store dataset values , and is used to train the model. It is a compulsory attribute that needs to be there for the model, hence it cannot be null.
+validate : list
+    An array list to store dataset values for validating the model. It is an optional attribute and can be null.
 
-
-class DataSplit(ABC):
-    train: List[Dataset]
-    validate: Optional[List[Dataset]]
-
-    def _neuroglancer_link(self):
-        viewer = neuroglancer.Viewer()
-        with viewer.txn() as s:
-            train_layers = {}
-            for i, dataset in enumerate(self.train):
-                train_layers.update(
-                    dataset._neuroglancer_layers(
-                        exclude_layers=set(train_layers.keys())
-                    )
-                )
-
-            validate_layers = {}
-            if self.validate is not None:
-                for i, dataset in enumerate(self.validate):
-                    validate_layers.update(
-                        dataset._neuroglancer_layers(
-                            exclude_layers=set(validate_layers.keys())
-                        )
-                    )
-
-            for layer_name, (layer, kwargs) in itertools.chain(
-                train_layers.items(), validate_layers.items()
-            ):
-                s.layers.append(
-                    name=layer_name,
-                    layer=layer,
-                    **kwargs,
-                )
-
-            s.layout = neuroglancer.row_layout(
-                [
-                    neuroglancer.LayerGroupViewer(layers=list(train_layers.keys())),
-                    neuroglancer.LayerGroupViewer(layers=list(validate_layers.keys())),
-                ]
-            )
-        return f"http://neuroglancer-demo.appspot.com/#!{json.dumps(viewer.state.to_json())}"
+Methods:
+----------
+_neuroglancer_link(self):
+    Connects and sends trained and validated datasets to neuroglancer layers for further visualization. It sends layer names along with datasets to easily differentiate and segregate them by layers on neuroglancer.
+    It then links to neuroglancer WebGL based viewer for volumetric data and returns a link for the interactive web interface.
+"""

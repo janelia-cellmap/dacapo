@@ -1,19 +1,23 @@
 import attr
-
 from .array_config import ArrayConfig
 from .zarr_array import ZarrArray
-
 from funlib.geometry import Coordinate
-
 from pathlib import Path
-
 from typing import Optional, List, Tuple
 
 
 @attr.s
 class ZarrArrayConfig(ArrayConfig):
-    """This config class provides the necessary configuration for a zarr array"""
+    """
+    A configuration class to setup the needs for a zarr array.
 
+    Attributes:
+        array_type (ZarrArray): Type of the array for the given config.
+        file_name (Path): The file name of the zarr container.
+        dataset (str): The name of the dataset. You can use '/' characters for nested heirarchies.
+        snap_to_grid (Optional[Coordinate]): To align the ROI's with a specific voxel_size if needed.
+        _axes (Optional[List[str]]): Define the axes of data.
+    """
     array_type = ZarrArray
 
     file_name: Path = attr.ib(
@@ -36,7 +40,11 @@ class ZarrArrayConfig(ArrayConfig):
 
     def verify(self) -> Tuple[bool, str]:
         """
-        Check whether this is a valid Array
+        Verify the existence and validity of the array.
+
+        Returns:
+            bool: Whether the array is valid.
+            str: Specific error message if the array is not valid. "No validation for this Array" if the array is valid.
         """
         if not self.file_name.exists():
             return False, f"{self.file_name} does not exist!"

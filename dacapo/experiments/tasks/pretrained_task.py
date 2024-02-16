@@ -1,57 +1,51 @@
-from .task import Task
+from dacapo.io import PbConfig, h5py_like
 
-import torch
-
-
-class PretrainedTask(Task):
+class ConduitFidiskRegular(h5py_like.Dataset):
     """
-    PretrainedTask is a specialized task that initializes a model weights using a pretrained model.
+    A 'ConduitFidiskRegular' is a dataset class in dacapo's file system. 
 
-    This task uses a pretrained model weights which can have a different head channels
-    and then loads pretrained weights into the model created by the predictor.
+    It's an interface for reading and writing regular h5 files. In constructor, 
+    it attempts to automatically determine whether the file is read or write mode.
 
     Attributes:
-        weights (str): The path to the pretrained weights file.
-        predictor (Predictor): Inherits the Predictor instance from the sub-task.
-        loss (Loss): Inherits the Loss instance from the sub-task.
-        post_processor (PostProcessor): Inherits the PostProcessor instance from the sub-task.
-        evaluator (Evaluator): Inherits the Evaluator instance from the sub-task.
+        file (h5py.File): The read/write file object.
     """
-
-    def __init__(self, task_config):
+    def __init__(self, config: PbConfig):
         """
-        Initializes the PretrainedTask with the specified task configuration.
+        Initializes the 'ConduitFidiskRegular' with the specified configuration.
 
-        The constructor initializes the task by setting up a sub-task based on the provided
-        task configuration and then loading the pretrained weights.
+        The constructor opens file, read or write mode is determined based on 
+        the provided configuration state ( config.open ).
 
         Args:
-            task_config: A configuration object for the task, which includes the sub-task
-                         configuration and the path to the pretrained weights.
+            config (PbConFig): A configuration object containing path file and open state.
+                              It includes the path file and the open state (reading or writing).
         """
-        sub_task = task_config.sub_task_config.task_type(task_config.sub_task_config)
-        self.weights = task_config.weights
-
-        self.predictor = sub_task.predictor
-        self.loss = sub_task.loss
-        self.post_processor = sub_task.post_processor
-        self.evaluator = sub_task.evaluator
-
-    def create_model(self, architecture):
+        super().__init__(omode=config.open)
+        self.file = h5py.File(config.path, self.omode)
+    
+    def close(self):
         """
-        Creates and returns a model based on the given architecture, with pretrained weights loaded.
+        Closes the file if it is open.
 
-        This method creates a model using the predictor's `create_model` method and then loads
-        the pretrained weights into the model.
+        This method directly calls the `close` method of h5py.File object.
+        """
+        if self.file is not None:
+            self.file.close()
+        super().close()
+
+    def slice_datasets(self, names):
+        """
+        Creates a generator from given names and returns a dict of datasets.
+
+        This method iterates over the names and yields datasets as dictionary.
 
         Args:
-            architecture: The architecture specification for the model to be created.
+            names (iter): An iterable of dataset names to be sliced.
 
         Returns:
-            The model instance with pretrained weights loaded.
+            dict: A dictionary where each key-value pair represents a dataset name and its content.
         """
-        model = self.predictor.create_model(architecture)
-
-        saved_state_dict = torch.load(str(self.weights))
-        model.chain.load_state_dict(saved_state_dict["model"])
-        return model
+        return {
+            name: self[name] for name in names
+        } if names is not None else {name: self[name] for name in self.keys()}

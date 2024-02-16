@@ -1,12 +1,34 @@
-from datetime import datetime
-from importlib.machinery import SourceFileLoader
-from pathlib import Path
-from daisy import Task, Roi
-from dacapo.compute_context import ComputeContext
-import dacapo.compute_context
+"""
+This python module defines a class `DaCapoBlockwiseTask` which extends the `Task` class from the `daisy` library.
+The class makes use of the compute context from the `dacapo` library and provides utility for spawning
+worker processes to perform the tasks.
+
+Classes:
+
+- `DaCapoBlockwiseTask`: Class that extends the `Task` class from `daisy` library.
+
+"""
 
 
 class DaCapoBlockwiseTask(Task):
+    """
+    A DaCapo blockwise task that provides features to setup and execute tasks according 
+    to specific context.
+
+
+    Attributes:
+    ----------
+    worker_file (str | Path): The workflow file for a worker process.
+    compute_context (ComputeContext | str): Compute context instance of a worker process.
+    total_roi: Total region of interest for a task.
+    read_roi: The region of interest that is to be read for a task.
+    write_roi: The region of interest that is to be written for a task.
+    num_workers (int, optional): Number of workers for the task. Default is 16.
+    max_retries (int, optional): Maximum number of retries for executing a task. Default is 2.
+    timeout: Maximum duration to wait for a task to finish execution.
+    upstream_tasks: Tasks that need to be executed before the current task.
+    """
+
     def __init__(
         self,
         worker_file: str | Path,
@@ -21,43 +43,6 @@ class DaCapoBlockwiseTask(Task):
         *args,
         **kwargs,
     ):
-        if isinstance(compute_context, str):
-            compute_context = getattr(dacapo.compute_context, compute_context)()
-
-        # Make the task_id unique
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        task_id = str(worker_file) + timestamp
-
-        # Load worker functions
-        worker_name = Path(worker_file).stem
-        worker = SourceFileLoader(worker_name, str(worker_file)).load_module()
-
-        process_function = worker.spawn_worker(
-            *args, **kwargs, compute_context=compute_context
-        )
-        if hasattr(worker, "check_function"):
-            check_function = worker.check_function
-        else:
-            check_function = None
-        if hasattr(worker, "init_callback_fn"):
-            init_callback_fn = worker.init_callback_fn
-        else:
-            init_callback_fn = None
-        read_write_conflict = worker.read_write_conflict
-        fit = worker.fit
-
-        super().__init__(
-            task_id,
-            total_roi,
-            read_roi,
-            write_roi,
-            process_function,
-            check_function,
-            init_callback_fn,
-            read_write_conflict,
-            num_workers,
-            max_retries,
-            fit,
-            timeout,
-            upstream_tasks,
-        )
+        """
+        Constructor method to initialize a DaCapo blockwise task.
+        """

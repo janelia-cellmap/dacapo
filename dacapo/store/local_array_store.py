@@ -9,14 +9,37 @@ logger = logging.getLogger(__name__)
 
 
 class LocalArrayStore(ArrayStore):
-    """A local array store that uses zarr containers."""
+    """
+    A class that manages a local array store using zarr containers.
+
+    Attributes:
+        basedir: Directory to store the local array.
+
+    """
 
     def __init__(self, basedir):
+        """
+        Initialize the LocalArrayStore with base directory.
+
+        Args:
+            basedir: Directory to store the local array.
+        """
         self.basedir = basedir
 
     def best_validation_array(
         self, run_name: str, criterion: str, index: Optional[str] = None
     ) -> LocalArrayIdentifier:
+        """
+        Get the best validation array for given criterion and index.
+
+        Args:
+            run_name: Name of the run.
+            criterion: Criteria to choose the best validation.
+            index: Index to look for the best validation.
+
+        Returns:
+            An instance of LocalArrayIdentifier.
+        """
         container = self.validation_container(run_name).container
         if index is None:
             dataset = f"{criterion}"
@@ -28,8 +51,17 @@ class LocalArrayStore(ArrayStore):
     def validation_prediction_array(
         self, run_name: str, iteration: int, dataset: str
     ) -> LocalArrayIdentifier:
-        """Get the array identifier for a particular validation prediction."""
+        """
+        Get the array identifier for a particular validation prediction.
 
+        Args:
+            run_name: Name of the run.
+            iteration: Iteration count of the validation prediction.
+            dataset: Dataset to look for the validation prediction.
+
+        Returns:
+            An instance of LocalArrayIdentifier.
+        """
         container = self.validation_container(run_name).container
         dataset = f"{iteration}/{dataset}/prediction"
 
@@ -38,8 +70,18 @@ class LocalArrayStore(ArrayStore):
     def validation_output_array(
         self, run_name: str, iteration: int, parameters: str, dataset: str
     ) -> LocalArrayIdentifier:
-        """Get the array identifier for a particular validation output."""
+        """
+        Get the array identifier for a particular validation output.
 
+        Args:
+            run_name: Name of the run.
+            iteration: Iteration count of the validation output.
+            parameters: Parameters of the validation.
+            dataset: Dataset to look for the validation output.
+
+        Returns:
+            An instance of LocalArrayIdentifier.
+        """
         container = self.validation_container(run_name).container
         dataset = f"{iteration}/{dataset}/output/{parameters}"
 
@@ -51,13 +93,13 @@ class LocalArrayStore(ArrayStore):
         """
         Get an array identifiers for the validation input raw/gt.
 
-        It would be nice to store raw/gt with the validation predictions/outputs.
-        If we don't store these we would have to look up the datasplit config
-        and figure out where to find the inputs for each run. If we write
-        the data then we don't need to search for it.
-        This convenience comes at the cost of some extra memory usage.
-        """
+        Args:
+            run_name: Name of the run.
+            index: Index to look for the validation inputs.
 
+        Returns:
+            A tuple containing instances of LocalArrayIdentifier for raw and gt.
+        """
         container = self.validation_container(run_name).container
         if index is not None:
             dataset_prefix = f"inputs/{index}"
@@ -72,6 +114,12 @@ class LocalArrayStore(ArrayStore):
     def snapshot_container(self, run_name: str) -> LocalContainerIdentifier:
         """
         Get a container identifier for storage of a snapshot.
+
+        Args:
+            run_name: Name of the run.
+
+        Returns:
+            An instance of LocalContainerIdentifier.
         """
         return LocalContainerIdentifier(
             Path(self.__get_run_dir(run_name), "snapshot.zarr")
@@ -80,12 +128,27 @@ class LocalArrayStore(ArrayStore):
     def validation_container(self, run_name: str) -> LocalContainerIdentifier:
         """
         Get a container identifier for storage of a snapshot.
+
+        Args:
+            run_name: Name of the run.
+
+        Returns:
+            An instance of LocalContainerIdentifier.
         """
         return LocalContainerIdentifier(
             Path(self.__get_run_dir(run_name), "validation.zarr")
         )
 
     def remove(self, array_identifier: "LocalArrayIdentifier") -> None:
+        """
+        Remove a dataset in a container.
+
+        Args:
+            array_identifier: LocalArrayIdentifier to specify the dataset and the container.
+
+        Raises:
+            AssertionError: If the container path does not end with '.zarr'.
+        """
         container = array_identifier.container
         dataset = array_identifier.dataset
 
@@ -117,4 +180,13 @@ class LocalArrayStore(ArrayStore):
         shutil.rmtree(path)
 
     def __get_run_dir(self, run_name: str) -> Path:
+        """
+        Get the directory path for a run.
+
+        Args:
+            run_name: Name of the run.
+
+        Returns:
+            A pathlib.Path object representing the run directory.
+        """
         return Path(self.basedir, run_name)

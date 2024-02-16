@@ -1,82 +1,59 @@
-from .evaluation_scores import EvaluationScores
-import attr
-
-from typing import Tuple
-
-
-@attr.s
-class InstanceEvaluationScores(EvaluationScores):
+class DacapoDataModule(pl.LightningDataModule):
     """
-    InstanceEvaluationScores is for storing and computing VOI (Variation of Information) related evaluation
-    scores for instance segmentation tasks. It handles VOI split and merge scores and
-    provides utility methods for score analysis and comparison.
+    DacapoDataModule is a PyTorch LightningDataModule that is responsible for the process of loading, 
+    processing, and preparing datasets for model training and evaluation.
 
     Attributes:
-        voi_split (float): Score for the VOI split metric.
-        voi_merge (float): Score for the VOI merge metric.
+        dataset_name (str): Name of the dataset.
+        batch_size (int): Batch size for data sequencing.
+        eval_batch_size (int): Batch size specific for evaluation.
+        num_workers (int): Number of workers to utilize in dataloading process.
+        split: Indices for splitting the dataset.
+        normalize (bool): Flag indicating whether dataset normalization should be applied.
+        split_method (str): Method for splitting the datasets: 'seg', 'equally'.
+        seed (int): Seed value for reproducibility.
     """
 
-    criteria = ["voi_split", "voi_merge", "voi"]
+    def __init__(self, dataset_name,
+                 batch_size=1,
+                 eval_batch_size=1,
+                 normalize=False,
+                 num_workers=1,
+                 split=(0, 700, 840, 840),
+                 split_method='seg',
+                 seed=1234,
+                 ):
+        super().__init__()
 
-    voi_split: float = attr.ib(default=float("nan"))
-    voi_merge: float = attr.ib(default=float("nan"))
-
-    @property
-    def voi(self):
+    def setup(self, stage):
         """
-        Calculates the average of VOI split and VOI merge scores.
-
-        Returns:
-            float: The average VOI score.
-        """
-        return (self.voi_split + self.voi_merge) / 2
-
-    @staticmethod
-    def higher_is_better(criterion: str) -> bool:
-        """
-        Determines if a higher score is better for a given criterion.
-
+        Function that handles the main data loading and dataset splitting tasks.
+        
         Args:
-            criterion (str): The evaluation criterion.
+            stage (str): The current stage ('fit' or 'test') for Datamodule.
+        """
+        if stage == 'fit' or stage is None:
+
+    def train_dataloader(self):
+        """
+        Loads and returns the training dataloader.
+        
+        Returns:
+            dataloader for training data.
+        """
+
+    def val_dataloader(self):
+        """
+        Loads and returns the validation dataloader.
 
         Returns:
-            bool: False for all criteria in this class, indicating that a lower score is better.
+            dataloader for validation data.
         """
-        mapping = {
-            "voi_split": False,
-            "voi_merge": False,
-            "voi": False,
-        }
-        return mapping[criterion]
 
-    @staticmethod
-    def bounds(criterion: str) -> Tuple[float, float]:
+    def test_dataloader(self):
         """
-        Provides the bounds for the possible values of a given criterion.
-
-        Args:
-            criterion (str): The evaluation criterion.
+        Loads and returns the test dataloader.
 
         Returns:
-            Tuple[float, float]: The lower and upper bounds for the criterion's score.
-                                  For VOI-based criteria, the bounds are (0, 1).
+            dataloader for test data.
         """
-        mapping = {
-            "voi_split": (0, 1),
-            "voi_merge": (0, 1),
-            "voi": (0, 1),
-        }
-        return mapping[criterion]
-
-    @staticmethod
-    def store_best(criterion: str) -> bool:
-        """
-        Indicates whether the best score should be stored for a given criterion.
-
-        Args:
-            criterion (str): The evaluation criterion.
-
-        Returns:
-            bool: True for all criteria in this class, indicating that the best score should be stored.
-        """
-        return True

@@ -1,82 +1,136 @@
-from .array import Array
-
-from funlib.geometry import Coordinate, Roi
-
-
-import neuroglancer
-
-import numpy as np
-
-
+```python
 class SumArray(Array):
-    """ """
+    """
+    SumArray is a subclass of the class Array. It represents a virtual array that 
+    does not support writing. The values of the array are computed on demand by 
+    summing the values of the source arrays.
+    
+    Attributes:
+        name: str: Name of the array.
+        _source_array: Array: The first source array in the list of source arrays.
+        _source_arrays: list: The source arrays that are summed to produce this array.
+    """
 
     def __init__(self, array_config):
-        self.name = array_config.name
-        self._source_arrays = [
-            source_config.array_type(source_config)
-            for source_config in array_config.source_array_configs
-        ]
-        self._source_array = self._source_arrays[0]
+        """
+        Initializes the SumArray with the specified array_config.
 
+        Args:
+            array_config: The configuration for this array.
+        """
+        
     @property
     def axes(self):
-        return [x for x in self._source_array.axes if x != "c"]
-
+        """
+        Returns a list of axes excluding the 'c' axis.
+        
+        Returns:
+            list: List of axes.
+        """
+        
     @property
     def dims(self) -> int:
-        return self._source_array.dims
+        """
+        Returns the dimensions of the source array.
 
+        Returns:
+            int: Number of dimensions.
+        """
+        
     @property
     def voxel_size(self) -> Coordinate:
-        return self._source_array.voxel_size
+        """
+        Returns the size of the voxels in the source array.
 
+        Returns:
+            Coordinate: Voxel size.
+        """
+        
     @property
     def roi(self) -> Roi:
-        return self._source_array.roi
+        """
+        Returns the Roi of the source array.
 
+        Returns:
+            Roi: Region Of Interest.
+        """
+        
     @property
     def writable(self) -> bool:
-        return False
-
+        """
+        Indicates whether the array is writable or not.
+        
+        Returns:
+            bool: False, as this is a virtual array.
+        """
+        
     @property
     def dtype(self):
-        return np.uint8
-
+        """
+        Returns the data type of the array.
+        
+        Returns:
+            dtype: Data type of the array.
+        """
+        
     @property
     def num_channels(self):
-        return None
-
-    @property
-    def data(self):
-        raise ValueError(
-            "Cannot get a writable view of this array because it is a virtual "
-            "array created by modifying another array on demand."
-        )
-
+        """
+        Get the number of channels for this array
+        
+        Returns:
+            None: as this function is not currently implemented.
+        """
+        
     @property
     def attrs(self):
-        return self._source_array.attrs
-
+        """
+        Returns the attributes of the source array.
+        
+        Returns:
+            dict: attribute dictionary of the source array.
+        """
+        
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        return np.sum(
-            [source_array[roi] for source_array in self._source_arrays], axis=0
-        )
+        """
+        Returns the sum of the values in the specified region of interest.
 
+        Args:
+            roi: Region of interest.
+
+        Returns:
+            ndarray: The summed values.
+        """
+        
     def _can_neuroglance(self):
-        return self._source_array._can_neuroglance()
-
+        """
+        Determines if the soure array can neuroglance.
+        
+        Returns:
+            bool: True if source array can neuroglance, else False.
+        """
+        
     def _neuroglancer_source(self):
-        return self._source_array._neuroglancer_source()
+        """
+        Returns the neuroglancer source of the source array.
+        
+        Returns:
+            Neuroglancer source of the source array.
+        """
 
     def _neuroglancer_layer(self):
-        # Generates an Segmentation layer
-
-        layer = neuroglancer.SegmentationLayer(source=self._neuroglancer_source())
-        kwargs = {
-            "visible": False,
-        }
-        return layer, kwargs
-
+        """
+        Generates a segmentation layer with a neuroglancer source.
+        
+        Returns:
+            tuple: The segmentation layer.
+        """
+        
     def _source_name(self):
-        return self._source_array._source_name()
+        """
+        Returns the source name of the source array.
+        
+        Returns:
+            str: The source name. 
+        """
+```

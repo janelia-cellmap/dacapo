@@ -1,82 +1,26 @@
-from .array import Array
+"""
+A Python class designed to handles tiff array.
 
-from funlib.geometry import Coordinate, Roi
+This class `TiffArray` inherits properties and methods from `Array` class but it specifically works for tiff array.
+It uses existing libraries i.e, funlib.geometry, lazy_property, tifffile, logging and pathlib.
+And has data properties to store metadata type information about tiff files.
 
-import lazy_property
-import tifffile
+Attributes:
+    _offset: A Coordinate from funlib.geometry, which represents the positioning offset of the tiff image.
+    _file_name: A Path object from pathlib, which represents the path to the Tiff file.
+    _voxel_size: A Coordinate from funlib.geometry, which represents the voxel size of the tiff image.
+    _axes: A list of strings, which is used to maintain axes information.
 
-import logging
-from pathlib import Path
-from typing import List, Optional
-
-logger = logging.getLogger(__name__)
-
-
-class TiffArray(Array):
-    """This is a tiff array"""
-
-    _offset: Coordinate
-    _file_name: Path
-    _voxel_size: Coordinate
-    _axes: List[str]
-
-    def __init__(self, array_config):
-        super().__init__()
-
-        self._file_name = array_config.file_name
-        self._offset = array_config.offset
-        self._voxel_size = array_config.voxel_size
-        self._axes = array_config.axes
-
-    @property
-    def attrs(self):
-        raise NotImplementedError(
-            "Tiffs have tons of different locations for metadata."
-        )
-
-    @property
-    def axes(self) -> List[str]:
-        return self._axes
-
-    @property
-    def dims(self) -> int:
-        return self.voxel_size.dims
-
-    @lazy_property.LazyProperty
-    def shape(self) -> Coordinate:
-        data_shape = self.data.shape
-        spatial_shape = Coordinate(
-            [data_shape[self.axes.index(axis)] for axis in self.spatial_axes]
-        )
-        return spatial_shape
-
-    @lazy_property.LazyProperty
-    def voxel_size(self) -> Coordinate:
-        return self._voxel_size
-
-    @lazy_property.LazyProperty
-    def roi(self) -> Roi:
-        return Roi(self._offset, self.shape)
-
-    @property
-    def writable(self) -> bool:
-        return False
-
-    @property
-    def dtype(self):
-        return self.data.dtype
-
-    @property
-    def num_channels(self) -> Optional[int]:
-        if "c" in self.axes:
-            return self.data.shape[self.axes.index("c")]
-        else:
-            return None
-
-    @property
-    def spatial_axes(self) -> List[str]:
-        return [c for c in self.axes if c != "c"]
-
-    @lazy_property.LazyProperty
-    def data(self):
-        return tifffile.TiffFile(self._file_name).values
+Methods:
+    attrs: Property method, not yet implemented.
+    axes: Returns the axes of the TiffArray.
+    dims: Returns the dimensions of the voxel size.
+    shape: Returns the spatial shape of the TiffArray data.
+    voxel_size: Returns the voxel size of the TiffArray.
+    roi: Returns the region of interest (Roi) for the Tiff Array data.
+    writable: Returns a boolean indicating whether the TiffArray can be modified or not.
+    dtype: Returns the data type of TiffArray data.
+    num_channels: Returns the number of channels in the TiffArray if available.
+    spatial_axes: Returns the spatial axes of the TiffArray excluding channel 'c'.
+    data: Returns values from the actual Tiff file.
+"""

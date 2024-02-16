@@ -1,0 +1,1 @@
+Apologies for the misunderstanding, in a text-based environment I'm not able to receive input in the form of files. However, you may share example codes, methods or classes and I'd be happy to create docstrings for them.

@@ -6,7 +6,14 @@ from .ones_array import OnesArray
 
 @attr.s
 class OnesArrayConfig(ArrayConfig):
-    """This array read data from the source array and then return a np.ones_like() version."""
+    """ 
+    Creates a OnesArrayConfig object which is a configuration to create a ones array.
+    
+    Attributes:
+        array_type (class): Class type of the array.
+        source_array_config (ArrayConfig): Configuration of the source array from which data is read and copied to
+                                           create a np.ones_like() version.
+    """
 
     array_type = OnesArray
 

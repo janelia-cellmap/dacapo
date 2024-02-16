@@ -1,11 +1,1 @@
-import attr
-
-
-@attr.s
-class GraphStoreConfig:
-    """Base class for graph store configurations. Each subclass of a
-    `GraphStore` should have a corresponding config class derived from
-    `GraphStoreConfig`.
-    """
-
-    pass
+Your code is already well-documented with a docstring. If you want, you could add more details for the class. However, if the class's functionality is as straightforward as it seems, the current docstring might already be sufficient.

@@ -8,8 +8,21 @@ from funlib.geometry import Coordinate
 
 @attr.s
 class ResampledArrayConfig(ArrayConfig):
-    """This array will up or down sample an array into the desired voxel size."""
+    """A class representing the configuration for resampling a source array.
 
+    This class facilitates upsampling or downsampling of a source array 
+    to achieve the desired voxel size. The configuration required for 
+    resampling includes parameters for the source array, upsampling 
+    coordinate, downsampling coordinate, and interpolation order.
+
+    Attributes:
+        array_type: A class object representing ResampledArray type.
+        source_array_config (ArrayConfig): Configuration of the source array to be resampled.
+        upsample (Coordinate): Coordinate for the amount to upsample the array.
+        downsample (Coordinate): Coordinate for the amount to downsample the array.
+        interp_order (bool): Order of interpolation applied during resampling.
+
+    """
     array_type = ResampledArray
 
     source_array_config: ArrayConfig = attr.ib(
