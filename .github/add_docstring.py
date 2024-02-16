@@ -60,14 +60,6 @@ def addDocstring(filePath):
             # Insert the generated docstring to the Function node
             node.value.insert(0, f'"""\n{docstring}\n"""')
 
-
-
-            # Insert the generated docstring to the Function node
-            if node.next and node.next.type == "comment":
-                node.next.insert_after(f'"""\n{docstring}\n"""')
-            else:
-                node.value.insert(0, f'"""\n{docstring}\n"""')
-
     # Write the modified Python file back to disk
     with open(filePath, "w", encoding="utf-8") as file:
         file.write(code.dumps())
