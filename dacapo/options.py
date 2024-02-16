@@ -53,15 +53,6 @@ class DaCapoConfig:
         return converter.unstructure(self)
 
 
-def parse_options():
-    for path in options_files:
-        if not path.exists():
-            continue
-
-        with path.open("r") as f:
-            return yaml.safe_load(f)
-
-
 class Options:
     def __init__(self):
         raise RuntimeError("Singleton: Use Options.instance()")
