@@ -1,4 +1,3 @@
-```python
 from enum import Enum, unique
 
 class DataKey(Enum):
@@ -39,4 +38,3 @@ class GraphKey(DataKey):
         The key for specified locations in the graph.
     """
     SPECIFIED_LOCATIONS = "specified_locations"
-```

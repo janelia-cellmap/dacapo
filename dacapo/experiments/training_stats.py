@@ -1,4 +1,3 @@
-```python
 from .training_iteration_stats import TrainingIterationStats
 
 import xarray as xr
@@ -90,4 +89,3 @@ class TrainingStats:
                 ],
             },
         )
-```

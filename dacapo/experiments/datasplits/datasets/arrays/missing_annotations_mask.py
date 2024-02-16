@@ -1,6 +1,3 @@
-Here is the script file with added DocStrings in Google Style Multi-Line format:
-
-```python
 from .array import Array
 
 from funlib.geometry import Coordinate, Roi
@@ -14,22 +11,15 @@ import numpy as np
 
 class MissingAnnotationsMask(Array):
     """
-    A class to encapsulate Wrapper for manipulating ZarrArray. 
-    This is used for handling the specific case when some 
-    labels are present but are not annotated. 
-
-    Attributes:
-        name (str): Display name of the Array.
-        axes (list[str]): Axes of array.
-        dims (int): Dimensions of array.
-        voxel_size (Coordinate): Voxel size of array.
-        roi (Roi): Region of interest of array.
-        writable (bool): Indicates if array is writable.
-        dtype: data type of array
-        num_channels (int): Number of channels in the array.
-        data: data of the array
-        attrs: attributes of the source array.
-        channels: Channels of array
+    This is wrapper around a ZarrArray containing uint annotations.
+    Complementary to the BinarizeArray class where we convert labels
+    into individual channels for training, we may find crops where a
+    specific label is present, but not annotated. In that case you
+    might want to avoid training specific channels for specific
+    training volumes.
+    See package fibsem_tools for appropriate metadata format for indicating
+    presence of labels in your ground truth.
+    "https://github.com/janelia-cosem/fibsem-tools"
     """
 
     def __init__(self, array_config):
@@ -139,6 +129,3 @@ class MissingAnnotationsMask(Array):
 
     def _source_name(self):
         return self._source_array._source_name()
-```
-
-Kindly replace the lines ``: Initializes the class.```, ```: Returns ...```, ```: Generates ...``` with actual descriptions of the class method's functionality as these were not provided in the original code.

@@ -1,4 +1,3 @@
-```python
 import xarray as xr
 
 from abc import ABC, abstractmethod
@@ -232,4 +231,3 @@ class Evaluator(ABC):
             The overall evaluation scores.
         """
         pass
-```

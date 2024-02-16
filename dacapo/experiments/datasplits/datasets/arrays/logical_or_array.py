@@ -1,33 +1,17 @@
-```python
 from .array import Array
+
 from funlib.geometry import Coordinate, Roi
+
+
 import neuroglancer
+
 import numpy as np
 
-class LogicalOrArray(Array):
-    """
-    A class for generating a logical OR array with methods to generate views to 
-    the array. It doesn't allow to write to the array.
 
-    Attributes
-    ----------
-    name : str
-        The name of the array.
-    dtype : np.uint8 datatype
-        The datatype of the array.
-    axes : list
-        The different axes of the array.
-    _source_array : array
-        The source array from the configuration.
-    """
+class LogicalOrArray(Array):
+    """ """
 
     def __init__(self, array_config):
-        """
-        Parameters
-        ----------
-        array_config : Array
-            The array configuration values.
-        """
         self.name = array_config.name
         self._source_array = array_config.source_array_config.array_type(
             array_config.source_array_config
@@ -35,123 +19,63 @@ class LogicalOrArray(Array):
 
     @property
     def axes(self):
-        """
-        Returns the axes of the array excluding 'c'.
-        
-        Returns
-        -------
-        list
-            The axes of the array.
-        """
+        return [x for x in self._source_array.axes if x != "c"]
+
+    @property
+    def dims(self) -> int:
+        return self._source_array.dims
 
     @property
     def voxel_size(self) -> Coordinate:
-        """
-        Returns the voxel size of the source array.
-        
-        Returns
-        -------
-        Coordinate
-            Size of the voxel in the source array.
-        """
+        return self._source_array.voxel_size
 
     @property
     def roi(self) -> Roi:
-        """
-        Returns the region of interest of the source array.
-        
-        Returns
-        -------
-        Roi
-            The region of interest in the source array.
-        """
+        return self._source_array.roi
 
     @property
     def writable(self) -> bool:
-        """
-        Returns whether the array is writable or not.
-        
-        Returns
-        -------
-        bool
-            False.
-        """         
+        return False
+
+    @property
+    def dtype(self):
+        return np.uint8
+
+    @property
+    def num_channels(self):
+        return None
 
     @property
     def data(self):
-        """
-        Indicates whether the array is writable or not. Raises ValueError if 
-        data is attempted to be retrieved.
-
-        Returns
-        -------
-        ValueError
-            Raises exception whenever the property is accessed.
-        """    
+        raise ValueError(
+            "Cannot get a writable view of this array because it is a virtual "
+            "array created by modifying another array on demand."
+        )
 
     @property
     def attrs(self):
-        """
-        Returns the attributes of the source array.
-        
-        Returns
-        -------
-        dict
-            The source array attributes.
-        """     
+        return self._source_array.attrs
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        """
-        Get a numpy array of the elements in the provided region of interest.
-
-        Parameters
-        ----------
-        roi : Roi
-            The region of interest.
-
-        Returns
-        -------
-        np.ndarray
-            Returns the max value along the "c" axis from the mask.
-        """  
+        mask = self._source_array[roi]
+        if "c" in self._source_array.axes:
+            mask = np.max(mask, axis=self._source_array.axes.index("c"))
+        return mask
 
     def _can_neuroglance(self):
-        """
-        Returns whether the source array can be viewed in neuroglancer or not.
-
-        Returns
-        -------
-        bool
-            True if the source array can be viewed in neuroglancer and False otherwise. 
-        """
+        return self._source_array._can_neuroglance()
 
     def _neuroglancer_source(self):
-        """
-        Returns the object used as source for neuroglancer from the source array.
-
-        Returns
-        -------
-        object
-            The source object used for neuroglancer.
-        """    
+        return self._source_array._neuroglancer_source()
 
     def _neuroglancer_layer(self):
-        """
-        Generates a segmentation layer based on the source array for neuroglancer.
+        # Generates an Segmentation layer
 
-        Returns
-        -------
-        tuple
-            The segmentation layer and a dictionary containing "visible" key set to False.
-        """   
+        layer = neuroglancer.SegmentationLayer(source=self._neuroglancer_source())
+        kwargs = {
+            "visible": False,
+        }
+        return layer, kwargs
 
     def _source_name(self):
-        """
-        Returns the name of the source array.
-
-        Returns
-        -------
-        str
-            Name of the source array.
-        """ 
-```
+        return self._source_array._source_name()

@@ -1,4 +1,3 @@
-```python
 from .evaluator import Evaluator
 from .dummy_evaluation_scores import DummyEvaluationScores
 
@@ -37,4 +36,3 @@ class DummyEvaluator(Evaluator):
             DummyEvaluationScores: An object of DummyEvaluationScores class.
         """
         return DummyEvaluationScores()
-```

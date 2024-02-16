@@ -1,102 +1,171 @@
+from abc import ABC, abstractmethod
+from typing import List, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from dacapo.experiments.run_config import RunConfig
+    from dacapo.experiments.tasks.task_config import TaskConfig
+    from dacapo.experiments.architectures.architecture_config import ArchitectureConfig
+    from dacapo.experiments.datasplits.datasplit_config import DataSplitConfig
+    from dacapo.experiments.datasplits.datasets.arrays.array_config import ArrayConfig
+    from dacapo.experiments.trainers.trainer_config import TrainerConfig
+
+
 class DuplicateNameError(Exception):
-    """Exception raised when an attempt is made to store a config with a name that already exists."""
+    pass
+
 
 class ConfigStore(ABC):
-    """
-    An abstract base class used to manage and access different configuration data.
-
-    Subclasses need to implement methods for managing run, task, architecture, trainer,
-    datasplit and array configs. 
-    """
+    """Base class for configuration stores."""
 
     @property
     @abstractmethod
     def runs(self):
-        """
-        Abstract getter method to be overridden by subclasses which 
-        contains configuration data for all the runs.
-        """
         pass
 
     @property
     @abstractmethod
     def datasplits(self):
-        """
-        Abstract getter method to be overridden by subclasses which 
-        contains configuration data for all the data splits.
-        """
         pass
 
     @property
     @abstractmethod
     def datasets(self):
-        """
-        Abstract getter method to be overridden by subclasses which 
-        contains configuration data for all the datasets.
-        """
         pass
 
     @property
     @abstractmethod
     def arrays(self):
-        """
-        Abstract getter method to be overridden by subclasses which 
-        contains configuration data for all the arrays.
-        """
         pass
 
     @property
     @abstractmethod
     def tasks(self):
-        """
-        Abstract getter method to be overridden by subclasses which 
-        contains configuration data for all the tasks.
-        """
         pass
 
     @property
     @abstractmethod
     def trainers(self):
-        """
-        Abstract getter method to be overridden by subclasses which 
-        contains configuration data for all the trainers.
-        """
         pass
 
     @property
     @abstractmethod
     def architectures(self):
-        """
-        Abstract getter method to be overridden by subclasses which 
-        contains configuration data for all the architectures.
-        """
         pass
 
     @abstractmethod
     def delete_config(self, database, config_name: str) -> None:
-        """Delete a given configuration from the specific type(database) of configuration."""
+        pass
+
+    @abstractmethod
+    def store_run_config(self, run_config: "RunConfig") -> None:
+        """Store a run config. This should also store the configs that are part
+        of the run config (i.e., task, architecture, trainer, and dataset
+        config)."""
+        pass
+
+    @abstractmethod
+    def retrieve_run_config(self, run_name: str) -> "RunConfig":
+        """Retrieve a run config from a run name."""
+        pass
+
+    @abstractmethod
+    def retrieve_run_config_names(self) -> List[str]:
+        """Retrieve all run config names."""
         pass
 
     def delete_run_config(self, run_name: str) -> None:
-        """Deletes a specific run configuration based on run name."""
         self.delete_config(self.runs, run_name)
 
+    @abstractmethod
+    def store_task_config(self, task_config: "TaskConfig") -> None:
+        """Store a task config."""
+        pass
+
+    @abstractmethod
+    def retrieve_task_config(self, task_name: str) -> "TaskConfig":
+        """Retrieve a task config from a task name."""
+        pass
+
+    @abstractmethod
+    def retrieve_task_config_names(self) -> List[str]:
+        """Retrieve all task config names."""
+        pass
+
     def delete_task_config(self, task_name: str) -> None:
-        """Deletes a specific task configuration based on task name."""
         self.delete_config(self.tasks, task_name)
 
+    @abstractmethod
+    def store_architecture_config(
+        self, architecture_config: "ArchitectureConfig"
+    ) -> None:
+        """Store a architecture config."""
+        pass
+
+    @abstractmethod
+    def retrieve_architecture_config(
+        self, architecture_name: str
+    ) -> "ArchitectureConfig":
+        """Retrieve a architecture config from a architecture name."""
+        pass
+
+    @abstractmethod
+    def retrieve_architecture_config_names(self) -> List[str]:
+        """Retrieve all architecture config names."""
+        pass
+
     def delete_architecture_config(self, architecture_name: str) -> None:
-        """Deletes a specific architecture configuration based on architecture name."""
         self.delete_config(self.architectures, architecture_name)
 
+    @abstractmethod
+    def store_trainer_config(self, trainer_config: "TrainerConfig") -> None:
+        """Store a trainer config."""
+        pass
+
+    @abstractmethod
+    def retrieve_trainer_config(self, trainer_name: str) -> None:
+        """Retrieve a trainer config from a trainer name."""
+        pass
+
+    @abstractmethod
+    def retrieve_trainer_config_names(self) -> List[str]:
+        """Retrieve all trainer config names."""
+        pass
+
     def delete_trainer_config(self, trainer_name: str) -> None:
-        """Deletes a specific trainer configuration based on trainer name."""
         self.delete_config(self.trainers, trainer_name)
 
+    @abstractmethod
+    def store_datasplit_config(self, datasplit_config: "DataSplitConfig") -> None:
+        """Store a datasplit config."""
+        pass
+
+    @abstractmethod
+    def retrieve_datasplit_config(self, datasplit_name: str) -> "DataSplitConfig":
+        """Retrieve a datasplit config from a datasplit name."""
+        pass
+
+    @abstractmethod
+    def retrieve_datasplit_config_names(self) -> List[str]:
+        """Retrieve all datasplit names."""
+        pass
+
     def delete_datasplit_config(self, datasplit_name: str) -> None:
-        """Deletes a specific datasplit configuration based on datasplit name."""
         self.delete_config(self.datasplits, datasplit_name)
 
+    @abstractmethod
+    def store_array_config(self, array_config: "ArrayConfig") -> None:
+        """Store a array config."""
+        pass
+
+    @abstractmethod
+    def retrieve_array_config(self, array_name: str) -> "ArrayConfig":
+        """Retrieve a array config from a array name."""
+        pass
+
+    @abstractmethod
+    def retrieve_array_config_names(self) -> List[str]:
+        """Retrieve all array names."""
+        pass
+
     def delete_array_config(self, array_name: str) -> None:
-        """Deletes a specific array configuration based on array name."""
         self.delete_config(self.arrays, array_name)

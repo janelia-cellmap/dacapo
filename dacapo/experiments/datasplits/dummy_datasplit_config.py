@@ -1,5 +1,3 @@
-The above script doesn't need any modification and the docstrings can be added as follows:
-```python
 from .dummy_datasplit import DummyDataSplit
 from .datasplit_config import DataSplitConfig
 from .datasets import DatasetConfig, DummyDatasetConfig
@@ -33,5 +31,3 @@ class DummyDataSplitConfig(DataSplitConfig):
             Tuple[bool, str]: A tuple contains a boolean 'False' and a string.
         """
         return False, "This is a DummyDataSplit and is never valid"
-```
-Hope this will helpful.

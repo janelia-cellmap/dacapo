@@ -1,4 +1,3 @@
-```python
 from .evaluators import BinarySegmentationEvaluator
 from .losses import MSELoss
 from .post_processors import ThresholdPostProcessor
@@ -38,4 +37,3 @@ class InnerDistanceTask(Task):
             tol_distance=task_config.tol_distance,
             channels=task_config.channels,
         )
-```

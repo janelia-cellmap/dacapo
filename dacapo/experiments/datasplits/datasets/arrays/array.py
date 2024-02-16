@@ -7,84 +7,56 @@ from abc import ABC, abstractmethod
 
 
 class Array(ABC):
-    """
-    Abstract class representing an n-dimensional array with some associated meta-data such as 
-    number of channels, dimensions, voxel size etc. and utilities to manipulate and view the data.
-    """
     @property
     @abstractmethod
     def attrs(self) -> Dict[str, Any]:
         """
-        Abstract method to return dictionary of meta-data attributes.
-
-        Returns: 
-            Dict[str, Any]: Dictionary containing meta-data attributes.
+        Return a dictionary of metadata attributes stored on this array.
         """
         pass
 
     @property
     @abstractmethod
     def axes(self) -> List[str]:
-        """
-        Abstract method to return axes.
+        """Returns the axes of this dataset as a string of charactes, as they
+        are indexed. Permitted characters are:
 
-        Returns:
-            List[str]: List of axes.
+            * ``zyx`` for spatial dimensions
+            * ``c`` for channels
+            * ``s`` for samples
         """
         pass
 
     @property
     @abstractmethod
     def dims(self) -> int:
-        """
-        Abstract method to return number of dimensions.
-
-        Returns:
-            int: Number of dimensions.
-        """
+        """Returns the number of spatial dimensions."""
         pass
 
     @property
     @abstractmethod
     def voxel_size(self) -> Coordinate:
-        """
-        Abstract method to return voxel size.
-
-        Returns:
-            Coordinate: Size of voxel.
-        """
+        """The size of a voxel in physical units."""
         pass
 
     @property
     @abstractmethod
     def roi(self) -> Roi:
-        """
-        Abstract method to return roi (region of interest).
-
-        Returns:
-            Roi: Region of interest.
-        """
+        """The total ROI of this array, in world units."""
         pass
 
     @property
     @abstractmethod
     def dtype(self) -> Any:
-        """
-        Abstract method to return data type of the array.
-
-        Returns:
-            Any: Data type of the array.
-        """
+        """The dtype of this array, in numpy dtypes"""
         pass
 
     @property
     @abstractmethod
     def num_channels(self) -> Optional[int]:
         """
-        Abstract method to return number of channels.
-
-        Returns:
-            Optional[int]: Number of channels if present else None.
+        The number of channels provided by this dataset.
+        Should return None if the channel dimension doesn't exist.
         """
         pass
 
@@ -92,10 +64,7 @@ class Array(ABC):
     @abstractmethod
     def data(self) -> np.ndarray:
         """
-        Abstract method to return a numpy ndarray view of the data.
-
-        Returns:
-            np.ndarray: Numpy ndarray view of the data.
+        Get a numpy like readable and writable view into this array.
         """
         pass
 
@@ -103,55 +72,42 @@ class Array(ABC):
     @abstractmethod
     def writable(self) -> bool:
         """
-        Abstract method to check if data is writable.
-
-        Returns:
-            bool: True if data is writable, False otherwise.
+        Can we write to this Array?
         """
         pass
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        """
-        Method to return a subset of the data defined by a region of interest.
+        if not self.roi.contains(roi):
+            raise ValueError(f"Cannot fetch data from outside my roi: {self.roi}!")
 
-        Args:
-            roi (Roi): The region of interest.
+        assert roi.offset % self.voxel_size == Coordinate(
+            (0,) * self.dims
+        ), f"Given roi offset: {roi.offset} is not a multiple of voxel_size: {self.voxel_size}"
+        assert roi.shape % self.voxel_size == Coordinate(
+            (0,) * self.dims
+        ), f"Given roi shape: {roi.shape} is not a multiple of voxel_size: {self.voxel_size}"
 
-        Returns:
-            np.ndarray: Data within the provided region of interest.
+        slices = tuple(self._slices(roi))
 
-        Raises:
-            ValueError: If the provided region of interest is outside the total ROI of the array.
-            AssertionError: If the offset of ROI is not multiple of voxel size.
-            AssertionError: If the shape of ROI is not multiple of voxel size.
-        """
-        pass  # implementation details omitted in this abstract class for brevity    
+        return self.data[slices]
 
     def _can_neuroglance(self) -> bool:
-        """
-        Method to check if data can be visualized using neuroglance.
-
-        Returns:
-            bool: Always returns False.
-        """
-        pass  # implementation details omitted in this docstring for brevity
+        return False
 
     def _neuroglancer_layer(self):
-        """
-        Method to generate neuroglancer layer.
-
-        Note: The functionality is not implemented in this method.
-        """
-        pass  # implementation details omitted in this docstring for brevity
+        pass
 
     def _slices(self, roi: Roi) -> Iterable[slice]:
-        """
-        Method to generate slices for a given region of interest.
-
-        Args:
-            roi (Roi): The region of interest.
-
-        Returns:
-            Iterable[slice]: Iterable of slices generated from provided roi.
-        """
-        pass  # implementation details omitted in this docstring for brevity
+        offset = (roi.offset - self.roi.offset) / self.voxel_size
+        shape = roi.shape / self.voxel_size
+        spatial_slices: Dict[str, slice] = {
+            a: slice(o, o + s)
+            for o, s, a in zip(offset, shape, self.axes[-self.dims :])
+        }
+        slices: List[slice] = []
+        for axis in self.axes:
+            if axis == "b" or axis == "c":
+                slices.append(slice(None, None))
+            else:
+                slices.append(spatial_slices[axis])
+        return slices

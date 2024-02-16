@@ -1,4 +1,3 @@
-```python
 from .predictor import Predictor
 from dacapo.experiments import Model
 from dacapo.experiments.arraytypes import DistanceArray
@@ -19,32 +18,17 @@ logger = logging.getLogger(__name__)
 
 class InnerDistancePredictor(Predictor):
     """
-    This is a class for InnerDistancePredictor.
+    Predict signed distances for a binary segmentation task.
 
-    Attributes:
-        channels (List[str]): The list of strings representing each class being segmented.
-        scale_factor (float): A factor to scale distances.
-
-    Methods:
-        embedding_dims: Returns the number of classes being segmented.
-        create_model: Returns a new model with the given architecture
-        create_target: Processes the ground truth data and returns a NumpyArray with distances.
-        create_weight: Balances weights independently for each channel.
-        output_array_type: Returns a DistanceArray.
-        process: Calculates signed distances for a multi-class segmentation task.
-        __find_boundaries: Identifies the boundaries within the labels.
-        __normalize: Normalizes the distances based on the given norm.
-        gt_region_for_roi: Returns the ground truth region for the given region of interest.
-        padding: Returns the required padding for the ground truth voxel size.
+    Distances deep within background are pushed to -inf, distances deep within
+    the foreground object are pushed to inf. After distances have been
+    calculated they are passed through a tanh so that distances saturate at +-1.
+    Multiple classes can be predicted via multiple distance channels. The names
+    of each class that is being segmented can be passed in as a list of strings
+    in the channels argument.
     """
 
     def __init__(self, channels: List[str], scale_factor: float):
-    """"
-    Constructs all the necessary attributes for the InnerDistancePredictor object.
-    Params:
-        channels (List[str]): list of strings representing each class being segmented.
-        scale_factor (float) : a factor to scale distances.
-    """
         self.channels = channels
         self.norm = "tanh"
         self.dt_scale_factor = scale_factor
@@ -55,50 +39,54 @@ class InnerDistancePredictor(Predictor):
 
     @property
     def embedding_dims(self):
-    """ 
-    This function returns the count of channels.
-    Returns:
-        length of the channel list
-    """
+        return len(self.channels)
 
     def create_model(self, architecture):
-    """"
-    This function returns a new model with the given architecture.
-    Params:
-        architecture : architecture of the model
-    Returns:
-        Model : new model with the given architecture
-    """
+        if architecture.dims == 2:
+            head = torch.nn.Conv2d(
+                architecture.num_out_channels, self.embedding_dims, kernel_size=1
+            )
+        elif architecture.dims == 3:
+            head = torch.nn.Conv3d(
+                architecture.num_out_channels, self.embedding_dims, kernel_size=1
+            )
+
+        return Model(architecture, head)
 
     def create_target(self, gt):
-    """
-    This function processes the ground truth data and returns a NumpyArray with distances.
-    Params:
-        gt : ground truth data
-    Returns:
-        NumpyArray : array of distances from gt.data
-    """
+        distances = self.process(
+            gt.data, gt.voxel_size, self.norm, self.dt_scale_factor
+        )
+        return NumpyArray.from_np_array(
+            distances,
+            gt.roi,
+            gt.voxel_size,
+            gt.axes,
+        )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
-    """
-    This function balances weights independently for each channel.
-    Params:
-        gt : ground truth data
-        target : target data
-        mask : mask data
-        moving_class_counts : counts of classes in the target
-    Returns:
-        NumpyArray : weights
-        moving_class_counts : counts of classes in the target
-    """
+        # balance weights independently for each channel
+
+        weights, moving_class_counts = balance_weights(
+            gt[target.roi],
+            2,
+            slab=tuple(1 if c == "c" else -1 for c in gt.axes),
+            masks=[mask[target.roi]],
+            moving_counts=moving_class_counts,
+        )
+        return (
+            NumpyArray.from_np_array(
+                weights,
+                gt.roi,
+                gt.voxel_size,
+                gt.axes,
+            ),
+            moving_class_counts,
+        )
 
     @property
     def output_array_type(self):
-    """
-    This function returns a DistanceArray.
-    Returns:
-        DistanceArray :  An array containing distances for a list of items.
-    """
+        return DistanceArray(self.embedding_dims)
 
     def process(
         self,
@@ -107,48 +95,97 @@ class InnerDistancePredictor(Predictor):
         normalize=None,
         normalize_args=None,
     ):
-    """
-    This function calculates signed distances for a multi-class segmentation task.
-    Params:
-        labels :  labels for the classes
-        voxel_size : size of the voxel
-        normalize : normalization factor
-        normalize_args : arguments for the normalize function
-    """
+        all_distances = np.zeros(labels.shape, dtype=np.float32) - 1
+        for ii, channel in enumerate(labels):
+            boundaries = self.__find_boundaries(channel)
+
+            # mark boundaries with 0 (not 1)
+            boundaries = 1.0 - boundaries
+
+            if np.sum(boundaries == 0) == 0:
+                max_distance = min(
+                    dim * vs / 2 for dim, vs in zip(channel.shape, voxel_size)
+                )
+                if np.sum(channel) == 0:
+                    distances = -np.ones(channel.shape, dtype=np.float32) * max_distance
+                else:
+                    distances = np.ones(channel.shape, dtype=np.float32) * max_distance
+            else:
+                # get distances (voxel_size/2 because image is doubled)
+                distances = distance_transform_edt(
+                    boundaries, sampling=tuple(float(v) / 2 for v in voxel_size)
+                )
+                distances = distances.astype(np.float32)
+
+                # restore original shape
+                downsample = (slice(None, None, 2),) * len(voxel_size)
+                distances = distances[downsample]
+
+                # todo: inverted distance
+                distances[channel == 0] = -distances[channel == 0]
+
+            if normalize is not None:
+                distances = self.__normalize(distances, normalize, normalize_args)
+
+            all_distances[ii] = distances
+
+        return all_distances * labels
 
     def __find_boundaries(self, labels):
-    """
-    This function identifies the boundaries within the labels.
-    Params:
-        labels :  labels for the classes
-    """
+        # labels: 1 1 1 1 0 0 2 2 2 2 3 3       n
+        # shift :   1 1 1 1 0 0 2 2 2 2 3       n - 1
+        # diff  :   0 0 0 1 0 1 0 0 0 1 0       n - 1
+        # bound.: 00000001000100000001000      2n - 1
+
+        logger.debug("computing boundaries for %s", labels.shape)
+
+        dims = len(labels.shape)
+        in_shape = labels.shape
+        out_shape = tuple(2 * s - 1 for s in in_shape)
+
+        boundaries = np.zeros(out_shape, dtype=bool)
+
+        logger.debug("boundaries shape is %s", boundaries.shape)
+
+        for d in range(dims):
+            logger.debug("processing dimension %d", d)
+
+            shift_p = [slice(None)] * dims
+            shift_p[d] = slice(1, in_shape[d])
+
+            shift_n = [slice(None)] * dims
+            shift_n[d] = slice(0, in_shape[d] - 1)
+
+            diff = (labels[tuple(shift_p)] - labels[tuple(shift_n)]) != 0
+
+            logger.debug("diff shape is %s", diff.shape)
+
+            target = [slice(None, None, 2)] * dims
+            target[d] = slice(1, out_shape[d], 2)
+
+            logger.debug("target slices are %s", target)
+
+            boundaries[tuple(target)] = diff
+
+        return boundaries
 
     def __normalize(self, distances, norm, normalize_args):
-    """
-    This function normalizes the distances based on the given norm.
-    Params:
-        distances : calculated distances
-        norm : normalization factor
-        normalize_args : arguments for the normalize function
-    Returns:
-        normalized distances
-    """
+        if norm == "tanh":
+            scale = normalize_args
+            return np.tanh(distances / scale)
+        else:
+            raise ValueError("Only tanh is supported for normalization")
 
     def gt_region_for_roi(self, target_spec):
-    """
-    This function returns the ground truth region for the given region of interest.
-    Params:
-        target_spec : target specifications
-    Returns:
-        ground truth region for the region of interest.
-    """
+        if self.mask_distances:
+            gt_spec = target_spec.copy()
+            gt_spec.roi = gt_spec.roi.grow(
+                Coordinate((self.max_distance,) * gt_spec.voxel_size.dims),
+                Coordinate((self.max_distance,) * gt_spec.voxel_size.dims),
+            ).snap_to_grid(gt_spec.voxel_size, mode="shrink")
+        else:
+            gt_spec = target_spec.copy()
+        return gt_spec
 
     def padding(self, gt_voxel_size: Coordinate) -> Coordinate:
-    """
-    This function returns the required padding for the ground truth voxel size.
-    Params:
-        gt_voxel_size : size of the ground truth voxel
-    Returns:
-        Coordinate : required padding
-    """
-```
+        return Coordinate((self.max_distance,) * gt_voxel_size.dims)

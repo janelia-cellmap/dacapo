@@ -1,4 +1,3 @@
-```python
 """
 Module containing all the necessary classes and configurations for effective data splitting.
 The data splitting approach is determined by the application and dataset requirements.
@@ -31,4 +30,3 @@ from .dummy_datasplit import DummyDataSplit
 from .dummy_datasplit_config import DummyDataSplitConfig
 from .train_validate_datasplit import TrainValidateDataSplit
 from .train_validate_datasplit_config import TrainValidateDataSplitConfig
-```

@@ -1,4 +1,3 @@
-```python
 import sys
 import traceback
 
@@ -35,4 +34,3 @@ class NoSuchModule:
             __exception: custom exception with the details of the original error.
         """
         raise self.__exception
-```

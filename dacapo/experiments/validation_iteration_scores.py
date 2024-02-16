@@ -1,4 +1,3 @@
-```python
 from typing import List
 import attr
 
@@ -22,4 +21,3 @@ class ValidationIterationScores:
             "parameters, and evaluation criterion."
         }
     )
-```

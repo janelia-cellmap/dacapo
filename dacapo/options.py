@@ -1,4 +1,3 @@
-```python
 import yaml
 import logging
 from os.path import expanduser
@@ -111,4 +110,3 @@ class Options:
             logger.error("\t%s", path.absolute())
 
         raise RuntimeError("Could not find a DaCapo options file.")
-```

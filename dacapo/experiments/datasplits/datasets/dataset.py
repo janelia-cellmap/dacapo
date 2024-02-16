@@ -1,4 +1,3 @@
-```python
 from .arrays import Array
 from funlib.geometry import Coordinate
 from abc import ABC
@@ -95,4 +94,3 @@ class Dataset(ABC):
         ):
             layers[self.mask._source_name()] = self.mask._neuroglancer_layer()
         return layers
-```

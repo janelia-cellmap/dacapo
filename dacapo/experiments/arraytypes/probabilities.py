@@ -1,6 +1,3 @@
-Sure, here is the script with docstring added:
-
-```python
 from .arraytype import ArrayType
 import attr
 from typing import List
@@ -34,4 +31,3 @@ class ProbabilityArray(ArrayType):
             bool: True indicating that the data can be interpolated.
         """
         return True
-```

@@ -1,23 +1,17 @@
+from .array import Array
+
+from funlib.geometry import Coordinate, Roi
+
+
+import neuroglancer
+
+import numpy as np
+
+
 class MergeInstancesArray(Array):
-    """
-    Class for merging different sources into a single array.
+    """ """
 
-    This class merges the source arrays defined in the array configuration. 
-    It implements different properties, and methods, to handle the merging process.
-
-    Attributes:
-        array_config: Configuration specifying how to initialize the array.
-        name: The name of the array.
-        _source_arrays: The list of source arrays to be merged based on the source configurations.
-        _source_array: The first array from the list of source arrays.
-    """
     def __init__(self, array_config):
-        """
-        Initialize the merge instances array class.
-
-        Args:
-            array_config: Configurations of the array to be initialised.
-        """
         self.name = array_config.name
         self._source_arrays = [
             source_config.array_type(source_config)
@@ -27,125 +21,65 @@ class MergeInstancesArray(Array):
 
     @property
     def axes(self):
-        """
-        Provide the axes excluding 'c' of the source array.
-        
-        Returns:
-            list: The axes of the source array excluding 'c'.
-        """
+        return [x for x in self._source_array.axes if x != "c"]
 
     @property
     def dims(self) -> int:
-        """
-        Provide the dimension of the source array.
+        return self._source_array.dims
 
-        Returns:
-            int: The dimension of the source array.
-        """
-        
     @property
     def voxel_size(self) -> Coordinate:
-        """
-        Provide the voxel size of the source array.
+        return self._source_array.voxel_size
 
-        Returns:
-            Coordinate: The voxel size of the source array.
-        """
-        
     @property
     def roi(self) -> Roi:
-        """
-        Provide the region of interest (ROI) of the source array.
-
-        Returns:
-            Roi: The region of interest of the source array.
-        """
+        return self._source_array.roi
 
     @property
     def writable(self) -> bool:
-        """
-        Indicate whether the array is writable.
+        return False
 
-        Returns:
-            bool: Always False, indicating non-writable.
-        """
-        
     @property
     def dtype(self):
-        """
-        Provide the data type - unsigned integer of 8 bits.
+        return np.uint8
 
-        Returns:
-            numpy data type: The data type of the array elements.
-        """
-        
     @property
     def num_channels(self):
-        """
-        Number of channels of the array, which is not defined here.
+        return None
 
-        Returns:
-            None.
-        """
-        
     @property
     def data(self):
-        """
-        This property is not defined in the current class.
+        raise ValueError(
+            "Cannot get a writable view of this array because it is a virtual "
+            "array created by modifying another array on demand."
+        )
 
-        Raises:
-            ValueError: if attempted to retrieve the data property.
-        """
-        
     @property
     def attrs(self):
-        """
-        Provide the attributes of the source array.
+        return self._source_array.attrs
 
-        Returns:
-            dict: The attrs dictionary of the source array.
-        """
-        
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        """
-        Get a subset of the merged array for the specified region of interest (ROI).
+        arrays = [source_array[roi] for source_array in self._source_arrays]
+        offset = 0
+        for array in arrays:
+            array[array > 0] += offset
+            offset = array.max()
+        return np.sum(arrays, axis=0)
 
-        Args:
-            roi: The region of interest from the merged array.
-
-        Returns:
-            np.ndarray: The merged array for the particular region of interest.
-        """
-        
     def _can_neuroglance(self):
-        """
-        Check if the source array can be visualized with neuroglancer.
+        return self._source_array._can_neuroglance()
 
-        Returns:
-            bool: True if neuroglancer can visualize the source array, False otherwise.
-        """
-        
     def _neuroglancer_source(self):
-        """
-        Provide the source of the neuroglancer visualization.
+        return self._source_array._neuroglancer_source()
 
-        Returns:
-            object: Source of the neuroglancer visualization.
-        """
-        
     def _neuroglancer_layer(self):
-        """
-        Generate a Segmentation layer for neuroglancer visualization. 
-        
-        Returns:
-            layer: The neuroglancer SegmentationLayer object.
-            kwargs: A dictionary of keyword arguments (visible is always set as False).
-        """
-        
-    def _source_name(self):
-        """
-        Provide the name of the source array.
+        # Generates an Segmentation layer
 
-        Returns:
-            str: Name of the source array
-        """
+        layer = neuroglancer.SegmentationLayer(source=self._neuroglancer_source())
+        kwargs = {
+            "visible": False,
+        }
+        return layer, kwargs
+
+    def _source_name(self):
+        return self._source_array._source_name()

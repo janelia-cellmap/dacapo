@@ -1,6 +1,3 @@
-Here is the annotated version:
-
-```python
 import torch
 
 from abc import ABC, abstractmethod
@@ -28,5 +25,3 @@ class Loss(ABC):
             torch.Tensor: The tensor representing computed loss.
         """
         pass
-
-```

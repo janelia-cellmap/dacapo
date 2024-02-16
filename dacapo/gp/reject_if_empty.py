@@ -1,4 +1,3 @@
-```python
 import logging
 import random
 
@@ -97,4 +96,3 @@ class RejectIfEmpty(BatchFilter):
         batch.profiling_stats.add(timing)
 
         return batch
-```

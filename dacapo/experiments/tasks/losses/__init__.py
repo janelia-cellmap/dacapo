@@ -1,6 +1,3 @@
-Here are the docstrings added to the provided scripts:
-
-```python
 """
 dacapo losses scripts - imports various loss functions from the library.
 
@@ -22,6 +19,3 @@ from .mse_loss import MSELoss  # noqa
 from .loss import Loss  # noqa
 from .affinities_loss import AffinitiesLoss  # noqa
 from .hot_distance_loss import HotDistanceLoss  # noqa
-```
-
-Please note that the descriptions of each function are estimated based on their names and can vary depending on their functionality. Replace them with more suitable descriptions depending on your use case.

@@ -1,4 +1,3 @@
-```python
 import attr
 from typing import Tuple
 
@@ -39,4 +38,3 @@ class ArchitectureConfig:
             A description of the architecture.
         """
         return True, "No validation for this Architecture"
-```

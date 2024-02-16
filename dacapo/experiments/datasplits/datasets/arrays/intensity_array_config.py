@@ -6,18 +6,9 @@ from .intensity_array import IntensitiesArray
 
 @attr.s
 class IntensitiesArrayConfig(ArrayConfig):
-    """Generates configurations for the creation of Intensity array.
+    """This config class provides the necessary configuration for turning an Annotated dataset into a
+    multi class binary classification problem"""
 
-    This class is a child class of ArrayConfig that holds attributes for IntensitiesArray.
-    Also inherits the methods of ArrayConfig to utilize for IntensitiesArray.
-
-    Attributes:
-        array_type: The class IntensitiesArray.
-        source_array_config: Object of ArrayConfig that holds the generic settings for an array.
-        min: Float. The minimum intensity in the data.
-        max: Float. The maximum intensity in the data.
-    """
-    
     array_type = IntensitiesArray
 
     source_array_config: ArrayConfig = attr.ib(

@@ -1,4 +1,3 @@
-```python
 import gunpowder as gp
 
 import copy
@@ -50,4 +49,3 @@ class GraphSource(gp.BatchProvider):
         if self.key in request:
             outputs[self.key] = copy.deepcopy(self.graph.crop(request[self.key].roi).trim(request[self.key].roi))
         return outputs
-```

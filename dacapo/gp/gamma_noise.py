@@ -1,4 +1,3 @@
-```python
 import numpy as np
 from gunpowder.nodes.batch_filter import BatchFilter
 from collections.abc import Iterable
@@ -95,4 +94,3 @@ class GammaAugment(BatchFilter):
         else:
             logger.warning("Skipping gamma noise since denominator would be too small")
             return a
-```

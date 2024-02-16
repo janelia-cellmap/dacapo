@@ -1,4 +1,3 @@
-```python
 """
 dacapo.__init__.py
 ------------------
@@ -45,4 +44,3 @@ from .product import Product
 """
 The Product module which implements special types of combinations of products.
 """
-```

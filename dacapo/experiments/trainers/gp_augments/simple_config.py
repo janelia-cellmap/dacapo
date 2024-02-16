@@ -1,4 +1,3 @@
-```python
 from .augment_config import AugmentConfig
 
 import gunpowder as gp
@@ -32,4 +31,3 @@ class SimpleAugmentConfig(AugmentConfig):
             gunpowder.SimpleAugment : Simple augmentation node which can be incorporated in the pipeline.
         """
         return gp.SimpleAugment()
-```

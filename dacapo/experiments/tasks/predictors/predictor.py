@@ -1,4 +1,3 @@
-```python
 from funlib.geometry import Coordinate
 
 from abc import ABC, abstractmethod
@@ -98,4 +97,3 @@ class Predictor(ABC):
         """
 
         return Coordinate((0,) * gt_voxel_size.dims)
-```

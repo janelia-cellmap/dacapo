@@ -1,4 +1,3 @@
-```python
 from .loss import Loss
 import torch
 
@@ -35,4 +34,3 @@ class MSELoss(Loss):
             The computed MSELoss tensor.
         """
         return torch.nn.MSELoss().forward(prediction * weight, target * weight)
-```

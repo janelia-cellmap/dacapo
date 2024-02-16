@@ -1,4 +1,3 @@
-```python
 import attr
 
 @attr.s
@@ -19,4 +18,3 @@ class TrainingIterationStats:
     time: float = attr.ib(
         metadata={"help_text": "The time it took to process this iteration."}
     )
-```
