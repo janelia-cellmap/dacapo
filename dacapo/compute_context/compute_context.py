@@ -14,7 +14,7 @@ class ComputeContext(ABC):
 
     def wrap_command(self, command):
         command = [str(com) for com in self._wrap_command(command)]
-        return " ".join(command)
+        return command
 
     def execute(self, command):
         # A helper method to run a command in the context specific way.
