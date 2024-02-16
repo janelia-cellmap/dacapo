@@ -17,4 +17,5 @@ __pycache__
 # vscode stuff
 .vscode
 .mypy_cache
+daisy_logs/
 
