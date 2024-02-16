@@ -9,18 +9,6 @@ from redbaron import RedBaron
 # Set OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Set starting prompt and history for OpenAI chatbot
-# Modify it according to your use case (this is just an example)
-starting_prompt = dict(
-    {
-        "role": "system",
-        "content": "I will send you a code of Python function. You need to analyse the code and return to me a string that I can use as the docstring for that function, so as to improve my documentation. The functions can also be routes of a Web App, handle those cases too. Donot write any explanations, just send me a string that I can use as the docstring. The language style of the docstring should be simple and easy to understand and it should be in Google Style Multi-Line format",
-    }
-)
-history = [
-    starting_prompt,
-]
-
 
 # Define function to add docstring to Python functions
 def addDocstring(filePath):
@@ -53,34 +41,26 @@ def addDocstring(filePath):
             function_code = node.dumps()
 
             # Send the function code to ChatGPT API for generating docstring (offcourse use GPT4 API if you hace access to it)
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                temperature=0.2,
-                messages=[
-                    *history,
-                    {"role": "user", "content": function_code},
-                ],
-            )
+            try:
+                response = openai.Completion.create(
+                    model="gpt-4-model-identifier",
+                    prompt=f"Write a docstring for the following Python function:\n\n{function_code}\n\n###",
+                    temperature=0.2,
+                    max_tokens=150
+                )
+            except Exception as e:
+                print(f"Error in generating docstring: {e}")
+                continue
 
             currentTime = time.time()
 
             # Extract the generated docstring from the OpenAI response
-            docstring = response.choices[0].message.content
+            docstring = response.choices[0].text.strip()
 
-            # Remove the quotes from the generated docstring if present
-            if docstring.startswith('"""') or docstring.startswith("'''"):
-                docstring = docstring[3:-3]
-            if docstring.startswith('"'):
-                docstring = docstring[1:-1]
+            # Insert the generated docstring to the Function node
+            node.value.insert(0, f'"""\n{docstring}\n"""')
 
-            # Add the function code and generated docstring to history
-            history.append({"role": "user", "content": function_code})
-            history.append(
-                {
-                    "role": "assistant",
-                    "content": docstring,
-                }
-            )
+
 
             # Insert the generated docstring to the Function node
             if node.next and node.next.type == "comment":
