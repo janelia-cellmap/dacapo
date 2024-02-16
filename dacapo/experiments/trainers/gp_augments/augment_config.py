@@ -19,4 +19,3 @@ class AugmentConfig(ABC):
         """
         return a gunpowder node that performs this augmentation
         """
-        pass
