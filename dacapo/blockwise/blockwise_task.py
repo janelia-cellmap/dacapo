@@ -24,13 +24,13 @@ class DaCapoBlockwiseTask(Task):
         if isinstance(compute_context, str):
             compute_context = getattr(dacapo.compute_context, compute_context)()
 
-        # Make the task_id unique
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        task_id = str(worker_file) + timestamp
-
         # Load worker functions
         worker_name = Path(worker_file).stem
         worker = SourceFileLoader(worker_name, str(worker_file)).load_module()
+
+        # Make the task_id unique
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        task_id = worker_name + timestamp
 
         process_function = worker.spawn_worker(
             *args, **kwargs, compute_context=compute_context

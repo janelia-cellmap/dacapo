@@ -31,7 +31,7 @@ def cli(log_level):
     "-r", "--run-name", required=True, type=str, help="The NAME of the run to train."
 )
 def train(run_name):
-    dacapo.train(run_name)
+    dacapo.train(run_name)  # TODO: run with compute_context
 
 
 @cli.command()
@@ -72,7 +72,7 @@ def validate(run_name, iteration):
     required=False,
     help="The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]",
 )
-@click.option("-w", "--num_cpu_workers", type=int, default=30)
+@click.option("-w", "--num_workers", type=int, default=30)
 @click.option("-dt", "--output_dtype", type=str, default="uint8")
 @click.option("-ow", "--overwrite", is_flag=True)
 @click.option("-cc", "--compute_context", type=str, default="LocalTorch")
@@ -86,7 +86,7 @@ def apply(
     iteration: Optional[int] = None,
     parameters: Optional[PostProcessorParameters | str] = None,
     roi: Optional[Roi | str] = None,
-    num_cpu_workers: int = 30,
+    num_workers: int = 30,
     output_dtype: Optional[np.dtype | str] = "uint8",
     overwrite: bool = True,
     compute_context: Optional[ComputeContext | str] = LocalTorch(),
@@ -104,7 +104,7 @@ def apply(
         iteration,
         parameters,
         roi,
-        num_cpu_workers,
+        num_workers,
         output_dtype,
         overwrite=overwrite,
         compute_context=compute_context,  # type: ignore

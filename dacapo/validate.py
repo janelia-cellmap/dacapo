@@ -9,8 +9,6 @@ from .store.create_store import (
     create_weights_store,
 )
 
-import torch
-
 from pathlib import Path
 import logging
 
@@ -18,7 +16,12 @@ logger = logging.getLogger(__name__)
 
 
 def validate(
-    run_name: str, iteration: int, compute_context: ComputeContext = LocalTorch()
+    run_name: str,
+    iteration: int,
+    compute_context: ComputeContext = LocalTorch(),
+    num_workers: int = 30,
+    output_dtype: str = "uint8",
+    overwrite: bool = True,
 ):
     """Validate a run at a given iteration. Loads the weights from a previously
     stored checkpoint. Returns the best parameters and scores for this
@@ -44,19 +47,28 @@ def validate(
     weights_store = create_weights_store()
     weights_store.retrieve_weights(run, iteration)
 
-    return validate_run(run, iteration, compute_context=compute_context)
+    return validate_run(
+        run,
+        iteration,
+        compute_context=compute_context,
+        num_workers=num_workers,
+        output_dtype=output_dtype,
+        overwrite=overwrite,
+    )
 
 
 def validate_run(
-    run: Run, iteration: int, compute_context: ComputeContext = LocalTorch()
+    run: Run,
+    iteration: int,
+    compute_context: ComputeContext = LocalTorch(),
+    num_workers: int = 30,
+    output_dtype: str = "uint8",
+    overwrite: bool = True,
 ):
     """Validate an already loaded run at the given iteration. This does not
     load the weights of that iteration, it is assumed that the model is already
     loaded correctly. Returns the best parameters and scores for this
     iteration."""
-    # set benchmark flag to True for performance
-    torch.backends.cudnn.benchmark = True
-    run.model.eval()
 
     if (
         run.datasplit.validate is None
@@ -143,12 +155,18 @@ def validate_run(
         )
         logger.info("Predicting on dataset %s", validation_dataset.name)
         predict(
-            run.model,
-            validation_dataset.raw,
-            prediction_array_identifier,
-            compute_context=compute_context,
+            run.name,
+            iteration,
+            input_container=input_raw_array_identifier.container,
+            input_dataset=input_raw_array_identifier.dataset,
+            output_path=prediction_array_identifier.container,
             output_roi=validation_dataset.gt.roi,
+            num_workers=num_workers,
+            output_dtype=output_dtype,
+            compute_context=compute_context,
+            overwrite=overwrite,
         )
+
         logger.info("Predicted on dataset %s", validation_dataset.name)
 
         post_processor.set_prediction(prediction_array_identifier)
