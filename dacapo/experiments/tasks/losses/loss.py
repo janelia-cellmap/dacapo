@@ -18,4 +18,3 @@ class Loss(ABC):
         All arguments are ``torch`` tensors. The return type should be a
         ``torch`` scalar that can be used with an optimizer, just as usual when
         training with ``torch``."""
-        pass

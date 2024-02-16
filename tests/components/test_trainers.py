@@ -1,5 +1,3 @@
-from ..fixtures import *
-
 from dacapo.store.create_store import create_config_store
 
 import pytest
@@ -26,4 +24,4 @@ def test_trainer(
     assert fetched_array_config == trainer_config
 
     # Create Trainer from config
-    trainer = trainer_config.trainer_type(trainer_config)
+    trainer_config.trainer_type(trainer_config)

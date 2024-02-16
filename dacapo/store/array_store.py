@@ -37,14 +37,12 @@ class ArrayStore(ABC):
         self, run_name: str, iteration: int, dataset: str
     ) -> LocalArrayIdentifier:
         """Get the array identifier for a particular validation prediction."""
-        pass
 
     @abstractmethod
     def validation_output_array(
         self, run_name: str, iteration: int, parameters: str, dataset: str
     ) -> LocalArrayIdentifier:
         """Get the array identifier for a particular validation output."""
-        pass
 
     @abstractmethod
     def validation_input_arrays(
@@ -59,26 +57,22 @@ class ArrayStore(ABC):
         the data then we don't need to search for it.
         This convenience comes at the cost of some extra memory usage.
         """
-        pass
 
     @abstractmethod
     def remove(self, array_identifier: "LocalArrayIdentifier") -> None:
         """Remove an array by its identifier."""
-        pass
 
     @abstractmethod
     def snapshot_container(self, run_name: str) -> LocalContainerIdentifier:
         """
         Get a container identifier for storage of a snapshot.
         """
-        pass
 
     @abstractmethod
     def validation_container(self, run_name: str) -> LocalContainerIdentifier:
         """
         Get a container identifier for storage of a snapshot.
         """
-        pass
 
     def _visualize_training(self, run):
         # returns a neuroglancer link to visualize snapshots and validations

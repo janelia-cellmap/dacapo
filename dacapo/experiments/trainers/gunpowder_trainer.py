@@ -6,7 +6,6 @@ from dacapo.gp import (
     GraphSource,
     DaCapoTargetFilter,
     CopyMask,
-    Product,
 )
 from dacapo.experiments.datasplits.datasets.arrays import (
     NumpyArray,
@@ -324,7 +323,6 @@ class GunpowderTrainer(Trainer):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self._iter.send(True)
-        pass
 
     def can_train(self, datasets) -> bool:
         return all([dataset.gt is not None for dataset in datasets])

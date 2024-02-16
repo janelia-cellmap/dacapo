@@ -13,7 +13,6 @@ class Array(ABC):
         """
         Return a dictionary of metadata attributes stored on this array.
         """
-        pass
 
     @property
     @abstractmethod
@@ -25,31 +24,26 @@ class Array(ABC):
             * ``c`` for channels
             * ``s`` for samples
         """
-        pass
 
     @property
     @abstractmethod
     def dims(self) -> int:
         """Returns the number of spatial dimensions."""
-        pass
 
     @property
     @abstractmethod
     def voxel_size(self) -> Coordinate:
         """The size of a voxel in physical units."""
-        pass
 
     @property
     @abstractmethod
     def roi(self) -> Roi:
         """The total ROI of this array, in world units."""
-        pass
 
     @property
     @abstractmethod
     def dtype(self) -> Any:
         """The dtype of this array, in numpy dtypes"""
-        pass
 
     @property
     @abstractmethod
@@ -58,7 +52,6 @@ class Array(ABC):
         The number of channels provided by this dataset.
         Should return None if the channel dimension doesn't exist.
         """
-        pass
 
     @property
     @abstractmethod
@@ -66,7 +59,6 @@ class Array(ABC):
         """
         Get a numpy like readable and writable view into this array.
         """
-        pass
 
     @property
     @abstractmethod
@@ -74,7 +66,6 @@ class Array(ABC):
         """
         Can we write to this Array?
         """
-        pass
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
         if not self.roi.contains(roi):

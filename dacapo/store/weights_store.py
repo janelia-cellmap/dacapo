@@ -38,28 +38,23 @@ class WeightsStore(ABC):
     def latest_iteration(self, run: str) -> Optional[int]:
         """Return the latest iteration for which weights are available for the
         given run."""
-        pass
 
     @abstractmethod
     def store_weights(self, run: Run, iteration: int) -> None:
         """Store the network weights of the given run."""
-        pass
 
     @abstractmethod
     def retrieve_weights(self, run: str, iteration: int) -> Weights:
         """Retrieve the network weights of the given run."""
-        pass
 
     @abstractmethod
     def remove(self, run: str, iteration: int) -> None:
         """
         Delete the weights associated with a specific run/iteration
         """
-        pass
 
     @abstractmethod
     def retrieve_best(self, run: str, dataset: str, criterion: str) -> int:
         """
         Retrieve the best weights for this run/dataset/criterion
         """
-        pass

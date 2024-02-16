@@ -22,7 +22,6 @@ class PostProcessor(ABC):
     @abstractmethod
     def enumerate_parameters(self) -> Iterable["PostProcessorParameters"]:
         """Enumerate all possible parameters of this post-processor."""
-        pass
 
     @abstractmethod
     def set_prediction(
@@ -40,4 +39,3 @@ class PostProcessor(ABC):
         chunk_size: Coordinate = Coordinate((64, 64, 64)),
     ) -> "Array":
         """Convert predictions into the final output."""
-        pass

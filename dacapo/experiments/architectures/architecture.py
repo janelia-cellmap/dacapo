@@ -11,7 +11,6 @@ class Architecture(torch.nn.Module, ABC):
     def input_shape(self) -> Coordinate:
         """The spatial input shape (i.e., not accounting for channels and batch
         dimensions) of this architecture."""
-        pass
 
     @property
     def eval_shape_increase(self) -> Coordinate:
@@ -24,13 +23,11 @@ class Architecture(torch.nn.Module, ABC):
     @abstractmethod
     def num_in_channels(self) -> int:
         """Return the number of input channels this architecture expects."""
-        pass
 
     @property
     @abstractmethod
     def num_out_channels(self) -> int:
         """Return the number of output channels of this architecture."""
-        pass
 
     @property
     def dims(self) -> int:

@@ -16,7 +16,6 @@ class Predictor(ABC):
         This is usually done by appending extra layers to the output of the
         architecture to get the output tensor of the architecture into the
         right shape for this predictor."""
-        pass
 
     @abstractmethod
     def create_target(self, gt: "Array") -> "Array":
@@ -38,7 +37,6 @@ class Predictor(ABC):
         threshold), you can request a larger ground-truth region. See method
         ``gt_region_for_roi``.
         """
-        pass
 
     @abstractmethod
     def create_weight(
@@ -51,7 +49,6 @@ class Predictor(ABC):
         """Create the weight array for training, given a ground-truth and
         associated target array.
         """
-        pass
 
     @property
     @abstractmethod

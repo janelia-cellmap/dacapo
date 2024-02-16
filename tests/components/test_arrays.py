@@ -1,5 +1,3 @@
-from ..fixtures import *
-
 from dacapo.store.create_store import create_config_store
 
 import pytest

@@ -1,7 +1,6 @@
 from dacapo.experiments.arraytypes.probabilities import ProbabilityArray
 from .predictor import Predictor
 from dacapo.experiments import Model
-from dacapo.experiments.arraytypes import DistanceArray
 from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
 from dacapo.utils.balance_weights import balance_weights
 
@@ -76,9 +75,11 @@ class HotDistancePredictor(Predictor):
             2,
             slab=tuple(1 if c == "c" else -1 for c in gt.axes),
             masks=[mask[target.roi]],
-            moving_counts=None
-            if moving_class_counts is None
-            else moving_class_counts[: self.classes],
+            moving_counts=(
+                None
+                if moving_class_counts is None
+                else moving_class_counts[: self.classes]
+            ),
         )
 
         if self.mask_distances:
@@ -97,9 +98,11 @@ class HotDistancePredictor(Predictor):
             2,
             slab=tuple(1 if c == "c" else -1 for c in gt.axes),
             masks=[mask[target.roi], distance_mask],
-            moving_counts=None
-            if moving_class_counts is None
-            else moving_class_counts[-self.classes :],
+            moving_counts=(
+                None
+                if moving_class_counts is None
+                else moving_class_counts[-self.classes :]
+            ),
         )
 
         weights = np.concatenate((one_hot_weights, distance_weights))

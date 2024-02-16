@@ -1,5 +1,3 @@
-from ..fixtures import *
-
 from dacapo.gp import DaCapoArraySource
 
 import gunpowder as gp

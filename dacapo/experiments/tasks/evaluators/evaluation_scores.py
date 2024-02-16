@@ -19,7 +19,6 @@ class EvaluationScores:
         """
         Wether or not higher is better for this criterion.
         """
-        pass
 
     @staticmethod
     @abstractmethod
@@ -27,7 +26,6 @@ class EvaluationScores:
         """
         The bounds for this criterion
         """
-        pass
 
     @staticmethod
     @abstractmethod
@@ -36,4 +34,3 @@ class EvaluationScores:
         Whether or not to save the best validation block and model
         weights for this criterion.
         """
-        pass

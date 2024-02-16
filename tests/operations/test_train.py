@@ -1,5 +1,4 @@
 from dacapo.store.create_store import create_stats_store
-from ..fixtures import *
 
 from dacapo.experiments import Run
 from dacapo.compute_context import LocalTorch

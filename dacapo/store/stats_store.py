@@ -16,26 +16,22 @@ class StatsStore(ABC):
     @abstractmethod
     def store_training_stats(self, run_name: str, training_stats: "TrainingStats"):
         """Store training stats of a given run."""
-        pass
 
     @abstractmethod
     def retrieve_training_stats(self, run_name: str) -> "TrainingStats":
         """Retrieve the training stats for a given run."""
-        pass
 
     @abstractmethod
     def store_validation_iteration_scores(
         self, run_name: str, validation_scores: "ValidationScores"
     ):
         """Store the validation iteration scores of a given run."""
-        pass
 
     @abstractmethod
     def retrieve_validation_iteration_scores(
         self, run_name: str
     ) -> List["ValidationIterationScores"]:
         """Retrieve the validation iteration scores for a given run."""
-        pass
 
     @abstractmethod
     def delete_training_stats(self, run_name: str) -> None:

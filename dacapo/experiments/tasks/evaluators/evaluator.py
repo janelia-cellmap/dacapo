@@ -31,7 +31,6 @@ class Evaluator(ABC):
         self, output_array: "Array", eval_array: "Array"
     ) -> "EvaluationScores":
         """Compare an `output_array` against ground-truth `eval_array`"""
-        pass
 
     @property
     def best_scores(
@@ -123,7 +122,6 @@ class Evaluator(ABC):
         that the best iteration/post processing parameters will be the same
         for all 3 of these criteria
         """
-        pass
 
     def higher_is_better(self, criterion: str) -> bool:
         """

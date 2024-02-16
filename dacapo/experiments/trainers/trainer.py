@@ -19,7 +19,6 @@ class Trainer(ABC):
     @abstractmethod
     def create_optimizer(self, model: "Model") -> torch.optim.Optimizer:
         """Create a ``torch`` optimizer for the given model."""
-        pass
 
     @abstractmethod
     def iterate(
@@ -30,7 +29,6 @@ class Trainer(ABC):
         device: torch.device,
     ) -> Iterator["TrainingIterationStats"]:
         """Perform ``num_iterations`` training iterations."""
-        pass
 
     @abstractmethod
     def can_train(self, datasets: List["Dataset"]) -> bool:
@@ -38,7 +36,6 @@ class Trainer(ABC):
         Can this trainer train with a specific set of datasets. Some trainers
         may have requirements for their training datasets.
         """
-        pass
 
     @abstractmethod
     def build_batch_provider(
@@ -58,7 +55,6 @@ class Trainer(ABC):
         The task is needed to transform gt into target
         The snapshot_container defines where snapshots will be saved.
         """
-        pass
 
     @abstractmethod
     def __enter__(self):
