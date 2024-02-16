@@ -34,7 +34,6 @@ def mongo_db_available():
     )
 )
 def options(request, tmp_path):
-
     # read the options from the users config file locally
     options = Options.instance(
         type=request.param, runs_base_dir="tests", mongo_db_name="dacapo_tests"
