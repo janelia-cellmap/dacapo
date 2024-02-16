@@ -1,6 +1,7 @@
 from dacapo.experiments.tasks.post_processors import (
     ArgmaxPostProcessor,
     ThresholdPostProcessor,
+    PostProcessorParameters,
 )
 
 import pytest

@@ -20,10 +20,7 @@ logging.basicConfig(level=logging.INFO)
         lazy_fixture("onehot_run"),
     ],
 )
-def test_apply(
-    options,
-    run_config,
-):
+def test_apply(options, run_config, zarr_array, tmp_path):
     # create a store
 
     store = create_config_store()
@@ -39,13 +36,35 @@ def test_apply(
     # -------------------------------------
 
     # apply
+    parameters = list(run.task.post_processor.enumerate_parameters())[0]
 
     # test validating iterations for which we know there are weights
     weights_store.store_weights(run, 0)
-    apply(run_config.name, 0)
+    apply(
+        run_config.name,
+        zarr_array.file_name,
+        zarr_array.dataset,
+        output_path=tmp_path,
+        iteration=0,
+        parameters=parameters,
+    )
     weights_store.store_weights(run, 1)
-    apply(run_config.name, 1)
+    apply(
+        run_config.name,
+        zarr_array.file_name,
+        zarr_array.dataset,
+        output_path=tmp_path,
+        iteration=1,
+        parameters=parameters,
+    )
 
     # test validating weights that don't exist
     with pytest.raises(FileNotFoundError):
-        apply(run_config.name, 2)
+        apply(
+            run_config.name,
+            zarr_array.file_name,
+            zarr_array.dataset,
+            output_path=tmp_path,
+            iteration=2,
+            parameters=parameters,
+        )
