@@ -100,7 +100,7 @@ def spawn_worker(
         "--output_dataset",
         output_array_identifier.dataset,
         "--threshold",
-        str(threshold),
+        threshold,
     ]
 
     def run_worker():
