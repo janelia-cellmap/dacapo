@@ -1,4 +1,3 @@
-```python
 from pathlib import Path
 from typing import Optional
 
@@ -14,6 +13,7 @@ from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
 )
 from dacapo.compute_context import ComputeContext, LocalTorch
 
+
 @click.group()
 @click.option(
     "--log-level",
@@ -23,27 +23,15 @@ from dacapo.compute_context import ComputeContext, LocalTorch
     default="INFO",
 )
 def cli(log_level):
-    """
-    This is the main driver function for the dacapo library. It initializes the CLI and sets the logging 
-    level for the entire program.
-
-    Args:
-        log_level (str): The level of logging to use while running the program. Defaults to INFO.
-    """
     logging.basicConfig(level=getattr(logging, log_level.upper()))
+
 
 @cli.command()
 @click.option(
     "-r", "--run-name", required=True, type=str, help="The NAME of the run to train."
 )
 def train(run_name):
-    """
-    This function starts the training of a model.
-
-    Args:
-        run_name (str): The name of the run to train.
-    """
-    dacapo.train(run_name)
+    dacapo.train(run_name)  # TODO: run with compute_context
 
 
 @cli.command()
@@ -58,35 +46,107 @@ def train(run_name):
     help="The iteration at which to validate the run.",
 )
 def validate(run_name, iteration):
-    """
-    This function starts the validation of a trained model at a specific iteration.
-
-    Args:
-        run_name (str): The name of the run to validate.
-        iteration (int): The iteration at which to validate the run.
-    """
     dacapo.validate(run_name, iteration)
 
 
 @cli.command()
-# Additional click options omitted for brevity
+@click.option(
+    "-r", "--run-name", required=True, type=str, help="The name of the run to apply."
+)
+@click.option(
+    "-ic",
+    "--input_container",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+)
+@click.option("-id", "--input_dataset", required=True, type=str)
+@click.option("-op", "--output_path", required=True, type=click.Path(file_okay=False))
+@click.option("-vd", "--validation_dataset", type=str, default=None)
+@click.option("-c", "--criterion", default="voi")
+@click.option("-i", "--iteration", type=int, default=None)
+@click.option("-p", "--parameters", type=str, default=None)
+@click.option(
+    "-roi",
+    "--roi",
+    type=str,
+    required=False,
+    help="The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]",
+)
+@click.option("-w", "--num_workers", type=int, default=30)
+@click.option("-dt", "--output_dtype", type=str, default="uint8")
+@click.option("-ow", "--overwrite", is_flag=True)
+@click.option("-cc", "--compute_context", type=str, default="LocalTorch")
 def apply(
     run_name: str,
-    # Other parameters omitted for brevity
+    input_container: Path | str,
+    input_dataset: str,
+    output_path: Path | str,
+    validation_dataset: Optional[Dataset | str] = None,
+    criterion: str = "voi",
+    iteration: Optional[int] = None,
+    parameters: Optional[PostProcessorParameters | str] = None,
+    roi: Optional[Roi | str] = None,
+    num_workers: int = 30,
+    output_dtype: Optional[np.dtype | str] = "uint8",
+    overwrite: bool = True,
+    compute_context: Optional[ComputeContext | str] = LocalTorch(),
 ):
-    """
-    This function applies a trained and validated model to a new dataset.
+    if isinstance(compute_context, str):
+        compute_context = getattr(compute_context, compute_context)()
 
-    Args:
-        run_name (str): The name of the run (i.e., training session) to apply.
-        input_container (Union[Path, str]): Path to the container with the input data.
-        input_dataset (str): Name of the input dataset.
-        output_path (Union[Path, str]): Path for the output.
-    """
-    # Full code omitted for brevity
+    dacapo.apply(
+        run_name,
+        input_container,
+        input_dataset,
+        output_path,
+        validation_dataset,
+        criterion,
+        iteration,
+        parameters,
+        roi,
+        num_workers,
+        output_dtype,
+        overwrite=overwrite,
+        compute_context=compute_context,  # type: ignore
+    )
+
 
 @cli.command()
-# Additional click options omitted for brevity
+@click.option(
+    "-r", "--run-name", required=True, type=str, help="The name of the run to apply."
+)
+@click.option(
+    "-i",
+    "--iteration",
+    required=True,
+    type=int,
+    help="The training iteration of the model to use for prediction.",
+)
+@click.option(
+    "-ic",
+    "--input_container",
+    required=True,
+    type=click.Path(exists=True, file_okay=False),
+)
+@click.option("-id", "--input_dataset", required=True, type=str)
+@click.option("-op", "--output_path", required=True, type=click.Path(file_okay=False))
+@click.option(
+    "-roi",
+    "--output_roi",
+    type=str,
+    required=False,
+    help="The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]",
+)
+@click.option("-w", "--num_workers", type=int, default=30)
+@click.option("-dt", "--output_dtype", type=str, default="uint8")
+@click.option(
+    "-cc",
+    "--compute_context",
+    type=str,
+    default="LocalTorch",
+    help="The compute context to use for prediction. Must be the name of a subclass of ComputeContext.",
+)
+@click.option("-ow", "--overwrite", is_flag=True)
 def predict(
     run_name: str,
     iteration: int,
@@ -99,16 +159,15 @@ def predict(
     compute_context: ComputeContext | str = LocalTorch(),
     overwrite: bool = True,
 ):
-    """
-    This function predicts the output for a given input dataset using the model trained at a specific 
-    iteration.
-
-    Args:
-        run_name (str): The name of the run to use for prediction.
-        iteration (int): The training iteration of the model to use for prediction.
-        input_container (Union[Path, str]): The path to the container with input data for prediction.
-        input_dataset (str): The specific input dataset to use for prediction.
-        output_path (Union[Path, str]): The path where prediction output will be stored.
-    """
-    # Full code omitted for brevity
-```
+    dacapo.predict(
+        run_name,
+        iteration,
+        input_container,
+        input_dataset,
+        output_path,
+        output_roi,
+        num_workers,
+        output_dtype,
+        compute_context,
+        overwrite,
+    )

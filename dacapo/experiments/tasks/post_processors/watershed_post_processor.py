@@ -1,71 +1,79 @@
-```python
+from pathlib import Path
+from dacapo.blockwise.scheduler import segment_blockwise
+from dacapo.compute_context import ComputeContext, LocalTorch
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from dacapo.store.array_store import LocalArrayIdentifier
+
 from .watershed_post_processor_parameters import WatershedPostProcessorParameters
 from .post_processor import PostProcessor
 from dacapo.compute_context import ComputeContext, LocalTorch
-from funlib.geometry import Coordinate
-import numpy_indexed as npi
-import mwatershed as mws
-from scipy.ndimage import measurements
+
+from funlib.geometry import Coordinate, Roi
+
+
 import numpy as np
+
 from typing import List
 
+
 class WatershedPostProcessor(PostProcessor):
-    """
-    A class to handle post-processing operations using the watershed algorithm.
-
-    Attributes:
-        offsets (List[Coordinate]): List of offsets for the watershed algorithm.
-    """
-
     def __init__(self, offsets: List[Coordinate]):
-        """Initializes the WatershedPostProcessor with the given offsets."""
         self.offsets = offsets
 
     def enumerate_parameters(self):
-        """
-        Enumerate all possible parameters of this post-processor. Should
-        yield instances of PostProcessorParameters.
+        """Enumerate all possible parameters of this post-processor. Should
+        return instances of ``PostProcessorParameters``."""
 
-        Yields:
-            WatershedPostProcessorParameters: A parameter instance for a specific bias value.
-        """
         for i, bias in enumerate([0.1, 0.25, 0.5, 0.75, 0.9]):
             yield WatershedPostProcessorParameters(id=i, bias=bias)
 
     def set_prediction(self, prediction_array_identifier):
-        """
-        Sets the prediction array using the given array identifier.
-
-        Args:
-            prediction_array_identifier: An identifier to locate the prediction array.
-        """
         self.prediction_array = ZarrArray.open_from_array_identifier(
             prediction_array_identifier
         )
 
     def process(
         self,
-        parameters: WatershedPostProcessorParameters,  
+        parameters: WatershedPostProcessorParameters,  # type: ignore[override]
         output_array_identifier: "LocalArrayIdentifier",
         compute_context: ComputeContext | str = LocalTorch(),
         num_workers: int = 16,
-        chunk_size: Coordinate = Coordinate((64, 64, 64)),
+        block_size: Coordinate = Coordinate((64, 64, 64)),
     ):
-        """
-        Process the segmentation using the watershed algorithm.
+        output_array = ZarrArray.create_from_array_identifier(
+            output_array_identifier,
+            [axis for axis in self.prediction_array.axes if axis != "c"],
+            self.prediction_array.roi,
+            None,
+            self.prediction_array.voxel_size,
+            np.uint64,
+        )
 
-        Args:
-            parameters (WatershedPostProcessorParameters): The {parameters] instance to use for processing.
-            output_array_identifier (LocalArrayIdentifier): The output array identifier.
-            compute_context (ComputeContext or str, optional): The compute context to use. Defaults to LocalTorch().
-            num_workers (int, optional): Number of workers for multiprocessing. Defaults to 16.
-            chunk_size (Coordinate, optional): Size of chunks for processing. Defaults to (64, 64, 64).
+        read_roi = Roi((0, 0, 0), self.prediction_array.voxel_size * block_size)
+        # run blockwise prediction
+        pars = {
+            "offsets": self.offsets,
+            "bias": parameters.bias,
+            "context": parameters.context,
+        }
+        segment_blockwise(
+            segment_function_file=str(
+                Path(Path(__file__).parent, "blockwise", "watershed_function.py")
+            ),
+            compute_context=compute_context,
+            context=parameters.context,
+            total_roi=self.prediction_array.roi,
+            read_roi=read_roi.grow(parameters.context, parameters.context),
+            write_roi=read_roi,
+            num_workers=num_workers,
+            max_retries=2,  # TODO: make this an option
+            timeout=None,  # TODO: make this an option
+            ######
+            input_array_identifier=LocalArrayIdentifier(
+                self.prediction_array.file_name, self.prediction_array.dataset
+            ),
+            output_array_identifier=output_array_identifier,
+            parameters=pars,
+        )
 
-        Returns:
-            output_array: The processed output array.
-        """
-        # function body...
         return output_array
-```

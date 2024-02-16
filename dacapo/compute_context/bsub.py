@@ -1,36 +1,13 @@
-"""
-This Python script implements Bsub class inheriting from ComputeContext. The Bsub class represents a batch submission system such as LSF 
-which is used to submit jobs to computing clusters. The Bsub class has attributes like queue, number of GPUs, number of CPUs and the 
-billing project name. It includes a property 'device' to check whether GPUs are used and a method 'wrap_command' to submit the job 
-to computing cluster with appropriate parameters.
+from .compute_context import ComputeContext
 
-Methods
--------
-wrap_command(command):
-    Returns the command to be executed on cluster after adding submission-related parameters
+import attr
 
-Properties
-----------
-device:
-    Returns the device being used for computation - "cuda" if GPU is used else "cpu"
-"""
+import subprocess
+from typing import Optional
+
 
 @attr.s
-class Bsub(ComputeContext):
-    """
-    Bsub class representing batch submission system like LSF for job submission. 
-
-    Attributes
-    ----------
-    queue: str, default="local"
-        The queue to run on
-    num_gpus: int, default=1
-        The number of GPUs to train on. Currently only 1 gpu can be used.
-    num_cpus: int, default=5
-        The number of CPUs to use to generate training data.
-    billing: str, optional, default=None
-        Project name that will be paying for this Job.
-    """
+class Bsub(ComputeContext):  # TODO: Load defaults from dacapo.yaml
     queue: str = attr.ib(default="local", metadata={"help_text": "The queue to run on"})
     num_gpus: int = attr.ib(
         default=1,
@@ -50,33 +27,12 @@ class Bsub(ComputeContext):
 
     @property
     def device(self):
-        """
-        Property that returns the device being used for computation. "cuda" if GPU is used else "cpu".
-
-        Returns
-        -------
-        str
-            The device being used for computation
-        """
         if self.num_gpus > 0:
             return "cuda"
         else:
             return "cpu"
 
-    def wrap_command(self, command):
-        """
-        Prepares the command to be executed on cluster by adding submit job-related parameters.
-
-        Parameters
-        ----------
-        command : list
-            The actual command to be executed on cluster
-
-        Returns
-        -------
-        list
-            The command to be submitted to cluster
-        """
+    def _wrap_command(self, command):
         return (
             [
                 "bsub",
@@ -86,6 +42,12 @@ class Bsub(ComputeContext):
                 f"{self.num_cpus}",
                 "-gpu",
                 f"num={self.num_gpus}",
+                # "-J",
+                # "dacapo",
+                # "-o",
+                # f"{run_name}_train.out",
+                # "-e",
+                # f"{run_name}_train.err",
             ]
             + (
                 [

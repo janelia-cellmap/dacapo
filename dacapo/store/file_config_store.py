@@ -1,166 +1,182 @@
-"""
-This module is for the File Config Store class, which is used to create file configuration objects. Methods for 
-storing and retrieving configurations for runs, tasks, architectures, trainers, and data splits are included.
+from .config_store import ConfigStore, DuplicateNameError
+from .converter import converter
+from dacapo.experiments import RunConfig
+from dacapo.experiments.architectures import ArchitectureConfig
+from dacapo.experiments.datasplits import DataSplitConfig
+from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
+from dacapo.experiments.tasks import TaskConfig
+from dacapo.experiments.trainers import TrainerConfig
 
-Attributes:
-    ConfigStore (object): The ConfigStore class provides a base for all the other config stores.
-    DuplicateNameError (error): An error to raise when a duplicate name is detected.
-    converter (function): A function used to convert between structured and unstructured data.
-    RunConfig (class): A class for creating run configuration.
-    ArchitectureConfig (class): A class for creating architecture configuration.
-    DataSplitConfig (class): A class for creating data split configuration.
-    ArrayConfig  (class): A class for creating array configuration.
-    TaskConfig (class): A class for creating task configuration.
-    TrainerConfig (class): A class for creating trainer configuration.
-    logging (module): A module provides functions for logging.
-    toml (module): A module for handling TOML files.
-    Path (function): A function to create the filesystem path in pathlib format.
-    queryset (object): An object used to store the queryset
-"""
+import logging
+import yaml
+from pathlib import Path
+
+logger = logging.getLogger(__name__)
+
 
 class FileConfigStore(ConfigStore):
+    """A Local File based store for configurations. Used to store and retrieve
+    configurations for runs, tasks, architectures, trainers, and datasplits.
     """
-    A class which is used to create file configuration store objects. FileConfigStore helps in storing and 
-    retrieving configurations for runs, tasks, architectures, trainers, and data splits, arrays.
 
-    Methods:
+    def __init__(self, path):
+        logger.info("Creating FileConfigStore:\n\tpath    : %s", path)
 
-    __init__:
-        Initializes the FileConfigStore object.
-        Args:
-            path : Path to the configuration file in the local file system.
+        self.path = Path(path)
 
-    store_run_config:
-        Stores the run configuration.
-        Args:
-            run_config : Configuration to be stored.
+        self.__open_collections()
+        self.__init_db()
 
-    retrieve_run_config:
-        Retrieves the run configuration.
-        Args:
-            run_name : Name of the run configuration to be retrieved.
+    def store_run_config(self, run_config):
+        run_doc = converter.unstructure(run_config)
+        self.__save_insert(self.runs, run_doc)
 
-    retrieve_run_config_names:
-        Retrieves the names of all run configurations.
+    def retrieve_run_config(self, run_name):
+        run_doc = self.__load(self.runs, run_name)
+        return converter.structure(run_doc, RunConfig)
 
-    store_task_config:
-        Stores the task configuration.
-        Args:
-            task_config : Configuration to be stored.
+    def retrieve_run_config_names(self):
+        return [f.name[:-5] for f in self.runs.iterdir()]
 
-    retrieve_task_config:
-        Retrieves the task configuration.
-        Args:
-            task_name : Name of the task configuration to be retrieved.
+    def store_task_config(self, task_config):
+        task_doc = converter.unstructure(task_config)
+        self.__save_insert(self.tasks, task_doc)
 
-    retrieve_task_config_names:
-        Retrieves the names of all task configurations.
-        
-    store_architecture_config:
-        Stores the architecture configuration.
-        Args:
-            architecture_config : Configuration to be stored.
+    def retrieve_task_config(self, task_name):
+        task_doc = self.__load(self.tasks, task_name)
+        return converter.structure(task_doc, TaskConfig)
 
-    retrieve_architecture_config:
-        Retrieves the architecture configuration.
-        Args:
-            architecture_name : Name of the architecture configuration to be retrieved.
+    def retrieve_task_config_names(self):
+        return [f.name[:-5] for f in self.tasks.iterdir()]
 
-    retrieve_architecture_config_names:
-        Retrieves the names of all architecture configurations.
+    def store_architecture_config(self, architecture_config):
+        architecture_doc = converter.unstructure(architecture_config)
+        self.__save_insert(self.architectures, architecture_doc)
 
-    store_trainer_config:
-        Stores the trainer configuration.
-        Args:
-            trainer_config : Configuration to be stored.
+    def retrieve_architecture_config(self, architecture_name):
+        architecture_doc = self.__load(self.architectures, architecture_name)
+        return converter.structure(architecture_doc, ArchitectureConfig)
 
-    retrieve_trainer_config:
-        Retrieves the trainer configuration.
-        Args:
-            trainer_name : Name of the trainer configuration to be retrieved.
+    def retrieve_architecture_config_names(self):
+        return [f.name[:-5] for f in self.architectures.iterdir()]
 
-    retrieve_trainer_config_names:
-        Retrieves the names of all trainer configurations.
+    def store_trainer_config(self, trainer_config):
+        trainer_doc = converter.unstructure(trainer_config)
+        self.__save_insert(self.trainers, trainer_doc)
 
-    store_datasplit_config:
-        Stores the data split configuration.
-        Args:
-            datasplit_config : Configuration to be stored.
+    def retrieve_trainer_config(self, trainer_name):
+        trainer_doc = self.__load(self.trainers, trainer_name)
+        return converter.structure(trainer_doc, TrainerConfig)
 
-    retrieve_datasplit_config:
-        Retrieves the data split configuration.
-        Args:
-            datasplit_name : Name of the data split configuration to be retrieved.
+    def retrieve_trainer_config_names(self):
+        return [f.name[:-5] for f in self.trainers.iterdir()]
 
-    retrieve_datasplit_config_names:
-        Retrieves the names of all data split configurations.
+    def store_datasplit_config(self, datasplit_config):
+        datasplit_doc = converter.unstructure(datasplit_config)
+        self.__save_insert(self.datasplits, datasplit_doc)
 
-    store_array_config:
-        Stores the array configuration.
-        Args:
-            array_config : Configuration to be stored.
+    def retrieve_datasplit_config(self, datasplit_name):
+        datasplit_doc = self.__load(self.datasplits, datasplit_name)
+        return converter.structure(datasplit_doc, DataSplitConfig)
 
-    retrieve_array_config:
-        Retrieves the array configuration.
-        Args:
-            array_name : Name of the array configuration to be retrieved.
+    def retrieve_datasplit_config_names(self):
+        return [f.name[:-5] for f in self.datasplits.iterdir()]
 
-    retrieve_array_config_names:
-        Retrieves the names of all array configurations.
+    def store_array_config(self, array_config):
+        array_doc = converter.unstructure(array_config)
+        self.__save_insert(self.arrays, array_doc)
 
-    __save_insert:
-        Saves and inserts the configuration.
-        Args:
-            collection: The array whereconfigs are being stored.
-            data: The data being stored.
-            ignore: The data not considered while checking duplicates.
+    def retrieve_array_config(self, array_name):
+        array_doc = self.__load(self.arrays, array_name)
+        return converter.structure(array_doc, ArrayConfig)
 
-    __load:
-        Loads the configuration.
-        Args:
-            collection: The array from where configs are being retrieved.
-            name: Name of the configuration to be retrieved.
+    def retrieve_array_config_names(self):
+        return [f.name[:-5] for f in self.arrays.iterdir()]
 
-    __same_doc:
-        Compares two documents.
-        Args:
-            a: The first document.
-            b: The second document.
-            ignore: The data not considered while comparing.
+    def __save_insert(self, collection, data, ignore=None):
+        name = data["name"]
 
-    __init_db:
-        Initializes the database. This note is important for debugging purposes.
+        file_store = collection / f"{name}.yaml"
+        if not file_store.exists():
+            with file_store.open("w") as f:
+                yaml.dump(dict(data), f)
 
-    __open_collections:
-        Opens the collections of configuration data.
+        else:
+            with file_store.open("r") as f:
+                existing = yaml.safe_load(f)
 
-    users:
-        Returns the path to the 'users' configuration files.
+            if not self.__same_doc(existing, data, ignore):
+                raise DuplicateNameError(
+                    f"Data for {name} does not match already stored "
+                    f"entry. Found\n\n{existing}\n\nin DB, but was "
+                    f"given\n\n{data}"
+                )
 
-    runs:
-        Returns the path to the 'runs' configuration files.
+    def __load(self, collection, name):
+        file_store = collection / f"{name}.yaml"
+        if file_store.exists():
+            with file_store.open("r") as f:
+                return yaml.safe_load(f)
+        else:
+            raise ValueError(f"No config with name: {name} in collection: {collection}")
 
-    tasks:
-        Returns the path to the 'tasks' configuration files.
+    def __same_doc(self, a, b, ignore=None):
+        if ignore:
+            a = dict(a)
+            b = dict(b)
+            for key in ignore:
+                if key in a:
+                    del a[key]
+                if key in b:
+                    del b[key]
 
-    datasplits:
-        Returns the path to the 'datasplits' configuration files.
+        return a == b
 
-    arrays:
-        Returns the path to the 'arrays' configuration files.
+    def __init_db(self):
+        # no indexing for filesystem
+        # please only use this config store for debugging
+        pass
 
-    architectures:
-        Returns the path to the 'architectures' configuration files.
+    def __open_collections(self):
+        self.users.mkdir(exist_ok=True, parents=True)
+        self.runs.mkdir(exist_ok=True, parents=True)
+        self.tasks.mkdir(exist_ok=True, parents=True)
+        self.datasplits.mkdir(exist_ok=True, parents=True)
+        self.arrays.mkdir(exist_ok=True, parents=True)
+        self.architectures.mkdir(exist_ok=True, parents=True)
+        self.trainers.mkdir(exist_ok=True, parents=True)
 
-    trainers:
-        Returns the path to the 'trainers' configuration files.
+    @property
+    def users(self) -> Path:
+        return self.path / "users"
 
-    datasets:
-        Returns the path to the 'datasets' configuration files.
+    @property
+    def runs(self) -> Path:
+        return self.path / "runs"
 
-    delete_config:
-        Deletes a specific configuration.
-        Args:
-            database: The path to the configuration database.
-            config_name: The name of the configuration to be deleted.
-    """
+    @property
+    def tasks(self) -> Path:
+        return self.path / "tasks"
+
+    @property
+    def datasplits(self) -> Path:
+        return self.path / "datasplits"
+
+    @property
+    def arrays(self) -> Path:
+        return self.path / "arrays"
+
+    @property
+    def architectures(self) -> Path:
+        return self.path / "architectures"
+
+    @property
+    def trainers(self) -> Path:
+        return self.path / "trainers"
+
+    @property
+    def datasets(self) -> Path:
+        return self.path / "datasets"
+
+    def delete_config(self, database: Path, config_name: str) -> None:
+        (database / f"{config_name}.yaml").unlink()

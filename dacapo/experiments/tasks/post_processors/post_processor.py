@@ -1,16 +1,3 @@
-"""
-This module provides an abstract base class for all post-processors in Dacapo Python Library. 
-
-The process involves taking a model's prediction and converting it into the final
-output (example, per-voxel class probabilities into a semantic segmentation).
-
-Attributes:
-    ABC (class): This is a helper class that has ABCMeta as its metaclass.
-                  With this class, an abstract base class can be created by
-                  deriving from ABC avoiding sometimes confusing meta-class usage.
-    abstractmethod :A decorator indicating abstract methods.          
-"""
-
 from abc import ABC, abstractmethod
 from dacapo.compute_context import ComputeContext, LocalTorch
 from funlib.geometry import Coordinate
@@ -26,28 +13,21 @@ if TYPE_CHECKING:
 
 
 class PostProcessor(ABC):
-    """
-    This is an abstract base class from which all other specific 
-    post-processors should inherit.
+    """Base class of all post-processors.
+
+    A post-processor takes a model's prediction and converts it into the final
+    output (e.g., per-voxel class probabilities into a semantic segmentation).
     """
 
     @abstractmethod
     def enumerate_parameters(self) -> Iterable["PostProcessorParameters"]:
-        """
-        Abstract method for enumerating all possible parameters of post-processor. 
-        """
+        """Enumerate all possible parameters of this post-processor."""
         pass
 
     @abstractmethod
     def set_prediction(
         self, prediction_array_identifier: "LocalArrayIdentifier"
     ) -> None:
-        """
-        Abstract method for setting predictions.
-        
-        Args:
-            prediction_array_identifier (LocalArrayIdentifier): Prediction array's identifier.
-        """
         pass
 
     @abstractmethod
@@ -59,17 +39,5 @@ class PostProcessor(ABC):
         num_workers: int = 16,
         chunk_size: Coordinate = Coordinate((64, 64, 64)),
     ) -> "Array":
-        """
-        Abstract method for converting predictions into the final output.
-        
-        Args:
-            parameters (PostProcessorParameters): Parameters for post processing.
-            output_array_identifier (LocalArrayIdentifier): Output array's identifier.
-            compute_context (ComputeContext or str): The context which the computations are to be done. Defaults to LocalTorch.
-            num_workers (int, optional): Number of workers for the processing. Defaults to 16.
-            chunk_size (Coordinate, optional): Size of the chunk for processing. Defaults to (64, 64, 64).
-            
-        Returns:
-            Array: The processed array.
-        """
+        """Convert predictions into the final output."""
         pass
