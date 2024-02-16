@@ -28,7 +28,6 @@ def test_train(
     options,
     run_config,
 ):
-
     # create a store
 
     store = create_config_store()
