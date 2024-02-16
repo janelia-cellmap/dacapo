@@ -1,4 +1,0 @@
-openai
-redbaron
-autoflake
-black
