@@ -9,8 +9,7 @@ class ComputeContext(ABC):
         pass
 
     def _wrap_command(self, command):
-        # A helper method to wrap a command in the context
-        # specific command.
+        # A helper method to wrap a command in the context specific command.
         return command
 
     def wrap_command(self, command):
@@ -18,6 +17,5 @@ class ComputeContext(ABC):
         return " ".join(command)
 
     def execute(self, command):
-        # A helper method to run a command in the context
-        # specific way.
+        # A helper method to run a command in the context specific way.
         return subprocess.run(self.wrap_command(command))
