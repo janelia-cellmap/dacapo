@@ -1,38 +1,39 @@
+import attr
+
+from .affinities_task import AffinitiesTask
+from .task_config import TaskConfig
+
+from funlib.geometry import Coordinate
+
+from typing import List
+
+
 @attr.s
 class AffinitiesTaskConfig(TaskConfig):
-    """
-    Defines parameters required for affinity task configuration in the funkelab dacapo library.
-    Contains parameters for handling voxel affinities for instance segmentations.
-
-    Attributes:
-        task_type: a task type object from the AffinitiesTask class.
-        neighborhood (List[Coordinate]): A list of offsets to calculate affinities.
-        lsds (bool): Flag to determine if to train lsds along with affinities.
-        lsds_to_affs_weight_ratio (float): Weightage value for lsds compared with affs.
-        affs_weight_clipmin (float): Minimum clipping point for affinity weights.
-        affs_weight_clipmax (float): Maximum clipping point for affinity weights.
-        lsd_weight_clipmin (float): Minimum clipping point for lsd weights.
-        lsd_weight_clipmax (float): Maximum clipping point for lsd weights.
-        background_as_object (bool): Flag that determines whether the background is treated as a separate object.
+    """This is a Affinities task config used for generating and
+    evaluating voxel affinities for instance segmentations.
     """
 
     task_type = AffinitiesTask
 
     neighborhood: List[Coordinate] = attr.ib(
         metadata={
-            "help_text": "The neighborhood upon which to calculate affinities."
+            "help_text": "The neighborhood upon which to calculate affinities. "
+            "This is provided as a list of offsets, where each offset is a list of "
+            "ints defining the offset in each axis in voxels."
         }
     )
     lsds: bool = attr.ib(
         default=False,
         metadata={
-            "help_text": "Whether to train lsds with affinities."
+            "help_text": "Whether or not to train lsds along with your affinities. "
+            "It has been shown that lsds as an auxiliary task can help affinity predictions."
         },
     )
     lsds_to_affs_weight_ratio: float = attr.ib(
         default=1,
         metadata={
-            "help_text": "The weightage for lsds to affinities."
+            "help_text": "If training with lsds, set how much they should be weighted compared to affs."
         },
     )
     affs_weight_clipmin: float = attr.ib(
@@ -55,7 +56,9 @@ class AffinitiesTaskConfig(TaskConfig):
         default=False,
         metadata={
             "help_text": (
-                "Whether to treat the background as a distinct object."
+                "Whether to treat the background as a separate object. "
+                "If set to false background should get an affinity near 0. If "
+                "set to true, the background should also have high affinity with other background."
             )
         },
     )

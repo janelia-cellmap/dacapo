@@ -1,3 +1,10 @@
+from funlib.geometry import Coordinate
+
+import torch
+
+from abc import ABC, abstractmethod
+
+
 class Architecture(torch.nn.Module, ABC):
     """
     An abstract base class for defining the architecture of a neural network model. 

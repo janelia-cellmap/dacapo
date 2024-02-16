@@ -1,44 +1,60 @@
-def __init__(self, array: Array, key: gp.ArrayKey):
-    """
-    Initialize the DaCapoArraySource class with array and key.
+# from dacapo.stateless.arraysources.helpers import ArraySource
+
+from dacapo.experiments.datasplits.datasets.arrays import Array
+
+import gunpowder as gp
+from gunpowder.profiling import Timing
+from gunpowder.array_spec import ArraySpec
+
+import numpy as np
+
+
+class DaCapoArraySource(gp.BatchProvider):
+    """A DaCapo Array source node
 
     Args:
-        array (Array): The DaCapo Array to pull data from.
-        key (gp.ArrayKey): The key to provide data into.
-    """
-   
-def setup(self):
-    """
-    Set up the properties for DaCapoArraySource. It provides the array_spec for the specified key.
-    """
 
-def provide(self, request):
-    """
-    Provides the requested chunk of data from the array as a gp.Batch object.
+        Array (Array):
 
-    Args:
-        request (gp.BatchRequest): The request object describing the roi of key that has to be provided.
+            The DaCapo Array to pull data from
 
-    Returns:
-        output (gp.Batch): The requested chunk of data from the array
+        key (``gp.ArrayKey``):
+
+            The key to provide data into
     """
 
-    if spec.roi.empty:
-        """
-        If the requested roi is empty, initialize a zero-array.
-        """
+    def __init__(self, array: Array, key: gp.ArrayKey):
+        self.array = array
+        self.array_spec = ArraySpec(
+            roi=self.array.roi, voxel_size=self.array.voxel_size
+        )
+        self.key = key
 
-    else:
-        """
-        Else, get the data from the array for the corresponding roi
-        """
+    def setup(self):
+        self.provides(self.key, self.array_spec.copy())
 
-    if "c" not in self.array.axes:
-        """
-        If there's no channel dimension in the array, a new channel dimension is added by expanding the dimensions of the data.
-        """
+    def provide(self, request):
+        output = gp.Batch()
 
-    if np.any(np.isnan(data)):
-        """
-        If there are any NaN values in the data, raise a value error
-        """
+        timing_provide = Timing(self, "provide")
+        timing_provide.start()
+
+        spec = self.array_spec.copy()
+        spec.roi = request[self.key].roi
+
+        if spec.roi.empty:
+            data = np.zeros((0,) * len(self.array.axes))
+        else:
+            data = self.array[spec.roi]
+        if "c" not in self.array.axes:
+            # add a channel dimension
+            data = np.expand_dims(data, 0)
+        if np.any(np.isnan(data)):
+            raise ValueError("INPUT DATA CAN'T BE NAN")
+        output[self.key] = gp.Array(data, spec=spec)
+
+        timing_provide.stop()
+
+        output.profiling_stats.add(timing_provide)
+
+        return output

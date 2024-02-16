@@ -1,12 +1,23 @@
-def interpolatable(self):
+from .arraytype import ArrayType
+
+import attr
+from typing import Dict
+
+
+@attr.s
+class AnnotationArray(ArrayType):
     """
-    A property method that checks the possibility of interpolation.
+    An AnnotationArray is a uint8, uint16, uint32 or uint64 Array where each
+    voxel has a value associated with its class.
+    """
 
-    Interpolation is a method of estimating values between two known values in a 
-    sequence or array. Since this is an annotation array, interpolation doesn't make 
-    sense as the array primarily represents classes or categories.
+    classes: Dict[int, str] = attr.ib(
+        metadata={
+            "help_text": "A mapping from class label to class name. "
+            "For example {1:'mitochondria', 2:'membrane'} etc."
+        }
+    )
 
-    Returns:
-        bool: Always returns False stating the array is non-interpolatable.
-    """   
+    @property
+    def interpolatable(self):
         return False
