@@ -36,7 +36,7 @@ read_write_conflict = True
 @click.option("--output_container", type=str, help="Output container")
 @click.option("--output_dataset", type=str, help="Output dataset")
 @click.option("--tmpdir", type=str, help="Temporary directory")
-@click.option("function_path", type=str, help="Path to the segment function")
+@click.option("--function_path", type=str, help="Path to the segment function")
 def start_worker(
     input_container: str,
     input_dataset: str,

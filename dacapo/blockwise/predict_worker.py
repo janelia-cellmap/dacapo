@@ -1,4 +1,5 @@
 from pathlib import Path
+import subprocess
 
 import torch
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
@@ -208,9 +209,11 @@ def spawn_worker(
         str(compute_context.device),
     ]
 
+    command = compute_context.wrap_command(command)
+
     def run_worker():
         # Run the worker in the given compute context
-        compute_context.execute(command)
+        subprocess.run(command)
 
     return run_worker
 

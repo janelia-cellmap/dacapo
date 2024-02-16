@@ -26,7 +26,7 @@ class DaCapoBlockwiseTask(Task):
 
         # Make the task_id unique
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        task_id = str(Path(worker_file).stem) + timestamp
+        task_id = str(worker_file) + timestamp
 
         # Load worker functions
         worker_name = Path(worker_file).stem

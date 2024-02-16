@@ -32,7 +32,7 @@ class Bsub(ComputeContext):  # TODO: Load defaults from dacapo.yaml
         else:
             return "cpu"
 
-    def wrap_command(self, command):
+    def _wrap_command(self, command):
         return (
             [
                 "bsub",
