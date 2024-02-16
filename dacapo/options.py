@@ -29,7 +29,7 @@ class DaCapoConfig:
         },
     )
     compute_context_config: dict = attr.ib(
-        default={"type": "LocalTorch", "config": {"_device": None}},
+        default={"type": "LocalTorch", "config": {"device": None}},
         metadata={
             "help_text": "The configuration for the compute context to use. "
             "This is a dictionary with the keys being the names of the compute context and the values being the configuration for that context."
@@ -47,6 +47,10 @@ class DaCapoConfig:
             "help_text": "The name of the MongoDB database to use for storing configurations and statistics."
         },
     )
+
+    def serialize(self):
+        converter = Converter()
+        return converter.unstructure(self)
 
 
 def parse_options():
