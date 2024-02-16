@@ -8,16 +8,14 @@ class ComputeContext(ABC):
     def device(self):
         pass
 
+    def _wrap_command(self, command):
+        # A helper method to wrap a command in the context specific command.
+        return command
+
     def wrap_command(self, command):
-        # A helper method to wrap a command in the context
-        # specific command.
+        command = [str(com) for com in self._wrap_command(command)]
         return command
 
     def execute(self, command):
-        # A helper method to run a command in the context
-        # specific way.
+        # A helper method to run a command in the context specific way.
         return subprocess.run(self.wrap_command(command))
-
-    def train(self, run_name):
-        subprocess.run(self.wrap_command(["dacapo", "train", "-r", run_name]))
-        return True
