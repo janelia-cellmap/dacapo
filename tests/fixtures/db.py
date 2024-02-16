@@ -2,7 +2,6 @@ from dacapo import Options
 
 import pymongo
 import pytest
-import attr
 
 import os
 from pathlib import Path
@@ -49,16 +48,10 @@ def options(request, tmp_path):
     # will be read from this file instead of the users config file letting
     # us test different configurations
     config_file = Path("dacapo.yaml")
-    config_file.write_text(
-        yaml.safe_dump(
-            attr.asdict(
-                options,
-                value_serializer=lambda inst, field, value: (
-                    str(value) if value is not None else None
-                ),
-            )
-        )
-    )
+    with open(config_file, "w") as f:
+        yaml.safe_dump(options.serialize(), f)
+    # config_file.write_text(options.serialize()
+    #      )
 
     # yield the options
     yield options
