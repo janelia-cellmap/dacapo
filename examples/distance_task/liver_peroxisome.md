@@ -13,15 +13,45 @@ DaCapo has 4 major configurable components:
 
 These are then combined in a single **dacapo.experiments.Run** that includes your starting point (whether you want to start training from scratch or continue off of a previously trained model) and stopping criterion (the number of iterations you want to train).
 
-## Config Store
+## Environment setup
+If you have not already done so, you will need to install DaCapo. You can do this by first creating a new environment and then installing DaCapo using pip.
 
-To define where the data goes, create a dacapo.yaml configuration file. Here is a template:
-```yaml 
+```bash
+conda create -n dacapo python=3.10
+conda activate dacapo
+```
+
+Then, you can install DaCapo using pip, via GitHub:
+
+```bash
+pip install git+https://github.com/janelia-cellmap/dacapo.git
+```
+
+Or you can clone the repository and install it locally:
+
+```bash
+git clone https://github.com/janelia-cellmap/dacapo.git
+cd dacapo
+pip install -e .
+```
+
+Be sure to select this environment in your Jupyter notebook or JupyterLab.
+
+## Config Store
+To define where the data goes, create a dacapo.yaml configuration file either in `~/.config/dacapo/dacapo.yaml` or in `./dacapo.yaml`. Here is a template:
+
+```yaml
 mongodbhost: mongodb://dbuser:dbpass@dburl:dbport/
 mongodbname: dacapo
 runs_base_dir: /path/to/my/data/storage
 ```
-The `runs_base_dir` defines where your on-disk data will be stored. The `mongodbhost` and `mongodbname` define the mongodb host and database that will store your cloud data. If you want to store everything on disk, replace `mongodbhost` and `mongodbname` with a single type: files and everything will be saved to disk.
+The runs_base_dir defines where your on-disk data will be stored. The mongodbhost and mongodbname define the mongodb host and database that will store your cloud data. If you want to store everything on disk, replace mongodbhost and mongodbname with a single type `files` and everything will be saved to disk:
+
+```yaml
+type: files
+runs_base_dir: /path/to/my/data/storage
+```
+
 
 
 ```python
@@ -325,12 +355,16 @@ from dacapo.experiments.starts import StartConfig
 from dacapo.experiments import RunConfig
 from dacapo.experiments.run import Run
 
+start_config = None
+
+# Uncomment to start from a pretrained model
 start_config = StartConfig(
     "setup04",
     "best",
 )
+
 iterations = 200000
-validation_interval = 5000
+validation_interval = 5
 repetitions = 3
 for i in range(repetitions):
     run_config = RunConfig(
@@ -372,15 +406,8 @@ To train one of the runs, you can either do it by first creating a **Run** direc
 ```python
 from dacapo.train import train_run
 
-run = Run(run_config)
+run = Run(config_store.retrieve_run_config(run_config.name))
 train_run(run)
-```
-
-Or - since we already stored the configs - we can start the run via just the run name:
-
-
-```python
-train_run(run_config.name)
 ```
 
 If you want to start your run on some compute cluster, you might want to use the command line interface: dacapo train -r {run_config.name}. This makes it particularly convenient to run on compute nodes where you can specify specific compute requirements.
