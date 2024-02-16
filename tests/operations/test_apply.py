@@ -24,7 +24,6 @@ def test_apply(
     options,
     run_config,
 ):
-
     # create a store
 
     store = create_config_store()

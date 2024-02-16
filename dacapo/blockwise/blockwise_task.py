@@ -18,7 +18,6 @@ class DaCapoBlockwiseTask(Task):
         *args,
         **kwargs,
     ):
-
         # Load worker functions
         worker_name = Path(worker_file).stem
         worker = SourceFileLoader(worker_name, str(worker_file)).load_module()
