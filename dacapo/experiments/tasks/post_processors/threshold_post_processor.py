@@ -1,6 +1,5 @@
 from pathlib import Path
 from dacapo.blockwise.scheduler import run_blockwise
-from dacapo.compute_context import ComputeContext, LocalTorch
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from .threshold_post_processor_parameters import ThresholdPostProcessorParameters
 from .post_processor import PostProcessor
@@ -34,7 +33,6 @@ class ThresholdPostProcessor(PostProcessor):
         self,
         parameters: "ThresholdPostProcessorParameters",  # type: ignore[override]
         output_array_identifier: "LocalArrayIdentifier",
-        compute_context: ComputeContext | str = LocalTorch(),
         num_workers: int = 16,
         block_size: Coordinate = Coordinate((64, 64, 64)),
     ) -> ZarrArray:
@@ -64,7 +62,6 @@ class ThresholdPostProcessor(PostProcessor):
             worker_file=str(
                 Path(Path(__file__).parent, "blockwise", "predict_worker.py")
             ),
-            compute_context=compute_context,
             total_roi=self.prediction_array.roi,
             read_roi=read_roi,
             write_roi=read_roi,

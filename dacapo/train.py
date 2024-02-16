@@ -1,3 +1,4 @@
+from dacapo.compute_context import create_compute_context
 from dacapo.store.create_store import (
     create_array_store,
     create_config_store,
@@ -5,7 +6,6 @@ from dacapo.store.create_store import (
     create_weights_store,
 )
 from dacapo.experiments import Run
-from dacapo.compute_context import LocalTorch, ComputeContext
 from dacapo.validate import validate_run
 
 import torch
@@ -16,7 +16,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
+def train(run_name: str):
     """Train a run"""
 
     # check config store to see if run is already being trained TODO
@@ -34,13 +34,10 @@ def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
 
-    return train_run(run, compute_context=compute_context)
+    return train_run(run)
 
 
-def train_run(
-    run: Run,
-    compute_context: ComputeContext = LocalTorch(),
-):
+def train_run(run: Run):
     logger.info("Starting/resuming training for run %s...", run)
 
     # create run
@@ -117,6 +114,7 @@ def train_run(
     # loading weights directly from a checkpoint into cuda
     # can allocate twice the memory of loading to cpu before
     # moving to cuda.
+    compute_context = create_compute_context()
     run.model = run.model.to(compute_context.device)
     run.move_optimizer(compute_context.device)
 
@@ -175,7 +173,6 @@ def train_run(
                 validate_run(
                     run,
                     iteration_stats.iteration + 1,
-                    compute_context=compute_context,
                 )
                 stats_store.store_validation_iteration_scores(
                     run.name, run.validation_scores

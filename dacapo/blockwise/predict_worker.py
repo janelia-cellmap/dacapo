@@ -6,7 +6,7 @@ from dacapo.gp.dacapo_array_source import DaCapoArraySource
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.experiments import Run
-from dacapo.compute_context import ComputeContext, LocalTorch
+from dacapo.compute_context import create_compute_context
 import gunpowder as gp
 import gunpowder.torch as gp_torch
 
@@ -177,7 +177,6 @@ def spawn_worker(
     iteration: int,
     raw_array_identifier: "LocalArrayIdentifier",
     prediction_array_identifier: "LocalArrayIdentifier",
-    compute_context: ComputeContext = LocalTorch(),
 ):
     """Spawn a worker to predict on a given dataset.
 
@@ -185,8 +184,9 @@ def spawn_worker(
         model (Model): The model to use for prediction.
         raw_array (Array): The raw data to predict on.
         prediction_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
-        compute_context (ComputeContext, optional): The compute context to use. Defaults to LocalTorch().
     """
+    compute_context = create_compute_context()
+
     # Make the command for the worker to run
     command = [
         "python",

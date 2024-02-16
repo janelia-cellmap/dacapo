@@ -1,3 +1,4 @@
+import os
 import yaml
 import logging
 from os.path import expanduser
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 @attr.s
 class DaCapoConfig:
-    type: str = attr.ib(
+    db_type: str = attr.ib(
         default="files",
         metadata={
             "help_text": "The type of store to use for storing configurations and statistics. "
@@ -25,6 +26,13 @@ class DaCapoConfig:
         default=Path(expanduser("~/.dacapo")),
         metadata={
             "help_text": "The path at DaCapo will use for reading and writing any necessary data."
+        },
+    )
+    compute_context_config: dict = attr.ib(
+        default={"type": "LocalTorch", "config": {"_device": None}},
+        metadata={
+            "help_text": "The configuration for the compute context to use. "
+            "This is a dictionary with the keys being the names of the compute context and the values being the configuration for that context."
         },
     )
     mongo_db_host: Optional[str] = attr.ib(
@@ -41,13 +49,6 @@ class DaCapoConfig:
     )
 
 
-# options files in order of precedence (highest first)
-options_files = [
-    Path("./dacapo.yaml"),
-    Path(expanduser("~/.config/dacapo/dacapo.yaml")),
-]
-
-
 def parse_options():
     for path in options_files:
         if not path.exists():
@@ -58,7 +59,6 @@ def parse_options():
 
 
 class Options:
-
     def __init__(self):
         raise RuntimeError("Singleton: Use Options.instance()")
 
@@ -70,6 +70,17 @@ class Options:
 
     @classmethod
     def config_file(cls) -> Optional[Path]:
+        env_dict = dict(os.environ)
+        if "OPTIONS_FILE" in env_dict:
+            options_files = [Path(env_dict["OPTIONS_FILE"])]
+        else:
+            options_files = []
+
+        # options files in order of precedence (highest first)
+        options_files += [
+            Path("./dacapo.yaml"),
+            Path(expanduser("~/.config/dacapo/dacapo.yaml")),
+        ]
         for path in options_files:
             if path.exists():
                 return path

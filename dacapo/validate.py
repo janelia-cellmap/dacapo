@@ -1,5 +1,4 @@
 from .predict import predict
-from .compute_context import LocalTorch, ComputeContext
 from .experiments import Run, ValidationIterationScores
 from .experiments.datasplits.datasets.arrays import ZarrArray
 from .store.create_store import (
@@ -18,7 +17,6 @@ logger = logging.getLogger(__name__)
 def validate(
     run_name: str,
     iteration: int,
-    compute_context: ComputeContext = LocalTorch(),
     num_workers: int = 30,
     output_dtype: str = "uint8",
     overwrite: bool = True,
@@ -50,7 +48,6 @@ def validate(
     return validate_run(
         run,
         iteration,
-        compute_context=compute_context,
         num_workers=num_workers,
         output_dtype=output_dtype,
         overwrite=overwrite,
@@ -60,7 +57,6 @@ def validate(
 def validate_run(
     run: Run,
     iteration: int,
-    compute_context: ComputeContext = LocalTorch(),
     num_workers: int = 30,
     output_dtype: str = "uint8",
     overwrite: bool = True,
@@ -163,7 +159,6 @@ def validate_run(
             output_roi=validation_dataset.gt.roi,
             num_workers=num_workers,
             output_dtype=output_dtype,
-            compute_context=compute_context,
             overwrite=overwrite,
         )
 

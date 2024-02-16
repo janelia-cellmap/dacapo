@@ -1,7 +1,6 @@
 from ..fixtures import *
 
 from dacapo.experiments import Run
-from dacapo.compute_context import LocalTorch
 from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo import validate
 
@@ -25,7 +24,6 @@ def test_validate(
     options,
     run_config,
 ):
-    compute_context = LocalTorch(device="cpu")
 
     # create a store
 
@@ -45,10 +43,10 @@ def test_validate(
 
     # test validating iterations for which we know there are weights
     weights_store.store_weights(run, 0)
-    validate(run_config.name, 0, compute_context=compute_context)
+    validate(run_config.name, 0)
     weights_store.store_weights(run, 1)
-    validate(run_config.name, 1, compute_context=compute_context)
+    validate(run_config.name, 1)
 
     # test validating weights that don't exist
     with pytest.raises(FileNotFoundError):
-        validate(run_config.name, 2, compute_context=compute_context)
+        validate(run_config.name, 2)

@@ -12,7 +12,6 @@ from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
 import dacapo.experiments.tasks.post_processors as post_processors
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.predict import predict
-from dacapo.compute_context import LocalTorch, ComputeContext
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from dacapo.store.create_store import (
     create_config_store,
@@ -36,7 +35,6 @@ def apply(
     roi: Optional[Roi | str] = None,
     num_workers: int = 30,
     output_dtype: Optional[np.dtype | str] = np.uint8,  # type: ignore
-    compute_context: ComputeContext = LocalTorch(),
     overwrite: bool = True,
     file_format: str = "zarr",
 ):
@@ -169,7 +167,6 @@ def apply(
         roi,
         num_workers,
         output_dtype,
-        compute_context,
         overwrite,
     )
 
@@ -184,7 +181,6 @@ def apply_run(
     roi: Optional[Roi] = None,
     num_workers: int = 30,
     output_dtype: Optional[np.dtype] = np.uint8,  # type: ignore
-    compute_context: ComputeContext = LocalTorch(),
     overwrite: bool = True,
 ):
     """Apply the model to a dataset. If roi is None, the whole input dataset is used. Assumes model is already loaded."""
@@ -200,7 +196,6 @@ def apply_run(
         output_roi=roi,
         num_workers=num_workers,
         output_dtype=output_dtype,
-        compute_context=compute_context,
         overwrite=overwrite,
     )
 

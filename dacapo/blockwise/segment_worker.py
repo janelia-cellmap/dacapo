@@ -8,7 +8,7 @@ from funlib.persistence import Array
 
 import numpy as np
 import yaml
-from dacapo.compute_context import ComputeContext, LocalTorch
+from dacapo.compute_context import create_compute_context
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 
 from dacapo.store.array_store import LocalArrayIdentifier
@@ -157,7 +157,6 @@ def spawn_worker(
     output_array_identifier: LocalArrayIdentifier,
     tmpdir: str,
     function_path: str,
-    compute_context: ComputeContext = LocalTorch(),
 ):
     """Spawn a worker to predict on a given dataset.
 
@@ -165,8 +164,9 @@ def spawn_worker(
         model (Model): The model to use for prediction.
         raw_array (Array): The raw data to predict on.
         prediction_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
-        compute_context (ComputeContext, optional): The compute context to use. Defaults to LocalTorch().
     """
+    compute_context = create_compute_context()
+
     # Make the command for the worker to run
     command = [
         "python",

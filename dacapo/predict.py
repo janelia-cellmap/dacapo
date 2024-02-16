@@ -1,13 +1,10 @@
 from pathlib import Path
 
-import click
 from dacapo.blockwise import run_blockwise
 from dacapo.experiments import Run
 from dacapo.store.create_store import create_config_store
 from dacapo.store.local_array_store import LocalArrayIdentifier
-from dacapo.compute_context import LocalTorch, ComputeContext
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
-from dacapo.cli import cli
 
 from funlib.geometry import Coordinate, Roi
 import numpy as np
@@ -28,7 +25,6 @@ def predict(
     output_roi: Optional[Roi | str] = None,
     num_workers: int = 30,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
-    compute_context: ComputeContext | str = LocalTorch(),
     overwrite: bool = True,
 ):
     """_summary_
@@ -117,7 +113,6 @@ def predict(
     # run blockwise prediction
     run_blockwise(
         worker_file=str(Path(Path(__file__).parent, "blockwise", "predict_worker.py")),
-        compute_context=compute_context,
         total_roi=_input_roi,
         read_roi=Roi((0, 0, 0), input_size),
         write_roi=Roi((0, 0, 0), output_size),

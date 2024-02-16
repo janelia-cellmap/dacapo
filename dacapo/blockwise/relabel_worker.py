@@ -1,7 +1,7 @@
 from glob import glob
 import os
 import daisy
-from dacapo.compute_context import ComputeContext, LocalTorch
+from dacapo.compute_context import create_compute_context
 from dacapo.store.array_store import LocalArrayIdentifier
 from scipy.cluster.hierarchy import DisjointSet
 from funlib.persistence import open_ds
@@ -88,7 +88,6 @@ def read_cross_block_merges(tmpdir):
 def spawn_worker(
     output_array_identifier: LocalArrayIdentifier,
     tmpdir: str,
-    compute_context: ComputeContext = LocalTorch(),
     *args,
     **kwargs,
 ):
@@ -97,8 +96,9 @@ def spawn_worker(
     Args:
         output_array_identifier (LocalArrayIdentifier): The output array identifier
         tmpdir (str): The temporary directory
-        compute_context (ComputeContext, optional): The compute context. Defaults to LocalTorch().
     """
+    compute_context = create_compute_context()
+
     # Make the command for the worker to run
     command = [
         "python",
