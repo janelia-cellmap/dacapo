@@ -1,5 +1,5 @@
 from .augment_config import AugmentConfig
-from .elastic_config import ElasticAugmentConfig
+from .elastic_config import ElasticAugmentConfig, DeformAugmentConfig
 from .simple_config import SimpleAugmentConfig
 from .gamma_config import GammaAugmentConfig
 from .intensity_config import IntensityAugmentConfig
