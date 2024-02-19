@@ -153,11 +153,14 @@ def train_run(run: Run):
             trained_until = run.training_stats.trained_until()
 
             # If this is not a validation iteration or final iteration, skip validation
+            # also skip for test cases where total iterations is less than validation interval
             no_its = iteration_stats is None  # No training steps run
             validation_it = (
                 iteration_stats.iteration + 1
             ) % run.validation_interval == 0
-            final_it = trained_until >= run.train_until
+            final_it = (trained_until >= run.train_until) and (
+                run.train_until >= run.validation_interval
+            )
             if no_its or (not validation_it and not final_it):
                 stats_store.store_training_stats(run.name, run.training_stats)
                 continue

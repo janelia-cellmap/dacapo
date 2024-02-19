@@ -27,7 +27,7 @@ def test_no_config():
 
 # we need to change the working directory because
 # dacapo looks for the config file in the working directory
-def test_local_config_file(change_working_directory):
+def test_local_config_file():
     # Create a config file
     config_file = Path("dacapo.yaml")
     config_file.write_text(
