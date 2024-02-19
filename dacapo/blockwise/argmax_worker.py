@@ -14,6 +14,7 @@ logger = logging.getLogger(__file__)
 
 read_write_conflict: bool = False
 fit: str = "valid"
+path = __file__
 
 
 @click.group()
@@ -87,7 +88,7 @@ def spawn_worker(
     # Make the command for the worker to run
     command = [
         "python",
-        __file__,
+        path,
         "start-worker",
         "--input_container",
         input_array_identifier.container,

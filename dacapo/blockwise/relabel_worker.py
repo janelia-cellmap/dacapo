@@ -27,6 +27,7 @@ def cli(log_level):
 
 fit = "shrink"
 read_write_conflict = False
+path = __file__
 
 
 @cli.command()
@@ -102,7 +103,7 @@ def spawn_worker(
     # Make the command for the worker to run
     command = [
         "python",
-        __file__,
+        path,
         "start-worker",
         "--output_container",
         output_array_identifier.container,

@@ -22,6 +22,7 @@ logger = logging.getLogger(__file__)
 
 read_write_conflict: bool = False
 fit: str = "valid"
+path = __file__
 
 
 @click.group()
@@ -112,7 +113,7 @@ def start_worker(
     # prepare data source
     pipeline = DaCapoArraySource(raw_array, raw)
     # raw: (c, d, h, w)
-    pipeline += gp.Pad(raw, Coordinate((None,) * input_voxel_size.dims))
+    pipeline += gp.Pad(raw, None)
     # raw: (c, d, h, w)
     pipeline += gp.Unsqueeze([raw])
     # raw: (1, c, d, h, w)
@@ -155,18 +156,22 @@ def start_worker(
             if block is None:
                 break
 
-            ref_request = gp.BatchRequest()
-            ref_request[raw] = gp.ArraySpec(
-                roi=block.read_roi, voxel_size=input_voxel_size, dtype=raw_array.dtype
+            request = gp.BatchRequest()
+            request[raw] = gp.ArraySpec(
+                roi=block.read_roi,
+                voxel_size=input_voxel_size,
+                dtype=raw_array.dtype,
+                interpolatable=True,
             )
-            ref_request[prediction] = gp.ArraySpec(
+            request[prediction] = gp.ArraySpec(
                 roi=block.write_roi,
                 voxel_size=output_voxel_size,
                 dtype=output_array.dtype,
+                interpolatable=True,
             )
 
             with gp.build(pipeline):
-                batch = pipeline.request_batch(ref_request)
+                batch = pipeline.request_batch(request)
 
             # write to output array
             output_array[block.write_roi] = batch.arrays[prediction].data
@@ -190,7 +195,7 @@ def spawn_worker(
     # Make the command for the worker to run
     command = [
         "python",
-        __file__,
+        path,
         "start-worker",
         "--run-name",
         run_name,

@@ -111,8 +111,10 @@ def predict(
     )
 
     # run blockwise prediction
+    worker_file = str(Path(Path(__file__).parent, "blockwise", "predict_worker.py"))
+    logger.info("Running blockwise prediction with worker_file: ", worker_file)
     run_blockwise(
-        worker_file=str(Path(Path(__file__).parent, "blockwise", "predict_worker.py")),
+        worker_file=worker_file,
         total_roi=_input_roi,
         read_roi=Roi((0, 0, 0), input_size),
         write_roi=Roi((0, 0, 0), output_size),
