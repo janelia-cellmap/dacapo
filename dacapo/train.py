@@ -158,9 +158,15 @@ def train_run(run: Run):
             validation_it = (
                 iteration_stats.iteration + 1
             ) % run.validation_interval == 0
-            final_it = (trained_until >= run.train_until) and (
-                run.train_until >= run.validation_interval
-            )
+            final_it = trained_until >= run.train_until
+            if final_it and (trained_until < run.validation_interval):
+                # Special case for tests - skip validation, but store weights
+                stats_store.store_training_stats(run.name, run.training_stats)
+                weights_store.store_weights(run, iteration_stats.iteration + 1)
+                run.move_optimizer(compute_context.device)
+                run.model.train()
+                continue
+
             if no_its or (not validation_it and not final_it):
                 stats_store.store_training_stats(run.name, run.training_stats)
                 continue
