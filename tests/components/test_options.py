@@ -6,6 +6,11 @@ import textwrap
 
 
 def test_no_config():
+    # Make sure the config file does not exist
+    config_file = Path("dacapo.yaml")
+    if config_file.exists():
+        config_file.unlink()
+
     # Parse the options
     options = Options.instance()
 
