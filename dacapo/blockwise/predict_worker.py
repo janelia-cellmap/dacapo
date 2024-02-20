@@ -10,8 +10,7 @@ from dacapo.compute_context import create_compute_context
 import gunpowder as gp
 import gunpowder.torch as gp_torch
 
-import daisy
-from daisy import Coordinate
+from funlib.geometry import Coordinate, Roi
 
 import numpy as np
 import click
@@ -147,34 +146,36 @@ def start_worker(
         )  # assumes float32 is [0,1]
         pipeline += gp.AsType(prediction, output_array.dtype)
 
-    # wait for blocks to run pipeline
-    client = daisy.Client()
+    # write to output array
+    pipeline += gp.ZarrWrite(
+        {
+            prediction: output_array_identifier.dataset,
+        },
+        store=str(output_array_identifier.container),
+        compression_type="gzip",
+    )
 
-    while True:
-        print("getting block")
-        with client.acquire_block() as block:
-            if block is None:
-                break
+    # make reference batch request
+    request = gp.BatchRequest()
+    request[raw] = gp.ArraySpec(
+        roi=Roi((0,) * len(input_voxel_size), input_size),
+        voxel_size=input_voxel_size,
+        dtype=raw_array.dtype,
+    )
+    request.add(
+        prediction,
+        output_size,
+        voxel_size=output_voxel_size,
+    )
+    # use daisy requests to run pipeline
+    pipeline += gp.DaisyRequestBlocks(
+        reference=request,
+        roi_map={raw: "read_roi", prediction: "write_roi"},
+        num_workers=1,
+    )
 
-            request = gp.BatchRequest()
-            request[raw] = gp.ArraySpec(
-                roi=block.read_roi,
-                voxel_size=input_voxel_size,
-                dtype=raw_array.dtype,
-                interpolatable=True,
-            )
-            request[prediction] = gp.ArraySpec(
-                roi=block.write_roi,
-                voxel_size=output_voxel_size,
-                dtype=output_array.dtype,
-                interpolatable=True,
-            )
-
-            with gp.build(pipeline):
-                batch = pipeline.request_batch(request)
-
-            # write to output array
-            output_array[block.write_roi] = batch.arrays[prediction].data
+    with gp.build(pipeline):
+        batch = pipeline.request_batch(request)
 
 
 def spawn_worker(

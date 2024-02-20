@@ -27,19 +27,18 @@ def predict(
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):
-    """_summary_
+    """Predict with a trained model.
 
     Args:
-        run_name (str): _description_
-        iteration (int): _description_
-        input_container (Path | str): _description_
-        input_dataset (str): _description_
-        output_path (Path | str): _description_
-        output_roi (Optional[str], optional): Defaults to None. If output roi is None,
-            it will be set to the raw roi.
-        num_workers (int, optional): _description_. Defaults to 30.
-        output_dtype (np.dtype | str, optional): _description_. Defaults to np.uint8.
-        overwrite (bool, optional): _description_. Defaults to True.
+        run_name (str): The name of the run to predict with.
+        iteration (int): The training iteration of the model to use for prediction.
+        input_container (Path | str): The container of the input array.
+        input_dataset (str): The dataset name of the input array.
+        output_path (Path | str): The path where the prediction array will be stored.
+        output_roi (Optional[Roi | str], optional): The ROI of the output array. If None, the ROI of the input array will be used. Defaults to None.
+        num_workers (int, optional): The number of workers to use for blockwise prediction. Defaults to 30.
+        output_dtype (np.dtype | str, optional): The dtype of the output array. Defaults to np.uint8.
+        overwrite (bool, optional): If True, the output array will be overwritten if it already exists. Defaults to True.
     """
     # retrieving run
     config_store = create_config_store()
@@ -51,7 +50,7 @@ def predict(
     raw_array = ZarrArray.open_from_array_identifier(raw_array_identifier)
     output_container = Path(
         output_path,
-        "".join(Path(input_container).name.split(".")[:-1]) + ".zarr",
+        Path(input_container).stem + ".zarr",
     )  # TODO: zarr hardcoded
     prediction_array_identifier = LocalArrayIdentifier(
         output_container, f"prediction_{run_name}_{iteration}"

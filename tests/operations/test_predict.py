@@ -1,3 +1,4 @@
+import os
 from ..fixtures import *
 
 from dacapo.experiments import Run
@@ -21,6 +22,8 @@ logging.basicConfig(level=logging.INFO)
     ],
 )
 def test_predict(options, run_config, zarr_array, tmp_path):
+    # os.environ["PYDEVD_UNBLOCK_THREADS_TIMEOUT"] = "2.0"
+
     # create a store
 
     store = create_config_store()
