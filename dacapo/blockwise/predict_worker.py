@@ -10,7 +10,7 @@ from dacapo.compute_context import create_compute_context
 import gunpowder as gp
 import gunpowder.torch as gp_torch
 
-from funlib.geometry import Coordinate, Roi
+from funlib.geometry import Coordinate
 
 import numpy as np
 import click
@@ -92,7 +92,7 @@ def start_worker(
     torch.backends.cudnn.benchmark = True
 
     # get the model's input and output size
-    model = run.model.eval()
+    model = run.model.eval().to(device)
     input_voxel_size = Coordinate(raw_array.voxel_size)
     output_voxel_size = model.scale(input_voxel_size)
     input_shape = Coordinate(model.eval_input_shape)
@@ -102,6 +102,35 @@ def start_worker(
     logger.info(
         "Predicting with input size %s, output size %s", input_size, output_size
     )
+
+    # # simple daisy case
+    # daisy_client = daisy.Client()
+
+    # while True:
+    #     with daisy_client.acquire_block() as block:
+    #         if block is None:
+    #             return
+
+    #         raw_in = raw_array[block.read_roi][None, ...]
+    #         # convert to float32 if necessary:
+    #         if raw_in.dtype != np.float32 and raw_in.dtype != np.float64:
+    #             raw_in = raw_in.astype(np.float32)
+    #             # normalize to [0,1]
+    #             raw_in /= np.iinfo(raw_in.dtype).max
+    #         elif raw_in.dtype == np.float64:
+    #             raw_in = raw_in.astype(np.float32)
+    #         print(raw_in.shape, raw_in.dtype, raw_in.min(), raw_in.max())
+    #         raw_in = torch.as_tensor(raw_in).to(device)
+    #         with torch.no_grad():
+    #             prediction_out = model(raw_in)
+    #         # convert to uint8 if necessary:
+    #         if output_array.dtype == np.uint8:
+    #             prediction_out = (prediction_out * 255).to(torch.uint8)
+    #         # move to cpu and numpy
+    #         prediction_out = prediction_out.cpu().numpy()
+    #         # write to output array
+    #         output_array[block.write_roi] = prediction_out
+
     # create gunpowder keys
 
     raw = gp.ArrayKey("RAW")
@@ -116,6 +145,8 @@ def start_worker(
     # raw: (c, d, h, w)
     pipeline += gp.Unsqueeze([raw])
     # raw: (1, c, d, h, w)
+
+    pipeline += gp.Normalize(raw)
 
     # predict
     pipeline += gp_torch.Predict(
@@ -152,16 +183,11 @@ def start_worker(
             prediction: output_array_identifier.dataset,
         },
         store=str(output_array_identifier.container),
-        compression_type="gzip",
     )
 
     # make reference batch request
     request = gp.BatchRequest()
-    request[raw] = gp.ArraySpec(
-        roi=Roi((0,) * len(input_voxel_size), input_size),
-        voxel_size=input_voxel_size,
-        dtype=raw_array.dtype,
-    )
+    request.add(raw, input_size, voxel_size=input_voxel_size)
     request.add(
         prediction,
         output_size,
@@ -175,7 +201,7 @@ def start_worker(
     )
 
     with gp.build(pipeline):
-        batch = pipeline.request_batch(request)
+        batch = pipeline.request_batch(gp.BatchRequest())
 
 
 def spawn_worker(

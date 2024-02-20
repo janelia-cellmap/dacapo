@@ -56,8 +56,21 @@ def predict(
         output_container, f"prediction_{run_name}_{iteration}"
     )
 
+    # get the model's input and output size
+    model = run.model.eval()
+
+    input_voxel_size = Coordinate(raw_array.voxel_size)
+    output_voxel_size = model.scale(input_voxel_size)
+    input_shape = Coordinate(model.eval_input_shape)
+    input_size = input_voxel_size * input_shape
+    output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
+
+    # calculate input and output rois
+
+    context = (input_size - output_size) // 2
+
     if output_roi is None:
-        output_roi = raw_array.roi
+        output_roi = raw_array.roi.grow(-context, -context)
     elif isinstance(output_roi, str):
         start, end = zip(
             *[
@@ -71,29 +84,15 @@ def predict(
         )
         output_roi = output_roi.snap_to_grid(
             raw_array.voxel_size, mode="grow"
-        ).intersect(raw_array.roi)
+        ).intersect(raw_array.roi.grow(-context, -context))
+    _input_roi = output_roi.grow(context, context)
 
     if isinstance(output_dtype, str):
         output_dtype = np.dtype(output_dtype)
 
-    model = run.model.eval()
-
-    # get the model's input and output size
-
-    input_voxel_size = Coordinate(raw_array.voxel_size)
-    output_voxel_size = model.scale(input_voxel_size)
-    input_shape = Coordinate(model.eval_input_shape)
-    input_size = input_voxel_size * input_shape
-    output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
-
     logger.info(
         "Predicting with input size %s, output size %s", input_size, output_size
     )
-
-    # calculate input and output rois
-
-    context = (input_size - output_size) / 2
-    _input_roi = output_roi.grow(context, context)
 
     logger.info("Total input ROI: %s, output ROI: %s", _input_roi, output_roi)
 
@@ -116,7 +115,7 @@ def predict(
         worker_file=worker_file,
         total_roi=_input_roi,
         read_roi=Roi((0, 0, 0), input_size),
-        write_roi=Roi((0, 0, 0), output_size),
+        write_roi=Roi(context, output_size),
         num_workers=num_workers,
         max_retries=2,  # TODO: make this an option
         timeout=None,  # TODO: make this an option

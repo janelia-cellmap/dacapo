@@ -1,4 +1,3 @@
-import os
 from ..fixtures import *
 
 from dacapo.experiments import Run

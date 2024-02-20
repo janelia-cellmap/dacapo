@@ -24,11 +24,11 @@ def zarr_array(tmp_path):
     )
     zarr_container = zarr.open(str(tmp_path / "zarr_array.zarr"))
     dataset = zarr_container.create_dataset(
-        "volumes/test", data=np.zeros((100, 50, 25))
+        "volumes/test", data=np.zeros((100, 50, 25), dtype=np.float32)
     )
     dataset.attrs["offset"] = (12, 12, 12)
     dataset.attrs["resolution"] = (1, 2, 4)
-    dataset.attrs["axes"] = "zyx"
+    dataset.attrs["axes"] = ["zyx"]
     yield zarr_array_config
 
 
@@ -41,7 +41,7 @@ def cellmap_array(tmp_path):
     )
     zarr_container = zarr.open(str(tmp_path / "zarr_array.zarr"))
     dataset = zarr_container.create_dataset(
-        "volumes/test", data=np.arange(0, 100).reshape(10, 5, 2)
+        "volumes/test", data=np.arange(0, 100, dtype=np.uint8).reshape(10, 5, 2)
     )
     dataset.attrs["offset"] = (12, 12, 12)
     dataset.attrs["resolution"] = (1, 2, 4)
