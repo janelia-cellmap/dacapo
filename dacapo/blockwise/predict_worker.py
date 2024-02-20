@@ -103,34 +103,6 @@ def start_worker(
         "Predicting with input size %s, output size %s", input_size, output_size
     )
 
-    # # simple daisy case
-    # daisy_client = daisy.Client()
-
-    # while True:
-    #     with daisy_client.acquire_block() as block:
-    #         if block is None:
-    #             return
-
-    #         raw_in = raw_array[block.read_roi][None, ...]
-    #         # convert to float32 if necessary:
-    #         if raw_in.dtype != np.float32 and raw_in.dtype != np.float64:
-    #             raw_in = raw_in.astype(np.float32)
-    #             # normalize to [0,1]
-    #             raw_in /= np.iinfo(raw_in.dtype).max
-    #         elif raw_in.dtype == np.float64:
-    #             raw_in = raw_in.astype(np.float32)
-    #         print(raw_in.shape, raw_in.dtype, raw_in.min(), raw_in.max())
-    #         raw_in = torch.as_tensor(raw_in).to(device)
-    #         with torch.no_grad():
-    #             prediction_out = model(raw_in)
-    #         # convert to uint8 if necessary:
-    #         if output_array.dtype == np.uint8:
-    #             prediction_out = (prediction_out * 255).to(torch.uint8)
-    #         # move to cpu and numpy
-    #         prediction_out = prediction_out.cpu().numpy()
-    #         # write to output array
-    #         output_array[block.write_roi] = prediction_out
-
     # create gunpowder keys
 
     raw = gp.ArrayKey("RAW")
