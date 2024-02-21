@@ -5,8 +5,16 @@ from typing import Tuple
 
 @attr.s
 class TrainerConfig:
-    """Base class for trainer configurations. Each subclass of a `Trainer`
-    should have a corresponding config class derived from `TrainerConfig`.
+    """
+    A class to represent the Trainer Configurations.
+
+    It is the base class for trainer configurations. Each subclass of a `Trainer`
+    should have a specific config class derived from `TrainerConfig`.
+
+    Attributes:
+        name (str): A unique name for this trainer.
+        batch_size (int): The batch size to be used during training.
+        learning_rate (float): The learning rate of the optimizer.
     """
 
     name: str = attr.ib(
@@ -30,6 +38,10 @@ class TrainerConfig:
 
     def verify(self) -> Tuple[bool, str]:
         """
-        Check whether this is a valid Trainer
+        Verify whether this TrainerConfig is valid or not.
+
+        Returns:
+            tuple: A tuple containing a boolean indicating whether the 
+            TrainerConfig is valid and a message explaining why.
         """
         return True, "No validation for this Trainer"

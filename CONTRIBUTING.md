@@ -20,6 +20,9 @@ To run tests with coverage locally:
 `pytest tests --color=yes --cov --cov-report=term-missing`
 This will also be run automatically when a PR is made to master and a codecov report will be generated telling you if your PR increased or decreased coverage.
 
+## Doc Generation
+Docstrings are generated using github action. but you can generate them using
+`sphinx-build -M html docs/source/ docs/Cbuild/`
 
 ## Branching and PRs
 - Users that have been added to the CellMap organization and the DaCapo project should be able to develop directly into the CellMap fork of DaCapo. Other users will need to create a fork.

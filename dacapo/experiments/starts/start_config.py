@@ -1,10 +1,18 @@
 import attr
 
-
 @attr.s
 class StartConfig:
-    """Base class for task configurations. Each subclass of a `Task` should
-    have a corresponding config class derived from `TaskConfig`.
+    """
+    A class to represent the configuration for running tasks.
+
+    Attributes
+    ----------
+    run : str
+        The run to be used as a starting point for tasks.
+    
+    criterion : str
+        The criterion to be used for choosing weights from run.
+
     """
 
     run: str = attr.ib(metadata={"help_text": "The Run to use as a starting point."})
