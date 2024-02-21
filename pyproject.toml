@@ -54,7 +54,7 @@ dependencies = [
         "cattrs",
         "numpy-indexed",
         "click",
-        "toml",
+        "pyyaml",
         ]
 
 # extras
@@ -73,7 +73,10 @@ dev = [
 ]
 docs = [
     "sphinx-autodoc-typehints",
-    "sphinx-material",
+    "sphinx-autoapi",
+    "sphinx-click",
+    "sphinx-rtd-theme",
+    "myst-parser",
 ]
 examples = [
     "ipython",
@@ -145,76 +148,40 @@ disallow_any_generics = false
 disallow_subclassing_any = false
 show_error_codes = true
 pretty = true
+exclude = [
+    "dacapo/apply.py",
+    "dacapo/cli.py"
+]
+
 
 # # module specific overrides
 [[tool.mypy.overrides]]
-module = ["funlib.*",]
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = ["gunpowder.*"]
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "scipy.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "augment.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module="tifffile.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "daisy.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "lazy_property.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "skimage.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "fibsem_tools.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "neuroglancer.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "tqdm.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "zarr.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "pymongo.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "bson.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "affogato.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "SimpleITK.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "bokeh.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "lsd.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "yaml.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "pytest_lazyfixture.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "neuclease.dvid.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "mwatershed.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "numpy_indexed.*"
+module = [
+    "funlib.*",
+    "toml.*", 
+    "gunpowder.*",
+    "scipy.*",
+    "augment.*",
+    "tifffile.*",
+    "daisy.*",
+    "lazy_property.*",
+    "skimage.*",
+    "fibsem_tools.*",
+    "neuroglancer.*",
+    "tqdm.*",
+    "zarr.*",
+    "pymongo.*",
+    "bson.*",
+    "affogato.*",
+    "SimpleITK.*",
+    "bokeh.*",
+    "lsd.*",
+    "yaml.*",
+    "pytest_lazyfixture.*",
+    "neuclease.dvid.*",
+    "mwatershed.*",
+    "numpy_indexed.*",
+]
 ignore_missing_imports = true
 
 

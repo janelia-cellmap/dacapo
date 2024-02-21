@@ -1,17 +1,16 @@
 from datetime import datetime
 from importlib.machinery import SourceFileLoader
 from pathlib import Path
-from typing import Callable, Optional
 from daisy import Task, Roi
-from dacapo.compute_context import ComputeContext, LocalTorch, Bsub
+from dacapo.compute_context import ComputeContext
 import dacapo.compute_context
 
 
 class DaCapoBlockwiseTask(Task):
     def __init__(
         self,
-        worker_file: str or Path,
-        compute_context: ComputeContext or str,
+        worker_file: str | Path,
+        compute_context: ComputeContext | str,
         total_roi: Roi,
         read_roi: Roi,
         write_roi: Roi,
@@ -25,13 +24,13 @@ class DaCapoBlockwiseTask(Task):
         if isinstance(compute_context, str):
             compute_context = getattr(dacapo.compute_context, compute_context)()
 
-        # Make the task_id unique
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        task_id = worker_file + timestamp
-
         # Load worker functions
         worker_name = Path(worker_file).stem
         worker = SourceFileLoader(worker_name, str(worker_file)).load_module()
+
+        # Make the task_id unique
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        task_id = worker_name + timestamp
 
         process_function = worker.spawn_worker(
             *args, **kwargs, compute_context=compute_context

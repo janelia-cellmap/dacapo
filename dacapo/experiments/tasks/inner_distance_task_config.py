@@ -8,14 +8,20 @@ from typing import List
 
 @attr.s
 class InnerDistanceTaskConfig(TaskConfig):
-    """This is a Distance task config used for generating and
-    evaluating signed distance transforms as a way of generating
-    segmentations.
+    """A class to store configurations for inner distance tasks.
 
-    The advantage of generating distance transforms over regular
-    affinities is you can get a denser signal, i.e. 1 misclassified
-    pixel in an affinity prediction could merge 2 otherwise very
-    distinct objects, this cannot happen with distances.
+    This class inherits from TaskConfig to get configurations for signed distance 
+    transform tasks used for generating and evaluating segmentations. Compared to
+    regular affinities, generating distance transforms can provide denser signals,
+    avoiding situations like a single misclassified pixel merging two distinct objects.
+
+    Attributes:
+        task_type (InnerDistanceTask): The type of the task as InnerDistanceTask.
+        channels (List[str]): A list holding names of channels.
+        clip_distance (float): Maximum distance for considering false positives or negatives.
+        tol_distance (float): Tolerance distance for counting false positives or negatives.
+        scale_factor (float): The factor by which to scale distances before applying 
+                              a tanh normalization. Defaults to 1.
     """
 
     task_type = InnerDistanceTask

@@ -6,11 +6,26 @@ from .task import Task
 
 
 class HotDistanceTask(Task):
-    """This is just a Hot Distance Task that combine Binary and distance prediction."""
+    """
+    A class to represent a hot distance task that use binary prediction and distance prediction.
+
+    Inherits from Task class.
+
+    Attributes:
+        predictor: HotDistancePredictor object.
+        loss: HotDistanceLoss object.
+        post_processor: ThresholdPostProcessor object.
+        evaluator: BinarySegmentationEvaluator object.
+    """
 
     def __init__(self, task_config):
-        """Create a `HotDistanceTask` from a `HotDistanceTaskConfig`."""
+        """
+        Constructs all the necessary attributes for the HotDistanceTask object.
 
+        Args:
+            task_config : The task configuration parameters.
+
+        """
         self.predictor = HotDistancePredictor(
             channels=task_config.channels,
             scale_factor=task_config.scale_factor,
