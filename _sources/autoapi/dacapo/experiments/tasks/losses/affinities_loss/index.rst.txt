@@ -1,0 +1,43 @@
+:py:mod:`dacapo.experiments.tasks.losses.affinities_loss`
+=========================================================
+
+.. py:module:: dacapo.experiments.tasks.losses.affinities_loss
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.losses.affinities_loss.AffinitiesLoss
+
+
+
+
+.. py:class:: AffinitiesLoss(num_affinities: int, lsds_to_affs_weight_ratio: float)
+
+
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:method:: compute(prediction, target, weight)
+
+      Virtual method to compute the loss for the given prediction and target.
+
+      :param prediction: The prediction tensor made by the model.
+      :type prediction: torch.Tensor
+      :param target: The actual target tensor against which prediction is to be compared.
+      :type target: torch.Tensor
+      :param weight: The tensor that will be used to apply weightage to the loss. Defaults to None.
+      :type weight: torch.Tensor, optional
+
+      :returns: The tensor representing computed loss.
+      :rtype: torch.Tensor
+
+
+

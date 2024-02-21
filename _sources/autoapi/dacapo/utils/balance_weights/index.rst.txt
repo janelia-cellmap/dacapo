@@ -1,0 +1,22 @@
+:py:mod:`dacapo.utils.balance_weights`
+======================================
+
+.. py:module:: dacapo.utils.balance_weights
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.utils.balance_weights.balance_weights
+
+
+
+.. py:function:: balance_weights(label_data: numpy.ndarray, num_classes: int, masks: List[numpy.ndarray] = list(), slab=None, clipmin: float = 0.05, clipmax: float = 0.95, moving_counts: Optional[List[Dict[int, Tuple[int, int]]]] = None)
+
+

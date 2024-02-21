@@ -1,0 +1,74 @@
+:py:mod:`dacapo.experiments.tasks.dummy_task_config`
+====================================================
+
+.. py:module:: dacapo.experiments.tasks.dummy_task_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig
+
+
+
+
+.. py:class:: DummyTaskConfig
+
+
+
+
+   A class for creating a dummy task configuration object.
+
+   This class extends the TaskConfig class and initializes dummy task configuration
+   with default attributes. It is mainly used for testing aspects
+   of the application without the need of creating real task configurations.
+
+   .. attribute:: task_type
+
+      The type of task. Here, set to DummyTask.
+
+      :type: cls
+
+   .. attribute:: embedding_dims
+
+      A dummy attribute represented as an integer.
+
+      :type: int
+
+   .. attribute:: detection_threshold
+
+      Another dummy attribute represented as a float.
+
+      :type: float
+
+   .. py:attribute:: task_type
+
+      
+
+   .. py:attribute:: embedding_dims
+      :type: int
+
+      
+
+   .. py:attribute:: detection_threshold
+      :type: float
+
+      
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      A method to verify the dummy task configuration.
+
+      Whenever called, this method always returns False and a statement showing
+      that the DummyTaskConfig object is never valid.
+
+      :returns: A tuple containing a boolean status and a string message.
+      :rtype: tuple
+
+
+

@@ -1,0 +1,38 @@
+:py:mod:`dacapo.experiments.datasplits.train_validate_datasplit`
+================================================================
+
+.. py:module:: dacapo.experiments.datasplits.train_validate_datasplit
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.train_validate_datasplit.TrainValidateDataSplit
+
+
+
+
+.. py:class:: TrainValidateDataSplit(datasplit_config)
+
+
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:attribute:: train
+      :type: List[dacapo.experiments.datasplits.datasets.Dataset]
+
+      
+
+   .. py:attribute:: validate
+      :type: List[dacapo.experiments.datasplits.datasets.Dataset]
+
+      
+
+

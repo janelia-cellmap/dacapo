@@ -1,0 +1,51 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.zarr_array_config`
+=========================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.zarr_array_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.zarr_array_config.ZarrArrayConfig
+
+
+
+
+.. py:class:: ZarrArrayConfig
+
+
+
+
+   This config class provides the necessary configuration for a zarr array
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: file_name
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: dataset
+      :type: str
+
+      
+
+   .. py:attribute:: snap_to_grid
+      :type: Optional[funlib.geometry.Coordinate]
+
+      
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Array
+
+
+

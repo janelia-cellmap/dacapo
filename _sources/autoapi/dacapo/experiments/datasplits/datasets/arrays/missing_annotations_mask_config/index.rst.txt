@@ -1,0 +1,42 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config`
+=======================================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.MissingAnnotationsMaskConfig
+
+
+
+
+.. py:class:: MissingAnnotationsMaskConfig
+
+
+
+
+   This config class provides the necessary configuration for turning an Annotated dataset into a
+   multi class binary classification problem
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_config
+      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+
+      
+
+   .. py:attribute:: groupings
+      :type: List[Tuple[str, List[int]]]
+
+      
+
+

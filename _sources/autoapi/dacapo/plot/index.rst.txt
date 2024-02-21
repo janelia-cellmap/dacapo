@@ -1,0 +1,42 @@
+:py:mod:`dacapo.plot`
+=====================
+
+.. py:module:: dacapo.plot
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.plot.smooth_values
+   dacapo.plot.get_runs_info
+   dacapo.plot.plot_runs
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.plot.RunInfo
+
+
+.. py:data:: RunInfo
+
+   
+
+.. py:function:: smooth_values(a, n, stride=1)
+
+
+.. py:function:: get_runs_info(run_config_names: List[str], validation_score_names: List[str], plot_losses: List[bool]) -> List[RunInfo]
+
+
+.. py:function:: plot_runs(run_config_base_names, smooth=100, validation_scores=None, higher_is_betters=None, plot_losses=None, return_json=False)
+
+

@@ -1,0 +1,192 @@
+:py:mod:`dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores`
+===================================================================================
+
+.. py:module:: dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores
+   dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores
+
+
+
+
+.. py:class:: BinarySegmentationEvaluationScores
+
+
+
+
+   Base class for evaluation scores.
+
+   .. py:attribute:: dice
+      :type: float
+
+      
+
+   .. py:attribute:: jaccard
+      :type: float
+
+      
+
+   .. py:attribute:: hausdorff
+      :type: float
+
+      
+
+   .. py:attribute:: false_negative_rate
+      :type: float
+
+      
+
+   .. py:attribute:: false_negative_rate_with_tolerance
+      :type: float
+
+      
+
+   .. py:attribute:: false_positive_rate
+      :type: float
+
+      
+
+   .. py:attribute:: false_discovery_rate
+      :type: float
+
+      
+
+   .. py:attribute:: false_positive_rate_with_tolerance
+      :type: float
+
+      
+
+   .. py:attribute:: voi
+      :type: float
+
+      
+
+   .. py:attribute:: mean_false_distance
+      :type: float
+
+      
+
+   .. py:attribute:: mean_false_negative_distance
+      :type: float
+
+      
+
+   .. py:attribute:: mean_false_positive_distance
+      :type: float
+
+      
+
+   .. py:attribute:: mean_false_distance_clipped
+      :type: float
+
+      
+
+   .. py:attribute:: mean_false_negative_distance_clipped
+      :type: float
+
+      
+
+   .. py:attribute:: mean_false_positive_distance_clipped
+      :type: float
+
+      
+
+   .. py:attribute:: precision_with_tolerance
+      :type: float
+
+      
+
+   .. py:attribute:: recall_with_tolerance
+      :type: float
+
+      
+
+   .. py:attribute:: f1_score_with_tolerance
+      :type: float
+
+      
+
+   .. py:attribute:: precision
+      :type: float
+
+      
+
+   .. py:attribute:: recall
+      :type: float
+
+      
+
+   .. py:attribute:: f1_score
+      :type: float
+
+      
+
+   .. py:attribute:: criteria
+      :value: ['dice', 'jaccard', 'hausdorff', 'false_negative_rate', 'false_negative_rate_with_tolerance',...
+
+      
+
+   .. py:method:: store_best(criterion: str) -> bool
+      :staticmethod:
+
+      Whether or not to save the best validation block and model
+      weights for this criterion.
+
+
+   .. py:method:: higher_is_better(criterion: str) -> bool
+      :staticmethod:
+
+      Wether or not higher is better for this criterion.
+
+
+   .. py:method:: bounds(criterion: str) -> Tuple[float, float]
+      :staticmethod:
+
+      The bounds for this criterion
+
+
+
+.. py:class:: MultiChannelBinarySegmentationEvaluationScores
+
+
+
+
+   Base class for evaluation scores.
+
+   .. py:property:: criteria
+
+
+   .. py:attribute:: channel_scores
+      :type: List[Tuple[str, BinarySegmentationEvaluationScores]]
+
+      
+
+   .. py:method:: higher_is_better(criterion: str) -> bool
+      :staticmethod:
+
+      Wether or not higher is better for this criterion.
+
+
+   .. py:method:: store_best(criterion: str) -> bool
+      :staticmethod:
+
+      Whether or not to save the best validation block and model
+      weights for this criterion.
+
+
+   .. py:method:: bounds(criterion: str) -> Tuple[float, float]
+      :staticmethod:
+
+      The bounds for this criterion
+
+
+

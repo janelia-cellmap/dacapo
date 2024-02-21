@@ -1,0 +1,212 @@
+:py:mod:`dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator`
+===========================================================================
+
+.. py:module:: dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator
+   dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator
+   dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.logger
+   dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BG
+
+
+.. py:data:: logger
+
+   
+
+.. py:data:: BG
+   :value: 0
+
+   
+
+.. py:class:: BinarySegmentationEvaluator(clip_distance: float, tol_distance: float, channels: List[str])
+
+
+
+
+   Given a binary segmentation, compute various metrics to determine their similarity.
+
+   .. py:property:: score
+
+      The abstract property to get the overall score of the evaluation.
+
+      :returns: The overall evaluation scores.
+      :rtype: EvaluationScores
+
+   .. py:attribute:: criteria
+      :value: ['jaccard', 'voi']
+
+      
+
+   .. py:method:: evaluate(output_array_identifier, evaluation_array)
+
+      Compares and evaluates the output array against the evaluation array.
+
+      :param output_array: The output data array to evaluate
+      :type output_array: Array
+      :param eval_array: The evaluation data array to compare with the output
+      :type eval_array: Array
+
+      :returns: The detailed evaluation scores after the comparison.
+      :rtype: EvaluationScores
+
+
+
+.. py:class:: ArrayEvaluator(truth_binary, test_binary, truth_empty, test_empty, metric_params, resolution)
+
+
+   .. py:method:: truth_itk()
+
+
+   .. py:method:: test_itk()
+
+
+   .. py:method:: overlap_measures_filter()
+
+
+   .. py:method:: dice()
+
+
+   .. py:method:: jaccard()
+
+
+   .. py:method:: hausdorff()
+
+
+   .. py:method:: false_negative_rate()
+
+
+   .. py:method:: false_positive_rate()
+
+
+   .. py:method:: false_discovery_rate()
+
+
+   .. py:method:: precision()
+
+
+   .. py:method:: recall()
+
+
+   .. py:method:: f1_score()
+
+
+   .. py:method:: voi()
+
+
+   .. py:method:: mean_false_distance()
+
+
+   .. py:method:: mean_false_negative_distance()
+
+
+   .. py:method:: mean_false_positive_distance()
+
+
+   .. py:method:: mean_false_distance_clipped()
+
+
+   .. py:method:: mean_false_negative_distance_clipped()
+
+
+   .. py:method:: mean_false_positive_distance_clipped()
+
+
+   .. py:method:: false_positive_rate_with_tolerance()
+
+
+   .. py:method:: false_negative_rate_with_tolerance()
+
+
+   .. py:method:: precision_with_tolerance()
+
+
+   .. py:method:: recall_with_tolerance()
+
+
+   .. py:method:: f1_score_with_tolerance()
+
+
+
+.. py:class:: CremiEvaluator(truth, test, sampling=(1, 1, 1), clip_distance=200, tol_distance=40)
+
+
+   .. py:method:: test_mask()
+
+
+   .. py:method:: truth_mask()
+
+
+   .. py:method:: test_edt()
+
+
+   .. py:method:: truth_edt()
+
+
+   .. py:method:: false_positive_distances()
+
+
+   .. py:method:: false_positives_with_tolerance()
+
+
+   .. py:method:: false_positive_rate_with_tolerance()
+
+
+   .. py:method:: false_negatives_with_tolerance()
+
+
+   .. py:method:: false_negative_rate_with_tolerance()
+
+
+   .. py:method:: true_positives_with_tolerance()
+
+
+   .. py:method:: precision_with_tolerance()
+
+
+   .. py:method:: recall_with_tolerance()
+
+
+   .. py:method:: f1_score_with_tolerance()
+
+
+   .. py:method:: mean_false_positive_distances_clipped()
+
+
+   .. py:method:: mean_false_negative_distances_clipped()
+
+
+   .. py:method:: mean_false_positive_distance()
+
+
+   .. py:method:: false_negative_distances()
+
+
+   .. py:method:: mean_false_negative_distance()
+
+
+   .. py:method:: mean_false_distance()
+
+
+   .. py:method:: mean_false_distance_clipped()
+
+
+

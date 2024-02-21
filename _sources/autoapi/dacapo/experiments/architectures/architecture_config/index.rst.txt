@@ -1,0 +1,48 @@
+:py:mod:`dacapo.experiments.architectures.architecture_config`
+==============================================================
+
+.. py:module:: dacapo.experiments.architectures.architecture_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.architectures.architecture_config.ArchitectureConfig
+
+
+
+
+.. py:class:: ArchitectureConfig
+
+
+   A class to represent the base configurations of any architecture.
+
+   .. attribute:: name
+
+      a unique name for the architecture.
+
+      :type: str
+
+   .. method:: verify()
+
+      validates the given architecture.
+
+   .. py:attribute:: name
+      :type: str
+
+      
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      A method to validate an architecture configuration.
+
+      :returns: * *bool* -- A flag indicating whether the config is valid or not.
+                * *str* -- A description of the architecture.
+
+
+

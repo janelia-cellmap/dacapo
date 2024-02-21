@@ -1,0 +1,144 @@
+:py:mod:`dacapo.store.mongo_config_store`
+=========================================
+
+.. py:module:: dacapo.store.mongo_config_store
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.store.mongo_config_store.MongoConfigStore
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.store.mongo_config_store.logger
+
+
+.. py:data:: logger
+
+   
+
+.. py:class:: MongoConfigStore(db_host, db_name)
+
+
+
+
+   A MongoDB store for configurations. Used to store and retrieve
+   configurations for runs, tasks, architectures, trainers, and datasets.
+
+   .. py:method:: store_run_config(run_config)
+
+      Store a run config. This should also store the configs that are part
+      of the run config (i.e., task, architecture, trainer, and dataset
+      config).
+
+
+   .. py:method:: retrieve_run_config(run_name)
+
+      Retrieve a run config from a run name.
+
+
+   .. py:method:: delete_run_config(run_name)
+
+
+   .. py:method:: retrieve_run_config_names(task_names=None, datasplit_names=None, architecture_names=None, trainer_names=None)
+
+      Retrieve all run config names.
+
+
+   .. py:method:: store_task_config(task_config)
+
+      Store a task config.
+
+
+   .. py:method:: retrieve_task_config(task_name)
+
+      Retrieve a task config from a task name.
+
+
+   .. py:method:: retrieve_task_config_names()
+
+      Retrieve all task config names.
+
+
+   .. py:method:: store_architecture_config(architecture_config)
+
+      Store a architecture config.
+
+
+   .. py:method:: retrieve_architecture_config(architecture_name)
+
+      Retrieve a architecture config from a architecture name.
+
+
+   .. py:method:: retrieve_architecture_config_names()
+
+      Retrieve all architecture config names.
+
+
+   .. py:method:: store_trainer_config(trainer_config)
+
+      Store a trainer config.
+
+
+   .. py:method:: retrieve_trainer_config(trainer_name)
+
+      Retrieve a trainer config from a trainer name.
+
+
+   .. py:method:: retrieve_trainer_config_names()
+
+      Retrieve all trainer config names.
+
+
+   .. py:method:: store_datasplit_config(datasplit_config)
+
+      Store a datasplit config.
+
+
+   .. py:method:: retrieve_datasplit_config(datasplit_name)
+
+      Retrieve a datasplit config from a datasplit name.
+
+
+   .. py:method:: retrieve_datasplit_config_names()
+
+      Retrieve all datasplit names.
+
+
+   .. py:method:: store_dataset_config(dataset_config)
+
+
+   .. py:method:: retrieve_dataset_config(dataset_name)
+
+
+   .. py:method:: retrieve_dataset_config_names()
+
+
+   .. py:method:: store_array_config(array_config)
+
+      Store a array config.
+
+
+   .. py:method:: retrieve_array_config(array_name)
+
+      Retrieve a array config from a array name.
+
+
+   .. py:method:: retrieve_array_config_names()
+
+      Retrieve all array names.
+
+
+

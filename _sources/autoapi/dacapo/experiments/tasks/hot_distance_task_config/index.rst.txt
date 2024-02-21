@@ -1,0 +1,99 @@
+:py:mod:`dacapo.experiments.tasks.hot_distance_task_config`
+===========================================================
+
+.. py:module:: dacapo.experiments.tasks.hot_distance_task_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.hot_distance_task_config.HotDistanceTaskConfig
+
+
+
+
+.. py:class:: HotDistanceTaskConfig
+
+
+
+
+   Class for generating and evaluating signed distance transforms as a way of generating
+   segmentations for the Hot Distance task config.
+
+   .. attribute:: task_type
+
+      A reference to the Hot Distance Task class.
+
+   .. attribute:: channels
+
+      A list of channel names.
+
+      :type: List[str]
+
+   .. attribute:: clip_distance
+
+      Maximum distance to consider for false positive/negatives.
+
+      :type: float
+
+   .. attribute:: tol_distance
+
+      Tolerance distance for counting false positives/negatives.
+
+      :type: float
+
+   .. attribute:: scale_factor
+
+      The amount by which to scale distances before applying
+      a tanh normalization. Defaults to 1.
+
+      :type: float
+
+   .. attribute:: mask_distances
+
+      Whether or not to mask out regions where the true distance to
+      object boundary cannot be known. Defaults to False
+
+      :type: bool
+
+   .. note::
+
+      Generating distance transforms over regular affinities provides you with a denser
+      signal, i.e., one misclassified pixel in an affinity prediction can merge 2
+      otherwise very distinct objects, a situation that cannot happen with distances.
+
+   .. py:attribute:: task_type
+
+      
+
+   .. py:attribute:: channels
+      :type: List[str]
+
+      
+
+   .. py:attribute:: clip_distance
+      :type: float
+
+      
+
+   .. py:attribute:: tol_distance
+      :type: float
+
+      
+
+   .. py:attribute:: scale_factor
+      :type: float
+
+      
+
+   .. py:attribute:: mask_distances
+      :type: bool
+
+      
+
+

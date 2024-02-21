@@ -1,0 +1,51 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.resampled_array_config`
+==============================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.resampled_array_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig
+
+
+
+
+.. py:class:: ResampledArrayConfig
+
+
+
+
+   This array will up or down sample an array into the desired voxel size.
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_config
+      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+
+      
+
+   .. py:attribute:: upsample
+      :type: funlib.geometry.Coordinate
+
+      
+
+   .. py:attribute:: downsample
+      :type: funlib.geometry.Coordinate
+
+      
+
+   .. py:attribute:: interp_order
+      :type: bool
+
+      
+
+

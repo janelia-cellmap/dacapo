@@ -1,0 +1,64 @@
+:py:mod:`dacapo.experiments.tasks.evaluators.instance_evaluation_scores`
+========================================================================
+
+.. py:module:: dacapo.experiments.tasks.evaluators.instance_evaluation_scores
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores
+
+
+
+
+.. py:class:: InstanceEvaluationScores
+
+
+
+
+   Base class for evaluation scores.
+
+   .. py:property:: voi
+
+
+   .. py:attribute:: criteria
+      :value: ['voi_split', 'voi_merge', 'voi']
+
+      
+
+   .. py:attribute:: voi_split
+      :type: float
+
+      
+
+   .. py:attribute:: voi_merge
+      :type: float
+
+      
+
+   .. py:method:: higher_is_better(criterion: str) -> bool
+      :staticmethod:
+
+      Wether or not higher is better for this criterion.
+
+
+   .. py:method:: bounds(criterion: str) -> Tuple[float, float]
+      :staticmethod:
+
+      The bounds for this criterion
+
+
+   .. py:method:: store_best(criterion: str) -> bool
+      :staticmethod:
+
+      Whether or not to save the best validation block and model
+      weights for this criterion.
+
+
+

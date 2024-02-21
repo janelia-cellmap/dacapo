@@ -1,0 +1,75 @@
+:py:mod:`dacapo.experiments.tasks.one_hot_task`
+===============================================
+
+.. py:module:: dacapo.experiments.tasks.one_hot_task
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.one_hot_task.OxygenTask
+
+
+
+
+.. py:class:: OxygenTask(task_config)
+
+
+
+
+   The OxygenTask is a specialized implementation of the Task that models the behavior of oxygen
+   chemical potential in a given material. It includes a model, a data driver, a predictor,
+   a post-processor, and a barrier mechanism.
+
+   .. attribute:: barrier
+
+      An instance of SimpleBarrier that defines how to transport atoms
+
+      :type: SimpleBarrier
+
+   .. attribute:: through a barrier.
+
+      
+
+   .. attribute:: data_driver
+
+      An instance of OxygenDataDriver that drives and controls
+
+      :type: OxygenDataDriver
+
+   .. attribute:: the raw data relevant to the oxygen task.
+
+      
+
+   .. attribute:: model
+
+      A placeholder model for the oxygenchemical potential simulation.
+
+      :type: DummyModel
+
+   .. attribute:: post_processor
+
+      A post-processor that processes the output of the
+
+      :type: DummyPostProcessor
+
+   .. attribute:: prediction for consumption by other components.
+
+      
+
+   .. attribute:: predictor
+
+      A placeholder predictor that handles the prediction logic
+
+      :type: DummyPredictor
+
+   .. attribute:: based on the model and the input data.
+
+      
+
+

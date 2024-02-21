@@ -1,0 +1,51 @@
+:py:mod:`dacapo.compute_context.bsub`
+=====================================
+
+.. py:module:: dacapo.compute_context.bsub
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.compute_context.bsub.Bsub
+
+
+
+
+.. py:class:: Bsub
+
+
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:property:: device
+
+
+   .. py:attribute:: queue
+      :type: str
+
+      
+
+   .. py:attribute:: num_gpus
+      :type: int
+
+      
+
+   .. py:attribute:: num_cpus
+      :type: int
+
+      
+
+   .. py:attribute:: billing
+      :type: Optional[str]
+
+      
+
+

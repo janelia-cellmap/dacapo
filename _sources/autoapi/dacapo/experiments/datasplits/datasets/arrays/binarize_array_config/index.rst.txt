@@ -1,0 +1,47 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.binarize_array_config`
+=============================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.binarize_array_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.binarize_array_config.BinarizeArrayConfig
+
+
+
+
+.. py:class:: BinarizeArrayConfig
+
+
+
+
+   This config class provides the necessary configuration for turning an Annotated dataset into a
+   multi class binary classification problem
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_config
+      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+
+      
+
+   .. py:attribute:: groupings
+      :type: List[Tuple[str, List[int]]]
+
+      
+
+   .. py:attribute:: background
+      :type: int
+
+      
+
+

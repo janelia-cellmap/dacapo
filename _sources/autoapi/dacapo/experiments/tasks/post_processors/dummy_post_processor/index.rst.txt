@@ -1,0 +1,44 @@
+:py:mod:`dacapo.experiments.tasks.post_processors.dummy_post_processor`
+=======================================================================
+
+.. py:module:: dacapo.experiments.tasks.post_processors.dummy_post_processor
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor
+
+
+
+
+.. py:class:: DummyPostProcessor(detection_threshold: float)
+
+
+
+
+   Base class of all post-processors.
+
+   A post-processor takes a model's prediction and converts it into the final
+   output (e.g., per-voxel class probabilities into a semantic segmentation).
+
+   .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters]
+
+      Enumerate all possible parameters of this post-processor. Should
+      return instances of ``PostProcessorParameters``.
+
+
+   .. py:method:: set_prediction(prediction_array)
+
+
+   .. py:method:: process(parameters, output_array_identifier)
+
+      Convert predictions into the final output.
+
+
+

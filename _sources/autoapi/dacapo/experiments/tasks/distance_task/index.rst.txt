@@ -1,0 +1,61 @@
+:py:mod:`dacapo.experiments.tasks.distance_task`
+================================================
+
+.. py:module:: dacapo.experiments.tasks.distance_task
+
+.. autoapi-nested-parse::
+
+   Module for DistanceTask class of FunkeLab DaCaPo Python library.
+
+   This module contains the DistanceTask class, which is responsible for
+   creating a predictor, loss, post_processor and evaluator from the
+   given task_config.
+
+   Classes:
+       DistanceTask
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.distance_task.DistanceTask
+
+
+
+
+.. py:class:: DistanceTask(task_config)
+
+
+
+
+   DistanceTask is a subclass of Task for handling tasks associated
+   with Distance.
+
+   DistanceTask uses `DistancePredictor` for prediction, `MSELoss` for
+   computing loss, `ThresholdPostProcessor` for post-processing the
+   prediction, and `BinarySegmentationEvaluator` for evaluating the
+   prediction.
+
+   .. attribute:: predictor
+
+      DistancePredictor object
+
+   .. attribute:: loss
+
+      MSELoss object
+
+   .. attribute:: post_processor
+
+      ThresholdPostProcessor object
+
+   .. attribute:: evaluator
+
+      BinarySegmentationEvaluator object
+
+

@@ -1,0 +1,36 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.ones_array_config`
+=========================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.ones_array_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.ones_array_config.OnesArrayConfig
+
+
+
+
+.. py:class:: OnesArrayConfig
+
+
+
+
+   This array read data from the source array and then return a np.ones_like() version.
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_config
+      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+
+      
+
+

@@ -1,0 +1,72 @@
+:py:mod:`dacapo.experiments.tasks.affinities_task_config`
+=========================================================
+
+.. py:module:: dacapo.experiments.tasks.affinities_task_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig
+
+
+
+
+.. py:class:: AffinitiesTaskConfig
+
+
+
+
+   This is a Affinities task config used for generating and
+   evaluating voxel affinities for instance segmentations.
+
+   .. py:attribute:: task_type
+
+      
+
+   .. py:attribute:: neighborhood
+      :type: List[funlib.geometry.Coordinate]
+
+      
+
+   .. py:attribute:: lsds
+      :type: bool
+
+      
+
+   .. py:attribute:: lsds_to_affs_weight_ratio
+      :type: float
+
+      
+
+   .. py:attribute:: affs_weight_clipmin
+      :type: float
+
+      
+
+   .. py:attribute:: affs_weight_clipmax
+      :type: float
+
+      
+
+   .. py:attribute:: lsd_weight_clipmin
+      :type: float
+
+      
+
+   .. py:attribute:: lsd_weight_clipmax
+      :type: float
+
+      
+
+   .. py:attribute:: background_as_object
+      :type: bool
+
+      
+
+

@@ -1,0 +1,56 @@
+:py:mod:`dacapo.predict`
+========================
+
+.. py:module:: dacapo.predict
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.predict.predict
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.predict.logger
+
+
+.. py:data:: logger
+
+   
+
+.. py:function:: predict(run_name: str, iteration: int, input_container: pathlib.Path | str, input_dataset: str, output_path: pathlib.Path | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 30, output_dtype: numpy.dtype | str = np.uint8, compute_context: dacapo.compute_context.ComputeContext | str = LocalTorch(), overwrite: bool = True)
+
+   _summary_
+
+   :param run_name: _description_
+   :type run_name: str
+   :param iteration: _description_
+   :type iteration: int
+   :param input_container: _description_
+   :type input_container: Path | str
+   :param input_dataset: _description_
+   :type input_dataset: str
+   :param output_path: _description_
+   :type output_path: Path | str
+   :param output_roi: Defaults to None. If output roi is None,
+                      it will be set to the raw roi.
+   :type output_roi: Optional[str], optional
+   :param num_workers: _description_. Defaults to 30.
+   :type num_workers: int, optional
+   :param output_dtype: _description_. Defaults to np.uint8.
+   :type output_dtype: np.dtype | str, optional
+   :param overwrite: _description_. Defaults to True.
+   :type overwrite: bool, optional
+
+

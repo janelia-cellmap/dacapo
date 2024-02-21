@@ -1,0 +1,54 @@
+:py:mod:`dacapo.gp.dacapo_array_source`
+=======================================
+
+.. py:module:: dacapo.gp.dacapo_array_source
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.gp.dacapo_array_source.DaCapoArraySource
+
+
+
+
+.. py:class:: DaCapoArraySource(array: dacapo.experiments.datasplits.datasets.arrays.Array, key: gunpowder.ArrayKey)
+
+
+
+
+   A DaCapo Array source node
+
+   :param Array: The DaCapo Array to pull data from
+   :type Array: Array
+   :param key: The key to provide data into
+   :type key: ``gp.ArrayKey``
+
+   .. py:method:: setup()
+
+      To be implemented in subclasses.
+
+      Called during initialization of the DAG. Callees can assume that all
+      upstream providers are set up already.
+
+      In setup, call :func:`provides` to announce the arrays and points
+      provided by this node.
+
+
+   .. py:method:: provide(request)
+
+      To be implemented in subclasses.
+
+      This function takes a :class:`BatchRequest` and should return the
+      corresponding :class:`Batch`.
+
+      :param request: The request to process.
+      :type request: :class:`BatchRequest`
+
+
+

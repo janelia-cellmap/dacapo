@@ -1,0 +1,166 @@
+:py:mod:`dacapo.utils.voi`
+==========================
+
+.. py:module:: dacapo.utils.voi
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.utils.voi.voi
+   dacapo.utils.voi.split_vi
+   dacapo.utils.voi.vi_tables
+   dacapo.utils.voi.contingency_table
+   dacapo.utils.voi.divide_columns
+   dacapo.utils.voi.divide_rows
+   dacapo.utils.voi.xlogx
+
+
+
+.. py:function:: voi(reconstruction, groundtruth, ignore_reconstruction=[], ignore_groundtruth=[0])
+
+   Evaluate groundtruth comparison by returning conditional entropies.
+
+   Calculates variation of information metric between reconstruction and groundtruth.
+
+   :param reconstruction: A candidate segmentation.
+   :type reconstruction: np.ndarray
+   :param groundtruth: The ground truth segmentation.
+   :type groundtruth: np.ndarray
+   :param ignore_reconstruction: A list of labels to ignore in the reconstruction. Default is an empty list.
+   :type ignore_reconstruction: list, optional
+   :param ignore_groundtruth: A list of labels to ignore in the groundtruth. By default, only the label 0 will be ignored.
+   :type ignore_groundtruth: list, optional
+
+   :returns: The variation of information split and merge error, i.e., H(X|Y) and H(Y|X).
+   :rtype: float
+
+
+.. py:function:: split_vi(x, y=None, ignore_x=[0], ignore_y=[0])
+
+   Return symmetric conditional entropies associated with the VI.
+
+   This function calculates the symmetric conditional entropies in the Variation of Information (VI)
+   metric between the inputs x and y. If y is None, x is assumed to be a contingency table.
+
+   If y is None, x is assumed to be a contingency table.
+
+   :param x: Label field (int type) or contingency table (float).
+   :type x: np.ndarray
+   :param y: A label field to compare to `x`.
+   :type y: np.ndarray of int, same shape as x, optional
+   :param ignore_x: Any points having a label in this list are ignored in the evaluation.
+                    Ignore 0-labeled points by default.
+   :type ignore_x: list of int, optional
+   :param ignore_y: Any points having a label in this list are ignored in the evaluation.
+                    Ignore 0-labeled points by default.
+   :type ignore_y: list of int, optional
+
+   :returns: [hygx.sum(), hxgy.sum()]
+             The conditional entropies of Y|X and X|Y.
+   :rtype: np.ndarray of float, shape (2,)
+
+
+.. py:function:: vi_tables(x, y=None, ignore_x=[0], ignore_y=[0])
+
+   Return probability tables used in VI calculation.
+
+   Returns the reference and target probability distributions and other derived quantities
+   used in the calculation of the Variation of Information metric.
+
+   If y is None, x is assumed to be a contingency table.
+
+   :param x: Either x and y are provided as equal-shaped np.ndarray label fields
+             (int type), or y is not provided and x is a contingency table
+             (sparse.csc_matrix) that may or may not sum to 1.
+   :type x: np.ndarray
+   :param y: Either x and y are provided as equal-shaped np.ndarray label fields
+             (int type), or y is not provided and x is a contingency table
+             (sparse.csc_matrix) that may or may not sum to 1.
+   :type y: np.ndarray
+   :param ignore_x: Rows and columns (respectively) to ignore in the contingency table.
+                    These are labels that are not counted when evaluating VI.
+   :type ignore_x: list of int, optional
+   :param ignore_y: Rows and columns (respectively) to ignore in the contingency table.
+                    These are labels that are not counted when evaluating VI.
+   :type ignore_y: list of int, optional
+
+   :returns: pxy (sparse.csc_matrix of float): The normalized contingency table.
+             px, py, hxgy, hygx, lpygx, lpxgy : np.ndarray of float
+             The proportions of each label in `x` and `y` (`px`, `py`), the
+             per-segment conditional entropies of `x` given `y` and vice-versa.
+   :rtype: list
+
+
+.. py:function:: contingency_table(seg, gt, ignore_seg=[0], ignore_gt=[0], norm=True)
+
+   Return the contingency table for all regions in matched segmentations.
+
+   :param seg: A candidate segmentation.
+   :type seg: np.ndarray, int type, arbitrary shape
+   :param gt: The ground truth segmentation.
+   :type gt: np.ndarray, int type, same shape as `seg`
+   :param ignore_seg: Values to ignore in `seg`.
+   :type ignore_seg: list of int, optional
+   :param ignore_gt: Values to ignore in `gt`.
+   :type ignore_gt: list of int, optional
+   :param norm: Whether to normalize the table so that it sums to 1.
+   :type norm: bool, optional
+
+   :returns: A contingency table.
+   :rtype: scipy.sparse.csc_matrix
+
+
+.. py:function:: divide_columns(matrix, row, in_place=False)
+
+   Divide each column of `matrix` by the corresponding element in `row`.
+
+   :param matrix: The input matrix.
+   :type matrix: np.ndarray, scipy.sparse.csc_matrix or csr_matrix, shape (M, N)
+   :param column: The row dividing `matrix`.
+   :type column: a 1D np.ndarray, shape (N,)
+   :param in_place: Do the computation in-place.
+   :type in_place: bool (optional, default False)
+
+   :returns: The result of the row-wise division.
+   :rtype: same type as `matrix`
+
+
+.. py:function:: divide_rows(matrix, column, in_place=False)
+
+   Divide each row of `matrix` by the corresponding element in `column`.
+
+   :param matrix: The input matrix.
+   :type matrix: np.ndarray, scipy.sparse.csc_matrix or csr_matrix, shape (M, N)
+   :param column: The column dividing `matrix`.
+   :type column: a 1D np.ndarray, shape (M,)
+   :param in_place: Do the computation in-place.
+   :type in_place: bool (optional, default False)
+
+   :returns: The result of the row-wise division.
+   :rtype: same type as `matrix`
+
+
+.. py:function:: xlogx(x, out=None, in_place=False)
+
+   Compute x * log_2(x).
+
+   We define 0 * log_2(0) = 0
+
+   :param x: The input array.
+   :type x: np.ndarray or scipy.sparse.csc_matrix or csr_matrix
+   :param out: If provided, use this array/matrix for the result.
+   :type out: same type as x (optional)
+   :param in_place: Operate directly on x.
+   :type in_place: bool (optional, default False)
+
+   :returns: Result of x * log_2(x).
+   :rtype: same type as x
+
+

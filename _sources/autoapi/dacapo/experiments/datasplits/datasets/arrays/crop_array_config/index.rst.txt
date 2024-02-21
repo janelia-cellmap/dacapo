@@ -1,0 +1,43 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.crop_array_config`
+=========================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.crop_array_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.crop_array_config.CropArrayConfig
+
+
+
+
+.. py:class:: CropArrayConfig
+
+
+
+
+   This config class provides the necessary configuration for cropping an
+   Array to a smaller ROI. Especially useful for validation volumes that may
+   be too large for quick evaluation
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_config
+      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+
+      
+
+   .. py:attribute:: roi
+      :type: funlib.geometry.Roi
+
+      
+
+

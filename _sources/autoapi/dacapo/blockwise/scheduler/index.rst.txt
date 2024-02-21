@@ -1,0 +1,51 @@
+:py:mod:`dacapo.blockwise.scheduler`
+====================================
+
+.. py:module:: dacapo.blockwise.scheduler
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.blockwise.scheduler.run_blockwise
+   dacapo.blockwise.scheduler.segment_blockwise
+
+
+
+.. py:function:: run_blockwise(worker_file: str | pathlib.Path, compute_context: dacapo.compute_context.ComputeContext | str, total_roi: funlib.geometry.Roi, read_roi: funlib.geometry.Roi, write_roi: funlib.geometry.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, *args, **kwargs)
+
+   Run a function in parallel over a large volume.
+
+   :param worker_file: The path to the file containing the necessary worker functions:
+                       ``spawn_worker`` and ``start_worker``.
+                       Optionally, the file can also contain a ``check_function`` and an ``init_callback_fn``.
+   :type worker_file: ``str`` or ``Path``
+   :param total_roi: The ROI to process.
+   :type total_roi: ``Roi``
+   :param read_roi: The ROI to read from for a block.
+   :type read_roi: ``Roi``
+   :param write_roi: The ROI to write to for a block.
+   :type write_roi: ``Roi``
+   :param num_workers: The number of workers to use.
+   :type num_workers: ``int``
+   :param max_retries: The maximum number of times a task will be retried if failed
+                       (either due to failed post check or application crashes or network
+                       failure)
+   :type max_retries: ``int``
+   :param compute_context: The compute context to use for parallelization.
+   :type compute_context: ``ComputeContext``
+   :param \*args: Additional positional arguments to pass to ``worker_function``.
+   :param \*\*kwargs: Additional keyword arguments to pass to ``worker_function``.
+
+   :returns: ``Bool``.
+
+
+.. py:function:: segment_blockwise(segment_function_file: str or Path, compute_context: dacapo.compute_context.ComputeContext | str, context: funlib.geometry.Coordinate, total_roi: funlib.geometry.Roi, read_roi: funlib.geometry.Roi, write_roi: funlib.geometry.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, tmp_prefix='tmp', *args, **kwargs)
+
+

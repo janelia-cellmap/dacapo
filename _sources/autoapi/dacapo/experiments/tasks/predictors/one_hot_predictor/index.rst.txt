@@ -1,0 +1,83 @@
+:py:mod:`dacapo.experiments.tasks.predictors.one_hot_predictor`
+===============================================================
+
+.. py:module:: dacapo.experiments.tasks.predictors.one_hot_predictor
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.predictors.one_hot_predictor.logger
+
+
+.. py:data:: logger
+
+   
+
+.. py:class:: OneHotPredictor(classes: List[str])
+
+
+
+
+   An abstract class that serves as a blueprint for all the specific predictors.
+
+   .. attribute:: output_array_type
+
+      A property which is expected to be implemented in subclasses.
+
+   .. py:property:: embedding_dims
+
+
+   .. py:property:: output_array_type
+
+      Subclasses should implement this method to define the type of array output by the predictor.
+
+   .. py:method:: create_model(architecture)
+
+      To create a model with the given training architecture.
+
+      :param architecture: An instance of class Architecture, to define training architecture for the model.
+
+      :returns: An instance of class Model with the designed architecture.
+
+
+   .. py:method:: create_target(gt)
+
+      Creates target for training based on ground-truth array.
+
+      :param gt: An instance of class Array, representing ground-truth values.
+
+      :returns: Instance of Array class, representing target for training.
+
+
+   .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
+
+      Creates a weight array, using a ground-truth and an associated target array.
+
+      :param gt: Ground Truth array.
+      :param target: Target array.
+      :param mask: Associated mask array.
+      :param moving_class_counts: Counts of moving classes.
+
+      :returns: Tuple containing Array instance with weight array and any additional returned value.
+
+
+   .. py:method:: process(labels: numpy.ndarray)
+
+
+

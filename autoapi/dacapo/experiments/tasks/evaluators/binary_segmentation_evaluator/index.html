@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator &mdash; DaCapo  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" />
+    <link rel="next" title="dacapo.experiments.tasks.evaluators.dummy_evaluation_scores" href="../dummy_evaluation_scores/index.html" />
+    <link rel="prev" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores" href="../binary_segmentation_evaluation_scores/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../../index.html" class="icon icon-home">
+            DaCapo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">DaCapo API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ext/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.ext</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../gp/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../cli.html">CLI</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">DaCapo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.evaluators</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../../_sources/autoapi/dacapo/experiments/tasks/evaluators/binary_segmentation_evaluator/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator">
+<span id="dacapo-experiments-tasks-evaluators-binary-segmentation-evaluator"></span><h1><a class="reference internal" href="#module-dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator</span></code></a><a class="headerlink" href="#module-dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator" title="Link to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinarySegmentationEvaluator</span></code></a></p></td>
+<td><p>Given a binary segmentation, compute various metrics to determine their similarity.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArrayEvaluator</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CremiEvaluator</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.logger" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BG" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BG</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.logger">
+<span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BG">
+<span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.</span></span><span class="sig-name descname"><span class="pre">BG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BG" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.</span></span><span class="sig-name descname"><span class="pre">BinarySegmentationEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clip_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator" title="Link to this definition"></a></dt>
+<dd><p>Given a binary segmentation, compute various metrics to determine their similarity.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.score">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.score" title="Link to this definition"></a></dt>
+<dd><p>The abstract property to get the overall score of the evaluation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The overall evaluation scores.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores" title="dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores">EvaluationScores</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.criteria">
+<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['jaccard',</span> <span class="pre">'voi']</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.criteria" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Compares and evaluates the output array against the evaluation array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_array</strong> (<a class="reference internal" href="../../../datasplits/datasets/arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><em>Array</em></a>) – The output data array to evaluate</p></li>
+<li><p><strong>eval_array</strong> (<a class="reference internal" href="../../../datasplits/datasets/arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><em>Array</em></a>) – The evaluation data array to compare with the output</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The detailed evaluation scores after the comparison.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores" title="dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores">EvaluationScores</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.</span></span><span class="sig-name descname"><span class="pre">ArrayEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">truth_binary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_binary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truth_empty</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_empty</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator" title="Link to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.truth_itk">
+<span class="sig-name descname"><span class="pre">truth_itk</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.truth_itk" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.test_itk">
+<span class="sig-name descname"><span class="pre">test_itk</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.test_itk" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.overlap_measures_filter">
+<span class="sig-name descname"><span class="pre">overlap_measures_filter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.overlap_measures_filter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.dice">
+<span class="sig-name descname"><span class="pre">dice</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.dice" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.jaccard">
+<span class="sig-name descname"><span class="pre">jaccard</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.jaccard" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.hausdorff">
+<span class="sig-name descname"><span class="pre">hausdorff</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.hausdorff" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_negative_rate">
+<span class="sig-name descname"><span class="pre">false_negative_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_negative_rate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_positive_rate">
+<span class="sig-name descname"><span class="pre">false_positive_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_positive_rate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_discovery_rate">
+<span class="sig-name descname"><span class="pre">false_discovery_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_discovery_rate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.precision">
+<span class="sig-name descname"><span class="pre">precision</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.precision" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.recall">
+<span class="sig-name descname"><span class="pre">recall</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.recall" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.f1_score">
+<span class="sig-name descname"><span class="pre">f1_score</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.f1_score" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.voi">
+<span class="sig-name descname"><span class="pre">voi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.voi" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_distance">
+<span class="sig-name descname"><span class="pre">mean_false_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_distance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_negative_distance">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_negative_distance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_positive_distance">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_positive_distance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_distance_clipped">
+<span class="sig-name descname"><span class="pre">mean_false_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_distance_clipped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_negative_distance_clipped">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_negative_distance_clipped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_positive_distance_clipped">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_positive_distance_clipped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_positive_rate_with_tolerance">
+<span class="sig-name descname"><span class="pre">false_positive_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_positive_rate_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_negative_rate_with_tolerance">
+<span class="sig-name descname"><span class="pre">false_negative_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_negative_rate_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.precision_with_tolerance">
+<span class="sig-name descname"><span class="pre">precision_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.precision_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.recall_with_tolerance">
+<span class="sig-name descname"><span class="pre">recall_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.recall_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.f1_score_with_tolerance">
+<span class="sig-name descname"><span class="pre">f1_score_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.f1_score_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.</span></span><span class="sig-name descname"><span class="pre">CremiEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">1,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator" title="Link to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test_mask">
+<span class="sig-name descname"><span class="pre">test_mask</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test_mask" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.truth_mask">
+<span class="sig-name descname"><span class="pre">truth_mask</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.truth_mask" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test_edt">
+<span class="sig-name descname"><span class="pre">test_edt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test_edt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.truth_edt">
+<span class="sig-name descname"><span class="pre">truth_edt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.truth_edt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_positive_distances">
+<span class="sig-name descname"><span class="pre">false_positive_distances</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_positive_distances" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_positives_with_tolerance">
+<span class="sig-name descname"><span class="pre">false_positives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_positives_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_positive_rate_with_tolerance">
+<span class="sig-name descname"><span class="pre">false_positive_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_positive_rate_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_negatives_with_tolerance">
+<span class="sig-name descname"><span class="pre">false_negatives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_negatives_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_negative_rate_with_tolerance">
+<span class="sig-name descname"><span class="pre">false_negative_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_negative_rate_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.true_positives_with_tolerance">
+<span class="sig-name descname"><span class="pre">true_positives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.true_positives_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.precision_with_tolerance">
+<span class="sig-name descname"><span class="pre">precision_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.precision_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.recall_with_tolerance">
+<span class="sig-name descname"><span class="pre">recall_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.recall_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.f1_score_with_tolerance">
+<span class="sig-name descname"><span class="pre">f1_score_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.f1_score_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_positive_distances_clipped">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distances_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_positive_distances_clipped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_negative_distances_clipped">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distances_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_negative_distances_clipped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_positive_distance">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_positive_distance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_negative_distances">
+<span class="sig-name descname"><span class="pre">false_negative_distances</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_negative_distances" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_negative_distance">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_negative_distance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_distance">
+<span class="sig-name descname"><span class="pre">mean_false_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_distance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_distance_clipped">
+<span class="sig-name descname"><span class="pre">mean_false_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_distance_clipped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../binary_segmentation_evaluation_scores/index.html" class="btn btn-neutral float-left" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../dummy_evaluation_scores/index.html" class="btn btn-neutral float-right" title="dacapo.experiments.tasks.evaluators.dummy_evaluation_scores" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, William Patton, David Ackerman, Jan Funke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

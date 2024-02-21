@@ -1,0 +1,45 @@
+:py:mod:`dacapo.experiments.trainers.gp_augments.augment_config`
+================================================================
+
+.. py:module:: dacapo.experiments.trainers.gp_augments.augment_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.trainers.gp_augments.augment_config.AugmentConfig
+
+
+
+
+.. py:class:: AugmentConfig
+
+
+
+
+   Abstraction class for augmentation configurations in gunpowder.
+   Each augmentation must have a configuration class derived from this.
+
+   .. py:method:: node(raw_key: gunpowder.ArrayKey, gt_key: gunpowder.ArrayKey, mask_key: gunpowder.ArrayKey) -> gunpowder.BatchFilter
+      :abstractmethod:
+
+      Create a gunpowder node that applies this augmentation.
+
+      :param raw_key: The key for the raw data array.
+      :type raw_key: gp.ArrayKey
+      :param gt_key: The key for the ground truth data array.
+      :type gt_key: gp.ArrayKey
+      :param mask_key: The key for the masking data array.
+      :type mask_key: gp.ArrayKey
+
+      :returns: The resulting gunpowder node that applies
+                this augmentation.
+      :rtype: gp.BatchFilter
+
+
+

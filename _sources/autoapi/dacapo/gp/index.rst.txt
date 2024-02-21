@@ -1,0 +1,453 @@
+:py:mod:`dacapo.gp`
+===================
+
+.. py:module:: dacapo.gp
+
+.. autoapi-nested-parse::
+
+   dacapo.__init__.py
+   ------------------
+
+   This module is used to initialize the dacapo module. It imports several core components of the dacapo library including DaCapoArraySource, DaCapoTargetFilter, GammaAugment, ElasticAugment, RejectIfEmpty, CopyMask, GraphSource and Product.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   copy/index.rst
+   dacapo_array_source/index.rst
+   dacapo_create_target/index.rst
+   dacapo_points_source/index.rst
+   elastic_augment_fuse/index.rst
+   gamma_noise/index.rst
+   product/index.rst
+   reject_if_empty/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.gp.DaCapoArraySource
+   dacapo.gp.DaCapoTargetFilter
+   dacapo.gp.GammaAugment
+   dacapo.gp.ElasticAugment
+   dacapo.gp.RejectIfEmpty
+   dacapo.gp.CopyMask
+   dacapo.gp.GraphSource
+   dacapo.gp.Product
+
+
+
+
+.. py:class:: DaCapoArraySource(array: dacapo.experiments.datasplits.datasets.arrays.Array, key: gunpowder.ArrayKey)
+
+
+
+
+   A DaCapo Array source node
+
+   :param Array: The DaCapo Array to pull data from
+   :type Array: Array
+   :param key: The key to provide data into
+   :type key: ``gp.ArrayKey``
+
+   .. py:method:: setup()
+
+      To be implemented in subclasses.
+
+      Called during initialization of the DAG. Callees can assume that all
+      upstream providers are set up already.
+
+      In setup, call :func:`provides` to announce the arrays and points
+      provided by this node.
+
+
+   .. py:method:: provide(request)
+
+      To be implemented in subclasses.
+
+      This function takes a :class:`BatchRequest` and should return the
+      corresponding :class:`Batch`.
+
+      :param request: The request to process.
+      :type request: :class:`BatchRequest`
+
+
+
+.. py:class:: DaCapoTargetFilter(predictor: dacapo.experiments.tasks.predictors.Predictor, gt_key: gunpowder.ArrayKey, target_key: Optional[gunpowder.ArrayKey] = None, weights_key: Optional[gunpowder.ArrayKey] = None, mask_key: Optional[gunpowder.ArrayKey] = None)
+
+
+
+
+   A Gunpowder node for generating the target from the ground truth
+
+   :param Predictor: The DaCapo Predictor to use to transform gt into target
+   :type Predictor: Predictor
+   :param gt: The dataset to use for generating the target.
+   :type gt: ``Array``
+   :param target_key: The key with which to provide the target.
+   :type target_key: ``gp.ArrayKey``
+
+   .. py:method:: setup()
+
+      To be implemented in subclasses.
+
+      Called during initialization of the DAG. Callees can assume that all
+      upstream providers are set up already.
+
+      In setup, call :func:`provides` or :func:`updates` to announce the
+      arrays and points provided or changed by this node.
+
+
+   .. py:method:: prepare(request)
+
+      To be implemented in subclasses.
+
+      Prepare for a batch request. Should return a :class:`BatchRequest` of
+      needed dependencies. If None is returned, it will be assumed that all
+      of request is needed.
+
+
+   .. py:method:: process(batch, request)
+
+      To be implemented in subclasses.
+
+      Filter a batch, will be called after :func:`prepare`. Should return a
+      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
+      batch will replace the associated data in the original batch. If None is
+      returned it is assumed that the batch has been modified in place. ``request``
+      is the same as passed to :func:`prepare`, provided for convenience.
+
+      :param batch: The batch received from upstream to be modified by this node.
+      :type batch: :class:`Batch`
+      :param request: The request this node received. The updated batch should meet
+                      this request.
+      :type request: :class:`BatchRequest`
+
+
+
+.. py:class:: GammaAugment(arrays, gamma_min, gamma_max)
+
+
+
+
+   Class for applying gamma noise augmentation.
+
+   .. attribute:: arrays
+
+      An iterable collection of np arrays to augment
+
+   .. attribute:: gamma_min
+
+      A float representing the lower limit of gamma perturbation
+
+   .. attribute:: gamma_max
+
+      A float representing the upper limit of gamma perturbation
+
+   .. method:: setup()
+
+      Method to configure the internal state of the class
+
+   .. method:: process()
+
+      Method to apply gamma noise to the desired arrays
+
+   .. method:: __augment()
+
+      Private method to perform the actual augmentation
+      
+
+   .. py:method:: setup()
+
+      Configuring the internal state by iterating over arrays.
+
+
+   .. py:method:: process(batch, request)
+
+      Method to apply gamma noise to the desired arrays.
+
+      :param batch: The input batch to be processed.
+      :param request: An object which holds the requested output location.
+
+
+
+.. py:class:: ElasticAugment(control_point_spacing, control_point_displacement_sigma, rotation_interval, subsample=1, augmentation_probability=1.0, seed=None, uniform_3d_rotation=False)
+
+
+
+
+   Elasticly deform a batch. Requests larger batches upstream to avoid data
+   loss due to rotation and jitter.
+
+   :param control_point_spacing: Distance between control points for the elastic deformation, in
+                                 voxels per dimension.
+   :type control_point_spacing: ``tuple`` of ``int``
+   :param control_point_displacement_sigma: Standard deviation of control point displacement distribution, in world coordinates.
+   :type control_point_displacement_sigma: ``tuple`` of ``float``
+   :param rotation_interval: Interval to randomly sample rotation angles from (0, 2PI).
+   :type rotation_interval: ``tuple`` of two ``floats``
+   :param subsample: Instead of creating an elastic transformation on the full
+                     resolution, create one sub-sampled by the given factor, and linearly
+                     interpolate to obtain the full resolution transformation. This can
+                     significantly speed up this node, at the expense of having visible
+                     piecewise linear deformations for large factors. Usually, a factor
+                     of 4 can safely be used without noticeable changes. However, the
+                     default is 1 (i.e., no sub-sampling).
+   :type subsample: ``int``
+   :param seed: Set random state for reproducible results (tests only, do not use
+                in production code!!)
+   :type seed: ``int``
+
+   .. py:method:: setup()
+
+      To be implemented in subclasses.
+
+      Called during initialization of the DAG. Callees can assume that all
+      upstream providers are set up already.
+
+      In setup, call :func:`provides` or :func:`updates` to announce the
+      arrays and points provided or changed by this node.
+
+
+   .. py:method:: prepare(request)
+
+      To be implemented in subclasses.
+
+      Prepare for a batch request. Should return a :class:`BatchRequest` of
+      needed dependencies. If None is returned, it will be assumed that all
+      of request is needed.
+
+
+   .. py:method:: process(batch, request)
+
+      To be implemented in subclasses.
+
+      Filter a batch, will be called after :func:`prepare`. Should return a
+      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
+      batch will replace the associated data in the original batch. If None is
+      returned it is assumed that the batch has been modified in place. ``request``
+      is the same as passed to :func:`prepare`, provided for convenience.
+
+      :param batch: The batch received from upstream to be modified by this node.
+      :type batch: :class:`Batch`
+      :param request: The request this node received. The updated batch should meet
+                      this request.
+      :type request: :class:`BatchRequest`
+
+
+
+.. py:class:: RejectIfEmpty(gt=None, p=0.5, background=0)
+
+
+
+
+   Node to reject batches based on the mask's filled vs empty ratio.
+
+   :param gt: The ground truth array key that will be used.
+              Default is None.
+   :type gt: ArrayKey, optional
+   :param p: The probability threshold for rejecting batches until
+             a non-empty ground truth is found. Default is 0.5.
+   :type p: float, optional
+   :param background: The value representing the background in
+                      the ground truth data. Default is 0.
+   :type background: int, optional
+
+   This class inherits from :class: `BatchFilter`.
+
+   In the setup() method, it asserts that only one provider is in the upstream.
+   In the provide() method, it makes sure that the gt ArrayKey is in the request
+   provided. It then keeps requesting batches from the upstream until it finds
+   a batch where the ground truth is not empty, or the random number generated
+   is greater than the threshold p.
+
+   .. py:method:: setup()
+
+      Asserts that only one upstream provider is supported.
+
+
+   .. py:method:: provide(request)
+
+      Provide the processed batch.
+
+      :param request: The batch request.
+
+      :returns: The processed batch.
+      :rtype: Batch
+
+      Random seed is initialized based on the request's random seed. Setup the
+      timer. If there is no gt in the request, it will assert error. Continue
+      requesting batch from the upstream provider until the data's min and max
+      value is not same as background value or the random number generated is
+      less than p (the probability threshold). It returns the accepted batch
+      after stopping the timer.
+
+
+
+.. py:class:: CopyMask(array_key: gunpowder.ArrayKey, copy_key: gunpowder.ArrayKey, drop_channels: bool = False)
+
+
+
+
+   A class to copy a mask into a new key with the option to drop channels via max collapse.
+
+   .. attribute:: array_key
+
+      Original key of the array from where the mask will be copied.
+
+      :type: gp.ArrayKey
+
+   .. attribute:: copy_key
+
+      New key where the copied mask will reside.
+
+      :type: gp.ArrayKey
+
+   .. attribute:: drop_channels
+
+      If True, channels will be dropped via a max collapse.
+
+      :type: bool
+
+   .. method:: setup
+
+      Sets up the filter by enabling autoskip and providing the copied key.
+
+   .. method:: prepare
+
+      Prepares the filter by copying the request of copy_key into a dependency.
+
+   .. method:: process
+
+      Processes the batch by copying the mask from the array_key to the copy_key.
+      
+
+   .. py:method:: setup()
+
+      Sets up the filter by enabling autoskip and providing the copied key.
+
+
+   .. py:method:: prepare(request)
+
+      Prepares the filter by copying the request of copy_key into a dependency.
+
+      :param request: The request to prepare.
+
+      :returns: The prepared dependencies.
+      :rtype: deps
+
+
+   .. py:method:: process(batch, request)
+
+      Processes the batch by copying the mask from the array_key to the copy_key.
+
+      If "drop_channels" attribute is True, it performs max collapse.
+
+      :param batch: The batch to process.
+      :param request: The request for processing.
+
+      :returns: The processed outputs.
+      :rtype: outputs
+
+
+
+.. py:class:: GraphSource(key: gunpowder.GraphKey, graph: gunpowder.Graph)
+
+
+
+
+   A provider for serving graph data in gunpowder pipelines.
+
+   The Graph Source loads a single graph to serve to the pipeline based on
+   ROI requests it receives.
+
+   .. attribute:: key
+
+      The key of the graph to be served.
+
+      :type: gp.GraphKey
+
+   .. attribute:: graph
+
+      The graph to be served.
+
+      :type: gp.Graph
+
+   .. py:method:: setup()
+
+      Set up the provider. This function sets the provider to provide the
+      graph with the given key.
+
+
+   .. py:method:: provide(request)
+
+      Provides the graph for the requested ROI.
+
+      This method will be passively called by gunpowder to get a batch.
+      Depending on the request we provide a subgraph of our data, or nothing
+      at all.
+
+      :param request: BatchRequest with the same ROI for
+      :type request: gp.BatchRequest
+      :param each requested array and graph.:
+
+      :returns: The graph contained in a Batch.
+      :rtype: outputs (gp.Batch)
+
+
+
+.. py:class:: Product(x1_key: gunpowder.ArrayKey, x2_key: gunpowder.ArrayKey, y_key: gunpowder.ArrayKey)
+
+
+
+
+   multiplies two arrays
+
+   .. py:method:: setup()
+
+      To be implemented in subclasses.
+
+      Called during initialization of the DAG. Callees can assume that all
+      upstream providers are set up already.
+
+      In setup, call :func:`provides` or :func:`updates` to announce the
+      arrays and points provided or changed by this node.
+
+
+   .. py:method:: prepare(request)
+
+      To be implemented in subclasses.
+
+      Prepare for a batch request. Should return a :class:`BatchRequest` of
+      needed dependencies. If None is returned, it will be assumed that all
+      of request is needed.
+
+
+   .. py:method:: process(batch, request)
+
+      To be implemented in subclasses.
+
+      Filter a batch, will be called after :func:`prepare`. Should return a
+      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
+      batch will replace the associated data in the original batch. If None is
+      returned it is assumed that the batch has been modified in place. ``request``
+      is the same as passed to :func:`prepare`, provided for convenience.
+
+      :param batch: The batch received from upstream to be modified by this node.
+      :type batch: :class:`Batch`
+      :param request: The request this node received. The updated batch should meet
+                      this request.
+      :type request: :class:`BatchRequest`
+
+
+

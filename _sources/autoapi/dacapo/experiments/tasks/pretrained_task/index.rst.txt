@@ -1,0 +1,31 @@
+:py:mod:`dacapo.experiments.tasks.pretrained_task`
+==================================================
+
+.. py:module:: dacapo.experiments.tasks.pretrained_task
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.pretrained_task.PretrainedTask
+
+
+
+
+.. py:class:: PretrainedTask(task_config)
+
+
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:method:: create_model(architecture)
+
+
+

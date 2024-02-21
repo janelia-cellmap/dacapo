@@ -1,0 +1,60 @@
+:py:mod:`dacapo.experiments.trainers.dummy_trainer_config`
+==========================================================
+
+.. py:module:: dacapo.experiments.trainers.dummy_trainer_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.trainers.dummy_trainer_config.DummyTrainerConfig
+
+
+
+
+.. py:class:: DummyTrainerConfig
+
+
+
+
+   A subclass of TrainerConfig representing a dummy trainer configuration
+   used for testing.
+
+   .. attribute:: trainer_type
+
+      An instance of the DummyTrainer class.
+
+      :type: DummyTrainer
+
+   .. attribute:: mirror_augment
+
+      A dummy attribute with no actual purpose.
+
+      :type: bool
+
+   .. py:attribute:: trainer_type
+
+      
+
+   .. py:attribute:: mirror_augment
+      :type: bool
+
+      
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Dummy method to verify the configuration.
+
+      This method will always return False and an error message as this is
+      not meant to represent a valid trainer configuration.
+
+      :returns: False and a string indicating that the configuration is invalid.
+      :rtype: Tuple[bool, str]
+
+
+

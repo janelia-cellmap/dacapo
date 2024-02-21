@@ -1,0 +1,66 @@
+:py:mod:`dacapo.store.mongo_stats_store`
+========================================
+
+.. py:module:: dacapo.store.mongo_stats_store
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.store.mongo_stats_store.MongoStatsStore
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.store.mongo_stats_store.logger
+
+
+.. py:data:: logger
+
+   
+
+.. py:class:: MongoStatsStore(db_host, db_name)
+
+
+
+
+   A MongoDB store for run statistics. Used to store and retrieve training
+   statistics and validation scores.
+
+   .. py:method:: store_training_stats(run_name: str, stats: dacapo.experiments.TrainingStats)
+
+      Store training stats of a given run.
+
+
+   .. py:method:: retrieve_training_stats(run_name: str, subsample: bool = False) -> dacapo.experiments.TrainingStats
+
+      Retrieve the training stats for a given run.
+
+
+   .. py:method:: store_validation_iteration_scores(run_name: str, scores: dacapo.experiments.ValidationScores)
+
+      Store the validation iteration scores of a given run.
+
+
+   .. py:method:: retrieve_validation_iteration_scores(run_name: str, subsample: bool = False, validation_interval: Optional[int] = None) -> List[dacapo.experiments.ValidationIterationScores]
+
+      Retrieve the validation iteration scores for a given run.
+
+
+   .. py:method:: delete_validation_scores(run_name: str) -> None
+
+
+   .. py:method:: delete_training_stats(run_name: str) -> None
+
+
+

@@ -1,0 +1,105 @@
+:py:mod:`dacapo.experiments.starts`
+===================================
+
+.. py:module:: dacapo.experiments.starts
+
+.. autoapi-nested-parse::
+
+   This script aims to execute the start and start_config module from the
+   Funkelab dacapo python library without any modification of the code or explanation.
+   It is just a simple import from local modules. Each of these modules
+   handles different functionalities.
+
+
+   Start: Imported module that runs the initiation sequences for Dacapo operation.
+
+   StartConfig: Imported module for handling starting configuration functionalities for Dacapo.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   start/index.rst
+   start_config/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.starts.Start
+   dacapo.experiments.starts.StartConfig
+
+
+
+
+.. py:class:: Start(start_config)
+
+
+
+
+   This class interfaces with the dacapo store to retrieve and load the
+   weights of a model.
+
+   .. attribute:: run
+
+      The specified run to retrieve weights for the model.
+
+      :type: str
+
+   .. attribute:: criterion
+
+      The policy that was used to decide when to store the weights.
+
+      :type: str
+
+   .. py:method:: initialize_weights(model)
+
+      Retrieves the weights from the dacapo store and load them into
+      the model.
+
+      :param model: The model to which the weights are to be loaded.
+      :type model: obj
+
+      :raises RuntimeError: If weights of a non-existing or mismatched layer are being
+          loaded, a RuntimeError exception is thrown which is logged
+          and handled by loading only the common layers from weights.
+
+
+
+.. py:class:: StartConfig
+
+
+   A class to represent the configuration for running tasks.
+
+   .. attribute:: run
+
+      The run to be used as a starting point for tasks.
+
+      :type: str
+
+   .. attribute:: criterion
+
+      The criterion to be used for choosing weights from run.
+
+      :type: str
+
+   .. py:attribute:: run
+      :type: str
+
+      
+
+   .. py:attribute:: criterion
+      :type: str
+
+      
+
+

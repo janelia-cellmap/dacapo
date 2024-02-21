@@ -1,0 +1,85 @@
+:py:mod:`dacapo.experiments.validation_scores`
+==============================================
+
+.. py:module:: dacapo.experiments.validation_scores
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.validation_scores.ValidationScores
+
+
+
+
+.. py:class:: ValidationScores
+
+
+   .. py:property:: criteria
+      :type: List[str]
+
+
+   .. py:property:: parameter_names
+      :type: List[str]
+
+
+   .. py:attribute:: parameters
+      :type: List[dacapo.experiments.tasks.post_processors.PostProcessorParameters]
+
+      
+
+   .. py:attribute:: datasets
+      :type: List[dacapo.experiments.datasplits.datasets.Dataset]
+
+      
+
+   .. py:attribute:: evaluation_scores
+      :type: dacapo.experiments.tasks.evaluators.EvaluationScores
+
+      
+
+   .. py:attribute:: scores
+      :type: List[dacapo.experiments.validation_iteration_scores.ValidationIterationScores]
+
+      
+
+   .. py:method:: subscores(iteration_scores: List[dacapo.experiments.validation_iteration_scores.ValidationIterationScores]) -> ValidationScores
+
+
+   .. py:method:: add_iteration_scores(iteration_scores: dacapo.experiments.validation_iteration_scores.ValidationIterationScores) -> None
+
+
+   .. py:method:: delete_after(iteration: int) -> None
+
+
+   .. py:method:: validated_until() -> int
+
+      The number of iterations validated for (the maximum iteration plus
+      one).
+
+
+   .. py:method:: compare(existing_iteration_scores: List[dacapo.experiments.validation_iteration_scores.ValidationIterationScores]) -> Tuple[bool, int]
+
+      Compares iteration stats provided from elsewhere to scores we have saved locally.
+      Local scores take priority. If local scores are at a lower iteration than the
+      existing ones, delete the existing ones and replace with local.
+      If local iteration > existing iteration, just update existing scores with the last
+      overhanging local scores.
+
+
+   .. py:method:: to_xarray() -> xarray.DataArray
+
+
+   .. py:method:: get_best(data: xarray.DataArray, dim: str) -> Tuple[xarray.DataArray, xarray.DataArray]
+
+      Compute the Best scores along dimension "dim" per criterion.
+      Returns both the index associated with the best value, and the
+      best value in two seperate arrays.
+
+
+

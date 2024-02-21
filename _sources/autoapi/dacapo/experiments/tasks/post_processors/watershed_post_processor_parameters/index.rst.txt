@@ -1,0 +1,37 @@
+:py:mod:`dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters`
+======================================================================================
+
+.. py:module:: dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters
+
+
+
+
+.. py:class:: WatershedPostProcessorParameters
+
+
+
+
+   Base class for post-processor parameters.
+
+   .. py:attribute:: bias
+      :type: float
+
+      
+
+   .. py:attribute:: context
+      :type: funlib.geometry.Coordinate
+
+      
+
+

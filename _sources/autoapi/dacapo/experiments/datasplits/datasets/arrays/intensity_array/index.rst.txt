@@ -1,0 +1,77 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.intensity_array`
+=======================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.intensity_array
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray
+
+
+
+
+.. py:class:: IntensitiesArray(array_config)
+
+
+
+
+   This is wrapper another array that will normalize intensities to
+   the range (0, 1) and convert to float32. Use this if you have your
+   intensities stored as uint8 or similar and want your model to
+   have floats as input.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+      :type: int
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+

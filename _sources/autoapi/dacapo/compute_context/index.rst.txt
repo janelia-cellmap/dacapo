@@ -1,0 +1,108 @@
+:py:mod:`dacapo.compute_context`
+================================
+
+.. py:module:: dacapo.compute_context
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   bsub/index.rst
+   compute_context/index.rst
+   local_torch/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.compute_context.ComputeContext
+   dacapo.compute_context.LocalTorch
+   dacapo.compute_context.Bsub
+
+
+
+
+.. py:class:: ComputeContext
+
+
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:property:: device
+      :abstractmethod:
+
+
+   .. py:method:: wrap_command(command)
+
+
+   .. py:method:: execute(command)
+
+
+
+.. py:class:: LocalTorch
+
+
+
+
+   The LocalTorch class is a subclass of the ComputeContext class. It is decorated with the attrs library, which
+   provides a convenient way of structuring data. It focuses on determining the type of device on which torch
+   computations will be done. It defaults to GPU (if available) over CPU.
+
+   .. attribute:: _device
+
+      This stores the type of device on which torch computations are to be done. It can
+
+      :type: Optional[str]
+
+   .. attribute:: take "cuda" for GPU or "cpu" for CPU. None value results in automatic detection of device type.
+
+      
+
+   .. py:property:: device
+
+      A property method that returns the torch device object. It automatically detects and uses "cuda" (GPU) if
+      available, else it falls back on using "cpu".
+
+
+.. py:class:: Bsub
+
+
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:property:: device
+
+
+   .. py:attribute:: queue
+      :type: str
+
+      
+
+   .. py:attribute:: num_gpus
+      :type: int
+
+      
+
+   .. py:attribute:: num_cpus
+      :type: int
+
+      
+
+   .. py:attribute:: billing
+      :type: Optional[str]
+
+      
+
+

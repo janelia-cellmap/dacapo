@@ -1,0 +1,67 @@
+:py:mod:`dacapo.blockwise.threshold_worker`
+===========================================
+
+.. py:module:: dacapo.blockwise.threshold_worker
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.blockwise.threshold_worker.cli
+   dacapo.blockwise.threshold_worker.start_worker
+   dacapo.blockwise.threshold_worker.spawn_worker
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.blockwise.threshold_worker.logger
+   dacapo.blockwise.threshold_worker.read_write_conflict
+   dacapo.blockwise.threshold_worker.fit
+
+
+.. py:data:: logger
+
+   
+
+.. py:data:: read_write_conflict
+   :type: bool
+   :value: False
+
+   
+
+.. py:data:: fit
+   :type: str
+   :value: 'valid'
+
+   
+
+.. py:function:: cli(log_level)
+
+
+.. py:function:: start_worker(input_container: pathlib.Path | str, input_dataset: str, output_container: pathlib.Path | str, output_dataset: str, threshold: float = 0.0)
+
+
+.. py:function:: spawn_worker(input_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, threshold: float = 0.0, compute_context: dacapo.compute_context.ComputeContext = LocalTorch())
+
+   Spawn a worker to predict on a given dataset.
+
+   :param model: The model to use for prediction.
+   :type model: Model
+   :param raw_array: The raw data to predict on.
+   :type raw_array: Array
+   :param prediction_array_identifier: The identifier of the prediction array.
+   :type prediction_array_identifier: LocalArrayIdentifier
+   :param compute_context: The compute context to use. Defaults to LocalTorch().
+   :type compute_context: ComputeContext, optional
+
+

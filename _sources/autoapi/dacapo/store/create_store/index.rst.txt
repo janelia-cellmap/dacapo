@@ -1,0 +1,42 @@
+:py:mod:`dacapo.store.create_store`
+===================================
+
+.. py:module:: dacapo.store.create_store
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.store.create_store.create_config_store
+   dacapo.store.create_store.create_stats_store
+   dacapo.store.create_store.create_weights_store
+   dacapo.store.create_store.create_array_store
+
+
+
+.. py:function:: create_config_store()
+
+   Create a config store based on the global DaCapo options.
+
+
+.. py:function:: create_stats_store()
+
+   Create a statistics store based on the global DaCapo options.
+
+
+.. py:function:: create_weights_store()
+
+   Create a weights store based on the global DaCapo options.
+
+
+.. py:function:: create_array_store()
+
+   Create an array store based on the global DaCapo options.
+
+

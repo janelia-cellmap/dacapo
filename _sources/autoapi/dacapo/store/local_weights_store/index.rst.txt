@@ -1,0 +1,72 @@
+:py:mod:`dacapo.store.local_weights_store`
+==========================================
+
+.. py:module:: dacapo.store.local_weights_store
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.store.local_weights_store.LocalWeightsStore
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.store.local_weights_store.logger
+
+
+.. py:data:: logger
+
+   
+
+.. py:class:: LocalWeightsStore(basedir)
+
+
+
+
+   A local store for network weights.
+
+   .. py:method:: latest_iteration(run: str) -> Optional[int]
+
+      Return the latest iteration for which weights are available for the
+      given run.
+
+
+   .. py:method:: store_weights(run: dacapo.experiments.run.Run, iteration: int)
+
+      Store the network weights of the given run.
+
+
+   .. py:method:: retrieve_weights(run: str, iteration: int) -> dacapo.store.weights_store.Weights
+
+      Retrieve the network weights of the given run.
+
+
+   .. py:method:: remove(run: str, iteration: int)
+
+      Delete the weights associated with a specific run/iteration
+
+
+   .. py:method:: store_best(run: str, iteration: int, dataset: str, criterion: str)
+
+      Store the best weights in a easy to find location.
+      Symlinks weights from appropriate iteration
+      # TODO: simply store a yaml of dataset/criterion -> iteration/parameter id
+
+
+   .. py:method:: retrieve_best(run: str, dataset: str | dacapo.experiments.datasplits.datasets.dataset.Dataset, criterion: str) -> int
+
+      Retrieve the best weights for this run/dataset/criterion
+
+
+

@@ -1,0 +1,45 @@
+:py:mod:`dacapo.experiments.tasks.hot_distance_task`
+====================================================
+
+.. py:module:: dacapo.experiments.tasks.hot_distance_task
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.hot_distance_task.HotDistanceTask
+
+
+
+
+.. py:class:: HotDistanceTask(task_config)
+
+
+
+
+   A class to represent a hot distance task that use binary prediction and distance prediction.
+
+   Inherits from Task class.
+
+   .. attribute:: predictor
+
+      HotDistancePredictor object.
+
+   .. attribute:: loss
+
+      HotDistanceLoss object.
+
+   .. attribute:: post_processor
+
+      ThresholdPostProcessor object.
+
+   .. attribute:: evaluator
+
+      BinarySegmentationEvaluator object.
+
+

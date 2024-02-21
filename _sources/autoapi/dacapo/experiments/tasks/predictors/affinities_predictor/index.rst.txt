@@ -1,0 +1,89 @@
+:py:mod:`dacapo.experiments.tasks.predictors.affinities_predictor`
+==================================================================
+
+.. py:module:: dacapo.experiments.tasks.predictors.affinities_predictor
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.predictors.affinities_predictor.AffinitiesPredictor
+
+
+
+
+.. py:class:: AffinitiesPredictor(neighborhood: List[funlib.geometry.Coordinate], lsds: bool = True, num_voxels: int = 20, downsample_lsds: int = 1, grow_boundary_iterations: int = 0, affs_weight_clipmin: float = 0.05, affs_weight_clipmax: float = 0.95, lsd_weight_clipmin: float = 0.05, lsd_weight_clipmax: float = 0.95, background_as_object: bool = False)
+
+
+
+
+   An abstract class that serves as a blueprint for all the specific predictors.
+
+   .. attribute:: output_array_type
+
+      A property which is expected to be implemented in subclasses.
+
+   .. py:property:: dims
+
+
+   .. py:property:: num_channels
+
+
+   .. py:property:: output_array_type
+
+      Subclasses should implement this method to define the type of array output by the predictor.
+
+   .. py:method:: extractor(voxel_size)
+
+
+   .. py:method:: sigma(voxel_size)
+
+
+   .. py:method:: lsd_pad(voxel_size)
+
+
+   .. py:method:: create_model(architecture)
+
+      To create a model with the given training architecture.
+
+      :param architecture: An instance of class Architecture, to define training architecture for the model.
+
+      :returns: An instance of class Model with the designed architecture.
+
+
+   .. py:method:: create_target(gt)
+
+      Creates target for training based on ground-truth array.
+
+      :param gt: An instance of class Array, representing ground-truth values.
+
+      :returns: Instance of Array class, representing target for training.
+
+
+   .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
+
+      Creates a weight array, using a ground-truth and an associated target array.
+
+      :param gt: Ground Truth array.
+      :param target: Target array.
+      :param mask: Associated mask array.
+      :param moving_class_counts: Counts of moving classes.
+
+      :returns: Tuple containing Array instance with weight array and any additional returned value.
+
+
+   .. py:method:: gt_region_for_roi(target_spec)
+
+      Method to report the required spatial context to generate a target for the given ROI.
+
+      :param target_spec: Target specifications for which ground truth region is needed.
+
+      :returns: Returns the same ROI by default, unless overridden.
+
+
+

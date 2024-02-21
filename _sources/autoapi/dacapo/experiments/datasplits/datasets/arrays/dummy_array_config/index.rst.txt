@@ -1,0 +1,37 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.dummy_array_config`
+==========================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.dummy_array_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.dummy_array_config.DummyArrayConfig
+
+
+
+
+.. py:class:: DummyArrayConfig
+
+
+
+
+   This is just a dummy array  config used for testing. None of the
+   attributes have any particular meaning.
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Array
+
+
+

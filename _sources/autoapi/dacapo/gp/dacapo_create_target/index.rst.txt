@@ -1,0 +1,71 @@
+:py:mod:`dacapo.gp.dacapo_create_target`
+========================================
+
+.. py:module:: dacapo.gp.dacapo_create_target
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.gp.dacapo_create_target.DaCapoTargetFilter
+
+
+
+
+.. py:class:: DaCapoTargetFilter(predictor: dacapo.experiments.tasks.predictors.Predictor, gt_key: gunpowder.ArrayKey, target_key: Optional[gunpowder.ArrayKey] = None, weights_key: Optional[gunpowder.ArrayKey] = None, mask_key: Optional[gunpowder.ArrayKey] = None)
+
+
+
+
+   A Gunpowder node for generating the target from the ground truth
+
+   :param Predictor: The DaCapo Predictor to use to transform gt into target
+   :type Predictor: Predictor
+   :param gt: The dataset to use for generating the target.
+   :type gt: ``Array``
+   :param target_key: The key with which to provide the target.
+   :type target_key: ``gp.ArrayKey``
+
+   .. py:method:: setup()
+
+      To be implemented in subclasses.
+
+      Called during initialization of the DAG. Callees can assume that all
+      upstream providers are set up already.
+
+      In setup, call :func:`provides` or :func:`updates` to announce the
+      arrays and points provided or changed by this node.
+
+
+   .. py:method:: prepare(request)
+
+      To be implemented in subclasses.
+
+      Prepare for a batch request. Should return a :class:`BatchRequest` of
+      needed dependencies. If None is returned, it will be assumed that all
+      of request is needed.
+
+
+   .. py:method:: process(batch, request)
+
+      To be implemented in subclasses.
+
+      Filter a batch, will be called after :func:`prepare`. Should return a
+      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
+      batch will replace the associated data in the original batch. If None is
+      returned it is assumed that the batch has been modified in place. ``request``
+      is the same as passed to :func:`prepare`, provided for convenience.
+
+      :param batch: The batch received from upstream to be modified by this node.
+      :type batch: :class:`Batch`
+      :param request: The request this node received. The updated batch should meet
+                      this request.
+      :type request: :class:`BatchRequest`
+
+
+

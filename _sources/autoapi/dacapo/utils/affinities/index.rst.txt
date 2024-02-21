@@ -1,0 +1,40 @@
+:py:mod:`dacapo.utils.affinities`
+=================================
+
+.. py:module:: dacapo.utils.affinities
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.utils.affinities.seg_to_affgraph
+   dacapo.utils.affinities.padding
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.utils.affinities.logger
+
+
+.. py:data:: logger
+
+   
+
+.. py:function:: seg_to_affgraph(seg: numpy.ndarray, neighborhood: List[funlib.geometry.Coordinate]) -> numpy.ndarray
+
+
+.. py:function:: padding(neighborhood, voxel_size)
+
+   Get the appropriate padding to make sure all provided affinities are "True"
+
+

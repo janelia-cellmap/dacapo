@@ -1,0 +1,87 @@
+:py:mod:`dacapo.experiments.tasks.inner_distance_task_config`
+=============================================================
+
+.. py:module:: dacapo.experiments.tasks.inner_distance_task_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig
+
+
+
+
+.. py:class:: InnerDistanceTaskConfig
+
+
+
+
+   A class to store configurations for inner distance tasks.
+
+   This class inherits from TaskConfig to get configurations for signed distance
+   transform tasks used for generating and evaluating segmentations. Compared to
+   regular affinities, generating distance transforms can provide denser signals,
+   avoiding situations like a single misclassified pixel merging two distinct objects.
+
+   .. attribute:: task_type
+
+      The type of the task as InnerDistanceTask.
+
+      :type: InnerDistanceTask
+
+   .. attribute:: channels
+
+      A list holding names of channels.
+
+      :type: List[str]
+
+   .. attribute:: clip_distance
+
+      Maximum distance for considering false positives or negatives.
+
+      :type: float
+
+   .. attribute:: tol_distance
+
+      Tolerance distance for counting false positives or negatives.
+
+      :type: float
+
+   .. attribute:: scale_factor
+
+      The factor by which to scale distances before applying
+      a tanh normalization. Defaults to 1.
+
+      :type: float
+
+   .. py:attribute:: task_type
+
+      
+
+   .. py:attribute:: channels
+      :type: List[str]
+
+      
+
+   .. py:attribute:: clip_distance
+      :type: float
+
+      
+
+   .. py:attribute:: tol_distance
+      :type: float
+
+      
+
+   .. py:attribute:: scale_factor
+      :type: float
+
+      
+
+

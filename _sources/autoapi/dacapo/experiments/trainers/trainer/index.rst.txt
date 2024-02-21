@@ -1,0 +1,108 @@
+:py:mod:`dacapo.experiments.trainers.trainer`
+=============================================
+
+.. py:module:: dacapo.experiments.trainers.trainer
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.trainers.trainer.Trainer
+
+
+
+
+.. py:class:: Trainer
+
+
+
+
+   Trainer Abstract Base Class
+
+   This serves as the blueprint for any trainer classes in the dacapo library.
+   It defines essential methods that every subclass must implement for effective
+   training of a neural network model.
+
+   .. py:attribute:: iteration
+      :type: int
+
+      
+
+   .. py:attribute:: batch_size
+      :type: int
+
+      
+
+   .. py:attribute:: learning_rate
+      :type: float
+
+      
+
+   .. py:method:: create_optimizer(model: dacapo.experiments.model.Model) -> torch.optim.Optimizer
+      :abstractmethod:
+
+      Creates an optimizer for the model.
+
+      :param model: The model for which the optimizer will be created.
+      :type model: Model
+
+      :returns: The optimizer created for the model.
+      :rtype: torch.optim.Optimizer
+
+
+   .. py:method:: iterate(num_iterations: int, model: dacapo.experiments.model.Model, optimizer: torch.optim.Optimizer, device: torch.device) -> Iterator[dacapo.experiments.training_iteration_stats.TrainingIterationStats]
+      :abstractmethod:
+
+      Performs a number of training iterations.
+
+      :param num_iterations: Number of training iterations.
+      :type num_iterations: int
+      :param model: The model to be trained.
+      :type model: Model
+      :param optimizer: The optimizer for the model.
+      :type optimizer: torch.optim.Optimizer
+      :param device: The device (GPU/CPU) where the model will be trained.
+      :type device: torch.device
+
+      :returns: An iterator of the training statistics.
+      :rtype: Iterator[TrainingIterationStats]
+
+
+   .. py:method:: can_train(datasets: List[dacapo.experiments.datasplits.datasets.Dataset]) -> bool
+      :abstractmethod:
+
+      Checks if the trainer can train with a specific set of datasets.
+
+      Some trainers may have specific requirements for their training datasets.
+
+      :param datasets: The training datasets.
+      :type datasets: List[Dataset]
+
+      :returns: True if the trainer can train on the given datasets, False otherwise.
+      :rtype: bool
+
+
+   .. py:method:: build_batch_provider(datasets: List[dacapo.experiments.datasplits.datasets.Dataset], model: dacapo.experiments.model.Model, task: dacapo.experiments.tasks.task.Task, snapshot_container: dacapo.store.array_store.LocalContainerIdentifier) -> None
+      :abstractmethod:
+
+      Initializes the training pipeline using various components.
+
+      This method uses the datasets, model, task, and snapshot_container to set up the
+      training pipeline.
+
+      :param datasets: The datasets to pull data from.
+      :type datasets: List[Dataset]
+      :param model: The model to inform the pipeline of required input/output sizes.
+      :type model: Model
+      :param task: The task to transform ground truth into target.
+      :type task: Task
+      :param snapshot_container: Defines where snapshots will be saved.
+      :type snapshot_container: LocalContainerIdentifier
+
+
+

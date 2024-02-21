@@ -1,0 +1,83 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.raw_gt_dataset`
+===============================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.raw_gt_dataset
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset
+
+
+
+
+.. py:class:: RawGTDataset(dataset_config)
+
+
+
+
+   A class to represent a dataset.
+
+   .. attribute:: name
+
+      The name of the dataset.
+
+      :type: str
+
+   .. attribute:: raw
+
+      The raw dataset.
+
+      :type: Array
+
+   .. attribute:: gt
+
+      The ground truth data.
+
+      :type: Array, optional
+
+   .. attribute:: mask
+
+      The mask for the data.
+
+      :type: Array, optional
+
+   .. attribute:: weight
+
+      The weight of the dataset.
+
+      :type: int, optional
+
+   .. attribute:: sample_points
+
+      The list of sample points in the dataset.
+
+      :type: list[Coordinate], optional
+
+   .. py:attribute:: raw
+      :type: dacapo.experiments.datasplits.datasets.arrays.Array
+
+      
+
+   .. py:attribute:: gt
+      :type: dacapo.experiments.datasplits.datasets.arrays.Array
+
+      
+
+   .. py:attribute:: mask
+      :type: Optional[dacapo.experiments.datasplits.datasets.arrays.Array]
+
+      
+
+   .. py:attribute:: sample_points
+      :type: Optional[List[funlib.geometry.Coordinate]]
+
+      
+
+

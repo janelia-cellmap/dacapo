@@ -1,0 +1,644 @@
+:py:mod:`dacapo.experiments.tasks`
+==================================
+
+.. py:module:: dacapo.experiments.tasks
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   evaluators/index.rst
+   losses/index.rst
+   post_processors/index.rst
+   predictors/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   affinities_task/index.rst
+   affinities_task_config/index.rst
+   distance_task/index.rst
+   distance_task_config/index.rst
+   dummy_task/index.rst
+   dummy_task_config/index.rst
+   hot_distance_task/index.rst
+   hot_distance_task_config/index.rst
+   inner_distance_task/index.rst
+   inner_distance_task_config/index.rst
+   one_hot_task/index.rst
+   one_hot_task_config/index.rst
+   pretrained_task/index.rst
+   pretrained_task_config/index.rst
+   task/index.rst
+   task_config/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.TaskConfig
+   dacapo.experiments.tasks.DummyTaskConfig
+   dacapo.experiments.tasks.DummyTask
+   dacapo.experiments.tasks.DistanceTaskConfig
+   dacapo.experiments.tasks.DistanceTask
+   dacapo.experiments.tasks.OneHotTaskConfig
+   dacapo.experiments.tasks.PretrainedTaskConfig
+   dacapo.experiments.tasks.PretrainedTask
+   dacapo.experiments.tasks.AffinitiesTaskConfig
+   dacapo.experiments.tasks.AffinitiesTask
+   dacapo.experiments.tasks.InnerDistanceTaskConfig
+   dacapo.experiments.tasks.InnerDistanceTask
+   dacapo.experiments.tasks.HotDistanceTaskConfig
+   dacapo.experiments.tasks.HotDistanceTask
+
+
+
+
+.. py:class:: TaskConfig
+
+
+   Base class for task configurations.
+
+   Each subclass of a `Task` should have a corresponding config class derived from `TaskConfig`.
+
+   .. attribute:: name
+
+      A unique name for this task.
+
+      :type: str
+
+   .. py:attribute:: name
+      :type: str
+
+      
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Task.
+
+      :returns: A tuple where the first element is a boolean indicating
+                if the task is valid and the second element is a string message.
+      :rtype: Tuple[bool, str]
+
+
+
+.. py:class:: DummyTaskConfig
+
+
+
+
+   A class for creating a dummy task configuration object.
+
+   This class extends the TaskConfig class and initializes dummy task configuration
+   with default attributes. It is mainly used for testing aspects
+   of the application without the need of creating real task configurations.
+
+   .. attribute:: task_type
+
+      The type of task. Here, set to DummyTask.
+
+      :type: cls
+
+   .. attribute:: embedding_dims
+
+      A dummy attribute represented as an integer.
+
+      :type: int
+
+   .. attribute:: detection_threshold
+
+      Another dummy attribute represented as a float.
+
+      :type: float
+
+   .. py:attribute:: task_type
+
+      
+
+   .. py:attribute:: embedding_dims
+      :type: int
+
+      
+
+   .. py:attribute:: detection_threshold
+      :type: float
+
+      
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      A method to verify the dummy task configuration.
+
+      Whenever called, this method always returns False and a statement showing
+      that the DummyTaskConfig object is never valid.
+
+      :returns: A tuple containing a boolean status and a string message.
+      :rtype: tuple
+
+
+
+.. py:class:: DummyTask(task_config)
+
+
+
+
+   A dummy task class that initializes all components (predictor, loss,
+   post-processing, and evaluator) for the dummy task. Primarily used for testing purposes.
+   Inherits from the Task class.
+
+   .. attribute:: predictor
+
+      Instance of DummyPredictor class.
+
+      :type: Object
+
+   .. attribute:: loss
+
+      Instance of DummyLoss class.
+
+      :type: Object
+
+   .. attribute:: post_processor
+
+      Instance of DummyPostProcessor class.
+
+      :type: Object
+
+   .. attribute:: evaluator
+
+      Instance of DummyEvaluator class.
+
+      :type: Object
+
+
+.. py:class:: DistanceTaskConfig
+
+
+
+
+   This is a configuration class for the distance tasks.
+
+   The class is used for generating and evaluating signed distance transforms.
+   The advantage of generating distance transforms instead of regular affinities
+   is that the signal can be denser. Misclassification of a single pixel in an affinity
+   prediction can merge two distinct objects, but this does not occur with distances.
+
+   .. attribute:: task_type
+
+      A constant attribute assigned to the DistanceTask.
+
+   .. attribute:: channels
+
+      A list containing channel names.
+
+      :type: List[str]
+
+   .. attribute:: clip_distance
+
+      Maximum distance value to consider for false positive/negative evaluations.
+
+      :type: float
+
+   .. attribute:: tol_distance
+
+      Tolerance level of distance for counting false positives/negatives.
+
+      :type: float
+
+   .. attribute:: scale_factor
+
+      The factor by which distances are scaled before normalizing.
+      Default is 1.
+
+      :type: float
+
+   .. attribute:: mask_distances
+
+      If True, masks out the regions where the true
+      distance to object boundary cannot be accurately known.
+      Default is False.
+
+      :type: bool
+
+   .. attribute:: clipmin
+
+      The minimum value allowed for distance weights. Default is 0.05.
+
+      :type: float
+
+   .. attribute:: clipmax
+
+      The maximum value allowed for distance weights. Default is 0.95.
+
+      :type: float
+
+   .. py:attribute:: task_type
+
+      
+
+   .. py:attribute:: channels
+      :type: List[str]
+
+      
+
+   .. py:attribute:: clip_distance
+      :type: float
+
+      
+
+   .. py:attribute:: tol_distance
+      :type: float
+
+      
+
+   .. py:attribute:: scale_factor
+      :type: float
+
+      
+
+   .. py:attribute:: mask_distances
+      :type: bool
+
+      
+
+   .. py:attribute:: clipmin
+      :type: float
+
+      
+
+   .. py:attribute:: clipmax
+      :type: float
+
+      
+
+
+.. py:class:: DistanceTask(task_config)
+
+
+
+
+   DistanceTask is a subclass of Task for handling tasks associated
+   with Distance.
+
+   DistanceTask uses `DistancePredictor` for prediction, `MSELoss` for
+   computing loss, `ThresholdPostProcessor` for post-processing the
+   prediction, and `BinarySegmentationEvaluator` for evaluating the
+   prediction.
+
+   .. attribute:: predictor
+
+      DistancePredictor object
+
+   .. attribute:: loss
+
+      MSELoss object
+
+   .. attribute:: post_processor
+
+      ThresholdPostProcessor object
+
+   .. attribute:: evaluator
+
+      BinarySegmentationEvaluator object
+
+
+.. py:class:: OneHotTaskConfig
+
+
+
+
+   Class that derives from the TaskConfig to perform one hot prediction tasks.
+
+   .. attribute:: task_type
+
+      the type of task, in this case, OneHotTask.
+
+   .. attribute:: classes
+
+      a List of classes which starts from id 0.
+
+   .. method:: None
+
+      
+      
+
+   .. note:: The class of each voxel is simply the argmax over the vector of output probabilities.
+
+   .. py:attribute:: task_type
+
+      
+
+   .. py:attribute:: classes
+      :type: List[str]
+
+      
+
+
+.. py:class:: PretrainedTaskConfig
+
+
+
+
+   .. py:attribute:: task_type
+
+      
+
+   .. py:attribute:: sub_task_config
+      :type: dacapo.experiments.tasks.task_config.TaskConfig
+
+      
+
+   .. py:attribute:: weights
+      :type: pathlib.Path
+
+      
+
+
+.. py:class:: PretrainedTask(task_config)
+
+
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:method:: create_model(architecture)
+
+
+
+.. py:class:: AffinitiesTaskConfig
+
+
+
+
+   This is a Affinities task config used for generating and
+   evaluating voxel affinities for instance segmentations.
+
+   .. py:attribute:: task_type
+
+      
+
+   .. py:attribute:: neighborhood
+      :type: List[funlib.geometry.Coordinate]
+
+      
+
+   .. py:attribute:: lsds
+      :type: bool
+
+      
+
+   .. py:attribute:: lsds_to_affs_weight_ratio
+      :type: float
+
+      
+
+   .. py:attribute:: affs_weight_clipmin
+      :type: float
+
+      
+
+   .. py:attribute:: affs_weight_clipmax
+      :type: float
+
+      
+
+   .. py:attribute:: lsd_weight_clipmin
+      :type: float
+
+      
+
+   .. py:attribute:: lsd_weight_clipmax
+      :type: float
+
+      
+
+   .. py:attribute:: background_as_object
+      :type: bool
+
+      
+
+
+.. py:class:: AffinitiesTask(task_config)
+
+
+
+
+   This is a task for generating voxel affinities.
+
+
+.. py:class:: InnerDistanceTaskConfig
+
+
+
+
+   A class to store configurations for inner distance tasks.
+
+   This class inherits from TaskConfig to get configurations for signed distance
+   transform tasks used for generating and evaluating segmentations. Compared to
+   regular affinities, generating distance transforms can provide denser signals,
+   avoiding situations like a single misclassified pixel merging two distinct objects.
+
+   .. attribute:: task_type
+
+      The type of the task as InnerDistanceTask.
+
+      :type: InnerDistanceTask
+
+   .. attribute:: channels
+
+      A list holding names of channels.
+
+      :type: List[str]
+
+   .. attribute:: clip_distance
+
+      Maximum distance for considering false positives or negatives.
+
+      :type: float
+
+   .. attribute:: tol_distance
+
+      Tolerance distance for counting false positives or negatives.
+
+      :type: float
+
+   .. attribute:: scale_factor
+
+      The factor by which to scale distances before applying
+      a tanh normalization. Defaults to 1.
+
+      :type: float
+
+   .. py:attribute:: task_type
+
+      
+
+   .. py:attribute:: channels
+      :type: List[str]
+
+      
+
+   .. py:attribute:: clip_distance
+      :type: float
+
+      
+
+   .. py:attribute:: tol_distance
+      :type: float
+
+      
+
+   .. py:attribute:: scale_factor
+      :type: float
+
+      
+
+
+.. py:class:: InnerDistanceTask(task_config)
+
+
+
+
+   This class extends the Task class for creating tasks related to computing inner distances.
+   It provides methods for prediction, loss calculation and post-processing. It includes Binary Segmentation Evaluator for evaluation.
+
+   .. attribute:: task_config
+
+      The configuration for the task.
+
+   .. attribute:: predictor
+
+      Used for predicting the inner distances.
+
+   .. attribute:: loss
+
+      Used for calculating the mean square error loss.
+
+   .. attribute:: post_processor
+
+      Used for applying threshold post-processing.
+
+   .. attribute:: evaluator
+
+      Used for evaluating the results using binary segmentation.
+
+
+.. py:class:: HotDistanceTaskConfig
+
+
+
+
+   Class for generating and evaluating signed distance transforms as a way of generating
+   segmentations for the Hot Distance task config.
+
+   .. attribute:: task_type
+
+      A reference to the Hot Distance Task class.
+
+   .. attribute:: channels
+
+      A list of channel names.
+
+      :type: List[str]
+
+   .. attribute:: clip_distance
+
+      Maximum distance to consider for false positive/negatives.
+
+      :type: float
+
+   .. attribute:: tol_distance
+
+      Tolerance distance for counting false positives/negatives.
+
+      :type: float
+
+   .. attribute:: scale_factor
+
+      The amount by which to scale distances before applying
+      a tanh normalization. Defaults to 1.
+
+      :type: float
+
+   .. attribute:: mask_distances
+
+      Whether or not to mask out regions where the true distance to
+      object boundary cannot be known. Defaults to False
+
+      :type: bool
+
+   .. note::
+
+      Generating distance transforms over regular affinities provides you with a denser
+      signal, i.e., one misclassified pixel in an affinity prediction can merge 2
+      otherwise very distinct objects, a situation that cannot happen with distances.
+
+   .. py:attribute:: task_type
+
+      
+
+   .. py:attribute:: channels
+      :type: List[str]
+
+      
+
+   .. py:attribute:: clip_distance
+      :type: float
+
+      
+
+   .. py:attribute:: tol_distance
+      :type: float
+
+      
+
+   .. py:attribute:: scale_factor
+      :type: float
+
+      
+
+   .. py:attribute:: mask_distances
+      :type: bool
+
+      
+
+
+.. py:class:: HotDistanceTask(task_config)
+
+
+
+
+   A class to represent a hot distance task that use binary prediction and distance prediction.
+
+   Inherits from Task class.
+
+   .. attribute:: predictor
+
+      HotDistancePredictor object.
+
+   .. attribute:: loss
+
+      HotDistanceLoss object.
+
+   .. attribute:: post_processor
+
+      ThresholdPostProcessor object.
+
+   .. attribute:: evaluator
+
+      BinarySegmentationEvaluator object.
+
+

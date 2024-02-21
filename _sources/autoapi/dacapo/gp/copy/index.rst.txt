@@ -1,0 +1,86 @@
+:py:mod:`dacapo.gp.copy`
+========================
+
+.. py:module:: dacapo.gp.copy
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.gp.copy.CopyMask
+
+
+
+
+.. py:class:: CopyMask(array_key: gunpowder.ArrayKey, copy_key: gunpowder.ArrayKey, drop_channels: bool = False)
+
+
+
+
+   A class to copy a mask into a new key with the option to drop channels via max collapse.
+
+   .. attribute:: array_key
+
+      Original key of the array from where the mask will be copied.
+
+      :type: gp.ArrayKey
+
+   .. attribute:: copy_key
+
+      New key where the copied mask will reside.
+
+      :type: gp.ArrayKey
+
+   .. attribute:: drop_channels
+
+      If True, channels will be dropped via a max collapse.
+
+      :type: bool
+
+   .. method:: setup
+
+      Sets up the filter by enabling autoskip and providing the copied key.
+
+   .. method:: prepare
+
+      Prepares the filter by copying the request of copy_key into a dependency.
+
+   .. method:: process
+
+      Processes the batch by copying the mask from the array_key to the copy_key.
+      
+
+   .. py:method:: setup()
+
+      Sets up the filter by enabling autoskip and providing the copied key.
+
+
+   .. py:method:: prepare(request)
+
+      Prepares the filter by copying the request of copy_key into a dependency.
+
+      :param request: The request to prepare.
+
+      :returns: The prepared dependencies.
+      :rtype: deps
+
+
+   .. py:method:: process(batch, request)
+
+      Processes the batch by copying the mask from the array_key to the copy_key.
+
+      If "drop_channels" attribute is True, it performs max collapse.
+
+      :param batch: The batch to process.
+      :param request: The request for processing.
+
+      :returns: The processed outputs.
+      :rtype: outputs
+
+
+

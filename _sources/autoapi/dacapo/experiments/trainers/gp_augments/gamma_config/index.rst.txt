@@ -1,0 +1,69 @@
+:py:mod:`dacapo.experiments.trainers.gp_augments.gamma_config`
+==============================================================
+
+.. py:module:: dacapo.experiments.trainers.gp_augments.gamma_config
+
+.. autoapi-nested-parse::
+
+   This module contains the GammaAugmentConfig class which inherits from AugmentConfig.
+   It handles node creating and gamma range configuration for Data augmentation.
+
+   Classes:
+       GammaAugmentConfig
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.trainers.gp_augments.gamma_config.GammaAugmentConfig
+
+
+
+
+.. py:class:: GammaAugmentConfig
+
+
+
+
+   This class manages the configuration of gamma augmentation for a given dataset.
+
+   .. attribute:: gamma_range
+
+      A tuple of float values represents the min and max range of gamma noise
+
+   .. attribute:: to apply on the raw data.
+
+      
+
+   .. method:: node()
+
+      Constructs a node in the augmentation pipeline.
+      
+
+   .. py:attribute:: gamma_range
+      :type: Tuple[float, float]
+
+      
+
+   .. py:method:: node(raw_key: gunpowder.ArrayKey, _gt_key=None, _mask_key=None)
+
+      Constructs a node in the augmentation pipeline.
+
+      :param raw_key: Key to an Array (volume) in the pipeline
+      :type raw_key: gp.ArrayKey
+      :param _gt_key: Ground Truth key, not used in this function. Defaults to None.
+      :type _gt_key: gp.ArrayKey, optional
+      :param _mask_key: Mask Key, not used in this function. Defaults to None.
+      :type _mask_key: gp.ArrayKey, optional
+
+      :returns: The augmentation method to be applied on the source data.
+      :rtype: GammaAugment instance
+
+
+

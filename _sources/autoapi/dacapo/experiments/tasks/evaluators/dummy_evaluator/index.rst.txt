@@ -1,0 +1,57 @@
+:py:mod:`dacapo.experiments.tasks.evaluators.dummy_evaluator`
+=============================================================
+
+.. py:module:: dacapo.experiments.tasks.evaluators.dummy_evaluator
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator
+
+
+
+
+.. py:class:: DummyEvaluator
+
+
+
+
+   A Dummy Evaluator class which extends the Evaluator class for evaluation operations.
+
+   .. attribute:: criteria
+
+      List of evaluation criteria.
+
+      :type: list
+
+   .. py:property:: score
+      :type: dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores
+
+      A property which is the instance of DummyEvaluationScores containing the evaluation scores.
+
+      :returns: An object of DummyEvaluationScores class.
+      :rtype: DummyEvaluationScores
+
+   .. py:attribute:: criteria
+      :value: ['frizz_level', 'blipp_score']
+
+      
+
+   .. py:method:: evaluate(output_array, evaluation_dataset)
+
+      Evaluate the given output array and dataset and returns the scores based on predefined criteria.
+
+      :param output_array: The output array to be evaluated.
+      :param evaluation_dataset: The dataset to be used for evaluation.
+
+      :returns: An object of DummyEvaluationScores class, with the evaluation scores.
+      :rtype: DummyEvaluationScore
+
+
+

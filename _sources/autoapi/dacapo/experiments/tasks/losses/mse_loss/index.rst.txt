@@ -1,0 +1,56 @@
+:py:mod:`dacapo.experiments.tasks.losses.mse_loss`
+==================================================
+
+.. py:module:: dacapo.experiments.tasks.losses.mse_loss
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.losses.mse_loss.MSELoss
+
+
+
+
+.. py:class:: MSELoss
+
+
+
+
+   A class used to represent the Mean Square Error Loss function (MSELoss).
+
+   .. attribute:: None
+
+
+
+   .. method:: compute(prediction, target, weight):
+
+      Computes the MSELoss with the given weight for the predictiom amd target.
+
+
+   .. py:method:: compute(prediction, target, weight)
+
+      Function to compute the MSELoss for the provided prediction and target, with respect to the weight.
+
+      Parameters:
+      ----------
+      prediction : torch.Tensor
+          The prediction tensor for which loss needs to be calculated.
+      target : torch.Tensor
+          The target tensor with respect to which loss is calculated.
+      weight : torch.Tensor
+          The weight tensor used to weigh the prediction in the loss calculation.
+
+      Returns:
+      -------
+      :
+      torch.Tensor
+          The computed MSELoss tensor.
+
+
+

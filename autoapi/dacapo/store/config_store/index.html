@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dacapo.store.config_store &mdash; DaCapo  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="dacapo.store.conversion_hooks" href="../conversion_hooks/index.html" />
+    <link rel="prev" title="dacapo.store.array_store" href="../array_store/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            DaCapo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">DaCapo API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../experiments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ext/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.ext</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../gp/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">CLI</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">DaCapo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.config_store</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/dacapo/store/config_store/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-dacapo.store.config_store">
+<span id="dacapo-store-config-store"></span><h1><a class="reference internal" href="#module-dacapo.store.config_store" title="dacapo.store.config_store"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.config_store</span></code></a><a class="headerlink" href="#module-dacapo.store.config_store" title="Link to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.config_store.ConfigStore" title="dacapo.store.config_store.ConfigStore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConfigStore</span></code></a></p></td>
+<td><p>Base class for configuration stores.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py exception">
+<dt class="sig sig-object py" id="dacapo.store.config_store.DuplicateNameError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.config_store.</span></span><span class="sig-name descname"><span class="pre">DuplicateNameError</span></span><a class="headerlink" href="#dacapo.store.config_store.DuplicateNameError" title="Link to this definition"></a></dt>
+<dd><p>Common base class for all non-exit exceptions.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.config_store.</span></span><span class="sig-name descname"><span class="pre">ConfigStore</span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore" title="Link to this definition"></a></dt>
+<dd><p>Base class for configuration stores.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.runs">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">runs</span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.runs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.datasplits">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">datasplits</span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.datasplits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.datasets">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">datasets</span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.datasets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.arrays">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">arrays</span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.arrays" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.tasks">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tasks</span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.tasks" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.trainers">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trainers</span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.trainers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.architectures">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">architectures</span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.architectures" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.delete_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.delete_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.store_run_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_run_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/run_config/index.html#dacapo.experiments.run_config.RunConfig" title="dacapo.experiments.run_config.RunConfig"><span class="pre">dacapo.experiments.run_config.RunConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.store_run_config" title="Link to this definition"></a></dt>
+<dd><p>Store a run config. This should also store the configs that are part
+of the run config (i.e., task, architecture, trainer, and dataset
+config).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.retrieve_run_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_run_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/run_config/index.html#dacapo.experiments.run_config.RunConfig" title="dacapo.experiments.run_config.RunConfig"><span class="pre">dacapo.experiments.run_config.RunConfig</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.retrieve_run_config" title="Link to this definition"></a></dt>
+<dd><p>Retrieve a run config from a run name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.retrieve_run_config_names">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_run_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.retrieve_run_config_names" title="Link to this definition"></a></dt>
+<dd><p>Retrieve all run config names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.delete_run_config">
+<span class="sig-name descname"><span class="pre">delete_run_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.delete_run_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.store_task_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_task_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/tasks/task_config/index.html#dacapo.experiments.tasks.task_config.TaskConfig" title="dacapo.experiments.tasks.task_config.TaskConfig"><span class="pre">dacapo.experiments.tasks.task_config.TaskConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.store_task_config" title="Link to this definition"></a></dt>
+<dd><p>Store a task config.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.retrieve_task_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_task_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/task_config/index.html#dacapo.experiments.tasks.task_config.TaskConfig" title="dacapo.experiments.tasks.task_config.TaskConfig"><span class="pre">dacapo.experiments.tasks.task_config.TaskConfig</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.retrieve_task_config" title="Link to this definition"></a></dt>
+<dd><p>Retrieve a task config from a task name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.retrieve_task_config_names">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_task_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.retrieve_task_config_names" title="Link to this definition"></a></dt>
+<dd><p>Retrieve all task config names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.delete_task_config">
+<span class="sig-name descname"><span class="pre">delete_task_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.delete_task_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.store_architecture_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_architecture_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/architectures/architecture_config/index.html#dacapo.experiments.architectures.architecture_config.ArchitectureConfig" title="dacapo.experiments.architectures.architecture_config.ArchitectureConfig"><span class="pre">dacapo.experiments.architectures.architecture_config.ArchitectureConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.store_architecture_config" title="Link to this definition"></a></dt>
+<dd><p>Store a architecture config.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.retrieve_architecture_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_architecture_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/architectures/architecture_config/index.html#dacapo.experiments.architectures.architecture_config.ArchitectureConfig" title="dacapo.experiments.architectures.architecture_config.ArchitectureConfig"><span class="pre">dacapo.experiments.architectures.architecture_config.ArchitectureConfig</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.retrieve_architecture_config" title="Link to this definition"></a></dt>
+<dd><p>Retrieve a architecture config from a architecture name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.retrieve_architecture_config_names">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_architecture_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.retrieve_architecture_config_names" title="Link to this definition"></a></dt>
+<dd><p>Retrieve all architecture config names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.delete_architecture_config">
+<span class="sig-name descname"><span class="pre">delete_architecture_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.delete_architecture_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.store_trainer_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_trainer_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/trainers/trainer_config/index.html#dacapo.experiments.trainers.trainer_config.TrainerConfig" title="dacapo.experiments.trainers.trainer_config.TrainerConfig"><span class="pre">dacapo.experiments.trainers.trainer_config.TrainerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.store_trainer_config" title="Link to this definition"></a></dt>
+<dd><p>Store a trainer config.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.retrieve_trainer_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_trainer_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.retrieve_trainer_config" title="Link to this definition"></a></dt>
+<dd><p>Retrieve a trainer config from a trainer name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.retrieve_trainer_config_names">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_trainer_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.retrieve_trainer_config_names" title="Link to this definition"></a></dt>
+<dd><p>Retrieve all trainer config names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.delete_trainer_config">
+<span class="sig-name descname"><span class="pre">delete_trainer_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.delete_trainer_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.store_datasplit_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_datasplit_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/datasplits/datasplit_config/index.html#dacapo.experiments.datasplits.datasplit_config.DataSplitConfig" title="dacapo.experiments.datasplits.datasplit_config.DataSplitConfig"><span class="pre">dacapo.experiments.datasplits.datasplit_config.DataSplitConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.store_datasplit_config" title="Link to this definition"></a></dt>
+<dd><p>Store a datasplit config.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.retrieve_datasplit_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_datasplit_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/datasplits/datasplit_config/index.html#dacapo.experiments.datasplits.datasplit_config.DataSplitConfig" title="dacapo.experiments.datasplits.datasplit_config.DataSplitConfig"><span class="pre">dacapo.experiments.datasplits.datasplit_config.DataSplitConfig</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.retrieve_datasplit_config" title="Link to this definition"></a></dt>
+<dd><p>Retrieve a datasplit config from a datasplit name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.retrieve_datasplit_config_names">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_datasplit_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.retrieve_datasplit_config_names" title="Link to this definition"></a></dt>
+<dd><p>Retrieve all datasplit names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.delete_datasplit_config">
+<span class="sig-name descname"><span class="pre">delete_datasplit_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.delete_datasplit_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.store_array_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_array_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/datasplits/datasets/arrays/array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.store_array_config" title="Link to this definition"></a></dt>
+<dd><p>Store a array config.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.retrieve_array_config">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_array_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/datasplits/datasets/arrays/array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.retrieve_array_config" title="Link to this definition"></a></dt>
+<dd><p>Retrieve a array config from a array name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.retrieve_array_config_names">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_array_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.retrieve_array_config_names" title="Link to this definition"></a></dt>
+<dd><p>Retrieve all array names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.config_store.ConfigStore.delete_array_config">
+<span class="sig-name descname"><span class="pre">delete_array_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.config_store.ConfigStore.delete_array_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../array_store/index.html" class="btn btn-neutral float-left" title="dacapo.store.array_store" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../conversion_hooks/index.html" class="btn btn-neutral float-right" title="dacapo.store.conversion_hooks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, William Patton, David Ackerman, Jan Funke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

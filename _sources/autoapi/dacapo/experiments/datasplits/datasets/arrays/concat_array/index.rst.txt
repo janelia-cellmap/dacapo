@@ -1,0 +1,91 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.concat_array`
+====================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.concat_array
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.concat_array.ConcatArray
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.concat_array.logger
+
+
+.. py:data:: logger
+
+   
+
+.. py:class:: ConcatArray(array_config)
+
+
+
+
+   This is a wrapper around other `source_arrays` that concatenates
+   them along the channel dimension.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: source_arrays
+      :type: Dict[str, dacapo.experiments.datasplits.datasets.arrays.array.Array]
+
+
+   .. py:property:: source_array
+      :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
+
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+

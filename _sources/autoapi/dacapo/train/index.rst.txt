@@ -1,0 +1,40 @@
+:py:mod:`dacapo.train`
+======================
+
+.. py:module:: dacapo.train
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.train.train
+   dacapo.train.train_run
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.train.logger
+
+
+.. py:data:: logger
+
+   
+
+.. py:function:: train(run_name: str, compute_context: dacapo.compute_context.ComputeContext = LocalTorch())
+
+   Train a run
+
+
+.. py:function:: train_run(run: dacapo.experiments.Run, compute_context: dacapo.compute_context.ComputeContext = LocalTorch())
+
+

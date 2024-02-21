@@ -1,0 +1,37 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.logical_or_array_config`
+===============================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.logical_or_array_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.logical_or_array_config.LogicalOrArrayConfig
+
+
+
+
+.. py:class:: LogicalOrArrayConfig
+
+
+
+
+   This config class takes a source array and performs a logical or over the channels.
+   Good for union multiple masks.
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_config
+      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+
+      
+
+

@@ -1,0 +1,53 @@
+:py:mod:`dacapo.experiments.tasks.dummy_task`
+=============================================
+
+.. py:module:: dacapo.experiments.tasks.dummy_task
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.dummy_task.DummyTask
+
+
+
+
+.. py:class:: DummyTask(task_config)
+
+
+
+
+   A dummy task class that initializes all components (predictor, loss,
+   post-processing, and evaluator) for the dummy task. Primarily used for testing purposes.
+   Inherits from the Task class.
+
+   .. attribute:: predictor
+
+      Instance of DummyPredictor class.
+
+      :type: Object
+
+   .. attribute:: loss
+
+      Instance of DummyLoss class.
+
+      :type: Object
+
+   .. attribute:: post_processor
+
+      Instance of DummyPostProcessor class.
+
+      :type: Object
+
+   .. attribute:: evaluator
+
+      Instance of DummyEvaluator class.
+
+      :type: Object
+
+

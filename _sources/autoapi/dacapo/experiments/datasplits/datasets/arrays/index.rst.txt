@@ -1,0 +1,1243 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays`
+=======================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   array/index.rst
+   array_config/index.rst
+   binarize_array/index.rst
+   binarize_array_config/index.rst
+   concat_array/index.rst
+   concat_array_config/index.rst
+   crop_array/index.rst
+   crop_array_config/index.rst
+   dummy_array/index.rst
+   dummy_array_config/index.rst
+   dvid_array/index.rst
+   dvid_array_config/index.rst
+   intensity_array/index.rst
+   intensity_array_config/index.rst
+   logical_or_array/index.rst
+   logical_or_array_config/index.rst
+   merge_instances_array/index.rst
+   merge_instances_array_config/index.rst
+   missing_annotations_mask/index.rst
+   missing_annotations_mask_config/index.rst
+   numpy_array/index.rst
+   ones_array/index.rst
+   ones_array_config/index.rst
+   resampled_array/index.rst
+   resampled_array_config/index.rst
+   sum_array/index.rst
+   sum_array_config/index.rst
+   tiff_array/index.rst
+   tiff_array_config/index.rst
+   zarr_array/index.rst
+   zarr_array_config/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.Array
+   dacapo.experiments.datasplits.datasets.arrays.ArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.DummyArray
+   dacapo.experiments.datasplits.datasets.arrays.DummyArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.BinarizeArray
+   dacapo.experiments.datasplits.datasets.arrays.BinarizeArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.ResampledArray
+   dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray
+   dacapo.experiments.datasplits.datasets.arrays.IntensitiesArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask
+   dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMaskConfig
+   dacapo.experiments.datasplits.datasets.arrays.OnesArray
+   dacapo.experiments.datasplits.datasets.arrays.OnesArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.ConcatArray
+   dacapo.experiments.datasplits.datasets.arrays.ConcatArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray
+   dacapo.experiments.datasplits.datasets.arrays.LogicalOrArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.CropArray
+   dacapo.experiments.datasplits.datasets.arrays.CropArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray
+   dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.DVIDArray
+   dacapo.experiments.datasplits.datasets.arrays.DVIDArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.SumArray
+   dacapo.experiments.datasplits.datasets.arrays.SumArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.NumpyArray
+
+
+
+
+.. py:class:: Array
+
+
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:property:: attrs
+      :type: Dict[str, Any]
+      :abstractmethod:
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: axes
+      :type: List[str]
+      :abstractmethod:
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+      :type: int
+      :abstractmethod:
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+      :abstractmethod:
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+      :abstractmethod:
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: dtype
+      :type: Any
+      :abstractmethod:
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+      :type: Optional[int]
+      :abstractmethod:
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:property:: data
+      :type: numpy.ndarray
+      :abstractmethod:
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: writable
+      :type: bool
+      :abstractmethod:
+
+      Can we write to this Array?
+
+
+.. py:class:: ArrayConfig
+
+
+   Base class for array configurations. Each subclass of an
+   `Array` should have a corresponding config class derived from
+   `ArrayConfig`.
+
+   .. py:attribute:: name
+      :type: str
+
+      
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Array
+
+
+
+.. py:class:: DummyArray(array_config)
+
+
+
+
+   This is just a dummy array for testing.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+
+.. py:class:: DummyArrayConfig
+
+
+
+
+   This is just a dummy array  config used for testing. None of the
+   attributes have any particular meaning.
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Array
+
+
+
+.. py:class:: ZarrArrayConfig
+
+
+
+
+   This config class provides the necessary configuration for a zarr array
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: file_name
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: dataset
+      :type: str
+
+      
+
+   .. py:attribute:: snap_to_grid
+      :type: Optional[funlib.geometry.Coordinate]
+
+      
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Array
+
+
+
+.. py:class:: BinarizeArray(array_config)
+
+
+
+
+   This is wrapper around a ZarrArray containing uint annotations.
+   Because we often want to predict classes that are a combination
+   of a set of labels we wrap a ZarrArray with the BinarizeArray
+   and provide something like `groupings=[("mito", [3,4,5])]`
+   where 4 corresponds to mito_membrane, 5 is mito_ribos, and
+   3 is everything else that is part of a mitochondria. The BinarizeArray
+   will simply combine labels 3,4,5 into a single binary channel for th
+   class of "mito".
+   We use a single channel per class because some classes may overlap.
+   For example if you had `groupings=[("mito", [3,4,5]), ("membrane", [4, 8, 1])]`
+   where 4 is mito_membrane, 8 is er_membrane, and 1 is plasma_membrane.
+   Now you can have a binary classification for membrane or not which in
+   some cases overlaps with the channel for mitochondria which includes
+   the mito membrane.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+      :type: int
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: channels
+
+
+
+.. py:class:: BinarizeArrayConfig
+
+
+
+
+   This config class provides the necessary configuration for turning an Annotated dataset into a
+   multi class binary classification problem
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_config
+      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+
+      
+
+   .. py:attribute:: groupings
+      :type: List[Tuple[str, List[int]]]
+
+      
+
+   .. py:attribute:: background
+      :type: int
+
+      
+
+
+.. py:class:: ResampledArray(array_config)
+
+
+
+
+   This is a zarr array
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+      :type: int
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: scale
+
+
+
+.. py:class:: ResampledArrayConfig
+
+
+
+
+   This array will up or down sample an array into the desired voxel size.
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_config
+      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+
+      
+
+   .. py:attribute:: upsample
+      :type: funlib.geometry.Coordinate
+
+      
+
+   .. py:attribute:: downsample
+      :type: funlib.geometry.Coordinate
+
+      
+
+   .. py:attribute:: interp_order
+      :type: bool
+
+      
+
+
+.. py:class:: IntensitiesArray(array_config)
+
+
+
+
+   This is wrapper another array that will normalize intensities to
+   the range (0, 1) and convert to float32. Use this if you have your
+   intensities stored as uint8 or similar and want your model to
+   have floats as input.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+      :type: int
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+
+.. py:class:: IntensitiesArrayConfig
+
+
+
+
+   This config class provides the necessary configuration for turning an Annotated dataset into a
+   multi class binary classification problem
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_config
+      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+
+      
+
+   .. py:attribute:: min
+      :type: float
+
+      
+
+   .. py:attribute:: max
+      :type: float
+
+      
+
+
+.. py:class:: MissingAnnotationsMask(array_config)
+
+
+
+
+   This is wrapper around a ZarrArray containing uint annotations.
+   Complementary to the BinarizeArray class where we convert labels
+   into individual channels for training, we may find crops where a
+   specific label is present, but not annotated. In that case you
+   might want to avoid training specific channels for specific
+   training volumes.
+   See package fibsem_tools for appropriate metadata format for indicating
+   presence of labels in your ground truth.
+   "https://github.com/janelia-cosem/fibsem-tools"
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+      :type: int
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: channels
+
+
+
+.. py:class:: MissingAnnotationsMaskConfig
+
+
+
+
+   This config class provides the necessary configuration for turning an Annotated dataset into a
+   multi class binary classification problem
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_config
+      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+
+      
+
+   .. py:attribute:: groupings
+      :type: List[Tuple[str, List[int]]]
+
+      
+
+
+.. py:class:: OnesArray(array_config)
+
+
+
+
+   This is a wrapper around another `source_array` that simply provides ones
+   with the same metadata as the `source_array`.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: source_array
+      :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
+
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:method:: like(array: dacapo.experiments.datasplits.datasets.arrays.array.Array)
+      :classmethod:
+
+
+
+.. py:class:: OnesArrayConfig
+
+
+
+
+   This array read data from the source array and then return a np.ones_like() version.
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_config
+      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+
+      
+
+
+.. py:class:: ConcatArray(array_config)
+
+
+
+
+   This is a wrapper around other `source_arrays` that concatenates
+   them along the channel dimension.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: source_arrays
+      :type: Dict[str, dacapo.experiments.datasplits.datasets.arrays.array.Array]
+
+
+   .. py:property:: source_array
+      :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
+
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+
+.. py:class:: ConcatArrayConfig
+
+
+
+
+   This array read data from the source array and then return a np.ones_like() version.
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: channels
+      :type: List[str]
+
+      
+
+   .. py:attribute:: source_array_configs
+      :type: Dict[str, dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
+
+      
+
+   .. py:attribute:: default_config
+      :type: Optional[dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
+
+      
+
+
+.. py:class:: LogicalOrArray(array_config)
+
+
+
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+
+.. py:class:: LogicalOrArrayConfig
+
+
+
+
+   This config class takes a source array and performs a logical or over the channels.
+   Good for union multiple masks.
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_config
+      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+
+      
+
+
+.. py:class:: CropArray(array_config)
+
+
+
+
+   Used to crop a larger array to a smaller array.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+      :type: int
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: channels
+
+
+
+.. py:class:: CropArrayConfig
+
+
+
+
+   This config class provides the necessary configuration for cropping an
+   Array to a smaller ROI. Especially useful for validation volumes that may
+   be too large for quick evaluation
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_config
+      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+
+      
+
+   .. py:attribute:: roi
+      :type: funlib.geometry.Roi
+
+      
+
+
+.. py:class:: MergeInstancesArray(array_config)
+
+
+
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+
+.. py:class:: MergeInstancesArrayConfig
+
+
+
+
+   Base class for array configurations. Each subclass of an
+   `Array` should have a corresponding config class derived from
+   `ArrayConfig`.
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_configs
+      :type: List[dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
+
+      
+
+
+.. py:class:: DVIDArray(array_config)
+
+
+
+
+   This is a DVID array
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: dtype
+      :type: Any
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+      :type: Optional[int]
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:property:: spatial_axes
+      :type: List[str]
+
+
+   .. py:property:: data
+      :type: Any
+      :abstractmethod:
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:method:: attrs()
+
+      Return a dictionary of metadata attributes stored on this array.
+
+
+   .. py:method:: voxel_size() -> funlib.geometry.Coordinate
+
+      The size of a voxel in physical units.
+
+
+   .. py:method:: roi() -> funlib.geometry.Roi
+
+      The total ROI of this array, in world units.
+
+
+   .. py:method:: add_metadata(metadata: Dict[str, Any]) -> None
+      :abstractmethod:
+
+
+
+.. py:class:: DVIDArrayConfig
+
+
+
+
+   This config class provides the necessary configuration for a DVID array
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source
+      :type: Tuple[str, str, str]
+
+      
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Array
+
+
+
+.. py:class:: SumArray(array_config)
+
+
+
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+
+.. py:class:: SumArrayConfig
+
+
+
+
+   Base class for array configurations. Each subclass of an
+   `Array` should have a corresponding config class derived from
+   `ArrayConfig`.
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_configs
+      :type: List[dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
+
+      
+
+
+.. py:class:: NumpyArray(array_config)
+
+
+
+
+   This is just a wrapper for a numpy array to make it fit the DaCapo Array interface.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:method:: from_gp_array(array: gunpowder.Array)
+      :classmethod:
+
+
+   .. py:method:: from_np_array(array: numpy.ndarray, roi, voxel_size, axes)
+      :classmethod:
+
+
+

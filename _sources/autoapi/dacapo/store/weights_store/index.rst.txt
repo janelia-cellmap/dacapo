@@ -1,0 +1,83 @@
+:py:mod:`dacapo.store.weights_store`
+====================================
+
+.. py:module:: dacapo.store.weights_store
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.store.weights_store.Weights
+   dacapo.store.weights_store.WeightsStore
+
+
+
+
+.. py:class:: Weights(model_state_dict, optimizer_state_dict)
+
+
+   .. py:attribute:: optimizer
+      :type: collections.OrderedDict[str, torch.Tensor]
+
+      
+
+   .. py:attribute:: model
+      :type: collections.OrderedDict[str, torch.Tensor]
+
+      
+
+
+.. py:class:: WeightsStore
+
+
+
+
+   Base class for network weight stores.
+
+   .. py:method:: load_weights(run: dacapo.experiments.run.Run, iteration: int) -> None
+
+      Load this iterations weights into the given run.
+
+
+   .. py:method:: load_best(run: dacapo.experiments.run.Run, dataset: str, criterion: str) -> None
+
+      Load the best weights for this Run,dataset,criterion into Run.model
+
+
+   .. py:method:: latest_iteration(run: str) -> Optional[int]
+      :abstractmethod:
+
+      Return the latest iteration for which weights are available for the
+      given run.
+
+
+   .. py:method:: store_weights(run: dacapo.experiments.run.Run, iteration: int) -> None
+      :abstractmethod:
+
+      Store the network weights of the given run.
+
+
+   .. py:method:: retrieve_weights(run: str, iteration: int) -> Weights
+      :abstractmethod:
+
+      Retrieve the network weights of the given run.
+
+
+   .. py:method:: remove(run: str, iteration: int) -> None
+      :abstractmethod:
+
+      Delete the weights associated with a specific run/iteration
+
+
+   .. py:method:: retrieve_best(run: str, dataset: str, criterion: str) -> int
+      :abstractmethod:
+
+      Retrieve the best weights for this run/dataset/criterion
+
+
+

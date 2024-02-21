@@ -1,0 +1,96 @@
+:py:mod:`dacapo.gp.elastic_augment_fuse`
+========================================
+
+.. py:module:: dacapo.gp.elastic_augment_fuse
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.gp.elastic_augment_fuse.ElasticAugment
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.gp.elastic_augment_fuse.logger
+
+
+.. py:data:: logger
+
+   
+
+.. py:class:: ElasticAugment(control_point_spacing, control_point_displacement_sigma, rotation_interval, subsample=1, augmentation_probability=1.0, seed=None, uniform_3d_rotation=False)
+
+
+
+
+   Elasticly deform a batch. Requests larger batches upstream to avoid data
+   loss due to rotation and jitter.
+
+   :param control_point_spacing: Distance between control points for the elastic deformation, in
+                                 voxels per dimension.
+   :type control_point_spacing: ``tuple`` of ``int``
+   :param control_point_displacement_sigma: Standard deviation of control point displacement distribution, in world coordinates.
+   :type control_point_displacement_sigma: ``tuple`` of ``float``
+   :param rotation_interval: Interval to randomly sample rotation angles from (0, 2PI).
+   :type rotation_interval: ``tuple`` of two ``floats``
+   :param subsample: Instead of creating an elastic transformation on the full
+                     resolution, create one sub-sampled by the given factor, and linearly
+                     interpolate to obtain the full resolution transformation. This can
+                     significantly speed up this node, at the expense of having visible
+                     piecewise linear deformations for large factors. Usually, a factor
+                     of 4 can safely be used without noticeable changes. However, the
+                     default is 1 (i.e., no sub-sampling).
+   :type subsample: ``int``
+   :param seed: Set random state for reproducible results (tests only, do not use
+                in production code!!)
+   :type seed: ``int``
+
+   .. py:method:: setup()
+
+      To be implemented in subclasses.
+
+      Called during initialization of the DAG. Callees can assume that all
+      upstream providers are set up already.
+
+      In setup, call :func:`provides` or :func:`updates` to announce the
+      arrays and points provided or changed by this node.
+
+
+   .. py:method:: prepare(request)
+
+      To be implemented in subclasses.
+
+      Prepare for a batch request. Should return a :class:`BatchRequest` of
+      needed dependencies. If None is returned, it will be assumed that all
+      of request is needed.
+
+
+   .. py:method:: process(batch, request)
+
+      To be implemented in subclasses.
+
+      Filter a batch, will be called after :func:`prepare`. Should return a
+      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
+      batch will replace the associated data in the original batch. If None is
+      returned it is assumed that the batch has been modified in place. ``request``
+      is the same as passed to :func:`prepare`, provided for convenience.
+
+      :param batch: The batch received from upstream to be modified by this node.
+      :type batch: :class:`Batch`
+      :param request: The request this node received. The updated batch should meet
+                      this request.
+      :type request: :class:`BatchRequest`
+
+
+

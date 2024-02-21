@@ -1,0 +1,34 @@
+:py:mod:`dacapo.experiments.tasks.post_processors.post_processor_parameters`
+============================================================================
+
+.. py:module:: dacapo.experiments.tasks.post_processors.post_processor_parameters
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters
+
+
+
+
+.. py:class:: PostProcessorParameters
+
+
+   Base class for post-processor parameters.
+
+   .. py:property:: parameter_names
+      :type: List[str]
+
+
+   .. py:attribute:: id
+      :type: int
+
+      
+
+

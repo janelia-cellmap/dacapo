@@ -1,0 +1,90 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.binarize_array`
+======================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.binarize_array
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray
+
+
+
+
+.. py:class:: BinarizeArray(array_config)
+
+
+
+
+   This is wrapper around a ZarrArray containing uint annotations.
+   Because we often want to predict classes that are a combination
+   of a set of labels we wrap a ZarrArray with the BinarizeArray
+   and provide something like `groupings=[("mito", [3,4,5])]`
+   where 4 corresponds to mito_membrane, 5 is mito_ribos, and
+   3 is everything else that is part of a mitochondria. The BinarizeArray
+   will simply combine labels 3,4,5 into a single binary channel for th
+   class of "mito".
+   We use a single channel per class because some classes may overlap.
+   For example if you had `groupings=[("mito", [3,4,5]), ("membrane", [4, 8, 1])]`
+   where 4 is mito_membrane, 8 is er_membrane, and 1 is plasma_membrane.
+   Now you can have a binary classification for membrane or not which in
+   some cases overlaps with the channel for mitochondria which includes
+   the mito membrane.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+      :type: int
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: channels
+
+
+

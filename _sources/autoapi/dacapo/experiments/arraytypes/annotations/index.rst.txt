@@ -1,0 +1,41 @@
+:py:mod:`dacapo.experiments.arraytypes.annotations`
+===================================================
+
+.. py:module:: dacapo.experiments.arraytypes.annotations
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.arraytypes.annotations.AnnotationArray
+
+
+
+
+.. py:class:: AnnotationArray
+
+
+
+
+   An AnnotationArray is a uint8, uint16, uint32 or uint64 Array where each
+   voxel has a value associated with its class.
+
+   .. py:property:: interpolatable
+
+      This is an abstract method which should be overridden in each of the subclasses
+      to determine if an array is interpolatable or not.
+
+      :returns: True if the array is interpolatable, False otherwise.
+      :rtype: bool
+
+   .. py:attribute:: classes
+      :type: Dict[int, str]
+
+      
+
+

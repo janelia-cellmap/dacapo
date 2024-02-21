@@ -1,0 +1,87 @@
+:py:mod:`dacapo.experiments.run`
+================================
+
+.. py:module:: dacapo.experiments.run
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.run.Run
+
+
+
+
+.. py:class:: Run(run_config)
+
+
+   .. py:attribute:: name
+      :type: str
+
+      
+
+   .. py:attribute:: train_until
+      :type: int
+
+      
+
+   .. py:attribute:: validation_interval
+      :type: int
+
+      
+
+   .. py:attribute:: task
+      :type: dacapo.experiments.tasks.task.Task
+
+      
+
+   .. py:attribute:: architecture
+      :type: dacapo.experiments.architectures.architecture.Architecture
+
+      
+
+   .. py:attribute:: trainer
+      :type: dacapo.experiments.trainers.trainer.Trainer
+
+      
+
+   .. py:attribute:: datasplit
+      :type: dacapo.experiments.datasplits.datasplit.DataSplit
+
+      
+
+   .. py:attribute:: model
+      :type: dacapo.experiments.model.Model
+
+      
+
+   .. py:attribute:: optimizer
+      :type: torch.optim.Optimizer
+
+      
+
+   .. py:attribute:: training_stats
+      :type: dacapo.experiments.training_stats.TrainingStats
+
+      
+
+   .. py:attribute:: validation_scores
+      :type: dacapo.experiments.validation_scores.ValidationScores
+
+      
+
+   .. py:method:: get_validation_scores(run_config) -> dacapo.experiments.validation_scores.ValidationScores
+      :staticmethod:
+
+      Static method to avoid having to initialize model, optimizer, trainer, etc.
+
+
+   .. py:method:: move_optimizer(device: torch.device, empty_cuda_cache: bool = False) -> None
+
+
+

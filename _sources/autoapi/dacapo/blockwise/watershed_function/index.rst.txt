@@ -1,0 +1,22 @@
+:py:mod:`dacapo.blockwise.watershed_function`
+=============================================
+
+.. py:module:: dacapo.blockwise.watershed_function
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.blockwise.watershed_function.segment_function
+
+
+
+.. py:function:: segment_function(input_array, block, offsets, bias)
+
+

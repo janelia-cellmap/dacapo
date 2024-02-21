@@ -1,0 +1,56 @@
+:py:mod:`dacapo.experiments.datasplits.dummy_datasplit_config`
+==============================================================
+
+.. py:module:: dacapo.experiments.datasplits.dummy_datasplit_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.dummy_datasplit_config.DummyDataSplitConfig
+
+
+
+
+.. py:class:: DummyDataSplitConfig
+
+
+
+
+   A simple class representing config for Dummy DataSplit.
+
+   This class is derived from 'DataSplitConfig' and is initialized with
+   'DatasetConfig' for training dataset.
+
+   .. attribute:: datasplit_type
+
+      Class of dummy data split functionality.
+
+   .. attribute:: train_config
+
+      Config for the training dataset. Defaults to DummyDatasetConfig.
+
+   .. py:attribute:: datasplit_type
+
+      
+
+   .. py:attribute:: train_config
+      :type: dacapo.experiments.datasplits.datasets.DatasetConfig
+
+      
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      A method for verification. This method always return 'False' plus
+      a string indicating the condition.
+
+      :returns: A tuple contains a boolean 'False' and a string.
+      :rtype: Tuple[bool, str]
+
+
+

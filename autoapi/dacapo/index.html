@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dacapo &mdash; DaCapo  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="dacapo.blockwise" href="blockwise/index.html" />
+    <link rel="prev" title="API Reference" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            DaCapo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">DaCapo API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#modules">Modules:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="experiments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="ext/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.ext</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="gp/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="apply/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.apply</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="options/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.options</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.plot</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="predict/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.predict</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="train/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.train</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="validate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.validate</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#classes">Classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">CLI</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DaCapo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/autoapi/dacapo/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-dacapo">
+<span id="dacapo"></span><h1><a class="reference internal" href="#module-dacapo" title="dacapo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><a class="headerlink" href="#module-dacapo" title="Link to this heading"></a></h1>
+<section id="dacapo-module">
+<p>This module contains several useful methods for performing common tasks in dacapo library.</p>
+<section id="modules">
+<h3>Modules:<a class="headerlink" href="#modules" title="Link to this heading"></a></h3>
+<p>Options            - Deals with configuring aspects of the program’s operations.
+experiments        - This module is responsible for conducting experiments.
+apply              - Applies the results of the training process to the given dataset.
+train              - Trains the model using given data set.
+validate           - This module is for validating the model.
+predict            - This module is used to generate predictions based on the model.</p>
+</section>
+</section>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blockwise/argmax_worker/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise.argmax_worker</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blockwise/blockwise_task/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise.blockwise_task</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blockwise/predict_worker/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise.predict_worker</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blockwise/relabel_worker/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise.relabel_worker</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blockwise/scheduler/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise.scheduler</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blockwise/segment_worker/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise.segment_worker</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blockwise/threshold_worker/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise.threshold_worker</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blockwise/watershed_function/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise.watershed_function</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="compute_context/bsub/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context.bsub</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="compute_context/compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context.compute_context</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="compute_context/local_torch/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context.local_torch</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="experiments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="experiments/architectures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.architectures</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="experiments/architectures/architecture/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.architectures.architecture</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/architectures/architecture_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.architectures.architecture_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/architectures/cnnectome_unet/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.architectures.cnnectome_unet</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/architectures/cnnectome_unet_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.architectures.cnnectome_unet_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/architectures/dummy_architecture/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.architectures.dummy_architecture</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/architectures/dummy_architecture_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.architectures.dummy_architecture_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="experiments/arraytypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.arraytypes</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="experiments/arraytypes/annotations/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.arraytypes.annotations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/arraytypes/arraytype/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.arraytypes.arraytype</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/arraytypes/binary/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.arraytypes.binary</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/arraytypes/distances/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.arraytypes.distances</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/arraytypes/embedding/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.arraytypes.embedding</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/arraytypes/intensities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.arraytypes.intensities</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/arraytypes/mask/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.arraytypes.mask</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/arraytypes/probabilities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.arraytypes.probabilities</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="experiments/datasplits/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="experiments/datasplits/datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/datasplits/keys/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.keys</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/datasplits/datasplit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasplit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/datasplits/datasplit_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasplit_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/datasplits/dummy_datasplit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.dummy_datasplit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/datasplits/dummy_datasplit_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.dummy_datasplit_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/datasplits/train_validate_datasplit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.train_validate_datasplit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/datasplits/train_validate_datasplit_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.train_validate_datasplit_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="experiments/starts/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.starts</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="experiments/starts/start/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.starts.start</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/starts/start_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.starts.start_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="experiments/tasks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/evaluators/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.evaluators</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/losses/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.losses</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/post_processors/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.post_processors</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/predictors/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.predictors</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/affinities_task/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.affinities_task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/affinities_task_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.affinities_task_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/distance_task/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.distance_task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/distance_task_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.distance_task_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/dummy_task/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.dummy_task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/dummy_task_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.dummy_task_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/hot_distance_task/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.hot_distance_task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/hot_distance_task_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.hot_distance_task_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/inner_distance_task/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.inner_distance_task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/inner_distance_task_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.inner_distance_task_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/one_hot_task/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.one_hot_task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/one_hot_task_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.one_hot_task_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/pretrained_task/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.pretrained_task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/pretrained_task_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.pretrained_task_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/task/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.task</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/tasks/task_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.task_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="experiments/trainers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.trainers</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="experiments/trainers/gp_augments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.trainers.gp_augments</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/trainers/optimizers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.trainers.optimizers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/trainers/dummy_trainer/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.trainers.dummy_trainer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/trainers/dummy_trainer_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.trainers.dummy_trainer_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/trainers/gunpowder_trainer/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.trainers.gunpowder_trainer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/trainers/gunpowder_trainer_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.trainers.gunpowder_trainer_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/trainers/trainer/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.trainers.trainer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="experiments/trainers/trainer_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.trainers.trainer_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="experiments/model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.model</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="experiments/run/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.run</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="experiments/run_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.run_config</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="experiments/training_iteration_stats/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.training_iteration_stats</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="experiments/training_stats/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.training_stats</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="experiments/validation_iteration_scores/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.validation_iteration_scores</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="experiments/validation_scores/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.validation_scores</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ext/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.ext</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="gp/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gp/copy/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp.copy</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gp/dacapo_array_source/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp.dacapo_array_source</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gp/dacapo_create_target/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp.dacapo_create_target</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gp/dacapo_points_source/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp.dacapo_points_source</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gp/elastic_augment_fuse/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp.elastic_augment_fuse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gp/gamma_noise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp.gamma_noise</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gp/product/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp.product</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gp/reject_if_empty/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp.reject_if_empty</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="store/array_store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.array_store</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="store/config_store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.config_store</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="store/conversion_hooks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.conversion_hooks</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="store/converter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.converter</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="store/create_store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.create_store</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="store/file_config_store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.file_config_store</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="store/file_stats_store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.file_stats_store</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="store/local_array_store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.local_array_store</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="store/local_weights_store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.local_weights_store</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="store/mongo_config_store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.mongo_config_store</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="store/mongo_stats_store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.mongo_stats_store</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="store/stats_store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.stats_store</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="store/weights_store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.weights_store</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.utils</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utils/affinities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.utils.affinities</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/balance_weights/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.utils.balance_weights</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/voi/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.utils.voi</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="apply/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.apply</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="options/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.options</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.plot</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="predict/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.predict</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="train/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.train</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="validate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.validate</span></code></a></li>
+</ul>
+</div>
+</section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.Options" title="dacapo.Options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Options</span></code></a></p></td>
+<td><p>Singleton class used to hold and access parsed configuration options.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.apply" title="dacapo.apply"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply</span></code></a>(run_name, input_container, input_dataset, ...[, ...])</p></td>
+<td><p>Load weights and apply a model to a dataset. If iteration is None, the best iteration based on the criterion is used. If roi is None, the whole input dataset is used.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="validate/index.html#module-dacapo.validate" title="dacapo.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>(run_name, iteration[, compute_context, ...])</p></td>
+<td><p>Validate a run at a given iteration. Loads the weights from a previously</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="predict/index.html#module-dacapo.predict" title="dacapo.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(run_name, iteration, input_container, ...[, ...])</p></td>
+<td><p>_summary_</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.Options">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.</span></span><span class="sig-name descname"><span class="pre">Options</span></span><a class="headerlink" href="#dacapo.Options" title="Link to this definition"></a></dt>
+<dd><p>Singleton class used to hold and access parsed configuration options.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.Options.instance">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.Options.instance" title="Link to this definition"></a></dt>
+<dd><p>Get the singleton instance of the Options class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> – Optional named arguments to parse as options.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The singleton instance of Options.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dacapo.Options" title="dacapo.Options">Options</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.apply">
+<span class="sig-prename descclassname"><span class="pre">dacapo.</span></span><span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_container</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="experiments/datasplits/datasets/dataset/index.html#dacapo.experiments.datasplits.datasets.dataset.Dataset" title="dacapo.experiments.datasplits.datasets.dataset.Dataset"><span class="pre">dacapo.experiments.datasplits.datasets.dataset.Dataset</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'voi'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="experiments/tasks/post_processors/post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters" title="dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Roi</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.dtype</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">np.uint8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="compute_context/index.html#dacapo.compute_context.ComputeContext" title="dacapo.compute_context.ComputeContext"><span class="pre">dacapo.compute_context.ComputeContext</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">LocalTorch()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'zarr'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply" title="Link to this definition"></a></dt>
+<dd><p>Load weights and apply a model to a dataset. If iteration is None, the best iteration based on the criterion is used. If roi is None, the whole input dataset is used.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.validate">
+<span class="sig-prename descclassname"><span class="pre">dacapo.</span></span><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="compute_context/index.html#dacapo.compute_context.ComputeContext" title="dacapo.compute_context.ComputeContext"><span class="pre">dacapo.compute_context.ComputeContext</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">LocalTorch()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'uint8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.validate" title="Link to this definition"></a></dt>
+<dd><p>Validate a run at a given iteration. Loads the weights from a previously
+stored checkpoint. Returns the best parameters and scores for this
+iteration.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.predict">
+<span class="sig-prename descclassname"><span class="pre">dacapo.</span></span><span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_container</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Roi</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.dtype</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">np.uint8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="compute_context/index.html#dacapo.compute_context.ComputeContext" title="dacapo.compute_context.ComputeContext"><span class="pre">dacapo.compute_context.ComputeContext</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">LocalTorch()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.predict" title="Link to this definition"></a></dt>
+<dd><p>_summary_</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_name</strong> (<em>str</em>) – _description_</p></li>
+<li><p><strong>iteration</strong> (<em>int</em>) – _description_</p></li>
+<li><p><strong>input_container</strong> (<em>Path</em><em> | </em><em>str</em>) – _description_</p></li>
+<li><p><strong>input_dataset</strong> (<em>str</em>) – _description_</p></li>
+<li><p><strong>output_path</strong> (<em>Path</em><em> | </em><em>str</em>) – _description_</p></li>
+<li><p><strong>output_roi</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Defaults to None. If output roi is None,
+it will be set to the raw roi.</p></li>
+<li><p><strong>num_workers</strong> (<em>int</em><em>, </em><em>optional</em>) – _description_. Defaults to 30.</p></li>
+<li><p><strong>output_dtype</strong> (<em>np.dtype</em><em> | </em><em>str</em><em>, </em><em>optional</em>) – _description_. Defaults to np.uint8.</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em><em>, </em><em>optional</em>) – _description_. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="blockwise/index.html" class="btn btn-neutral float-right" title="dacapo.blockwise" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, William Patton, David Ackerman, Jan Funke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

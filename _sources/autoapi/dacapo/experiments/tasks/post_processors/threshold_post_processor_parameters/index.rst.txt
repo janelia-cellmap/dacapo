@@ -1,0 +1,32 @@
+:py:mod:`dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters`
+======================================================================================
+
+.. py:module:: dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters
+
+
+
+
+.. py:class:: ThresholdPostProcessorParameters
+
+
+
+
+   Base class for post-processor parameters.
+
+   .. py:attribute:: threshold
+      :type: float
+
+      
+
+

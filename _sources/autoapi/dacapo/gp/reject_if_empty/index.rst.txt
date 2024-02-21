@@ -1,0 +1,79 @@
+:py:mod:`dacapo.gp.reject_if_empty`
+===================================
+
+.. py:module:: dacapo.gp.reject_if_empty
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.gp.reject_if_empty.RejectIfEmpty
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.gp.reject_if_empty.logger
+
+
+.. py:data:: logger
+
+   
+
+.. py:class:: RejectIfEmpty(gt=None, p=0.5, background=0)
+
+
+
+
+   Node to reject batches based on the mask's filled vs empty ratio.
+
+   :param gt: The ground truth array key that will be used.
+              Default is None.
+   :type gt: ArrayKey, optional
+   :param p: The probability threshold for rejecting batches until
+             a non-empty ground truth is found. Default is 0.5.
+   :type p: float, optional
+   :param background: The value representing the background in
+                      the ground truth data. Default is 0.
+   :type background: int, optional
+
+   This class inherits from :class: `BatchFilter`.
+
+   In the setup() method, it asserts that only one provider is in the upstream.
+   In the provide() method, it makes sure that the gt ArrayKey is in the request
+   provided. It then keeps requesting batches from the upstream until it finds
+   a batch where the ground truth is not empty, or the random number generated
+   is greater than the threshold p.
+
+   .. py:method:: setup()
+
+      Asserts that only one upstream provider is supported.
+
+
+   .. py:method:: provide(request)
+
+      Provide the processed batch.
+
+      :param request: The batch request.
+
+      :returns: The processed batch.
+      :rtype: Batch
+
+      Random seed is initialized based on the request's random seed. Setup the
+      timer. If there is no gt in the request, it will assert error. Continue
+      requesting batch from the upstream provider until the data's min and max
+      value is not same as background value or the random number generated is
+      less than p (the probability threshold). It returns the accepted batch
+      after stopping the timer.
+
+
+

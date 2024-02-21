@@ -1,0 +1,55 @@
+:py:mod:`dacapo.store.stats_store`
+==================================
+
+.. py:module:: dacapo.store.stats_store
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.store.stats_store.StatsStore
+
+
+
+
+.. py:class:: StatsStore
+
+
+
+
+   Base class for statistics stores.
+
+   .. py:method:: store_training_stats(run_name: str, training_stats: dacapo.experiments.training_stats.TrainingStats)
+      :abstractmethod:
+
+      Store training stats of a given run.
+
+
+   .. py:method:: retrieve_training_stats(run_name: str) -> dacapo.experiments.training_stats.TrainingStats
+      :abstractmethod:
+
+      Retrieve the training stats for a given run.
+
+
+   .. py:method:: store_validation_iteration_scores(run_name: str, validation_scores: dacapo.experiments.validation_scores.ValidationScores)
+      :abstractmethod:
+
+      Store the validation iteration scores of a given run.
+
+
+   .. py:method:: retrieve_validation_iteration_scores(run_name: str) -> List[dacapo.experiments.validation_scores.ValidationIterationScores]
+      :abstractmethod:
+
+      Retrieve the validation iteration scores for a given run.
+
+
+   .. py:method:: delete_training_stats(run_name: str) -> None
+      :abstractmethod:
+
+
+

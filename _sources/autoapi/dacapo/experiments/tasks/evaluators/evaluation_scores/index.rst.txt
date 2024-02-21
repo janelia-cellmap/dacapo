@@ -1,0 +1,52 @@
+:py:mod:`dacapo.experiments.tasks.evaluators.evaluation_scores`
+===============================================================
+
+.. py:module:: dacapo.experiments.tasks.evaluators.evaluation_scores
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
+
+
+
+
+.. py:class:: EvaluationScores
+
+
+   Base class for evaluation scores.
+
+   .. py:property:: criteria
+      :type: List[str]
+      :abstractmethod:
+
+
+   .. py:method:: higher_is_better(criterion: str) -> bool
+      :staticmethod:
+      :abstractmethod:
+
+      Wether or not higher is better for this criterion.
+
+
+   .. py:method:: bounds(criterion: str) -> Tuple[float, float]
+      :staticmethod:
+      :abstractmethod:
+
+      The bounds for this criterion
+
+
+   .. py:method:: store_best(criterion: str) -> bool
+      :staticmethod:
+      :abstractmethod:
+
+      Whether or not to save the best validation block and model
+      weights for this criterion.
+
+
+

@@ -1,0 +1,72 @@
+:py:mod:`dacapo.experiments.starts.start`
+=========================================
+
+.. py:module:: dacapo.experiments.starts.start
+
+.. autoapi-nested-parse::
+
+   This module contains a Start class utilized in the dacapo Python library
+   to initialize the weights of a model using a specified criterion and run
+   configuration.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.starts.start.Start
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.starts.start.logger
+
+
+.. py:data:: logger
+
+   
+
+.. py:class:: Start(start_config)
+
+
+
+
+   This class interfaces with the dacapo store to retrieve and load the
+   weights of a model.
+
+   .. attribute:: run
+
+      The specified run to retrieve weights for the model.
+
+      :type: str
+
+   .. attribute:: criterion
+
+      The policy that was used to decide when to store the weights.
+
+      :type: str
+
+   .. py:method:: initialize_weights(model)
+
+      Retrieves the weights from the dacapo store and load them into
+      the model.
+
+      :param model: The model to which the weights are to be loaded.
+      :type model: obj
+
+      :raises RuntimeError: If weights of a non-existing or mismatched layer are being
+          loaded, a RuntimeError exception is thrown which is logged
+          and handled by loading only the common layers from weights.
+
+
+

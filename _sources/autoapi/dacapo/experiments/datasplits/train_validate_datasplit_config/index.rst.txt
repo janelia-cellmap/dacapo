@@ -1,0 +1,41 @@
+:py:mod:`dacapo.experiments.datasplits.train_validate_datasplit_config`
+=======================================================================
+
+.. py:module:: dacapo.experiments.datasplits.train_validate_datasplit_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplitConfig
+
+
+
+
+.. py:class:: TrainValidateDataSplitConfig
+
+
+
+
+   This is the standard Train/Validate DataSplit config.
+
+   .. py:attribute:: datasplit_type
+
+      
+
+   .. py:attribute:: train_configs
+      :type: List[dacapo.experiments.datasplits.datasets.DatasetConfig]
+
+      
+
+   .. py:attribute:: validate_configs
+      :type: List[dacapo.experiments.datasplits.datasets.DatasetConfig]
+
+      
+
+

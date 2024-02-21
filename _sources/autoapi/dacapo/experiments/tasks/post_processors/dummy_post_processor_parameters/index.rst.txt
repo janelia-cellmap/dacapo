@@ -1,0 +1,32 @@
+:py:mod:`dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters`
+==================================================================================
+
+.. py:module:: dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters
+
+
+
+
+.. py:class:: DummyPostProcessorParameters
+
+
+
+
+   Base class for post-processor parameters.
+
+   .. py:attribute:: min_size
+      :type: int
+
+      
+
+

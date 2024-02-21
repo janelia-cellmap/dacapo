@@ -1,0 +1,99 @@
+:py:mod:`dacapo.experiments.trainers.gunpowder_trainer_config`
+==============================================================
+
+.. py:module:: dacapo.experiments.trainers.gunpowder_trainer_config
+
+.. autoapi-nested-parse::
+
+   This script file contains the GunpowderTrainerConfig class. It inherits from the TrainerConfig class and is used to configure a gunpowder trainer for the dacapo library.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig
+
+
+
+
+.. py:class:: GunpowderTrainerConfig
+
+
+
+
+   This class is used to configure a Gunpowder Trainer. It contains attributes related to trainer type,
+   number of data fetchers, augmentations to apply, snapshot interval, minimum masked value, and a boolean
+   value indicating whether to clip raw or not.
+
+   .. attribute:: trainer_type
+
+      This is the type of the trainer which is set to GunpowderTrainer by default.
+
+      :type: class
+
+   .. attribute:: num_data_fetchers
+
+      This is the number of CPU workers who will be dedicated to fetch and process the data.
+
+      :type: int
+
+   .. attribute:: augments
+
+      This is the list of augments to apply during the training.
+
+      :type: List[AugmentConfig]
+
+   .. attribute:: snapshot_interval
+
+      This is the number of iterations after which a new snapshot should be saved.
+
+      :type: Optional[int]
+
+   .. attribute:: min_masked
+
+      This is the minimum masked value.
+
+      :type: Optional[float]
+
+   .. attribute:: clip_raw
+
+      This is a boolean value indicating if the raw data should be clipped or not.
+
+      :type: bool
+
+   .. py:attribute:: trainer_type
+
+      
+
+   .. py:attribute:: num_data_fetchers
+      :type: int
+
+      
+
+   .. py:attribute:: augments
+      :type: List[dacapo.experiments.trainers.gp_augments.AugmentConfig]
+
+      
+
+   .. py:attribute:: snapshot_interval
+      :type: Optional[int]
+
+      
+
+   .. py:attribute:: min_masked
+      :type: Optional[float]
+
+      
+
+   .. py:attribute:: clip_raw
+      :type: bool
+
+      
+
+

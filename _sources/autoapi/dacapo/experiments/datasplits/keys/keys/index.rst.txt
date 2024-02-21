@@ -1,0 +1,100 @@
+:py:mod:`dacapo.experiments.datasplits.keys.keys`
+=================================================
+
+.. py:module:: dacapo.experiments.datasplits.keys.keys
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.keys.keys.DataKey
+   dacapo.experiments.datasplits.keys.keys.ArrayKey
+   dacapo.experiments.datasplits.keys.keys.GraphKey
+
+
+
+
+.. py:class:: DataKey
+
+
+
+
+   Represent a base class for various types of keys in Dacapo library.
+
+
+.. py:class:: ArrayKey
+
+
+
+
+   A unique enumeration representing different types of array keys
+
+   .. attribute:: RAW
+
+      The raw data key.
+
+      :type: str
+
+   .. attribute:: GT
+
+      The ground truth data key.
+
+      :type: str
+
+   .. attribute:: MASK
+
+      The data mask key.
+
+      :type: str
+
+   .. attribute:: NON_EMPTY
+
+      The data key for non-empty mask.
+
+      :type: str
+
+   .. py:attribute:: RAW
+      :value: 'raw'
+
+      
+
+   .. py:attribute:: GT
+      :value: 'gt'
+
+      
+
+   .. py:attribute:: MASK
+      :value: 'mask'
+
+      
+
+   .. py:attribute:: NON_EMPTY
+      :value: 'non_empty_mask'
+
+      
+
+
+.. py:class:: GraphKey
+
+
+
+
+   A unique enumeration representing different types of graph keys
+
+   .. attribute:: SPECIFIED_LOCATIONS
+
+      The key for specified locations in the graph.
+
+      :type: str
+
+   .. py:attribute:: SPECIFIED_LOCATIONS
+      :value: 'specified_locations'
+
+      
+
+

@@ -1,0 +1,42 @@
+:py:mod:`dacapo.experiments.arraytypes.embedding`
+=================================================
+
+.. py:module:: dacapo.experiments.arraytypes.embedding
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.arraytypes.embedding.EmbeddingArray
+
+
+
+
+.. py:class:: EmbeddingArray
+
+
+
+
+   A generic output of a model that could represent almost anything. Assumed to be
+   float, interpolatable, and have sum number of channels.
+
+   .. py:property:: interpolatable
+      :type: bool
+
+      This is an abstract method which should be overridden in each of the subclasses
+      to determine if an array is interpolatable or not.
+
+      :returns: True if the array is interpolatable, False otherwise.
+      :rtype: bool
+
+   .. py:attribute:: embedding_dims
+      :type: int
+
+      
+
+

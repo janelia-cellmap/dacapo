@@ -1,0 +1,75 @@
+:py:mod:`dacapo.experiments.datasplits.dummy_datasplit`
+=======================================================
+
+.. py:module:: dacapo.experiments.datasplits.dummy_datasplit
+
+.. autoapi-nested-parse::
+
+   DummyDataSplit is a class derived from the DataSplit class which is used to setup a simple list of one dataset for training purposes.
+   Validation datasets are left as an empty list in this class.
+
+   Attributes:
+   ----------
+   train : list
+       List containing the training dataset(s).
+   validate : list
+       An empty list for validation data. It does not contain any validation dataset in this class.
+
+   Methods:
+   ----------
+   __init__(self, datasplit_config):
+       Initializes the DummyDataSplit instance with the configuration setup for training.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.dummy_datasplit.DummyDataSplit
+
+
+
+
+.. py:class:: DummyDataSplit(datasplit_config)
+
+
+
+
+   A class for creating a simple train dataset and no validation dataset.
+
+   It is derived from `DataSplit` class.
+
+   ...
+   .. attribute:: train
+
+      The list containing training datasets. In this class, it contains only one dataset for training.
+
+      :type: list
+
+   .. attribute:: validate
+
+      The list containing validation datasets. In this class, it is an empty list as no validation dataset is set.
+
+      :type: list
+
+   .. method:: __init__(self, datasplit_config):
+
+      The constructor for DummyDataSplit class. It initialises a list with training datasets according to the input configuration.
+
+
+   .. py:attribute:: train
+      :type: List[dacapo.experiments.datasplits.datasets.Dataset]
+
+      
+
+   .. py:attribute:: validate
+      :type: List[dacapo.experiments.datasplits.datasets.Dataset]
+
+      
+
+

@@ -1,0 +1,142 @@
+:py:mod:`dacapo.blockwise`
+==========================
+
+.. py:module:: dacapo.blockwise
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   argmax_worker/index.rst
+   blockwise_task/index.rst
+   predict_worker/index.rst
+   relabel_worker/index.rst
+   scheduler/index.rst
+   segment_worker/index.rst
+   threshold_worker/index.rst
+   watershed_function/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.blockwise.DaCapoBlockwiseTask
+
+
+
+
+.. py:class:: DaCapoBlockwiseTask(worker_file: str | pathlib.Path, compute_context: dacapo.compute_context.ComputeContext | str, total_roi: daisy.Roi, read_roi: daisy.Roi, write_roi: daisy.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, *args, **kwargs)
+
+
+
+
+   Definition of a ``daisy`` task that is to be run in a block-wise
+   fashion.
+
+   :param name: The unique name of the task.
+   :type name: ``string``
+   :param total_roi (`class: daisy.Roi`):
+
+                             The region of interest (ROI) of the complete volume to process.
+   :param read_roi (`class: daisy.Roi`):
+
+                            The ROI every block needs to read data from. Will be shifted over
+                            the ``total_roi`` to cover the whole volume.
+   :param write_roi (`class: daisy.Roi`):
+
+                             The ROI every block writes data from. Will be shifted over the
+                             ``total_roi`` to cover the whole volume.
+   :param process_function:
+                            A function that will be called as::
+
+                                process_function(block)
+
+                            with ``block`` being the shifted read and write ROI for each
+                            location in the volume.
+
+                            If ``read_write_conflict`` is ``True`, the callee can assume that
+                            there are no read/write concurencies, i.e., at any given point in
+                            time the ``read_roi`` does not overlap with the ``write_roi`` of
+                            another process.
+   :type process_function: function
+   :param check_function:
+                          A function that will be called as::
+
+                              check_function(block)
+
+                          This function should return ``True`` if the block was completed.
+                          This is used internally to avoid processing blocks that are already
+                          done and to check if a block was correctly processed.
+
+                          If a tuple of two functions is given, the first one will be called
+                          to check if the block needs to be run, and if so, the second one
+                          will be called after it was run to check if the run succeeded.
+   :type check_function: function, optional
+   :param init_callback_fn: A function that Daisy will call once when the task is started.
+                            It will be called as::
+
+                                init_callback_fn(context)
+
+                            Where `context` is the `daisy.Context` string that can be used
+                            by the daisy clients to connect to the server.
+   :type init_callback_fn: function, optional
+   :param read_write_conflict: Whether the read and write ROIs are conflicting, i.e., accessing
+                               the same resource. If set to ``False``, all blocks can run at the
+                               same time in parallel. In this case, providing a ``read_roi`` is
+                               simply a means of convenience to ensure no out-of-bound accesses
+                               and to avoid re-computation of it in each block.
+   :type read_write_conflict: ``bool``, optional
+   :param fit: How to handle cases where shifting blocks by the size of
+               ``write_roi`` does not tile the ``total_roi``. Possible options
+               are:
+
+               "valid": Skip blocks that would lie outside of ``total_roi``. This
+               is the default::
+
+                   |---------------------------|     total ROI
+
+                   |rrrr|wwwwww|rrrr|                block 1
+                          |rrrr|wwwwww|rrrr|         block 2
+                                                     no further block
+
+               "overhang": Add all blocks that overlap with ``total_roi``, even if
+               they leave it. Client code has to take care of save access beyond
+               ``total_roi`` in this case.::
+
+                   |---------------------------|     total ROI
+
+                   |rrrr|wwwwww|rrrr|                block 1
+                          |rrrr|wwwwww|rrrr|         block 2
+                                 |rrrr|wwwwww|rrrr|  block 3 (overhanging)
+
+               "shrink": Like "overhang", but shrink the boundary blocks' read and
+               write ROIs such that they are guaranteed to lie within
+               ``total_roi``. The shrinking will preserve the context, i.e., the
+               difference between the read ROI and write ROI stays the same.::
+
+                   |---------------------------|     total ROI
+
+                   |rrrr|wwwwww|rrrr|                block 1
+                          |rrrr|wwwwww|rrrr|         block 2
+                                 |rrrr|www|rrrr|     block 3 (shrunk)
+   :type fit: ``string``, optional
+   :param num_workers: The number of parallel processes to run.
+   :type num_workers: int, optional
+   :param max_retries: The maximum number of times a task will be retried if failed
+                       (either due to failed post check or application crashes or network
+                       failure)
+   :type max_retries: int, optional
+   :param timeout: Time in seconds to wait for a block to be returned from a worker.
+                   The worker is killed (and the block retried) if this time is
+                   exceeded.
+   :type timeout: int, optional
+
+

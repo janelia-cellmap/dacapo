@@ -1,0 +1,87 @@
+:py:mod:`dacapo.experiments.architectures.dummy_architecture`
+=============================================================
+
+.. py:module:: dacapo.experiments.architectures.dummy_architecture
+
+.. autoapi-nested-parse::
+
+   This module implements dummy architecture layer for a 3D convolutional neural network.
+
+   Classes:
+       DummyArchitecture(Architecture)
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.architectures.dummy_architecture.DummyArchitecture
+
+
+
+
+.. py:class:: DummyArchitecture(architecture_config)
+
+
+
+
+   A class used to represent a dummy architecture layer for a 3D CNN.
+
+   .. attribute:: channels_in
+
+      An integer representing the number of input channels.
+
+   .. attribute:: channels_out
+
+      An integer representing the number of output channels.
+
+   .. attribute:: conv
+
+      A 3D convolution object.
+
+   .. attribute:: input_shape
+
+      A coordinate object representing the shape of the input.
+
+   .. method:: forward(x)
+
+      Performs the forward pass of the network.
+      
+
+   .. py:property:: input_shape
+
+      Returns the input shape for this architecture.
+
+      :returns: Input shape of the architecture.
+      :rtype: Coordinate
+
+   .. py:property:: num_in_channels
+
+      Returns the number of input channels for this architecture.
+
+      :returns: Number of input channels.
+      :rtype: int
+
+   .. py:property:: num_out_channels
+
+      Returns the number of output channels for this architecture.
+
+      :returns: Number of output channels.
+      :rtype: int
+
+   .. py:method:: forward(x)
+
+      Perform the forward pass of the network.
+
+      :param x: Input tensor.
+
+      :returns: Output tensor after the forward pass.
+      :rtype: Tensor
+
+
+

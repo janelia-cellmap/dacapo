@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dacapo.experiments.tasks.evaluators &mdash; DaCapo  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores" href="binary_segmentation_evaluation_scores/index.html" />
+    <link rel="prev" title="dacapo.experiments.tasks" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            DaCapo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">DaCapo API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../ext/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.ext</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../gp/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../index.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../cli.html">CLI</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">DaCapo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.evaluators</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../_sources/autoapi/dacapo/experiments/tasks/evaluators/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-dacapo.experiments.tasks.evaluators">
+<span id="dacapo-experiments-tasks-evaluators"></span><h1><a class="reference internal" href="#module-dacapo.experiments.tasks.evaluators" title="dacapo.experiments.tasks.evaluators"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.evaluators</span></code></a><a class="headerlink" href="#module-dacapo.experiments.tasks.evaluators" title="Link to this heading"></a></h1>
+<p>This script imports important classes from individual sub-modules into the package’s root namespace which includes DummyEvaluationScores, DummyEvaluator, EvaluationScores,
+Evaluator, MultiChannelBinarySegmentationEvaluationScores, BinarySegmentationEvaluationScores, BinarySegmentationEvaluator, InstanceEvaluationScores, and InstanceEvaluator.</p>
+<p>These classes are used for different types of evaluation and scoring in the DACapo python library.</p>
+<dl class="simple">
+<dt>Modules:</dt><dd><ul class="simple">
+<li><p>dummy_evaluation_scores: Contains the definition for DummyEvaluationScores Class.</p></li>
+<li><p>dummy_evaluator: Contains the definition for DummyEvaluator Class.</p></li>
+<li><p>evaluation_scores: Contains the definition for EvaluationScores Class.</p></li>
+<li><p>evaluator: Contains the definition for Evaluator Class.</p></li>
+<li><p>binary_segmentation_evaluation_scores: Contains the definition for MultiChannelBinarySegmentationEvaluationScores and BinarySegmentationEvaluationScores Classes.</p></li>
+<li><p>binary_segmentation_evaluator: Contains the definition for BinarySegmentationEvaluator Class.</p></li>
+<li><p>instance_evaluation_scores: Contains the definition for InstanceEvaluationScores Class.</p></li>
+<li><p>instance_evaluator: Contains the definition for InstanceEvaluator Class.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Import errors are ignored with <cite>noqa</cite> flag.</p></li>
+</ul>
+</div>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="binary_segmentation_evaluation_scores/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="binary_segmentation_evaluator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="dummy_evaluation_scores/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.evaluators.dummy_evaluation_scores</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="dummy_evaluator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.evaluators.dummy_evaluator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="evaluation_scores/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.evaluators.evaluation_scores</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="evaluator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.evaluators.evaluator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="instance_evaluation_scores/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.evaluators.instance_evaluation_scores</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="instance_evaluator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.tasks.evaluators.instance_evaluator</span></code></a></li>
+</ul>
+</div>
+</section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.DummyEvaluationScores" title="dacapo.experiments.tasks.evaluators.DummyEvaluationScores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyEvaluationScores</span></code></a></p></td>
+<td><p>Base class for evaluation scores.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.DummyEvaluator" title="dacapo.experiments.tasks.evaluators.DummyEvaluator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyEvaluator</span></code></a></p></td>
+<td><p>A Dummy Evaluator class which extends the Evaluator class for evaluation operations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.EvaluationScores" title="dacapo.experiments.tasks.evaluators.EvaluationScores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EvaluationScores</span></code></a></p></td>
+<td><p>Base class for evaluation scores.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.Evaluator" title="dacapo.experiments.tasks.evaluators.Evaluator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Evaluator</span></code></a></p></td>
+<td><p>Abstract base evaluator class. It provides the fundamental structure and methods for</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.MultiChannelBinarySegmentationEvaluationScores" title="dacapo.experiments.tasks.evaluators.MultiChannelBinarySegmentationEvaluationScores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiChannelBinarySegmentationEvaluationScores</span></code></a></p></td>
+<td><p>Base class for evaluation scores.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores" title="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinarySegmentationEvaluationScores</span></code></a></p></td>
+<td><p>Base class for evaluation scores.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluator" title="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinarySegmentationEvaluator</span></code></a></p></td>
+<td><p>Given a binary segmentation, compute various metrics to determine their similarity.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluationScores" title="dacapo.experiments.tasks.evaluators.InstanceEvaluationScores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InstanceEvaluationScores</span></code></a></p></td>
+<td><p>Base class for evaluation scores.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluator" title="dacapo.experiments.tasks.evaluators.InstanceEvaluator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InstanceEvaluator</span></code></a></p></td>
+<td><p>A subclass of Evaluator that specifically evaluates instance segmentation tasks. This class</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.DummyEvaluationScores">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.</span></span><span class="sig-name descname"><span class="pre">DummyEvaluationScores</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.DummyEvaluationScores" title="Link to this definition"></a></dt>
+<dd><p>Base class for evaluation scores.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.DummyEvaluationScores.criteria">
+<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['frizz_level',</span> <span class="pre">'blipp_score']</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.DummyEvaluationScores.criteria" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.DummyEvaluationScores.frizz_level">
+<span class="sig-name descname"><span class="pre">frizz_level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.DummyEvaluationScores.frizz_level" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.DummyEvaluationScores.blipp_score">
+<span class="sig-name descname"><span class="pre">blipp_score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.DummyEvaluationScores.blipp_score" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.DummyEvaluationScores.higher_is_better">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.DummyEvaluationScores.higher_is_better" title="Link to this definition"></a></dt>
+<dd><p>Wether or not higher is better for this criterion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.DummyEvaluationScores.bounds">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.DummyEvaluationScores.bounds" title="Link to this definition"></a></dt>
+<dd><p>The bounds for this criterion</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.DummyEvaluationScores.store_best">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.DummyEvaluationScores.store_best" title="Link to this definition"></a></dt>
+<dd><p>Whether or not to save the best validation block and model
+weights for this criterion.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.DummyEvaluator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.</span></span><span class="sig-name descname"><span class="pre">DummyEvaluator</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.DummyEvaluator" title="Link to this definition"></a></dt>
+<dd><p>A Dummy Evaluator class which extends the Evaluator class for evaluation operations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.DummyEvaluator.criteria">
+<span class="sig-name descname"><span class="pre">criteria</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.DummyEvaluator.criteria" title="Link to this definition"></a></dt>
+<dd><p>List of evaluation criteria.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.DummyEvaluator.score">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="dummy_evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores" title="dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores</span></a></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.DummyEvaluator.score" title="Link to this definition"></a></dt>
+<dd><p>A property which is the instance of DummyEvaluationScores containing the evaluation scores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An object of DummyEvaluationScores class.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.DummyEvaluationScores" title="dacapo.experiments.tasks.evaluators.DummyEvaluationScores">DummyEvaluationScores</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['frizz_level',</span> <span class="pre">'blipp_score']</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.DummyEvaluator.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.DummyEvaluator.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the given output array and dataset and returns the scores based on predefined criteria.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_array</strong> – The output array to be evaluated.</p></li>
+<li><p><strong>evaluation_dataset</strong> – The dataset to be used for evaluation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object of DummyEvaluationScores class, with the evaluation scores.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DummyEvaluationScore</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.EvaluationScores">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.</span></span><span class="sig-name descname"><span class="pre">EvaluationScores</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.EvaluationScores" title="Link to this definition"></a></dt>
+<dd><p>Base class for evaluation scores.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.EvaluationScores.criteria">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.EvaluationScores.criteria" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.EvaluationScores.higher_is_better">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.EvaluationScores.higher_is_better" title="Link to this definition"></a></dt>
+<dd><p>Wether or not higher is better for this criterion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.EvaluationScores.bounds">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.EvaluationScores.bounds" title="Link to this definition"></a></dt>
+<dd><p>The bounds for this criterion</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.EvaluationScores.store_best">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.EvaluationScores.store_best" title="Link to this definition"></a></dt>
+<dd><p>Whether or not to save the best validation block and model
+weights for this criterion.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.Evaluator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.</span></span><span class="sig-name descname"><span class="pre">Evaluator</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.Evaluator" title="Link to this definition"></a></dt>
+<dd><p>Abstract base evaluator class. It provides the fundamental structure and methods for
+evaluators. A specific evaluator must inherent this class and implement its methods.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.Evaluator.best_scores">
+<span class="sig-name descname"><span class="pre">best_scores</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.Evaluator.best_scores" title="Link to this definition"></a></dt>
+<dd><p>Dictionary storing the best scores, indexed by OutputIdentifier which is a tuple
+of Dataset, PostProcessorParameters, and criteria string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[OutputIdentifier, BestScore]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">best_scores</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">OutputIdentifier</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">BestScore</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Provides the best scores so far. If not available, an empty dictionary is
+created and returned.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.Evaluator.criteria">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.Evaluator.criteria" title="Link to this definition"></a></dt>
+<dd><p>A list of all criteria for which a model might be “best”. i.e. your
+criteria might be “precision”, “recall”, and “jaccard”. It is unlikely
+that the best iteration/post processing parameters will be the same
+for all 3 of these criteria</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.Evaluator.score">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores" title="dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores</span></a></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.Evaluator.score" title="Link to this definition"></a></dt>
+<dd><p>The abstract property to get the overall score of the evaluation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The overall evaluation scores.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.EvaluationScores" title="dacapo.experiments.tasks.evaluators.EvaluationScores">EvaluationScores</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.Evaluator.evaluate">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores" title="dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores</span></a></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.Evaluator.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Compares and evaluates the output array against the evaluation array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_array</strong> (<a class="reference internal" href="../../datasplits/datasets/arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><em>Array</em></a>) – The output data array to evaluate</p></li>
+<li><p><strong>eval_array</strong> (<a class="reference internal" href="../../datasplits/datasets/arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><em>Array</em></a>) – The evaluation data array to compare with the output</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The detailed evaluation scores after the comparison.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.EvaluationScores" title="dacapo.experiments.tasks.evaluators.EvaluationScores">EvaluationScores</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.Evaluator.is_best">
+<span class="sig-name descname"><span class="pre">is_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../datasplits/datasets/index.html#dacapo.experiments.datasplits.datasets.Dataset" title="dacapo.experiments.datasplits.datasets.Dataset"><span class="pre">dacapo.experiments.datasplits.datasets.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../post_processors/index.html#dacapo.experiments.tasks.post_processors.PostProcessorParameters" title="dacapo.experiments.tasks.post_processors.PostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.PostProcessorParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores" title="dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.Evaluator.is_best" title="Link to this definition"></a></dt>
+<dd><p>Determine if the provided score is the best for a specific
+dataset/parameter/criterion combination.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="../../datasplits/datasets/dataset/index.html#dacapo.experiments.datasplits.datasets.dataset.Dataset" title="dacapo.experiments.datasplits.datasets.dataset.Dataset"><em>Dataset</em></a>) – The dataset for which the evaluation is done</p></li>
+<li><p><strong>parameter</strong> (<a class="reference internal" href="../post_processors/index.html#dacapo.experiments.tasks.post_processors.PostProcessorParameters" title="dacapo.experiments.tasks.post_processors.PostProcessorParameters"><em>PostProcessorParameters</em></a>) – The post processing parameters used for the given dataset</p></li>
+<li><p><strong>criterion</strong> (<em>str</em>) – The evaluation criterion</p></li>
+<li><p><strong>score</strong> (<a class="reference internal" href="#dacapo.experiments.tasks.evaluators.EvaluationScores" title="dacapo.experiments.tasks.evaluators.EvaluationScores"><em>EvaluationScores</em></a>) – The calculated evaluation scores</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the score is the best, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.Evaluator.set_best">
+<span class="sig-name descname"><span class="pre">set_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validation_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../validation_scores/index.html#dacapo.experiments.validation_scores.ValidationScores" title="dacapo.experiments.validation_scores.ValidationScores"><span class="pre">dacapo.experiments.validation_scores.ValidationScores</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.Evaluator.set_best" title="Link to this definition"></a></dt>
+<dd><p>Identify the best iteration for each dataset/post_processing_parameter/criterion
+and set them as the current best scores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>validation_scores</strong> (<a class="reference internal" href="../../index.html#dacapo.experiments.ValidationScores" title="dacapo.experiments.ValidationScores"><em>ValidationScores</em></a>) – The validation scores from which the best are to be picked.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.Evaluator.higher_is_better">
+<span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.Evaluator.higher_is_better" title="Link to this definition"></a></dt>
+<dd><p>Determines whether a higher score is better for the given criterion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criterion</strong> (<em>str</em>) – The evaluation criterion</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if higher score is better, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.Evaluator.bounds">
+<span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.Evaluator.bounds" title="Link to this definition"></a></dt>
+<dd><p>Provides the bounds for the given evaluation criterion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criterion</strong> (<em>str</em>) – The evaluation criterion</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The lower and upper bounds for the criterion.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.Evaluator.store_best">
+<span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.Evaluator.store_best" title="Link to this definition"></a></dt>
+<dd><p>Determine if the best scores should be stored for the given criterion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criterion</strong> (<em>str</em>) – The evaluation criterion</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if best scores should be stored, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.MultiChannelBinarySegmentationEvaluationScores">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.</span></span><span class="sig-name descname"><span class="pre">MultiChannelBinarySegmentationEvaluationScores</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.MultiChannelBinarySegmentationEvaluationScores" title="Link to this definition"></a></dt>
+<dd><p>Base class for evaluation scores.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.MultiChannelBinarySegmentationEvaluationScores.criteria">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">criteria</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.MultiChannelBinarySegmentationEvaluationScores.criteria" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.MultiChannelBinarySegmentationEvaluationScores.channel_scores">
+<span class="sig-name descname"><span class="pre">channel_scores</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores" title="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores"><span class="pre">BinarySegmentationEvaluationScores</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.MultiChannelBinarySegmentationEvaluationScores.channel_scores" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.MultiChannelBinarySegmentationEvaluationScores.higher_is_better">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.MultiChannelBinarySegmentationEvaluationScores.higher_is_better" title="Link to this definition"></a></dt>
+<dd><p>Wether or not higher is better for this criterion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.MultiChannelBinarySegmentationEvaluationScores.store_best">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.MultiChannelBinarySegmentationEvaluationScores.store_best" title="Link to this definition"></a></dt>
+<dd><p>Whether or not to save the best validation block and model
+weights for this criterion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.MultiChannelBinarySegmentationEvaluationScores.bounds">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.MultiChannelBinarySegmentationEvaluationScores.bounds" title="Link to this definition"></a></dt>
+<dd><p>The bounds for this criterion</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.</span></span><span class="sig-name descname"><span class="pre">BinarySegmentationEvaluationScores</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores" title="Link to this definition"></a></dt>
+<dd><p>Base class for evaluation scores.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.dice">
+<span class="sig-name descname"><span class="pre">dice</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.dice" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.jaccard">
+<span class="sig-name descname"><span class="pre">jaccard</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.jaccard" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.hausdorff">
+<span class="sig-name descname"><span class="pre">hausdorff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.hausdorff" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.false_negative_rate">
+<span class="sig-name descname"><span class="pre">false_negative_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.false_negative_rate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.false_negative_rate_with_tolerance">
+<span class="sig-name descname"><span class="pre">false_negative_rate_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.false_negative_rate_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.false_positive_rate">
+<span class="sig-name descname"><span class="pre">false_positive_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.false_positive_rate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.false_discovery_rate">
+<span class="sig-name descname"><span class="pre">false_discovery_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.false_discovery_rate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.false_positive_rate_with_tolerance">
+<span class="sig-name descname"><span class="pre">false_positive_rate_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.false_positive_rate_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.voi">
+<span class="sig-name descname"><span class="pre">voi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.voi" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.mean_false_distance">
+<span class="sig-name descname"><span class="pre">mean_false_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.mean_false_distance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.mean_false_negative_distance">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.mean_false_negative_distance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.mean_false_positive_distance">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.mean_false_positive_distance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.mean_false_distance_clipped">
+<span class="sig-name descname"><span class="pre">mean_false_distance_clipped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.mean_false_distance_clipped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.mean_false_negative_distance_clipped">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance_clipped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.mean_false_negative_distance_clipped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.mean_false_positive_distance_clipped">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance_clipped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.mean_false_positive_distance_clipped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.precision_with_tolerance">
+<span class="sig-name descname"><span class="pre">precision_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.precision_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.recall_with_tolerance">
+<span class="sig-name descname"><span class="pre">recall_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.recall_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.f1_score_with_tolerance">
+<span class="sig-name descname"><span class="pre">f1_score_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.f1_score_with_tolerance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.precision">
+<span class="sig-name descname"><span class="pre">precision</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.precision" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.recall">
+<span class="sig-name descname"><span class="pre">recall</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.recall" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.f1_score">
+<span class="sig-name descname"><span class="pre">f1_score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.f1_score" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.criteria">
+<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['dice',</span> <span class="pre">'jaccard',</span> <span class="pre">'hausdorff',</span> <span class="pre">'false_negative_rate',</span> <span class="pre">'false_negative_rate_with_tolerance',...</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.criteria" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.store_best">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.store_best" title="Link to this definition"></a></dt>
+<dd><p>Whether or not to save the best validation block and model
+weights for this criterion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.higher_is_better">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.higher_is_better" title="Link to this definition"></a></dt>
+<dd><p>Wether or not higher is better for this criterion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.bounds">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores.bounds" title="Link to this definition"></a></dt>
+<dd><p>The bounds for this criterion</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.</span></span><span class="sig-name descname"><span class="pre">BinarySegmentationEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clip_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluator" title="Link to this definition"></a></dt>
+<dd><p>Given a binary segmentation, compute various metrics to determine their similarity.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluator.score">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluator.score" title="Link to this definition"></a></dt>
+<dd><p>The abstract property to get the overall score of the evaluation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The overall evaluation scores.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.EvaluationScores" title="dacapo.experiments.tasks.evaluators.EvaluationScores">EvaluationScores</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluator.criteria">
+<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['jaccard',</span> <span class="pre">'voi']</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluator.criteria" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluator.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluator.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Compares and evaluates the output array against the evaluation array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_array</strong> (<a class="reference internal" href="../../datasplits/datasets/arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><em>Array</em></a>) – The output data array to evaluate</p></li>
+<li><p><strong>eval_array</strong> (<a class="reference internal" href="../../datasplits/datasets/arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><em>Array</em></a>) – The evaluation data array to compare with the output</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The detailed evaluation scores after the comparison.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.EvaluationScores" title="dacapo.experiments.tasks.evaluators.EvaluationScores">EvaluationScores</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.InstanceEvaluationScores">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.</span></span><span class="sig-name descname"><span class="pre">InstanceEvaluationScores</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluationScores" title="Link to this definition"></a></dt>
+<dd><p>Base class for evaluation scores.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.InstanceEvaluationScores.voi">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voi</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluationScores.voi" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.InstanceEvaluationScores.criteria">
+<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['voi_split',</span> <span class="pre">'voi_merge',</span> <span class="pre">'voi']</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluationScores.criteria" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.InstanceEvaluationScores.voi_split">
+<span class="sig-name descname"><span class="pre">voi_split</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluationScores.voi_split" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.InstanceEvaluationScores.voi_merge">
+<span class="sig-name descname"><span class="pre">voi_merge</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluationScores.voi_merge" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.InstanceEvaluationScores.higher_is_better">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluationScores.higher_is_better" title="Link to this definition"></a></dt>
+<dd><p>Wether or not higher is better for this criterion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.InstanceEvaluationScores.bounds">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluationScores.bounds" title="Link to this definition"></a></dt>
+<dd><p>The bounds for this criterion</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.InstanceEvaluationScores.store_best">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluationScores.store_best" title="Link to this definition"></a></dt>
+<dd><p>Whether or not to save the best validation block and model
+weights for this criterion.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.InstanceEvaluator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.</span></span><span class="sig-name descname"><span class="pre">InstanceEvaluator</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluator" title="Link to this definition"></a></dt>
+<dd><p>A subclass of Evaluator that specifically evaluates instance segmentation tasks. This class
+extends the base Evaluator class from dacapo library.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.InstanceEvaluator.criteria">
+<span class="sig-name descname"><span class="pre">criteria</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluator.criteria" title="Link to this definition"></a></dt>
+<dd><p>A list of metric names that are used in this evaluation process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.InstanceEvaluator.score">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="instance_evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores" title="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores</span></a></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluator.score" title="Link to this definition"></a></dt>
+<dd><p>Property that returns the evaluation scores. However, currently, it only returns
+an empty InstanceEvaluationScores object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An object that supposedly contains evaluation scores.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluationScores" title="dacapo.experiments.tasks.evaluators.InstanceEvaluationScores">InstanceEvaluationScores</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['voi_merge',</span> <span class="pre">'voi_split',</span> <span class="pre">'voi']</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.InstanceEvaluator.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluator.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the segmentation predictions with the ground truth data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_array_identifier</strong> – A unique id that refers to the array that contains
+predicted labels from the segmentation.</p></li>
+<li><p><strong>evaluation_array</strong> – The ground truth labels to compare the predicted labels with.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object that includes the segmentation evaluation results.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.InstanceEvaluationScores" title="dacapo.experiments.tasks.evaluators.InstanceEvaluationScores">InstanceEvaluationScores</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="dacapo.experiments.tasks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="binary_segmentation_evaluation_scores/index.html" class="btn btn-neutral float-right" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, William Patton, David Ackerman, Jan Funke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

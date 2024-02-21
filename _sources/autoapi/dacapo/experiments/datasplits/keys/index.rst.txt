@@ -1,0 +1,120 @@
+:py:mod:`dacapo.experiments.datasplits.keys`
+============================================
+
+.. py:module:: dacapo.experiments.datasplits.keys
+
+.. autoapi-nested-parse::
+
+   This python script is essential for importing key classes from the keys module in the current directory for the Dacapo library.
+   The imported classes include ArrayKey, GraphKey, and DataKey, which serve as identifiers for various types of data in the library.
+
+   Classes:
+       ArrayKey: Class for managing unique identifiers for Array data type.
+       GraphKey: Class for managing unique identifiers for Graph data type.
+       DataKey: Class to manage Data keys.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   keys/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.keys.ArrayKey
+   dacapo.experiments.datasplits.keys.GraphKey
+   dacapo.experiments.datasplits.keys.DataKey
+
+
+
+
+.. py:class:: ArrayKey
+
+
+
+
+   A unique enumeration representing different types of array keys
+
+   .. attribute:: RAW
+
+      The raw data key.
+
+      :type: str
+
+   .. attribute:: GT
+
+      The ground truth data key.
+
+      :type: str
+
+   .. attribute:: MASK
+
+      The data mask key.
+
+      :type: str
+
+   .. attribute:: NON_EMPTY
+
+      The data key for non-empty mask.
+
+      :type: str
+
+   .. py:attribute:: RAW
+      :value: 'raw'
+
+      
+
+   .. py:attribute:: GT
+      :value: 'gt'
+
+      
+
+   .. py:attribute:: MASK
+      :value: 'mask'
+
+      
+
+   .. py:attribute:: NON_EMPTY
+      :value: 'non_empty_mask'
+
+      
+
+
+.. py:class:: GraphKey
+
+
+
+
+   A unique enumeration representing different types of graph keys
+
+   .. attribute:: SPECIFIED_LOCATIONS
+
+      The key for specified locations in the graph.
+
+      :type: str
+
+   .. py:attribute:: SPECIFIED_LOCATIONS
+      :value: 'specified_locations'
+
+      
+
+
+.. py:class:: DataKey
+
+
+
+
+   Represent a base class for various types of keys in Dacapo library.
+
+

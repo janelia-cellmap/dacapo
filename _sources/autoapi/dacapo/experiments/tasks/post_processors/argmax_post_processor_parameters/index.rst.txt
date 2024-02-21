@@ -1,0 +1,27 @@
+:py:mod:`dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters`
+===================================================================================
+
+.. py:module:: dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.ArgmaxPostProcessorParameters
+
+
+
+
+.. py:class:: ArgmaxPostProcessorParameters
+
+
+
+
+   Base class for post-processor parameters.
+
+

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dacapo.experiments.run_config &mdash; DaCapo  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="dacapo.experiments.training_iteration_stats" href="../training_iteration_stats/index.html" />
+    <link rel="prev" title="dacapo.experiments.run" href="../run/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            DaCapo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">DaCapo API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ext/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.ext</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../gp/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cli.html">CLI</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">DaCapo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.run_config</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/dacapo/experiments/run_config/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-dacapo.experiments.run_config">
+<span id="dacapo-experiments-run-config"></span><h1><a class="reference internal" href="#module-dacapo.experiments.run_config" title="dacapo.experiments.run_config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.run_config</span></code></a><a class="headerlink" href="#module-dacapo.experiments.run_config" title="Link to this heading"></a></h1>
+<p>This module structures and configures the run for the models used in the dacapo library. It helps define
+the backbone architecture, the tasks it is supposed to run, the training procedures and the data it will
+use. Additionally, it provides room for repetition, setting the number of iterations and defining
+validation intervals during a run.</p>
+<p>This configuration makes model runs more structured and customizable based on user’s needs. This
+configuration is twined to each independent run, allowing unique settings for different runs.</p>
+<dl class="simple">
+<dt>Classes:</dt><dd><p>RunConfig: Defines and structures a run for the model using several parameters.</p>
+</dd>
+</dl>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.run_config.RunConfig" title="dacapo.experiments.run_config.RunConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RunConfig</span></code></a></p></td>
+<td><p>A class to represent a configuration of a run that helps to structure all the tasks,</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.run_config.RunConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.run_config.</span></span><span class="sig-name descname"><span class="pre">RunConfig</span></span><a class="headerlink" href="#dacapo.experiments.run_config.RunConfig" title="Link to this definition"></a></dt>
+<dd><p>A class to represent a configuration of a run that helps to structure all the tasks,
+architecture, training, and datasplit configurations.</p>
+<p>…</p>
+<section id="attributes">
+<h4>Attributes:<a class="headerlink" href="#attributes" title="Link to this heading"></a></h4>
+<dl>
+<dt>task_config: <cite>TaskConfig</cite></dt><dd><p>A config defining the Task to run that includes deciding the output of the model and
+different methods to achieve the goal.</p>
+</dd>
+<dt>architecture_config: <cite>ArchitectureConfig</cite></dt><dd><p>A config that defines the backbone architecture of the model. It impacts the model’s
+performance significantly.</p>
+</dd>
+<dt>trainer_config: <cite>TrainerConfig</cite></dt><dd><p>Defines how batches are generated and passed for training the model along with defining
+configurations like batch size, learning rate, number of cpu workers and snapshot logging.</p>
+</dd>
+<dt>datasplit_config: <cite>DataSplitConfig</cite></dt><dd><p>Configures the data available for the model during training or validation phases.</p>
+</dd>
+<dt>name: str</dt><dd><p>A unique name for this run to distinguish it.</p>
+</dd>
+<dt>repetition: int</dt><dd><p>The repetition number of this run.</p>
+</dd>
+<dt>num_iterations: int</dt><dd><p>The total number of iterations to train for during this run.</p>
+</dd>
+<dt>validation_interval: int</dt><dd><p>Specifies how often to perform validation during the run. It defaults to 1000.</p>
+</dd>
+<dt>start_config<span class="classifier"><cite>Optional[StartConfig]</cite></span></dt><dd><p>A starting point for continued training. It is optional and can be left out.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.run_config.RunConfig.task_config">
+<span class="sig-name descname"><span class="pre">task_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.TaskConfig" title="dacapo.experiments.tasks.TaskConfig"><span class="pre">dacapo.experiments.tasks.TaskConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.run_config.RunConfig.task_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.run_config.RunConfig.architecture_config">
+<span class="sig-name descname"><span class="pre">architecture_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../architectures/index.html#dacapo.experiments.architectures.ArchitectureConfig" title="dacapo.experiments.architectures.ArchitectureConfig"><span class="pre">dacapo.experiments.architectures.ArchitectureConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.run_config.RunConfig.architecture_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.run_config.RunConfig.trainer_config">
+<span class="sig-name descname"><span class="pre">trainer_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../trainers/index.html#dacapo.experiments.trainers.TrainerConfig" title="dacapo.experiments.trainers.TrainerConfig"><span class="pre">dacapo.experiments.trainers.TrainerConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.run_config.RunConfig.trainer_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.run_config.RunConfig.datasplit_config">
+<span class="sig-name descname"><span class="pre">datasplit_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../datasplits/index.html#dacapo.experiments.datasplits.DataSplitConfig" title="dacapo.experiments.datasplits.DataSplitConfig"><span class="pre">dacapo.experiments.datasplits.DataSplitConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.run_config.RunConfig.datasplit_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.run_config.RunConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.run_config.RunConfig.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.run_config.RunConfig.repetition">
+<span class="sig-name descname"><span class="pre">repetition</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.run_config.RunConfig.repetition" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.run_config.RunConfig.num_iterations">
+<span class="sig-name descname"><span class="pre">num_iterations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.run_config.RunConfig.num_iterations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.run_config.RunConfig.validation_interval">
+<span class="sig-name descname"><span class="pre">validation_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.run_config.RunConfig.validation_interval" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.run_config.RunConfig.start_config">
+<span class="sig-name descname"><span class="pre">start_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../starts/index.html#dacapo.experiments.starts.StartConfig" title="dacapo.experiments.starts.StartConfig"><span class="pre">dacapo.experiments.starts.StartConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#dacapo.experiments.run_config.RunConfig.start_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../run/index.html" class="btn btn-neutral float-left" title="dacapo.experiments.run" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../training_iteration_stats/index.html" class="btn btn-neutral float-right" title="dacapo.experiments.training_iteration_stats" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, William Patton, David Ackerman, Jan Funke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

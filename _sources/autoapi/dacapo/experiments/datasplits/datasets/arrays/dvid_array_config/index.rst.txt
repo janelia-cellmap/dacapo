@@ -1,0 +1,41 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.dvid_array_config`
+=========================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.dvid_array_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.dvid_array_config.DVIDArrayConfig
+
+
+
+
+.. py:class:: DVIDArrayConfig
+
+
+
+
+   This config class provides the necessary configuration for a DVID array
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source
+      :type: Tuple[str, str, str]
+
+      
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Array
+
+
+

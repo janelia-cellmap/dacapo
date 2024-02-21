@@ -1,0 +1,49 @@
+:py:mod:`dacapo.experiments.tasks.losses.dummy_loss`
+====================================================
+
+.. py:module:: dacapo.experiments.tasks.losses.dummy_loss
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.losses.dummy_loss.DummyLoss
+
+
+
+
+.. py:class:: DummyLoss
+
+
+
+
+   A class representing a dummy loss function that calculates the absolute difference between each prediction and target.
+
+   Inherits the Loss class.
+
+   .. method:: compute(prediction, target, weight=None)
+
+      Calculate the total loss between prediction and target.
+
+
+   .. py:method:: compute(prediction, target, weight=None)
+
+      Method to calculate the total dummy loss.
+
+      :param prediction: predicted output
+      :type prediction: float or int
+      :param target: true output
+      :type target: float or int
+      :param weight: weight parameter for the loss, by default None
+      :type weight: float or int, optional
+
+      :returns: Total loss calculated as the sum of absolute differences between prediction and target.
+      :rtype: float or int
+
+
+

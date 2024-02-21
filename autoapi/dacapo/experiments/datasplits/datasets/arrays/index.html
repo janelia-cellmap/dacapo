@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dacapo.experiments.datasplits.datasets.arrays &mdash; DaCapo  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../../../../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" />
+    <link rel="next" title="dacapo.experiments.datasplits.datasets.arrays.array" href="array/index.html" />
+    <link rel="prev" title="dacapo.experiments.datasplits.datasets" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../../index.html" class="icon icon-home">
+            DaCapo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">DaCapo API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ext/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.ext</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../gp/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../store/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../cli.html">CLI</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">DaCapo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../../_sources/autoapi/dacapo/experiments/datasplits/datasets/arrays/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-dacapo.experiments.datasplits.datasets.arrays">
+<span id="dacapo-experiments-datasplits-datasets-arrays"></span><h1><a class="reference internal" href="#module-dacapo.experiments.datasplits.datasets.arrays" title="dacapo.experiments.datasplits.datasets.arrays"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays</span></code></a><a class="headerlink" href="#module-dacapo.experiments.datasplits.datasets.arrays" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="array_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="binarize_array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.binarize_array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="binarize_array_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.binarize_array_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="concat_array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.concat_array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="concat_array_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.concat_array_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="crop_array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.crop_array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="crop_array_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.crop_array_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="dummy_array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.dummy_array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="dummy_array_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.dummy_array_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="dvid_array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.dvid_array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="dvid_array_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.dvid_array_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="intensity_array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.intensity_array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="intensity_array_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.intensity_array_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="logical_or_array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.logical_or_array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="logical_or_array_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.logical_or_array_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="merge_instances_array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.merge_instances_array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="merge_instances_array_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.merge_instances_array_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="missing_annotations_mask/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="missing_annotations_mask_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="numpy_array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.numpy_array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="ones_array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.ones_array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="ones_array_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.ones_array_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="resampled_array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.resampled_array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="resampled_array_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.resampled_array_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sum_array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.sum_array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sum_array_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.sum_array_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="tiff_array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.tiff_array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="tiff_array_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.tiff_array_config</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="zarr_array/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.zarr_array</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="zarr_array_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.zarr_array_config</span></code></a></li>
+</ul>
+</div>
+</section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Array</span></code></a></p></td>
+<td><p>Helper class that provides a standard way to create an ABC using</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArrayConfig</span></code></a></p></td>
+<td><p>Base class for array configurations. Each subclass of an</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray" title="dacapo.experiments.datasplits.datasets.arrays.DummyArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyArray</span></code></a></p></td>
+<td><p>This is just a dummy array for testing.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.DummyArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyArrayConfig</span></code></a></p></td>
+<td><p>This is just a dummy array  config used for testing. None of the</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ZarrArrayConfig</span></code></a></p></td>
+<td><p>This config class provides the necessary configuration for a zarr array</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray" title="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinarizeArray</span></code></a></p></td>
+<td><p>This is wrapper around a ZarrArray containing uint annotations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.BinarizeArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinarizeArrayConfig</span></code></a></p></td>
+<td><p>This config class provides the necessary configuration for turning an Annotated dataset into a</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArray" title="dacapo.experiments.datasplits.datasets.arrays.ResampledArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResampledArray</span></code></a></p></td>
+<td><p>This is a zarr array</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResampledArrayConfig</span></code></a></p></td>
+<td><p>This array will up or down sample an array into the desired voxel size.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray" title="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntensitiesArray</span></code></a></p></td>
+<td><p>This is wrapper another array that will normalize intensities to</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntensitiesArrayConfig</span></code></a></p></td>
+<td><p>This config class provides the necessary configuration for turning an Annotated dataset into a</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask" title="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MissingAnnotationsMask</span></code></a></p></td>
+<td><p>This is wrapper around a ZarrArray containing uint annotations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMaskConfig" title="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMaskConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MissingAnnotationsMaskConfig</span></code></a></p></td>
+<td><p>This config class provides the necessary configuration for turning an Annotated dataset into a</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArray" title="dacapo.experiments.datasplits.datasets.arrays.OnesArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OnesArray</span></code></a></p></td>
+<td><p>This is a wrapper around another <cite>source_array</cite> that simply provides ones</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.OnesArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OnesArrayConfig</span></code></a></p></td>
+<td><p>This array read data from the source array and then return a np.ones_like() version.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray" title="dacapo.experiments.datasplits.datasets.arrays.ConcatArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConcatArray</span></code></a></p></td>
+<td><p>This is a wrapper around other <cite>source_arrays</cite> that concatenates</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ConcatArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConcatArrayConfig</span></code></a></p></td>
+<td><p>This array read data from the source array and then return a np.ones_like() version.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray" title="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LogicalOrArray</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LogicalOrArrayConfig</span></code></a></p></td>
+<td><p>This config class takes a source array and performs a logical or over the channels.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.CropArray" title="dacapo.experiments.datasplits.datasets.arrays.CropArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CropArray</span></code></a></p></td>
+<td><p>Used to crop a larger array to a smaller array.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.CropArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.CropArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CropArrayConfig</span></code></a></p></td>
+<td><p>This config class provides the necessary configuration for cropping an</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray" title="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MergeInstancesArray</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MergeInstancesArrayConfig</span></code></a></p></td>
+<td><p>Base class for array configurations. Each subclass of an</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArray" title="dacapo.experiments.datasplits.datasets.arrays.DVIDArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DVIDArray</span></code></a></p></td>
+<td><p>This is a DVID array</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.DVIDArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DVIDArrayConfig</span></code></a></p></td>
+<td><p>This config class provides the necessary configuration for a DVID array</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray" title="dacapo.experiments.datasplits.datasets.arrays.SumArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SumArray</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.SumArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.SumArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SumArrayConfig</span></code></a></p></td>
+<td><p>Base class for array configurations. Each subclass of an</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NumpyArray</span></code></a></p></td>
+<td><p>This is just a wrapper for a numpy array to make it fit the DaCapo Array interface.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.Array">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">Array</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.Array" title="Link to this definition"></a></dt>
+<dd><p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.Array.attrs">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.Array.attrs" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.Array.axes">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.Array.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.Array.dims">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.Array.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of spatial dimensions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.Array.voxel_size">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.Array.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.Array.roi">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.Array.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.Array.dtype">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.Array.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.Array.num_channels">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.Array.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.Array.data">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.Array.data" title="Link to this definition"></a></dt>
+<dd><p>Get a numpy like readable and writable view into this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.Array.writable">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.Array.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ArrayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">ArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ArrayConfig" title="Link to this definition"></a></dt>
+<dd><p>Base class for array configurations. Each subclass of an
+<cite>Array</cite> should have a corresponding config class derived from
+<cite>ArrayConfig</cite>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ArrayConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ArrayConfig.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ArrayConfig.verify">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ArrayConfig.verify" title="Link to this definition"></a></dt>
+<dd><p>Check whether this is a valid Array</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">DummyArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray" title="Link to this definition"></a></dt>
+<dd><p>This is just a dummy array for testing.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.attrs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.attrs" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.axes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.dims">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of spatial dimensions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.voxel_size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.roi">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.writable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.data" title="Link to this definition"></a></dt>
+<dd><p>Get a numpy like readable and writable view into this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.num_channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArrayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">DummyArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArrayConfig" title="Link to this definition"></a></dt>
+<dd><p>This is just a dummy array  config used for testing. None of the
+attributes have any particular meaning.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArrayConfig.array_type">
+<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArrayConfig.array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArrayConfig.verify">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArrayConfig.verify" title="Link to this definition"></a></dt>
+<dd><p>Check whether this is a valid Array</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">ZarrArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig" title="Link to this definition"></a></dt>
+<dd><p>This config class provides the necessary configuration for a zarr array</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig.array_type">
+<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig.array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig.file_name">
+<span class="sig-name descname"><span class="pre">file_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig.file_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig.dataset">
+<span class="sig-name descname"><span class="pre">dataset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig.dataset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig.snap_to_grid">
+<span class="sig-name descname"><span class="pre">snap_to_grid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig.snap_to_grid" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig.verify">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig.verify" title="Link to this definition"></a></dt>
+<dd><p>Check whether this is a valid Array</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">BinarizeArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray" title="Link to this definition"></a></dt>
+<dd><p>This is wrapper around a ZarrArray containing uint annotations.
+Because we often want to predict classes that are a combination
+of a set of labels we wrap a ZarrArray with the BinarizeArray
+and provide something like <cite>groupings=[(“mito”, [3,4,5])]</cite>
+where 4 corresponds to mito_membrane, 5 is mito_ribos, and
+3 is everything else that is part of a mitochondria. The BinarizeArray
+will simply combine labels 3,4,5 into a single binary channel for th
+class of “mito”.
+We use a single channel per class because some classes may overlap.
+For example if you had <cite>groupings=[(“mito”, [3,4,5]), (“membrane”, [4, 8, 1])]</cite>
+where 4 is mito_membrane, 8 is er_membrane, and 1 is plasma_membrane.
+Now you can have a binary classification for membrane or not which in
+some cases overlaps with the channel for mitochondria which includes
+the mito membrane.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.attrs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.attrs" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.axes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.dims">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of spatial dimensions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.voxel_size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.roi">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.writable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.num_channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.data" title="Link to this definition"></a></dt>
+<dd><p>Get a numpy like readable and writable view into this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.channels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArrayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">BinarizeArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArrayConfig" title="Link to this definition"></a></dt>
+<dd><p>This config class provides the necessary configuration for turning an Annotated dataset into a
+multi class binary classification problem</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArrayConfig.array_type">
+<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArrayConfig.array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArrayConfig.source_array_config">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArrayConfig.source_array_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArrayConfig.groupings">
+<span class="sig-name descname"><span class="pre">groupings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArrayConfig.groupings" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArrayConfig.background">
+<span class="sig-name descname"><span class="pre">background</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArrayConfig.background" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">ResampledArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArray" title="Link to this definition"></a></dt>
+<dd><p>This is a zarr array</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArray.attrs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArray.attrs" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArray.axes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArray.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArray.dims">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArray.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of spatial dimensions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArray.voxel_size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArray.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArray.roi">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArray.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArray.writable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArray.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArray.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArray.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArray.num_channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArray.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArray.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArray.data" title="Link to this definition"></a></dt>
+<dd><p>Get a numpy like readable and writable view into this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArray.scale">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scale</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArray.scale" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">ResampledArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig" title="Link to this definition"></a></dt>
+<dd><p>This array will up or down sample an array into the desired voxel size.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig.array_type">
+<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig.array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig.source_array_config">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig.source_array_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig.upsample">
+<span class="sig-name descname"><span class="pre">upsample</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig.upsample" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig.downsample">
+<span class="sig-name descname"><span class="pre">downsample</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig.downsample" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig.interp_order">
+<span class="sig-name descname"><span class="pre">interp_order</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ResampledArrayConfig.interp_order" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">IntensitiesArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray" title="Link to this definition"></a></dt>
+<dd><p>This is wrapper another array that will normalize intensities to
+the range (0, 1) and convert to float32. Use this if you have your
+intensities stored as uint8 or similar and want your model to
+have floats as input.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.attrs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.attrs" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.axes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.dims">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of spatial dimensions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.voxel_size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.roi">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.writable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.num_channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.data" title="Link to this definition"></a></dt>
+<dd><p>Get a numpy like readable and writable view into this array.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArrayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">IntensitiesArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArrayConfig" title="Link to this definition"></a></dt>
+<dd><p>This config class provides the necessary configuration for turning an Annotated dataset into a
+multi class binary classification problem</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArrayConfig.array_type">
+<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArrayConfig.array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArrayConfig.source_array_config">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArrayConfig.source_array_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArrayConfig.min">
+<span class="sig-name descname"><span class="pre">min</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArrayConfig.min" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArrayConfig.max">
+<span class="sig-name descname"><span class="pre">max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArrayConfig.max" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">MissingAnnotationsMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask" title="Link to this definition"></a></dt>
+<dd><p>This is wrapper around a ZarrArray containing uint annotations.
+Complementary to the BinarizeArray class where we convert labels
+into individual channels for training, we may find crops where a
+specific label is present, but not annotated. In that case you
+might want to avoid training specific channels for specific
+training volumes.
+See package fibsem_tools for appropriate metadata format for indicating
+presence of labels in your ground truth.
+“<a class="reference external" href="https://github.com/janelia-cosem/fibsem-tools">https://github.com/janelia-cosem/fibsem-tools</a>”</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.axes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.dims">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of spatial dimensions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.voxel_size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.roi">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.writable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.num_channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.data" title="Link to this definition"></a></dt>
+<dd><p>Get a numpy like readable and writable view into this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.attrs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.attrs" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.channels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMaskConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">MissingAnnotationsMaskConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMaskConfig" title="Link to this definition"></a></dt>
+<dd><p>This config class provides the necessary configuration for turning an Annotated dataset into a
+multi class binary classification problem</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMaskConfig.array_type">
+<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMaskConfig.array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMaskConfig.source_array_config">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMaskConfig.source_array_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMaskConfig.groupings">
+<span class="sig-name descname"><span class="pre">groupings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMaskConfig.groupings" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">OnesArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArray" title="Link to this definition"></a></dt>
+<dd><p>This is a wrapper around another <cite>source_array</cite> that simply provides ones
+with the same metadata as the <cite>source_array</cite>.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArray.attrs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArray.attrs" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArray.source_array">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source_array</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array.Array</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArray.source_array" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArray.axes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArray.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArray.dims">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArray.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of spatial dimensions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArray.voxel_size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArray.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArray.roi">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArray.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArray.writable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArray.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArray.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArray.data" title="Link to this definition"></a></dt>
+<dd><p>Get a numpy like readable and writable view into this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArray.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArray.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArray.num_channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArray.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArray.like">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">like</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array.Array</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArray.like" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArrayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">OnesArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArrayConfig" title="Link to this definition"></a></dt>
+<dd><p>This array read data from the source array and then return a np.ones_like() version.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArrayConfig.array_type">
+<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArrayConfig.array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.OnesArrayConfig.source_array_config">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.OnesArrayConfig.source_array_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">ConcatArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray" title="Link to this definition"></a></dt>
+<dd><p>This is a wrapper around other <cite>source_arrays</cite> that concatenates
+them along the channel dimension.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.attrs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.attrs" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.source_arrays">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source_arrays</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array.Array</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.source_arrays" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.source_array">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source_array</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array.Array</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.source_array" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.axes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.dims">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of spatial dimensions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.voxel_size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.roi">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.writable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.data" title="Link to this definition"></a></dt>
+<dd><p>Get a numpy like readable and writable view into this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.num_channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArrayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">ConcatArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArrayConfig" title="Link to this definition"></a></dt>
+<dd><p>This array read data from the source array and then return a np.ones_like() version.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArrayConfig.array_type">
+<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArrayConfig.array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArrayConfig.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArrayConfig.channels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArrayConfig.source_array_configs">
+<span class="sig-name descname"><span class="pre">source_array_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArrayConfig.source_array_configs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArrayConfig.default_config">
+<span class="sig-name descname"><span class="pre">default_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArrayConfig.default_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">LogicalOrArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray" title="Link to this definition"></a></dt>
+<dd><dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.axes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.dims">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of spatial dimensions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.voxel_size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.roi">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.writable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.num_channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.data" title="Link to this definition"></a></dt>
+<dd><p>Get a numpy like readable and writable view into this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.attrs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArray.attrs" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArrayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">LogicalOrArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArrayConfig" title="Link to this definition"></a></dt>
+<dd><p>This config class takes a source array and performs a logical or over the channels.
+Good for union multiple masks.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArrayConfig.array_type">
+<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArrayConfig.array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.LogicalOrArrayConfig.source_array_config">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.LogicalOrArrayConfig.source_array_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">CropArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArray" title="Link to this definition"></a></dt>
+<dd><p>Used to crop a larger array to a smaller array.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArray.attrs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArray.attrs" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArray.axes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArray.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArray.dims">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArray.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of spatial dimensions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArray.voxel_size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArray.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArray.roi">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArray.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArray.writable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArray.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArray.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArray.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArray.num_channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArray.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArray.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArray.data" title="Link to this definition"></a></dt>
+<dd><p>Get a numpy like readable and writable view into this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArray.channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArray.channels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArrayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">CropArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArrayConfig" title="Link to this definition"></a></dt>
+<dd><p>This config class provides the necessary configuration for cropping an
+Array to a smaller ROI. Especially useful for validation volumes that may
+be too large for quick evaluation</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArrayConfig.array_type">
+<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArrayConfig.array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArrayConfig.source_array_config">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArrayConfig.source_array_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.CropArrayConfig.roi">
+<span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.CropArrayConfig.roi" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">MergeInstancesArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray" title="Link to this definition"></a></dt>
+<dd><dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.axes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.dims">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of spatial dimensions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.voxel_size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.roi">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.writable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.num_channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.data" title="Link to this definition"></a></dt>
+<dd><p>Get a numpy like readable and writable view into this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.attrs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.attrs" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArrayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">MergeInstancesArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArrayConfig" title="Link to this definition"></a></dt>
+<dd><p>Base class for array configurations. Each subclass of an
+<cite>Array</cite> should have a corresponding config class derived from
+<cite>ArrayConfig</cite>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArrayConfig.array_type">
+<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArrayConfig.array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArrayConfig.source_array_configs">
+<span class="sig-name descname"><span class="pre">source_array_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArrayConfig.source_array_configs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">DVIDArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArray" title="Link to this definition"></a></dt>
+<dd><p>This is a DVID array</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArray.axes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArray.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArray.dims">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArray.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of spatial dimensions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArray.writable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArray.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArray.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArray.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArray.num_channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArray.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArray.spatial_axes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spatial_axes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArray.spatial_axes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArray.data">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArray.data" title="Link to this definition"></a></dt>
+<dd><p>Get a numpy like readable and writable view into this array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArray.attrs">
+<span class="sig-name descname"><span class="pre">attrs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArray.attrs" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArray.voxel_size">
+<span class="sig-name descname"><span class="pre">voxel_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">funlib.geometry.Coordinate</span></span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArray.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArray.roi">
+<span class="sig-name descname"><span class="pre">roi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">funlib.geometry.Roi</span></span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArray.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArray.add_metadata">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArray.add_metadata" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArrayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">DVIDArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArrayConfig" title="Link to this definition"></a></dt>
+<dd><p>This config class provides the necessary configuration for a DVID array</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArrayConfig.array_type">
+<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArrayConfig.array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArrayConfig.source">
+<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArrayConfig.source" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArrayConfig.verify">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArrayConfig.verify" title="Link to this definition"></a></dt>
+<dd><p>Check whether this is a valid Array</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">SumArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray" title="Link to this definition"></a></dt>
+<dd><dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray.axes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray.dims">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of spatial dimensions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray.voxel_size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray.roi">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray.writable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray.num_channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray.data" title="Link to this definition"></a></dt>
+<dd><p>Get a numpy like readable and writable view into this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray.attrs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray.attrs" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArrayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">SumArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArrayConfig" title="Link to this definition"></a></dt>
+<dd><p>Base class for array configurations. Each subclass of an
+<cite>Array</cite> should have a corresponding config class derived from
+<cite>ArrayConfig</cite>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArrayConfig.array_type">
+<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArrayConfig.array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArrayConfig.source_array_configs">
+<span class="sig-name descname"><span class="pre">source_array_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArrayConfig.source_array_configs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">NumpyArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="Link to this definition"></a></dt>
+<dd><p>This is just a wrapper for a numpy array to make it fit the DaCapo Array interface.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray.attrs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray.attrs" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray.axes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray.dims">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of spatial dimensions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray.voxel_size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray.roi">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray.writable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray.data" title="Link to this definition"></a></dt>
+<dd><p>Get a numpy like readable and writable view into this array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray.dtype">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray.num_channels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray.from_gp_array">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_gp_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.Array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray.from_gp_array" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray.from_np_array">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_np_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray.from_np_array" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="dacapo.experiments.datasplits.datasets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="array/index.html" class="btn btn-neutral float-right" title="dacapo.experiments.datasplits.datasets.arrays.array" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, William Patton, David Ackerman, Jan Funke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

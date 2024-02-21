@@ -1,0 +1,535 @@
+:py:mod:`dacapo.experiments.tasks.predictors`
+=============================================
+
+.. py:module:: dacapo.experiments.tasks.predictors
+
+.. autoapi-nested-parse::
+
+   This module imports different kinds of predictor classes from different modules.
+
+   .. attribute:: DummyPredictor
+
+      This class is used to predict dummy values.
+
+   .. attribute:: DistancePredictor
+
+      This class computes and predicts distances.
+
+   .. attribute:: OneHotPredictor
+
+      This class predicts one hot encoded values.
+
+   .. attribute:: Predictor
+
+      This is the main Predictor class from which other classes inherit.
+
+   .. attribute:: AffinitiesPredictor
+
+      This class works with predicting affinities.
+
+   .. attribute:: InnerDistancePredictor
+
+      This class predicts inner distances.
+
+   .. attribute:: HotDistancePredictor
+
+      This class is used for hot distance predictions.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   affinities_predictor/index.rst
+   distance_predictor/index.rst
+   dummy_predictor/index.rst
+   hot_distance_predictor/index.rst
+   inner_distance_predictor/index.rst
+   one_hot_predictor/index.rst
+   predictor/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.predictors.DummyPredictor
+   dacapo.experiments.tasks.predictors.DistancePredictor
+   dacapo.experiments.tasks.predictors.OneHotPredictor
+   dacapo.experiments.tasks.predictors.Predictor
+   dacapo.experiments.tasks.predictors.AffinitiesPredictor
+   dacapo.experiments.tasks.predictors.InnerDistancePredictor
+   dacapo.experiments.tasks.predictors.HotDistancePredictor
+
+
+
+
+.. py:class:: DummyPredictor(embedding_dims)
+
+
+
+
+   An abstract class that serves as a blueprint for all the specific predictors.
+
+   .. attribute:: output_array_type
+
+      A property which is expected to be implemented in subclasses.
+
+   .. py:property:: output_array_type
+
+      Subclasses should implement this method to define the type of array output by the predictor.
+
+   .. py:method:: create_model(architecture)
+
+      To create a model with the given training architecture.
+
+      :param architecture: An instance of class Architecture, to define training architecture for the model.
+
+      :returns: An instance of class Model with the designed architecture.
+
+
+   .. py:method:: create_target(gt)
+
+      Creates target for training based on ground-truth array.
+
+      :param gt: An instance of class Array, representing ground-truth values.
+
+      :returns: Instance of Array class, representing target for training.
+
+
+   .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
+
+      Creates a weight array, using a ground-truth and an associated target array.
+
+      :param gt: Ground Truth array.
+      :param target: Target array.
+      :param mask: Associated mask array.
+      :param moving_class_counts: Counts of moving classes.
+
+      :returns: Tuple containing Array instance with weight array and any additional returned value.
+
+
+
+.. py:class:: DistancePredictor(channels: List[str], scale_factor: float, mask_distances: bool, clipmin: float = 0.05, clipmax: float = 0.95)
+
+
+
+
+   Predict signed distances for a binary segmentation task.
+   Distances deep within background are pushed to -inf, distances deep within
+   the foreground object are pushed to inf. After distances have been
+   calculated they are passed through a tanh so that distances saturate at +-1.
+   Multiple classes can be predicted via multiple distance channels. The names
+   of each class that is being segmented can be passed in as a list of strings
+   in the channels argument.
+
+   .. py:property:: embedding_dims
+
+
+   .. py:property:: output_array_type
+
+      Subclasses should implement this method to define the type of array output by the predictor.
+
+   .. py:method:: create_model(architecture)
+
+      To create a model with the given training architecture.
+
+      :param architecture: An instance of class Architecture, to define training architecture for the model.
+
+      :returns: An instance of class Model with the designed architecture.
+
+
+   .. py:method:: create_target(gt)
+
+      Creates target for training based on ground-truth array.
+
+      :param gt: An instance of class Array, representing ground-truth values.
+
+      :returns: Instance of Array class, representing target for training.
+
+
+   .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
+
+      Creates a weight array, using a ground-truth and an associated target array.
+
+      :param gt: Ground Truth array.
+      :param target: Target array.
+      :param mask: Associated mask array.
+      :param moving_class_counts: Counts of moving classes.
+
+      :returns: Tuple containing Array instance with weight array and any additional returned value.
+
+
+   .. py:method:: create_distance_mask(distances: numpy.ndarray, mask: numpy.ndarray, voxel_size: funlib.geometry.Coordinate, normalize=None, normalize_args=None)
+
+
+   .. py:method:: process(labels: numpy.ndarray, voxel_size: funlib.geometry.Coordinate, normalize=None, normalize_args=None)
+
+
+   .. py:method:: gt_region_for_roi(target_spec)
+
+      Method to report the required spatial context to generate a target for the given ROI.
+
+      :param target_spec: Target specifications for which ground truth region is needed.
+
+      :returns: Returns the same ROI by default, unless overridden.
+
+
+   .. py:method:: padding(gt_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
+
+      Calculates and returns the padding size for an array.
+
+      :param gt_voxel_size: Ground Truth voxel size of type Coordinate.
+
+      :returns: Coordinate having padding size.
+
+
+
+.. py:class:: OneHotPredictor(classes: List[str])
+
+
+
+
+   An abstract class that serves as a blueprint for all the specific predictors.
+
+   .. attribute:: output_array_type
+
+      A property which is expected to be implemented in subclasses.
+
+   .. py:property:: embedding_dims
+
+
+   .. py:property:: output_array_type
+
+      Subclasses should implement this method to define the type of array output by the predictor.
+
+   .. py:method:: create_model(architecture)
+
+      To create a model with the given training architecture.
+
+      :param architecture: An instance of class Architecture, to define training architecture for the model.
+
+      :returns: An instance of class Model with the designed architecture.
+
+
+   .. py:method:: create_target(gt)
+
+      Creates target for training based on ground-truth array.
+
+      :param gt: An instance of class Array, representing ground-truth values.
+
+      :returns: Instance of Array class, representing target for training.
+
+
+   .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
+
+      Creates a weight array, using a ground-truth and an associated target array.
+
+      :param gt: Ground Truth array.
+      :param target: Target array.
+      :param mask: Associated mask array.
+      :param moving_class_counts: Counts of moving classes.
+
+      :returns: Tuple containing Array instance with weight array and any additional returned value.
+
+
+   .. py:method:: process(labels: numpy.ndarray)
+
+
+
+.. py:class:: Predictor
+
+
+
+
+   An abstract class that serves as a blueprint for all the specific predictors.
+
+   .. attribute:: output_array_type
+
+      A property which is expected to be implemented in subclasses.
+
+   .. py:property:: output_array_type
+      :abstractmethod:
+
+      Subclasses should implement this method to define the type of array output by the predictor.
+
+   .. py:method:: create_model(architecture: dacapo.experiments.architectures.architecture.Architecture) -> dacapo.experiments.model.Model
+      :abstractmethod:
+
+      To create a model with the given training architecture.
+
+      :param architecture: An instance of class Architecture, to define training architecture for the model.
+
+      :returns: An instance of class Model with the designed architecture.
+
+
+   .. py:method:: create_target(gt: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.datasplits.datasets.arrays.Array
+      :abstractmethod:
+
+      Creates target for training based on ground-truth array.
+
+      :param gt: An instance of class Array, representing ground-truth values.
+
+      :returns: Instance of Array class, representing target for training.
+
+
+   .. py:method:: create_weight(gt: dacapo.experiments.datasplits.datasets.arrays.Array, target: dacapo.experiments.datasplits.datasets.arrays.Array, mask: dacapo.experiments.datasplits.datasets.arrays.Array, moving_class_counts: Any) -> Tuple[dacapo.experiments.datasplits.datasets.arrays.Array, Any]
+      :abstractmethod:
+
+      Creates a weight array, using a ground-truth and an associated target array.
+
+      :param gt: Ground Truth array.
+      :param target: Target array.
+      :param mask: Associated mask array.
+      :param moving_class_counts: Counts of moving classes.
+
+      :returns: Tuple containing Array instance with weight array and any additional returned value.
+
+
+   .. py:method:: gt_region_for_roi(target_spec)
+
+      Method to report the required spatial context to generate a target for the given ROI.
+
+      :param target_spec: Target specifications for which ground truth region is needed.
+
+      :returns: Returns the same ROI by default, unless overridden.
+
+
+   .. py:method:: padding(gt_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
+
+      Calculates and returns the padding size for an array.
+
+      :param gt_voxel_size: Ground Truth voxel size of type Coordinate.
+
+      :returns: Coordinate having padding size.
+
+
+
+.. py:class:: AffinitiesPredictor(neighborhood: List[funlib.geometry.Coordinate], lsds: bool = True, num_voxels: int = 20, downsample_lsds: int = 1, grow_boundary_iterations: int = 0, affs_weight_clipmin: float = 0.05, affs_weight_clipmax: float = 0.95, lsd_weight_clipmin: float = 0.05, lsd_weight_clipmax: float = 0.95, background_as_object: bool = False)
+
+
+
+
+   An abstract class that serves as a blueprint for all the specific predictors.
+
+   .. attribute:: output_array_type
+
+      A property which is expected to be implemented in subclasses.
+
+   .. py:property:: dims
+
+
+   .. py:property:: num_channels
+
+
+   .. py:property:: output_array_type
+
+      Subclasses should implement this method to define the type of array output by the predictor.
+
+   .. py:method:: extractor(voxel_size)
+
+
+   .. py:method:: sigma(voxel_size)
+
+
+   .. py:method:: lsd_pad(voxel_size)
+
+
+   .. py:method:: create_model(architecture)
+
+      To create a model with the given training architecture.
+
+      :param architecture: An instance of class Architecture, to define training architecture for the model.
+
+      :returns: An instance of class Model with the designed architecture.
+
+
+   .. py:method:: create_target(gt)
+
+      Creates target for training based on ground-truth array.
+
+      :param gt: An instance of class Array, representing ground-truth values.
+
+      :returns: Instance of Array class, representing target for training.
+
+
+   .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
+
+      Creates a weight array, using a ground-truth and an associated target array.
+
+      :param gt: Ground Truth array.
+      :param target: Target array.
+      :param mask: Associated mask array.
+      :param moving_class_counts: Counts of moving classes.
+
+      :returns: Tuple containing Array instance with weight array and any additional returned value.
+
+
+   .. py:method:: gt_region_for_roi(target_spec)
+
+      Method to report the required spatial context to generate a target for the given ROI.
+
+      :param target_spec: Target specifications for which ground truth region is needed.
+
+      :returns: Returns the same ROI by default, unless overridden.
+
+
+
+.. py:class:: InnerDistancePredictor(channels: List[str], scale_factor: float)
+
+
+
+
+   Predict signed distances for a binary segmentation task.
+
+   Distances deep within background are pushed to -inf, distances deep within
+   the foreground object are pushed to inf. After distances have been
+   calculated they are passed through a tanh so that distances saturate at +-1.
+   Multiple classes can be predicted via multiple distance channels. The names
+   of each class that is being segmented can be passed in as a list of strings
+   in the channels argument.
+
+   .. py:property:: embedding_dims
+
+
+   .. py:property:: output_array_type
+
+      Subclasses should implement this method to define the type of array output by the predictor.
+
+   .. py:method:: create_model(architecture)
+
+      To create a model with the given training architecture.
+
+      :param architecture: An instance of class Architecture, to define training architecture for the model.
+
+      :returns: An instance of class Model with the designed architecture.
+
+
+   .. py:method:: create_target(gt)
+
+      Creates target for training based on ground-truth array.
+
+      :param gt: An instance of class Array, representing ground-truth values.
+
+      :returns: Instance of Array class, representing target for training.
+
+
+   .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
+
+      Creates a weight array, using a ground-truth and an associated target array.
+
+      :param gt: Ground Truth array.
+      :param target: Target array.
+      :param mask: Associated mask array.
+      :param moving_class_counts: Counts of moving classes.
+
+      :returns: Tuple containing Array instance with weight array and any additional returned value.
+
+
+   .. py:method:: process(labels: numpy.ndarray, voxel_size: funlib.geometry.Coordinate, normalize=None, normalize_args=None)
+
+
+   .. py:method:: gt_region_for_roi(target_spec)
+
+      Method to report the required spatial context to generate a target for the given ROI.
+
+      :param target_spec: Target specifications for which ground truth region is needed.
+
+      :returns: Returns the same ROI by default, unless overridden.
+
+
+   .. py:method:: padding(gt_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
+
+      Calculates and returns the padding size for an array.
+
+      :param gt_voxel_size: Ground Truth voxel size of type Coordinate.
+
+      :returns: Coordinate having padding size.
+
+
+
+.. py:class:: HotDistancePredictor(channels: List[str], scale_factor: float, mask_distances: bool)
+
+
+
+
+   Predict signed distances and one hot embedding (as a proxy task) for a binary segmentation task.
+   Distances deep within background are pushed to -inf, distances deep within
+   the foreground object are pushed to inf. After distances have been
+   calculated they are passed through a tanh so that distances saturate at +-1.
+   Multiple classes can be predicted via multiple distance channels. The names
+   of each class that is being segmented can be passed in as a list of strings
+   in the channels argument.
+
+   .. py:property:: embedding_dims
+
+
+   .. py:property:: classes
+
+
+   .. py:property:: output_array_type
+
+      Subclasses should implement this method to define the type of array output by the predictor.
+
+   .. py:method:: create_model(architecture)
+
+      To create a model with the given training architecture.
+
+      :param architecture: An instance of class Architecture, to define training architecture for the model.
+
+      :returns: An instance of class Model with the designed architecture.
+
+
+   .. py:method:: create_target(gt)
+
+      Creates target for training based on ground-truth array.
+
+      :param gt: An instance of class Array, representing ground-truth values.
+
+      :returns: Instance of Array class, representing target for training.
+
+
+   .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
+
+      Creates a weight array, using a ground-truth and an associated target array.
+
+      :param gt: Ground Truth array.
+      :param target: Target array.
+      :param mask: Associated mask array.
+      :param moving_class_counts: Counts of moving classes.
+
+      :returns: Tuple containing Array instance with weight array and any additional returned value.
+
+
+   .. py:method:: create_distance_mask(distances: numpy.ndarray, mask: numpy.ndarray, voxel_size: funlib.geometry.Coordinate, normalize=None, normalize_args=None)
+
+
+   .. py:method:: process(labels: numpy.ndarray, voxel_size: funlib.geometry.Coordinate, normalize=None, normalize_args=None)
+
+
+   .. py:method:: gt_region_for_roi(target_spec)
+
+      Method to report the required spatial context to generate a target for the given ROI.
+
+      :param target_spec: Target specifications for which ground truth region is needed.
+
+      :returns: Returns the same ROI by default, unless overridden.
+
+
+   .. py:method:: padding(gt_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
+
+      Calculates and returns the padding size for an array.
+
+      :param gt_voxel_size: Ground Truth voxel size of type Coordinate.
+
+      :returns: Coordinate having padding size.
+
+
+

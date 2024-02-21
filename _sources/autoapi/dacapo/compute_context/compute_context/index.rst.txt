@@ -1,0 +1,38 @@
+:py:mod:`dacapo.compute_context.compute_context`
+================================================
+
+.. py:module:: dacapo.compute_context.compute_context
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.compute_context.compute_context.ComputeContext
+
+
+
+
+.. py:class:: ComputeContext
+
+
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:property:: device
+      :abstractmethod:
+
+
+   .. py:method:: wrap_command(command)
+
+
+   .. py:method:: execute(command)
+
+
+

@@ -1,0 +1,71 @@
+:py:mod:`dacapo.options`
+========================
+
+.. py:module:: dacapo.options
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.options.Options
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.options.parse_options
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.options.logger
+   dacapo.options.options_files
+
+
+.. py:data:: logger
+
+   
+
+.. py:data:: options_files
+
+   
+
+.. py:function:: parse_options()
+
+   Parse and return the config options from the YAML files.
+
+   Yaml files are parsed in the order of their precedence (highest first).
+
+   :returns: Dictionary containing all the parsed options.
+   :rtype: dict
+
+
+.. py:class:: Options
+
+
+   Singleton class used to hold and access parsed configuration options.
+
+   .. py:method:: instance(**kwargs)
+      :classmethod:
+
+      Get the singleton instance of the Options class.
+
+      :param \*\*kwargs: Optional named arguments to parse as options.
+
+      :returns: The singleton instance of Options.
+      :rtype: Options
+
+
+

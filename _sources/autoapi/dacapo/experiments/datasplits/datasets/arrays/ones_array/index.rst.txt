@@ -1,0 +1,79 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.ones_array`
+==================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.ones_array
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.ones_array.OnesArray
+
+
+
+
+.. py:class:: OnesArray(array_config)
+
+
+
+
+   This is a wrapper around another `source_array` that simply provides ones
+   with the same metadata as the `source_array`.
+
+   .. py:property:: attrs
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: source_array
+      :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
+
+
+   .. py:property:: axes
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: writable
+      :type: bool
+
+      Can we write to this Array?
+
+   .. py:property:: data
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:method:: like(array: dacapo.experiments.datasplits.datasets.arrays.array.Array)
+      :classmethod:
+
+
+

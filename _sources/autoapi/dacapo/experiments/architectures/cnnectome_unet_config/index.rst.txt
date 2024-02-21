@@ -1,0 +1,94 @@
+:py:mod:`dacapo.experiments.architectures.cnnectome_unet_config`
+================================================================
+
+.. py:module:: dacapo.experiments.architectures.cnnectome_unet_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.architectures.cnnectome_unet_config.CNNectomeUNetConfig
+
+
+
+
+.. py:class:: CNNectomeUNetConfig
+
+
+
+
+   This class configures the CNNectomeUNet based on
+   https://github.com/saalfeldlab/CNNectome/blob/master/CNNectome/networks/unet_class.py
+
+   Includes support for super resolution via the upsampling factors.
+
+   .. py:attribute:: architecture_type
+
+      
+
+   .. py:attribute:: input_shape
+      :type: funlib.geometry.Coordinate
+
+      
+
+   .. py:attribute:: fmaps_out
+      :type: int
+
+      
+
+   .. py:attribute:: fmaps_in
+      :type: int
+
+      
+
+   .. py:attribute:: num_fmaps
+      :type: int
+
+      
+
+   .. py:attribute:: fmap_inc_factor
+      :type: int
+
+      
+
+   .. py:attribute:: downsample_factors
+      :type: List[funlib.geometry.Coordinate]
+
+      
+
+   .. py:attribute:: kernel_size_down
+      :type: Optional[List[funlib.geometry.Coordinate]]
+
+      
+
+   .. py:attribute:: kernel_size_up
+      :type: Optional[List[funlib.geometry.Coordinate]]
+
+      
+
+   .. py:attribute:: upsample_factors
+      :type: Optional[List[funlib.geometry.Coordinate]]
+
+      
+
+   .. py:attribute:: constant_upsample
+      :type: bool
+
+      
+
+   .. py:attribute:: padding
+      :type: str
+
+      
+
+   .. py:attribute:: use_attention
+      :type: bool
+
+      
+
+

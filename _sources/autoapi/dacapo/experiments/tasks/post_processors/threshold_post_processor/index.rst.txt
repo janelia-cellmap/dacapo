@@ -1,0 +1,43 @@
+:py:mod:`dacapo.experiments.tasks.post_processors.threshold_post_processor`
+===========================================================================
+
+.. py:module:: dacapo.experiments.tasks.post_processors.threshold_post_processor
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.post_processors.threshold_post_processor.ThresholdPostProcessor
+
+
+
+
+.. py:class:: ThresholdPostProcessor
+
+
+
+
+   Base class of all post-processors.
+
+   A post-processor takes a model's prediction and converts it into the final
+   output (e.g., per-voxel class probabilities into a semantic segmentation).
+
+   .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters]
+
+      Enumerate all possible parameters of this post-processor.
+
+
+   .. py:method:: set_prediction(prediction_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier)
+
+
+   .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters, output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, compute_context: dacapo.compute_context.ComputeContext | str = LocalTorch(), num_workers: int = 16, block_size: daisy.Coordinate = Coordinate((64, 64, 64))) -> dacapo.experiments.datasplits.datasets.arrays.zarr_array.ZarrArray
+
+      Convert predictions into the final output.
+
+
+

@@ -1,0 +1,63 @@
+:py:mod:`dacapo.store.file_stats_store`
+=======================================
+
+.. py:module:: dacapo.store.file_stats_store
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.store.file_stats_store.FileStatsStore
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.store.file_stats_store.logger
+
+
+.. py:data:: logger
+
+   
+
+.. py:class:: FileStatsStore(path)
+
+
+
+
+   A File based store for run statistics. Used to store and retrieve training
+   statistics and validation scores.
+
+   .. py:method:: store_training_stats(run_name, stats)
+
+      Store training stats of a given run.
+
+
+   .. py:method:: retrieve_training_stats(run_name)
+
+      Retrieve the training stats for a given run.
+
+
+   .. py:method:: store_validation_iteration_scores(run_name, scores)
+
+      Store the validation iteration scores of a given run.
+
+
+   .. py:method:: retrieve_validation_iteration_scores(run_name)
+
+      Retrieve the validation iteration scores for a given run.
+
+
+   .. py:method:: delete_training_stats(run_name: str) -> None
+
+
+

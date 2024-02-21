@@ -1,0 +1,41 @@
+:py:mod:`dacapo.experiments.arraytypes.arraytype`
+=================================================
+
+.. py:module:: dacapo.experiments.arraytypes.arraytype
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.arraytypes.arraytype.ArrayType
+
+
+
+
+.. py:class:: ArrayType
+
+
+
+
+   The type of data provided by an array. The ArrayType class helps to keep
+   track of the semantic meaning of an Array. Additionally the ArrayType
+   keeps track of metadata that is specific to this datatype such as
+   num_classes for an annotated volume or channel names for intensity
+   arrays.
+
+   .. py:property:: interpolatable
+      :type: bool
+      :abstractmethod:
+
+      This is an abstract method which should be overridden in each of the subclasses
+      to determine if an array is interpolatable or not.
+
+      :returns: True if the array is interpolatable, False otherwise.
+      :rtype: bool
+
+

@@ -1,0 +1,39 @@
+:py:mod:`dacapo.experiments.tasks.pretrained_task_config`
+=========================================================
+
+.. py:module:: dacapo.experiments.tasks.pretrained_task_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.pretrained_task_config.PretrainedTaskConfig
+
+
+
+
+.. py:class:: PretrainedTaskConfig
+
+
+
+
+   .. py:attribute:: task_type
+
+      
+
+   .. py:attribute:: sub_task_config
+      :type: dacapo.experiments.tasks.task_config.TaskConfig
+
+      
+
+   .. py:attribute:: weights
+      :type: pathlib.Path
+
+      
+
+

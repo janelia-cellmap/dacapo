@@ -1,0 +1,49 @@
+:py:mod:`dacapo.experiments.trainers.gp_augments.simple_config`
+===============================================================
+
+.. py:module:: dacapo.experiments.trainers.gp_augments.simple_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.trainers.gp_augments.simple_config.SimpleAugmentConfig
+
+
+
+
+.. py:class:: SimpleAugmentConfig
+
+
+
+
+   This class is an implementation of AugmentConfig that applies simple augmentations.
+
+   :param _raw_key: Key for raw data. Not used in this implementation. Defaults to None.
+   :param _gt_key: Key for ground truth data. Not used in this implementation. Defaults to None.
+   :param _mask_key: Key for mask data. Not used in this implementation. Defaults to None.
+
+   :returns: A node that can be included in a pipeline to perform simple data augmentations.
+   :rtype: Gunpowder SimpleAugment Node
+
+   .. py:method:: node(_raw_key=None, _gt_key=None, _mask_key=None)
+
+      Get a gp.SimpleAugment node.
+
+      :param _raw_key: Specific key for raw data, not used in this implementation. Defaults to None.
+      :type _raw_key: [type], optional
+      :param _gt_key: Specific key for ground truth data, not used in this implementation. Defaults to None.
+      :type _gt_key: [type], optional
+      :param _mask_key: Specific key for mask data, not used in this implementation. Defaults to None.
+      :type _mask_key: [type], optional
+
+      :returns: Simple augmentation node which can be incorporated in the pipeline.
+      :rtype: gunpowder.SimpleAugment
+
+
+

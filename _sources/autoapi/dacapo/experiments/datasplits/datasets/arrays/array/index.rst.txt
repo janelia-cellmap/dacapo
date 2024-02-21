@@ -1,0 +1,88 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.array`
+=============================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.array
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.array.Array
+
+
+
+
+.. py:class:: Array
+
+
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:property:: attrs
+      :type: Dict[str, Any]
+      :abstractmethod:
+
+      Return a dictionary of metadata attributes stored on this array.
+
+   .. py:property:: axes
+      :type: List[str]
+      :abstractmethod:
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+   .. py:property:: dims
+      :type: int
+      :abstractmethod:
+
+      Returns the number of spatial dimensions.
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+      :abstractmethod:
+
+      The size of a voxel in physical units.
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+      :abstractmethod:
+
+      The total ROI of this array, in world units.
+
+   .. py:property:: dtype
+      :type: Any
+      :abstractmethod:
+
+      The dtype of this array, in numpy dtypes
+
+   .. py:property:: num_channels
+      :type: Optional[int]
+      :abstractmethod:
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+   .. py:property:: data
+      :type: numpy.ndarray
+      :abstractmethod:
+
+      Get a numpy like readable and writable view into this array.
+
+   .. py:property:: writable
+      :type: bool
+      :abstractmethod:
+
+      Can we write to this Array?
+
+

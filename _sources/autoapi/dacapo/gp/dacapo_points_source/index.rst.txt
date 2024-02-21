@@ -1,0 +1,64 @@
+:py:mod:`dacapo.gp.dacapo_points_source`
+========================================
+
+.. py:module:: dacapo.gp.dacapo_points_source
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.gp.dacapo_points_source.GraphSource
+
+
+
+
+.. py:class:: GraphSource(key: gunpowder.GraphKey, graph: gunpowder.Graph)
+
+
+
+
+   A provider for serving graph data in gunpowder pipelines.
+
+   The Graph Source loads a single graph to serve to the pipeline based on
+   ROI requests it receives.
+
+   .. attribute:: key
+
+      The key of the graph to be served.
+
+      :type: gp.GraphKey
+
+   .. attribute:: graph
+
+      The graph to be served.
+
+      :type: gp.Graph
+
+   .. py:method:: setup()
+
+      Set up the provider. This function sets the provider to provide the
+      graph with the given key.
+
+
+   .. py:method:: provide(request)
+
+      Provides the graph for the requested ROI.
+
+      This method will be passively called by gunpowder to get a batch.
+      Depending on the request we provide a subgraph of our data, or nothing
+      at all.
+
+      :param request: BatchRequest with the same ROI for
+      :type request: gp.BatchRequest
+      :param each requested array and graph.:
+
+      :returns: The graph contained in a Batch.
+      :rtype: outputs (gp.Batch)
+
+
+

@@ -1,0 +1,239 @@
+:py:mod:`dacapo.experiments.tasks.post_processors`
+==================================================
+
+.. py:module:: dacapo.experiments.tasks.post_processors
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   argmax_post_processor/index.rst
+   argmax_post_processor_parameters/index.rst
+   dummy_post_processor/index.rst
+   dummy_post_processor_parameters/index.rst
+   post_processor/index.rst
+   post_processor_parameters/index.rst
+   threshold_post_processor/index.rst
+   threshold_post_processor_parameters/index.rst
+   watershed_post_processor/index.rst
+   watershed_post_processor_parameters/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.post_processors.DummyPostProcessor
+   dacapo.experiments.tasks.post_processors.DummyPostProcessorParameters
+   dacapo.experiments.tasks.post_processors.PostProcessorParameters
+   dacapo.experiments.tasks.post_processors.PostProcessor
+   dacapo.experiments.tasks.post_processors.ThresholdPostProcessor
+   dacapo.experiments.tasks.post_processors.ThresholdPostProcessorParameters
+   dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor
+   dacapo.experiments.tasks.post_processors.ArgmaxPostProcessorParameters
+   dacapo.experiments.tasks.post_processors.WatershedPostProcessor
+   dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters
+
+
+
+
+.. py:class:: DummyPostProcessor(detection_threshold: float)
+
+
+
+
+   Base class of all post-processors.
+
+   A post-processor takes a model's prediction and converts it into the final
+   output (e.g., per-voxel class probabilities into a semantic segmentation).
+
+   .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters]
+
+      Enumerate all possible parameters of this post-processor. Should
+      return instances of ``PostProcessorParameters``.
+
+
+   .. py:method:: set_prediction(prediction_array)
+
+
+   .. py:method:: process(parameters, output_array_identifier)
+
+      Convert predictions into the final output.
+
+
+
+.. py:class:: DummyPostProcessorParameters
+
+
+
+
+   Base class for post-processor parameters.
+
+   .. py:attribute:: min_size
+      :type: int
+
+      
+
+
+.. py:class:: PostProcessorParameters
+
+
+   Base class for post-processor parameters.
+
+   .. py:property:: parameter_names
+      :type: List[str]
+
+
+   .. py:attribute:: id
+      :type: int
+
+      
+
+
+.. py:class:: PostProcessor
+
+
+
+
+   Base class of all post-processors.
+
+   A post-processor takes a model's prediction and converts it into the final
+   output (e.g., per-voxel class probabilities into a semantic segmentation).
+
+   .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters]
+      :abstractmethod:
+
+      Enumerate all possible parameters of this post-processor.
+
+
+   .. py:method:: set_prediction(prediction_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier) -> None
+      :abstractmethod:
+
+
+   .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters, output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, compute_context: dacapo.compute_context.ComputeContext | str = LocalTorch(), num_workers: int = 16, chunk_size: funlib.geometry.Coordinate = Coordinate((64, 64, 64))) -> dacapo.experiments.datasplits.datasets.arrays.Array
+      :abstractmethod:
+
+      Convert predictions into the final output.
+
+
+
+.. py:class:: ThresholdPostProcessor
+
+
+
+
+   Base class of all post-processors.
+
+   A post-processor takes a model's prediction and converts it into the final
+   output (e.g., per-voxel class probabilities into a semantic segmentation).
+
+   .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters]
+
+      Enumerate all possible parameters of this post-processor.
+
+
+   .. py:method:: set_prediction(prediction_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier)
+
+
+   .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters, output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, compute_context: dacapo.compute_context.ComputeContext | str = LocalTorch(), num_workers: int = 16, block_size: daisy.Coordinate = Coordinate((64, 64, 64))) -> dacapo.experiments.datasplits.datasets.arrays.zarr_array.ZarrArray
+
+      Convert predictions into the final output.
+
+
+
+.. py:class:: ThresholdPostProcessorParameters
+
+
+
+
+   Base class for post-processor parameters.
+
+   .. py:attribute:: threshold
+      :type: float
+
+      
+
+
+.. py:class:: ArgmaxPostProcessor
+
+
+
+
+   Base class of all post-processors.
+
+   A post-processor takes a model's prediction and converts it into the final
+   output (e.g., per-voxel class probabilities into a semantic segmentation).
+
+   .. py:method:: enumerate_parameters()
+
+      Enumerate all possible parameters of this post-processor. Should
+      return instances of ``PostProcessorParameters``.
+
+
+   .. py:method:: set_prediction(prediction_array_identifier)
+
+
+   .. py:method:: process(parameters, output_array_identifier, compute_context: dacapo.compute_context.ComputeContext | str = LocalTorch(), num_workers: int = 16, block_size: daisy.Coordinate = Coordinate((64, 64, 64)))
+
+      Convert predictions into the final output.
+
+
+
+.. py:class:: ArgmaxPostProcessorParameters
+
+
+
+
+   Base class for post-processor parameters.
+
+
+.. py:class:: WatershedPostProcessor(offsets: List[funlib.geometry.Coordinate])
+
+
+
+
+   Base class of all post-processors.
+
+   A post-processor takes a model's prediction and converts it into the final
+   output (e.g., per-voxel class probabilities into a semantic segmentation).
+
+   .. py:method:: enumerate_parameters()
+
+      Enumerate all possible parameters of this post-processor. Should
+      return instances of ``PostProcessorParameters``.
+
+
+   .. py:method:: set_prediction(prediction_array_identifier)
+
+
+   .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, compute_context: dacapo.compute_context.ComputeContext | str = LocalTorch(), num_workers: int = 16, block_size: funlib.geometry.Coordinate = Coordinate((64, 64, 64)))
+
+      Convert predictions into the final output.
+
+
+
+.. py:class:: WatershedPostProcessorParameters
+
+
+
+
+   Base class for post-processor parameters.
+
+   .. py:attribute:: bias
+      :type: float
+
+      
+
+   .. py:attribute:: context
+      :type: funlib.geometry.Coordinate
+
+      
+
+

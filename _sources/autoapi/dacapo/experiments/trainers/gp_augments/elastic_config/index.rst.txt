@@ -1,0 +1,123 @@
+:py:mod:`dacapo.experiments.trainers.gp_augments.elastic_config`
+================================================================
+
+.. py:module:: dacapo.experiments.trainers.gp_augments.elastic_config
+
+.. autoapi-nested-parse::
+
+   A python library module that defines the configuration class `ElasticAugmentConfig` for elastic augmentations
+   of a 3D image given certain parameters. It inherits from the AugmentConfig class.
+
+   Modules:
+       attr: Used for defining classes in a neat, concise way.
+       List, Tuple: Used for type hinting.
+       AugmentConfig: The base class for `ElasticAugmentConfig` class.
+       .gp.elastic_augment_fuse.ElasticAugment: A function that applies elastic augmentation on 3D image.
+
+   Classes:
+       ElasticAugmentConfig: Defines the configuration details for elastic augmentations.
+
+   .. method:: node
+
+      Returns the ElasticAugment object.
+      
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugmentConfig
+
+
+
+
+.. py:class:: ElasticAugmentConfig
+
+
+
+
+   A class that holds the configuration details for the elastic augmentations.
+
+   .. attribute:: control_point_spacing
+
+      Distance(in voxels per dimension) between control points for
+      the elastic deformation.
+
+      :type: List[int]
+
+   .. attribute:: control_point_displacement_sigma
+
+      Standard deviation of control point displacement
+      distribution, in world coordinates.
+
+      :type: List[float]
+
+   .. attribute:: rotation_interval
+
+      An interval to randomly sample rotation angles from
+      (0,2PI).
+
+      :type: Tuple[float, float]
+
+   .. attribute:: subsample
+
+      Downsample factor to perform the elastic augmentation
+      on a grid. Default is 1.
+
+      :type: int
+
+   .. attribute:: uniform_3d_rotation
+
+      Should 3D rotations be performed uniformly. The 'rotation_interval'
+      will be ignored. Default is False.
+
+      :type: bool
+
+   .. py:attribute:: control_point_spacing
+      :type: List[int]
+
+      
+
+   .. py:attribute:: control_point_displacement_sigma
+      :type: List[float]
+
+      
+
+   .. py:attribute:: rotation_interval
+      :type: Tuple[float, float]
+
+      
+
+   .. py:attribute:: subsample
+      :type: int
+
+      
+
+   .. py:attribute:: uniform_3d_rotation
+      :type: bool
+
+      
+
+   .. py:method:: node(_raw_key=None, _gt_key=None, _mask_key=None)
+
+      Returns the object of ElasticAugment with the given configuration details.
+
+      :param _raw_key: Unused variable, kept for future use.
+      :param _gt_key: Unused variable, kept for future use.
+      :param _mask_key: Unused variable, kept for future use.
+
+      :returns:
+
+                A ElasticAugment object configured with `control_point_spacing`,
+                                `control_point_displacement_sigma`, `rotation_interval`, `subsample` and
+                                `uniform_3d_rotation`.
+      :rtype: ElasticAugment
+
+
+

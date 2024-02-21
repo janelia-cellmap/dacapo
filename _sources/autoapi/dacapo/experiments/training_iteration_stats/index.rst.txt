@@ -1,0 +1,58 @@
+:py:mod:`dacapo.experiments.training_iteration_stats`
+=====================================================
+
+.. py:module:: dacapo.experiments.training_iteration_stats
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.training_iteration_stats.TrainingIterationStats
+
+
+
+
+.. py:class:: TrainingIterationStats
+
+
+   A class to represent the training iteration statistics.
+
+   .. attribute:: iteration
+
+      The iteration that produced these stats.
+
+      :type: int
+
+   .. attribute:: loss
+
+      The loss value of this iteration.
+
+      :type: float
+
+   .. attribute:: time
+
+      The time it took to process this iteration.
+
+      :type: float
+
+   .. py:attribute:: iteration
+      :type: int
+
+      
+
+   .. py:attribute:: loss
+      :type: float
+
+      
+
+   .. py:attribute:: time
+      :type: float
+
+      
+
+

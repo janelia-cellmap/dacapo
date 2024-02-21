@@ -1,0 +1,27 @@
+:py:mod:`dacapo.store`
+======================
+
+.. py:module:: dacapo.store
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   array_store/index.rst
+   config_store/index.rst
+   conversion_hooks/index.rst
+   converter/index.rst
+   create_store/index.rst
+   file_config_store/index.rst
+   file_stats_store/index.rst
+   local_array_store/index.rst
+   local_weights_store/index.rst
+   mongo_config_store/index.rst
+   mongo_stats_store/index.rst
+   stats_store/index.rst
+   weights_store/index.rst
+
+

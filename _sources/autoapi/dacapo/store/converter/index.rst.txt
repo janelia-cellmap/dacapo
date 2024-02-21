@@ -1,0 +1,75 @@
+:py:mod:`dacapo.store.converter`
+================================
+
+.. py:module:: dacapo.store.converter
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.store.converter.TypedConverter
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.store.converter.converter
+
+
+.. py:class:: TypedConverter(dict_factory: Callable[[], Any] = dict, unstruct_strat: UnstructureStrategy = UnstructureStrategy.AS_DICT, omit_if_default: bool = False, forbid_extra_keys: bool = False, type_overrides: cattrs._compat.Mapping[Type, cattrs.gen.AttributeOverride] = {}, unstruct_collection_overrides: cattrs._compat.Mapping[Type, Callable] = {}, prefer_attrib_converters: bool = False, detailed_validation: bool = True, unstructure_fallback_factory: cattrs.dispatch.HookFactory[cattrs.dispatch.UnstructureHook] = lambda _: identity, structure_fallback_factory: cattrs.dispatch.HookFactory[cattrs.dispatch.StructureHook] = lambda _: raise_error)
+
+
+
+
+   A converter that stores and retrieves type information for selected
+   class hierarchies. Used to reconstruct a concrete class from unstructured
+   data.
+
+   .. py:method:: register_hierarchy(cls, cls_fn)
+
+      Register a class hierarchy for typed structure/unstructure
+      conversion.
+
+      For each class in the hierarchy under (including) ``cls``, this will
+      store an additional ``__type__`` attribute (a string) in the object
+      dictionary. This ``__type__`` string will be the concrete class of the
+      object, and will be used to structure the dictionary back into an
+      object of the correct class.
+
+      For this to work, this function needs to know how to convert a
+      ``__type__`` string back into a class, for which it used the provided
+      ``cls_fn``.
+
+      :param cls: The top-level class of the hierarchy to register.
+      :type cls: class
+      :param cls_fn: A function mapping type strings to classes. This can be as
+                     simple as ``lambda typ: eval(typ)``, if all subclasses of
+                     ``cls`` are visible to the module that calls this method.
+      :type cls_fn: function
+
+      .. rubric:: Example
+
+      If class ``A`` is the base of class ``B``, and
+      ``converter.register_hierarchy(A, lambda typ: eval(typ))`` has been
+      called, the dictionary ``y = converter.unstructure(x)`` will
+      contain a ``__type__`` field that is ``'A'`` if ``x = A()`` and
+      ``B`` if ``x = B()``.
+
+      This ``__type__`` field is then used by ``x =
+      converter.structure(y, A)`` to recreate the concrete type of ``x``.
+
+
+
+.. py:data:: converter
+
+   
+

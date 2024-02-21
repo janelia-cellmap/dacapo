@@ -1,0 +1,27 @@
+:py:mod:`dacapo.experiments.tasks.affinities_task`
+==================================================
+
+.. py:module:: dacapo.experiments.tasks.affinities_task
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.affinities_task.AffinitiesTask
+
+
+
+
+.. py:class:: AffinitiesTask(task_config)
+
+
+
+
+   This is a task for generating voxel affinities.
+
+

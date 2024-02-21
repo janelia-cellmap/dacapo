@@ -1,0 +1,38 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.arrays.sum_array_config`
+========================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.sum_array_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.sum_array_config.SumArrayConfig
+
+
+
+
+.. py:class:: SumArrayConfig
+
+
+
+
+   Base class for array configurations. Each subclass of an
+   `Array` should have a corresponding config class derived from
+   `ArrayConfig`.
+
+   .. py:attribute:: array_type
+
+      
+
+   .. py:attribute:: source_array_configs
+      :type: List[dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
+
+      
+
+

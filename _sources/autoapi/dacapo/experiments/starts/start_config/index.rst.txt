@@ -1,0 +1,47 @@
+:py:mod:`dacapo.experiments.starts.start_config`
+================================================
+
+.. py:module:: dacapo.experiments.starts.start_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.starts.start_config.StartConfig
+
+
+
+
+.. py:class:: StartConfig
+
+
+   A class to represent the configuration for running tasks.
+
+   .. attribute:: run
+
+      The run to be used as a starting point for tasks.
+
+      :type: str
+
+   .. attribute:: criterion
+
+      The criterion to be used for choosing weights from run.
+
+      :type: str
+
+   .. py:attribute:: run
+      :type: str
+
+      
+
+   .. py:attribute:: criterion
+      :type: str
+
+      
+
+

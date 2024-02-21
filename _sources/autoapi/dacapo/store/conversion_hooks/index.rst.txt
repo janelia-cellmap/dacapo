@@ -1,0 +1,38 @@
+:py:mod:`dacapo.store.conversion_hooks`
+=======================================
+
+.. py:module:: dacapo.store.conversion_hooks
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.store.conversion_hooks.register_hierarchy_hooks
+   dacapo.store.conversion_hooks.register_hooks
+   dacapo.store.conversion_hooks.cls_fun
+
+
+
+.. py:function:: register_hierarchy_hooks(converter)
+
+   Central place to register type hierarchies for conversion.
+
+
+.. py:function:: register_hooks(converter)
+
+   Central place to register all conversion hooks with the given
+   converter.
+
+
+.. py:function:: cls_fun(typ)
+
+   Convert a type string into the corresponding class. The class must be
+   visible to this module (hence the star imports at the top).
+
+

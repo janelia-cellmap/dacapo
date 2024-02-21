@@ -1,0 +1,88 @@
+:py:mod:`dacapo.experiments.datasplits.datasets.raw_gt_dataset_config`
+======================================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.raw_gt_dataset_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig
+
+
+
+
+.. py:class:: RawGTDatasetConfig
+
+
+
+
+   This is a configuration class for the standard dataset with both raw and GT Array.
+
+   The configuration includes array configurations for raw data, ground truth data and mask data.
+   The configuration for ground truth (GT) data is mandatory, whereas configurations for raw
+   and mask data are optional. It also includes an optional list of points around which training samples
+   will be extracted.
+
+   .. attribute:: dataset_type
+
+      The type of dataset that is being configured.
+
+      :type: class
+
+   .. attribute:: raw_config
+
+      Configuration for the raw data associated with this dataset.
+
+      :type: Optional[ArrayConfig]
+
+   .. attribute:: gt_config
+
+      Configuration for the ground truth data associated with this dataset.
+
+      :type: Optional[ArrayConfig]
+
+   .. attribute:: mask_config
+
+      An optional mask configuration that sets the loss
+      equal to zero on voxels where the mask is 1.
+
+      :type: Optional[ArrayConfig]
+
+   .. attribute:: sample_points
+
+      An optional list of points around which
+      training samples will be extracted.
+
+      :type: Optional[List[Coordinate]]
+
+   .. py:attribute:: dataset_type
+
+      
+
+   .. py:attribute:: raw_config
+      :type: Optional[dacapo.experiments.datasplits.datasets.arrays.ArrayConfig]
+
+      
+
+   .. py:attribute:: gt_config
+      :type: Optional[dacapo.experiments.datasplits.datasets.arrays.ArrayConfig]
+
+      
+
+   .. py:attribute:: mask_config
+      :type: Optional[dacapo.experiments.datasplits.datasets.arrays.ArrayConfig]
+
+      
+
+   .. py:attribute:: sample_points
+      :type: Optional[List[funlib.geometry.Coordinate]]
+
+      
+
+
