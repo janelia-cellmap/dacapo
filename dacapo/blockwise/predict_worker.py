@@ -66,7 +66,7 @@ def start_worker(
     input_dataset: str,
     output_container: Path | str,
     output_dataset: str,
-    device: str = "cuda",
+    device: str | torch.device = "cuda",
 ):
     # retrieving run
     config_store = create_config_store()

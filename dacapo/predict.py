@@ -2,7 +2,7 @@ from pathlib import Path
 
 from dacapo.blockwise import run_blockwise
 from dacapo.experiments import Run
-from dacapo.store.create_store import create_config_store
+from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.store.local_array_store import LocalArrayIdentifier
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 
@@ -23,7 +23,7 @@ def predict(
     input_dataset: str,
     output_path: Path | str,
     output_roi: Optional[Roi | str] = None,
-    num_workers: int = 30,
+    num_workers: int = 12,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):
@@ -44,6 +44,15 @@ def predict(
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
+
+    # check to see if we can load the weights
+    weights_store = create_weights_store()
+    try:
+        weights_store.retrieve_weights(run_name, iteration)
+    except FileNotFoundError:
+        raise ValueError(
+            f"No weights found for run {run_name} at iteration {iteration}."
+        )
 
     # get arrays
     raw_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)

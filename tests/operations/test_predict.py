@@ -46,6 +46,7 @@ def test_predict(options, run_config, zarr_array, tmp_path):
         input_container=zarr_array.file_name,
         input_dataset=zarr_array.dataset,
         output_path=tmp_path,
+        num_workers=4,
     )
     weights_store.store_weights(run, 1)
     predict(
@@ -54,6 +55,7 @@ def test_predict(options, run_config, zarr_array, tmp_path):
         input_container=zarr_array.file_name,
         input_dataset=zarr_array.dataset,
         output_path=tmp_path,
+        num_workers=4,
     )
 
     # test predicting with iterations for which we know there are no weights
@@ -64,4 +66,5 @@ def test_predict(options, run_config, zarr_array, tmp_path):
             input_container=zarr_array.file_name,
             input_dataset=zarr_array.dataset,
             output_path=tmp_path,
+            num_workers=4,
         )

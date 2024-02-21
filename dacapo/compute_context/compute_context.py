@@ -20,7 +20,6 @@ class ComputeContext(ABC):
 
     def execute(self, command):
         # A helper method to run a command in the context specific way.
-        # subprocess.run(self.wrap_command(command), shell=True)
         subprocess.run(self.wrap_command(command))
 
 
