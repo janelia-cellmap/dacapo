@@ -2,6 +2,7 @@ from pathlib import Path
 import tempfile
 import time
 import daisy
+import dacapo.blockwise
 from funlib.geometry import Roi, Coordinate
 import yaml
 
@@ -102,7 +103,7 @@ def segment_blockwise(
 
         # Make the task
         task = DaCapoBlockwiseTask(
-            str(Path(Path(__file__).parent, "segment_worker.py")),
+            str(Path(Path(dacapo.blockwise.__file__).parent, "segment_worker.py")),
             total_roi.grow(context, context),
             read_roi,
             write_roi,
@@ -126,7 +127,7 @@ def segment_blockwise(
 
         # Make the task
         task = DaCapoBlockwiseTask(
-            str(Path(Path(__file__).parent, "relabel_worker.py")),
+            str(Path(Path(dacapo.blockwise.__file__).parent, "relabel_worker.py")),
             total_roi,
             read_roi,
             write_roi,

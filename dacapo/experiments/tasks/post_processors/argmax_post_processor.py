@@ -1,5 +1,6 @@
 from pathlib import Path
-from dacapo.blockwise.scheduler import run_blockwise
+from dacapo.blockwise import run_blockwise
+import dacapo.blockwise
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from dacapo.store.array_store import LocalArrayIdentifier
 from .argmax_post_processor_parameters import ArgmaxPostProcessorParameters
@@ -43,7 +44,7 @@ class ArgmaxPostProcessor(PostProcessor):
         # run blockwise prediction
         run_blockwise(
             worker_file=str(
-                Path(Path(__file__).parent, "blockwise", "predict_worker.py")
+                Path(Path(dacapo.blockwise.__file__).parent, "argmax_worker.py")
             ),
             total_roi=self.prediction_array.roi,
             read_roi=read_roi,

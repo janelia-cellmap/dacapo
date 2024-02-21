@@ -47,6 +47,7 @@ def test_apply(options, run_config, zarr_array, tmp_path):
         output_path=tmp_path,
         iteration=0,
         parameters=parameters,
+        num_workers=4,
     )
     weights_store.store_weights(run, 1)
     apply(
@@ -56,6 +57,7 @@ def test_apply(options, run_config, zarr_array, tmp_path):
         output_path=tmp_path,
         iteration=1,
         parameters=parameters,
+        num_workers=4,
     )
 
     # test validating weights that don't exist
@@ -67,4 +69,5 @@ def test_apply(options, run_config, zarr_array, tmp_path):
             output_path=tmp_path,
             iteration=2,
             parameters=parameters,
+            num_workers=4,
         )

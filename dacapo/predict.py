@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from dacapo.blockwise import run_blockwise
+import dacapo.blockwise
 from dacapo.experiments import Run
 from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.store.local_array_store import LocalArrayIdentifier
@@ -57,10 +58,13 @@ def predict(
     # get arrays
     raw_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
     raw_array = ZarrArray.open_from_array_identifier(raw_array_identifier)
-    output_container = Path(
-        output_path,
-        Path(input_container).stem + ".zarr",
-    )  # TODO: zarr hardcoded
+    if ".zarr" in str(output_path) or ".n5" in str(output_path):
+        output_container = Path(output_path)
+    else:
+        output_container = Path(
+            output_path,
+            Path(input_container).stem + ".zarr",
+        )  # TODO: zarr hardcoded
     prediction_array_identifier = LocalArrayIdentifier(
         output_container, f"prediction_{run_name}_{iteration}"
     )
@@ -118,7 +122,7 @@ def predict(
     )
 
     # run blockwise prediction
-    worker_file = str(Path(Path(__file__).parent, "blockwise", "predict_worker.py"))
+    worker_file = str(Path(Path(dacapo.blockwise.__file__).parent, "predict_worker.py"))
     logger.info("Running blockwise prediction with worker_file: ", worker_file)
     run_blockwise(
         worker_file=worker_file,

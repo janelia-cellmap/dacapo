@@ -1,4 +1,5 @@
 from pathlib import Path
+import dacapo.blockwise
 from dacapo.blockwise.scheduler import segment_blockwise
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from dacapo.store.array_store import LocalArrayIdentifier
@@ -55,7 +56,7 @@ class WatershedPostProcessor(PostProcessor):
         }
         segment_blockwise(
             segment_function_file=str(
-                Path(Path(__file__).parent, "blockwise", "watershed_function.py")
+                Path(Path(dacapo.blockwise.__file__).parent, "watershed_function.py")
             ),
             context=parameters.context,
             total_roi=self.prediction_array.roi,

@@ -3,16 +3,14 @@ from dacapo.blockwise.scheduler import run_blockwise
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from .threshold_post_processor_parameters import ThresholdPostProcessorParameters
 from .post_processor import PostProcessor
+import dacapo.blockwise
 import numpy as np
 from daisy import Roi, Coordinate
 
 from typing import TYPE_CHECKING, Iterable
 
-if TYPE_CHECKING:
-    from dacapo.store.local_array_store import LocalArrayIdentifier
-    from dacapo.experiments.tasks.post_processors import (
-        ThresholdPostProcessorParameters,
-    )
+# if TYPE_CHECKING:
+from dacapo.store.local_array_store import LocalArrayIdentifier
 
 
 class ThresholdPostProcessor(PostProcessor):
@@ -60,7 +58,7 @@ class ThresholdPostProcessor(PostProcessor):
         # run blockwise prediction
         run_blockwise(
             worker_file=str(
-                Path(Path(__file__).parent, "blockwise", "predict_worker.py")
+                Path(Path(dacapo.blockwise.__file__).parent, "threshold_worker.py")
             ),
             total_roi=self.prediction_array.roi,
             read_roi=read_roi,

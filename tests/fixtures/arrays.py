@@ -22,9 +22,9 @@ def zarr_array(tmp_path):
         file_name=tmp_path / "zarr_array.zarr",
         dataset="volumes/test",
     )
-    zarr_container = zarr.open(str(tmp_path / "zarr_array.zarr"))
+    zarr_container = zarr.open(str(zarr_array_config.file_name))
     dataset = zarr_container.create_dataset(
-        "volumes/test", data=np.zeros((100, 50, 25), dtype=np.float32)
+        zarr_array_config.dataset, data=np.zeros((100, 50, 25), dtype=np.float32)
     )
     dataset.attrs["offset"] = (12, 12, 12)
     dataset.attrs["resolution"] = (1, 2, 4)
@@ -39,9 +39,10 @@ def cellmap_array(tmp_path):
         file_name=tmp_path / "zarr_array.zarr",
         dataset="volumes/test",
     )
-    zarr_container = zarr.open(str(tmp_path / "zarr_array.zarr"))
+    zarr_container = zarr.open(str(zarr_array_config.file_name))
     dataset = zarr_container.create_dataset(
-        "volumes/test", data=np.arange(0, 100, dtype=np.uint8).reshape(10, 5, 2)
+        zarr_array_config.dataset,
+        data=np.arange(0, 100, dtype=np.uint8).reshape(10, 5, 2),
     )
     dataset.attrs["offset"] = (12, 12, 12)
     dataset.attrs["resolution"] = (1, 2, 4)

@@ -33,7 +33,7 @@ def apply(
     iteration: Optional[int] = None,
     parameters: Optional[PostProcessorParameters | str] = None,
     roi: Optional[Roi | str] = None,
-    num_workers: int = 30,
+    num_workers: int = 12,
     output_dtype: Optional[np.dtype | str] = np.uint8,  # type: ignore
     overwrite: bool = True,
     file_format: str = "zarr",
@@ -142,7 +142,7 @@ def apply(
         )
     output_container = Path(
         output_path,
-        "".join(Path(input_container).name.split(".")[:-1]) + f".{file_format}",
+        Path(input_container).stem + f".{file_format}",
     )
     prediction_array_identifier = LocalArrayIdentifier(
         output_container, f"prediction_{run_name}_{iteration}"
@@ -158,7 +158,7 @@ def apply(
         Path(input_container, input_dataset),
     )
     return apply_run(
-        run.name,
+        run,
         iteration,
         parameters,
         input_array_identifier,
@@ -172,15 +172,15 @@ def apply(
 
 
 def apply_run(
-    run_name: str,
+    run: Run,
     iteration: int,
     parameters: PostProcessorParameters,
     input_array_identifier: "LocalArrayIdentifier",
     prediction_array_identifier: "LocalArrayIdentifier",
     output_array_identifier: "LocalArrayIdentifier",
     roi: Optional[Roi] = None,
-    num_workers: int = 30,
-    output_dtype: Optional[np.dtype] = np.uint8,  # type: ignore
+    num_workers: int = 12,
+    output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):
     """Apply the model to a dataset. If roi is None, the whole input dataset is used. Assumes model is already loaded."""
@@ -188,7 +188,7 @@ def apply_run(
     # render prediction dataset
     logger.info("Predicting on dataset %s", prediction_array_identifier)
     predict(
-        run_name,
+        run.name,
         iteration,
         input_container=input_array_identifier.container,
         input_dataset=input_array_identifier.dataset,
@@ -203,7 +203,7 @@ def apply_run(
     logger.info("Post-processing output to dataset %s", output_array_identifier)
     post_processor = run.task.post_processor
     post_processor.set_prediction(prediction_array_identifier)
-    post_processor.process(parameters, output_array_identifier)
+    post_processor.process(parameters, output_array_identifier, num_workers=num_workers)
 
     logger.info("Done")
     return
