@@ -10,7 +10,7 @@ from typing import List
 class InnerDistanceTaskConfig(TaskConfig):
     """A class to store configurations for inner distance tasks.
 
-    This class inherits from TaskConfig to get configurations for signed distance 
+    This class inherits from TaskConfig to get configurations for signed distance
     transform tasks used for generating and evaluating segmentations. Compared to
     regular affinities, generating distance transforms can provide denser signals,
     avoiding situations like a single misclassified pixel merging two distinct objects.
@@ -20,7 +20,7 @@ class InnerDistanceTaskConfig(TaskConfig):
         channels (List[str]): A list holding names of channels.
         clip_distance (float): Maximum distance for considering false positives or negatives.
         tol_distance (float): Tolerance distance for counting false positives or negatives.
-        scale_factor (float): The factor by which to scale distances before applying 
+        scale_factor (float): The factor by which to scale distances before applying
                               a tanh normalization. Defaults to 1.
     """
 

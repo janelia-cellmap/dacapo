@@ -9,12 +9,12 @@ from typing import Tuple
 @attr.s
 class DummyArchitectureConfig(ArchitectureConfig):
     """A dummy architecture configuration class used for testing purposes.
-    
+
     It extends the base class "ArchitectureConfig". This class contains dummy attributes and always
     returns that the configuration is invalid when verified.
 
     Attributes:
-        architecture_type (:obj:`DummyArchitecture`): A class attribute assigning 
+        architecture_type (:obj:`DummyArchitecture`): A class attribute assigning
             the DummyArchitecture class to this configuration.
         num_in_channels (int): The number of input channels. This is a dummy attribute and has no real
             functionality or meaning.
@@ -37,5 +37,5 @@ class DummyArchitectureConfig(ArchitectureConfig):
         Returns:
             tuple: A tuple containing a boolean validity flag and a reason message string.
         """
-  
+
         return False, "This is a DummyArchitectureConfig and is never valid"

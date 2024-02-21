@@ -12,14 +12,14 @@ import torch
 
 class DummyArchitecture(Architecture):
     """
-    A class used to represent a dummy architecture layer for a 3D CNN. 
-    
+    A class used to represent a dummy architecture layer for a 3D CNN.
+
     Attributes:
         channels_in: An integer representing the number of input channels.
         channels_out: An integer representing the number of output channels.
         conv: A 3D convolution object.
         input_shape: A coordinate object representing the shape of the input.
-        
+
     Methods:
         forward(x): Performs the forward pass of the network.
     """
@@ -40,7 +40,7 @@ class DummyArchitecture(Architecture):
     def input_shape(self):
         """
         Returns the input shape for this architecture.
-        
+
         Returns:
             Coordinate: Input shape of the architecture.
         """
@@ -50,7 +50,7 @@ class DummyArchitecture(Architecture):
     def num_in_channels(self):
         """
         Returns the number of input channels for this architecture.
-        
+
         Returns:
             int: Number of input channels.
         """
@@ -60,7 +60,7 @@ class DummyArchitecture(Architecture):
     def num_out_channels(self):
         """
         Returns the number of output channels for this architecture.
-        
+
         Returns:
             int: Number of output channels.
         """
@@ -69,10 +69,10 @@ class DummyArchitecture(Architecture):
     def forward(self, x):
         """
         Perform the forward pass of the network.
-        
+
         Args:
             x: Input tensor.
-            
+
         Returns:
             Tensor: Output tensor after the forward pass.
         """

@@ -8,6 +8,7 @@ if TYPE_CHECKING:
     from dacapo.experiments.model import Model
     from dacapo.experiments.datasplits.datasets.arrays import Array
 
+
 class Predictor(ABC):
     """
     An abstract class that serves as a blueprint for all the specific predictors.

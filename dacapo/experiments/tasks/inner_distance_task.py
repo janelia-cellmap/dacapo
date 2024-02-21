@@ -6,12 +6,12 @@ from .task import Task
 
 
 class InnerDistanceTask(Task):
-    """This class extends the Task class for creating tasks related to computing inner distances. 
+    """This class extends the Task class for creating tasks related to computing inner distances.
     It provides methods for prediction, loss calculation and post-processing. It includes Binary Segmentation Evaluator for evaluation.
-    
+
     Attributes:
         task_config: The configuration for the task.
-        predictor: Used for predicting the inner distances. 
+        predictor: Used for predicting the inner distances.
         loss: Used for calculating the mean square error loss.
         post_processor: Used for applying threshold post-processing.
         evaluator: Used for evaluating the results using binary segmentation.
@@ -20,7 +20,7 @@ class InnerDistanceTask(Task):
     def __init__(self, task_config):
         """
         Initializes an instance of InnerDistanceTask.
-        
+
         Args:
             task_config: The configuration for the task including channel and scale factor for prediction,
                          and clip distance, tolerance distance, and channels for evaluation.

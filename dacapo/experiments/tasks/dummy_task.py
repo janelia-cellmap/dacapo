@@ -7,8 +7,8 @@ from .task import Task
 
 class DummyTask(Task):
     """
-    A dummy task class that initializes all components (predictor, loss, 
-    post-processing, and evaluator) for the dummy task. Primarily used for testing purposes. 
+    A dummy task class that initializes all components (predictor, loss,
+    post-processing, and evaluator) for the dummy task. Primarily used for testing purposes.
     Inherits from the Task class.
 
     Attributes

@@ -13,7 +13,7 @@ import scipy.sparse as sparse
 def voi(reconstruction, groundtruth, ignore_reconstruction=[], ignore_groundtruth=[0]):
     """Evaluate groundtruth comparison by returning conditional entropies.
 
-    Calculates variation of information metric between reconstruction and groundtruth. 
+    Calculates variation of information metric between reconstruction and groundtruth.
 
     Parameters
     ----------
@@ -58,9 +58,9 @@ def split_vi(x, y=None, ignore_x=[0], ignore_y=[0]):
     Returns
     -------
     np.ndarray of float, shape (2,)
-        [hygx.sum(), hxgy.sum()] 
+        [hygx.sum(), hxgy.sum()]
         The conditional entropies of Y|X and X|Y.
-    """ 
+    """
     _, _, _, hxgy, hygx, _, _ = vi_tables(x, y, ignore_x, ignore_y)
     # false merges, false splits
     return np.array([hygx.sum(), hxgy.sum()])
@@ -69,8 +69,8 @@ def split_vi(x, y=None, ignore_x=[0], ignore_y=[0]):
 def vi_tables(x, y=None, ignore_x=[0], ignore_y=[0]):
     """Return probability tables used in VI calculation.
 
-    Returns the reference and target probability distributions and other derived quantities 
-    used in the calculation of the Variation of Information metric. 
+    Returns the reference and target probability distributions and other derived quantities
+    used in the calculation of the Variation of Information metric.
 
     If y is None, x is assumed to be a contingency table.
 
@@ -133,16 +133,16 @@ def contingency_table(seg, gt, ignore_seg=[0], ignore_gt=[0], norm=True):
     gt : np.ndarray, int type, same shape as `seg`
         The ground truth segmentation.
     ignore_seg : list of int, optional
-        Values to ignore in `seg`. 
+        Values to ignore in `seg`.
     ignore_gt : list of int, optional
-        Values to ignore in `gt`. 
+        Values to ignore in `gt`.
     norm : bool, optional
         Whether to normalize the table so that it sums to 1.
 
     Returns
     -------
     scipy.sparse.csc_matrix
-        A contingency table. 
+        A contingency table.
     """
     segr = seg.ravel()
     gtr = gt.ravel()

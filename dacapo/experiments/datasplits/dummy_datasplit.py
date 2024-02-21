@@ -39,6 +39,7 @@ class DummyDataSplit(DataSplit):
     __init__(self, datasplit_config):
         The constructor for DummyDataSplit class. It initialises a list with training datasets according to the input configuration.
     """
+
     train: List[Dataset]
     validate: List[Dataset]
 

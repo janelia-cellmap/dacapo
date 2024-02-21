@@ -5,7 +5,6 @@ from typing import Optional
 
 
 class Loss(ABC):
-    
     @abstractmethod
     def compute(
         self,
@@ -17,7 +16,7 @@ class Loss(ABC):
         Virtual method to compute the loss for the given prediction and target.
 
         Args:
-            prediction (torch.Tensor): The prediction tensor made by the model. 
+            prediction (torch.Tensor): The prediction tensor made by the model.
             target (torch.Tensor): The actual target tensor against which prediction is to be compared.
             weight (torch.Tensor, optional): The tensor that will be used to apply weightage to the loss. Defaults to None.
 

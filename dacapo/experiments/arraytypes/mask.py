@@ -16,16 +16,18 @@ from .arraytype import ArrayType
 
 import attr
 
+
 @attr.s
 class Mask(ArrayType):
     """
     A class that inherits the ArrayType class. This is a representation of a Mask in the system.
-    
+
     Methods
     -------
     interpolatable():
         It is a method that returns False.
     """
+
     @property
     def interpolatable(self) -> bool:
         """

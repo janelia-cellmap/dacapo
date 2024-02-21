@@ -18,6 +18,7 @@ class ArchitectureConfig:
         validates the given architecture.
 
     """
+
     name: str = attr.ib(
         metadata={
             "help_text": "A unique name for this architecture. This will be saved so "

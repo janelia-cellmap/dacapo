@@ -3,6 +3,7 @@ from .distance_task import DistanceTask
 from .task_config import TaskConfig
 from typing import List
 
+
 @attr.s
 class DistanceTaskConfig(TaskConfig):
     """This is a configuration class for the distance tasks.
@@ -11,7 +12,7 @@ class DistanceTaskConfig(TaskConfig):
     The advantage of generating distance transforms instead of regular affinities
     is that the signal can be denser. Misclassification of a single pixel in an affinity
     prediction can merge two distinct objects, but this does not occur with distances.
-    
+
     Attributes:
         task_type: A constant attribute assigned to the DistanceTask.
         channels (List[str]): A list containing channel names.
@@ -25,6 +26,7 @@ class DistanceTaskConfig(TaskConfig):
         clipmin (float): The minimum value allowed for distance weights. Default is 0.05.
         clipmax (float): The maximum value allowed for distance weights. Default is 0.95.
     """
+
     task_type = DistanceTask
 
     channels: List[str] = attr.ib(metadata={"help_text": "A list of channel names."})

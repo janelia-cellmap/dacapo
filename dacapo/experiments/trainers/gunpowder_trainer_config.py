@@ -10,6 +10,7 @@ from .trainer_config import TrainerConfig
 
 from typing import Optional, List
 
+
 @attr.s
 class GunpowderTrainerConfig(TrainerConfig):
     """

@@ -8,19 +8,19 @@ from .task import Task
 
 class OxygenTask(Task):
     """
-    The OxygenTask is a specialized implementation of the Task that models the behavior of oxygen 
+    The OxygenTask is a specialized implementation of the Task that models the behavior of oxygen
     chemical potential in a given material. It includes a model, a data driver, a predictor,
     a post-processor, and a barrier mechanism.
-    
+
     Attributes:
-        barrier (SimpleBarrier): An instance of SimpleBarrier that defines how to transport atoms 
+        barrier (SimpleBarrier): An instance of SimpleBarrier that defines how to transport atoms
         through a barrier.
-        data_driver (OxygenDataDriver): An instance of OxygenDataDriver that drives and controls 
+        data_driver (OxygenDataDriver): An instance of OxygenDataDriver that drives and controls
         the raw data relevant to the oxygen task.
         model (DummyModel): A placeholder model for the oxygenchemical potential simulation.
-        post_processor (DummyPostProcessor): A post-processor that processes the output of the 
+        post_processor (DummyPostProcessor): A post-processor that processes the output of the
         prediction for consumption by other components.
-        predictor (DummyPredictor): A placeholder predictor that handles the prediction logic 
+        predictor (DummyPredictor): A placeholder predictor that handles the prediction logic
         based on the model and the input data.
     """
 
@@ -36,7 +36,7 @@ class OxygenTask(Task):
         - data_driver: An OxygenDataDriver is initialized to drive and control the oxygen related raw data.
         - model: A dummy model to be placeholder for the actual model used.
         - post_processor: DummyPostProcessor instance is created for processing the predicted output.
-        - predictor: DummyPredictor is set up to handle the task specific prediction logic based on 
+        - predictor: DummyPredictor is set up to handle the task specific prediction logic based on
         model and input data.
         """
         self.barrier = SimpleBarrier(task_config.barrier)

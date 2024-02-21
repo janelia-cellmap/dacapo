@@ -11,6 +11,7 @@ options_files = [
     Path(expanduser("~/.config/dacapo/dacapo.yaml")),
 ]
 
+
 def parse_options():
     """
     Parse and return the config options from the YAML files.
@@ -32,25 +33,26 @@ class Options:
     """
     Singleton class used to hold and access parsed configuration options.
     """
+
     _instance = None
 
     def __init__(self):
         """
         Constructor method is private to enforce Singleton pattern.
-        
+
         Raises:
             RuntimeError: Always raises this error as it's a Singleton.
         """
         raise RuntimeError("Singleton: Use Options.instance()")
-    
+
     @classmethod
     def instance(cls, **kwargs):
         """
         Get the singleton instance of the Options class.
-        
+
         Args:
             **kwargs: Optional named arguments to parse as options.
-            
+
         Returns:
             Options: The singleton instance of Options.
         """
@@ -63,13 +65,13 @@ class Options:
     def __getattr__(self, name):
         """
         Get an option by its name.
-        
+
         Args:
             name (str): The name of the option.
-            
+
         Returns:
             Any: The value of the option.
-            
+
         Raises:
             RuntimeError: If the requested option does not exist.
         """
@@ -84,7 +86,7 @@ class Options:
     def __parse_options(self, **kwargs):
         """
         Private method to parse and set the configuration options.
-        
+
         Args:
             **kwargs: Optional named arguments to parse as options.
         """

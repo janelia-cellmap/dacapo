@@ -14,11 +14,11 @@ if TYPE_CHECKING:
 class Trainer(ABC):
     """Trainer Abstract Base Class
 
-    This serves as the blueprint for any trainer classes in the dacapo library. 
-    It defines essential methods that every subclass must implement for effective 
+    This serves as the blueprint for any trainer classes in the dacapo library.
+    It defines essential methods that every subclass must implement for effective
     training of a neural network model.
     """
-    
+
     iteration: int
     batch_size: int
     learning_rate: float

@@ -16,9 +16,8 @@ class TaskConfig:
     """
 
     name: str = attr.ib(
-        metadata = {
-            "help_text": \
-            "A unique name for this task. This will be saved so you and "
+        metadata={
+            "help_text": "A unique name for this task. This will be saved so you and "
             "others can find and reuse this task. Keep it short and avoid "
             "special characters."
         }

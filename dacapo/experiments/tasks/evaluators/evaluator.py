@@ -18,6 +18,7 @@ Iteration = int
 Score = float
 BestScore = Optional[Tuple[Iteration, Score]]
 
+
 class Evaluator(ABC):
     """
     Abstract base evaluator class. It provides the fundamental structure and methods for
@@ -28,7 +29,7 @@ class Evaluator(ABC):
     best_scores: Dict[OutputIdentifier, BestScore]
         Dictionary storing the best scores, indexed by OutputIdentifier which is a tuple
         of Dataset, PostProcessorParameters, and criteria string.
-    
+
     """
 
     @abstractmethod
@@ -48,7 +49,7 @@ class Evaluator(ABC):
         Returns
         -------
         EvaluationScores
-            The detailed evaluation scores after the comparison. 
+            The detailed evaluation scores after the comparison.
         """
         pass
 
@@ -72,7 +73,7 @@ class Evaluator(ABC):
         score: "EvaluationScores",
     ) -> bool:
         """
-        Determine if the provided score is the best for a specific 
+        Determine if the provided score is the best for a specific
         dataset/parameter/criterion combination.
 
         Parameters

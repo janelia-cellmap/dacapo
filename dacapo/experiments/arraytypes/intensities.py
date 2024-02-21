@@ -14,6 +14,7 @@ from .arraytype import ArrayType
 import attr
 from typing import Dict
 
+
 @attr.s
 class IntensitiesArray(ArrayType):
     """
@@ -23,7 +24,7 @@ class IntensitiesArray(ArrayType):
         channels (Dict[int, str]): A mapping from channel to a name describing that channel.
         min (float): The minimum possible value of your intensities.
         max (float): The maximum possible value of your intensities.
-        
+
     The `@property` defined enables to treat the 'interpolatable' as an attribute of the class.
     """
 
@@ -43,7 +44,7 @@ class IntensitiesArray(ArrayType):
     def interpolatable(self) -> bool:
         """
         The metadata information for interpolation ability.
-        
+
         Returns:
             bool: Always returns True for this IntensitiesArray class. The actual functionality depends on the specific implementation.
         """

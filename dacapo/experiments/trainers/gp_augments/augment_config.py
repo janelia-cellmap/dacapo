@@ -25,7 +25,7 @@ class AugmentConfig(ABC):
             mask_key (gp.ArrayKey): The key for the masking data array.
 
         Returns:
-            gp.BatchFilter: The resulting gunpowder node that applies 
+            gp.BatchFilter: The resulting gunpowder node that applies
             this augmentation.
         """
         pass

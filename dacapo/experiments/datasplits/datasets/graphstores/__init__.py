@@ -5,6 +5,7 @@ the current package.
 """
 
 from .graph_source_config import GraphStoreConfig
+
 """
 Class: GraphStoreConfig
 It configures the graph data for the dacapo python library.

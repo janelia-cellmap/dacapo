@@ -10,13 +10,13 @@ import numpy as np
 
 class InstanceEvaluator(Evaluator):
     """
-    A subclass of Evaluator that specifically evaluates instance segmentation tasks. This class 
+    A subclass of Evaluator that specifically evaluates instance segmentation tasks. This class
     extends the base Evaluator class from dacapo library.
 
     Attributes:
-        criteria (list[str]): A list of metric names that are used in this evaluation process.      
+        criteria (list[str]): A list of metric names that are used in this evaluation process.
     """
-    
+
     criteria = ["voi_merge", "voi_split", "voi"]
 
     def evaluate(self, output_array_identifier, evaluation_array):
@@ -24,7 +24,7 @@ class InstanceEvaluator(Evaluator):
         Evaluate the segmentation predictions with the ground truth data.
 
         Args:
-            output_array_identifier: A unique id that refers to the array that contains 
+            output_array_identifier: A unique id that refers to the array that contains
                                      predicted labels from the segmentation.
             evaluation_array: The ground truth labels to compare the predicted labels with.
 
@@ -43,7 +43,7 @@ class InstanceEvaluator(Evaluator):
     @property
     def score(self) -> InstanceEvaluationScores:
         """
-        Property that returns the evaluation scores. However, currently, it only returns 
+        Property that returns the evaluation scores. However, currently, it only returns
         an empty InstanceEvaluationScores object.
 
         Returns:
