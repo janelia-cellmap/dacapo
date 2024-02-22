@@ -33,4 +33,4 @@ def create_compute_context():
             **options.compute_context_config["config"]
         )
     else:
-        raise ValueError(f"Unknown store type {options.db_type}")
+        raise ValueError(f"Unknown store type {options.type}")

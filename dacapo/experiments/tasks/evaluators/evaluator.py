@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from dacapo.experiments.tasks.evaluators.evaluation_scores import EvaluationScores
     from dacapo.experiments.datasplits.datasets import Dataset
     from dacapo.experiments.datasplits.datasets.arrays import Array
+    from dacapo.store.local_array_store import LocalArrayIdentifier
     from dacapo.experiments.tasks.post_processors import PostProcessorParameters
     from dacapo.experiments.validation_scores import ValidationScores
 
@@ -28,9 +29,9 @@ class Evaluator(ABC):
 
     @abstractmethod
     def evaluate(
-        self, output_array: "Array", eval_array: "Array"
+        self, output_array_identifier: "LocalArrayIdentifier", evaluation_array: "Array"
     ) -> "EvaluationScores":
-        """Compare an `output_array` against ground-truth `eval_array`"""
+        """Compare an `output_array_identifier` against ground-truth `evaluation_array`"""
         pass
 
     @property

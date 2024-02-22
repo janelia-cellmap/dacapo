@@ -22,7 +22,7 @@ def predict(
     iteration: int,
     input_container: Path | str,
     input_dataset: str,
-    output_path: Path | str,
+    output_path: LocalArrayIdentifier | str,
     output_roi: Optional[Roi | str] = None,
     num_workers: int = 12,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
@@ -35,7 +35,7 @@ def predict(
         iteration (int): The training iteration of the model to use for prediction.
         input_container (Path | str): The container of the input array.
         input_dataset (str): The dataset name of the input array.
-        output_path (Path | str): The path where the prediction array will be stored.
+        output_path (LocalArrayIdentifier | str): The path where the prediction array will be stored, or a LocalArryIdentifier for the prediction array.
         output_roi (Optional[Roi | str], optional): The ROI of the output array. If None, the ROI of the input array will be used. Defaults to None.
         num_workers (int, optional): The number of workers to use for blockwise prediction. Defaults to 30.
         output_dtype (np.dtype | str, optional): The dtype of the output array. Defaults to np.uint8.
@@ -58,16 +58,19 @@ def predict(
     # get arrays
     raw_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
     raw_array = ZarrArray.open_from_array_identifier(raw_array_identifier)
-    if ".zarr" in str(output_path) or ".n5" in str(output_path):
-        output_container = Path(output_path)
+    if isinstance(output_path, LocalArrayIdentifier):
+        prediction_array_identifier = output_path
     else:
-        output_container = Path(
-            output_path,
-            Path(input_container).stem + ".zarr",
-        )  # TODO: zarr hardcoded
-    prediction_array_identifier = LocalArrayIdentifier(
-        output_container, f"prediction_{run_name}_{iteration}"
-    )
+        if ".zarr" in str(output_path) or ".n5" in str(output_path):
+            output_container = Path(output_path)
+        else:
+            output_container = Path(
+                output_path,
+                Path(input_container).stem + ".zarr",
+            )  # TODO: zarr hardcoded
+        prediction_array_identifier = LocalArrayIdentifier(
+            output_container, f"prediction_{run_name}_{iteration}"
+        )
 
     # get the model's input and output size
     model = run.model.eval()

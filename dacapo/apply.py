@@ -192,7 +192,7 @@ def apply_run(
         iteration,
         input_container=input_array_identifier.container,
         input_dataset=input_array_identifier.dataset,
-        output_path=prediction_array_identifier.container,
+        output_path=prediction_array_identifier,
         output_roi=roi,
         num_workers=num_workers,
         output_dtype=output_dtype,

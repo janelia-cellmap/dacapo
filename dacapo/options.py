@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 @attr.s
 class DaCapoConfig:
-    db_type: str = attr.ib(
+    type: str = attr.ib(
         default="files",
         metadata={
             "help_text": "The type of store to use for storing configurations and statistics. "

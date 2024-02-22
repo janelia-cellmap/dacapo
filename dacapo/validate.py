@@ -43,7 +43,7 @@ def validate(
 
     # create weights store and read weights
     weights_store = create_weights_store()
-    weights_store.retrieve_weights(run, iteration)
+    weights_store.retrieve_weights(run.name, iteration)
 
     return validate_run(
         run,
@@ -147,7 +147,7 @@ def validate_run(
             logger.info("validation inputs already copied!")
 
         prediction_array_identifier = array_store.validation_prediction_array(
-            run.name, iteration, validation_dataset
+            run.name, iteration, validation_dataset.name
         )
         logger.info("Predicting on dataset %s", validation_dataset.name)
         predict(
@@ -155,7 +155,7 @@ def validate_run(
             iteration,
             input_container=input_raw_array_identifier.container,
             input_dataset=input_raw_array_identifier.dataset,
-            output_path=prediction_array_identifier.container,
+            output_path=prediction_array_identifier,
             output_roi=validation_dataset.gt.roi,
             num_workers=num_workers,
             output_dtype=output_dtype,
@@ -170,7 +170,7 @@ def validate_run(
 
         for parameters in post_processor.enumerate_parameters():
             output_array_identifier = array_store.validation_output_array(
-                run.name, iteration, parameters, validation_dataset
+                run.name, iteration, str(parameters), validation_dataset.name
             )
 
             post_processed_array = post_processor.process(
@@ -206,10 +206,11 @@ def validate_run(
                             "iteration": iteration,
                             criterion: getattr(scores, criterion),
                             "parameters_id": parameters.id,
+                            "parameters": str(parameters),
                         }
                     )
                     weights_store.store_best(
-                        run, iteration, validation_dataset.name, criterion
+                        run.name, iteration, validation_dataset.name, criterion
                     )
 
             # delete current output. We only keep the best outputs as determined by
