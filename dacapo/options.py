@@ -54,14 +54,8 @@ class DaCapoConfig:
 
 class Options:
     def __init__(self):
-        """
-        Constructor method is private to enforce Singleton pattern.
-        
-        Raises:
-            RuntimeError: Always raises this error as it's a Singleton.
-        """
         raise RuntimeError("Singleton: Use Options.instance()")
-    
+
     @classmethod
     def instance(cls, **kwargs) -> DaCapoConfig:
         config = cls.__parse_options(**kwargs)

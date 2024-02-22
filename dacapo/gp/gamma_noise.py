@@ -1,55 +1,33 @@
 import numpy as np
+
 from gunpowder.nodes.batch_filter import BatchFilter
 from collections.abc import Iterable
+
 import logging
 
 logger = logging.getLogger(__file__)
 
+
 class GammaAugment(BatchFilter):
     """
-    Class for applying gamma noise augmentation.
-
-    Attributes:
-        arrays: An iterable collection of np arrays to augment
-        gamma_min: A float representing the lower limit of gamma perturbation
-        gamma_max: A float representing the upper limit of gamma perturbation
-
-    Methods:
-        setup(): Method to configure the internal state of the class
-        process(): Method to apply gamma noise to the desired arrays
-        __augment(): Private method to perform the actual augmentation
+    An Augment to apply gamma noise
     """
-    def __init__(self, arrays, gamma_min, gamma_max):
-        """
-        Initializing the Variables.
 
-        Args:
-            arrays : An iterable collection of np arrays to augment
-            gamma_min : A float representing  the lower limit of gamma perturbation
-            gamma_max : A float representing the upper limit of gamma perturbation
-        """
+    def __init__(self, arrays, gamma_min, gamma_max):
         if not isinstance(arrays, Iterable):
-            arrays = [arrays,]
+            arrays = [
+                arrays,
+            ]
         self.arrays = arrays
         self.gamma_min = gamma_min
         self.gamma_max = gamma_max
         assert self.gamma_max >= self.gamma_min
 
     def setup(self):
-        """
-        Configuring the internal state by iterating over arrays.
-        """
         for array in self.arrays:
             self.updates(array, self.spec[array])
 
     def process(self, batch, request):
-        """
-        Method to apply gamma noise to the desired arrays.
-
-        Args:
-            batch : The input batch to be processed.
-            request : An object which holds the requested output location.
-        """
         sample_gamma_min = (max(self.gamma_min, 1.0 / self.gamma_min) - 1) * (-1) ** (
             self.gamma_min < 1
         )
@@ -74,13 +52,6 @@ class GammaAugment(BatchFilter):
             raw.data = self.__augment(raw.data, gamma)
 
     def __augment(self, a, gamma):
-        """
-        Private method to perform the actual augmentation.
-
-        Args:
-            a: raw array to be augmented
-            gamma: gamma index to be applied
-        """
         # normalize a
         a_min = a.min()
         a_max = a.max()

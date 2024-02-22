@@ -1,13 +1,3 @@
-"""Module for DistanceTask class of FunkeLab DaCaPo Python library.
-
-This module contains the DistanceTask class, which is responsible for
-creating a predictor, loss, post_processor and evaluator from the 
-given task_config.
-
-Classes:
-    DistanceTask
-"""
-
 from .evaluators import BinarySegmentationEvaluator
 from .losses import MSELoss
 from .post_processors import ThresholdPostProcessor
@@ -16,29 +6,10 @@ from .task import Task
 
 
 class DistanceTask(Task):
-    """DistanceTask is a subclass of Task for handling tasks associated 
-    with Distance.
+    """This is just a dummy task for testing."""
 
-    DistanceTask uses `DistancePredictor` for prediction, `MSELoss` for 
-    computing loss, `ThresholdPostProcessor` for post-processing the 
-    prediction, and `BinarySegmentationEvaluator` for evaluating the 
-    prediction.
-
-    Attributes:
-        predictor: DistancePredictor object
-        loss: MSELoss object
-        post_processor: ThresholdPostProcessor object
-        evaluator: BinarySegmentationEvaluator object
-    """
     def __init__(self, task_config):
-        """Initializes attributes of DistanceTask.
-
-        It initializes predictor, loss, post processor, and evaluator 
-        based on the controls provided in task_config.
-
-        Args:
-            task_config: Object of task configuration
-        """
+        """Create a `DummyTask` from a `DummyTaskConfig`."""
 
         self.predictor = DistancePredictor(
             channels=task_config.channels,
