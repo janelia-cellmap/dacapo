@@ -9,7 +9,6 @@ from cattr import Converter
 
 from typing import Optional
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -60,8 +59,8 @@ class Options:
     @classmethod
     def instance(cls, **kwargs) -> DaCapoConfig:
         config = cls.__parse_options(**kwargs)
-
         return config
+
 
     @classmethod
     def config_file(cls) -> Optional[Path]:

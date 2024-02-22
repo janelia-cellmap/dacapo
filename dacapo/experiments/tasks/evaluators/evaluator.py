@@ -31,7 +31,21 @@ class Evaluator(ABC):
     def evaluate(
         self, output_array_identifier: "LocalArrayIdentifier", evaluation_array: "Array"
     ) -> "EvaluationScores":
-        """Compare an `output_array_identifier` against ground-truth `evaluation_array`"""
+        """
+        Compares and evaluates the output array against the evaluation array.
+
+        Parameters
+        ----------
+        output_array_identifier : Array
+            The output data array to evaluate
+        evaluation_array : Array
+            The evaluation data array to compare with the output
+
+        Returns
+        -------
+        EvaluationScores
+            The detailed evaluation scores after the comparison. 
+        """
         pass
 
     @property
