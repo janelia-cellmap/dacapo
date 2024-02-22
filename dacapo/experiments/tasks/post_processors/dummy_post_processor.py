@@ -18,7 +18,7 @@ class DummyPostProcessor(PostProcessor):
         for i, min_size in enumerate(range(1, 11)):
             yield DummyPostProcessorParameters(id=i, min_size=min_size)
 
-    def set_prediction(self, prediction_array):
+    def set_prediction(self, prediction_array_identifier):
         pass
 
     def process(self, parameters, output_array_identifier, *args, **kwargs):

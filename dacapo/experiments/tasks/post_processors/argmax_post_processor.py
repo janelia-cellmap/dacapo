@@ -20,6 +20,7 @@ class ArgmaxPostProcessor(PostProcessor):
         yield ArgmaxPostProcessorParameters(id=1)
 
     def set_prediction(self, prediction_array_identifier):
+        self.prediction_array_identifier = prediction_array_identifier
         self.prediction_array = ZarrArray.open_from_array_identifier(
             prediction_array_identifier
         )
@@ -27,7 +28,7 @@ class ArgmaxPostProcessor(PostProcessor):
     def process(
         self,
         parameters,
-        output_array_identifier,
+        output_array_identifier: "LocalArrayIdentifier",
         num_workers: int = 16,
         block_size: Coordinate = Coordinate((64, 64, 64)),
     ):
@@ -53,9 +54,7 @@ class ArgmaxPostProcessor(PostProcessor):
             max_retries=2,  # TODO: make this an option
             timeout=None,  # TODO: make this an option
             ######
-            input_array_identifier=LocalArrayIdentifier(
-                self.prediction_array.file_name, self.prediction_array.dataset
-            ),
+            input_array_identifier=self.prediction_array_identifier,
             output_array_identifier=output_array_identifier,
         )
 

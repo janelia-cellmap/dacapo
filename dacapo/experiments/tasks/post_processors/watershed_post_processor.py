@@ -27,6 +27,7 @@ class WatershedPostProcessor(PostProcessor):
             yield WatershedPostProcessorParameters(id=i, bias=bias)
 
     def set_prediction(self, prediction_array_identifier):
+        self.prediction_array_identifier = prediction_array_identifier
         self.prediction_array = ZarrArray.open_from_array_identifier(
             prediction_array_identifier
         )
@@ -66,9 +67,7 @@ class WatershedPostProcessor(PostProcessor):
             max_retries=2,  # TODO: make this an option
             timeout=None,  # TODO: make this an option
             ######
-            input_array_identifier=LocalArrayIdentifier(
-                self.prediction_array.file_name, self.prediction_array.dataset
-            ),
+            input_array_identifier=self.prediction_array_identifier,
             output_array_identifier=output_array_identifier,
             parameters=pars,
         )

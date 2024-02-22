@@ -2,15 +2,13 @@ from pathlib import Path
 from dacapo.blockwise.scheduler import run_blockwise
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from .threshold_post_processor_parameters import ThresholdPostProcessorParameters
+from dacapo.store.array_store import LocalArrayIdentifier
 from .post_processor import PostProcessor
 import dacapo.blockwise
 import numpy as np
 from daisy import Roi, Coordinate
 
-from typing import TYPE_CHECKING, Iterable
-
-# if TYPE_CHECKING:
-from dacapo.store.local_array_store import LocalArrayIdentifier
+from typing import Iterable
 
 
 class ThresholdPostProcessor(PostProcessor):
@@ -22,7 +20,8 @@ class ThresholdPostProcessor(PostProcessor):
         for i, threshold in enumerate([-0.1, 0.0, 0.1]):
             yield ThresholdPostProcessorParameters(id=i, threshold=threshold)
 
-    def set_prediction(self, prediction_array_identifier: "LocalArrayIdentifier"):
+    def set_prediction(self, prediction_array_identifier):
+        self.prediction_array_identifier = prediction_array_identifier
         self.prediction_array = ZarrArray.open_from_array_identifier(
             prediction_array_identifier
         )
@@ -67,9 +66,7 @@ class ThresholdPostProcessor(PostProcessor):
             max_retries=2,  # TODO: make this an option
             timeout=None,  # TODO: make this an option
             ######
-            input_array_identifier=LocalArrayIdentifier(
-                self.prediction_array.file_name, self.prediction_array.dataset
-            ),
+            input_array_identifier=self.prediction_array_identifier,
             output_array_identifier=output_array_identifier,
             threshold=parameters.threshold,
         )
