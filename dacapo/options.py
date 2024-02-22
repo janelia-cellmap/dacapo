@@ -61,7 +61,6 @@ class Options:
         config = cls.__parse_options(**kwargs)
         return config
 
-
     @classmethod
     def config_file(cls) -> Optional[Path]:
         env_dict = dict(os.environ)

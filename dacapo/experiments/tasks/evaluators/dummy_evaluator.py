@@ -10,11 +10,11 @@ class DummyEvaluator(Evaluator):
     def evaluate(self, output_array_identifier, evaluation_dataset):
         """
         Evaluate the given output array and dataset and returns the scores based on predefined criteria.
-        
+
         Args:
             output_array_identifier : The output array to be evaluated.
             evaluation_dataset : The dataset to be used for evaluation.
-        
+
         Returns:
             DummyEvaluationScore: An object of DummyEvaluationScores class, with the evaluation scores.
         """
