@@ -1,7 +1,7 @@
 from pathlib import Path
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from dacapo.store.array_store import LocalArrayIdentifier
-from dacapo.compute_context import ComputeContext, LocalTorch
+from dacapo.compute_context import create_compute_context
 
 import daisy
 
@@ -14,6 +14,7 @@ logger = logging.getLogger(__file__)
 
 read_write_conflict: bool = False
 fit: str = "valid"
+path = __file__
 
 
 @click.group()
@@ -74,7 +75,6 @@ def start_worker(
 def spawn_worker(
     input_array_identifier: "LocalArrayIdentifier",
     output_array_identifier: "LocalArrayIdentifier",
-    compute_context: ComputeContext = LocalTorch(),
 ):
     """Spawn a worker to predict on a given dataset.
 
@@ -82,12 +82,13 @@ def spawn_worker(
         model (Model): The model to use for prediction.
         raw_array (Array): The raw data to predict on.
         prediction_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
-        compute_context (ComputeContext, optional): The compute context to use. Defaults to LocalTorch().
     """
+    compute_context = create_compute_context()
+
     # Make the command for the worker to run
     command = [
         "python",
-        __file__,
+        path,
         "start-worker",
         "--input_container",
         input_array_identifier.container,

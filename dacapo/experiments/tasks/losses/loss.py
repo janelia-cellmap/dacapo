@@ -5,7 +5,6 @@ from typing import Optional
 
 
 class Loss(ABC):
-    
     @abstractmethod
     def compute(
         self,
@@ -13,15 +12,10 @@ class Loss(ABC):
         target: torch.Tensor,
         weight: Optional[torch.Tensor] = None,
     ) -> torch.Tensor:
-        """
-        Virtual method to compute the loss for the given prediction and target.
+        """Compute the loss for the given prediction and target. Optionally, if
+        given, a loss weight should be considered.
 
-        Args:
-            prediction (torch.Tensor): The prediction tensor made by the model. 
-            target (torch.Tensor): The actual target tensor against which prediction is to be compared.
-            weight (torch.Tensor, optional): The tensor that will be used to apply weightage to the loss. Defaults to None.
-
-        Returns:
-            torch.Tensor: The tensor representing computed loss.
-        """
+        All arguments are ``torch`` tensors. The return type should be a
+        ``torch`` scalar that can be used with an optimizer, just as usual when
+        training with ``torch``."""
         pass

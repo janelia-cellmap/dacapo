@@ -5,26 +5,10 @@ from typing import Tuple
 
 @attr.s
 class DatasetConfig:
-    """A class used to define configuration for datasets. This provides the 
-    framework to create a Dataset instance.
-
-    Attributes:
-        name: str (eg: "sample_dataset").
-            A unique identifier to name the dataset. 
-            It aids in easy identification and reusability of this dataset. 
-            Advised to keep it short and refrain from using special characters.
-        
-        weight: int (default=1).
-            A numeric value that indicates how frequently this dataset should be 
-            sampled in comparison to others. Higher the weight, more frequently it 
-            gets sampled.
-
-    Methods:
-        verify: 
-            Checks and validates the dataset configuration. The specific rules for 
-            validation need to be defined by the user.
+    """Configuration class for datasets, to be used to create a ``Dataset``
+    instance.
     """
-    
+
     name: str = attr.ib(
         metadata={
             "help_text": "A unique name for this dataset. This will be saved so you "
@@ -42,14 +26,6 @@ class DatasetConfig:
 
     def verify(self) -> Tuple[bool, str]:
         """
-        Method to verify the dataset configuration.
-
-        Since there is no specific validation logic defined for this DataSet, this 
-        method will always return True as default reaction and a message stating 
-        the lack of validation.
-
-        Returns:
-            tuple: A tuple of boolean value indicating the check (True or False) and 
-            message specifying result of validation.
+        Check whether this is a valid DataSet
         """
         return True, "No validation for this DataSet"

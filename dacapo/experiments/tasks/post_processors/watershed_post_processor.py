@@ -1,12 +1,11 @@
 from pathlib import Path
+import dacapo.blockwise
 from dacapo.blockwise.scheduler import segment_blockwise
-from dacapo.compute_context import ComputeContext, LocalTorch
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from dacapo.store.array_store import LocalArrayIdentifier
 
 from .watershed_post_processor_parameters import WatershedPostProcessorParameters
 from .post_processor import PostProcessor
-from dacapo.compute_context import ComputeContext, LocalTorch
 
 from funlib.geometry import Coordinate, Roi
 
@@ -28,6 +27,7 @@ class WatershedPostProcessor(PostProcessor):
             yield WatershedPostProcessorParameters(id=i, bias=bias)
 
     def set_prediction(self, prediction_array_identifier):
+        self.prediction_array_identifier = prediction_array_identifier
         self.prediction_array = ZarrArray.open_from_array_identifier(
             prediction_array_identifier
         )
@@ -36,7 +36,6 @@ class WatershedPostProcessor(PostProcessor):
         self,
         parameters: WatershedPostProcessorParameters,  # type: ignore[override]
         output_array_identifier: "LocalArrayIdentifier",
-        compute_context: ComputeContext | str = LocalTorch(),
         num_workers: int = 16,
         block_size: Coordinate = Coordinate((64, 64, 64)),
     ):
@@ -58,9 +57,8 @@ class WatershedPostProcessor(PostProcessor):
         }
         segment_blockwise(
             segment_function_file=str(
-                Path(Path(__file__).parent, "blockwise", "watershed_function.py")
+                Path(Path(dacapo.blockwise.__file__).parent, "watershed_function.py")
             ),
-            compute_context=compute_context,
             context=parameters.context,
             total_roi=self.prediction_array.roi,
             read_roi=read_roi.grow(parameters.context, parameters.context),
@@ -69,9 +67,7 @@ class WatershedPostProcessor(PostProcessor):
             max_retries=2,  # TODO: make this an option
             timeout=None,  # TODO: make this an option
             ######
-            input_array_identifier=LocalArrayIdentifier(
-                self.prediction_array.file_name, self.prediction_array.dataset
-            ),
+            input_array_identifier=self.prediction_array_identifier,
             output_array_identifier=output_array_identifier,
             parameters=pars,
         )

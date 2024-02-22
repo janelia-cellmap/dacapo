@@ -11,25 +11,36 @@ import scipy.sparse as sparse
 
 
 def voi(reconstruction, groundtruth, ignore_reconstruction=[], ignore_groundtruth=[0]):
-    """Evaluate groundtruth comparison by returning conditional entropies.
+    """Return the conditional entropies of the variation of information metric. [1]
 
-    Calculates variation of information metric between reconstruction and groundtruth. 
+    Let X be a reconstruction, and Y a ground truth labelling. The variation of
+    information between the two is the sum of two conditional entropies:
+
+        VI(X, Y) = H(X|Y) + H(Y|X).
+
+    The first one, H(X|Y), is a measure of oversegmentation, the second one,
+    H(Y|X), a measure of undersegmentation. These measures are referred to as
+    the variation of information split or merge error, respectively.
 
     Parameters
     ----------
-    reconstruction : np.ndarray
+    seg : np.ndarray, int type, arbitrary shape
         A candidate segmentation.
-    groundtruth : np.ndarray
+    gt : np.ndarray, int type, same shape as `seg`
         The ground truth segmentation.
-    ignore_reconstruction: list, optional
-        A list of labels to ignore in the reconstruction. Default is an empty list.
-    ignore_groundtruth: list, optional
-        A list of labels to ignore in the groundtruth. By default, only the label 0 will be ignored.
+    ignore_seg, ignore_gt : list of int, optional
+        Any points having a label in this list are ignored in the evaluation.
+        By default, only the label 0 in the ground truth will be ignored.
 
     Returns
     -------
-    float
-        The variation of information split and merge error, i.e., H(X|Y) and H(Y|X).
+    (split, merge) : float
+        The variation of information split and merge error, i.e., H(X|Y) and H(Y|X)
+
+    References
+    ----------
+    [1] Meila, M. (2007). Comparing clusterings - an information based
+    distance. Journal of Multivariate Analysis 98, 873-895.
     """
     (hyxg, hxgy) = split_vi(
         reconstruction, groundtruth, ignore_reconstruction, ignore_groundtruth
@@ -38,17 +49,22 @@ def voi(reconstruction, groundtruth, ignore_reconstruction=[], ignore_groundtrut
 
 
 def split_vi(x, y=None, ignore_x=[0], ignore_y=[0]):
-    """Return symmetric conditional entropies associated with the VI.
+    """Return the symmetric conditional entropies associated with the VI.
 
-    This function calculates the symmetric conditional entropies in the Variation of Information (VI)
-    metric between the inputs x and y. If y is None, x is assumed to be a contingency table.
+    The variation of information is defined as VI(X,Y) = H(X|Y) + H(Y|X).
+    If Y is the ground-truth segmentation, then H(Y|X) can be interpreted
+    as the amount of under-segmentation of Y and H(X|Y) is then the amount
+    of over-segmentation.  In other words, a perfect over-segmentation
+    will have H(Y|X)=0 and a perfect under-segmentation will have H(X|Y)=0.
 
     If y is None, x is assumed to be a contingency table.
 
     Parameters
     ----------
     x : np.ndarray
-        Label field (int type) or contingency table (float).
+        Label field (int type) or contingency table (float). `x` is
+        interpreted as a contingency table (summing to 1.0) if and only if `y`
+        is not provided.
     y : np.ndarray of int, same shape as x, optional
         A label field to compare to `x`.
     ignore_x, ignore_y : list of int, optional
@@ -57,20 +73,20 @@ def split_vi(x, y=None, ignore_x=[0], ignore_y=[0]):
 
     Returns
     -------
-    np.ndarray of float, shape (2,)
-        [hygx.sum(), hxgy.sum()] 
+    sv : np.ndarray of float, shape (2,)
         The conditional entropies of Y|X and X|Y.
-    """ 
+
+    See Also
+    --------
+    vi
+    """
     _, _, _, hxgy, hygx, _, _ = vi_tables(x, y, ignore_x, ignore_y)
     # false merges, false splits
     return np.array([hygx.sum(), hxgy.sum()])
 
 
 def vi_tables(x, y=None, ignore_x=[0], ignore_y=[0]):
-    """Return probability tables used in VI calculation.
-
-    Returns the reference and target probability distributions and other derived quantities 
-    used in the calculation of the Variation of Information metric. 
+    """Return probability tables used for calculating VI.
 
     If y is None, x is assumed to be a contingency table.
 
@@ -86,11 +102,12 @@ def vi_tables(x, y=None, ignore_x=[0], ignore_y=[0]):
 
     Returns
     -------
-    list
-        pxy (sparse.csc_matrix of float): The normalized contingency table.
-        px, py, hxgy, hygx, lpygx, lpxgy : np.ndarray of float
+    pxy : sparse.csc_matrix of float
+        The normalized contingency table.
+    px, py, hxgy, hygx, lpygx, lpxgy : np.ndarray of float
         The proportions of each label in `x` and `y` (`px`, `py`), the
-        per-segment conditional entropies of `x` given `y` and vice-versa.
+        per-segment conditional entropies of `x` given `y` and vice-versa, the
+        per-segment conditional probability p log p.
     """
     if y is not None:
         pxy = contingency_table(x, y, ignore_x, ignore_y)
@@ -133,16 +150,20 @@ def contingency_table(seg, gt, ignore_seg=[0], ignore_gt=[0], norm=True):
     gt : np.ndarray, int type, same shape as `seg`
         The ground truth segmentation.
     ignore_seg : list of int, optional
-        Values to ignore in `seg`. 
+        Values to ignore in `seg`. Voxels in `seg` having a value in this list
+        will not contribute to the contingency table. (default: [0])
     ignore_gt : list of int, optional
-        Values to ignore in `gt`. 
+        Values to ignore in `gt`. Voxels in `gt` having a value in this list
+        will not contribute to the contingency table. (default: [0])
     norm : bool, optional
         Whether to normalize the table so that it sums to 1.
 
     Returns
     -------
-    scipy.sparse.csc_matrix
-        A contingency table. 
+    cont : scipy.sparse.csc_matrix
+        A contingency table. `cont[i, j]` will equal the number of voxels
+        labeled `i` in `seg` and `j` in `gt`. (Or the proportion of such voxels
+        if `norm=True`.)
     """
     segr = seg.ravel()
     gtr = gt.ravel()
@@ -162,6 +183,8 @@ def contingency_table(seg, gt, ignore_seg=[0], ignore_gt=[0], norm=True):
 def divide_columns(matrix, row, in_place=False):
     """Divide each column of `matrix` by the corresponding element in `row`.
 
+    The result is as follows: out[i, j] = matrix[i, j] / row[j]
+
     Parameters
     ----------
     matrix : np.ndarray, scipy.sparse.csc_matrix or csr_matrix, shape (M, N)
@@ -173,7 +196,7 @@ def divide_columns(matrix, row, in_place=False):
 
     Returns
     -------
-    same type as `matrix`
+    out : same type as `matrix`
         The result of the row-wise division.
     """
     if in_place:
@@ -199,6 +222,8 @@ def divide_columns(matrix, row, in_place=False):
 def divide_rows(matrix, column, in_place=False):
     """Divide each row of `matrix` by the corresponding element in `column`.
 
+    The result is as follows: out[i, j] = matrix[i, j] / column[i]
+
     Parameters
     ----------
     matrix : np.ndarray, scipy.sparse.csc_matrix or csr_matrix, shape (M, N)
@@ -210,7 +235,7 @@ def divide_rows(matrix, column, in_place=False):
 
     Returns
     -------
-    same type as `matrix`
+    out : same type as `matrix`
         The result of the row-wise division.
     """
     if in_place:
@@ -249,7 +274,7 @@ def xlogx(x, out=None, in_place=False):
 
     Returns
     -------
-    same type as x
+    y : same type as x
         Result of x * log_2(x).
     """
     if in_place:

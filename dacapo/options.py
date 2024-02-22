@@ -1,112 +1,98 @@
+import os
 import yaml
 import logging
 from os.path import expanduser
 from pathlib import Path
 
+import attr
+from cattr import Converter
+
+from typing import Optional
+
 logger = logging.getLogger(__name__)
 
-# options files in order of precedence (highest first)
-options_files = [
-    Path("./dacapo.yaml"),
-    Path(expanduser("~/.config/dacapo/dacapo.yaml")),
-]
 
-def parse_options():
-    """
-    Parse and return the config options from the YAML files.
+@attr.s
+class DaCapoConfig:
+    type: str = attr.ib(
+        default="files",
+        metadata={
+            "help_text": "The type of store to use for storing configurations and statistics. "
+            "Currently, only 'files' and 'mongo' are supported with files being the default."
+        },
+    )
+    runs_base_dir: Path = attr.ib(
+        default=Path(expanduser("~/.dacapo")),
+        metadata={
+            "help_text": "The path at DaCapo will use for reading and writing any necessary data."
+        },
+    )
+    compute_context_config: dict = attr.ib(
+        default={"type": "LocalTorch", "config": {"device": None}},
+        metadata={
+            "help_text": "The configuration for the compute context to use. "
+            "This is a dictionary with the keys being the names of the compute context and the values being the configuration for that context."
+        },
+    )
+    mongo_db_host: Optional[str] = attr.ib(
+        default=None,
+        metadata={
+            "help_text": "The host of the MongoDB instance to use for storing configurations and statistics."
+        },
+    )
+    mongo_db_name: Optional[str] = attr.ib(
+        default=None,
+        metadata={
+            "help_text": "The name of the MongoDB database to use for storing configurations and statistics."
+        },
+    )
 
-    Yaml files are parsed in the order of their precedence (highest first).
-
-    Returns:
-        dict: Dictionary containing all the parsed options.
-    """
-    for path in options_files:
-        if not path.exists():
-            continue
-
-        with path.open("r") as f:
-            return yaml.safe_load(f)
+    def serialize(self):
+        converter = Converter()
+        return converter.unstructure(self)
 
 
 class Options:
-    """
-    Singleton class used to hold and access parsed configuration options.
-    """
-    _instance = None
-
     def __init__(self):
-        """
-        Constructor method is private to enforce Singleton pattern.
-        
-        Raises:
-            RuntimeError: Always raises this error as it's a Singleton.
-        """
         raise RuntimeError("Singleton: Use Options.instance()")
-    
+
     @classmethod
-    def instance(cls, **kwargs):
-        """
-        Get the singleton instance of the Options class.
-        
-        Args:
-            **kwargs: Optional named arguments to parse as options.
-            
-        Returns:
-            Options: The singleton instance of Options.
-        """
-        if cls._instance is None:
-            cls._instance = cls.__new__(cls)
-            cls._instance.__parse_options(**kwargs)
+    def instance(cls, **kwargs) -> DaCapoConfig:
+        config = cls.__parse_options(**kwargs)
+        return config
 
-        return cls._instance
 
-    def __getattr__(self, name):
-        """
-        Get an option by its name.
-        
-        Args:
-            name (str): The name of the option.
-            
-        Returns:
-            Any: The value of the option.
-            
-        Raises:
-            RuntimeError: If the requested option does not exist.
-        """
-        try:
-            return self.__options[name]
-        except KeyError:
-            raise RuntimeError(
-                f"Configuration file {self.filename} does not contain an "
-                f"entry for option {name}"
-            )
+    @classmethod
+    def config_file(cls) -> Optional[Path]:
+        env_dict = dict(os.environ)
+        if "OPTIONS_FILE" in env_dict:
+            options_files = [Path(env_dict["OPTIONS_FILE"])]
+        else:
+            options_files = []
 
-    def __parse_options(self, **kwargs):
-        """
-        Private method to parse and set the configuration options.
-        
-        Args:
-            **kwargs: Optional named arguments to parse as options.
-        """
-        if len(kwargs) > 0:
-            self.__options = kwargs
-            self.filename = "kwargs"
-            return
-
+        # options files in order of precedence (highest first)
+        options_files += [
+            Path("./dacapo.yaml"),
+            Path(expanduser("~/.config/dacapo/dacapo.yaml")),
+        ]
         for path in options_files:
-            if not path.exists():
-                continue
+            if path.exists():
+                return path
+        return None
 
-            with path.open("r") as f:
-                self.__options = yaml.safe_load(f)
-                self.filename = path
+    @classmethod
+    def __parse_options_from_file(cls):
+        if (config_file := cls.config_file()) is not None:
+            with config_file.open("r") as f:
+                return yaml.safe_load(f)
+        else:
+            return {}
 
-            return
+    @classmethod
+    def __parse_options(cls, **kwargs):
+        options = cls.__parse_options_from_file()
+        options.update(kwargs)
 
-        logger.error(
-            "No options file found. Please create any of the following " "files:"
-        )
-        for path in options_files:
-            logger.error("\t%s", path.absolute())
+        converter = Converter()
 
-        raise RuntimeError("Could not find a DaCapo options file.")
+        return converter.structure(options, DaCapoConfig)
