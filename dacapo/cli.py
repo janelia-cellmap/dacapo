@@ -11,7 +11,6 @@ from dacapo.experiments.datasplits.datasets.dataset import Dataset
 from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
     PostProcessorParameters,
 )
-from dacapo.compute_context import ComputeContext, LocalTorch
 
 
 @click.group()
@@ -45,6 +44,9 @@ def train(run_name):
     type=int,
     help="The iteration at which to validate the run.",
 )
+@click.option("-w", "--num_workers", type=int, default=30)
+@click.option("-dt", "--output_dtype", type=str, default="uint8")
+@click.option("-ow", "--overwrite", is_flag=True)
 def validate(run_name, iteration):
     dacapo.validate(run_name, iteration)
 
@@ -75,7 +77,6 @@ def validate(run_name, iteration):
 @click.option("-w", "--num_workers", type=int, default=30)
 @click.option("-dt", "--output_dtype", type=str, default="uint8")
 @click.option("-ow", "--overwrite", is_flag=True)
-@click.option("-cc", "--compute_context", type=str, default="LocalTorch")
 def apply(
     run_name: str,
     input_container: Path | str,
@@ -89,11 +90,7 @@ def apply(
     num_workers: int = 30,
     output_dtype: Optional[np.dtype | str] = "uint8",
     overwrite: bool = True,
-    compute_context: Optional[ComputeContext | str] = LocalTorch(),
 ):
-    if isinstance(compute_context, str):
-        compute_context = getattr(compute_context, compute_context)()
-
     dacapo.apply(
         run_name,
         input_container,
@@ -107,7 +104,6 @@ def apply(
         num_workers,
         output_dtype,
         overwrite=overwrite,
-        compute_context=compute_context,  # type: ignore
     )
 
 
@@ -139,13 +135,6 @@ def apply(
 )
 @click.option("-w", "--num_workers", type=int, default=30)
 @click.option("-dt", "--output_dtype", type=str, default="uint8")
-@click.option(
-    "-cc",
-    "--compute_context",
-    type=str,
-    default="LocalTorch",
-    help="The compute context to use for prediction. Must be the name of a subclass of ComputeContext.",
-)
 @click.option("-ow", "--overwrite", is_flag=True)
 def predict(
     run_name: str,
@@ -156,7 +145,6 @@ def predict(
     output_roi: Optional[str | Roi] = None,
     num_workers: int = 30,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
-    compute_context: ComputeContext | str = LocalTorch(),
     overwrite: bool = True,
 ):
     dacapo.predict(
@@ -168,6 +156,5 @@ def predict(
         output_roi,
         num_workers,
         output_dtype,
-        compute_context,
         overwrite,
     )

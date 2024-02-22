@@ -41,7 +41,8 @@ dependencies = [
         "attrs",
         "bokeh",
         "numpy-indexed>=0.3.7",
-        "daisy>=1.0",
+        #"daisy>=1.0",
+        "daisy @ git+https://github.com/funkelab/daisy.git",
         "funlib.math>=0.1",
         "funlib.geometry>=0.2",
         "mwatershed>=0.1",
@@ -83,9 +84,10 @@ examples = [
     "ipykernel",
     "jupyter",
 ]
+all = ["dacapo-ml[test,dev,docs,examples]"]
 
 [project.urls]
-homepage = "https://github.com/janelia-cellmap/dacapo"
+homepage = "https://github.io/janelia-cellmap/dacapo"
 repository = "https://github.com/janelia-cellmap/dacapo"
 
 # https://hatch.pypa.io/latest/config/metadata/
@@ -139,7 +141,7 @@ filterwarnings = [
     "error",
     "ignore::DeprecationWarning",
     ]
-
+    
 # https://mypy.readthedocs.io/en/stable/config_file.html
 [tool.mypy]
 files = "dacapo/**/"

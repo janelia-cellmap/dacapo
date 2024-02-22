@@ -2,7 +2,6 @@ from .compute_context import ComputeContext
 
 import attr
 
-import subprocess
 from typing import Optional
 
 
