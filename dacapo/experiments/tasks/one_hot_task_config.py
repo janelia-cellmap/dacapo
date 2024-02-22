@@ -5,22 +5,17 @@ from .task_config import TaskConfig
 
 from typing import List
 
+
 @attr.s
 class OneHotTaskConfig(TaskConfig):
+    """This is a One Hot prediction task that outputs a probability vector
+    of length `c` for each voxel where `c` is the number of classes.
+    Each voxel prediction has all positive values an l1 norm equal to 1.
+
+    Post processing is extremely easy, the class of each voxel is
+    simply the argmax over the vector of output probabilities.
     """
-    Class that derives from the TaskConfig to perform one hot prediction tasks. 
 
-    Attributes:
-        task_type: the type of task, in this case, OneHotTask.
-        classes: a List of classes which starts from id 0.
-
-    Methods:
-        None
-
-    Note:
-        The class of each voxel is simply the argmax over the vector of output probabilities.
-
-    """
     task_type = OneHotTask
 
     classes: List[str] = attr.ib(

@@ -6,32 +6,10 @@ from .task import Task
 
 
 class DummyTask(Task):
-    """
-    A dummy task class that initializes all components (predictor, loss, 
-    post-processing, and evaluator) for the dummy task. Primarily used for testing purposes. 
-    Inherits from the Task class.
-
-    Attributes
-    ----------
-    predictor : Object
-        Instance of DummyPredictor class.
-    loss : Object
-        Instance of DummyLoss class.
-    post_processor : Object
-        Instance of DummyPostProcessor class.
-    evaluator : Object
-        Instance of DummyEvaluator class.
-    """
+    """This is just a dummy task for testing."""
 
     def __init__(self, task_config):
-        """
-        Initializes dummy task with predictor, loss function, post processor and evaluator.
-
-        Parameters
-        ----------
-        task_config : Object
-            Configurations for the task, contains `embedding_dims` and `detection_threshold`
-        """
+        """Create a `DummyTask` from a `DummyTaskConfig`."""
 
         self.predictor = DummyPredictor(task_config.embedding_dims)
         self.loss = DummyLoss()
