@@ -50,7 +50,6 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
@@ -106,13 +105,13 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.utils.voi.voi" title="dacapo.utils.voi.voi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">voi</span></code></a>(reconstruction, groundtruth[, ...])</p></td>
-<td><p>Evaluate groundtruth comparison by returning conditional entropies.</p></td>
+<td><p>Return the conditional entropies of the variation of information metric. [1]</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.utils.voi.split_vi" title="dacapo.utils.voi.split_vi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_vi</span></code></a>(x[, y, ignore_x, ignore_y])</p></td>
-<td><p>Return symmetric conditional entropies associated with the VI.</p></td>
+<td><p>Return the symmetric conditional entropies associated with the VI.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.utils.voi.vi_tables" title="dacapo.utils.voi.vi_tables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vi_tables</span></code></a>(x[, y, ignore_x, ignore_y])</p></td>
-<td><p>Return probability tables used in VI calculation.</p></td>
+<td><p>Return probability tables used for calculating VI.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.utils.voi.contingency_table" title="dacapo.utils.voi.contingency_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contingency_table</span></code></a>(seg, gt[, ignore_seg, ignore_gt, norm])</p></td>
 <td><p>Return the contingency table for all regions in matched segmentations.</p></td>
@@ -131,37 +130,54 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.utils.voi.voi">
 <span class="sig-prename descclassname"><span class="pre">dacapo.utils.voi.</span></span><span class="sig-name descname"><span class="pre">voi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reconstruction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groundtruth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_reconstruction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_groundtruth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.voi.voi" title="Link to this definition"></a></dt>
-<dd><p>Evaluate groundtruth comparison by returning conditional entropies.</p>
-<p>Calculates variation of information metric between reconstruction and groundtruth.</p>
+<dd><p>Return the conditional entropies of the variation of information metric. [1]</p>
+<p>Let X be a reconstruction, and Y a ground truth labelling. The variation of
+information between the two is the sum of two conditional entropies:</p>
+<blockquote>
+<div><p>VI(X, Y) = H(X|Y) + H(Y|X).</p>
+</div></blockquote>
+<p>The first one, H(X|Y), is a measure of oversegmentation, the second one,
+H(Y|X), a measure of undersegmentation. These measures are referred to as
+the variation of information split or merge error, respectively.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>reconstruction</strong> (<em>np.ndarray</em>) – A candidate segmentation.</p></li>
-<li><p><strong>groundtruth</strong> (<em>np.ndarray</em>) – The ground truth segmentation.</p></li>
-<li><p><strong>ignore_reconstruction</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of labels to ignore in the reconstruction. Default is an empty list.</p></li>
-<li><p><strong>ignore_groundtruth</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of labels to ignore in the groundtruth. By default, only the label 0 will be ignored.</p></li>
+<li><p><strong>seg</strong> (<em>np.ndarray</em><em>, </em><em>int type</em><em>, </em><em>arbitrary shape</em>) – A candidate segmentation.</p></li>
+<li><p><strong>gt</strong> (np.ndarray, int type, same shape as <cite>seg</cite>) – The ground truth segmentation.</p></li>
+<li><p><strong>ignore_seg</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Any points having a label in this list are ignored in the evaluation.
+By default, only the label 0 in the ground truth will be ignored.</p></li>
+<li><p><strong>ignore_gt</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Any points having a label in this list are ignored in the evaluation.
+By default, only the label 0 in the ground truth will be ignored.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The variation of information split and merge error, i.e., H(X|Y) and H(Y|X).</p>
+<dd class="field-even"><p><strong>(split, merge)</strong> – The variation of information split and merge error, i.e., H(X|Y) and H(Y|X)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
+<p class="rubric">References</p>
+<p>[1] Meila, M. (2007). Comparing clusterings - an information based
+distance. Journal of Multivariate Analysis 98, 873-895.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.utils.voi.split_vi">
 <span class="sig-prename descclassname"><span class="pre">dacapo.utils.voi.</span></span><span class="sig-name descname"><span class="pre">split_vi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.voi.split_vi" title="Link to this definition"></a></dt>
-<dd><p>Return symmetric conditional entropies associated with the VI.</p>
-<p>This function calculates the symmetric conditional entropies in the Variation of Information (VI)
-metric between the inputs x and y. If y is None, x is assumed to be a contingency table.</p>
+<dd><p>Return the symmetric conditional entropies associated with the VI.</p>
+<p>The variation of information is defined as VI(X,Y) = H(X|Y) + H(Y|X).
+If Y is the ground-truth segmentation, then H(Y|X) can be interpreted
+as the amount of under-segmentation of Y and H(X|Y) is then the amount
+of over-segmentation.  In other words, a perfect over-segmentation
+will have H(Y|X)=0 and a perfect under-segmentation will have H(X|Y)=0.</p>
 <p>If y is None, x is assumed to be a contingency table.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>np.ndarray</em>) – Label field (int type) or contingency table (float).</p></li>
+<li><p><strong>x</strong> (<em>np.ndarray</em>) – Label field (int type) or contingency table (float). <cite>x</cite> is
+interpreted as a contingency table (summing to 1.0) if and only if <cite>y</cite>
+is not provided.</p></li>
 <li><p><strong>y</strong> (<em>np.ndarray</em><em> of </em><em>int</em><em>, </em><em>same shape as x</em><em>, </em><em>optional</em>) – A label field to compare to <cite>x</cite>.</p></li>
 <li><p><strong>ignore_x</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Any points having a label in this list are ignored in the evaluation.
 Ignore 0-labeled points by default.</p></li>
@@ -170,21 +186,22 @@ Ignore 0-labeled points by default.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>[hygx.sum(), hxgy.sum()]
-The conditional entropies of Y|X and X|Y.</p>
+<dd class="field-even"><p><strong>sv</strong> – The conditional entropies of Y|X and X|Y.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray of float, shape (2,)</p>
 </dd>
 </dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">vi</span></code></p>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.utils.voi.vi_tables">
 <span class="sig-prename descclassname"><span class="pre">dacapo.utils.voi.</span></span><span class="sig-name descname"><span class="pre">vi_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.voi.vi_tables" title="Link to this definition"></a></dt>
-<dd><p>Return probability tables used in VI calculation.</p>
-<p>Returns the reference and target probability distributions and other derived quantities
-used in the calculation of the Variation of Information metric.</p>
+<dd><p>Return probability tables used for calculating VI.</p>
 <p>If y is None, x is assumed to be a contingency table.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -202,13 +219,13 @@ These are labels that are not counted when evaluating VI.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>pxy (sparse.csc_matrix of float): The normalized contingency table.
-px, py, hxgy, hygx, lpygx, lpxgy : np.ndarray of float
-The proportions of each label in <cite>x</cite> and <cite>y</cite> (<cite>px</cite>, <cite>py</cite>), the
-per-segment conditional entropies of <cite>x</cite> given <cite>y</cite> and vice-versa.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>pxy</strong> (<em>sparse.csc_matrix of float</em>) – The normalized contingency table.</p></li>
+<li><p><strong>px, py, hxgy, hygx, lpygx, lpxgy</strong> (<em>np.ndarray of float</em>) – The proportions of each label in <cite>x</cite> and <cite>y</cite> (<cite>px</cite>, <cite>py</cite>), the
+per-segment conditional entropies of <cite>x</cite> given <cite>y</cite> and vice-versa, the
+per-segment conditional probability p log p.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -222,13 +239,17 @@ per-segment conditional entropies of <cite>x</cite> given <cite>y</cite> and vic
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>seg</strong> (<em>np.ndarray</em><em>, </em><em>int type</em><em>, </em><em>arbitrary shape</em>) – A candidate segmentation.</p></li>
 <li><p><strong>gt</strong> (np.ndarray, int type, same shape as <cite>seg</cite>) – The ground truth segmentation.</p></li>
-<li><p><strong>ignore_seg</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Values to ignore in <cite>seg</cite>.</p></li>
-<li><p><strong>ignore_gt</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Values to ignore in <cite>gt</cite>.</p></li>
+<li><p><strong>ignore_seg</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Values to ignore in <cite>seg</cite>. Voxels in <cite>seg</cite> having a value in this list
+will not contribute to the contingency table. (default: [0])</p></li>
+<li><p><strong>ignore_gt</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Values to ignore in <cite>gt</cite>. Voxels in <cite>gt</cite> having a value in this list
+will not contribute to the contingency table. (default: [0])</p></li>
 <li><p><strong>norm</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to normalize the table so that it sums to 1.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A contingency table.</p>
+<dd class="field-even"><p><strong>cont</strong> – A contingency table. <cite>cont[i, j]</cite> will equal the number of voxels
+labeled <cite>i</cite> in <cite>seg</cite> and <cite>j</cite> in <cite>gt</cite>. (Or the proportion of such voxels
+if <cite>norm=True</cite>.)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>scipy.sparse.csc_matrix</p>
@@ -240,6 +261,7 @@ per-segment conditional entropies of <cite>x</cite> given <cite>y</cite> and vic
 <dt class="sig sig-object py" id="dacapo.utils.voi.divide_columns">
 <span class="sig-prename descclassname"><span class="pre">dacapo.utils.voi.</span></span><span class="sig-name descname"><span class="pre">divide_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.voi.divide_columns" title="Link to this definition"></a></dt>
 <dd><p>Divide each column of <cite>matrix</cite> by the corresponding element in <cite>row</cite>.</p>
+<p>The result is as follows: out[i, j] = matrix[i, j] / row[j]</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -249,7 +271,7 @@ per-segment conditional entropies of <cite>x</cite> given <cite>y</cite> and vic
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The result of the row-wise division.</p>
+<dd class="field-even"><p><strong>out</strong> – The result of the row-wise division.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>same type as <cite>matrix</cite></p>
@@ -261,6 +283,7 @@ per-segment conditional entropies of <cite>x</cite> given <cite>y</cite> and vic
 <dt class="sig sig-object py" id="dacapo.utils.voi.divide_rows">
 <span class="sig-prename descclassname"><span class="pre">dacapo.utils.voi.</span></span><span class="sig-name descname"><span class="pre">divide_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.voi.divide_rows" title="Link to this definition"></a></dt>
 <dd><p>Divide each row of <cite>matrix</cite> by the corresponding element in <cite>column</cite>.</p>
+<p>The result is as follows: out[i, j] = matrix[i, j] / column[i]</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -270,7 +293,7 @@ per-segment conditional entropies of <cite>x</cite> given <cite>y</cite> and vic
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The result of the row-wise division.</p>
+<dd class="field-even"><p><strong>out</strong> – The result of the row-wise division.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>same type as <cite>matrix</cite></p>
@@ -292,7 +315,7 @@ per-segment conditional entropies of <cite>x</cite> given <cite>y</cite> and vic
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Result of x * log_2(x).</p>
+<dd class="field-even"><p><strong>y</strong> – Result of x * log_2(x).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>same type as x</p>

@@ -50,7 +50,6 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../../../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
@@ -108,7 +107,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor" title="dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OneHotPredictor</span></code></a></p></td>
-<td><p>An abstract class that serves as a blueprint for all the specific predictors.</p></td>
+<td><p>Helper class that provides a standard way to create an ABC using</p></td>
 </tr>
 </tbody>
 </table>
@@ -130,69 +129,50 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.predictors.one_hot_predictor.</span></span><span class="sig-name descname"><span class="pre">OneHotPredictor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor" title="Link to this definition"></a></dt>
-<dd><p>An abstract class that serves as a blueprint for all the specific predictors.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor.output_array_type">
-<span class="sig-name descname"><span class="pre">output_array_type</span></span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor.output_array_type" title="Link to this definition"></a></dt>
-<dd><p>A property which is expected to be implemented in subclasses.</p>
-</dd></dl>
-
+<dd><p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor.embedding_dims">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">embedding_dims</span></span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor.embedding_dims" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id0">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">output_array_type</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd><p>Subclasses should implement this method to define the type of array output by the predictor.</p>
-</dd></dl>
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor.output_array_type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">output_array_type</span></span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor.output_array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor.create_model">
 <span class="sig-name descname"><span class="pre">create_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor.create_model" title="Link to this definition"></a></dt>
-<dd><p>To create a model with the given training architecture.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>architecture</strong> – An instance of class Architecture, to define training architecture for the model.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>An instance of class Model with the designed architecture.</p>
-</dd>
-</dl>
+<dd><p>Given a training architecture, create a model for this predictor.
+This is usually done by appending extra layers to the output of the
+architecture to get the output tensor of the architecture into the
+right shape for this predictor.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor.create_target">
 <span class="sig-name descname"><span class="pre">create_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor.create_target" title="Link to this definition"></a></dt>
-<dd><p>Creates target for training based on ground-truth array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>gt</strong> – An instance of class Array, representing ground-truth values.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Instance of Array class, representing target for training.</p>
-</dd>
-</dl>
+<dd><p>Create the target array for training, given a ground-truth array.</p>
+<p>In general, the target is different from the ground-truth.</p>
+<p>The target is the array that is passed to the loss, and hence directly
+compared to the prediction (i.e., the output of the model). Depending
+on the predictor, the target can therefore be different from the
+ground-truth (e.g., an instance segmentation ground-truth would have to
+be converted into boundaries, if the model is predicting boundaries).</p>
+<p>By default, it is assumed that the spatial dimensions of ground-truth
+and target are the same.</p>
+<p>If your predictor needs more ground-truth context to create a target
+(e.g., because it predicts the distance to a boundary, up to a certain
+threshold), you can request a larger ground-truth region. See method
+<code class="docutils literal notranslate"><span class="pre">gt_region_for_roi</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor.create_weight">
 <span class="sig-name descname"><span class="pre">create_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moving_class_counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.one_hot_predictor.OneHotPredictor.create_weight" title="Link to this definition"></a></dt>
-<dd><p>Creates a weight array, using a ground-truth and an associated target array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>gt</strong> – Ground Truth array.</p></li>
-<li><p><strong>target</strong> – Target array.</p></li>
-<li><p><strong>mask</strong> – Associated mask array.</p></li>
-<li><p><strong>moving_class_counts</strong> – Counts of moving classes.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Tuple containing Array instance with weight array and any additional returned value.</p>
-</dd>
-</dl>
+<dd><p>Create the weight array for training, given a ground-truth and
+associated target array.</p>
 </dd></dl>
 
 <dl class="py method">

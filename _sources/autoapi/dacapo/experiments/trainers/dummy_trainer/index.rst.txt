@@ -22,11 +22,8 @@ Classes
 
 
 
-   Trainer Abstract Base Class
-
-   This serves as the blueprint for any trainer classes in the dacapo library.
-   It defines essential methods that every subclass must implement for effective
-   training of a neural network model.
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
 
    .. py:attribute:: iteration
       :value: 0
@@ -35,60 +32,30 @@ Classes
 
    .. py:method:: create_optimizer(model)
 
-      Creates an optimizer for the model.
-
-      :param model: The model for which the optimizer will be created.
-      :type model: Model
-
-      :returns: The optimizer created for the model.
-      :rtype: torch.optim.Optimizer
+      Create a ``torch`` optimizer for the given model.
 
 
    .. py:method:: iterate(num_iterations: int, model: dacapo.experiments.model.Model, optimizer, device)
 
-      Performs a number of training iterations.
-
-      :param num_iterations: Number of training iterations.
-      :type num_iterations: int
-      :param model: The model to be trained.
-      :type model: Model
-      :param optimizer: The optimizer for the model.
-      :type optimizer: torch.optim.Optimizer
-      :param device: The device (GPU/CPU) where the model will be trained.
-      :type device: torch.device
-
-      :returns: An iterator of the training statistics.
-      :rtype: Iterator[TrainingIterationStats]
+      Perform ``num_iterations`` training iterations.
 
 
    .. py:method:: build_batch_provider(datasplit, architecture, task, snapshot_container)
 
-      Initializes the training pipeline using various components.
+      Initialize the training pipeline using the datasets, model, task
+      and snapshot_container
 
-      This method uses the datasets, model, task, and snapshot_container to set up the
-      training pipeline.
-
-      :param datasets: The datasets to pull data from.
-      :type datasets: List[Dataset]
-      :param model: The model to inform the pipeline of required input/output sizes.
-      :type model: Model
-      :param task: The task to transform ground truth into target.
-      :type task: Task
-      :param snapshot_container: Defines where snapshots will be saved.
-      :type snapshot_container: LocalContainerIdentifier
+      The training datasets are required s.t. the pipeline knows where to pull
+      data from.
+      The model is needed to inform the pipeline of required input/output sizes
+      The task is needed to transform gt into target
+      The snapshot_container defines where snapshots will be saved.
 
 
    .. py:method:: can_train(datasplit)
 
-      Checks if the trainer can train with a specific set of datasets.
-
-      Some trainers may have specific requirements for their training datasets.
-
-      :param datasets: The training datasets.
-      :type datasets: List[Dataset]
-
-      :returns: True if the trainer can train on the given datasets, False otherwise.
-      :rtype: bool
+      Can this trainer train with a specific set of datasets. Some trainers
+      may have requirements for their training datasets.
 
 
 

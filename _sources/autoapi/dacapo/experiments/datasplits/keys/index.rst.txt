@@ -3,17 +3,6 @@
 
 .. py:module:: dacapo.experiments.datasplits.keys
 
-.. autoapi-nested-parse::
-
-   This python script is essential for importing key classes from the keys module in the current directory for the Dacapo library.
-   The imported classes include ArrayKey, GraphKey, and DataKey, which serve as identifiers for various types of data in the library.
-
-   Classes:
-       ArrayKey: Class for managing unique identifiers for Array data type.
-       GraphKey: Class for managing unique identifiers for Graph data type.
-       DataKey: Class to manage Data keys.
-
-
 
 Submodules
 ----------
@@ -44,31 +33,9 @@ Classes
 
 
 
-   A unique enumeration representing different types of array keys
+   Generic enumeration.
 
-   .. attribute:: RAW
-
-      The raw data key.
-
-      :type: str
-
-   .. attribute:: GT
-
-      The ground truth data key.
-
-      :type: str
-
-   .. attribute:: MASK
-
-      The data mask key.
-
-      :type: str
-
-   .. attribute:: NON_EMPTY
-
-      The data key for non-empty mask.
-
-      :type: str
+   Derive from this class to define new enumerations.
 
    .. py:attribute:: RAW
       :value: 'raw'
@@ -96,13 +63,9 @@ Classes
 
 
 
-   A unique enumeration representing different types of graph keys
+   Generic enumeration.
 
-   .. attribute:: SPECIFIED_LOCATIONS
-
-      The key for specified locations in the graph.
-
-      :type: str
+   Derive from this class to define new enumerations.
 
    .. py:attribute:: SPECIFIED_LOCATIONS
       :value: 'specified_locations'
@@ -115,6 +78,8 @@ Classes
 
 
 
-   Represent a base class for various types of keys in Dacapo library.
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
 
 

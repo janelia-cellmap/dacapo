@@ -12,16 +12,9 @@ Classes
 
 .. autoapisummary::
 
+   dacapo.options.DaCapoConfig
    dacapo.options.Options
 
-
-
-Functions
-~~~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.options.parse_options
 
 
 
@@ -31,41 +24,53 @@ Attributes
 .. autoapisummary::
 
    dacapo.options.logger
-   dacapo.options.options_files
 
 
 .. py:data:: logger
 
    
 
-.. py:data:: options_files
+.. py:class:: DaCapoConfig
 
-   
 
-.. py:function:: parse_options()
+   .. py:attribute:: type
+      :type: str
 
-   Parse and return the config options from the YAML files.
+      
 
-   Yaml files are parsed in the order of their precedence (highest first).
+   .. py:attribute:: runs_base_dir
+      :type: pathlib.Path
 
-   :returns: Dictionary containing all the parsed options.
-   :rtype: dict
+      
+
+   .. py:attribute:: compute_context_config
+      :type: dict
+
+      
+
+   .. py:attribute:: mongo_db_host
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: mongo_db_name
+      :type: Optional[str]
+
+      
+
+   .. py:method:: serialize()
+
 
 
 .. py:class:: Options
 
 
-   Singleton class used to hold and access parsed configuration options.
-
-   .. py:method:: instance(**kwargs)
+   .. py:method:: instance(**kwargs) -> DaCapoConfig
       :classmethod:
 
-      Get the singleton instance of the Options class.
 
-      :param \*\*kwargs: Optional named arguments to parse as options.
-
-      :returns: The singleton instance of Options.
-      :rtype: Options
+   .. py:method:: config_file() -> Optional[pathlib.Path]
+      :classmethod:
 
 
 

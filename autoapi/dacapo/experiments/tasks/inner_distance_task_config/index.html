@@ -50,7 +50,6 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
@@ -107,97 +106,43 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig" title="dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InnerDistanceTaskConfig</span></code></a></p></td>
-<td><p>A class to store configurations for inner distance tasks.</p></td>
+<td><p>This is a Distance task config used for generating and</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.inner_distance_task_config.</span></span><span class="sig-name descname"><span class="pre">InnerDistanceTaskConfig</span></span><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig" title="Link to this definition"></a></dt>
-<dd><p>A class to store configurations for inner distance tasks.</p>
-<p>This class inherits from TaskConfig to get configurations for signed distance
-transform tasks used for generating and evaluating segmentations. Compared to
-regular affinities, generating distance transforms can provide denser signals,
-avoiding situations like a single misclassified pixel merging two distinct objects.</p>
+<dd><p>This is a Distance task config used for generating and
+evaluating signed distance transforms as a way of generating
+segmentations.</p>
+<p>The advantage of generating distance transforms over regular
+affinities is you can get a denser signal, i.e. 1 misclassified
+pixel in an affinity prediction could merge 2 otherwise very
+distinct objects, this cannot happen with distances.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig.task_type">
 <span class="sig-name descname"><span class="pre">task_type</span></span><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig.task_type" title="Link to this definition"></a></dt>
-<dd><p>The type of the task as InnerDistanceTask.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../index.html#dacapo.experiments.tasks.InnerDistanceTask" title="dacapo.experiments.tasks.InnerDistanceTask">InnerDistanceTask</a></p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig.channels">
-<span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig.channels" title="Link to this definition"></a></dt>
-<dd><p>A list holding names of channels.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[str]</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig.channels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig.clip_distance">
-<span class="sig-name descname"><span class="pre">clip_distance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig.clip_distance" title="Link to this definition"></a></dt>
-<dd><p>Maximum distance for considering false positives or negatives.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">clip_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig.clip_distance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig.tol_distance">
-<span class="sig-name descname"><span class="pre">tol_distance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig.tol_distance" title="Link to this definition"></a></dt>
-<dd><p>Tolerance distance for counting false positives or negatives.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">tol_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig.tol_distance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig.scale_factor">
-<span class="sig-name descname"><span class="pre">scale_factor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig.scale_factor" title="Link to this definition"></a></dt>
-<dd><p>The factor by which to scale distances before applying
-a tanh normalization. Defaults to 1.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">task_type</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">clip_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">tol_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">scale_factor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">scale_factor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task_config.InnerDistanceTaskConfig.scale_factor" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

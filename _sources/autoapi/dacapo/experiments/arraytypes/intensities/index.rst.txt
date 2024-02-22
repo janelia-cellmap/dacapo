@@ -3,19 +3,6 @@
 
 .. py:module:: dacapo.experiments.arraytypes.intensities
 
-.. autoapi-nested-parse::
-
-   This module contains the IntensitiesArray class.
-
-   Imported libraries and modules:
-
-       * attr: used for creating classes without having to write explicit `__init__`, `__repr__`, etc. methods.
-       * typing: for providing hint types for python objects/functions.
-
-   Classes:
-       * IntensitiesArray(ArrayType)
-
-
 
 Module Contents
 ---------------
@@ -35,35 +22,11 @@ Classes
 
 
 
-   An IntensitiesArray is an Array of measured intensities. Inherits from ArrayType.
-
-   .. attribute:: channels
-
-      A mapping from channel to a name describing that channel.
-
-      :type: Dict[int, str]
-
-   .. attribute:: min
-
-      The minimum possible value of your intensities.
-
-      :type: float
-
-   .. attribute:: max
-
-      The maximum possible value of your intensities.
-
-      :type: float
-
-   The `@property` defined enables to treat the 'interpolatable' as an attribute of the class.
+   An IntensitiesArray is an Array of measured intensities.
 
    .. py:property:: interpolatable
       :type: bool
 
-      The metadata information for interpolation ability.
-
-      :returns: Always returns True for this IntensitiesArray class. The actual functionality depends on the specific implementation.
-      :rtype: bool
 
    .. py:attribute:: channels
       :type: Dict[int, str]

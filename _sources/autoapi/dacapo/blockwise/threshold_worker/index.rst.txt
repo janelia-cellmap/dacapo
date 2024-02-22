@@ -27,6 +27,7 @@ Attributes
    dacapo.blockwise.threshold_worker.logger
    dacapo.blockwise.threshold_worker.read_write_conflict
    dacapo.blockwise.threshold_worker.fit
+   dacapo.blockwise.threshold_worker.path
 
 
 .. py:data:: logger
@@ -45,13 +46,17 @@ Attributes
 
    
 
+.. py:data:: path
+
+   
+
 .. py:function:: cli(log_level)
 
 
 .. py:function:: start_worker(input_container: pathlib.Path | str, input_dataset: str, output_container: pathlib.Path | str, output_dataset: str, threshold: float = 0.0)
 
 
-.. py:function:: spawn_worker(input_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, threshold: float = 0.0, compute_context: dacapo.compute_context.ComputeContext = LocalTorch())
+.. py:function:: spawn_worker(input_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, threshold: float = 0.0)
 
    Spawn a worker to predict on a given dataset.
 
@@ -61,7 +66,5 @@ Attributes
    :type raw_array: Array
    :param prediction_array_identifier: The identifier of the prediction array.
    :type prediction_array_identifier: LocalArrayIdentifier
-   :param compute_context: The compute context to use. Defaults to LocalTorch().
-   :type compute_context: ComputeContext, optional
 
 

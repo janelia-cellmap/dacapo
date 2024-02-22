@@ -3,33 +3,6 @@
 
 .. py:module:: dacapo.experiments.datasplits
 
-.. autoapi-nested-parse::
-
-   Module containing all the necessary classes and configurations for effective data splitting.
-   The data splitting approach is determined by the application and dataset requirements.
-
-   The module includes classes for data splitting, data split configuration, dummy data split,
-   dummy data split configuration, train validate data split and its configuration.
-
-   Classes:
-       DataSplit: Class for splitting data based on a given config.
-       DataSplitConfig: Configuration class for controlling the data split.
-       DummyDataSplit: Class for creating a dummy data split based on a given config.
-       DummyDataSplitConfig: Configuration class for controlling the dummy data split.
-       TrainValidateDataSplit: Class for creating a training and validation data split.
-       TrainValidateDataSplitConfig: Configuration class for controlling the training
-       and validation data split.
-
-   Imports:
-       datasplit: Provides the main data splitting class.
-       datasplit_config: Provides the data splitting configuration class.
-       dummy_datasplit: Provides the class for dummy data splitting.
-       dummy_datasplit_config: Provides the dummy data splitting configuration class.
-       train_validate_datasplit: Provides the class for train and validation data splitting.
-       train_validate_datasplit_config: Provides the train and validation data splitting
-       configuration class.
-
-
 
 Subpackages
 -----------
@@ -95,20 +68,9 @@ Classes
 .. py:class:: DataSplitConfig
 
 
-   A class used to create a DataSplit configuration object.
-
-   .. attribute:: name
-
-      A name for the datasplit. This name will be saved so it can be found
-      and reused easily. It is recommended to keep it short and avoid special
-      characters.
-
-      :type: str
-
-   .. method:: verify() -> Tuple[bool, str]:
-
-      Validates if it is a valid data split configuration.
-
+   Base class for datasplit configurations. Each subclass of an
+   `DataSplit` should have a corresponding config class derived from
+   `DataSplitConfig`.
 
    .. py:attribute:: name
       :type: str
@@ -117,11 +79,7 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      Validates if the current configuration is a valid data split configuration.
-
-      :returns: True if the configuration is valid,
-                False otherwise along with respective validation error message.
-      :rtype: Tuple[bool, str]
+      Check whether this is a valid data split
 
 
 
@@ -130,27 +88,8 @@ Classes
 
 
 
-   A class for creating a simple train dataset and no validation dataset.
-
-   It is derived from `DataSplit` class.
-
-   ...
-   .. attribute:: train
-
-      The list containing training datasets. In this class, it contains only one dataset for training.
-
-      :type: list
-
-   .. attribute:: validate
-
-      The list containing validation datasets. In this class, it is an empty list as no validation dataset is set.
-
-      :type: list
-
-   .. method:: __init__(self, datasplit_config):
-
-      The constructor for DummyDataSplit class. It initialises a list with training datasets according to the input configuration.
-
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
 
    .. py:attribute:: train
       :type: List[dacapo.experiments.datasplits.datasets.Dataset]
@@ -168,18 +107,8 @@ Classes
 
 
 
-   A simple class representing config for Dummy DataSplit.
-
-   This class is derived from 'DataSplitConfig' and is initialized with
-   'DatasetConfig' for training dataset.
-
-   .. attribute:: datasplit_type
-
-      Class of dummy data split functionality.
-
-   .. attribute:: train_config
-
-      Config for the training dataset. Defaults to DummyDatasetConfig.
+   This is just a dummy DataSplit config used for testing. None of the
+   attributes have any particular meaning.
 
    .. py:attribute:: datasplit_type
 
@@ -192,11 +121,7 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      A method for verification. This method always return 'False' plus
-      a string indicating the condition.
-
-      :returns: A tuple contains a boolean 'False' and a string.
-      :rtype: Tuple[bool, str]
+      Check whether this is a valid data split
 
 
 

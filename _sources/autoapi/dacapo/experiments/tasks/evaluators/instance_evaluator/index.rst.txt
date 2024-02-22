@@ -22,23 +22,14 @@ Classes
 
 
 
-   A subclass of Evaluator that specifically evaluates instance segmentation tasks. This class
-   extends the base Evaluator class from dacapo library.
+   Base class of all evaluators.
 
-   .. attribute:: criteria
-
-      A list of metric names that are used in this evaluation process.
-
-      :type: list[str]
+   An evaluator takes a post-processor's output and compares it against
+   ground-truth.
 
    .. py:property:: score
       :type: dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores
 
-      Property that returns the evaluation scores. However, currently, it only returns
-      an empty InstanceEvaluationScores object.
-
-      :returns: An object that supposedly contains evaluation scores.
-      :rtype: InstanceEvaluationScores
 
    .. py:attribute:: criteria
       :value: ['voi_merge', 'voi_split', 'voi']
@@ -47,14 +38,15 @@ Classes
 
    .. py:method:: evaluate(output_array_identifier, evaluation_array)
 
-      Evaluate the segmentation predictions with the ground truth data.
+      Compares and evaluates the output array against the evaluation array.
 
-      :param output_array_identifier: A unique id that refers to the array that contains
-                                      predicted labels from the segmentation.
-      :param evaluation_array: The ground truth labels to compare the predicted labels with.
+      :param output_array_identifier: The output data array to evaluate
+      :type output_array_identifier: Array
+      :param evaluation_array: The evaluation data array to compare with the output
+      :type evaluation_array: Array
 
-      :returns: An object that includes the segmentation evaluation results.
-      :rtype: InstanceEvaluationScores
+      :returns: The detailed evaluation scores after the comparison.
+      :rtype: EvaluationScores
 
 
 

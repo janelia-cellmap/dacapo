@@ -22,65 +22,43 @@ Classes
 
 
 
-   A class to copy a mask into a new key with the option to drop channels via max collapse.
-
-   .. attribute:: array_key
-
-      Original key of the array from where the mask will be copied.
-
-      :type: gp.ArrayKey
-
-   .. attribute:: copy_key
-
-      New key where the copied mask will reside.
-
-      :type: gp.ArrayKey
-
-   .. attribute:: drop_channels
-
-      If True, channels will be dropped via a max collapse.
-
-      :type: bool
-
-   .. method:: setup
-
-      Sets up the filter by enabling autoskip and providing the copied key.
-
-   .. method:: prepare
-
-      Prepares the filter by copying the request of copy_key into a dependency.
-
-   .. method:: process
-
-      Processes the batch by copying the mask from the array_key to the copy_key.
-      
+   Copies a mask into a new key, with the option of dropping channels via a max collapse
 
    .. py:method:: setup()
 
-      Sets up the filter by enabling autoskip and providing the copied key.
+      To be implemented in subclasses.
+
+      Called during initialization of the DAG. Callees can assume that all
+      upstream providers are set up already.
+
+      In setup, call :func:`provides` or :func:`updates` to announce the
+      arrays and points provided or changed by this node.
 
 
    .. py:method:: prepare(request)
 
-      Prepares the filter by copying the request of copy_key into a dependency.
+      To be implemented in subclasses.
 
-      :param request: The request to prepare.
-
-      :returns: The prepared dependencies.
-      :rtype: deps
+      Prepare for a batch request. Should return a :class:`BatchRequest` of
+      needed dependencies. If None is returned, it will be assumed that all
+      of request is needed.
 
 
    .. py:method:: process(batch, request)
 
-      Processes the batch by copying the mask from the array_key to the copy_key.
+      To be implemented in subclasses.
 
-      If "drop_channels" attribute is True, it performs max collapse.
+      Filter a batch, will be called after :func:`prepare`. Should return a
+      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
+      batch will replace the associated data in the original batch. If None is
+      returned it is assumed that the batch has been modified in place. ``request``
+      is the same as passed to :func:`prepare`, provided for convenience.
 
-      :param batch: The batch to process.
-      :param request: The request for processing.
-
-      :returns: The processed outputs.
-      :rtype: outputs
+      :param batch: The batch received from upstream to be modified by this node.
+      :type batch: :class:`Batch`
+      :param request: The request this node received. The updated batch should meet
+                      this request.
+      :type request: :class:`BatchRequest`
 
 
 

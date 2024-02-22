@@ -50,7 +50,6 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
@@ -99,16 +98,6 @@
              
   <section id="module-dacapo.experiments.run_config">
 <span id="dacapo-experiments-run-config"></span><h1><a class="reference internal" href="#module-dacapo.experiments.run_config" title="dacapo.experiments.run_config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.run_config</span></code></a><a class="headerlink" href="#module-dacapo.experiments.run_config" title="Link to this heading"></a></h1>
-<p>This module structures and configures the run for the models used in the dacapo library. It helps define
-the backbone architecture, the tasks it is supposed to run, the training procedures and the data it will
-use. Additionally, it provides room for repetition, setting the number of iterations and defining
-validation intervals during a run.</p>
-<p>This configuration makes model runs more structured and customizable based on user’s needs. This
-configuration is twined to each independent run, allowing unique settings for different runs.</p>
-<dl class="simple">
-<dt>Classes:</dt><dd><p>RunConfig: Defines and structures a run for the model using several parameters.</p>
-</dd>
-</dl>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <section id="classes">
@@ -116,42 +105,14 @@ configuration is twined to each independent run, allowing unique settings for di
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.run_config.RunConfig" title="dacapo.experiments.run_config.RunConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RunConfig</span></code></a></p></td>
-<td><p>A class to represent a configuration of a run that helps to structure all the tasks,</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.run_config.RunConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.run_config.</span></span><span class="sig-name descname"><span class="pre">RunConfig</span></span><a class="headerlink" href="#dacapo.experiments.run_config.RunConfig" title="Link to this definition"></a></dt>
-<dd><p>A class to represent a configuration of a run that helps to structure all the tasks,
-architecture, training, and datasplit configurations.</p>
-<p>…</p>
-<section id="attributes">
-<h4>Attributes:<a class="headerlink" href="#attributes" title="Link to this heading"></a></h4>
-<dl>
-<dt>task_config: <cite>TaskConfig</cite></dt><dd><p>A config defining the Task to run that includes deciding the output of the model and
-different methods to achieve the goal.</p>
-</dd>
-<dt>architecture_config: <cite>ArchitectureConfig</cite></dt><dd><p>A config that defines the backbone architecture of the model. It impacts the model’s
-performance significantly.</p>
-</dd>
-<dt>trainer_config: <cite>TrainerConfig</cite></dt><dd><p>Defines how batches are generated and passed for training the model along with defining
-configurations like batch size, learning rate, number of cpu workers and snapshot logging.</p>
-</dd>
-<dt>datasplit_config: <cite>DataSplitConfig</cite></dt><dd><p>Configures the data available for the model during training or validation phases.</p>
-</dd>
-<dt>name: str</dt><dd><p>A unique name for this run to distinguish it.</p>
-</dd>
-<dt>repetition: int</dt><dd><p>The repetition number of this run.</p>
-</dd>
-<dt>num_iterations: int</dt><dd><p>The total number of iterations to train for during this run.</p>
-</dd>
-<dt>validation_interval: int</dt><dd><p>Specifies how often to perform validation during the run. It defaults to 1000.</p>
-</dd>
-<dt>start_config<span class="classifier"><cite>Optional[StartConfig]</cite></span></dt><dd><p>A starting point for continued training. It is optional and can be left out.</p>
-</dd>
-</dl>
-<dl class="py attribute">
+<dd><dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.run_config.RunConfig.task_config">
 <span class="sig-name descname"><span class="pre">task_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.TaskConfig" title="dacapo.experiments.tasks.TaskConfig"><span class="pre">dacapo.experiments.tasks.TaskConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.run_config.RunConfig.task_config" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -193,10 +154,9 @@ configurations like batch size, learning rate, number of cpu workers and snapsho
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.run_config.RunConfig.start_config">
-<span class="sig-name descname"><span class="pre">start_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../starts/index.html#dacapo.experiments.starts.StartConfig" title="dacapo.experiments.starts.StartConfig"><span class="pre">dacapo.experiments.starts.StartConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#dacapo.experiments.run_config.RunConfig.start_config" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">start_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../starts/index.html#dacapo.experiments.starts.StartConfig" title="dacapo.experiments.starts.StartConfig"><span class="pre">dacapo.experiments.starts.StartConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dacapo.experiments.run_config.RunConfig.start_config" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-</section>
 </dd></dl>
 
 </section>

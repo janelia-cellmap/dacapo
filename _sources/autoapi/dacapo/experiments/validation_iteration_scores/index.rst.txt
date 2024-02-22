@@ -20,24 +20,6 @@ Classes
 .. py:class:: ValidationIterationScores
 
 
-   A class used to represent the validation iteration scores in an organized structure.
-
-   .. attribute:: iteration
-
-      The iteration associated with these validation scores.
-
-      :type: int
-
-   .. attribute:: scores
-
-      A list of scores per dataset, post processor
-
-      :type: List[List[List[float]]]
-
-   .. attribute:: parameters, and evaluation criterion.
-
-      
-
    .. py:attribute:: iteration
       :type: int
 

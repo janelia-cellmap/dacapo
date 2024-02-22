@@ -50,7 +50,6 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../../../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
@@ -101,11 +100,6 @@
              
   <section id="module-dacapo.experiments.datasplits.datasets.dummy_dataset_config">
 <span id="dacapo-experiments-datasplits-datasets-dummy-dataset-config"></span><h1><a class="reference internal" href="#module-dacapo.experiments.datasplits.datasets.dummy_dataset_config" title="dacapo.experiments.datasplits.datasets.dummy_dataset_config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.datasplits.datasets.dummy_dataset_config</span></code></a><a class="headerlink" href="#module-dacapo.experiments.datasplits.datasets.dummy_dataset_config" title="Link to this heading"></a></h1>
-<p>This module provides a configuration class for dummy datasets in the daCapo python library.</p>
-<dl class="simple">
-<dt>Classes:</dt><dd><p>DummyDatasetConfig: A config class for dummy datasets used for testing.</p>
-</dd>
-</dl>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <section id="classes">
@@ -113,51 +107,29 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig" title="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyDatasetConfig</span></code></a></p></td>
-<td><p>A dummy configuration class for test datasets.</p></td>
+<td><p>This is just a dummy DataSplit config used for testing. None of the</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.dummy_dataset_config.</span></span><span class="sig-name descname"><span class="pre">DummyDatasetConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig" title="Link to this definition"></a></dt>
-<dd><p>A dummy configuration class for test datasets.</p>
+<dd><p>This is just a dummy DataSplit config used for testing. None of the
+attributes have any particular meaning.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig.dataset_type">
 <span class="sig-name descname"><span class="pre">dataset_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig.dataset_type" title="Link to this definition"></a></dt>
-<dd><p>Clearly mentions the type of dataset</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig.raw_config">
-<span class="sig-name descname"><span class="pre">raw_config</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig.raw_config" title="Link to this definition"></a></dt>
-<dd><p>This attribute holds the configurations related to dataset arrays.</p>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">raw_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.ArrayConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig.raw_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>A dummy verification method for testing purposes, always returns False and a message.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">dataset_type</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">raw_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.ArrayConfig</span></a></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
-<dd><p>A dummy method that always indicates the dataset config is not valid.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A tuple of False and a message indicating the invalidity.</p>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig.verify" title="Link to this definition"></a></dt>
+<dd><p>Check whether this is a valid DataSet</p>
 </dd></dl>
 
 </dd></dl>

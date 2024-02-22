@@ -28,17 +28,12 @@ Classes
    .. py:method:: compute(prediction: torch.Tensor, target: torch.Tensor, weight: Optional[torch.Tensor] = None) -> torch.Tensor
       :abstractmethod:
 
-      Virtual method to compute the loss for the given prediction and target.
+      Compute the loss for the given prediction and target. Optionally, if
+      given, a loss weight should be considered.
 
-      :param prediction: The prediction tensor made by the model.
-      :type prediction: torch.Tensor
-      :param target: The actual target tensor against which prediction is to be compared.
-      :type target: torch.Tensor
-      :param weight: The tensor that will be used to apply weightage to the loss. Defaults to None.
-      :type weight: torch.Tensor, optional
-
-      :returns: The tensor representing computed loss.
-      :rtype: torch.Tensor
+      All arguments are ``torch`` tensors. The return type should be a
+      ``torch`` scalar that can be used with an optimizer, just as usual when
+      training with ``torch``.
 
 
 

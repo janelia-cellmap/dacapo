@@ -52,11 +52,8 @@ Classes
 
 
 
-   Trainer Abstract Base Class
-
-   This serves as the blueprint for any trainer classes in the dacapo library.
-   It defines essential methods that every subclass must implement for effective
-   training of a neural network model.
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
 
    .. py:attribute:: iteration
       :type: int
@@ -76,91 +73,41 @@ Classes
    .. py:method:: create_optimizer(model: dacapo.experiments.model.Model) -> torch.optim.Optimizer
       :abstractmethod:
 
-      Creates an optimizer for the model.
-
-      :param model: The model for which the optimizer will be created.
-      :type model: Model
-
-      :returns: The optimizer created for the model.
-      :rtype: torch.optim.Optimizer
+      Create a ``torch`` optimizer for the given model.
 
 
    .. py:method:: iterate(num_iterations: int, model: dacapo.experiments.model.Model, optimizer: torch.optim.Optimizer, device: torch.device) -> Iterator[dacapo.experiments.training_iteration_stats.TrainingIterationStats]
       :abstractmethod:
 
-      Performs a number of training iterations.
-
-      :param num_iterations: Number of training iterations.
-      :type num_iterations: int
-      :param model: The model to be trained.
-      :type model: Model
-      :param optimizer: The optimizer for the model.
-      :type optimizer: torch.optim.Optimizer
-      :param device: The device (GPU/CPU) where the model will be trained.
-      :type device: torch.device
-
-      :returns: An iterator of the training statistics.
-      :rtype: Iterator[TrainingIterationStats]
+      Perform ``num_iterations`` training iterations.
 
 
    .. py:method:: can_train(datasets: List[dacapo.experiments.datasplits.datasets.Dataset]) -> bool
       :abstractmethod:
 
-      Checks if the trainer can train with a specific set of datasets.
-
-      Some trainers may have specific requirements for their training datasets.
-
-      :param datasets: The training datasets.
-      :type datasets: List[Dataset]
-
-      :returns: True if the trainer can train on the given datasets, False otherwise.
-      :rtype: bool
+      Can this trainer train with a specific set of datasets. Some trainers
+      may have requirements for their training datasets.
 
 
    .. py:method:: build_batch_provider(datasets: List[dacapo.experiments.datasplits.datasets.Dataset], model: dacapo.experiments.model.Model, task: dacapo.experiments.tasks.task.Task, snapshot_container: dacapo.store.array_store.LocalContainerIdentifier) -> None
       :abstractmethod:
 
-      Initializes the training pipeline using various components.
+      Initialize the training pipeline using the datasets, model, task
+      and snapshot_container
 
-      This method uses the datasets, model, task, and snapshot_container to set up the
-      training pipeline.
-
-      :param datasets: The datasets to pull data from.
-      :type datasets: List[Dataset]
-      :param model: The model to inform the pipeline of required input/output sizes.
-      :type model: Model
-      :param task: The task to transform ground truth into target.
-      :type task: Task
-      :param snapshot_container: Defines where snapshots will be saved.
-      :type snapshot_container: LocalContainerIdentifier
+      The training datasets are required s.t. the pipeline knows where to pull
+      data from.
+      The model is needed to inform the pipeline of required input/output sizes
+      The task is needed to transform gt into target
+      The snapshot_container defines where snapshots will be saved.
 
 
 
 .. py:class:: TrainerConfig
 
 
-   A class to represent the Trainer Configurations.
-
-   It is the base class for trainer configurations. Each subclass of a `Trainer`
-   should have a specific config class derived from `TrainerConfig`.
-
-   .. attribute:: name
-
-      A unique name for this trainer.
-
-      :type: str
-
-   .. attribute:: batch_size
-
-      The batch size to be used during training.
-
-      :type: int
-
-   .. attribute:: learning_rate
-
-      The learning rate of the optimizer.
-
-      :type: float
+   Base class for trainer configurations. Each subclass of a `Trainer`
+   should have a corresponding config class derived from `TrainerConfig`.
 
    .. py:attribute:: name
       :type: str
@@ -179,11 +126,7 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      Verify whether this TrainerConfig is valid or not.
-
-      :returns: A tuple containing a boolean indicating whether the
-                TrainerConfig is valid and a message explaining why.
-      :rtype: tuple
+      Check whether this is a valid Trainer
 
 
 
@@ -192,20 +135,8 @@ Classes
 
 
 
-   A subclass of TrainerConfig representing a dummy trainer configuration
-   used for testing.
-
-   .. attribute:: trainer_type
-
-      An instance of the DummyTrainer class.
-
-      :type: DummyTrainer
-
-   .. attribute:: mirror_augment
-
-      A dummy attribute with no actual purpose.
-
-      :type: bool
+   This is just a dummy trainer config used for testing. None of the
+   attributes have any particular meaning.
 
    .. py:attribute:: trainer_type
 
@@ -218,13 +149,7 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      Dummy method to verify the configuration.
-
-      This method will always return False and an error message as this is
-      not meant to represent a valid trainer configuration.
-
-      :returns: False and a string indicating that the configuration is invalid.
-      :rtype: Tuple[bool, str]
+      Check whether this is a valid Trainer
 
 
 
@@ -233,11 +158,8 @@ Classes
 
 
 
-   Trainer Abstract Base Class
-
-   This serves as the blueprint for any trainer classes in the dacapo library.
-   It defines essential methods that every subclass must implement for effective
-   training of a neural network model.
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
 
    .. py:attribute:: iteration
       :value: 0
@@ -246,60 +168,30 @@ Classes
 
    .. py:method:: create_optimizer(model)
 
-      Creates an optimizer for the model.
-
-      :param model: The model for which the optimizer will be created.
-      :type model: Model
-
-      :returns: The optimizer created for the model.
-      :rtype: torch.optim.Optimizer
+      Create a ``torch`` optimizer for the given model.
 
 
    .. py:method:: iterate(num_iterations: int, model: dacapo.experiments.model.Model, optimizer, device)
 
-      Performs a number of training iterations.
-
-      :param num_iterations: Number of training iterations.
-      :type num_iterations: int
-      :param model: The model to be trained.
-      :type model: Model
-      :param optimizer: The optimizer for the model.
-      :type optimizer: torch.optim.Optimizer
-      :param device: The device (GPU/CPU) where the model will be trained.
-      :type device: torch.device
-
-      :returns: An iterator of the training statistics.
-      :rtype: Iterator[TrainingIterationStats]
+      Perform ``num_iterations`` training iterations.
 
 
    .. py:method:: build_batch_provider(datasplit, architecture, task, snapshot_container)
 
-      Initializes the training pipeline using various components.
+      Initialize the training pipeline using the datasets, model, task
+      and snapshot_container
 
-      This method uses the datasets, model, task, and snapshot_container to set up the
-      training pipeline.
-
-      :param datasets: The datasets to pull data from.
-      :type datasets: List[Dataset]
-      :param model: The model to inform the pipeline of required input/output sizes.
-      :type model: Model
-      :param task: The task to transform ground truth into target.
-      :type task: Task
-      :param snapshot_container: Defines where snapshots will be saved.
-      :type snapshot_container: LocalContainerIdentifier
+      The training datasets are required s.t. the pipeline knows where to pull
+      data from.
+      The model is needed to inform the pipeline of required input/output sizes
+      The task is needed to transform gt into target
+      The snapshot_container defines where snapshots will be saved.
 
 
    .. py:method:: can_train(datasplit)
 
-      Checks if the trainer can train with a specific set of datasets.
-
-      Some trainers may have specific requirements for their training datasets.
-
-      :param datasets: The training datasets.
-      :type datasets: List[Dataset]
-
-      :returns: True if the trainer can train on the given datasets, False otherwise.
-      :rtype: bool
+      Can this trainer train with a specific set of datasets. Some trainers
+      may have requirements for their training datasets.
 
 
 
@@ -308,45 +200,8 @@ Classes
 
 
 
-   This class is used to configure a Gunpowder Trainer. It contains attributes related to trainer type,
-   number of data fetchers, augmentations to apply, snapshot interval, minimum masked value, and a boolean
-   value indicating whether to clip raw or not.
-
-   .. attribute:: trainer_type
-
-      This is the type of the trainer which is set to GunpowderTrainer by default.
-
-      :type: class
-
-   .. attribute:: num_data_fetchers
-
-      This is the number of CPU workers who will be dedicated to fetch and process the data.
-
-      :type: int
-
-   .. attribute:: augments
-
-      This is the list of augments to apply during the training.
-
-      :type: List[AugmentConfig]
-
-   .. attribute:: snapshot_interval
-
-      This is the number of iterations after which a new snapshot should be saved.
-
-      :type: Optional[int]
-
-   .. attribute:: min_masked
-
-      This is the minimum masked value.
-
-      :type: Optional[float]
-
-   .. attribute:: clip_raw
-
-      This is a boolean value indicating if the raw data should be clipped or not.
-
-      :type: bool
+   Base class for trainer configurations. Each subclass of a `Trainer`
+   should have a corresponding config class derived from `TrainerConfig`.
 
    .. py:attribute:: trainer_type
 
@@ -383,11 +238,8 @@ Classes
 
 
 
-   Trainer Abstract Base Class
-
-   This serves as the blueprint for any trainer classes in the dacapo library.
-   It defines essential methods that every subclass must implement for effective
-   training of a neural network model.
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
 
    .. py:attribute:: iteration
       :value: 0
@@ -396,47 +248,24 @@ Classes
 
    .. py:method:: create_optimizer(model)
 
-      Creates an optimizer for the model.
-
-      :param model: The model for which the optimizer will be created.
-      :type model: Model
-
-      :returns: The optimizer created for the model.
-      :rtype: torch.optim.Optimizer
+      Create a ``torch`` optimizer for the given model.
 
 
    .. py:method:: build_batch_provider(datasets, model, task, snapshot_container=None)
 
-      Initializes the training pipeline using various components.
+      Initialize the training pipeline using the datasets, model, task
+      and snapshot_container
 
-      This method uses the datasets, model, task, and snapshot_container to set up the
-      training pipeline.
-
-      :param datasets: The datasets to pull data from.
-      :type datasets: List[Dataset]
-      :param model: The model to inform the pipeline of required input/output sizes.
-      :type model: Model
-      :param task: The task to transform ground truth into target.
-      :type task: Task
-      :param snapshot_container: Defines where snapshots will be saved.
-      :type snapshot_container: LocalContainerIdentifier
+      The training datasets are required s.t. the pipeline knows where to pull
+      data from.
+      The model is needed to inform the pipeline of required input/output sizes
+      The task is needed to transform gt into target
+      The snapshot_container defines where snapshots will be saved.
 
 
    .. py:method:: iterate(num_iterations, model, optimizer, device)
 
-      Performs a number of training iterations.
-
-      :param num_iterations: Number of training iterations.
-      :type num_iterations: int
-      :param model: The model to be trained.
-      :type model: Model
-      :param optimizer: The optimizer for the model.
-      :type optimizer: torch.optim.Optimizer
-      :param device: The device (GPU/CPU) where the model will be trained.
-      :type device: torch.device
-
-      :returns: An iterator of the training statistics.
-      :rtype: Iterator[TrainingIterationStats]
+      Perform ``num_iterations`` training iterations.
 
 
    .. py:method:: next()
@@ -444,15 +273,8 @@ Classes
 
    .. py:method:: can_train(datasets) -> bool
 
-      Checks if the trainer can train with a specific set of datasets.
-
-      Some trainers may have specific requirements for their training datasets.
-
-      :param datasets: The training datasets.
-      :type datasets: List[Dataset]
-
-      :returns: True if the trainer can train on the given datasets, False otherwise.
-      :rtype: bool
+      Can this trainer train with a specific set of datasets. Some trainers
+      may have requirements for their training datasets.
 
 
 
@@ -461,24 +283,13 @@ Classes
 
 
 
-   Abstraction class for augmentation configurations in gunpowder.
-   Each augmentation must have a configuration class derived from this.
+   Base class for gunpowder augment configurations. Each subclass of a `Augment`
+   should have a corresponding config class derived from `AugmentConfig`.
 
    .. py:method:: node(raw_key: gunpowder.ArrayKey, gt_key: gunpowder.ArrayKey, mask_key: gunpowder.ArrayKey) -> gunpowder.BatchFilter
       :abstractmethod:
 
-      Create a gunpowder node that applies this augmentation.
-
-      :param raw_key: The key for the raw data array.
-      :type raw_key: gp.ArrayKey
-      :param gt_key: The key for the ground truth data array.
-      :type gt_key: gp.ArrayKey
-      :param mask_key: The key for the masking data array.
-      :type mask_key: gp.ArrayKey
-
-      :returns: The resulting gunpowder node that applies
-                this augmentation.
-      :rtype: gp.BatchFilter
+      return a gunpowder node that performs this augmentation
 
 
 

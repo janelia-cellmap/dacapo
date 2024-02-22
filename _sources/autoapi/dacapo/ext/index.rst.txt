@@ -20,20 +20,4 @@ Classes
 .. py:class:: NoSuchModule(name)
 
 
-   A custom exception class for handling
-   situations when a module specified name does not exist.
-
-   .. attribute:: __name
-
-      str, name of the module which does not exist.
-
-   .. attribute:: __traceback_str
-
-      list, the formatted stack trace at the time of the
-      exception. It is captured by the sys and traceback module.
-
-   .. attribute:: __exception
-
-      Exception, stores exception type along with values.
-
 

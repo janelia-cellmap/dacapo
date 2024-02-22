@@ -22,11 +22,8 @@ Classes
 
 
 
-   An abstract class that serves as a blueprint for all the specific predictors.
-
-   .. attribute:: output_array_type
-
-      A property which is expected to be implemented in subclasses.
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
 
    .. py:property:: dims
 
@@ -36,7 +33,6 @@ Classes
 
    .. py:property:: output_array_type
 
-      Subclasses should implement this method to define the type of array output by the predictor.
 
    .. py:method:: extractor(voxel_size)
 
@@ -49,41 +45,46 @@ Classes
 
    .. py:method:: create_model(architecture)
 
-      To create a model with the given training architecture.
-
-      :param architecture: An instance of class Architecture, to define training architecture for the model.
-
-      :returns: An instance of class Model with the designed architecture.
+      Given a training architecture, create a model for this predictor.
+      This is usually done by appending extra layers to the output of the
+      architecture to get the output tensor of the architecture into the
+      right shape for this predictor.
 
 
    .. py:method:: create_target(gt)
 
-      Creates target for training based on ground-truth array.
+      Create the target array for training, given a ground-truth array.
 
-      :param gt: An instance of class Array, representing ground-truth values.
+      In general, the target is different from the ground-truth.
 
-      :returns: Instance of Array class, representing target for training.
+      The target is the array that is passed to the loss, and hence directly
+      compared to the prediction (i.e., the output of the model). Depending
+      on the predictor, the target can therefore be different from the
+      ground-truth (e.g., an instance segmentation ground-truth would have to
+      be converted into boundaries, if the model is predicting boundaries).
+
+      By default, it is assumed that the spatial dimensions of ground-truth
+      and target are the same.
+
+      If your predictor needs more ground-truth context to create a target
+      (e.g., because it predicts the distance to a boundary, up to a certain
+      threshold), you can request a larger ground-truth region. See method
+      ``gt_region_for_roi``.
 
 
    .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
 
-      Creates a weight array, using a ground-truth and an associated target array.
-
-      :param gt: Ground Truth array.
-      :param target: Target array.
-      :param mask: Associated mask array.
-      :param moving_class_counts: Counts of moving classes.
-
-      :returns: Tuple containing Array instance with weight array and any additional returned value.
+      Create the weight array for training, given a ground-truth and
+      associated target array.
 
 
    .. py:method:: gt_region_for_roi(target_spec)
 
-      Method to report the required spatial context to generate a target for the given ROI.
+      Report how much spatial context this predictor needs to generate a
+      target for the given ROI. By default, uses the same ROI.
 
-      :param target_spec: Target specifications for which ground truth region is needed.
-
-      :returns: Returns the same ROI by default, unless overridden.
+      Overwrite this method to request ground-truth in a larger ROI, as
+      needed.
 
 
 

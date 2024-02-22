@@ -29,6 +29,7 @@ Attributes
 
    dacapo.blockwise.relabel_worker.fit
    dacapo.blockwise.relabel_worker.read_write_conflict
+   dacapo.blockwise.relabel_worker.path
 
 
 .. py:function:: cli(log_level)
@@ -44,6 +45,10 @@ Attributes
 
    
 
+.. py:data:: path
+
+   
+
 .. py:function:: start_worker(output_container, output_dataset, tmpdir, *args, **kwargs)
 
 
@@ -56,7 +61,7 @@ Attributes
 .. py:function:: read_cross_block_merges(tmpdir)
 
 
-.. py:function:: spawn_worker(output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, tmpdir: str, compute_context: dacapo.compute_context.ComputeContext = LocalTorch(), *args, **kwargs)
+.. py:function:: spawn_worker(output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, tmpdir: str, *args, **kwargs)
 
    Spawn a worker to predict on a given dataset.
 
@@ -64,7 +69,5 @@ Attributes
    :type output_array_identifier: LocalArrayIdentifier
    :param tmpdir: The temporary directory
    :type tmpdir: str
-   :param compute_context: The compute context. Defaults to LocalTorch().
-   :type compute_context: ComputeContext, optional
 
 

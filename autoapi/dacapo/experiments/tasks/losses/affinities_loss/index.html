@@ -50,7 +50,6 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../../../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
@@ -120,22 +119,11 @@ inheritance.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.affinities_loss.AffinitiesLoss.compute">
 <span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.losses.affinities_loss.AffinitiesLoss.compute" title="Link to this definition"></a></dt>
-<dd><p>Virtual method to compute the loss for the given prediction and target.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>prediction</strong> (<em>torch.Tensor</em>) – The prediction tensor made by the model.</p></li>
-<li><p><strong>target</strong> (<em>torch.Tensor</em>) – The actual target tensor against which prediction is to be compared.</p></li>
-<li><p><strong>weight</strong> (<em>torch.Tensor</em><em>, </em><em>optional</em>) – The tensor that will be used to apply weightage to the loss. Defaults to None.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The tensor representing computed loss.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>torch.Tensor</p>
-</dd>
-</dl>
+<dd><p>Compute the loss for the given prediction and target. Optionally, if
+given, a loss weight should be considered.</p>
+<p>All arguments are <code class="docutils literal notranslate"><span class="pre">torch</span></code> tensors. The return type should be a
+<code class="docutils literal notranslate"><span class="pre">torch</span></code> scalar that can be used with an optimizer, just as usual when
+training with <code class="docutils literal notranslate"><span class="pre">torch</span></code>.</p>
 </dd></dl>
 
 </dd></dl>

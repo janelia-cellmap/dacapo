@@ -50,7 +50,6 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
@@ -106,7 +105,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.gp.reject_if_empty.RejectIfEmpty" title="dacapo.gp.reject_if_empty.RejectIfEmpty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RejectIfEmpty</span></code></a></p></td>
-<td><p>Node to reject batches based on the mask's filled vs empty ratio.</p></td>
+<td><p>Reject batches based on the masked-in vs. masked-out ratio.</p></td>
 </tr>
 </tbody>
 </table>
@@ -128,52 +127,36 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.gp.reject_if_empty.RejectIfEmpty">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.gp.reject_if_empty.</span></span><span class="sig-name descname"><span class="pre">RejectIfEmpty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.reject_if_empty.RejectIfEmpty" title="Link to this definition"></a></dt>
-<dd><p>Node to reject batches based on the mask’s filled vs empty ratio.</p>
+<dd><p>Reject batches based on the masked-in vs. masked-out ratio.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gt</strong> (<a class="reference internal" href="../../experiments/datasplits/keys/index.html#dacapo.experiments.datasplits.keys.ArrayKey" title="dacapo.experiments.datasplits.keys.ArrayKey"><em>ArrayKey</em></a><em>, </em><em>optional</em>) – The ground truth array key that will be used.
-Default is None.</p></li>
-<li><p><strong>p</strong> (<em>float</em><em>, </em><em>optional</em>) – The probability threshold for rejecting batches until
-a non-empty ground truth is found. Default is 0.5.</p></li>
-<li><p><strong>background</strong> (<em>int</em><em>, </em><em>optional</em>) – The value representing the background in
-the ground truth data. Default is 0.</p></li>
+<li><p><strong>gt</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ArrayKey</span></code>, optional) – The gt array to use</p></li>
+<li><p><strong>p</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>, optional) – The probability that we reject until gt is nonempty</p></li>
 </ul>
 </dd>
 </dl>
-<p>This class inherits from :class: <cite>BatchFilter</cite>.</p>
-<p>In the setup() method, it asserts that only one provider is in the upstream.
-In the provide() method, it makes sure that the gt ArrayKey is in the request
-provided. It then keeps requesting batches from the upstream until it finds
-a batch where the ground truth is not empty, or the random number generated
-is greater than the threshold p.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.reject_if_empty.RejectIfEmpty.setup">
 <span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.reject_if_empty.RejectIfEmpty.setup" title="Link to this definition"></a></dt>
-<dd><p>Asserts that only one upstream provider is supported.</p>
+<dd><p>To be implemented in subclasses.</p>
+<p>Called during initialization of the DAG. Callees can assume that all
+upstream providers are set up already.</p>
+<p>In setup, call <code class="xref py py-func docutils literal notranslate"><span class="pre">provides()</span></code> or <code class="xref py py-func docutils literal notranslate"><span class="pre">updates()</span></code> to announce the
+arrays and points provided or changed by this node.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.reject_if_empty.RejectIfEmpty.provide">
 <span class="sig-name descname"><span class="pre">provide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.reject_if_empty.RejectIfEmpty.provide" title="Link to this definition"></a></dt>
-<dd><p>Provide the processed batch.</p>
+<dd><p>To be implemented in subclasses.</p>
+<p>This function takes a <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code> and should return the
+corresponding <code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The batch request.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The processed batch.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Batch</p>
+<dd class="field-odd"><p><strong>request</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code>) – The request to process.</p>
 </dd>
 </dl>
-<p>Random seed is initialized based on the request’s random seed. Setup the
-timer. If there is no gt in the request, it will assert error. Continue
-requesting batch from the upstream provider until the data’s min and max
-value is not same as background value or the random number generated is
-less than p (the probability threshold). It returns the accepted batch
-after stopping the timer.</p>
 </dd></dl>
 
 </dd></dl>

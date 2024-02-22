@@ -48,7 +48,16 @@
               <p class="caption" role="heading"><span class="caption-text">DaCapo API:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">CLI</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CLI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dacapo">dacapo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dacapo-apply">apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dacapo-predict">predict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dacapo-train">train</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dacapo-validate">validate</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -77,6 +86,200 @@
              
   <section id="cli">
 <h1>CLI<a class="headerlink" href="#cli" title="Link to this heading"></a></h1>
+<section id="dacapo">
+<h2>dacapo<a class="headerlink" href="#dacapo" title="Link to this heading"></a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>dacapo<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>ARGS<span class="o">]</span>...
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-log-level">
+<span class="sig-name descname"><span class="pre">--log-level</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;log_level&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-log-level" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DEBUG | INFO | WARNING | ERROR | CRITICAL</p>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="dacapo-apply">
+<h3>apply<a class="headerlink" href="#dacapo-apply" title="Link to this heading"></a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>dacapo<span class="w"> </span>apply<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-apply-r">
+<span id="cmdoption-dacapo-apply-run-name"></span><span class="sig-name descname"><span class="pre">-r</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--run-name</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;run_name&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-r" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong> The name of the run to apply.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-apply-ic">
+<span id="cmdoption-dacapo-apply-input_container"></span><span class="sig-name descname"><span class="pre">-ic</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_container</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_container&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-ic" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-apply-id">
+<span id="cmdoption-dacapo-apply-input_dataset"></span><span class="sig-name descname"><span class="pre">-id</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_dataset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_dataset&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-id" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-apply-op">
+<span id="cmdoption-dacapo-apply-output_path"></span><span class="sig-name descname"><span class="pre">-op</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_path</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_path&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-op" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-apply-vd">
+<span id="cmdoption-dacapo-apply-validation_dataset"></span><span class="sig-name descname"><span class="pre">-vd</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--validation_dataset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;validation_dataset&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-vd" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-apply-c">
+<span id="cmdoption-dacapo-apply-criterion"></span><span class="sig-name descname"><span class="pre">-c</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--criterion</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;criterion&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-c" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-apply-i">
+<span id="cmdoption-dacapo-apply-iteration"></span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--iteration</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;iteration&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-i" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-apply-p">
+<span id="cmdoption-dacapo-apply-parameters"></span><span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--parameters</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;parameters&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-p" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-apply-roi">
+<span id="cmdoption-dacapo-apply-roi"></span><span class="sig-name descname"><span class="pre">-roi</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--roi</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;roi&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-roi" title="Link to this definition"></a></dt>
+<dd><p>The roi to predict on. Passed in as [lower:upper, lower:upper, … ]</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-apply-w">
+<span id="cmdoption-dacapo-apply-num_workers"></span><span class="sig-name descname"><span class="pre">-w</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--num_workers</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;num_workers&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-w" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-apply-dt">
+<span id="cmdoption-dacapo-apply-output_dtype"></span><span class="sig-name descname"><span class="pre">-dt</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_dtype</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_dtype&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-dt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-apply-ow">
+<span id="cmdoption-dacapo-apply-overwrite"></span><span class="sig-name descname"><span class="pre">-ow</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--overwrite</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dacapo-apply-ow" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="dacapo-predict">
+<h3>predict<a class="headerlink" href="#dacapo-predict" title="Link to this heading"></a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>dacapo<span class="w"> </span>predict<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-predict-r">
+<span id="cmdoption-dacapo-predict-run-name"></span><span class="sig-name descname"><span class="pre">-r</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--run-name</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;run_name&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-predict-r" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong> The name of the run to apply.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-predict-i">
+<span id="cmdoption-dacapo-predict-iteration"></span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--iteration</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;iteration&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-predict-i" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong> The training iteration of the model to use for prediction.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-predict-ic">
+<span id="cmdoption-dacapo-predict-input_container"></span><span class="sig-name descname"><span class="pre">-ic</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_container</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_container&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-predict-ic" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-predict-id">
+<span id="cmdoption-dacapo-predict-input_dataset"></span><span class="sig-name descname"><span class="pre">-id</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_dataset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_dataset&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-predict-id" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-predict-op">
+<span id="cmdoption-dacapo-predict-output_path"></span><span class="sig-name descname"><span class="pre">-op</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_path</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_path&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-predict-op" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-predict-roi">
+<span id="cmdoption-dacapo-predict-output_roi"></span><span class="sig-name descname"><span class="pre">-roi</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_roi</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_roi&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-predict-roi" title="Link to this definition"></a></dt>
+<dd><p>The roi to predict on. Passed in as [lower:upper, lower:upper, … ]</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-predict-w">
+<span id="cmdoption-dacapo-predict-num_workers"></span><span class="sig-name descname"><span class="pre">-w</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--num_workers</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;num_workers&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-predict-w" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-predict-dt">
+<span id="cmdoption-dacapo-predict-output_dtype"></span><span class="sig-name descname"><span class="pre">-dt</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_dtype</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_dtype&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-predict-dt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-predict-ow">
+<span id="cmdoption-dacapo-predict-overwrite"></span><span class="sig-name descname"><span class="pre">-ow</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--overwrite</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dacapo-predict-ow" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="dacapo-train">
+<h3>train<a class="headerlink" href="#dacapo-train" title="Link to this heading"></a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>dacapo<span class="w"> </span>train<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-train-r">
+<span id="cmdoption-dacapo-train-run-name"></span><span class="sig-name descname"><span class="pre">-r</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--run-name</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;run_name&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-train-r" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong> The NAME of the run to train.</p>
+</dd></dl>
+
+</section>
+<section id="dacapo-validate">
+<h3>validate<a class="headerlink" href="#dacapo-validate" title="Link to this heading"></a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>dacapo<span class="w"> </span>validate<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-validate-r">
+<span id="cmdoption-dacapo-validate-run-name"></span><span class="sig-name descname"><span class="pre">-r</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--run-name</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;run_name&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-validate-r" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong> The name of the run to validate.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-validate-i">
+<span id="cmdoption-dacapo-validate-iteration"></span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--iteration</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;iteration&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-validate-i" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong> The iteration at which to validate the run.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-validate-w">
+<span id="cmdoption-dacapo-validate-num_workers"></span><span class="sig-name descname"><span class="pre">-w</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--num_workers</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;num_workers&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-validate-w" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-validate-dt">
+<span id="cmdoption-dacapo-validate-output_dtype"></span><span class="sig-name descname"><span class="pre">-dt</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_dtype</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_dtype&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-validate-dt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-validate-ow">
+<span id="cmdoption-dacapo-validate-overwrite"></span><span class="sig-name descname"><span class="pre">-ow</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--overwrite</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dacapo-validate-ow" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
 </section>
 
 

@@ -3,23 +3,6 @@
 
 .. py:module:: dacapo
 
-.. autoapi-nested-parse::
-
-   dacapo module
-   ==============
-
-   This module contains several useful methods for performing common tasks in dacapo library.
-
-   Modules:
-   -----------
-   Options            - Deals with configuring aspects of the program's operations.
-   experiments        - This module is responsible for conducting experiments.
-   apply              - Applies the results of the training process to the given dataset.
-   train              - Trains the model using given data set.
-   validate           - This module is for validating the model.
-   predict            - This module is used to generate predictions based on the model.
-
-
 
 Subpackages
 -----------
@@ -76,54 +59,48 @@ Functions
 .. py:class:: Options
 
 
-   Singleton class used to hold and access parsed configuration options.
-
-   .. py:method:: instance(**kwargs)
+   .. py:method:: instance(**kwargs) -> DaCapoConfig
       :classmethod:
 
-      Get the singleton instance of the Options class.
 
-      :param \*\*kwargs: Optional named arguments to parse as options.
-
-      :returns: The singleton instance of Options.
-      :rtype: Options
+   .. py:method:: config_file() -> Optional[pathlib.Path]
+      :classmethod:
 
 
 
-.. py:function:: apply(run_name: str, input_container: pathlib.Path | str, input_dataset: str, output_path: pathlib.Path | str, validation_dataset: Optional[dacapo.experiments.datasplits.datasets.dataset.Dataset | str] = None, criterion: str = 'voi', iteration: Optional[int] = None, parameters: Optional[dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters | str] = None, roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 30, output_dtype: Optional[numpy.dtype | str] = np.uint8, compute_context: dacapo.compute_context.ComputeContext = LocalTorch(), overwrite: bool = True, file_format: str = 'zarr')
+.. py:function:: apply(run_name: str, input_container: pathlib.Path | str, input_dataset: str, output_path: pathlib.Path | str, validation_dataset: Optional[dacapo.experiments.datasplits.datasets.dataset.Dataset | str] = None, criterion: str = 'voi', iteration: Optional[int] = None, parameters: Optional[dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters | str] = None, roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: Optional[numpy.dtype | str] = np.uint8, overwrite: bool = True, file_format: str = 'zarr')
 
    Load weights and apply a model to a dataset. If iteration is None, the best iteration based on the criterion is used. If roi is None, the whole input dataset is used.
 
 
-.. py:function:: validate(run_name: str, iteration: int, compute_context: dacapo.compute_context.ComputeContext = LocalTorch(), num_workers: int = 30, output_dtype: str = 'uint8', overwrite: bool = True)
+.. py:function:: validate(run_name: str, iteration: int, num_workers: int = 30, output_dtype: str = 'uint8', overwrite: bool = True)
 
    Validate a run at a given iteration. Loads the weights from a previously
    stored checkpoint. Returns the best parameters and scores for this
    iteration.
 
 
-.. py:function:: predict(run_name: str, iteration: int, input_container: pathlib.Path | str, input_dataset: str, output_path: pathlib.Path | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 30, output_dtype: numpy.dtype | str = np.uint8, compute_context: dacapo.compute_context.ComputeContext | str = LocalTorch(), overwrite: bool = True)
+.. py:function:: predict(run_name: str, iteration: int, input_container: pathlib.Path | str, input_dataset: str, output_path: dacapo.store.local_array_store.LocalArrayIdentifier | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True)
 
-   _summary_
+   Predict with a trained model.
 
-   :param run_name: _description_
+   :param run_name: The name of the run to predict with.
    :type run_name: str
-   :param iteration: _description_
+   :param iteration: The training iteration of the model to use for prediction.
    :type iteration: int
-   :param input_container: _description_
+   :param input_container: The container of the input array.
    :type input_container: Path | str
-   :param input_dataset: _description_
+   :param input_dataset: The dataset name of the input array.
    :type input_dataset: str
-   :param output_path: _description_
-   :type output_path: Path | str
-   :param output_roi: Defaults to None. If output roi is None,
-                      it will be set to the raw roi.
-   :type output_roi: Optional[str], optional
-   :param num_workers: _description_. Defaults to 30.
+   :param output_path: The path where the prediction array will be stored, or a LocalArryIdentifier for the prediction array.
+   :type output_path: LocalArrayIdentifier | str
+   :param output_roi: The ROI of the output array. If None, the ROI of the input array will be used. Defaults to None.
+   :type output_roi: Optional[Roi | str], optional
+   :param num_workers: The number of workers to use for blockwise prediction. Defaults to 30.
    :type num_workers: int, optional
-   :param output_dtype: _description_. Defaults to np.uint8.
+   :param output_dtype: The dtype of the output array. Defaults to np.uint8.
    :type output_dtype: np.dtype | str, optional
-   :param overwrite: _description_. Defaults to True.
+   :param overwrite: If True, the output array will be overwritten if it already exists. Defaults to True.
    :type overwrite: bool, optional
 
 

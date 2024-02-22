@@ -32,33 +32,40 @@ Classes
 
    Base class for configuration stores.
 
-   .. py:property:: runs
-      :abstractmethod:
+   .. py:attribute:: runs
+      :type: Any
 
+      
 
-   .. py:property:: datasplits
-      :abstractmethod:
+   .. py:attribute:: datasplits
+      :type: Any
 
+      
 
-   .. py:property:: datasets
-      :abstractmethod:
+   .. py:attribute:: datasets
+      :type: Any
 
+      
 
-   .. py:property:: arrays
-      :abstractmethod:
+   .. py:attribute:: arrays
+      :type: Any
 
+      
 
-   .. py:property:: tasks
-      :abstractmethod:
+   .. py:attribute:: tasks
+      :type: Any
 
+      
 
-   .. py:property:: trainers
-      :abstractmethod:
+   .. py:attribute:: trainers
+      :type: Any
 
+      
 
-   .. py:property:: architectures
-      :abstractmethod:
+   .. py:attribute:: architectures
+      :type: Any
 
+      
 
    .. py:method:: delete_config(database, config_name: str) -> None
       :abstractmethod:

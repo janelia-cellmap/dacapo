@@ -22,61 +22,14 @@ Classes
 
 
 
-   This is a configuration class for the distance tasks.
+   This is a Distance task config used for generating and
+   evaluating signed distance transforms as a way of generating
+   segmentations.
 
-   The class is used for generating and evaluating signed distance transforms.
-   The advantage of generating distance transforms instead of regular affinities
-   is that the signal can be denser. Misclassification of a single pixel in an affinity
-   prediction can merge two distinct objects, but this does not occur with distances.
-
-   .. attribute:: task_type
-
-      A constant attribute assigned to the DistanceTask.
-
-   .. attribute:: channels
-
-      A list containing channel names.
-
-      :type: List[str]
-
-   .. attribute:: clip_distance
-
-      Maximum distance value to consider for false positive/negative evaluations.
-
-      :type: float
-
-   .. attribute:: tol_distance
-
-      Tolerance level of distance for counting false positives/negatives.
-
-      :type: float
-
-   .. attribute:: scale_factor
-
-      The factor by which distances are scaled before normalizing.
-      Default is 1.
-
-      :type: float
-
-   .. attribute:: mask_distances
-
-      If True, masks out the regions where the true
-      distance to object boundary cannot be accurately known.
-      Default is False.
-
-      :type: bool
-
-   .. attribute:: clipmin
-
-      The minimum value allowed for distance weights. Default is 0.05.
-
-      :type: float
-
-   .. attribute:: clipmax
-
-      The maximum value allowed for distance weights. Default is 0.95.
-
-      :type: float
+   The advantage of generating distance transforms over regular
+   affinities is you can get a denser signal, i.e. 1 misclassified
+   pixel in an affinity prediction could merge 2 otherwise very
+   distinct objects, this cannot happen with distances.
 
    .. py:attribute:: task_type
 

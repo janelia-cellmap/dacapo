@@ -37,7 +37,7 @@ Classes
       :abstractmethod:
 
 
-   .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters, output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, compute_context: dacapo.compute_context.ComputeContext | str = LocalTorch(), num_workers: int = 16, chunk_size: funlib.geometry.Coordinate = Coordinate((64, 64, 64))) -> dacapo.experiments.datasplits.datasets.arrays.Array
+   .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters, output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, num_workers: int = 16, chunk_size: funlib.geometry.Coordinate = Coordinate((64, 64, 64))) -> dacapo.experiments.datasplits.datasets.arrays.Array
       :abstractmethod:
 
       Convert predictions into the final output.

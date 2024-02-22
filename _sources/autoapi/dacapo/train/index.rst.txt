@@ -30,11 +30,11 @@ Attributes
 
    
 
-.. py:function:: train(run_name: str, compute_context: dacapo.compute_context.ComputeContext = LocalTorch())
+.. py:function:: train(run_name: str)
 
    Train a run
 
 
-.. py:function:: train_run(run: dacapo.experiments.Run, compute_context: dacapo.compute_context.ComputeContext = LocalTorch())
+.. py:function:: train_run(run: dacapo.experiments.Run)
 
 

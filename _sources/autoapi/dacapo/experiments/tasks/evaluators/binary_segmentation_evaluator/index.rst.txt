@@ -46,10 +46,6 @@ Attributes
 
    .. py:property:: score
 
-      The abstract property to get the overall score of the evaluation.
-
-      :returns: The overall evaluation scores.
-      :rtype: EvaluationScores
 
    .. py:attribute:: criteria
       :value: ['jaccard', 'voi']
@@ -60,10 +56,10 @@ Attributes
 
       Compares and evaluates the output array against the evaluation array.
 
-      :param output_array: The output data array to evaluate
-      :type output_array: Array
-      :param eval_array: The evaluation data array to compare with the output
-      :type eval_array: Array
+      :param output_array_identifier: The output data array to evaluate
+      :type output_array_identifier: Array
+      :param evaluation_array: The evaluation data array to compare with the output
+      :type evaluation_array: Array
 
       :returns: The detailed evaluation scores after the comparison.
       :rtype: EvaluationScores

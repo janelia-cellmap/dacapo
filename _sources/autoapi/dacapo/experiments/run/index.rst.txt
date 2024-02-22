@@ -41,17 +41,17 @@ Classes
       
 
    .. py:attribute:: architecture
-      :type: dacapo.experiments.architectures.architecture.Architecture
+      :type: dacapo.experiments.architectures.Architecture
 
       
 
    .. py:attribute:: trainer
-      :type: dacapo.experiments.trainers.trainer.Trainer
+      :type: dacapo.experiments.trainers.Trainer
 
       
 
    .. py:attribute:: datasplit
-      :type: dacapo.experiments.datasplits.datasplit.DataSplit
+      :type: dacapo.experiments.datasplits.DataSplit
 
       
 

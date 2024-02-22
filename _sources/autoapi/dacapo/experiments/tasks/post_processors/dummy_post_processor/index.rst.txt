@@ -33,10 +33,10 @@ Classes
       return instances of ``PostProcessorParameters``.
 
 
-   .. py:method:: set_prediction(prediction_array)
+   .. py:method:: set_prediction(prediction_array_identifier)
 
 
-   .. py:method:: process(parameters, output_array_identifier)
+   .. py:method:: process(parameters, output_array_identifier, *args, **kwargs)
 
       Convert predictions into the final output.
 

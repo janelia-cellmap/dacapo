@@ -20,20 +20,9 @@ Classes
 .. py:class:: DataSplitConfig
 
 
-   A class used to create a DataSplit configuration object.
-
-   .. attribute:: name
-
-      A name for the datasplit. This name will be saved so it can be found
-      and reused easily. It is recommended to keep it short and avoid special
-      characters.
-
-      :type: str
-
-   .. method:: verify() -> Tuple[bool, str]:
-
-      Validates if it is a valid data split configuration.
-
+   Base class for datasplit configurations. Each subclass of an
+   `DataSplit` should have a corresponding config class derived from
+   `DataSplitConfig`.
 
    .. py:attribute:: name
       :type: str
@@ -42,11 +31,7 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      Validates if the current configuration is a valid data split configuration.
-
-      :returns: True if the configuration is valid,
-                False otherwise along with respective validation error message.
-      :rtype: Tuple[bool, str]
+      Check whether this is a valid data split
 
 
 

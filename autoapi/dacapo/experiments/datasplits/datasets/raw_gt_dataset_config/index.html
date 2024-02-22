@@ -50,7 +50,6 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../../../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
@@ -108,98 +107,37 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig" title="dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RawGTDatasetConfig</span></code></a></p></td>
-<td><p>This is a configuration class for the standard dataset with both raw and GT Array.</p></td>
+<td><p>This is the standard dataset with a Raw and a GT Array.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.</span></span><span class="sig-name descname"><span class="pre">RawGTDatasetConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig" title="Link to this definition"></a></dt>
-<dd><p>This is a configuration class for the standard dataset with both raw and GT Array.</p>
-<p>The configuration includes array configurations for raw data, ground truth data and mask data.
-The configuration for ground truth (GT) data is mandatory, whereas configurations for raw
-and mask data are optional. It also includes an optional list of points around which training samples
-will be extracted.</p>
+<dd><p>This is the standard dataset with a Raw and a GT Array.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig.dataset_type">
 <span class="sig-name descname"><span class="pre">dataset_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig.dataset_type" title="Link to this definition"></a></dt>
-<dd><p>The type of dataset that is being configured.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>class</p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig.raw_config">
-<span class="sig-name descname"><span class="pre">raw_config</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig.raw_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the raw data associated with this dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optional[<a class="reference internal" href="../arrays/array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig">ArrayConfig</a>]</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">raw_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.ArrayConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig.raw_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig.gt_config">
-<span class="sig-name descname"><span class="pre">gt_config</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig.gt_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the ground truth data associated with this dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optional[<a class="reference internal" href="../arrays/array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig">ArrayConfig</a>]</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">gt_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.ArrayConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig.gt_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig.mask_config">
-<span class="sig-name descname"><span class="pre">mask_config</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig.mask_config" title="Link to this definition"></a></dt>
-<dd><p>An optional mask configuration that sets the loss
-equal to zero on voxels where the mask is 1.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optional[<a class="reference internal" href="../arrays/array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig">ArrayConfig</a>]</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">mask_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.ArrayConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig.mask_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig.sample_points">
-<span class="sig-name descname"><span class="pre">sample_points</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig.sample_points" title="Link to this definition"></a></dt>
-<dd><p>An optional list of points around which
-training samples will be extracted.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optional[List[Coordinate]]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">dataset_type</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">raw_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.ArrayConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">gt_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.ArrayConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">mask_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.ArrayConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">sample_points</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">funlib.geometry.Coordinate</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sample_points</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">funlib.geometry.Coordinate</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset_config.RawGTDatasetConfig.sample_points" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

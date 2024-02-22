@@ -50,7 +50,6 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
@@ -100,7 +99,6 @@
              
   <section id="module-dacapo.experiments.trainers.gunpowder_trainer_config">
 <span id="dacapo-experiments-trainers-gunpowder-trainer-config"></span><h1><a class="reference internal" href="#module-dacapo.experiments.trainers.gunpowder_trainer_config" title="dacapo.experiments.trainers.gunpowder_trainer_config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.trainers.gunpowder_trainer_config</span></code></a><a class="headerlink" href="#module-dacapo.experiments.trainers.gunpowder_trainer_config" title="Link to this heading"></a></h1>
-<p>This script file contains the GunpowderTrainerConfig class. It inherits from the TrainerConfig class and is used to configure a gunpowder trainer for the dacapo library.</p>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <section id="classes">
@@ -108,110 +106,43 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig" title="dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GunpowderTrainerConfig</span></code></a></p></td>
-<td><p>This class is used to configure a Gunpowder Trainer. It contains attributes related to trainer type,</p></td>
+<td><p>Base class for trainer configurations. Each subclass of a <cite>Trainer</cite></p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.trainers.gunpowder_trainer_config.</span></span><span class="sig-name descname"><span class="pre">GunpowderTrainerConfig</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig" title="Link to this definition"></a></dt>
-<dd><p>This class is used to configure a Gunpowder Trainer. It contains attributes related to trainer type,
-number of data fetchers, augmentations to apply, snapshot interval, minimum masked value, and a boolean
-value indicating whether to clip raw or not.</p>
+<dd><p>Base class for trainer configurations. Each subclass of a <cite>Trainer</cite>
+should have a corresponding config class derived from <cite>TrainerConfig</cite>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.trainer_type">
 <span class="sig-name descname"><span class="pre">trainer_type</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.trainer_type" title="Link to this definition"></a></dt>
-<dd><p>This is the type of the trainer which is set to GunpowderTrainer by default.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>class</p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.num_data_fetchers">
-<span class="sig-name descname"><span class="pre">num_data_fetchers</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.num_data_fetchers" title="Link to this definition"></a></dt>
-<dd><p>This is the number of CPU workers who will be dedicated to fetch and process the data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">num_data_fetchers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.num_data_fetchers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.augments">
-<span class="sig-name descname"><span class="pre">augments</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.augments" title="Link to this definition"></a></dt>
-<dd><p>This is the list of augments to apply during the training.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[<a class="reference internal" href="../gp_augments/augment_config/index.html#dacapo.experiments.trainers.gp_augments.augment_config.AugmentConfig" title="dacapo.experiments.trainers.gp_augments.augment_config.AugmentConfig">AugmentConfig</a>]</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">augments</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../gp_augments/index.html#dacapo.experiments.trainers.gp_augments.AugmentConfig" title="dacapo.experiments.trainers.gp_augments.AugmentConfig"><span class="pre">dacapo.experiments.trainers.gp_augments.AugmentConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.augments" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.snapshot_interval">
-<span class="sig-name descname"><span class="pre">snapshot_interval</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.snapshot_interval" title="Link to this definition"></a></dt>
-<dd><p>This is the number of iterations after which a new snapshot should be saved.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optional[int]</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">snapshot_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.snapshot_interval" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.min_masked">
-<span class="sig-name descname"><span class="pre">min_masked</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.min_masked" title="Link to this definition"></a></dt>
-<dd><p>This is the minimum masked value.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optional[float]</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">min_masked</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.min_masked" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.clip_raw">
-<span class="sig-name descname"><span class="pre">clip_raw</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.clip_raw" title="Link to this definition"></a></dt>
-<dd><p>This is a boolean value indicating if the raw data should be clipped or not.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">trainer_type</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">num_data_fetchers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">augments</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../gp_augments/index.html#dacapo.experiments.trainers.gp_augments.AugmentConfig" title="dacapo.experiments.trainers.gp_augments.AugmentConfig"><span class="pre">dacapo.experiments.trainers.gp_augments.AugmentConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">snapshot_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">min_masked</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">clip_raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">clip_raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.trainers.gunpowder_trainer_config.GunpowderTrainerConfig.clip_raw" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

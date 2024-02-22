@@ -3,21 +3,6 @@
 
 .. py:module:: dacapo.experiments.arraytypes.mask
 
-.. autoapi-nested-parse::
-
-   This is a module of the dacapo python library of funkelab that contains the definition of Mask class which inherits the ArrayType class.
-
-   Attributes:
-   -----------
-   attr: module
-       This is a python library for creating classes and managing attributes and validators.
-
-   Classes:
-   --------
-   Mask
-       Inherits ArrayType class. This class defines a method called interpolatable, which returns False.
-
-
 
 Module Contents
 ---------------
@@ -37,19 +22,14 @@ Classes
 
 
 
-   A class that inherits the ArrayType class. This is a representation of a Mask in the system.
-
-   .. method:: interpolatable():
-
-      It is a method that returns False.
-
+   The type of data provided by an array. The ArrayType class helps to keep
+   track of the semantic meaning of an Array. Additionally the ArrayType
+   keeps track of metadata that is specific to this datatype such as
+   num_classes for an annotated volume or channel names for intensity
+   arrays.
 
    .. py:property:: interpolatable
       :type: bool
 
-      Method to return False.
-
-      :returns: Returns a boolean value of False representing that the values are not interpolatable.
-      :rtype: bool
 
 

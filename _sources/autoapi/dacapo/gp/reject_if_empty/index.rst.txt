@@ -34,46 +34,33 @@ Attributes
 
 
 
-   Node to reject batches based on the mask's filled vs empty ratio.
+   Reject batches based on the masked-in vs. masked-out ratio.
 
-   :param gt: The ground truth array key that will be used.
-              Default is None.
-   :type gt: ArrayKey, optional
-   :param p: The probability threshold for rejecting batches until
-             a non-empty ground truth is found. Default is 0.5.
-   :type p: float, optional
-   :param background: The value representing the background in
-                      the ground truth data. Default is 0.
-   :type background: int, optional
-
-   This class inherits from :class: `BatchFilter`.
-
-   In the setup() method, it asserts that only one provider is in the upstream.
-   In the provide() method, it makes sure that the gt ArrayKey is in the request
-   provided. It then keeps requesting batches from the upstream until it finds
-   a batch where the ground truth is not empty, or the random number generated
-   is greater than the threshold p.
+   :param gt: The gt array to use
+   :type gt: :class:`ArrayKey`, optional
+   :param p: The probability that we reject until gt is nonempty
+   :type p: ``float``, optional
 
    .. py:method:: setup()
 
-      Asserts that only one upstream provider is supported.
+      To be implemented in subclasses.
+
+      Called during initialization of the DAG. Callees can assume that all
+      upstream providers are set up already.
+
+      In setup, call :func:`provides` or :func:`updates` to announce the
+      arrays and points provided or changed by this node.
 
 
    .. py:method:: provide(request)
 
-      Provide the processed batch.
+      To be implemented in subclasses.
 
-      :param request: The batch request.
+      This function takes a :class:`BatchRequest` and should return the
+      corresponding :class:`Batch`.
 
-      :returns: The processed batch.
-      :rtype: Batch
-
-      Random seed is initialized based on the request's random seed. Setup the
-      timer. If there is no gt in the request, it will assert error. Continue
-      requesting batch from the upstream provider until the data's min and max
-      value is not same as background value or the random number generated is
-      less than p (the probability threshold). It returns the accepted batch
-      after stopping the timer.
+      :param request: The request to process.
+      :type request: :class:`BatchRequest`
 
 
 

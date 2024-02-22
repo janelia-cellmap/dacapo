@@ -50,7 +50,6 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../apply/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.apply</span></code></a></li>
@@ -103,18 +102,11 @@
 <h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.options.Options" title="dacapo.options.Options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Options</span></code></a></p></td>
-<td><p>Singleton class used to hold and access parsed configuration options.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.options.DaCapoConfig" title="dacapo.options.DaCapoConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DaCapoConfig</span></code></a></p></td>
+<td><p></p></td>
 </tr>
-</tbody>
-</table>
-</section>
-<section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.options.parse_options" title="dacapo.options.parse_options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_options</span></code></a>()</p></td>
-<td><p>Parse and return the config options from the YAML files.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.options.Options" title="dacapo.options.Options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Options</span></code></a></p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -126,9 +118,6 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.options.logger" title="dacapo.options.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.options.options_files" title="dacapo.options.options_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">options_files</span></code></a></p></td>
-<td><p></p></td>
-</tr>
 </tbody>
 </table>
 <dl class="py data">
@@ -136,46 +125,53 @@
 <span class="sig-prename descclassname"><span class="pre">dacapo.options.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#dacapo.options.logger" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="dacapo.options.options_files">
-<span class="sig-prename descclassname"><span class="pre">dacapo.options.</span></span><span class="sig-name descname"><span class="pre">options_files</span></span><a class="headerlink" href="#dacapo.options.options_files" title="Link to this definition"></a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.options.DaCapoConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.options.</span></span><span class="sig-name descname"><span class="pre">DaCapoConfig</span></span><a class="headerlink" href="#dacapo.options.DaCapoConfig" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.options.DaCapoConfig.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.options.DaCapoConfig.type" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="dacapo.options.parse_options">
-<span class="sig-prename descclassname"><span class="pre">dacapo.options.</span></span><span class="sig-name descname"><span class="pre">parse_options</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.options.parse_options" title="Link to this definition"></a></dt>
-<dd><p>Parse and return the config options from the YAML files.</p>
-<p>Yaml files are parsed in the order of their precedence (highest first).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dictionary containing all the parsed options.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict</p>
-</dd>
-</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.options.DaCapoConfig.runs_base_dir">
+<span class="sig-name descname"><span class="pre">runs_base_dir</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><a class="headerlink" href="#dacapo.options.DaCapoConfig.runs_base_dir" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.options.DaCapoConfig.compute_context_config">
+<span class="sig-name descname"><span class="pre">compute_context_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#dacapo.options.DaCapoConfig.compute_context_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.options.DaCapoConfig.mongo_db_host">
+<span class="sig-name descname"><span class="pre">mongo_db_host</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dacapo.options.DaCapoConfig.mongo_db_host" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.options.DaCapoConfig.mongo_db_name">
+<span class="sig-name descname"><span class="pre">mongo_db_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dacapo.options.DaCapoConfig.mongo_db_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.options.DaCapoConfig.serialize">
+<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.options.DaCapoConfig.serialize" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.options.Options">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.options.</span></span><span class="sig-name descname"><span class="pre">Options</span></span><a class="headerlink" href="#dacapo.options.Options" title="Link to this definition"></a></dt>
-<dd><p>Singleton class used to hold and access parsed configuration options.</p>
-<dl class="py method">
+<dd><dl class="py method">
 <dt class="sig sig-object py" id="dacapo.options.Options.instance">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.options.Options.instance" title="Link to this definition"></a></dt>
-<dd><p>Get the singleton instance of the Options class.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>**kwargs</strong> – Optional named arguments to parse as options.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The singleton instance of Options.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.options.Options" title="dacapo.options.Options">Options</a></p>
-</dd>
-</dl>
-</dd></dl>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dacapo.options.DaCapoConfig" title="dacapo.options.DaCapoConfig"><span class="pre">DaCapoConfig</span></a></span></span><a class="headerlink" href="#dacapo.options.Options.instance" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.options.Options.config_file">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">config_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#dacapo.options.Options.config_file" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

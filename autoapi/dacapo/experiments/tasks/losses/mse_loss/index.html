@@ -50,7 +50,6 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../../../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
@@ -108,48 +107,23 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.losses.mse_loss.MSELoss" title="dacapo.experiments.tasks.losses.mse_loss.MSELoss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MSELoss</span></code></a></p></td>
-<td><p>A class used to represent the Mean Square Error Loss function (MSELoss).</p></td>
+<td><p>Helper class that provides a standard way to create an ABC using</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.mse_loss.MSELoss">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.losses.mse_loss.</span></span><span class="sig-name descname"><span class="pre">MSELoss</span></span><a class="headerlink" href="#dacapo.experiments.tasks.losses.mse_loss.MSELoss" title="Link to this definition"></a></dt>
-<dd><p>A class used to represent the Mean Square Error Loss function (MSELoss).</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.mse_loss.MSELoss.None">
-<span class="sig-name descname"><span class="pre">None</span></span><a class="headerlink" href="#dacapo.experiments.tasks.losses.mse_loss.MSELoss.None" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">compute(prediction,</span> <span class="pre">target,</span> <span class="pre">weight):</span></span></dt>
-<dd><p>Computes the MSELoss with the given weight for the predictiom amd target.</p>
-</dd></dl>
-
+<dd><p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.mse_loss.MSELoss.compute">
 <span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.losses.mse_loss.MSELoss.compute" title="Link to this definition"></a></dt>
-<dd><p>Function to compute the MSELoss for the provided prediction and target, with respect to the weight.</p>
-<section id="parameters">
-<h4>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
-<dl class="simple">
-<dt>prediction<span class="classifier">torch.Tensor</span></dt><dd><p>The prediction tensor for which loss needs to be calculated.</p>
-</dd>
-<dt>target<span class="classifier">torch.Tensor</span></dt><dd><p>The target tensor with respect to which loss is calculated.</p>
-</dd>
-<dt>weight<span class="classifier">torch.Tensor</span></dt><dd><p>The weight tensor used to weigh the prediction in the loss calculation.</p>
-</dd>
-</dl>
-</section>
-<section id="returns">
-<h4>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h4>
-<p>:
-torch.Tensor</p>
-<blockquote>
-<div><p>The computed MSELoss tensor.</p>
-</div></blockquote>
-</section>
+<dd><p>Compute the loss for the given prediction and target. Optionally, if
+given, a loss weight should be considered.</p>
+<p>All arguments are <code class="docutils literal notranslate"><span class="pre">torch</span></code> tensors. The return type should be a
+<code class="docutils literal notranslate"><span class="pre">torch</span></code> scalar that can be used with an optimizer, just as usual when
+training with <code class="docutils literal notranslate"><span class="pre">torch</span></code>.</p>
 </dd></dl>
 
 </dd></dl>

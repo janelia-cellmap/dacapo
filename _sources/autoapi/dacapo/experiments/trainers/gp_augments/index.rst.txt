@@ -3,23 +3,6 @@
 
 .. py:module:: dacapo.experiments.trainers.gp_augments
 
-.. autoapi-nested-parse::
-
-   funkelab dacapo python library script file.
-
-   This script file imports various augment configuration classes from different modules
-   into the current namespace.
-
-   Classes:
-       AugmentConfig:  Basic class for augment configuration with its base properties.
-       ElasticAugmentConfig : Config file for elastic augmentations in image processing.
-       SimpleAugmentConfig: Basic configuration for simple image augmentations.
-       GammaAugmentConfig: Config file for gamma corrections in image augmentations.
-       IntensityAugmentConfig: Configurations for intensity based augmentations.
-       IntensityScaleShiftAugmentConfig: Configuration for scaling and shifting of image
-       intensity during augmentations.
-
-
 
 Submodules
 ----------
@@ -58,24 +41,13 @@ Classes
 
 
 
-   Abstraction class for augmentation configurations in gunpowder.
-   Each augmentation must have a configuration class derived from this.
+   Base class for gunpowder augment configurations. Each subclass of a `Augment`
+   should have a corresponding config class derived from `AugmentConfig`.
 
    .. py:method:: node(raw_key: gunpowder.ArrayKey, gt_key: gunpowder.ArrayKey, mask_key: gunpowder.ArrayKey) -> gunpowder.BatchFilter
       :abstractmethod:
 
-      Create a gunpowder node that applies this augmentation.
-
-      :param raw_key: The key for the raw data array.
-      :type raw_key: gp.ArrayKey
-      :param gt_key: The key for the ground truth data array.
-      :type gt_key: gp.ArrayKey
-      :param mask_key: The key for the masking data array.
-      :type mask_key: gp.ArrayKey
-
-      :returns: The resulting gunpowder node that applies
-                this augmentation.
-      :rtype: gp.BatchFilter
+      return a gunpowder node that performs this augmentation
 
 
 
@@ -84,42 +56,8 @@ Classes
 
 
 
-   A class that holds the configuration details for the elastic augmentations.
-
-   .. attribute:: control_point_spacing
-
-      Distance(in voxels per dimension) between control points for
-      the elastic deformation.
-
-      :type: List[int]
-
-   .. attribute:: control_point_displacement_sigma
-
-      Standard deviation of control point displacement
-      distribution, in world coordinates.
-
-      :type: List[float]
-
-   .. attribute:: rotation_interval
-
-      An interval to randomly sample rotation angles from
-      (0,2PI).
-
-      :type: Tuple[float, float]
-
-   .. attribute:: subsample
-
-      Downsample factor to perform the elastic augmentation
-      on a grid. Default is 1.
-
-      :type: int
-
-   .. attribute:: uniform_3d_rotation
-
-      Should 3D rotations be performed uniformly. The 'rotation_interval'
-      will be ignored. Default is False.
-
-      :type: bool
+   Base class for gunpowder augment configurations. Each subclass of a `Augment`
+   should have a corresponding config class derived from `AugmentConfig`.
 
    .. py:attribute:: control_point_spacing
       :type: List[int]
@@ -148,18 +86,7 @@ Classes
 
    .. py:method:: node(_raw_key=None, _gt_key=None, _mask_key=None)
 
-      Returns the object of ElasticAugment with the given configuration details.
-
-      :param _raw_key: Unused variable, kept for future use.
-      :param _gt_key: Unused variable, kept for future use.
-      :param _mask_key: Unused variable, kept for future use.
-
-      :returns:
-
-                A ElasticAugment object configured with `control_point_spacing`,
-                                `control_point_displacement_sigma`, `rotation_interval`, `subsample` and
-                                `uniform_3d_rotation`.
-      :rtype: ElasticAugment
+      return a gunpowder node that performs this augmentation
 
 
 
@@ -168,28 +95,12 @@ Classes
 
 
 
-   This class is an implementation of AugmentConfig that applies simple augmentations.
-
-   :param _raw_key: Key for raw data. Not used in this implementation. Defaults to None.
-   :param _gt_key: Key for ground truth data. Not used in this implementation. Defaults to None.
-   :param _mask_key: Key for mask data. Not used in this implementation. Defaults to None.
-
-   :returns: A node that can be included in a pipeline to perform simple data augmentations.
-   :rtype: Gunpowder SimpleAugment Node
+   Base class for gunpowder augment configurations. Each subclass of a `Augment`
+   should have a corresponding config class derived from `AugmentConfig`.
 
    .. py:method:: node(_raw_key=None, _gt_key=None, _mask_key=None)
 
-      Get a gp.SimpleAugment node.
-
-      :param _raw_key: Specific key for raw data, not used in this implementation. Defaults to None.
-      :type _raw_key: [type], optional
-      :param _gt_key: Specific key for ground truth data, not used in this implementation. Defaults to None.
-      :type _gt_key: [type], optional
-      :param _mask_key: Specific key for mask data, not used in this implementation. Defaults to None.
-      :type _mask_key: [type], optional
-
-      :returns: Simple augmentation node which can be incorporated in the pipeline.
-      :rtype: gunpowder.SimpleAugment
+      return a gunpowder node that performs this augmentation
 
 
 
@@ -198,20 +109,8 @@ Classes
 
 
 
-   This class manages the configuration of gamma augmentation for a given dataset.
-
-   .. attribute:: gamma_range
-
-      A tuple of float values represents the min and max range of gamma noise
-
-   .. attribute:: to apply on the raw data.
-
-      
-
-   .. method:: node()
-
-      Constructs a node in the augmentation pipeline.
-      
+   Base class for gunpowder augment configurations. Each subclass of a `Augment`
+   should have a corresponding config class derived from `AugmentConfig`.
 
    .. py:attribute:: gamma_range
       :type: Tuple[float, float]
@@ -220,17 +119,7 @@ Classes
 
    .. py:method:: node(raw_key: gunpowder.ArrayKey, _gt_key=None, _mask_key=None)
 
-      Constructs a node in the augmentation pipeline.
-
-      :param raw_key: Key to an Array (volume) in the pipeline
-      :type raw_key: gp.ArrayKey
-      :param _gt_key: Ground Truth key, not used in this function. Defaults to None.
-      :type _gt_key: gp.ArrayKey, optional
-      :param _mask_key: Mask Key, not used in this function. Defaults to None.
-      :type _mask_key: gp.ArrayKey, optional
-
-      :returns: The augmentation method to be applied on the source data.
-      :rtype: GammaAugment instance
+      return a gunpowder node that performs this augmentation
 
 
 
@@ -239,8 +128,8 @@ Classes
 
 
 
-   Abstraction class for augmentation configurations in gunpowder.
-   Each augmentation must have a configuration class derived from this.
+   Base class for gunpowder augment configurations. Each subclass of a `Augment`
+   should have a corresponding config class derived from `AugmentConfig`.
 
    .. py:attribute:: scale
       :type: Tuple[float, float]
@@ -259,18 +148,7 @@ Classes
 
    .. py:method:: node(raw_key: gunpowder.ArrayKey, _gt_key=None, _mask_key=None)
 
-      Create a gunpowder node that applies this augmentation.
-
-      :param raw_key: The key for the raw data array.
-      :type raw_key: gp.ArrayKey
-      :param gt_key: The key for the ground truth data array.
-      :type gt_key: gp.ArrayKey
-      :param mask_key: The key for the masking data array.
-      :type mask_key: gp.ArrayKey
-
-      :returns: The resulting gunpowder node that applies
-                this augmentation.
-      :rtype: gp.BatchFilter
+      return a gunpowder node that performs this augmentation
 
 
 
@@ -279,8 +157,8 @@ Classes
 
 
 
-   Abstraction class for augmentation configurations in gunpowder.
-   Each augmentation must have a configuration class derived from this.
+   Base class for gunpowder augment configurations. Each subclass of a `Augment`
+   should have a corresponding config class derived from `AugmentConfig`.
 
    .. py:attribute:: scale
       :type: float
@@ -294,18 +172,7 @@ Classes
 
    .. py:method:: node(raw_key: gunpowder.ArrayKey, _gt_key=None, _mask_key=None)
 
-      Create a gunpowder node that applies this augmentation.
-
-      :param raw_key: The key for the raw data array.
-      :type raw_key: gp.ArrayKey
-      :param gt_key: The key for the ground truth data array.
-      :type gt_key: gp.ArrayKey
-      :param mask_key: The key for the masking data array.
-      :type mask_key: gp.ArrayKey
-
-      :returns: The resulting gunpowder node that applies
-                this augmentation.
-      :rtype: gp.BatchFilter
+      return a gunpowder node that performs this augmentation
 
 
 

@@ -36,7 +36,7 @@ Classes
    .. py:method:: set_prediction(prediction_array_identifier)
 
 
-   .. py:method:: process(parameters, output_array_identifier, compute_context: dacapo.compute_context.ComputeContext | str = LocalTorch(), num_workers: int = 16, block_size: daisy.Coordinate = Coordinate((64, 64, 64)))
+   .. py:method:: process(parameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, num_workers: int = 16, block_size: daisy.Coordinate = Coordinate((64, 64, 64)))
 
       Convert predictions into the final output.
 

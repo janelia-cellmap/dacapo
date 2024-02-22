@@ -34,44 +34,34 @@ Attributes
 
 
 
-   Class for applying gamma noise augmentation.
-
-   .. attribute:: arrays
-
-      An iterable collection of np arrays to augment
-
-   .. attribute:: gamma_min
-
-      A float representing the lower limit of gamma perturbation
-
-   .. attribute:: gamma_max
-
-      A float representing the upper limit of gamma perturbation
-
-   .. method:: setup()
-
-      Method to configure the internal state of the class
-
-   .. method:: process()
-
-      Method to apply gamma noise to the desired arrays
-
-   .. method:: __augment()
-
-      Private method to perform the actual augmentation
-      
+   An Augment to apply gamma noise
 
    .. py:method:: setup()
 
-      Configuring the internal state by iterating over arrays.
+      To be implemented in subclasses.
+
+      Called during initialization of the DAG. Callees can assume that all
+      upstream providers are set up already.
+
+      In setup, call :func:`provides` or :func:`updates` to announce the
+      arrays and points provided or changed by this node.
 
 
    .. py:method:: process(batch, request)
 
-      Method to apply gamma noise to the desired arrays.
+      To be implemented in subclasses.
 
-      :param batch: The input batch to be processed.
-      :param request: An object which holds the requested output location.
+      Filter a batch, will be called after :func:`prepare`. Should return a
+      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
+      batch will replace the associated data in the original batch. If None is
+      returned it is assumed that the batch has been modified in place. ``request``
+      is the same as passed to :func:`prepare`, provided for convenience.
+
+      :param batch: The batch received from upstream to be modified by this node.
+      :type batch: :class:`Batch`
+      :param request: The request this node received. The updated batch should meet
+                      this request.
+      :type request: :class:`BatchRequest`
 
 
 

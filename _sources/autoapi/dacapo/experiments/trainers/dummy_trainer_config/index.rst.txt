@@ -22,20 +22,8 @@ Classes
 
 
 
-   A subclass of TrainerConfig representing a dummy trainer configuration
-   used for testing.
-
-   .. attribute:: trainer_type
-
-      An instance of the DummyTrainer class.
-
-      :type: DummyTrainer
-
-   .. attribute:: mirror_augment
-
-      A dummy attribute with no actual purpose.
-
-      :type: bool
+   This is just a dummy trainer config used for testing. None of the
+   attributes have any particular meaning.
 
    .. py:attribute:: trainer_type
 
@@ -48,13 +36,7 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      Dummy method to verify the configuration.
-
-      This method will always return False and an error message as this is
-      not meant to represent a valid trainer configuration.
-
-      :returns: False and a string indicating that the configuration is invalid.
-      :rtype: Tuple[bool, str]
+      Check whether this is a valid Trainer
 
 
 

@@ -36,7 +36,7 @@ Classes
    .. py:method:: set_prediction(prediction_array_identifier)
 
 
-   .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, compute_context: dacapo.compute_context.ComputeContext | str = LocalTorch(), num_workers: int = 16, block_size: funlib.geometry.Coordinate = Coordinate((64, 64, 64)))
+   .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, num_workers: int = 16, block_size: funlib.geometry.Coordinate = Coordinate((64, 64, 64)))
 
       Convert predictions into the final output.
 

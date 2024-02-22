@@ -20,35 +20,6 @@ Classes
 .. py:class:: TrainingStats
 
 
-   A class used to represent Training Statistics.
-
-   .. attribute:: iteration_stats
-
-      List[TrainingIterationStats]
-      an ordered list of training stats.
-
-   .. method:: add_iteration_stats(iteration_stats
-
-      TrainingIterationStats) -> None:
-      Add a new set of iterations stats to the existing list of iteration
-      stats.
-
-   .. method:: delete_after(iteration
-
-      int) -> None:
-      Deletes training stats after a specified iteration number.
-
-   .. method:: trained_until() -> int
-
-      
-      Gets the number of iterations that the model has been trained for.
-
-   .. method:: to_xarray() -> xr.DataArray
-
-      
-      Converts the iteration statistics to a xarray data array.
-      
-
    .. py:attribute:: iteration_stats
       :type: List[dacapo.experiments.training_iteration_stats.TrainingIterationStats]
 
@@ -56,37 +27,18 @@ Classes
 
    .. py:method:: add_iteration_stats(iteration_stats: dacapo.experiments.training_iteration_stats.TrainingIterationStats) -> None
 
-      Add a new iteration stats to the current iteration stats.
-
-      :param iteration_stats: a new iteration stats object.
-      :type iteration_stats: TrainingIterationStats
-
-      :raises assert: if the new iteration stats do not follow the order of existing iteration stats.
-
 
    .. py:method:: delete_after(iteration: int) -> None
-
-      Deletes training stats after a specified iteration.
-
-      :param iteration: the iteration after which the stats are to be deleted.
-      :type iteration: int
 
 
    .. py:method:: trained_until() -> int
 
-      The number of iterations trained for (the maximum iteration plus one).
-      Returns zero if no iterations trained yet.
-
-      :returns: number of iterations that the model has been trained for.
-      :rtype: int
+      The number of iterations trained for (the maximum iteration plus
+      one).
+      0 if no iterations trained yet.
 
 
    .. py:method:: to_xarray() -> xarray.DataArray
-
-      Converts the iteration stats to a data array format easily manipulatable.
-
-      :returns: xarray DataArray of iteration losses.
-      :rtype: xr.DataArray
 
 
 

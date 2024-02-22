@@ -26,6 +26,7 @@ Attributes
 
    dacapo.blockwise.segment_worker.fit
    dacapo.blockwise.segment_worker.read_write_conflict
+   dacapo.blockwise.segment_worker.path
 
 
 .. py:function:: cli(log_level)
@@ -41,10 +42,14 @@ Attributes
 
    
 
+.. py:data:: path
+
+   
+
 .. py:function:: start_worker(input_container: str, input_dataset: str, output_container: str, output_dataset: str, tmpdir: str, function_path: str)
 
 
-.. py:function:: spawn_worker(input_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, tmpdir: str, function_path: str, compute_context: dacapo.compute_context.ComputeContext = LocalTorch())
+.. py:function:: spawn_worker(input_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, tmpdir: str, function_path: str)
 
    Spawn a worker to predict on a given dataset.
 
@@ -54,7 +59,5 @@ Attributes
    :type raw_array: Array
    :param prediction_array_identifier: The identifier of the prediction array.
    :type prediction_array_identifier: LocalArrayIdentifier
-   :param compute_context: The compute context to use. Defaults to LocalTorch().
-   :type compute_context: ComputeContext, optional
 
 

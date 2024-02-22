@@ -3,22 +3,6 @@
 
 .. py:module:: dacapo.experiments.tasks.losses
 
-.. autoapi-nested-parse::
-
-   dacapo losses scripts - imports various loss functions from the library.
-
-   This module consists of classes importing several loss calculation methods used in deep learning.
-
-   Functions:
-   :func: .dummy_loss.DummyLoss - A placeholder for a loss function, performs no real calculation.
-   :func: .mse_loss.MSELoss - Calculates the Mean Squared Error loss between predicted and actual values.
-   :func: .loss.Loss - Generic loss function base class.
-   :func: .affinities_loss.AffinitiesLoss - Calculates the loss due to differing input and output affinities.
-   :func: .hot_distance_loss.HotDistanceLoss - Calculates the loss based on the distances between hot points in the data.
-
-   Note: The 'noqa' comments are used to instruct flake8 to ignore these lines for linting purposes.
-
-
 
 Submodules
 ----------
@@ -55,28 +39,17 @@ Classes
 
 
 
-   A class representing a dummy loss function that calculates the absolute difference between each prediction and target.
-
-   Inherits the Loss class.
-
-   .. method:: compute(prediction, target, weight=None)
-
-      Calculate the total loss between prediction and target.
-
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
 
    .. py:method:: compute(prediction, target, weight=None)
 
-      Method to calculate the total dummy loss.
+      Compute the loss for the given prediction and target. Optionally, if
+      given, a loss weight should be considered.
 
-      :param prediction: predicted output
-      :type prediction: float or int
-      :param target: true output
-      :type target: float or int
-      :param weight: weight parameter for the loss, by default None
-      :type weight: float or int, optional
-
-      :returns: Total loss calculated as the sum of absolute differences between prediction and target.
-      :rtype: float or int
+      All arguments are ``torch`` tensors. The return type should be a
+      ``torch`` scalar that can be used with an optimizer, just as usual when
+      training with ``torch``.
 
 
 
@@ -85,35 +58,17 @@ Classes
 
 
 
-   A class used to represent the Mean Square Error Loss function (MSELoss).
-
-   .. attribute:: None
-
-
-
-   .. method:: compute(prediction, target, weight):
-
-      Computes the MSELoss with the given weight for the predictiom amd target.
-
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
 
    .. py:method:: compute(prediction, target, weight)
 
-      Function to compute the MSELoss for the provided prediction and target, with respect to the weight.
+      Compute the loss for the given prediction and target. Optionally, if
+      given, a loss weight should be considered.
 
-      Parameters:
-      ----------
-      prediction : torch.Tensor
-          The prediction tensor for which loss needs to be calculated.
-      target : torch.Tensor
-          The target tensor with respect to which loss is calculated.
-      weight : torch.Tensor
-          The weight tensor used to weigh the prediction in the loss calculation.
-
-      Returns:
-      -------
-      :
-      torch.Tensor
-          The computed MSELoss tensor.
+      All arguments are ``torch`` tensors. The return type should be a
+      ``torch`` scalar that can be used with an optimizer, just as usual when
+      training with ``torch``.
 
 
 
@@ -128,17 +83,12 @@ Classes
    .. py:method:: compute(prediction: torch.Tensor, target: torch.Tensor, weight: Optional[torch.Tensor] = None) -> torch.Tensor
       :abstractmethod:
 
-      Virtual method to compute the loss for the given prediction and target.
+      Compute the loss for the given prediction and target. Optionally, if
+      given, a loss weight should be considered.
 
-      :param prediction: The prediction tensor made by the model.
-      :type prediction: torch.Tensor
-      :param target: The actual target tensor against which prediction is to be compared.
-      :type target: torch.Tensor
-      :param weight: The tensor that will be used to apply weightage to the loss. Defaults to None.
-      :type weight: torch.Tensor, optional
-
-      :returns: The tensor representing computed loss.
-      :rtype: torch.Tensor
+      All arguments are ``torch`` tensors. The return type should be a
+      ``torch`` scalar that can be used with an optimizer, just as usual when
+      training with ``torch``.
 
 
 
@@ -152,17 +102,12 @@ Classes
 
    .. py:method:: compute(prediction, target, weight)
 
-      Virtual method to compute the loss for the given prediction and target.
+      Compute the loss for the given prediction and target. Optionally, if
+      given, a loss weight should be considered.
 
-      :param prediction: The prediction tensor made by the model.
-      :type prediction: torch.Tensor
-      :param target: The actual target tensor against which prediction is to be compared.
-      :type target: torch.Tensor
-      :param weight: The tensor that will be used to apply weightage to the loss. Defaults to None.
-      :type weight: torch.Tensor, optional
-
-      :returns: The tensor representing computed loss.
-      :rtype: torch.Tensor
+      All arguments are ``torch`` tensors. The return type should be a
+      ``torch`` scalar that can be used with an optimizer, just as usual when
+      training with ``torch``.
 
 
 
@@ -176,17 +121,12 @@ Classes
 
    .. py:method:: compute(prediction, target, weight)
 
-      Virtual method to compute the loss for the given prediction and target.
+      Compute the loss for the given prediction and target. Optionally, if
+      given, a loss weight should be considered.
 
-      :param prediction: The prediction tensor made by the model.
-      :type prediction: torch.Tensor
-      :param target: The actual target tensor against which prediction is to be compared.
-      :type target: torch.Tensor
-      :param weight: The tensor that will be used to apply weightage to the loss. Defaults to None.
-      :type weight: torch.Tensor, optional
-
-      :returns: The tensor representing computed loss.
-      :rtype: torch.Tensor
+      All arguments are ``torch`` tensors. The return type should be a
+      ``torch`` scalar that can be used with an optimizer, just as usual when
+      training with ``torch``.
 
 
    .. py:method:: hot_loss(prediction, target, weight)

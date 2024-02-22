@@ -50,7 +50,6 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
@@ -120,7 +119,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.relabel_worker.read_cross_block_merges" title="dacapo.blockwise.relabel_worker.read_cross_block_merges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_cross_block_merges</span></code></a>(tmpdir)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.relabel_worker.spawn_worker" title="dacapo.blockwise.relabel_worker.spawn_worker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spawn_worker</span></code></a>(output_array_identifier, tmpdir[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.relabel_worker.spawn_worker" title="dacapo.blockwise.relabel_worker.spawn_worker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spawn_worker</span></code></a>(output_array_identifier, tmpdir, *args, ...)</p></td>
 <td><p>Spawn a worker to predict on a given dataset.</p></td>
 </tr>
 </tbody>
@@ -134,6 +133,9 @@
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.relabel_worker.read_write_conflict" title="dacapo.blockwise.relabel_worker.read_write_conflict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_write_conflict</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.relabel_worker.path" title="dacapo.blockwise.relabel_worker.path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -151,6 +153,11 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="dacapo.blockwise.relabel_worker.read_write_conflict">
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.relabel_worker.</span></span><span class="sig-name descname"><span class="pre">read_write_conflict</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#dacapo.blockwise.relabel_worker.read_write_conflict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="dacapo.blockwise.relabel_worker.path">
+<span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.relabel_worker.</span></span><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#dacapo.blockwise.relabel_worker.path" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -175,14 +182,13 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.relabel_worker.spawn_worker">
-<span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.relabel_worker.</span></span><span class="sig-name descname"><span class="pre">spawn_worker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmpdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../compute_context/index.html#dacapo.compute_context.ComputeContext" title="dacapo.compute_context.ComputeContext"><span class="pre">dacapo.compute_context.ComputeContext</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">LocalTorch()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.relabel_worker.spawn_worker" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.relabel_worker.</span></span><span class="sig-name descname"><span class="pre">spawn_worker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmpdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.relabel_worker.spawn_worker" title="Link to this definition"></a></dt>
 <dd><p>Spawn a worker to predict on a given dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>output_array_identifier</strong> (<a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The output array identifier</p></li>
 <li><p><strong>tmpdir</strong> (<em>str</em>) – The temporary directory</p></li>
-<li><p><strong>compute_context</strong> (<a class="reference internal" href="../../compute_context/compute_context/index.html#dacapo.compute_context.compute_context.ComputeContext" title="dacapo.compute_context.compute_context.ComputeContext"><em>ComputeContext</em></a><em>, </em><em>optional</em>) – The compute context. Defaults to LocalTorch().</p></li>
 </ul>
 </dd>
 </dl>

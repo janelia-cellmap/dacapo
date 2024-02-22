@@ -50,7 +50,6 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../../../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
@@ -101,12 +100,6 @@
              
   <section id="module-dacapo.experiments.trainers.gp_augments.gamma_config">
 <span id="dacapo-experiments-trainers-gp-augments-gamma-config"></span><h1><a class="reference internal" href="#module-dacapo.experiments.trainers.gp_augments.gamma_config" title="dacapo.experiments.trainers.gp_augments.gamma_config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.trainers.gp_augments.gamma_config</span></code></a><a class="headerlink" href="#module-dacapo.experiments.trainers.gp_augments.gamma_config" title="Link to this heading"></a></h1>
-<p>This module contains the GammaAugmentConfig class which inherits from AugmentConfig.
-It handles node creating and gamma range configuration for Data augmentation.</p>
-<dl class="simple">
-<dt>Classes:</dt><dd><p>GammaAugmentConfig</p>
-</dd>
-</dl>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <section id="classes">
@@ -114,55 +107,24 @@ It handles node creating and gamma range configuration for Data augmentation.</p
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.gp_augments.gamma_config.GammaAugmentConfig" title="dacapo.experiments.trainers.gp_augments.gamma_config.GammaAugmentConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GammaAugmentConfig</span></code></a></p></td>
-<td><p>This class manages the configuration of gamma augmentation for a given dataset.</p></td>
+<td><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite></p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.gamma_config.GammaAugmentConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.trainers.gp_augments.gamma_config.</span></span><span class="sig-name descname"><span class="pre">GammaAugmentConfig</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.gamma_config.GammaAugmentConfig" title="Link to this definition"></a></dt>
-<dd><p>This class manages the configuration of gamma augmentation for a given dataset.</p>
+<dd><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite>
+should have a corresponding config class derived from <cite>AugmentConfig</cite>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.gamma_config.GammaAugmentConfig.gamma_range">
-<span class="sig-name descname"><span class="pre">gamma_range</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.gamma_config.GammaAugmentConfig.gamma_range" title="Link to this definition"></a></dt>
-<dd><p>A tuple of float values represents the min and max range of gamma noise</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">to</span> <span class="pre">apply</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">raw</span> <span class="pre">data.</span></span></dt>
+<span class="sig-name descname"><span class="pre">gamma_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.gamma_config.GammaAugmentConfig.gamma_range" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.gamma_config.GammaAugmentConfig.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.gamma_config.GammaAugmentConfig.node" title="Link to this definition"></a></dt>
-<dd><p>Constructs a node in the augmentation pipeline.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">gamma_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_gt_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mask_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd><p>Constructs a node in the augmentation pipeline.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>raw_key</strong> (<em>gp.ArrayKey</em>) – Key to an Array (volume) in the pipeline</p></li>
-<li><p><strong>_gt_key</strong> (<em>gp.ArrayKey</em><em>, </em><em>optional</em>) – Ground Truth key, not used in this function. Defaults to None.</p></li>
-<li><p><strong>_mask_key</strong> (<em>gp.ArrayKey</em><em>, </em><em>optional</em>) – Mask Key, not used in this function. Defaults to None.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The augmentation method to be applied on the source data.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>GammaAugment instance</p>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_gt_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mask_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.gamma_config.GammaAugmentConfig.node" title="Link to this definition"></a></dt>
+<dd><p>return a gunpowder node that performs this augmentation</p>
 </dd></dl>
 
 </dd></dl>

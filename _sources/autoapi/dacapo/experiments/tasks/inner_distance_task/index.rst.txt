@@ -22,27 +22,6 @@ Classes
 
 
 
-   This class extends the Task class for creating tasks related to computing inner distances.
-   It provides methods for prediction, loss calculation and post-processing. It includes Binary Segmentation Evaluator for evaluation.
-
-   .. attribute:: task_config
-
-      The configuration for the task.
-
-   .. attribute:: predictor
-
-      Used for predicting the inner distances.
-
-   .. attribute:: loss
-
-      Used for calculating the mean square error loss.
-
-   .. attribute:: post_processor
-
-      Used for applying threshold post-processing.
-
-   .. attribute:: evaluator
-
-      Used for evaluating the results using binary segmentation.
+   This is just a dummy task for testing.
 
 

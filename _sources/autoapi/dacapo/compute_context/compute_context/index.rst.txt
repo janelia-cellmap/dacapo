@@ -16,6 +16,14 @@ Classes
 
 
 
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.compute_context.compute_context.create_compute_context
+
+
 
 .. py:class:: ComputeContext
 
@@ -34,5 +42,10 @@ Classes
 
    .. py:method:: execute(command)
 
+
+
+.. py:function:: create_compute_context()
+
+   Create a compute context based on the global DaCapo options.
 
 

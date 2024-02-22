@@ -49,21 +49,14 @@ Attributes
 
 
 
-   Abstract base evaluator class. It provides the fundamental structure and methods for
-   evaluators. A specific evaluator must inherent this class and implement its methods.
+   Base class of all evaluators.
 
-   .. attribute:: best_scores
-
-      Dictionary storing the best scores, indexed by OutputIdentifier which is a tuple
-      of Dataset, PostProcessorParameters, and criteria string.
-
-      :type: Dict[OutputIdentifier, BestScore]
+   An evaluator takes a post-processor's output and compares it against
+   ground-truth.
 
    .. py:property:: best_scores
       :type: Dict[OutputIdentifier, BestScore]
 
-      Provides the best scores so far. If not available, an empty dictionary is
-      created and returned.
 
    .. py:property:: criteria
       :type: List[str]
@@ -78,20 +71,16 @@ Attributes
       :type: dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
       :abstractmethod:
 
-      The abstract property to get the overall score of the evaluation.
 
-      :returns: The overall evaluation scores.
-      :rtype: EvaluationScores
-
-   .. py:method:: evaluate(output_array: dacapo.experiments.datasplits.datasets.arrays.Array, eval_array: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
+   .. py:method:: evaluate(output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, evaluation_array: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
       :abstractmethod:
 
       Compares and evaluates the output array against the evaluation array.
 
-      :param output_array: The output data array to evaluate
-      :type output_array: Array
-      :param eval_array: The evaluation data array to compare with the output
-      :type eval_array: Array
+      :param output_array_identifier: The output data array to evaluate
+      :type output_array_identifier: Array
+      :param evaluation_array: The evaluation data array to compare with the output
+      :type evaluation_array: Array
 
       :returns: The detailed evaluation scores after the comparison.
       :rtype: EvaluationScores
@@ -99,62 +88,27 @@ Attributes
 
    .. py:method:: is_best(dataset: dacapo.experiments.datasplits.datasets.Dataset, parameter: dacapo.experiments.tasks.post_processors.PostProcessorParameters, criterion: str, score: dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores) -> bool
 
-      Determine if the provided score is the best for a specific
-      dataset/parameter/criterion combination.
-
-      :param dataset: The dataset for which the evaluation is done
-      :type dataset: Dataset
-      :param parameter: The post processing parameters used for the given dataset
-      :type parameter: PostProcessorParameters
-      :param criterion: The evaluation criterion
-      :type criterion: str
-      :param score: The calculated evaluation scores
-      :type score: EvaluationScores
-
-      :returns: True if the score is the best, False otherwise.
-      :rtype: bool
+      Check if the provided score is the best for this dataset/parameter/criterion combo
 
 
    .. py:method:: set_best(validation_scores: dacapo.experiments.validation_scores.ValidationScores) -> None
 
-      Identify the best iteration for each dataset/post_processing_parameter/criterion
-      and set them as the current best scores.
-
-      :param validation_scores: The validation scores from which the best are to be picked.
-      :type validation_scores: ValidationScores
+      Find the best iteration for each dataset/post_processing_parameter/criterion
 
 
    .. py:method:: higher_is_better(criterion: str) -> bool
 
-      Determines whether a higher score is better for the given criterion.
-
-      :param criterion: The evaluation criterion
-      :type criterion: str
-
-      :returns: True if higher score is better, False otherwise.
-      :rtype: bool
+      Wether or not higher is better for this criterion.
 
 
    .. py:method:: bounds(criterion: str) -> Tuple[float, float]
 
-      Provides the bounds for the given evaluation criterion.
-
-      :param criterion: The evaluation criterion
-      :type criterion: str
-
-      :returns: The lower and upper bounds for the criterion.
-      :rtype: Tuple[float, float]
+      The bounds for this criterion
 
 
    .. py:method:: store_best(criterion: str) -> bool
 
-      Determine if the best scores should be stored for the given criterion.
-
-      :param criterion: The evaluation criterion
-      :type criterion: str
-
-      :returns: True if best scores should be stored, False otherwise.
-      :rtype: bool
+      The bounds for this criterion
 
 
 

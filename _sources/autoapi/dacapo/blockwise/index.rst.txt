@@ -33,7 +33,7 @@ Classes
 
 
 
-.. py:class:: DaCapoBlockwiseTask(worker_file: str | pathlib.Path, compute_context: dacapo.compute_context.ComputeContext | str, total_roi: daisy.Roi, read_roi: daisy.Roi, write_roi: daisy.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, *args, **kwargs)
+.. py:class:: DaCapoBlockwiseTask(worker_file: str | pathlib.Path, total_roi: daisy.Roi, read_roi: daisy.Roi, write_roi: daisy.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, *args, **kwargs)
 
 
 

@@ -22,29 +22,8 @@ Classes
 
 
 
-   A class for creating a dummy task configuration object.
-
-   This class extends the TaskConfig class and initializes dummy task configuration
-   with default attributes. It is mainly used for testing aspects
-   of the application without the need of creating real task configurations.
-
-   .. attribute:: task_type
-
-      The type of task. Here, set to DummyTask.
-
-      :type: cls
-
-   .. attribute:: embedding_dims
-
-      A dummy attribute represented as an integer.
-
-      :type: int
-
-   .. attribute:: detection_threshold
-
-      Another dummy attribute represented as a float.
-
-      :type: float
+   This is just a dummy task config used for testing. None of the
+   attributes have any particular meaning.
 
    .. py:attribute:: task_type
 
@@ -62,13 +41,7 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      A method to verify the dummy task configuration.
-
-      Whenever called, this method always returns False and a statement showing
-      that the DummyTaskConfig object is never valid.
-
-      :returns: A tuple containing a boolean status and a string message.
-      :rtype: tuple
+      Check whether this is a valid Task
 
 
 

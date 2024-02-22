@@ -22,31 +22,8 @@ Classes
 
 
 
-   A dummy architecture configuration class used for testing purposes.
-
-   It extends the base class "ArchitectureConfig". This class contains dummy attributes and always
-   returns that the configuration is invalid when verified.
-
-   .. attribute:: architecture_type
-
-      A class attribute assigning
-      the DummyArchitecture class to this configuration.
-
-      :type: :obj:`DummyArchitecture`
-
-   .. attribute:: num_in_channels
-
-      The number of input channels. This is a dummy attribute and has no real
-      functionality or meaning.
-
-      :type: int
-
-   .. attribute:: num_out_channels
-
-      The number of output channels. This is also a dummy attribute and
-      has no real functionality or meaning.
-
-      :type: int
+   This is just a dummy architecture config used for testing. None of the
+   attributes have any particular meaning.
 
    .. py:attribute:: architecture_type
 
@@ -64,13 +41,7 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      Verifies the configuration validity.
-
-      Since this is a dummy configuration for testing purposes, this method always returns False
-      indicating that the configuration is invalid.
-
-      :returns: A tuple containing a boolean validity flag and a reason message string.
-      :rtype: tuple
+      Check whether this is a valid architecture
 
 
 

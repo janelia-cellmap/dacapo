@@ -50,7 +50,6 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../index.html#dacapo-module">This module contains several useful methods for performing common tasks in dacapo library.</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
@@ -135,17 +134,17 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.run.Run.architecture">
-<span class="sig-name descname"><span class="pre">architecture</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../architectures/architecture/index.html#dacapo.experiments.architectures.architecture.Architecture" title="dacapo.experiments.architectures.architecture.Architecture"><span class="pre">dacapo.experiments.architectures.architecture.Architecture</span></a></em><a class="headerlink" href="#dacapo.experiments.run.Run.architecture" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">architecture</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../architectures/index.html#dacapo.experiments.architectures.Architecture" title="dacapo.experiments.architectures.Architecture"><span class="pre">dacapo.experiments.architectures.Architecture</span></a></em><a class="headerlink" href="#dacapo.experiments.run.Run.architecture" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.run.Run.trainer">
-<span class="sig-name descname"><span class="pre">trainer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../trainers/trainer/index.html#dacapo.experiments.trainers.trainer.Trainer" title="dacapo.experiments.trainers.trainer.Trainer"><span class="pre">dacapo.experiments.trainers.trainer.Trainer</span></a></em><a class="headerlink" href="#dacapo.experiments.run.Run.trainer" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">trainer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../trainers/index.html#dacapo.experiments.trainers.Trainer" title="dacapo.experiments.trainers.Trainer"><span class="pre">dacapo.experiments.trainers.Trainer</span></a></em><a class="headerlink" href="#dacapo.experiments.run.Run.trainer" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.run.Run.datasplit">
-<span class="sig-name descname"><span class="pre">datasplit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../datasplits/datasplit/index.html#dacapo.experiments.datasplits.datasplit.DataSplit" title="dacapo.experiments.datasplits.datasplit.DataSplit"><span class="pre">dacapo.experiments.datasplits.datasplit.DataSplit</span></a></em><a class="headerlink" href="#dacapo.experiments.run.Run.datasplit" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">datasplit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../datasplits/index.html#dacapo.experiments.datasplits.DataSplit" title="dacapo.experiments.datasplits.DataSplit"><span class="pre">dacapo.experiments.datasplits.DataSplit</span></a></em><a class="headerlink" href="#dacapo.experiments.run.Run.datasplit" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -176,7 +175,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.run.Run.move_optimizer">
-<span class="sig-name descname"><span class="pre">move_optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_cuda_cache</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.experiments.run.Run.move_optimizer" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">move_optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_cuda_cache</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dacapo.experiments.run.Run.move_optimizer" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

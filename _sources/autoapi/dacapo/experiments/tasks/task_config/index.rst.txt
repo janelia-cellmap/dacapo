@@ -20,15 +20,8 @@ Classes
 .. py:class:: TaskConfig
 
 
-   Base class for task configurations.
-
-   Each subclass of a `Task` should have a corresponding config class derived from `TaskConfig`.
-
-   .. attribute:: name
-
-      A unique name for this task.
-
-      :type: str
+   Base class for task configurations. Each subclass of a `Task` should
+   have a corresponding config class derived from `TaskConfig`.
 
    .. py:attribute:: name
       :type: str
@@ -37,11 +30,7 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      Check whether this is a valid Task.
-
-      :returns: A tuple where the first element is a boolean indicating
-                if the task is valid and the second element is a string message.
-      :rtype: Tuple[bool, str]
+      Check whether this is a valid Task
 
 
 

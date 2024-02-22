@@ -3,12 +3,6 @@
 
 .. py:module:: dacapo.experiments.datasplits.datasets.graphstores
 
-.. autoapi-nested-parse::
-
-   This script contains the import statement for the `GraphStoreConfig` class from the module `graph_source_config` within
-   the current package.
-
-
 
 Submodules
 ----------

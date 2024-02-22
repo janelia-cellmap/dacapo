@@ -22,43 +22,40 @@ Classes
 
 
 
-   A provider for serving graph data in gunpowder pipelines.
+   Superclass for all nodes in a `gunpowder` graph.
 
-   The Graph Source loads a single graph to serve to the pipeline based on
-   ROI requests it receives.
+   A :class:`BatchProvider` provides :class:`Batches<Batch>` containing
+   :class:`Arrays<Array>` and/or :class:`Graph`. The available data is
+   specified in a :class:`ProviderSpec` instance, accessible via :attr:`spec`.
 
-   .. attribute:: key
+   To create a new node, subclass this class and implement (at least)
+   :func:`setup` and :func:`provide`.
 
-      The key of the graph to be served.
-
-      :type: gp.GraphKey
-
-   .. attribute:: graph
-
-      The graph to be served.
-
-      :type: gp.Graph
+   A :class:`BatchProvider` can be linked to any number of other
+   :class:`BatchProviders<BatchProvider>` upstream. If your node accepts
+   exactly one upstream provider, consider subclassing :class:`BatchFilter`
+   instead.
 
    .. py:method:: setup()
 
-      Set up the provider. This function sets the provider to provide the
-      graph with the given key.
+      To be implemented in subclasses.
+
+      Called during initialization of the DAG. Callees can assume that all
+      upstream providers are set up already.
+
+      In setup, call :func:`provides` to announce the arrays and points
+      provided by this node.
 
 
    .. py:method:: provide(request)
 
-      Provides the graph for the requested ROI.
+      To be implemented in subclasses.
 
-      This method will be passively called by gunpowder to get a batch.
-      Depending on the request we provide a subgraph of our data, or nothing
-      at all.
+      This function takes a :class:`BatchRequest` and should return the
+      corresponding :class:`Batch`.
 
-      :param request: BatchRequest with the same ROI for
-      :type request: gp.BatchRequest
-      :param each requested array and graph.:
-
-      :returns: The graph contained in a Batch.
-      :rtype: outputs (gp.Batch)
+      :param request: The request to process.
+      :type request: :class:`BatchRequest`
 
 
 

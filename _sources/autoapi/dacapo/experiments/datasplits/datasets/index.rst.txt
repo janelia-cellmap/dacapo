@@ -3,26 +3,6 @@
 
 .. py:module:: dacapo.experiments.datasplits.datasets
 
-.. autoapi-nested-parse::
-
-   dacapo package
-
-   This package provides the core functionalities for managing different datasets. It includes definitions for Dataset,
-   DatasetConfig, DummyDataset, DummyDatasetConfig, RawGTDataset, RawGTDatasetConfig. These classes allow convenient and
-   manageable handling of large datasets.
-
-   Modules
-   -------
-   .dataset : Base 'Dataset' definition. It is the building block for other classes.
-   .dataset_config : A configuration script for datasets.
-   .dummy_dataset : A dummy dataset for testing purposes.
-   .dummy_dataset_config : Configuration settings for the dummy dataset.
-   .raw_gt_dataset : A dataset class for handling raw ground-truth datasets.
-   .raw_gt_dataset_config : Configuration for the raw ground-truth dataset class.
-
-   Each module has its own functionality provided to assist with the handling of large datasets.
-
-
 
 Subpackages
 -----------
@@ -71,43 +51,8 @@ Classes
 
 
 
-   A class to represent a dataset.
-
-   .. attribute:: name
-
-      The name of the dataset.
-
-      :type: str
-
-   .. attribute:: raw
-
-      The raw dataset.
-
-      :type: Array
-
-   .. attribute:: gt
-
-      The ground truth data.
-
-      :type: Array, optional
-
-   .. attribute:: mask
-
-      The mask for the data.
-
-      :type: Array, optional
-
-   .. attribute:: weight
-
-      The weight of the dataset.
-
-      :type: int, optional
-
-   .. attribute:: sample_points
-
-      The list of sample points in the dataset.
-
-      :type: list[Coordinate], optional
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
 
    .. py:attribute:: name
       :type: str
@@ -143,29 +88,8 @@ Classes
 .. py:class:: DatasetConfig
 
 
-   A class used to define configuration for datasets. This provides the
-   framework to create a Dataset instance.
-
-   .. attribute:: name
-
-      str (eg: "sample_dataset").
-      A unique identifier to name the dataset.
-      It aids in easy identification and reusability of this dataset.
-      Advised to keep it short and refrain from using special characters.
-
-   .. attribute:: weight
-
-      int (default=1).
-      A numeric value that indicates how frequently this dataset should be
-      sampled in comparison to others. Higher the weight, more frequently it
-      gets sampled.
-
-   .. method:: verify
-
-      
-      Checks and validates the dataset configuration. The specific rules for
-      validation need to be defined by the user.
-      
+   Configuration class for datasets, to be used to create a ``Dataset``
+   instance.
 
    .. py:attribute:: name
       :type: str
@@ -179,15 +103,7 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      Method to verify the dataset configuration.
-
-      Since there is no specific validation logic defined for this DataSet, this
-      method will always return True as default reaction and a message stating
-      the lack of validation.
-
-      :returns: A tuple of boolean value indicating the check (True or False) and
-                message specifying result of validation.
-      :rtype: tuple
+      Check whether this is a valid DataSet
 
 
 
@@ -196,10 +112,8 @@ Classes
 
 
 
-   DummyDataset is a child class of the Dataset. This class has property 'raw' of Array type and a name.
-
-   :param dataset_config: an instance of a configuration class.
-   :type dataset_config: object
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
 
    .. py:attribute:: raw
       :type: dacapo.experiments.datasplits.datasets.arrays.Array
@@ -212,20 +126,8 @@ Classes
 
 
 
-   A dummy configuration class for test datasets.
-
-   .. attribute:: dataset_type
-
-      Clearly mentions the type of dataset
-
-   .. attribute:: raw_config
-
-      This attribute holds the configurations related to dataset arrays.
-
-   .. method:: verify
-
-      A dummy verification method for testing purposes, always returns False and a message.
-      
+   This is just a dummy DataSplit config used for testing. None of the
+   attributes have any particular meaning.
 
    .. py:attribute:: dataset_type
 
@@ -238,9 +140,7 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      A dummy method that always indicates the dataset config is not valid.
-
-      :returns: A tuple of False and a message indicating the invalidity.
+      Check whether this is a valid DataSet
 
 
 
@@ -249,43 +149,8 @@ Classes
 
 
 
-   A class to represent a dataset.
-
-   .. attribute:: name
-
-      The name of the dataset.
-
-      :type: str
-
-   .. attribute:: raw
-
-      The raw dataset.
-
-      :type: Array
-
-   .. attribute:: gt
-
-      The ground truth data.
-
-      :type: Array, optional
-
-   .. attribute:: mask
-
-      The mask for the data.
-
-      :type: Array, optional
-
-   .. attribute:: weight
-
-      The weight of the dataset.
-
-      :type: int, optional
-
-   .. attribute:: sample_points
-
-      The list of sample points in the dataset.
-
-      :type: list[Coordinate], optional
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
 
    .. py:attribute:: raw
       :type: dacapo.experiments.datasplits.datasets.arrays.Array
@@ -313,44 +178,7 @@ Classes
 
 
 
-   This is a configuration class for the standard dataset with both raw and GT Array.
-
-   The configuration includes array configurations for raw data, ground truth data and mask data.
-   The configuration for ground truth (GT) data is mandatory, whereas configurations for raw
-   and mask data are optional. It also includes an optional list of points around which training samples
-   will be extracted.
-
-   .. attribute:: dataset_type
-
-      The type of dataset that is being configured.
-
-      :type: class
-
-   .. attribute:: raw_config
-
-      Configuration for the raw data associated with this dataset.
-
-      :type: Optional[ArrayConfig]
-
-   .. attribute:: gt_config
-
-      Configuration for the ground truth data associated with this dataset.
-
-      :type: Optional[ArrayConfig]
-
-   .. attribute:: mask_config
-
-      An optional mask configuration that sets the loss
-      equal to zero on voxels where the mask is 1.
-
-      :type: Optional[ArrayConfig]
-
-   .. attribute:: sample_points
-
-      An optional list of points around which
-      training samples will be extracted.
-
-      :type: Optional[List[Coordinate]]
+   This is the standard dataset with a Raw and a GT Array.
 
    .. py:attribute:: dataset_type
 
