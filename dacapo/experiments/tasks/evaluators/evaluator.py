@@ -19,25 +19,48 @@ Iteration = int
 Score = float
 BestScore = Optional[Tuple[Iteration, Score]]
 
-
 class Evaluator(ABC):
-    """Base class of all evaluators.
+    """
+    Abstract base evaluator class. It provides the fundamental structure and methods for
+    evaluators. A specific evaluator must inherent this class and implement its methods.
 
-    An evaluator takes a post-processor's output and compares it against
-    ground-truth.
+    Attributes
+    ----------
+    best_scores: Dict[OutputIdentifier, BestScore]
+        Dictionary storing the best scores, indexed by OutputIdentifier which is a tuple
+        of Dataset, PostProcessorParameters, and criteria string.
+    
     """
 
     @abstractmethod
     def evaluate(
         self, output_array_identifier: "LocalArrayIdentifier", evaluation_array: "Array"
     ) -> "EvaluationScores":
-        """Compare an `output_array_identifier` against ground-truth `evaluation_array`"""
+        """
+        Compares and evaluates the output array against the evaluation array.
+
+        Parameters
+        ----------
+        output_array_identifier : Array
+            The output data array to evaluate
+        evaluation_array : Array
+            The evaluation data array to compare with the output
+
+        Returns
+        -------
+        EvaluationScores
+            The detailed evaluation scores after the comparison. 
+        """
         pass
 
     @property
     def best_scores(
         self,
     ) -> Dict[OutputIdentifier, BestScore]:
+        """
+        Provides the best scores so far. If not available, an empty dictionary is
+        created and returned.
+        """
         if not hasattr(self, "_best_scores"):
             self._best_scores: Dict[OutputIdentifier, BestScore] = {}
         return self._best_scores
@@ -50,7 +73,24 @@ class Evaluator(ABC):
         score: "EvaluationScores",
     ) -> bool:
         """
-        Check if the provided score is the best for this dataset/parameter/criterion combo
+        Determine if the provided score is the best for a specific 
+        dataset/parameter/criterion combination.
+
+        Parameters
+        ----------
+        dataset : Dataset
+            The dataset for which the evaluation is done
+        parameter : PostProcessorParameters
+            The post processing parameters used for the given dataset
+        criterion : str
+            The evaluation criterion
+        score : EvaluationScores
+            The calculated evaluation scores
+
+        Returns
+        -------
+        bool
+            True if the score is the best, False otherwise.
         """
         if not self.store_best(criterion) or math.isnan(getattr(score, criterion)):
             return False
@@ -66,7 +106,13 @@ class Evaluator(ABC):
 
     def set_best(self, validation_scores: "ValidationScores") -> None:
         """
-        Find the best iteration for each dataset/post_processing_parameter/criterion
+        Identify the best iteration for each dataset/post_processing_parameter/criterion
+        and set them as the current best scores.
+
+        Parameters
+        ----------
+        validation_scores : ValidationScores
+            The validation scores from which the best are to be picked.
         """
         scores = validation_scores.to_xarray()
 
@@ -128,23 +174,61 @@ class Evaluator(ABC):
 
     def higher_is_better(self, criterion: str) -> bool:
         """
-        Wether or not higher is better for this criterion.
+        Determines whether a higher score is better for the given criterion.
+
+        Parameters
+        ----------
+        criterion : str
+            The evaluation criterion
+
+        Returns
+        -------
+        bool
+            True if higher score is better, False otherwise.
         """
         return self.score.higher_is_better(criterion)
 
     def bounds(self, criterion: str) -> Tuple[float, float]:
         """
-        The bounds for this criterion
+        Provides the bounds for the given evaluation criterion.
+
+        Parameters
+        ----------
+        criterion : str
+            The evaluation criterion
+
+        Returns
+        -------
+        Tuple[float, float]
+            The lower and upper bounds for the criterion.
         """
         return self.score.bounds(criterion)
 
     def store_best(self, criterion: str) -> bool:
         """
-        The bounds for this criterion
+        Determine if the best scores should be stored for the given criterion.
+
+        Parameters
+        ----------
+        criterion : str
+            The evaluation criterion
+
+        Returns
+        -------
+        bool
+            True if best scores should be stored, False otherwise.
         """
         return self.score.store_best(criterion)
 
     @property
     @abstractmethod
     def score(self) -> "EvaluationScores":
+        """
+        The abstract property to get the overall score of the evaluation.
+
+        Returns
+        -------
+        EvaluationScores
+            The overall evaluation scores.
+        """
         pass
