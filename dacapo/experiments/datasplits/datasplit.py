@@ -1,4 +1,4 @@
-from dacapo.experiments.datasplits.datasets import Dataset
+from .datasets import Dataset
 
 import neuroglancer
 

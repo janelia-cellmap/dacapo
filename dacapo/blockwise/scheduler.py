@@ -82,7 +82,7 @@ def run_blockwise(
 
 
 def segment_blockwise(
-    segment_function_file: str or Path,
+    segment_function_file: str | Path,
     context: Coordinate,
     total_roi: Roi,
     read_roi: Roi,

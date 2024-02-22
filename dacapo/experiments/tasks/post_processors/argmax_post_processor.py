@@ -41,7 +41,7 @@ class ArgmaxPostProcessor(PostProcessor):
         )
 
         read_roi = Roi((0, 0, 0), self.prediction_array.voxel_size * block_size)
-        # run blockwise prediction
+        # run blockwise post-processing
         run_blockwise(
             worker_file=str(
                 Path(Path(dacapo.blockwise.__file__).parent, "argmax_worker.py")
@@ -58,4 +58,5 @@ class ArgmaxPostProcessor(PostProcessor):
             ),
             output_array_identifier=output_array_identifier,
         )
+
         return output_array

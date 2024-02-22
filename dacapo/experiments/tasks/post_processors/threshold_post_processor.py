@@ -55,7 +55,7 @@ class ThresholdPostProcessor(PostProcessor):
         )
 
         read_roi = Roi((0, 0, 0), self.prediction_array.voxel_size * block_size)
-        # run blockwise prediction
+        # run blockwise post-processing
         run_blockwise(
             worker_file=str(
                 Path(Path(dacapo.blockwise.__file__).parent, "threshold_worker.py")

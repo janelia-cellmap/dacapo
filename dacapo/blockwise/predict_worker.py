@@ -1,8 +1,8 @@
 from pathlib import Path
 
 import torch
-from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
-from dacapo.gp.dacapo_array_source import DaCapoArraySource
+from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+from dacapo.gp import DaCapoArraySource
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.experiments import Run
