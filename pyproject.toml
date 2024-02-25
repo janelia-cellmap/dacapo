@@ -84,7 +84,10 @@ examples = [
     "ipykernel",
     "jupyter",
 ]
-all = ["dacapo-ml[test,dev,docs,examples]"]
+pretrained = [
+    "empanada-napari",
+    ]
+all = ["dacapo-ml[test,dev,docs,examples,pretrained]"]
 
 [project.urls]
 homepage = "https://github.io/janelia-cellmap/dacapo"
@@ -151,8 +154,7 @@ disallow_subclassing_any = false
 show_error_codes = true
 pretty = true
 exclude = [
-    "dacapo/apply.py",
-    "dacapo/cli.py"
+    "scratch/*",
 ]
 
 
@@ -183,9 +185,11 @@ module = [
     "neuclease.dvid.*",
     "mwatershed.*",
     "numpy_indexed.*",
+    "empanada_napari.*",
+    "napari.*",
+    "empanada.*",
 ]
 ignore_missing_imports = true
-
 
 # https://coverage.readthedocs.io/en/6.4/config.html
 [tool.coverage.report]

@@ -22,7 +22,7 @@ def predict(
     iteration: int,
     input_container: Path | str,
     input_dataset: str,
-    output_path: LocalArrayIdentifier | str,
+    output_path: LocalArrayIdentifier | Path | str,
     output_roi: Optional[Roi | str] = None,
     num_workers: int = 12,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
@@ -101,7 +101,7 @@ def predict(
         output_roi = output_roi.snap_to_grid(
             raw_array.voxel_size, mode="grow"
         ).intersect(raw_array.roi.grow(-context, -context))
-    _input_roi = output_roi.grow(context, context)
+    _input_roi = output_roi.grow(context, context)  # type: ignore
 
     if isinstance(output_dtype, str):
         output_dtype = np.dtype(output_dtype)

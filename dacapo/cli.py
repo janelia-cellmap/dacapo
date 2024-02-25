@@ -88,7 +88,7 @@ def apply(
     parameters: Optional[PostProcessorParameters | str] = None,
     roi: Optional[Roi | str] = None,
     num_workers: int = 30,
-    output_dtype: Optional[np.dtype | str] = "uint8",
+    output_dtype: np.dtype | str = "uint8",
     overwrite: bool = True,
 ):
     dacapo.apply(
