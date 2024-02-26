@@ -34,7 +34,7 @@ def apply(
     parameters: Optional[PostProcessorParameters | str] = None,
     roi: Optional[Roi | str] = None,
     num_workers: int = 12,
-    output_dtype: Optional[np.dtype | str] = np.uint8,  # type: ignore
+    output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
     file_format: str = "zarr",
 ):
@@ -92,7 +92,7 @@ def apply(
         logger.info(
             "Finding best parameters for validation dataset %s", _validation_dataset
         )
-        parameters = run.task.evaluator.get_overall_best_parameters(  # TODO
+        parameters = run.task.evaluator.get_overall_best_parameters(
             _validation_dataset, criterion
         )
         assert (
@@ -102,10 +102,10 @@ def apply(
     elif isinstance(parameters, str):
         try:
             post_processor_name = parameters.split("(")[0]
-            post_processor_kwargs = parameters.split("(")[1].strip(")").split(",")
+            _post_processor_kwargs = parameters.split("(")[1].strip(")").split(",")
             post_processor_kwargs = {
                 key.strip(): value.strip()
-                for key, value in [arg.split("=") for arg in post_processor_kwargs]
+                for key, value in [arg.split("=") for arg in _post_processor_kwargs]
             }
             for key, value in post_processor_kwargs.items():
                 if value.isdigit():
@@ -132,12 +132,12 @@ def apply(
     ), "Parameters must be parsable to a PostProcessorParameters object."
 
     # make array identifiers for input, predictions and outputs
-    input_array_identifier = LocalArrayIdentifier(input_container, input_dataset)
+    input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
     input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
     if roi is None:
-        roi = input_array.roi
+        _roi = input_array.roi
     else:
-        roi = roi.snap_to_grid(input_array.voxel_size, mode="grow").intersect(
+        _roi = roi.snap_to_grid(input_array.voxel_size, mode="grow").intersect(
             input_array.roi
         )
     output_container = Path(
@@ -164,7 +164,7 @@ def apply(
         input_array_identifier,
         prediction_array_identifier,
         output_array_identifier,
-        roi,
+        _roi,
         num_workers,
         output_dtype,
         overwrite,

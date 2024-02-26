@@ -1,3 +1,4 @@
+import os
 from dacapo import Options
 
 
@@ -10,6 +11,11 @@ def test_no_config():
     config_file = Path("dacapo.yaml")
     if config_file.exists():
         config_file.unlink()
+
+    # Remove the environment variable
+    env_dict = dict(os.environ)
+    if "OPTIONS_FILE" in env_dict:
+        del env_dict["OPTIONS_FILE"]
 
     # Parse the options
     options = Options.instance()
