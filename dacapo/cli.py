@@ -212,7 +212,7 @@ def predict(
 @click.option("-nw", "--num_workers", type=int, default=16)
 @click.option("-mr", "--max_retries", type=int, default=2)
 @click.option("-t", "--timeout", type=int, default=None)
-@click.option("-ow", "--overwrite", is_flag=True)
+@click.option("-ow", "--overwrite", is_flag=True, default=True)
 @click.option("-co", "-channels_out", type=int, default=None)
 @click.option("-dt", "--output_dtype", type=str, default="uint8")
 @click.pass_context
@@ -327,7 +327,7 @@ def run_blockwise(
 @click.option("-mr", "--max_retries", type=int, default=2)
 @click.option("-t", "--timeout", type=int, default=None)
 @click.option("-tp", "--tmp_prefix", type=str, default="tmp")
-@click.option("-ow", "--overwrite", is_flag=True)
+@click.option("-ow", "--overwrite", is_flag=True, default=True)
 @click.option("-co", "--channels_out", type=int, default=None)
 @click.pass_context
 def segment_blockwise(
