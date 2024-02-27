@@ -28,7 +28,7 @@ class DaCapoConfig:
         },
     )
     compute_context_config: dict = attr.ib(
-        default={"type": "LocalTorch", "config": {"device": None}},
+        default={"type": "LocalTorch", "config": {}},
         metadata={
             "help_text": "The configuration for the compute context to use. "
             "This is a dictionary with the keys being the names of the compute context and the values being the configuration for that context."
@@ -60,7 +60,6 @@ class Options:
     def instance(cls, **kwargs) -> DaCapoConfig:
         config = cls.__parse_options(**kwargs)
         return config
-
 
     @classmethod
     def config_file(cls) -> Optional[Path]:

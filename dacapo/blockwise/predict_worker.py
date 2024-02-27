@@ -179,15 +179,16 @@ def start_worker(
 def spawn_worker(
     run_name: str,
     iteration: int,
-    raw_array_identifier: "LocalArrayIdentifier",
-    prediction_array_identifier: "LocalArrayIdentifier",
+    input_array_identifier: "LocalArrayIdentifier",
+    output_array_identifier: "LocalArrayIdentifier",
 ):
     """Spawn a worker to predict on a given dataset.
 
     Args:
-        model (Model): The model to use for prediction.
-        raw_array (Array): The raw data to predict on.
-        prediction_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
+        run_name (str): The name of the run to apply.
+        iteration (int): The training iteration of the model to use for prediction.
+        input_array_identifier (LocalArrayIdentifier): The raw data to predict on.
+        output_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
     """
     compute_context = create_compute_context()
 
@@ -201,13 +202,13 @@ def spawn_worker(
         "--iteration",
         iteration,
         "--input_container",
-        raw_array_identifier.container,
+        input_array_identifier.container,
         "--input_dataset",
-        raw_array_identifier.dataset,
+        input_array_identifier.dataset,
         "--output_container",
-        prediction_array_identifier.container,
+        output_array_identifier.container,
         "--output_dataset",
-        prediction_array_identifier.dataset,
+        output_array_identifier.dataset,
         "--device",
         str(compute_context.device),
     ]
