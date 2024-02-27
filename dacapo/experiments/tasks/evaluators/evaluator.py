@@ -44,7 +44,7 @@ class Evaluator(ABC):
         Returns
         -------
         EvaluationScores
-            The detailed evaluation scores after the comparison. 
+            The detailed evaluation scores after the comparison.
         """
         pass
 
