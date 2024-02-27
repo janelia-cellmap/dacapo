@@ -28,13 +28,13 @@ default_parameters = {
     "downsampling": 1,
     "confidence_thr": 0.5,
     "center_confidence_thr": 0.1,
-    "min_distance_object_centers": 3,
+    "min_distance_object_centers": 21,
     "fine_boundaries": True,
     "semantic_only": False,
-    "median_slices": 3,
-    "min_size": 500,
-    "min_extent": 500,
-    "maximum_objects_per_class": 100000,
+    "median_slices": 11,
+    "min_size": 10000,
+    "min_extent": 50,
+    "maximum_objects_per_class": 1000000,
     "inference_plane": "xy",
     "orthoplane": True,
     "return_panoptic": False,
@@ -48,7 +48,7 @@ def segment_function(input_array, block, **parameters):
     for vol, class_name, _ in empanada_segmenter(
         input_array[block.read_roi], **parameters
     ):
-        vols.append(vol)
+        vols.append(vol[None, ...].astype(np.uint64))
         class_names.append(class_name)
     return np.concatenate(vols, axis=0, dtype=np.uint64)
 
@@ -89,13 +89,13 @@ def empanada_segmenter(
     downsampling=1,
     confidence_thr=0.5,
     center_confidence_thr=0.1,
-    min_distance_object_centers=3,
+    min_distance_object_centers=21,
     fine_boundaries=True,
     semantic_only=False,
-    median_slices=3,
-    min_size=500,
-    min_extent=500,
-    maximum_objects_per_class=100000,
+    median_slices=11,
+    min_size=10000,
+    min_extent=50,
+    maximum_objects_per_class=1000000,
     inference_plane="xy",
     orthoplane=True,
     return_panoptic=False,
@@ -103,29 +103,10 @@ def empanada_segmenter(
     allow_one_view=False,
 ):
     # load the model config
-    model_config_name = model_config
     model_config = read_yaml(model_configs[model_config])
     min_size = int(min_size)
     min_extent = int(min_extent)
     maximum_objects_per_class = int(maximum_objects_per_class)
-
-    chunk_size = chunk_size.split(",")
-    if len(chunk_size) == 1:
-        chunk_size = tuple(int(chunk_size[0]) for _ in range(3))
-    else:
-        assert (
-            len(chunk_size) == 3
-        ), f"Chunk size must be 1 or 3 integers, got {chunk_size}"
-        chunk_size = tuple(int(s) for s in chunk_size)
-
-    # create the storage url from layer name and model config
-    output_path = str(output_path)
-    if output_path == "no zarr storage":
-        store_url = None
-        print(f"Running without zarr storage directory, this may use a lot of memory!")
-    else:
-        store_url = os.path.join(output_path, f"{model_config_name}.zarr")
-        print(f"Using zarr storage at {store_url}")
 
     if multigpu:
         engine = MultiGPUEngine3d(

@@ -86,7 +86,7 @@ def start_worker(
 
             assert (
                 segmentation.dtype == np.uint64
-            ), "Instance segmentations is expected to be uint64"
+            ), "Instance segmentations returned by segment_function is expected to be uint64"
 
             id_bump = block.block_id[1] * num_voxels_in_block
             segmentation += id_bump
@@ -98,7 +98,7 @@ def start_worker(
             )
 
             # store segmentation in out array
-            output_array._daisy_array[block.write_roi] = segmentation[block.write_roi]
+            output_array[block.write_roi] = segmentation[block.write_roi]
 
             neighbor_roi = block.write_roi.grow(
                 input_array.voxel_size, input_array.voxel_size

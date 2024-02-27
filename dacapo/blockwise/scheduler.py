@@ -97,9 +97,9 @@ def segment_blockwise(
 ):
     with tempfile.TemporaryDirectory(prefix=tmp_prefix) as tmpdir:
         # write parameters to tmpdir
-        if "parameters" in locals():
+        if "parameters" in kwargs:
             with open(Path(tmpdir, "parameters.yaml"), "w") as f:
-                yaml.dump(locals()["parameters"], f)
+                yaml.dump(kwargs.pop("parameters"), f)
 
         # Make the task
         task = DaCapoBlockwiseTask(
@@ -112,7 +112,7 @@ def segment_blockwise(
             timeout,
             upstream_tasks,
             tmpdir=tmpdir,
-            function_path=segment_function_file,
+            function_path=str(segment_function_file),
             *args,
             **kwargs,
         )
