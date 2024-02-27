@@ -6,7 +6,7 @@ from typing import Optional
 
 
 @attr.s
-class Bsub(ComputeContext):  # TODO: Load defaults from dacapo.yaml
+class Bsub(ComputeContext):
     queue: str = attr.ib(default="local", metadata={"help_text": "The queue to run on"})
     num_gpus: int = attr.ib(
         default=1,
