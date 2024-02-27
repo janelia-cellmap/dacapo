@@ -52,6 +52,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#dacapo">dacapo</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#dacapo-apply">apply</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dacapo-predict">predict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dacapo-run-blockwise">run-blockwise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dacapo-segment-blockwise">segment-blockwise</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dacapo-train">train</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#dacapo-validate">validate</a></li>
 </ul>
@@ -229,6 +231,182 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-predict-ow">
 <span id="cmdoption-dacapo-predict-overwrite"></span><span class="sig-name descname"><span class="pre">-ow</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--overwrite</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dacapo-predict-ow" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="dacapo-run-blockwise">
+<h3>run-blockwise<a class="headerlink" href="#dacapo-run-blockwise" title="Link to this heading"></a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>dacapo<span class="w"> </span>run-blockwise<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-ic">
+<span id="cmdoption-dacapo-run-blockwise-input_container"></span><span class="sig-name descname"><span class="pre">-ic</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_container</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_container&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-ic" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-id">
+<span id="cmdoption-dacapo-run-blockwise-input_dataset"></span><span class="sig-name descname"><span class="pre">-id</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_dataset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_dataset&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-id" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-oc">
+<span id="cmdoption-dacapo-run-blockwise-output_container"></span><span class="sig-name descname"><span class="pre">-oc</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_container</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_container&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-oc" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-od">
+<span id="cmdoption-dacapo-run-blockwise-output_dataset"></span><span class="sig-name descname"><span class="pre">-od</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_dataset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_dataset&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-od" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-w">
+<span id="cmdoption-dacapo-run-blockwise-worker_file"></span><span class="sig-name descname"><span class="pre">-w</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--worker_file</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;worker_file&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-w" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong> The path to the worker file.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-tr">
+<span id="cmdoption-dacapo-run-blockwise-total_roi"></span><span class="sig-name descname"><span class="pre">-tr</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--total_roi</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;total_roi&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-tr" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong> The total roi to be processed. Format is [start:end, start:end, … ] in voxels. Defaults to the roi of the input dataset. Do not use spaces in CLI argument.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-rr">
+<span id="cmdoption-dacapo-run-blockwise-read_roi_size"></span><span class="sig-name descname"><span class="pre">-rr</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--read_roi_size</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;read_roi_size&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-rr" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong> The size of the roi to be read for each block, in the format of [z,y,x] in voxels.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-wr">
+<span id="cmdoption-dacapo-run-blockwise-write_roi_size"></span><span class="sig-name descname"><span class="pre">-wr</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--write_roi_size</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;write_roi_size&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-wr" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong> The size of the roi to be written for each block, in the format of [z,y,x] in voxels.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-nw">
+<span id="cmdoption-dacapo-run-blockwise-num_workers"></span><span class="sig-name descname"><span class="pre">-nw</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--num_workers</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;num_workers&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-nw" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-mr">
+<span id="cmdoption-dacapo-run-blockwise-max_retries"></span><span class="sig-name descname"><span class="pre">-mr</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--max_retries</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;max_retries&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-mr" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-t">
+<span id="cmdoption-dacapo-run-blockwise-timeout"></span><span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--timeout</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;timeout&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-t" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-ow">
+<span id="cmdoption-dacapo-run-blockwise-overwrite"></span><span class="sig-name descname"><span class="pre">-ow</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--overwrite</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-ow" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-co">
+<span id="cmdoption-dacapo-run-blockwise-channels_out"></span><span class="sig-name descname"><span class="pre">-co</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-channels_out</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;co&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-co" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-dt">
+<span id="cmdoption-dacapo-run-blockwise-output_dtype"></span><span class="sig-name descname"><span class="pre">-dt</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_dtype</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_dtype&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-dt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="dacapo-segment-blockwise">
+<h3>segment-blockwise<a class="headerlink" href="#dacapo-segment-blockwise" title="Link to this heading"></a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>dacapo<span class="w"> </span>segment-blockwise<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-ic">
+<span id="cmdoption-dacapo-segment-blockwise-input_container"></span><span class="sig-name descname"><span class="pre">-ic</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_container</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_container&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-ic" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-id">
+<span id="cmdoption-dacapo-segment-blockwise-input_dataset"></span><span class="sig-name descname"><span class="pre">-id</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_dataset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_dataset&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-id" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-oc">
+<span id="cmdoption-dacapo-segment-blockwise-output_container"></span><span class="sig-name descname"><span class="pre">-oc</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_container</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_container&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-oc" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-od">
+<span id="cmdoption-dacapo-segment-blockwise-output_dataset"></span><span class="sig-name descname"><span class="pre">-od</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_dataset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_dataset&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-od" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-sf">
+<span id="cmdoption-dacapo-segment-blockwise-segment_function_file"></span><span class="sig-name descname"><span class="pre">-sf</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--segment_function_file</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;segment_function_file&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-sf" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-tr">
+<span id="cmdoption-dacapo-segment-blockwise-total_roi"></span><span class="sig-name descname"><span class="pre">-tr</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--total_roi</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;total_roi&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-tr" title="Link to this definition"></a></dt>
+<dd><p>The total roi to be processed. Format is [start:end,start:end,…] in voxels. Defaults to the roi of the input dataset. Do not use spaces in CLI argument.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-rr">
+<span id="cmdoption-dacapo-segment-blockwise-read_roi_size"></span><span class="sig-name descname"><span class="pre">-rr</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--read_roi_size</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;read_roi_size&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-rr" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong> The size of the roi to be read for each block, in the format of [z,y,x] in voxels.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-wr">
+<span id="cmdoption-dacapo-segment-blockwise-write_roi_size"></span><span class="sig-name descname"><span class="pre">-wr</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--write_roi_size</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;write_roi_size&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-wr" title="Link to this definition"></a></dt>
+<dd><p><strong>Required</strong> The size of the roi to be written for each block, in the format of [z,y,x] in voxels.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-c">
+<span id="cmdoption-dacapo-segment-blockwise-context"></span><span class="sig-name descname"><span class="pre">-c</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--context</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;context&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-c" title="Link to this definition"></a></dt>
+<dd><p>The context to be used, in the format of [z,y,x] in voxels. Defaults to the difference between the read and write rois.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-nw">
+<span id="cmdoption-dacapo-segment-blockwise-num_workers"></span><span class="sig-name descname"><span class="pre">-nw</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--num_workers</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;num_workers&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-nw" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-mr">
+<span id="cmdoption-dacapo-segment-blockwise-max_retries"></span><span class="sig-name descname"><span class="pre">-mr</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--max_retries</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;max_retries&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-mr" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-t">
+<span id="cmdoption-dacapo-segment-blockwise-timeout"></span><span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--timeout</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;timeout&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-t" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-tp">
+<span id="cmdoption-dacapo-segment-blockwise-tmp_prefix"></span><span class="sig-name descname"><span class="pre">-tp</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--tmp_prefix</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;tmp_prefix&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-tp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-ow">
+<span id="cmdoption-dacapo-segment-blockwise-overwrite"></span><span class="sig-name descname"><span class="pre">-ow</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--overwrite</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-ow" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-co">
+<span id="cmdoption-dacapo-segment-blockwise-channels_out"></span><span class="sig-name descname"><span class="pre">-co</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--channels_out</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;channels_out&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-co" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>

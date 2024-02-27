@@ -56,15 +56,17 @@ Attributes
 .. py:function:: start_worker(run_name: str, iteration: int, input_container: pathlib.Path | str, input_dataset: str, output_container: pathlib.Path | str, output_dataset: str, device: str | torch.device = 'cuda')
 
 
-.. py:function:: spawn_worker(run_name: str, iteration: int, raw_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, prediction_array_identifier: dacapo.store.array_store.LocalArrayIdentifier)
+.. py:function:: spawn_worker(run_name: str, iteration: int, input_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier)
 
    Spawn a worker to predict on a given dataset.
 
-   :param model: The model to use for prediction.
-   :type model: Model
-   :param raw_array: The raw data to predict on.
-   :type raw_array: Array
-   :param prediction_array_identifier: The identifier of the prediction array.
-   :type prediction_array_identifier: LocalArrayIdentifier
+   :param run_name: The name of the run to apply.
+   :type run_name: str
+   :param iteration: The training iteration of the model to use for prediction.
+   :type iteration: int
+   :param input_array_identifier: The raw data to predict on.
+   :type input_array_identifier: LocalArrayIdentifier
+   :param output_array_identifier: The identifier of the prediction array.
+   :type output_array_identifier: LocalArrayIdentifier
 
 

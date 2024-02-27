@@ -29,7 +29,7 @@ Attributes
 
    
 
-.. py:function:: predict(run_name: str, iteration: int, input_container: pathlib.Path | str, input_dataset: str, output_path: dacapo.store.local_array_store.LocalArrayIdentifier | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True)
+.. py:function:: predict(run_name: str, iteration: int, input_container: pathlib.Path | str, input_dataset: str, output_path: dacapo.store.local_array_store.LocalArrayIdentifier | pathlib.Path | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True)
 
    Predict with a trained model.
 

@@ -12,6 +12,7 @@ Submodules
 
    argmax_worker/index.rst
    blockwise_task/index.rst
+   empanada_function/index.rst
    predict_worker/index.rst
    relabel_worker/index.rst
    scheduler/index.rst

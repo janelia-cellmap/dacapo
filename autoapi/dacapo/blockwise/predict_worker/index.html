@@ -24,7 +24,7 @@
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
     <link rel="next" title="dacapo.blockwise.relabel_worker" href="../relabel_worker/index.html" />
-    <link rel="prev" title="dacapo.blockwise.blockwise_task" href="../blockwise_task/index.html" /> 
+    <link rel="prev" title="dacapo.blockwise.empanada_function" href="../empanada_function/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -166,14 +166,15 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.predict_worker.spawn_worker">
-<span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.predict_worker.</span></span><span class="sig-name descname"><span class="pre">spawn_worker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prediction_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.predict_worker.spawn_worker" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.predict_worker.</span></span><span class="sig-name descname"><span class="pre">spawn_worker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.predict_worker.spawn_worker" title="Link to this definition"></a></dt>
 <dd><p>Spawn a worker to predict on a given dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<a class="reference internal" href="../../experiments/index.html#dacapo.experiments.Model" title="dacapo.experiments.Model"><em>Model</em></a>) – The model to use for prediction.</p></li>
-<li><p><strong>raw_array</strong> (<a class="reference internal" href="../../experiments/datasplits/datasets/arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><em>Array</em></a>) – The raw data to predict on.</p></li>
-<li><p><strong>prediction_array_identifier</strong> (<a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The identifier of the prediction array.</p></li>
+<li><p><strong>run_name</strong> (<em>str</em>) – The name of the run to apply.</p></li>
+<li><p><strong>iteration</strong> (<em>int</em>) – The training iteration of the model to use for prediction.</p></li>
+<li><p><strong>input_array_identifier</strong> (<a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The raw data to predict on.</p></li>
+<li><p><strong>output_array_identifier</strong> (<a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The identifier of the prediction array.</p></li>
 </ul>
 </dd>
 </dl>
@@ -187,7 +188,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../blockwise_task/index.html" class="btn btn-neutral float-left" title="dacapo.blockwise.blockwise_task" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../empanada_function/index.html" class="btn btn-neutral float-left" title="dacapo.blockwise.empanada_function" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="../relabel_worker/index.html" class="btn btn-neutral float-right" title="dacapo.blockwise.relabel_worker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

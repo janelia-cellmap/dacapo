@@ -68,7 +68,7 @@ Functions
 
 
 
-.. py:function:: apply(run_name: str, input_container: pathlib.Path | str, input_dataset: str, output_path: pathlib.Path | str, validation_dataset: Optional[dacapo.experiments.datasplits.datasets.dataset.Dataset | str] = None, criterion: str = 'voi', iteration: Optional[int] = None, parameters: Optional[dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters | str] = None, roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: Optional[numpy.dtype | str] = np.uint8, overwrite: bool = True, file_format: str = 'zarr')
+.. py:function:: apply(run_name: str, input_container: pathlib.Path | str, input_dataset: str, output_path: pathlib.Path | str, validation_dataset: Optional[dacapo.experiments.datasplits.datasets.dataset.Dataset | str] = None, criterion: str = 'voi', iteration: Optional[int] = None, parameters: Optional[dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters | str] = None, roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True, file_format: str = 'zarr')
 
    Load weights and apply a model to a dataset. If iteration is None, the best iteration based on the criterion is used. If roi is None, the whole input dataset is used.
 
@@ -80,7 +80,7 @@ Functions
    iteration.
 
 
-.. py:function:: predict(run_name: str, iteration: int, input_container: pathlib.Path | str, input_dataset: str, output_path: dacapo.store.local_array_store.LocalArrayIdentifier | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True)
+.. py:function:: predict(run_name: str, iteration: int, input_container: pathlib.Path | str, input_dataset: str, output_path: dacapo.store.local_array_store.LocalArrayIdentifier | pathlib.Path | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True)
 
    Predict with a trained model.
 
