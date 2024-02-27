@@ -117,13 +117,11 @@ def segment_blockwise(
             **kwargs,
         )
 
-        daisy.run_blockwise([task])
+        success = daisy.run_blockwise([task])
 
         # give a second for the fist task to finish
         time.sleep(1)
         read_roi = write_roi
-
-        success = daisy.run_blockwise([task])
 
         # Make the task
         task = DaCapoBlockwiseTask(

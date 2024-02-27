@@ -213,7 +213,7 @@ def predict(
 @click.option("-mr", "--max_retries", type=int, default=2)
 @click.option("-t", "--timeout", type=int, default=None)
 @click.option("-ow", "--overwrite", is_flag=True)
-@click.option("-co", "-channels_out", type=int, default=1)
+@click.option("-co", "-channels_out", type=int, default=None)
 @click.option("-dt", "--output_dtype", type=str, default="uint8")
 @click.pass_context
 def run_blockwise(
@@ -230,7 +230,7 @@ def run_blockwise(
     max_retries: int = 2,
     timeout=None,
     overwrite: bool = True,
-    channels_out: int = 1,
+    channels_out: Optional[int] = None,
     output_dtype: np.dtype | str = "uint8",
     *args,
     **kwargs,
@@ -328,7 +328,7 @@ def run_blockwise(
 @click.option("-t", "--timeout", type=int, default=None)
 @click.option("-tp", "--tmp_prefix", type=str, default="tmp")
 @click.option("-ow", "--overwrite", is_flag=True)
-@click.option("-co", "--channels_out", type=int, default=1)
+@click.option("-co", "--channels_out", type=int, default=None)
 @click.pass_context
 def segment_blockwise(
     ctx,
@@ -346,7 +346,7 @@ def segment_blockwise(
     timeout=None,
     tmp_prefix: str = "tmp",
     overwrite: bool = True,
-    channels_out: int = 1,
+    channels_out: Optional[int] = None,
     *args,
     **kwargs,
 ):

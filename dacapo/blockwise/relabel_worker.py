@@ -47,7 +47,6 @@ def start_worker(
     nodes, edges = read_cross_block_merges(tmpdir)
 
     components = find_components(nodes, edges)
-    components = DisjointSet(nodes, edges)
 
     while True:
         with client.acquire_block() as block:

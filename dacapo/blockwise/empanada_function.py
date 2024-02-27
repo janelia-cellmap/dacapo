@@ -50,7 +50,7 @@ def segment_function(input_array, block, **parameters):
     ):
         vols.append(vol[None, ...].astype(np.uint64))
         class_names.append(class_name)
-    return np.concatenate(vols, axis=0, dtype=np.uint64)
+    return np.concatenate(vols, axis=0, dtype=np.uint64).squeeze()
 
 
 # THESE ARE NON-THREAD WORKER VERSIONS OF THE FUNCTIONS, adapted from empanada-napari in by Jeff Rhoades (HHMI Janelia) February 2024
