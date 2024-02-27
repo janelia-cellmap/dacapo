@@ -84,7 +84,9 @@ def start_worker(
 
             segmentation = segment_function(input_array, block, **parameters)
 
-            assert segmentation.dtype == np.uint64
+            assert (
+                segmentation.dtype == np.uint64
+            ), "Instance segmentations returned by segment_function is expected to be uint64"
 
             id_bump = block.block_id[1] * num_voxels_in_block
             segmentation += id_bump
@@ -96,7 +98,7 @@ def start_worker(
             )
 
             # store segmentation in out array
-            output_array._daisy_array[block.write_roi] = segmentation[block.write_roi]
+            output_array[block.write_roi] = segmentation[block.write_roi]
 
             neighbor_roi = block.write_roi.grow(
                 input_array.voxel_size, input_array.voxel_size
@@ -139,8 +141,8 @@ def start_worker(
                 )
 
             unique_pairs = np.concatenate(unique_pairs)
-            zero_u = unique_pairs[:, 0] == 0
-            zero_v = unique_pairs[:, 1] == 0
+            zero_u = unique_pairs[:, 0] == 0  # type: ignore
+            zero_v = unique_pairs[:, 1] == 0  # type: ignore
             non_zero_filter = np.logical_not(np.logical_or(zero_u, zero_v))
 
             edges = unique_pairs[non_zero_filter]

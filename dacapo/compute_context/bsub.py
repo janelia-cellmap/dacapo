@@ -6,7 +6,7 @@ from typing import Optional
 
 
 @attr.s
-class Bsub(ComputeContext):  # TODO: Load defaults from dacapo.yaml
+class Bsub(ComputeContext):
     queue: str = attr.ib(default="local", metadata={"help_text": "The queue to run on"})
     num_gpus: int = attr.ib(
         default=1,
@@ -23,6 +23,10 @@ class Bsub(ComputeContext):  # TODO: Load defaults from dacapo.yaml
         default=None,
         metadata={"help_text": "Project name that will be paying for this Job."},
     )
+    # log_dir: Optional[str] = attr.ib(
+    #     default="~/logs/dacapo/",
+    #     metadata={"help_text": "The directory to store the logs in."},
+    # )
 
     @property
     def device(self):
@@ -41,8 +45,8 @@ class Bsub(ComputeContext):  # TODO: Load defaults from dacapo.yaml
                 f"{self.num_cpus}",
                 "-gpu",
                 f"num={self.num_gpus}",
-                # "-J",
-                # "dacapo",
+                "-J",
+                "dacapo",
                 # "-o",
                 # f"{run_name}_train.out",
                 # "-e",
