@@ -56,6 +56,7 @@ dependencies = [
         "numpy-indexed",
         "click",
         "pyyaml",
+        "cellpose",
         ]
 
 # extras
