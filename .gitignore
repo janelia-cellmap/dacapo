@@ -13,6 +13,8 @@ dist
 build
 dacapo.yaml
 __pycache__
+daisy_logs
+scratch
 
 # vscode stuff
 .vscode

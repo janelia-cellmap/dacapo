@@ -204,26 +204,26 @@ class DataSplitGenerator:
     
 
     def _generate_semantic_seg_datasplit(self, task_config: TaskConfig):
-        organelle_arrays = {}
-        for organelle, _ in targets[1]:
-            array_name = f"{labels_group}/{organelle}"
+        class_arrays = {}
+        for class, _ in targets[1]:
+            array_name = f"{labels_group}/{class}"
             if Path(container_path, array_name).exists():
-                organelle_labels_config = ZarrArrayConfig(
-                    f"{dataset}_{crop_num}_{organelle}",
+                class_labels_config = ZarrArrayConfig(
+                    f"{dataset}_{crop_num}_{class}",
                     container_path,
                     array_name,
                     snap_to_grid=input_voxel_size,
                 )
 
-                organelle_labels = ZarrArray(organelle_labels_config)
-                if no_useful_data(organelle_labels, targets):
+                class_labels = ZarrArray(class_labels_config)
+                if no_useful_data(class_labels, targets):
                     logger.debug(
                         f"Skipping {dataset}, {crop_num} due to not containing "
                         f"relevant data for target: {targets[0]}"
                     )
                     continue
-                organelle_labels.attrs["labels"]
-                label_voxel_size = organelle_labels.voxel_size
+                class_labels.attrs["labels"]
+                label_voxel_size = class_labels.voxel_size
 
                 upsample = label_voxel_size / resolution
                 downsample = resolution / label_voxel_size
@@ -237,32 +237,32 @@ class DataSplitGenerator:
                             f"skipping crop {crop_num} due to extreme resampling"
                         )
                         return None, None, None
-                    organelle_labels_config = ResampledArrayConfig(
-                        name=f"{organelle_labels_config.name}_resampled_{resolution[0]}nm",
-                        source_array_config=organelle_labels_config,
+                    class_labels_config = ResampledArrayConfig(
+                        name=f"{class_labels_config.name}_resampled_{resolution[0]}nm",
+                        source_array_config=class_labels_config,
                         upsample=upsample,
                         downsample=downsample,
                         interp_order=0,
                     )
 
                 # binarize everything into 0 or 1
-                organelle_gt_config = BinarizeArrayConfig(
-                    f"{dataset}_{crop_num}_{organelle}_{resolution[0]}nm_binarized",
-                    source_array_config=organelle_labels_config,
-                    groupings=[(organelle, [])],
+                class_gt_config = BinarizeArrayConfig(
+                    f"{dataset}_{crop_num}_{class}_{resolution[0]}nm_binarized",
+                    source_array_config=class_labels_config,
+                    groupings=[(class, [])],
                 )
                 # mask in everything in this array
-                organelle_mask_config = OnesArrayConfig(
-                    f"{dataset}_{crop_num}_{organelle}_{resolution[0]}nm_mask_1",
-                    source_array_config=organelle_gt_config,
+                class_mask_config = OnesArrayConfig(
+                    f"{dataset}_{crop_num}_{class}_{resolution[0]}nm_mask_1",
+                    source_array_config=class_gt_config,
                 )
-                organelle_arrays[organelle] = (
-                    organelle_gt_config,
-                    organelle_mask_config,
+                class_arrays[class] = (
+                    class_gt_config,
+                    class_mask_config,
                 )
 
         # Concatenates multiple arrays along the channel dimension, giving each channel
-        # the name of the organelle from which it came. If no array is provided for
+        # the name of the class from which it came. If no array is provided for
         # a channel it will be filled with zeros
 
         # Assume mutual exclusivity. e.g. nucleus cannot also be mito. So although
@@ -270,8 +270,8 @@ class DataSplitGenerator:
         # negative case wherever there is nucleus.
         gt_config = ConcatArrayConfig(
             name=f"{dataset}_{crop_num}_{resolution[0]}nm_gt",
-            channels=[organelle for organelle, _ in targets[1]],
-            source_array_configs={k: gt for k, (gt, _) in organelle_arrays.items()},
+            channels=[class for class, _ in targets[1]],
+            source_array_configs={k: gt for k, (gt, _) in class_arrays.items()},
         )
         label_mask_config = LogicalOrArrayConfig(
             name=f"{dataset}_{crop_num}_{resolution[0]}nm_labelled_voxels",
@@ -279,8 +279,8 @@ class DataSplitGenerator:
         )
         mask_config = ConcatArrayConfig(
             name=f"{dataset}_{crop_num}_{resolution[0]}nm_mask",
-            channels=[organelle for organelle, _ in targets[1]],
-            source_array_configs={k: mask for k, (_, mask) in organelle_arrays.items()},
+            channels=[class for class, _ in targets[1]],
+            source_array_configs={k: mask for k, (_, mask) in class_arrays.items()},
             default_config=label_mask_config,
         )
         if (
