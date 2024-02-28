@@ -44,6 +44,7 @@ class RunConfig:
             "but if there is any preprocessing that needs to be done, that can be configured here."
         }
     )
+    dataset_adapter_config: DatasetAdapterConfig = attr.ib(...)
 
     name: str = attr.ib(
         metadata={
