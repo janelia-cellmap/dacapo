@@ -1,5 +1,4 @@
 from .predict import predict
-from .compute_context import LocalTorch, ComputeContext
 from .experiments import Run, ValidationIterationScores
 from .experiments.datasplits.datasets.arrays import ZarrArray
 from .store.create_store import (
@@ -9,8 +8,6 @@ from .store.create_store import (
     create_weights_store,
 )
 
-import torch
-
 from pathlib import Path
 import logging
 
@@ -18,7 +15,11 @@ logger = logging.getLogger(__name__)
 
 
 def validate(
-    run_name: str, iteration: int, compute_context: ComputeContext = LocalTorch()
+    run_name: str,
+    iteration: int,
+    num_workers: int = 30,
+    output_dtype: str = "uint8",
+    overwrite: bool = True,
 ):
     """Validate a run at a given iteration. Loads the weights from a previously
     stored checkpoint. Returns the best parameters and scores for this
@@ -42,21 +43,28 @@ def validate(
 
     # create weights store and read weights
     weights_store = create_weights_store()
-    weights_store.retrieve_weights(run, iteration)
+    weights_store.retrieve_weights(run.name, iteration)
 
-    return validate_run(run, iteration, compute_context=compute_context)
+    return validate_run(
+        run,
+        iteration,
+        num_workers=num_workers,
+        output_dtype=output_dtype,
+        overwrite=overwrite,
+    )
 
 
 def validate_run(
-    run: Run, iteration: int, compute_context: ComputeContext = LocalTorch()
+    run: Run,
+    iteration: int,
+    num_workers: int = 30,
+    output_dtype: str = "uint8",
+    overwrite: bool = True,
 ):
     """Validate an already loaded run at the given iteration. This does not
     load the weights of that iteration, it is assumed that the model is already
     loaded correctly. Returns the best parameters and scores for this
     iteration."""
-    # set benchmark flag to True for performance
-    torch.backends.cudnn.benchmark = True
-    run.model.eval()
 
     if (
         run.datasplit.validate is None
@@ -139,16 +147,21 @@ def validate_run(
             logger.info("validation inputs already copied!")
 
         prediction_array_identifier = array_store.validation_prediction_array(
-            run.name, iteration, validation_dataset
+            run.name, iteration, validation_dataset.name
         )
         logger.info("Predicting on dataset %s", validation_dataset.name)
         predict(
-            run.model,
-            validation_dataset.raw,
-            prediction_array_identifier,
-            compute_context=compute_context,
+            run.name,
+            iteration,
+            input_container=input_raw_array_identifier.container,
+            input_dataset=input_raw_array_identifier.dataset,
+            output_path=prediction_array_identifier,
             output_roi=validation_dataset.gt.roi,
+            num_workers=num_workers,
+            output_dtype=output_dtype,
+            overwrite=overwrite,
         )
+
         logger.info("Predicted on dataset %s", validation_dataset.name)
 
         post_processor.set_prediction(prediction_array_identifier)
@@ -157,7 +170,7 @@ def validate_run(
 
         for parameters in post_processor.enumerate_parameters():
             output_array_identifier = array_store.validation_output_array(
-                run.name, iteration, parameters, validation_dataset
+                run.name, iteration, str(parameters), validation_dataset.name
             )
 
             post_processed_array = post_processor.process(
@@ -193,10 +206,11 @@ def validate_run(
                             "iteration": iteration,
                             criterion: getattr(scores, criterion),
                             "parameters_id": parameters.id,
+                            "parameters": str(parameters),
                         }
                     )
                     weights_store.store_best(
-                        run, iteration, validation_dataset.name, criterion
+                        run.name, iteration, validation_dataset.name, criterion
                     )
 
             # delete current output. We only keep the best outputs as determined by

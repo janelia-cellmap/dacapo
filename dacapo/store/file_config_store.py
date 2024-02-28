@@ -8,7 +8,7 @@ from dacapo.experiments.tasks import TaskConfig
 from dacapo.experiments.trainers import TrainerConfig
 
 import logging
-import toml
+import yaml
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -96,14 +96,14 @@ class FileConfigStore(ConfigStore):
     def __save_insert(self, collection, data, ignore=None):
         name = data["name"]
 
-        file_store = collection / f"{name}.toml"
+        file_store = collection / f"{name}.yaml"
         if not file_store.exists():
             with file_store.open("w") as f:
-                toml.dump(dict(data), f)
+                yaml.dump(dict(data), f)
 
         else:
             with file_store.open("r") as f:
-                existing = toml.load(f)
+                existing = yaml.safe_load(f)
 
             if not self.__same_doc(existing, data, ignore):
                 raise DuplicateNameError(
@@ -113,10 +113,10 @@ class FileConfigStore(ConfigStore):
                 )
 
     def __load(self, collection, name):
-        file_store = collection / f"{name}.toml"
+        file_store = collection / f"{name}.yaml"
         if file_store.exists():
             with file_store.open("r") as f:
-                return toml.load(f)
+                return yaml.safe_load(f)
         else:
             raise ValueError(f"No config with name: {name} in collection: {collection}")
 
@@ -179,4 +179,4 @@ class FileConfigStore(ConfigStore):
         return self.path / "datasets"
 
     def delete_config(self, database: Path, config_name: str) -> None:
-        (database / f"{config_name}.toml").unlink()
+        (database / f"{config_name}.yaml").unlink()

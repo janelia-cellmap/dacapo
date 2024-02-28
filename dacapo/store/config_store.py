@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, TYPE_CHECKING
+from typing import Any, List, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from dacapo.experiments.run_config import RunConfig
@@ -17,40 +17,13 @@ class DuplicateNameError(Exception):
 class ConfigStore(ABC):
     """Base class for configuration stores."""
 
-    @property
-    @abstractmethod
-    def runs(self):
-        pass
-
-    @property
-    @abstractmethod
-    def datasplits(self):
-        pass
-
-    @property
-    @abstractmethod
-    def datasets(self):
-        pass
-
-    @property
-    @abstractmethod
-    def arrays(self):
-        pass
-
-    @property
-    @abstractmethod
-    def tasks(self):
-        pass
-
-    @property
-    @abstractmethod
-    def trainers(self):
-        pass
-
-    @property
-    @abstractmethod
-    def architectures(self):
-        pass
+    runs: Any
+    datasplits: Any
+    datasets: Any
+    arrays: Any
+    tasks: Any
+    trainers: Any
+    architectures: Any
 
     @abstractmethod
     def delete_config(self, database, config_name: str) -> None:

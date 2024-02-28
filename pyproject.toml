@@ -41,7 +41,8 @@ dependencies = [
         "attrs",
         "bokeh",
         "numpy-indexed>=0.3.7",
-        "daisy>=1.0",
+        #"daisy>=1.0",
+        "daisy @ git+https://github.com/funkelab/daisy.git",
         "funlib.math>=0.1",
         "funlib.geometry>=0.2",
         "mwatershed>=0.1",
@@ -54,7 +55,7 @@ dependencies = [
         "cattrs",
         "numpy-indexed",
         "click",
-        "toml",
+        "pyyaml",
         ]
 
 # extras
@@ -83,9 +84,14 @@ examples = [
     "ipykernel",
     "jupyter",
 ]
+pretrained = [
+    "pyqt5",
+    "empanada-napari",    
+    ]
+all = ["dacapo-ml[test,dev,docs,examples,pretrained]"]
 
 [project.urls]
-homepage = "https://github.com/janelia-cellmap/dacapo"
+homepage = "https://github.io/janelia-cellmap/dacapo"
 repository = "https://github.com/janelia-cellmap/dacapo"
 
 # https://hatch.pypa.io/latest/config/metadata/
@@ -139,7 +145,7 @@ filterwarnings = [
     "error",
     "ignore::DeprecationWarning",
     ]
-
+    
 # https://mypy.readthedocs.io/en/stable/config_file.html
 [tool.mypy]
 files = "dacapo/**/"
@@ -148,78 +154,43 @@ disallow_any_generics = false
 disallow_subclassing_any = false
 show_error_codes = true
 pretty = true
+exclude = [
+    "scratch/*",
+]
+
 
 # # module specific overrides
 [[tool.mypy.overrides]]
-module = ["funlib.*",]
+module = [
+    "funlib.*",
+    "toml.*", 
+    "gunpowder.*",
+    "scipy.*",
+    "augment.*",
+    "tifffile.*",
+    "daisy.*",
+    "lazy_property.*",
+    "skimage.*",
+    "fibsem_tools.*",
+    "neuroglancer.*",
+    "tqdm.*",
+    "zarr.*",
+    "pymongo.*",
+    "bson.*",
+    "affogato.*",
+    "SimpleITK.*",
+    "bokeh.*",
+    "lsd.*",
+    "yaml.*",
+    "pytest_lazyfixture.*",
+    "neuclease.dvid.*",
+    "mwatershed.*",
+    "numpy_indexed.*",
+    "empanada_napari.*",
+    "napari.*",
+    "empanada.*",
+]
 ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = ["gunpowder.*"]
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "scipy.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "augment.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module="tifffile.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "daisy.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "lazy_property.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "skimage.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "fibsem_tools.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "neuroglancer.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "tqdm.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "zarr.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "pymongo.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "bson.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "affogato.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "SimpleITK.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "bokeh.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "lsd.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "yaml.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "pytest_lazyfixture.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "neuclease.dvid.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "mwatershed.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "numpy_indexed.*"
-ignore_missing_imports = true
-
 
 # https://coverage.readthedocs.io/en/6.4/config.html
 [tool.coverage.report]
