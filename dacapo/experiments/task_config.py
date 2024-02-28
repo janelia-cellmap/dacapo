@@ -1,6 +1,7 @@
 import attr
 
-from typing import Tuple
+from typing import Any, Tuple
+import tasks
 
 # TODO: make lookup dynamically for tasks
 
@@ -17,6 +18,9 @@ class TaskConfig:
             "Task class to use when generating targets, and computing loss, etc.. Examples are `semantic` and `instance` for simple semantic and instance segmentation respectively."
         }
     )
+    params: Any = attr.ib(
+        default=None, metadata={"help_text": "Any additional options for this task."}
+    )
     name: str = attr.ib(
         default="{experiment}_task",
         metadata={
@@ -25,20 +29,18 @@ class TaskConfig:
             "special characters."
         },
     )
-    params: any = attr.ib(
-        default={}, metadata={"help_text": "Any additional options for this task."}
-    )
 
-    def __init__(self, target: str, **kwargs):
-        self.target = target
+    def __attrs_post_init__(self, **kwargs):
         task_dict = {
             "semantic": "OneHot",
             "instance": "Affinity",
         }
-        self.params = any
+        self.params = getattr(tasks, f"{task_dict[self.target]}TaskParameters")(
+            **kwargs
+        )
         for k, v in kwargs.items():
             setattr(self, k, v)
-        self.config = getattr(subtasks, f"{target.capitalize()}TaskConfig")(**kwargs)
+        self.task_class = getattr(tasks, f"{task_dict[self.target]}Task")
 
     def verify(self) -> Tuple[bool, str]:
         """

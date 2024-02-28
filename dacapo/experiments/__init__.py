@@ -6,3 +6,8 @@ from .training_stats import TrainingStats  # noqa
 from .validation_iteration_scores import ValidationIterationScores  # noqa
 from .validation_scores import ValidationScores  # noqa
 from .data_config import DataConfig  # noqa
+from .tasks.task import Task  # noqa
+from .task_config import TaskConfig  # noqa
+from .architectures import ArchitectureConfig  # noqa
+from .trainers import TrainerConfig  # noqa
+from .starts import StartConfig  # noqa
