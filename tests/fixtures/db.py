@@ -3,18 +3,18 @@ from dacapo import Options
 import pymongo
 import pytest
 
+import os
+from pathlib import Path
+import yaml
+
 
 def mongo_db_available():
-    try:
-        options = Options.instance()
-        client = pymongo.MongoClient(
-            host=options.mongo_db_host, serverSelectionTimeoutMS=1000
-        )
-        Options._instance = None
-    except RuntimeError:
-        # cannot find a dacapo config file, mongodb is not available
-        Options._instance = None
-        return False
+    options = Options.instance()
+    client = pymongo.MongoClient(
+        host=options.mongo_db_host,
+        serverSelectionTimeoutMS=1000,
+        socketTimeoutMS=1000,
+    )
     try:
         client.admin.command("ping")
         return True
@@ -34,23 +34,31 @@ def mongo_db_available():
     )
 )
 def options(request, tmp_path):
-    # TODO: Clean up this fixture. Its a bit clunky to use.
-    # Maybe just write the dacapo.yaml file instead of assigning to Options._instance
-    kwargs_from_file = {}
-    if request.param == "mongo":
-        options_from_file = Options.instance()
-        kwargs_from_file.update(
-            {
-                "mongo_db_host": options_from_file.mongo_db_host,
-                "mongo_db_name": "dacapo_tests",
-            }
-        )
-    Options._instance = None
+    # read the options from the users config file locally
     options = Options.instance(
-        type=request.param, runs_base_dir=f"{tmp_path}", **kwargs_from_file
+        type=request.param, runs_base_dir="tests", mongo_db_name="dacapo_tests"
     )
+
+    # change to a temporary directory for this test only
+    old_dir = os.getcwd()
+    os.chdir(tmp_path)
+
+    # write the dacapo config in the current temporary directory. Now options
+    # will be read from this file instead of the users config file letting
+    # us test different configurations
+    config_file = Path("dacapo.yaml")
+    with open(config_file, "w") as f:
+        yaml.safe_dump(options.serialize(), f)
+    # config_file.write_text(options.serialize()
+    #      )
+
+    # yield the options
     yield options
+
+    # cleanup
     if request.param == "mongo":
         client = pymongo.MongoClient(host=options.mongo_db_host)
         client.drop_database("dacapo_tests")
-    Options._instance = None
+
+    # reset working directory
+    os.chdir(old_dir)
