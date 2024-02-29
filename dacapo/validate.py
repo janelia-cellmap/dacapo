@@ -155,7 +155,6 @@ def validate_run(
         prediction_array_identifier = array_store.validation_prediction_array(
             run.name, iteration, validation_dataset
         )
-        logger.info("Predicting on dataset %s", validation_dataset.name)
         predict(
             run.model,
             validation_dataset.raw,
@@ -163,11 +162,19 @@ def validate_run(
             compute_context=compute_context,
             output_roi=validation_dataset.gt.roi,
         )
-        logger.info("Predicted on dataset %s", validation_dataset.name)
 
         post_processor.set_prediction(prediction_array_identifier)
 
         dataset_iteration_scores = []
+
+        # set up dict for overall best scores
+        overall_best_scores = {}
+        for criterion in run.validation_scores.criteria:
+            overall_best_scores[criterion] = evaluator.get_overall_best(
+                validation_dataset,
+                criterion,
+                run.validation_scores.evaluation_scores.higher_is_better(criterion),
+            )
 
         for parameters in post_processor.enumerate_parameters():
             output_array_identifier = array_store.validation_output_array(
@@ -175,7 +182,6 @@ def validate_run(
             )
 
             post_processor.set_prediction(prediction_array_identifier)
-
             dataset_iteration_scores = []
 
             # set up dict for overall best scores
