@@ -1,8 +1,10 @@
-name: Pages
+name: Generate Pages
+
 on:
   push:
     branches:
-    - master
+      - main
+
 jobs:
   docs:
     runs-on: ubuntu-latest

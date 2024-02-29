@@ -14,7 +14,7 @@ from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.predict import predict
 from dacapo.compute_context import LocalTorch, ComputeContext
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
-from dacapo.store import (
+from dacapo.store.create_store import (
     create_config_store,
     create_weights_store,
 )
@@ -35,7 +35,7 @@ def apply(
     parameters: Optional[PostProcessorParameters or str] = None,
     roi: Optional[Roi or str] = None,
     num_cpu_workers: int = 30,
-    output_dtype: Optional[np.dtype or str] = np.uint8,
+    output_dtype: Optional[np.dtype | str] = np.uint8,  # type: ignore
     compute_context: ComputeContext = LocalTorch(),
     overwrite: bool = True,
     file_format: str = "zarr",
@@ -71,20 +71,27 @@ def apply(
 
     # load weights
     if iteration is None:
-        # weights_store._load_best(run, criterion)
-        iteration = weights_store.retrieve_best(run_name, validation_dataset, criterion)
+        iteration = weights_store.retrieve_best(run_name, validation_dataset, criterion)  # type: ignore
     logger.info("Loading weights for iteration %i", iteration)
-    weights_store.retrieve_weights(run, iteration)  # shouldn't this be load_weights?
+    weights_store.retrieve_weights(run_name, iteration)
 
     # find the best parameters
-    if isinstance(validation_dataset, str):
+    if isinstance(validation_dataset, str) and run.datasplit.validate is not None:
         val_ds_name = validation_dataset
         validation_dataset = [
             dataset for dataset in run.datasplit.validate if dataset.name == val_ds_name
         ][0]
-    logger.info("Finding best parameters for validation dataset %s", validation_dataset)
+    elif isinstance(validation_dataset, Dataset) or parameters is not None:
+        pass
+    else:
+        raise ValueError(
+            "validation_dataset must be a dataset name or a Dataset object, or parameters must be provided explicitly."
+        )
     if parameters is None:
-        parameters = run.task.evaluator.get_overall_best_parameters(
+        logger.info(
+            "Finding best parameters for validation dataset %s", validation_dataset
+        )
+        parameters = run.task.evaluator.get_overall_best_parameters(  # TODO
             validation_dataset, criterion
         )
         assert (
@@ -101,9 +108,9 @@ def apply(
             }
             for key, value in post_processor_kwargs.items():
                 if value.isdigit():
-                    post_processor_kwargs[key] = int(value)
+                    post_processor_kwargs[key] = int(value)  # type: ignore
                 elif value.replace(".", "", 1).isdigit():
-                    post_processor_kwargs[key] = float(value)
+                    post_processor_kwargs[key] = float(value)  # type: ignore
         except:
             raise ValueError(
                 f"Could not parse parameters string {parameters}. Must be of the form 'post_processor_name(arg1=val1, arg2=val2, ...)'"
@@ -126,9 +133,12 @@ def apply(
     # make array identifiers for input, predictions and outputs
     input_array_identifier = LocalArrayIdentifier(input_container, input_dataset)
     input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
-    roi = roi.snap_to_grid(input_array.voxel_size, mode="grow").intersect(
-        input_array.roi
-    )
+    if roi is None:
+        roi = input_array.roi
+    else:
+        roi = roi.snap_to_grid(input_array.voxel_size, mode="grow").intersect(
+            input_array.roi
+        )
     output_container = Path(
         output_path,
         "".join(Path(input_container).name.split(".")[:-1]) + f".{file_format}",
@@ -164,11 +174,11 @@ def apply_run(
     run: Run,
     parameters: PostProcessorParameters,
     input_array: Array,
-    prediction_array_identifier: LocalArrayIdentifier,
-    output_array_identifier: LocalArrayIdentifier,
+    prediction_array_identifier: "LocalArrayIdentifier",
+    output_array_identifier: "LocalArrayIdentifier",
     roi: Optional[Roi] = None,
     num_cpu_workers: int = 30,
-    output_dtype: Optional[np.dtype] = np.uint8,
+    output_dtype: Optional[np.dtype] = np.uint8,  # type: ignore
     compute_context: ComputeContext = LocalTorch(),
     overwrite: bool = True,
 ):
@@ -182,7 +192,7 @@ def apply_run(
         input_array,
         prediction_array_identifier,
         output_roi=roi,
-        num_cpu_workers=num_cpu_workers,
+        num_workers=num_cpu_workers,
         output_dtype=output_dtype,
         compute_context=compute_context,
         overwrite=overwrite,
@@ -192,9 +202,7 @@ def apply_run(
     logger.info("Post-processing output to dataset %s", output_array_identifier)
     post_processor = run.task.post_processor
     post_processor.set_prediction(prediction_array_identifier)
-    post_processor.process(
-        parameters, output_array_identifier, overwrite=overwrite, blockwise=True
-    )
+    post_processor.process(parameters, output_array_identifier)
 
     logger.info("Done")
     return

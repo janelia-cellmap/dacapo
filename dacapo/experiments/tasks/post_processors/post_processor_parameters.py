@@ -12,3 +12,6 @@ class PostProcessorParameters:
     @property
     def parameter_names(self) -> List[str]:
         return ["id"]
+
+
+# TODO: Add parameter_names to subclasses

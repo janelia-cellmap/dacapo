@@ -1,5 +1,0 @@
-black
-mypy
-pytest
-pytest-cov
-pytest-lazy-fixture
