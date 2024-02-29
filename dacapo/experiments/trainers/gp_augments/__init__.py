@@ -1,6 +1,7 @@
 from .augment_config import AugmentConfig
-from .elastic_config import ElasticAugmentConfig
+from .elastic_config import ElasticAugmentConfig, DeformAugmentConfig
 from .simple_config import SimpleAugmentConfig
 from .gamma_config import GammaAugmentConfig
 from .intensity_config import IntensityAugmentConfig
 from .intensity_scale_shift_config import IntensityScaleShiftAugmentConfig
+from .gaussian_noise_config import GaussianNoiseAugmentConfig
