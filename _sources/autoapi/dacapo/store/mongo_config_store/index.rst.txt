@@ -37,6 +37,9 @@ Attributes
    A MongoDB store for configurations. Used to store and retrieve
    configurations for runs, tasks, architectures, trainers, and datasets.
 
+   .. py:method:: delete_config(database, config_name: str) -> None
+
+
    .. py:method:: store_run_config(run_config)
 
       Store a run config. This should also store the configs that are part
