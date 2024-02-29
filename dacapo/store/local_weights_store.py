@@ -83,7 +83,7 @@ class LocalWeightsStore(WeightsStore):
         """
         Store the best weights in a easy to find location.
         Symlinks weights from appropriate iteration
-        # TODO: simply store a toml of dataset/criterion -> iteration/parameter id
+        # TODO: simply store a yaml of dataset/criterion -> iteration/parameter id
         """
 
         # must exist since we must read run/iteration weights

@@ -36,6 +36,9 @@ class MongoConfigStore(ConfigStore):
         self.__open_collections()
         self.__init_db()
 
+    def delete_config(self, database, config_name: str) -> None:
+        database.delete_one({"name": config_name})
+
     def store_run_config(self, run_config):
         run_doc = converter.unstructure(run_config)
         self.__save_insert(self.runs, run_doc)
