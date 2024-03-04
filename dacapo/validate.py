@@ -1,3 +1,5 @@
+import torch
+from dacapo.compute_context import create_compute_context
 from .predict import predict
 from .experiments import Run, ValidationIterationScores
 from .experiments.datasplits.datasets.arrays import ZarrArray
@@ -9,7 +11,6 @@ from .store.create_store import (
 )
 
 from pathlib import Path
-from reloading import reloading
 import logging
 
 logger = logging.getLogger(__name__)
@@ -69,6 +70,7 @@ def validate_run(
     iteration."""
     try:  # we don't want this to hold up training
         # set benchmark flag to True for performance
+        compute_context = create_compute_context()
         torch.backends.cudnn.benchmark = True
         run.model.to(compute_context.device)
         run.model.eval()
@@ -157,7 +159,7 @@ def validate_run(
                 logger.info("validation inputs already copied!")
 
             prediction_array_identifier = array_store.validation_prediction_array(
-                run.name, iteration, validation_dataset
+                run.name, iteration, validation_dataset.name
             )
             input_gt[output_roi] = validation_dataset.gt[output_roi]
         else:
@@ -172,7 +174,7 @@ def validate_run(
             input_container=input_raw_array_identifier.container,
             input_dataset=input_raw_array_identifier.dataset,
             output_path=prediction_array_identifier,
-            output_roi=validation_dataset.gt.roi,
+            output_roi=validation_dataset.gt.roi,  # type: ignore
             num_workers=num_workers,
             output_dtype=output_dtype,
             overwrite=overwrite,
@@ -190,7 +192,6 @@ def validate_run(
             overall_best_scores[criterion] = evaluator.get_overall_best(
                 validation_dataset,
                 criterion,
-                run.validation_scores.evaluation_scores.higher_is_better(criterion),
             )
 
         for parameters in post_processor.enumerate_parameters():
@@ -212,7 +213,7 @@ def validate_run(
             output_array_identifiers = []
             for parameters in post_processor.enumerate_parameters():
                 output_array_identifier = array_store.validation_output_array(
-                    run.name, iteration, parameters, validation_dataset
+                    run.name, iteration, str(parameters), validation_dataset.name
                 )
                 output_array_identifiers.append(output_array_identifier)
                 post_processed_array = post_processor.process(
@@ -221,7 +222,7 @@ def validate_run(
 
                 try:
                     scores = evaluator.evaluate(
-                        output_array_identifier, validation_dataset.gt
+                        output_array_identifier, validation_dataset.gt  # type: ignore
                     )
                     for criterion in run.validation_scores.criteria:
                         # replace predictions in array with the new better predictions
@@ -279,7 +280,10 @@ def validate_run(
                                     }
                                 )
                                 weights_store.store_best(
-                                    run, iteration, validation_dataset.name, criterion
+                                    run.name,
+                                    iteration,
+                                    validation_dataset.name,
+                                    criterion,
                                 )
                 except:
                     logger.error(

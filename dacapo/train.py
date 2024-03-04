@@ -163,8 +163,6 @@ def train_run(run: Run):
                 # Special case for tests - skip validation, but store weights
                 stats_store.store_training_stats(run.name, run.training_stats)
                 weights_store.store_weights(run, iteration_stats.iteration + 1)
-                run.move_optimizer(compute_context.device)
-                run.model.train()
                 continue
 
             if no_its or (not validation_it and not final_it):
@@ -173,7 +171,6 @@ def train_run(run: Run):
 
             run.model.eval()
             # free up optimizer memory to allow larger validation blocks
-            run.model = run.model.to(torch.device("cpu"))
             run.move_optimizer(torch.device("cpu"), empty_cuda_cache=True)
 
             stats_store.store_training_stats(run.name, run.training_stats)
