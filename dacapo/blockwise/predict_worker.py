@@ -80,8 +80,8 @@ def start_worker(
     weights_store.retrieve_weights(run_name, iteration)
 
     # get arrays
-    raw_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    raw_array = ZarrArray.open_from_array_identifier(raw_array_identifier)
+    input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
+    raw_array = ZarrArray.open_from_array_identifier(input_array_identifier)
 
     output_array_identifier = LocalArrayIdentifier(
         Path(output_container), output_dataset
