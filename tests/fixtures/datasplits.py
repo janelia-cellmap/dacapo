@@ -67,7 +67,7 @@ def twelve_class_datasplit(tmp_path):
         gt_dataset = twelve_class_zarr.create_dataset(
             gt.dataset, shape=(40, 20, 20), dtype=np.uint8
         )
-        random_data = np.random.randn(40, 20, 20)
+        random_data = np.random.rand(40, 20, 20)
         # as intensities increase so does the class
         for i in list(np.linspace(random_data.min(), random_data.max(), 13))[1:]:
             gt_dataset[:] += random_data > i
@@ -178,7 +178,7 @@ def six_class_datasplit(tmp_path):
         gt_dataset = twelve_class_zarr.create_dataset(
             gt.dataset, shape=(40, 20, 20), dtype=np.uint8
         )
-        random_data = np.random.randn(40, 20, 20)
+        random_data = np.random.rand(40, 20, 20)
         # as intensities increase so does the class
         for i in list(np.linspace(random_data.min(), random_data.max(), 13))[1:]:
             gt_dataset[:] += random_data > i
