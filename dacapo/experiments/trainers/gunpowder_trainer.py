@@ -91,10 +91,10 @@ class GunpowderTrainer(Trainer):
             assert isinstance(dataset.weight, int), dataset
 
             raw_source = DaCapoArraySource(dataset.raw, raw_key)
-            if self.clip_raw:
-                raw_source += gp.Crop(
-                    raw_key, dataset.gt.roi.snap_to_grid(dataset.raw.voxel_size)
-                )
+            # if self.clip_raw:
+            #     raw_source += gp.Crop(
+            #         raw_key, dataset.gt.roi.snap_to_grid(dataset.raw.voxel_size)
+            #     )
             gt_source = DaCapoArraySource(dataset.gt, gt_key)
             sample_points = dataset.sample_points
             points_source = None

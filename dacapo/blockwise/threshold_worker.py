@@ -11,6 +11,9 @@ import click
 import logging
 
 logger = logging.getLogger(__file__)
+logger.setLevel(logging.DEBUG)
+
+        
 
 read_write_conflict: bool = False
 fit: str = "valid"
@@ -62,7 +65,7 @@ def start_worker(
     client = daisy.Client()
 
     while True:
-        print("getting block")
+        logger.warning("getting block")
         with client.acquire_block() as block:
             if block is None:
                 break
@@ -71,6 +74,7 @@ def start_worker(
             output_array[block.write_roi] = (
                 input_array[block.write_roi] > threshold
             ).astype(np.uint8)
+            logger.warning(f"writing to {output_array_identifier} at {block.write_roi}")
 
 
 def spawn_worker(
@@ -85,7 +89,7 @@ def spawn_worker(
         raw_array (Array): The raw data to predict on.
         prediction_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
     """
-    compute_context = create_compute_context()
+    # compute_context = create_compute_context()
 
     # Make the command for the worker to run
     command = [
@@ -93,20 +97,37 @@ def spawn_worker(
         path,
         "start-worker",
         "--input_container",
-        input_array_identifier.container,
+        str(input_array_identifier.container),
         "--input_dataset",
         input_array_identifier.dataset,
         "--output_container",
-        output_array_identifier.container,
+        str(output_array_identifier.container),
         "--output_dataset",
         output_array_identifier.dataset,
         "--threshold",
-        threshold,
+        str(threshold),
     ]
 
     def run_worker():
         # Run the worker in the given compute context
-        compute_context.execute(command)
+        import subprocess
+        name = f"threshold_{output_array_identifier.dataset}_{threshold}"
+        import os
+        if not os.path.exists("validate/logs/threshold"):
+            os.makedirs("validate/logs/threshold")
+        full_command = [
+                "bsub",
+                "-n", "14",
+                 "-J", name,
+                "-o", f"validate/logs/threshold/{name}.out",
+                "-e", f"validate/logs/threshold/{name}.err",
+                    "-P",
+                    f"cellmap",
+                ]+ command
+        str_command = " ".join(full_command)
+        logger.warning(f"Submitting: {str_command}")
+        subprocess.run(full_command)
+        # compute_context.execute(command)
 
     return run_worker
 

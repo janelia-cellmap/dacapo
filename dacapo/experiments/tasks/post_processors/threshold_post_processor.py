@@ -1,37 +1,33 @@
-from pathlib import Path
-from dacapo.blockwise.scheduler import run_blockwise
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from .threshold_post_processor_parameters import ThresholdPostProcessorParameters
-from dacapo.store.array_store import LocalArrayIdentifier
 from .post_processor import PostProcessor
-import dacapo.blockwise
 import numpy as np
-from daisy import Roi, Coordinate
 
-from typing import Iterable
+from typing import TYPE_CHECKING, Iterable
+
+if TYPE_CHECKING:
+    from dacapo.store.local_array_store import LocalArrayIdentifier
+    from dacapo.experiments.tasks.post_processors import PostProcessorParameters
 
 
 class ThresholdPostProcessor(PostProcessor):
     def __init__(self):
         pass
 
-    def enumerate_parameters(self) -> Iterable["ThresholdPostProcessorParameters"]:
+    def enumerate_parameters(self) -> Iterable[ThresholdPostProcessorParameters]:
         """Enumerate all possible parameters of this post-processor."""
-        for i, threshold in enumerate([-0.1, 0.0, 0.1]):
-            yield ThresholdPostProcessorParameters(id=i, threshold=threshold)
 
-    def set_prediction(self, prediction_array_identifier):
-        self.prediction_array_identifier = prediction_array_identifier
+        yield ThresholdPostProcessorParameters(id=1)
+
+    def set_prediction(self, prediction_array_identifier: "LocalArrayIdentifier"):
         self.prediction_array = ZarrArray.open_from_array_identifier(
             prediction_array_identifier
         )
 
     def process(
         self,
-        parameters: "ThresholdPostProcessorParameters",  # type: ignore[override]
+        parameters: "PostProcessorParameters",
         output_array_identifier: "LocalArrayIdentifier",
-        num_workers: int = 16,
-        block_size: Coordinate = Coordinate((64, 64, 64)),
     ) -> ZarrArray:
         # TODO: Investigate Liskov substitution princple and whether it is a problem here
         # OOP theory states the super class should always be replaceable with its subclasses
@@ -53,22 +49,8 @@ class ThresholdPostProcessor(PostProcessor):
             np.uint8,
         )
 
-        read_roi = Roi((0, 0, 0), self.prediction_array.voxel_size * block_size)
-        # run blockwise post-processing
-        run_blockwise(
-            worker_file=str(
-                Path(Path(dacapo.blockwise.__file__).parent, "threshold_worker.py")
-            ),
-            total_roi=self.prediction_array.roi,
-            read_roi=read_roi,
-            write_roi=read_roi,
-            num_workers=num_workers,
-            max_retries=2,  # TODO: make this an option
-            timeout=None,  # TODO: make this an option
-            ######
-            input_array_identifier=self.prediction_array_identifier,
-            output_array_identifier=output_array_identifier,
-            threshold=parameters.threshold,
-        )
+        output_array[self.prediction_array.roi] = (
+            self.prediction_array[self.prediction_array.roi] > 0
+        ).astype(np.uint8)
 
         return output_array

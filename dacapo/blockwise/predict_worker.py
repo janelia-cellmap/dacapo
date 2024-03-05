@@ -18,6 +18,8 @@ import click
 import logging
 
 logger = logging.getLogger(__file__)
+logger.setLevel(logging.DEBUG)
+
 
 read_write_conflict: bool = False
 fit: str = "valid"
@@ -68,6 +70,7 @@ def start_worker(
     output_dataset: str,
     device: str | torch.device = "cuda",
 ):
+    logger.warning(f"Predicting {run_name}")
     # retrieving run
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(run_name)
@@ -93,13 +96,18 @@ def start_worker(
 
     # get the model's input and output size
     model = run.model.eval().to(device)
+    # raise error if no cuda
+    if not torch.cuda.is_available():
+        raise ValueError("CUDA is not available")
+    if not model.is_cuda:
+        raise ValueError("Model is not on CUDA")
     input_voxel_size = Coordinate(raw_array.voxel_size)
     output_voxel_size = model.scale(input_voxel_size)
     input_shape = Coordinate(model.eval_input_shape)
     input_size = input_voxel_size * input_shape
     output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
 
-    logger.info(
+    logger.warning(
         "Predicting with input size %s, output size %s", input_size, output_size
     )
 
@@ -172,6 +180,8 @@ def start_worker(
         num_workers=1,
     )
 
+    logger.warning("Running pipeline")
+
     with gp.build(pipeline):
         batch = pipeline.request_batch(gp.BatchRequest())
 
@@ -190,7 +200,7 @@ def spawn_worker(
         input_array_identifier (LocalArrayIdentifier): The raw data to predict on.
         output_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
     """
-    compute_context = create_compute_context()
+    # compute_context = create_compute_context()
 
     # Make the command for the worker to run
     command = [
@@ -200,22 +210,47 @@ def spawn_worker(
         "--run-name",
         run_name,
         "--iteration",
-        iteration,
+        str(iteration),
         "--input_container",
-        input_array_identifier.container,
+        str(input_array_identifier.container),
         "--input_dataset",
         input_array_identifier.dataset,
         "--output_container",
-        output_array_identifier.container,
+        str(output_array_identifier.container),
         "--output_dataset",
         output_array_identifier.dataset,
         "--device",
-        str(compute_context.device),
+        "cuda",
     ]
+
+    str_command = " ".join(command)
+    logger.warning(f"Spawning worker with command: {str_command}")
 
     def run_worker():
         # Run the worker in the given compute context
-        compute_context.execute(command)
+        import os
+        import subprocess
+
+        folder = f"/groups/cellmap/cellmap/zouinkhim/ml_experiments_ome/validate/logs/{run_name}"
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        name = f"predict_{run_name}_{iteration}"
+        full_command = [
+                "bsub",
+                "-q", "gpu_tesla",
+                "-gpu", "num=1",
+                "-n", "14",
+                 "-J", name,
+                "-o", f"/groups/cellmap/cellmap/zouinkhim/ml_experiments_ome/validate/logs/{run_name}/predict_{iteration}.out",
+                "-e", f"/groups/cellmap/cellmap/zouinkhim/ml_experiments_ome/validate/logs/{run_name}/predict_{iteration}.err",
+                    "-P",
+                    f"cellmap",
+                ]+ command
+        str_command = " ".join(full_command)
+        print(f"Submitting: {str_command}")
+        logger.warning(f"Submitting: {str_command}")
+        subprocess.run(full_command)
+        # compute_context.execute(command)
 
     return run_worker
 

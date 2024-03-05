@@ -12,6 +12,7 @@ from pathlib import Path
 import logging
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 def validate(
@@ -25,13 +26,16 @@ def validate(
     stored checkpoint. Returns the best parameters and scores for this
     iteration."""
 
-    logger.info("Validating run %s at iteration %d...", run_name, iteration)
+    logger.warning("Validating run %s at iteration %d...", run_name, iteration)
 
     # create run
 
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
+
+    logger.warning("Loading stats for run %s", run_name)
+
 
     # read in previous training/validation stats
 
@@ -44,6 +48,8 @@ def validate(
     # create weights store and read weights
     weights_store = create_weights_store()
     weights_store.retrieve_weights(run.name, iteration)
+
+    logger.warning("Loaded weights for run %s at iteration %d", run_name, iteration)
 
     return validate_run(
         run,
@@ -71,7 +77,7 @@ def validate_run(
         or len(run.datasplit.validate) == 0
         or run.datasplit.validate[0].gt is None
     ):
-        logger.info("Cannot validate run %s. Continuing training!", run.name)
+        logger.warning("Cannot validate run %s. Continuing training!", run.name)
         return None, None
 
     # get array and weight store
@@ -90,7 +96,7 @@ def validate_run(
         assert (
             validation_dataset.gt is not None
         ), "We do not yet support validating on datasets without ground truth"
-        logger.info(
+        logger.warning(
             "Validating run %s on dataset %s", run.name, validation_dataset.name
         )
 
@@ -106,7 +112,7 @@ def validate_run(
                 f"{input_gt_array_identifier.container}/{input_gt_array_identifier.dataset}"
             ).exists()
         ):
-            logger.info("Copying validation inputs!")
+            logger.warning("Copying validation inputs!")
             input_voxel_size = validation_dataset.raw.voxel_size
             output_voxel_size = run.model.scale(input_voxel_size)
             input_shape = run.model.eval_input_shape
@@ -144,31 +150,31 @@ def validate_run(
             )
             input_gt[output_roi] = validation_dataset.gt[output_roi]
         else:
-            logger.info("validation inputs already copied!")
+            logger.warning("validation inputs already copied!")
 
         prediction_array_identifier = array_store.validation_prediction_array(
             run.name, iteration, validation_dataset.name
         )
-        logger.info("Predicting on dataset %s", validation_dataset.name)
+        logger.warning("Predicting on dataset %s", validation_dataset.name)
+        # compute_context = run.task.create_compute_context()
+
         predict(
-            run.name,
-            iteration,
-            input_container=input_raw_array_identifier.container,
-            input_dataset=input_raw_array_identifier.dataset,
-            output_path=prediction_array_identifier,
+            run.model,
+            validation_dataset.raw,
+            prediction_array_identifier,
+            # compute_context=compute_context,
             output_roi=validation_dataset.gt.roi,
-            num_workers=num_workers,
-            output_dtype=output_dtype,
-            overwrite=overwrite,
         )
 
-        logger.info("Predicted on dataset %s", validation_dataset.name)
+
+        logger.warning("Predicted on dataset %s", validation_dataset.name)
 
         post_processor.set_prediction(prediction_array_identifier)
 
         dataset_iteration_scores = []
 
         for parameters in post_processor.enumerate_parameters():
+            logger.warning("Post processing on dataset %s - %s", validation_dataset.name, parameters)
             output_array_identifier = array_store.validation_output_array(
                 run.name, iteration, str(parameters), validation_dataset.name
             )
@@ -178,8 +184,17 @@ def validate_run(
             )
 
             scores = evaluator.evaluate(output_array_identifier, validation_dataset.gt)
+            logger.warning(
+                "Evaluated on dataset %s - %s: %s",
+                validation_dataset.name,
+                parameters,
+                scores,
+            )
 
             for criterion in run.validation_scores.criteria:
+                logger.warning(
+                    "Criterion %s: %s", criterion, getattr(scores, criterion)
+                )
                 # replace predictions in array with the new better predictions
                 if evaluator.is_best(
                     validation_dataset,

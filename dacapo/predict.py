@@ -1,13 +1,14 @@
-from pathlib import Path
-
-from dacapo.blockwise import run_blockwise
-import dacapo.blockwise
-from dacapo.experiments import Run
-from dacapo.store.create_store import create_config_store, create_weights_store
+# import torch
+from dacapo.gp import DaCapoArraySource
+from dacapo.experiments.model import Model
+from dacapo.experiments.datasplits.datasets.arrays import Array
 from dacapo.store.local_array_store import LocalArrayIdentifier
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+from dacapo.compute_context import LocalTorch, ComputeContext
+from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 
 from funlib.geometry import Coordinate, Roi
+import gunpowder as gp
+import gunpowder.torch as gp_torch
 import numpy as np
 import zarr
 
@@ -18,62 +19,14 @@ logger = logging.getLogger(__name__)
 
 
 def predict(
-    run_name: str,
-    iteration: int,
-    input_container: Path | str,
-    input_dataset: str,
-    output_path: LocalArrayIdentifier | Path | str,
-    output_roi: Optional[Roi | str] = None,
-    num_workers: int = 12,
-    output_dtype: np.dtype | str = np.uint8,  # type: ignore
-    overwrite: bool = True,
+    model: Model,
+    raw_array: Array,
+    prediction_array_identifier: LocalArrayIdentifier,
+    num_cpu_workers: int = 4,
+    # compute_context: ComputeContext = LocalTorch(),
+    output_roi: Optional[Roi] = None,
 ):
-    """Predict with a trained model.
-
-    Args:
-        run_name (str): The name of the run to predict with.
-        iteration (int): The training iteration of the model to use for prediction.
-        input_container (Path | str): The container of the input array.
-        input_dataset (str): The dataset name of the input array.
-        output_path (LocalArrayIdentifier | str): The path where the prediction array will be stored, or a LocalArryIdentifier for the prediction array.
-        output_roi (Optional[Roi | str], optional): The ROI of the output array. If None, the ROI of the input array will be used. Defaults to None.
-        num_workers (int, optional): The number of workers to use for blockwise prediction. Defaults to 30.
-        output_dtype (np.dtype | str, optional): The dtype of the output array. Defaults to np.uint8.
-        overwrite (bool, optional): If True, the output array will be overwritten if it already exists. Defaults to True.
-    """
-    # retrieving run
-    config_store = create_config_store()
-    run_config = config_store.retrieve_run_config(run_name)
-    run = Run(run_config)
-
-    # check to see if we can load the weights
-    weights_store = create_weights_store()
-    try:
-        weights_store.retrieve_weights(run_name, iteration)
-    except FileNotFoundError:
-        raise ValueError(
-            f"No weights found for run {run_name} at iteration {iteration}."
-        )
-
-    # get arrays
-    input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    raw_array = ZarrArray.open_from_array_identifier(input_array_identifier)
-    if isinstance(output_path, LocalArrayIdentifier):
-        output_array_identifier = output_path
-    else:
-        if ".zarr" in str(output_path) or ".n5" in str(output_path):
-            output_container = Path(output_path)
-        else:
-            output_container = Path(
-                output_path,
-                Path(input_container).stem + ".zarr",
-            )  # TODO: zarr hardcoded
-        output_array_identifier = LocalArrayIdentifier(
-            output_container, f"prediction_{run_name}_{iteration}"
-        )
-
     # get the model's input and output size
-    model = run.model.eval()
 
     input_voxel_size = Coordinate(raw_array.voxel_size)
     output_voxel_size = model.scale(input_voxel_size)
@@ -81,69 +34,115 @@ def predict(
     input_size = input_voxel_size * input_shape
     output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
 
-    # calculate input and output rois
+    # check if model not in cuda move it to cuda
+    # if not model.is_cuda:
+    #     model = model.eval().to("cuda")
 
-    context = (input_size - output_size) // 2
+    # if not torch.cuda.is_available():
+    #     raise ValueError("CUDA is not available")
+    
+    # if not(next(model.parameters()).is_cuda):
+    #     raise ValueError("Model is not on CUDA")
+    
 
-    if output_roi is None:
-        output_roi = raw_array.roi.grow(-context, -context)
-    elif isinstance(output_roi, str):
-        start, end = zip(
-            *[
-                tuple(int(coord) for coord in axis.split(":"))
-                for axis in output_roi.strip("[]").split(",")
-            ]
-        )
-        output_roi = Roi(
-            Coordinate(start),
-            Coordinate(end) - Coordinate(start),
-        )
-        output_roi = output_roi.snap_to_grid(
-            raw_array.voxel_size, mode="grow"
-        ).intersect(raw_array.roi.grow(-context, -context))
-    _input_roi = output_roi.grow(context, context)  # type: ignore
-
-    if isinstance(output_dtype, str):
-        output_dtype = np.dtype(output_dtype)
-
-    logger.info(
+    logger.warning(
         "Predicting with input size %s, output size %s", input_size, output_size
     )
 
-    logger.info("Total input ROI: %s, output ROI: %s", _input_roi, output_roi)
+    # calculate input and output rois
+
+    context = (input_size - output_size) / 2
+    if output_roi is None:
+        input_roi = raw_array.roi
+        output_roi = input_roi.grow(-context, -context)
+    else:
+        input_roi = output_roi.grow(context, context)
+
+    logger.warning("Total input ROI: %s, output ROI: %s", input_roi, output_roi)
 
     # prepare prediction dataset
     axes = ["c"] + [axis for axis in raw_array.axes if axis != "c"]
+    import os 
+    dataset_path = os.path.join(prediction_array_identifier.container, prediction_array_identifier.dataset)
+    if os.path.exists(dataset_path):
+        logger.warning(f"Removing existing dataset at {dataset_path}")
+        import shutil
+        shutil.rmtree(dataset_path)
     ZarrArray.create_from_array_identifier(
-        output_array_identifier,
+        prediction_array_identifier,
         axes,
         output_roi,
         model.num_out_channels,
         output_voxel_size,
-        output_dtype,
-        overwrite=overwrite,
+        np.float32,
     )
 
-    # run blockwise prediction
-    worker_file = str(Path(Path(dacapo.blockwise.__file__).parent, "predict_worker.py"))
-    logger.info("Running blockwise prediction with worker_file: ", worker_file)
-    run_blockwise(
-        worker_file=worker_file,
-        total_roi=_input_roi,
-        read_roi=Roi((0, 0, 0), input_size),
-        write_roi=Roi(context, output_size),
-        num_workers=num_workers,
-        max_retries=2,  # TODO: make this an option
-        timeout=None,  # TODO: make this an option
-        ######
-        run_name=run_name,
-        iteration=iteration,
-        input_array_identifier=input_array_identifier,
-        output_array_identifier=output_array_identifier,
+    # create gunpowder keys
+
+    raw = gp.ArrayKey("RAW")
+    prediction = gp.ArrayKey("PREDICTION")
+
+    # assemble prediction pipeline
+
+    # prepare data source
+    pipeline = DaCapoArraySource(raw_array, raw)
+    # raw: (c, d, h, w)
+    pipeline += gp.Pad(raw, Coordinate((None,) * input_voxel_size.dims))
+    # raw: (c, d, h, w)
+    pipeline += gp.Unsqueeze([raw])
+    # raw: (1, c, d, h, w)
+
+    gt_padding = (output_size - output_roi.shape) % output_size
+    prediction_roi = output_roi.grow(gt_padding)
+
+    # predict
+    pipeline += gp_torch.Predict(
+        model=model,
+        inputs={"x": raw},
+        outputs={0: prediction},
+        array_specs={
+            prediction: gp.ArraySpec(
+                roi=prediction_roi, voxel_size=output_voxel_size, dtype=np.float32
+            )
+        },
+        spawn_subprocess=False,
+        device="cuda",
+    )
+    # raw: (1, c, d, h, w)
+    # prediction: (1, [c,] d, h, w)
+
+    # prepare writing
+    pipeline += gp.Squeeze([raw, prediction])
+    # raw: (c, d, h, w)
+    # prediction: (c, d, h, w)
+    # raw: (c, d, h, w)
+    # prediction: (c, d, h, w)
+
+    # write to zarr
+    pipeline += gp.ZarrWrite(
+        {prediction: prediction_array_identifier.dataset},
+        prediction_array_identifier.container.parent,
+        prediction_array_identifier.container.name,
+        dataset_dtypes={prediction: np.float32},
     )
 
-    container = zarr.open(str(output_array_identifier.container))
-    dataset = container[output_array_identifier.dataset]
-    dataset.attrs["axes"] = (  # type: ignore
+    # create reference batch request
+    ref_request = gp.BatchRequest()
+    ref_request.add(raw, input_size)
+    ref_request.add(prediction, output_size)
+    pipeline += gp.Scan(ref_request)
+
+    # build pipeline and predict in complete output ROI
+
+    with gp.build(pipeline):
+        pipeline.request_batch(gp.BatchRequest())
+    
+    logger.warning("Finished predicting")
+
+    container = zarr.open(prediction_array_identifier.container)
+    dataset = container[prediction_array_identifier.dataset]
+    dataset.attrs["axes"] = (
         raw_array.axes if "c" in raw_array.axes else ["c"] + raw_array.axes
     )
+
+    logger.warning("Finished writing to %s", prediction_array_identifier)

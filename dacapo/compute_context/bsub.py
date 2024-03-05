@@ -47,10 +47,10 @@ class Bsub(ComputeContext):
                 f"num={self.num_gpus}",
                 "-J",
                 "dacapo",
-                # "-o",
-                # f"{run_name}_train.out",
-                # "-e",
-                # f"{run_name}_train.err",
+                "-o",
+                "train.out",
+                "-e",
+                "train.err",
             ]
             + (
                 [
