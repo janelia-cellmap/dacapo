@@ -38,18 +38,22 @@ class DaCapoBlockwiseTask(Task):
         read_write_conflict = worker.read_write_conflict
         fit = worker.fit
 
+        kwargs = {
+            "task_id": task_id,
+            "total_roi": total_roi,
+            "read_roi": read_roi,
+            "write_roi": write_roi,
+            "process_function": process_function,
+            "check_function": check_function,
+            "init_callback_fn": init_callback_fn,
+            "read_write_conflict": read_write_conflict,
+            "num_workers": num_workers,
+            "max_retries": max_retries,
+            "fit": fit,
+            "timeout": timeout,
+            "upstream_tasks": upstream_tasks,
+        }
+
         super().__init__(
-            task_id,
-            total_roi,
-            read_roi,
-            write_roi,
-            process_function,
-            check_function,
-            init_callback_fn,
-            read_write_conflict,
-            num_workers,
-            max_retries,
-            fit,
-            timeout,
-            upstream_tasks,
+            **{k: v for k, v in kwargs.items() if v is not None},
         )
