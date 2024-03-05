@@ -30,9 +30,11 @@ git clone git@github.com:janelia-cellmap/dacapo.git
 cd dacapo
 pip install .
 ```
-This will install the minimum required dependencies. However, having access to a MongoDB server for storing outputs is strongly recommended for smoothest performance.
+This will install the minimum required dependencies. 
 
-To install and run MongoDB locally, refer to the MongoDB documentation [here](https://www.mongodb.com/docs/manual/installation/).
+You may additionally utilize a MongoDB server for storing outputs. To install and run MongoDB locally, refer to the MongoDB documentation [here](https://www.mongodb.com/docs/manual/installation/).
+
+The use of MongoDB, as well as specifying the compute context (on cluster or not) should be specified in the ```dacapo.yaml``` in the main directory.
 
 ## Functionality Overview
 
