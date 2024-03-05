@@ -11,6 +11,7 @@ import gunpowder as gp
 import gunpowder.torch as gp_torch
 
 from funlib.geometry import Coordinate
+import daisy
 
 import numpy as np
 import click
@@ -165,15 +166,28 @@ def start_worker(
         output_size,
         voxel_size=output_voxel_size,
     )
-    # use daisy requests to run pipeline
-    pipeline += gp.DaisyRequestBlocks(
-        reference=request,
-        roi_map={raw: "read_roi", prediction: "write_roi"},
-        num_workers=1,
-    )
+    # # use daisy requests to run pipeline
+    # pipeline += gp.DaisyRequestBlocks(
+    #     reference=request,
+    #     roi_map={raw: "read_roi", prediction: "write_roi"},
+    #     num_workers=1,
+    # )
 
-    with gp.build(pipeline):
-        batch = pipeline.request_batch(gp.BatchRequest())
+    daisy_client = daisy.Client()
+
+    while True:
+        with daisy_client.acquire_block() as block:
+            if block is None:
+                return
+
+            logger.info("Processing block %s", block)
+
+            chunk_request = request.copy()
+            chunk_request[raw].roi = block.read_roi
+            chunk_request[prediction].roi = block.write_roi
+
+        with gp.build(pipeline):
+            _ = pipeline.request_batch(chunk_request)
 
 
 def spawn_worker(
