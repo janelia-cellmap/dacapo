@@ -10,6 +10,7 @@ from dacapo.validate import validate_run
 
 import torch
 from tqdm import tqdm
+import threading
 
 import logging
 
@@ -176,10 +177,18 @@ def train_run(run: Run):
             stats_store.store_training_stats(run.name, run.training_stats)
             weights_store.store_weights(run, iteration_stats.iteration + 1)
             try:
-                validate_run(
-                    run,
-                    iteration_stats.iteration + 1,
+                # launch validation in a separate thread to avoid blocking training
+                validate_thread = threading.Thread(
+                    target=validate_run,
+                    args=(run, iteration_stats.iteration + 1),
+                    name=f"validate_{run.name}_{iteration_stats.iteration + 1}",
                 )
+                validate_thread.start()
+                # validate_run(
+                #     run,
+                #     iteration_stats.iteration + 1,
+                # )
+
                 stats_store.store_validation_iteration_scores(
                     run.name, run.validation_scores
                 )

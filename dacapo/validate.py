@@ -36,7 +36,6 @@ def validate(
     run = Run(run_config)
 
     # read in previous training/validation stats
-
     stats_store = create_stats_store()
     run.training_stats = stats_store.retrieve_training_stats(run_name)
     run.validation_scores.scores = stats_store.retrieve_validation_iteration_scores(
