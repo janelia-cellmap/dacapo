@@ -10,6 +10,7 @@ from dacapo.validate import validate_run
 
 import torch
 from tqdm import tqdm
+import threading
 
 import logging
 
@@ -163,8 +164,6 @@ def train_run(run: Run):
                 # Special case for tests - skip validation, but store weights
                 stats_store.store_training_stats(run.name, run.training_stats)
                 weights_store.store_weights(run, iteration_stats.iteration + 1)
-                run.move_optimizer(compute_context.device)
-                run.model.train()
                 continue
 
             if no_its or (not validation_it and not final_it):
@@ -173,16 +172,24 @@ def train_run(run: Run):
 
             run.model.eval()
             # free up optimizer memory to allow larger validation blocks
-            run.model = run.model.to(torch.device("cpu"))
             run.move_optimizer(torch.device("cpu"), empty_cuda_cache=True)
 
             stats_store.store_training_stats(run.name, run.training_stats)
             weights_store.store_weights(run, iteration_stats.iteration + 1)
             try:
-                validate_run(
-                    run,
-                    iteration_stats.iteration + 1,
+                # launch validation in a separate thread to avoid blocking training
+                validate_thread = threading.Thread(
+                    target=validate_run,
+                    args=(run, iteration_stats.iteration + 1),
+                    name=f"validate_{run.name}_{iteration_stats.iteration + 1}",
+                    daemon=True,
                 )
+                validate_thread.start()
+                # validate_run(
+                #     run,
+                #     iteration_stats.iteration + 1,
+                # )
+
                 stats_store.store_validation_iteration_scores(
                     run.name, run.validation_scores
                 )

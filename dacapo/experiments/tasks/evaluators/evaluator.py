@@ -78,6 +78,52 @@ class Evaluator(ABC):
             else:
                 return getattr(score, criterion) < previous_best_score
 
+    def get_overall_best(self, dataset: "Dataset", criterion: str):
+        overall_best = None
+        if self.best_scores:
+            for _, parameter, _ in self.best_scores.keys():
+                score = self.best_scores[(dataset, parameter, criterion)]
+                if score is None:
+                    overall_best = None
+                else:
+                    _, current_parameter_score = score
+                    if overall_best is None:
+                        overall_best = current_parameter_score
+                    else:
+                        if current_parameter_score:
+                            if self.higher_is_better(criterion):
+                                if current_parameter_score > overall_best:
+                                    overall_best = current_parameter_score
+                            else:
+                                if current_parameter_score < overall_best:
+                                    overall_best = current_parameter_score
+        return overall_best
+
+    def get_overall_best_parameters(self, dataset: "Dataset", criterion: str):
+        overall_best = None
+        overall_best_parameters = None
+        if self.best_scores:
+            for _, parameter, _ in self.best_scores.keys():
+                score = self.best_scores[(dataset, parameter, criterion)]
+                if score is None:
+                    overall_best = None
+                else:
+                    _, current_parameter_score = score
+                    if overall_best is None:
+                        overall_best = current_parameter_score
+                        overall_best_parameters = parameter
+                    else:
+                        if current_parameter_score:
+                            if self.higher_is_better(criterion):
+                                if current_parameter_score > overall_best:
+                                    overall_best = current_parameter_score
+                                    overall_best_parameters = parameter
+                            else:
+                                if current_parameter_score < overall_best:
+                                    overall_best = current_parameter_score
+                                    overall_best_parameters = parameter
+        return overall_best_parameters
+
     def set_best(self, validation_scores: "ValidationScores") -> None:
         """
         Find the best iteration for each dataset/post_processing_parameter/criterion
