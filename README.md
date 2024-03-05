@@ -1,3 +1,4 @@
+![CellMap](docs/source/_static/CellMapLogo.png)
 # DaCapo ![DaCapo](docs/source/_static/icon_dacapo.png) 
 
 [![tests](https://github.com/janelia-cellmap/dacapo/actions/workflows/tests.yaml/badge.svg)](https://github.com/janelia-cellmap/dacapo/actions/workflows/tests.yaml)
