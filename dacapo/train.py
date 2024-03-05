@@ -182,6 +182,7 @@ def train_run(run: Run):
                     target=validate_run,
                     args=(run, iteration_stats.iteration + 1),
                     name=f"validate_{run.name}_{iteration_stats.iteration + 1}",
+                    daemon=True,
                 )
                 validate_thread.start()
                 # validate_run(
