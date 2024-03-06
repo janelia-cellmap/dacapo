@@ -380,6 +380,9 @@ def segment_blockwise(
         np.uint64,
         overwrite=overwrite,
     )
+    print(
+        f"Created output array {output_array_identifier.container}:{output_array_identifier.dataset} with ROI {_total_roi}."
+    )
 
     _segment_blockwise(
         input_array_identifier=input_array_identifier,
