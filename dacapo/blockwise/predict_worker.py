@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import daisy
 import torch
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from dacapo.gp import DaCapoArraySource
@@ -68,10 +68,11 @@ def start_worker(
     output_dataset: str,
     device: str | torch.device = "cuda",
 ):
+    client = daisy.Client()
     # retrieving run
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(run_name)
-    run = Run(run_config)
+    run = Run(run_config, load_starter_weights=False)
 
     # create weights store
     weights_store = create_weights_store()
@@ -190,6 +191,8 @@ def spawn_worker(
         input_array_identifier (LocalArrayIdentifier): The raw data to predict on.
         output_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
     """
+
+    logger.warning("Spawning worker")
     compute_context = create_compute_context()
 
     # Make the command for the worker to run
@@ -200,13 +203,13 @@ def spawn_worker(
         "--run-name",
         run_name,
         "--iteration",
-        iteration,
+        str(iteration),
         "--input_container",
-        input_array_identifier.container,
+        str(input_array_identifier.container),
         "--input_dataset",
         input_array_identifier.dataset,
         "--output_container",
-        output_array_identifier.container,
+        str(output_array_identifier.container),
         "--output_dataset",
         output_array_identifier.dataset,
         "--device",
@@ -215,7 +218,10 @@ def spawn_worker(
 
     def run_worker():
         # Run the worker in the given compute context
+        logger.warning("Running worker with command: %s", command)
         compute_context.execute(command)
+
+    run_worker()
 
     return run_worker
 

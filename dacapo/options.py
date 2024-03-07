@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 @attr.s
 class DaCapoConfig:
     type: str = attr.ib(
-        default="files",
+        default="mongo",
         metadata={
             "help_text": "The type of store to use for storing configurations and statistics. "
             "Currently, only 'files' and 'mongo' are supported with files being the default."
@@ -28,7 +28,7 @@ class DaCapoConfig:
         },
     )
     compute_context_config: dict = attr.ib(
-        default={"type": "LocalTorch", "config": {}},
+        default={"type": "Bsub", "config": {}},
         metadata={
             "help_text": "The configuration for the compute context to use. "
             "This is a dictionary with the keys being the names of the compute context and the values being the configuration for that context."

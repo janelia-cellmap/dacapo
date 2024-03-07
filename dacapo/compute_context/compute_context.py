@@ -2,7 +2,9 @@ from abc import ABC, abstractmethod
 import subprocess
 
 from dacapo import Options, compute_context
+import logging
 
+logger = logging.getLogger(__name__)
 
 class ComputeContext(ABC):
     @property
@@ -15,6 +17,7 @@ class ComputeContext(ABC):
         return command
 
     def wrap_command(self, command):
+        logger.warning(f"Wrapping command {command} with {self}")
         command = [str(com) for com in self._wrap_command(command)]
         return command
 

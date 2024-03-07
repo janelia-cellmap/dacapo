@@ -2,7 +2,9 @@ from datetime import datetime
 from importlib.machinery import SourceFileLoader
 from pathlib import Path
 from daisy import Task, Roi
+import logging
 
+logger = logging.getLogger(__name__)
 
 class DaCapoBlockwiseTask(Task):
     def __init__(
@@ -11,7 +13,7 @@ class DaCapoBlockwiseTask(Task):
         total_roi: Roi,
         read_roi: Roi,
         write_roi: Roi,
-        num_workers: int = 16,
+        num_workers: int = 4,
         max_retries: int = 2,
         timeout=None,
         upstream_tasks=None,
@@ -27,29 +29,51 @@ class DaCapoBlockwiseTask(Task):
         task_id = worker_name + timestamp
 
         process_function = worker.spawn_worker(*args, **kwargs)
+        logger.warning("process_function blockwise task: %s", task_id)
+        logger.warning(process_function)
+        logger.warning("worker_file: %s", worker_file)
         if hasattr(worker, "check_function"):
             check_function = worker.check_function
         else:
             check_function = None
-        if hasattr(worker, "init_callback_fn"):
-            init_callback_fn = worker.init_callback_fn
-        else:
-            init_callback_fn = None
+        # if hasattr(worker, "init_callback_fn"):
+        #     init_callback_fn = worker.init_callback_fn
+        # else:
+        #     init_callback_fn = None
+        
+        # logger.warning("init_callback_fn: %s", init_callback_fn)
         read_write_conflict = worker.read_write_conflict
         fit = worker.fit
 
+        # def init_callback_fn(self, context):
+        #     logger.warning("Init callback with context: %s" % context)
+
+        #     print(
+        #         "sbatch command: DAISY_CONTEXT={} sbatch --parsable {}\n".format(
+        #             context.to_env(), self.sbatch_file
+        #         )
+        #     )
+
+        #     print(
+        #         "Terminal command: DAISY_CONTEXT={} {}\n".format(
+        #             context.to_env(), self.new_actor_cmd
+        #         )
+        #     )
+
         super().__init__(
-            task_id,
-            total_roi,
-            read_roi,
-            write_roi,
-            process_function,
-            check_function,
-            init_callback_fn,
-            read_write_conflict,
-            num_workers,
-            max_retries,
-            fit,
-            timeout,
-            upstream_tasks,
+            task_id=task_id,
+            total_roi=total_roi,
+            read_roi=read_roi,
+            write_roi=write_roi,
+            process_function=process_function,
+            check_function=check_function,
+            # init_callback_fn,
+            read_write_conflict=read_write_conflict,
+            num_workers=num_workers,
+            max_retries=max_retries,
+            fit=fit,
+            timeout=timeout,
+            upstream_tasks=upstream_tasks,
         )
+    
+    

@@ -7,8 +7,10 @@ from funlib.geometry import Roi, Coordinate
 import yaml
 
 from dacapo.blockwise import DaCapoBlockwiseTask
+import logging
 
-
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 def run_blockwise(
     worker_file: str | Path,
     total_roi: Roi,
@@ -63,7 +65,7 @@ def run_blockwise(
             ``Bool``.
 
     """
-
+    logger.warning("Running blockwise with worker_file: %s", worker_file)
     # Make the task
     task = DaCapoBlockwiseTask(
         worker_file,
@@ -77,6 +79,8 @@ def run_blockwise(
         *args,
         **kwargs,
     )
+
+    logger.warning("Running blockwise task: %s", task)
 
     return daisy.run_blockwise([task])
 

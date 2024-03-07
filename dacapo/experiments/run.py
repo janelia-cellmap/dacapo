@@ -26,7 +26,7 @@ class Run:
     training_stats: TrainingStats
     validation_scores: ValidationScores
 
-    def __init__(self, run_config):
+    def __init__(self, run_config, load_starter_weights: bool = True):
         self.name = run_config.name
         self.train_until = run_config.num_iterations
         self.validation_interval = run_config.validation_interval
@@ -54,13 +54,14 @@ class Run:
         )
 
         # preloaded weights from previous run
-        self.start = (
-            Start(run_config.start_config)
-            if run_config.start_config is not None
-            else None
-        )
-        if self.start is not None:
-            self.start.initialize_weights(self.model)
+        if load_starter_weights:
+            self.start = (
+                Start(run_config.start_config)
+                if run_config.start_config is not None
+                else None
+            )
+            if self.start is not None:
+                self.start.initialize_weights(self.model)
 
     @staticmethod
     def get_validation_scores(run_config) -> ValidationScores:

@@ -8,6 +8,7 @@ class Start(ABC):
     def __init__(self, start_config):
         self.run = start_config.run
         self.criterion = start_config.criterion
+        # raise NotImplementedError("Start is not implemented yet")
 
     def initialize_weights(self, model):
         from dacapo.store.create_store import create_weights_store

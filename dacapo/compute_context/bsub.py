@@ -3,7 +3,9 @@ from .compute_context import ComputeContext
 import attr
 
 from typing import Optional
+import logging
 
+logger = logging.getLogger(__name__)
 
 @attr.s
 class Bsub(ComputeContext):
@@ -36,29 +38,26 @@ class Bsub(ComputeContext):
             return "cpu"
 
     def _wrap_command(self, command):
-        return (
+        full_command =  (
             [
                 "bsub",
+                "-P",
+                "cellmap",
                 "-q",
-                f"{self.queue}",
+                "gpu_tesla",
                 "-n",
-                f"{self.num_cpus}",
+                f"5",
                 "-gpu",
-                f"num={self.num_gpus}",
+                f"num=1",
                 "-J",
-                "dacapo",
-                # "-o",
-                # f"{run_name}_train.out",
-                # "-e",
-                # f"{run_name}_train.err",
+                "dacapoooooooooo",
+                "-o"
+                f"/groups/cellmap/cellmap/zouinkhim/ml_experiments_v2/validate/logs/v22_peroxisome_funetuning_best_v20_1e4_finetuned_distances_8nm_peroxisome_jrc_mus-livers_peroxisome_8nm_attention-upsample-unet_default_one_label_finetuning_0/train.out",
+                "-e",
+                f"/groups/cellmap/cellmap/zouinkhim/ml_experiments_v2/validate/logs/v22_peroxisome_funetuning_best_v20_1e4_finetuned_distances_8nm_peroxisome_jrc_mus-livers_peroxisome_8nm_attention-upsample-unet_default_one_label_finetuning_0/train.err",
             ]
-            + (
-                [
-                    "-P",
-                    f"{self.billing}",
-                ]
-                if self.billing is not None
-                else []
-            )
             + command
         )
+        full_command = [str(c) for c in full_command]
+        logger.warning(f"Submitting command: {' '.join(full_command)}")
+        return full_command
