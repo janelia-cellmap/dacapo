@@ -1,6 +1,6 @@
-<img src="https://github.com/janelia-cellmap/dacapo/blob/main/docs/source/_static/CellMapLogo.png" alt="CellMap logo" width="85%">
+<img src="https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/CellMapLogo.png" alt="CellMap logo" width="85%">
 
-# DaCapo ![DaCapo](https://github.com/janelia-cellmap/dacapo/blob/main/docs/source/_static/icon_dacapo.png)
+# DaCapo ![DaCapo](https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/icon_dacapo.png)
 
 [![tests](https://github.com/janelia-cellmap/dacapo/actions/workflows/tests.yaml/badge.svg)](https://github.com/janelia-cellmap/dacapo/actions/workflows/tests.yaml)
 [![black](https://github.com/janelia-cellmap/dacapo/actions/workflows/black.yaml/badge.svg)](https://github.com/janelia-cellmap/dacapo/actions/workflows/black.yaml)
