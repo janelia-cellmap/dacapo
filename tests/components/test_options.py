@@ -50,6 +50,7 @@ def test_local_config_file():
             """
         )
     )
+    os.environ["OPTIONS_FILE"] = str(config_file)
 
     # Parse the options
     options = Options.instance()
