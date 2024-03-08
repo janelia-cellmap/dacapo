@@ -46,11 +46,10 @@ def options(request, tmp_path):
     # write the dacapo config in the current temporary directory. Now options
     # will be read from this file instead of the users config file letting
     # us test different configurations
-    config_file = Path("dacapo.yaml")
+    config_file = Path(tmp_path / "dacapo.yaml")
     with open(config_file, "w") as f:
         yaml.safe_dump(options.serialize(), f)
-    # config_file.write_text(options.serialize()
-    #      )
+    os.environ["OPTIONS_FILE"] = str(config_file)
 
     # yield the options
     yield options

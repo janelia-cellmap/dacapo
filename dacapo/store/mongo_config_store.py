@@ -39,9 +39,9 @@ class MongoConfigStore(ConfigStore):
     def delete_config(self, database, config_name: str) -> None:
         database.delete_one({"name": config_name})
 
-    def store_run_config(self, run_config):
+    def store_run_config(self, run_config, ignore=None):
         run_doc = converter.unstructure(run_config)
-        self.__save_insert(self.runs, run_doc)
+        self.__save_insert(self.runs, run_doc, ignore)
 
     def retrieve_run_config(self, run_name):
         run_doc = self.runs.find_one({"name": run_name}, projection={"_id": False})
@@ -72,9 +72,9 @@ class MongoConfigStore(ConfigStore):
         runs = self.runs.find(filters, projection={"_id": False, "name": True})
         return list([run["name"] for run in runs])
 
-    def store_task_config(self, task_config):
+    def store_task_config(self, task_config, ignore=None):
         task_doc = converter.unstructure(task_config)
-        self.__save_insert(self.tasks, task_doc)
+        self.__save_insert(self.tasks, task_doc, ignore)
 
     def retrieve_task_config(self, task_name):
         task_doc = self.tasks.find_one({"name": task_name}, projection={"_id": False})
@@ -84,9 +84,9 @@ class MongoConfigStore(ConfigStore):
         tasks = self.tasks.find({}, projection={"_id": False, "name": True})
         return list([task["name"] for task in tasks])
 
-    def store_architecture_config(self, architecture_config):
+    def store_architecture_config(self, architecture_config, ignore=None):
         architecture_doc = converter.unstructure(architecture_config)
-        self.__save_insert(self.architectures, architecture_doc)
+        self.__save_insert(self.architectures, architecture_doc, ignore)
 
     def retrieve_architecture_config(self, architecture_name):
         architecture_doc = self.architectures.find_one(
@@ -100,9 +100,9 @@ class MongoConfigStore(ConfigStore):
         )
         return list([architecture["name"] for architecture in architectures])
 
-    def store_trainer_config(self, trainer_config):
+    def store_trainer_config(self, trainer_config, ignore=None):
         trainer_doc = converter.unstructure(trainer_config)
-        self.__save_insert(self.trainers, trainer_doc)
+        self.__save_insert(self.trainers, trainer_doc, ignore)
 
     def retrieve_trainer_config(self, trainer_name):
         trainer_doc = self.trainers.find_one(
@@ -114,9 +114,9 @@ class MongoConfigStore(ConfigStore):
         trainers = self.trainers.find({}, projection={"_id": False, "name": True})
         return list([trainer["name"] for trainer in trainers])
 
-    def store_datasplit_config(self, datasplit_config):
+    def store_datasplit_config(self, datasplit_config, ignore=None):
         datasplit_doc = converter.unstructure(datasplit_config)
-        self.__save_insert(self.datasplits, datasplit_doc)
+        self.__save_insert(self.datasplits, datasplit_doc, ignore)
 
     def retrieve_datasplit_config(self, datasplit_name):
         datasplit_doc = self.datasplits.find_one(
@@ -128,9 +128,9 @@ class MongoConfigStore(ConfigStore):
         datasplits = self.datasplits.find({}, projection={"_id": False, "name": True})
         return list([datasplit["name"] for datasplit in datasplits])
 
-    def store_dataset_config(self, dataset_config):
+    def store_dataset_config(self, dataset_config, ignore=None):
         dataset_doc = converter.unstructure(dataset_config)
-        self.__save_insert(self.datasets, dataset_doc)
+        self.__save_insert(self.datasets, dataset_doc, ignore)
 
     def retrieve_dataset_config(self, dataset_name):
         dataset_doc = self.datasets.find_one(
@@ -142,9 +142,9 @@ class MongoConfigStore(ConfigStore):
         datasets = self.datasets.find({}, projection={"_id": False, "name": True})
         return list([dataset["name"] for dataset in datasets])
 
-    def store_array_config(self, array_config):
+    def store_array_config(self, array_config, ignore=None):
         array_doc = converter.unstructure(array_config)
-        self.__save_insert(self.arrays, array_doc)
+        self.__save_insert(self.arrays, array_doc, ignore)
 
     def retrieve_array_config(self, array_name):
         array_doc = self.arrays.find_one(
