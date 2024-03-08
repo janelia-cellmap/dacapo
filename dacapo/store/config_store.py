@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Any, List, TYPE_CHECKING
+from .converter import converter
 
 if TYPE_CHECKING:
     from dacapo.experiments.run_config import RunConfig
@@ -30,11 +31,15 @@ class ConfigStore(ABC):
         pass
 
     @abstractmethod
+    def __save_insert(self, collection, data, ignore=None):
+        pass
+
     def store_run_config(self, run_config: "RunConfig") -> None:
         """Store a run config. This should also store the configs that are part
         of the run config (i.e., task, architecture, trainer, and dataset
         config)."""
-        pass
+        run_doc = converter.unstructure(run_config)
+        self.__save_insert(self.runs, run_doc)
 
     @abstractmethod
     def retrieve_run_config(self, run_name: str) -> "RunConfig":
@@ -49,10 +54,10 @@ class ConfigStore(ABC):
     def delete_run_config(self, run_name: str) -> None:
         self.delete_config(self.runs, run_name)
 
-    @abstractmethod
     def store_task_config(self, task_config: "TaskConfig") -> None:
         """Store a task config."""
-        pass
+        task_doc = converter.unstructure(task_config)
+        self.__save_insert(self.tasks, task_doc)
 
     @abstractmethod
     def retrieve_task_config(self, task_name: str) -> "TaskConfig":
@@ -67,12 +72,12 @@ class ConfigStore(ABC):
     def delete_task_config(self, task_name: str) -> None:
         self.delete_config(self.tasks, task_name)
 
-    @abstractmethod
     def store_architecture_config(
         self, architecture_config: "ArchitectureConfig"
     ) -> None:
         """Store a architecture config."""
-        pass
+        architecture_doc = converter.unstructure(architecture_config)
+        self.__save_insert(self.architectures, architecture_doc)
 
     @abstractmethod
     def retrieve_architecture_config(
@@ -89,10 +94,10 @@ class ConfigStore(ABC):
     def delete_architecture_config(self, architecture_name: str) -> None:
         self.delete_config(self.architectures, architecture_name)
 
-    @abstractmethod
     def store_trainer_config(self, trainer_config: "TrainerConfig") -> None:
         """Store a trainer config."""
-        pass
+        trainer_doc = converter.unstructure(trainer_config)
+        self.__save_insert(self.trainers, trainer_doc)
 
     @abstractmethod
     def retrieve_trainer_config(self, trainer_name: str) -> None:
@@ -107,10 +112,10 @@ class ConfigStore(ABC):
     def delete_trainer_config(self, trainer_name: str) -> None:
         self.delete_config(self.trainers, trainer_name)
 
-    @abstractmethod
     def store_datasplit_config(self, datasplit_config: "DataSplitConfig") -> None:
         """Store a datasplit config."""
-        pass
+        datasplit_doc = converter.unstructure(datasplit_config)
+        self.__save_insert(self.datasplits, datasplit_doc)
 
     @abstractmethod
     def retrieve_datasplit_config(self, datasplit_name: str) -> "DataSplitConfig":
@@ -125,10 +130,10 @@ class ConfigStore(ABC):
     def delete_datasplit_config(self, datasplit_name: str) -> None:
         self.delete_config(self.datasplits, datasplit_name)
 
-    @abstractmethod
     def store_array_config(self, array_config: "ArrayConfig") -> None:
         """Store a array config."""
-        pass
+        array_doc = converter.unstructure(array_config)
+        self.__save_insert(self.arrays, array_doc)
 
     @abstractmethod
     def retrieve_array_config(self, array_name: str) -> "ArrayConfig":
@@ -142,3 +147,7 @@ class ConfigStore(ABC):
 
     def delete_array_config(self, array_name: str) -> None:
         self.delete_config(self.arrays, array_name)
+
+    def store_dataset_config(self, dataset_config):
+        dataset_doc = converter.unstructure(dataset_config)
+        self.__save_insert(self.datasets, dataset_doc)
