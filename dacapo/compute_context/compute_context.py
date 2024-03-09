@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+import os
 import subprocess
+import sys
 
 from dacapo import Options, compute_context
 
@@ -20,6 +22,9 @@ class ComputeContext(ABC):
 
     def execute(self, command):
         # A helper method to run a command in the context specific way.
+
+        # add pythonpath to the environment
+        os.environ["PYTHONPATH"] = sys.executable
         subprocess.run(self.wrap_command(command))
 
 
