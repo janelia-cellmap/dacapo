@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 import torch
@@ -208,7 +209,8 @@ def spawn_worker(
 
     # Make the command for the worker to run
     command = [
-        "python",
+        # "python",
+        sys.executable,
         path,
         "start-worker",
         "--run-name",

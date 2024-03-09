@@ -2,6 +2,7 @@ from importlib.machinery import SourceFileLoader
 import logging
 import os
 from pathlib import Path
+import sys
 import click
 import daisy
 from funlib.persistence import Array
@@ -191,7 +192,8 @@ def spawn_worker(
 
     # Make the command for the worker to run
     command = [
-        "python",
+        # "python",
+        sys.executable,
         path,
         "start-worker",
         "--input_container",
