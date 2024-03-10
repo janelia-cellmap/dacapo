@@ -238,7 +238,7 @@ def run_blockwise(
     *args,
     **kwargs,
 ):
-    # get arubtrary args and kwargs
+    # get arbitrary args and kwargs
     parameters = unpack_ctx(ctx)
 
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
@@ -264,7 +264,7 @@ def run_blockwise(
         overwrite=overwrite,
     )
 
-    _run_blockwise(
+    _run_blockwise(  # type: ignore
         input_array_identifier=input_array_identifier,
         output_array_identifier=output_array_identifier,
         worker_file=worker_file,
@@ -390,7 +390,7 @@ def segment_blockwise(
         f"Created output array {output_array_identifier.container}:{output_array_identifier.dataset} with ROI {_total_roi}."
     )
 
-    _segment_blockwise(
+    _segment_blockwise(  # type: ignore
         input_array_identifier=input_array_identifier,
         output_array_identifier=output_array_identifier,
         segment_function_file=segment_function_file,

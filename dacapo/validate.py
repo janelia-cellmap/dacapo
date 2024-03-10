@@ -159,48 +159,23 @@ def validate_run(
         prediction_array_identifier = array_store.validation_prediction_array(
             run.name, iteration, validation_dataset.name
         )
-        input_gt[output_roi] = validation_dataset.gt[output_roi]
-    else:
-        logger.info("validation inputs already copied!")
-
-    prediction_array_identifier = array_store.validation_prediction_array(
-        run.name, iteration, validation_dataset.name
-    )
-    predict(
-        run.name,
-        iteration,
-        input_container=input_raw_array_identifier.container,
-        input_dataset=input_raw_array_identifier.dataset,
-        output_path=prediction_array_identifier,
-        output_roi=validation_dataset.gt.roi,  # type: ignore
-        num_workers=num_workers,
-        output_dtype=output_dtype,
-        overwrite=overwrite,
-    )
-
-    logger.info("Predicted on dataset %s", validation_dataset.name)
-
-    post_processor.set_prediction(prediction_array_identifier)
-
-    dataset_iteration_scores = []
-
-    # set up dict for overall best scores
-    overall_best_scores = {}
-    for criterion in run.validation_scores.criteria:
-        overall_best_scores[criterion] = evaluator.get_overall_best(
-            validation_dataset,
-            criterion,
+        predict(
+            run.name,
+            iteration,
+            input_container=input_raw_array_identifier.container,
+            input_dataset=input_raw_array_identifier.dataset,
+            output_path=prediction_array_identifier,
+            output_roi=validation_dataset.gt.roi,  # type: ignore
+            num_workers=num_workers,
+            output_dtype=output_dtype,
+            overwrite=overwrite,
         )
 
-    for parameters in post_processor.enumerate_parameters():
-        output_array_identifier = array_store.validation_output_array(
-            run.name, iteration, str(parameters), validation_dataset.name
-        )
+        logger.info("Predicted on dataset %s", validation_dataset.name)
 
         post_processor.set_prediction(prediction_array_identifier)
-        dataset_iteration_scores = []
 
-        # set up dict for overall best scores
+        # set up dict for overall best scores per dataset
         overall_best_scores = {}
         for criterion in run.validation_scores.criteria:
             overall_best_scores[criterion] = evaluator.get_overall_best(
@@ -209,6 +184,7 @@ def validate_run(
 
         any_overall_best = False
         output_array_identifiers = []
+        dataset_iteration_scores = []
         for parameters in post_processor.enumerate_parameters():
             output_array_identifier = array_store.validation_output_array(
                 run.name, iteration, str(parameters), validation_dataset.name
@@ -231,20 +207,10 @@ def validate_run(
                         scores,
                     ):
                         # then this is the current best score for this parameter, but not necessarily the overall best
-                        higher_is_better = scores.higher_is_better(criterion)
                         # initial_best_score = overall_best_scores[criterion]
                         current_score = getattr(scores, criterion)
-                        if not overall_best_scores[
-                            criterion
-                        ] or (  # TODO: should be in evaluator
-                            (
-                                higher_is_better
-                                and current_score > overall_best_scores[criterion]
-                            )
-                            or (
-                                not higher_is_better
-                                and current_score < overall_best_scores[criterion]
-                            )
+                        if not overall_best_scores[criterion] or evaluator.compare(
+                            current_score, overall_best_scores[criterion], criterion
                         ):
                             any_overall_best = True
                             overall_best_scores[criterion] = current_score
@@ -285,6 +251,7 @@ def validate_run(
                 logger.error(
                     f"Could not evaluate run {run.name} on dataset {validation_dataset.name} with parameters {parameters}.",
                     exc_info=True,
+                    stack_info=True,
                 )
 
             dataset_iteration_scores.append(

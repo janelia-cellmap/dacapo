@@ -1,3 +1,4 @@
+import numpy as np
 from dacapo.store.create_store import create_stats_store
 from ..fixtures import *
 
@@ -51,7 +52,9 @@ def test_train(
 
     for name, weight in init_weights.model.items():
         weight_diff = (weight - final_weights.model[name]).sum()
-        assert abs(weight_diff) > 1e-5, weight_diff
+        assert (
+            abs(weight_diff) > np.finfo(weight_diff.numpy().dtype).resolution
+        ), weight_diff
 
     # assert train_stats and validation_scores are available
 

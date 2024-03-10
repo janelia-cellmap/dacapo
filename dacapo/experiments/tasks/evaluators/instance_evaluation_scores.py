@@ -1,3 +1,4 @@
+from numbers import Number
 from .evaluation_scores import EvaluationScores
 import attr
 
@@ -27,7 +28,7 @@ class InstanceEvaluationScores(EvaluationScores):
         return mapping[criterion]
 
     @staticmethod
-    def bounds(criterion: str) -> Tuple[float, float]:
+    def bounds(criterion: str) -> Tuple[Number | None, Number | None]:
         mapping = {
             "voi_split": (0, 1),
             "voi_merge": (0, 1),
