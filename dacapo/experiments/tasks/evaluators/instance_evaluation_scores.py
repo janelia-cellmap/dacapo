@@ -1,8 +1,7 @@
-from numbers import Number
 from .evaluation_scores import EvaluationScores
 import attr
 
-from typing import Tuple
+from typing import Tuple, Union
 
 
 @attr.s
@@ -28,7 +27,9 @@ class InstanceEvaluationScores(EvaluationScores):
         return mapping[criterion]
 
     @staticmethod
-    def bounds(criterion: str) -> Tuple[Number | None, Number | None]:
+    def bounds(
+        criterion: str,
+    ) -> Tuple[Union[int, float, None], Union[int, float, None]]:
         mapping = {
             "voi_split": (0, 1),
             "voi_merge": (0, 1),

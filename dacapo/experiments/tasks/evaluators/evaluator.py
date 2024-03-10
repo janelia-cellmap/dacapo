@@ -1,7 +1,7 @@
 import xarray as xr
 
 from abc import ABC, abstractmethod
-from typing import Tuple, Dict, Optional, List, TYPE_CHECKING
+from typing import Tuple, Dict, Optional, List, TYPE_CHECKING, Union
 import math
 import itertools
 
@@ -194,7 +194,9 @@ class Evaluator(ABC):
         """
         return self.score.higher_is_better(criterion)
 
-    def bounds(self, criterion: str) -> Tuple[float, float]:
+    def bounds(
+        self, criterion: str
+    ) -> Tuple[Union[int, float, None], Union[int, float, None]]:
         """
         The bounds for this criterion
         """
