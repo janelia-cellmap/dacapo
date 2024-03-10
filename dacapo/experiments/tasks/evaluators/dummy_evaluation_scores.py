@@ -1,7 +1,7 @@
 from .evaluation_scores import EvaluationScores
 import attr
 
-from typing import Tuple
+from typing import Tuple, Union
 
 
 @attr.s
@@ -20,7 +20,9 @@ class DummyEvaluationScores(EvaluationScores):
         return mapping[criterion]
 
     @staticmethod
-    def bounds(criterion: str) -> Tuple[float, float]:
+    def bounds(
+        criterion: str,
+    ) -> Tuple[Union[int, float, None], Union[int, float, None]]:
         mapping = {
             "frizz_level": (0.0, 1.0),
             "blipp_score": (0.0, 1.0),
