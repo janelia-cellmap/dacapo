@@ -187,8 +187,8 @@ def start_worker(
             chunk_request[raw].roi = block.read_roi
             chunk_request[prediction].roi = block.write_roi
 
-        with gp.build(pipeline):
-            _ = pipeline.request_batch(chunk_request)
+            with gp.build(pipeline):
+                _ = pipeline.request_batch(chunk_request)
 
 
 def spawn_worker(

@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import shutil
 from ..fixtures import *
 
 from dacapo.experiments import Run
@@ -30,6 +31,8 @@ def test_validate(
     debug = False
     if debug:
         tmp_path = f"{Path(__file__).parent}/tmp"
+        if os.path.exists(tmp_path):
+            shutil.rmtree(tmp_path, ignore_errors=True)
         os.makedirs(tmp_path, exist_ok=True)
         old_path = os.getcwd()
         os.chdir(tmp_path)

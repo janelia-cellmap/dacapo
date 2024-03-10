@@ -82,7 +82,8 @@ def run_blockwise(
     )
 
     logger.info("Running blockwise with worker_file: ", worker_file)
-    return daisy.run_blockwise([task])
+    success = daisy.run_blockwise([task])
+    return success
 
 
 def segment_blockwise(
@@ -200,4 +201,5 @@ def segment_blockwise(
             str(Path(Path(dacapo.blockwise.__file__).parent, "relabel_worker.py")),
         )
 
-        return success and daisy.run_blockwise([task])
+        success = success and daisy.run_blockwise([task])
+        return success
