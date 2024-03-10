@@ -39,7 +39,7 @@ def options(request, tmp_path):
         type=request.param,
         runs_base_dir="tests",
         mongo_db_name="dacapo_tests",
-        compute_context={"type": "LocalTorch", "config": {}},
+        compute_context={"type": "LocalTorch", "config": {"device": "cpu"}},
     )
 
     # change to a temporary directory for this test only

@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 from ..fixtures import *
 
 from dacapo.experiments import Run
@@ -21,6 +23,15 @@ logging.basicConfig(level=logging.INFO)
     ],
 )
 def test_predict(options, run_config, zarr_array, tmp_path):
+    # set debug to True to run the test in a specific directory (for debugging)
+    debug = False
+    if debug:
+        tmp_path = f"{Path(__file__).parent}/tmp"
+        os.makedirs(tmp_path, exist_ok=True)
+        old_path = os.getcwd()
+        os.chdir(tmp_path)
+    # when done debugging, delete "tests/operations/tmp"
+    # -------------------------------------
 
     # create a store
 
@@ -67,3 +78,6 @@ def test_predict(options, run_config, zarr_array, tmp_path):
             output_path=tmp_path,
             num_workers=4,
         )
+
+    if debug:
+        os.chdir(old_path)

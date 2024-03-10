@@ -11,10 +11,10 @@ readme = "README.md"
 requires-python = ">=3.10"
 # license = { text = "BSD 3-Clause License" }
 authors = [
-    { email = "funkej@janelia.hhmi.org", name = "Jan Funke" },
     { email = "pattonw@janelia.hhmi.org", name = "Will Patton" },
     { email = "rhoadesj@hhmi.org", name = "Jeff Rhoades" },
     { email = "zouinkhim@hhmi.org", name = "Marwan Zouinkhi" },
+    { email = "funkej@janelia.hhmi.org", name = "Jan Funke" },
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
