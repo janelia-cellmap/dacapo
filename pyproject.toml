@@ -41,7 +41,7 @@ dependencies = [
         "attrs",
         "bokeh",
         "numpy-indexed>=0.3.7",
-        "daisy @ git+https://github.com/funkelab/daisy/tree/dev/master",
+        "daisy @ git+https://github.com/funkelab/daisy@dev/master",
         "funlib.math>=0.1",
         "funlib.geometry>=0.2",
         "mwatershed>=0.1",
