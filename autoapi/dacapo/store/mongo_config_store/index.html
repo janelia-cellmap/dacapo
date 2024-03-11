@@ -136,7 +136,7 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.mongo_config_store.MongoConfigStore.store_run_config">
-<span class="sig-name descname"><span class="pre">store_run_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.MongoConfigStore.store_run_config" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">store_run_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.MongoConfigStore.store_run_config" title="Link to this definition"></a></dt>
 <dd><p>Store a run config. This should also store the configs that are part
 of the run config (i.e., task, architecture, trainer, and dataset
 config).</p>
@@ -161,7 +161,7 @@ config).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.mongo_config_store.MongoConfigStore.store_task_config">
-<span class="sig-name descname"><span class="pre">store_task_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.MongoConfigStore.store_task_config" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">store_task_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.MongoConfigStore.store_task_config" title="Link to this definition"></a></dt>
 <dd><p>Store a task config.</p>
 </dd></dl>
 
@@ -179,7 +179,7 @@ config).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.mongo_config_store.MongoConfigStore.store_architecture_config">
-<span class="sig-name descname"><span class="pre">store_architecture_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.MongoConfigStore.store_architecture_config" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">store_architecture_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.MongoConfigStore.store_architecture_config" title="Link to this definition"></a></dt>
 <dd><p>Store a architecture config.</p>
 </dd></dl>
 
@@ -197,7 +197,7 @@ config).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.mongo_config_store.MongoConfigStore.store_trainer_config">
-<span class="sig-name descname"><span class="pre">store_trainer_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.MongoConfigStore.store_trainer_config" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">store_trainer_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.MongoConfigStore.store_trainer_config" title="Link to this definition"></a></dt>
 <dd><p>Store a trainer config.</p>
 </dd></dl>
 
@@ -215,7 +215,7 @@ config).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.mongo_config_store.MongoConfigStore.store_datasplit_config">
-<span class="sig-name descname"><span class="pre">store_datasplit_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.MongoConfigStore.store_datasplit_config" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">store_datasplit_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.MongoConfigStore.store_datasplit_config" title="Link to this definition"></a></dt>
 <dd><p>Store a datasplit config.</p>
 </dd></dl>
 
@@ -233,7 +233,7 @@ config).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.mongo_config_store.MongoConfigStore.store_dataset_config">
-<span class="sig-name descname"><span class="pre">store_dataset_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.MongoConfigStore.store_dataset_config" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">store_dataset_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.MongoConfigStore.store_dataset_config" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -248,7 +248,7 @@ config).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.mongo_config_store.MongoConfigStore.store_array_config">
-<span class="sig-name descname"><span class="pre">store_array_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.MongoConfigStore.store_array_config" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">store_array_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.MongoConfigStore.store_array_config" title="Link to this definition"></a></dt>
 <dd><p>Store a array config.</p>
 </dd></dl>
 
@@ -281,7 +281,7 @@ config).</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, William Patton, David Ackerman, Jan Funke.</p>
+    <p>&#169; Copyright 2024, Caroline Malin-Mayor, Jeff Rhoades, Marwan Zouinkhi, William Patton, David Ackerman, Jan Funke.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

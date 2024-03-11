@@ -24,10 +24,15 @@ Attributes
 
 .. autoapisummary::
 
+   dacapo.blockwise.segment_worker.logger
    dacapo.blockwise.segment_worker.fit
    dacapo.blockwise.segment_worker.read_write_conflict
    dacapo.blockwise.segment_worker.path
 
+
+.. py:data:: logger
+
+   
 
 .. py:function:: cli(log_level)
 
@@ -47,6 +52,21 @@ Attributes
    
 
 .. py:function:: start_worker(input_container: str, input_dataset: str, output_container: str, output_dataset: str, tmpdir: str, function_path: str)
+
+   Start a worker to run a segment function on a given dataset.
+
+   :param input_container: The input container.
+   :type input_container: str
+   :param input_dataset: The input dataset.
+   :type input_dataset: str
+   :param output_container: The output container.
+   :type output_container: str
+   :param output_dataset: The output dataset.
+   :type output_dataset: str
+   :param tmpdir: The temporary directory.
+   :type tmpdir: str
+   :param function_path: The path to the segment function.
+   :type function_path: str
 
 
 .. py:function:: spawn_worker(input_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, tmpdir: str, function_path: str)

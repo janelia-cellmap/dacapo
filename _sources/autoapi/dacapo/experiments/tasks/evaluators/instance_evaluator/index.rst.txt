@@ -16,6 +16,33 @@ Classes
 
 
 
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.evaluators.instance_evaluator.relabel
+
+
+
+.. py:function:: relabel(array, return_backwards_map=False, inplace=False)
+
+   Relabel array, such that IDs are consecutive. Excludes 0.
+
+   :param array: The array to relabel.
+   :type array: ndarray
+   :param return_backwards_map: If ``True``, return an ndarray that maps new labels (indices in
+                                the array) to old labels.
+   :type return_backwards_map: ``bool``, optional
+   :param inplace: Perform the replacement in-place on ``array``.
+   :type inplace: ``bool``, optional
+
+   :returns: A tuple ``(relabelled, n)``, where ``relabelled`` is the relabelled
+             array and ``n`` the number of unique labels found.
+
+             If ``return_backwards_map`` is ``True``, returns ``(relabelled, n,
+             backwards_map)``.
+
 
 .. py:class:: InstanceEvaluator
 
@@ -32,7 +59,8 @@ Classes
 
 
    .. py:attribute:: criteria
-      :value: ['voi_merge', 'voi_split', 'voi']
+      :type: List[str]
+      :value: ['voi_merge', 'voi_split', 'voi', 'avg_iou']
 
       
 

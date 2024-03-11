@@ -202,6 +202,21 @@ for all 3 of these criteria</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.evaluator.Evaluator.get_overall_best">
+<span class="sig-name descname"><span class="pre">get_overall_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../datasplits/datasets/index.html#dacapo.experiments.datasplits.datasets.Dataset" title="dacapo.experiments.datasplits.datasets.Dataset"><span class="pre">dacapo.experiments.datasplits.datasets.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.evaluator.Evaluator.get_overall_best" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.evaluator.Evaluator.get_overall_best_parameters">
+<span class="sig-name descname"><span class="pre">get_overall_best_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../datasplits/datasets/index.html#dacapo.experiments.datasplits.datasets.Dataset" title="dacapo.experiments.datasplits.datasets.Dataset"><span class="pre">dacapo.experiments.datasplits.datasets.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.evaluator.Evaluator.get_overall_best_parameters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.evaluator.Evaluator.compare">
+<span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">score_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criterion</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.evaluator.Evaluator.compare" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.evaluator.Evaluator.set_best">
 <span class="sig-name descname"><span class="pre">set_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validation_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../validation_scores/index.html#dacapo.experiments.validation_scores.ValidationScores" title="dacapo.experiments.validation_scores.ValidationScores"><span class="pre">dacapo.experiments.validation_scores.ValidationScores</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.evaluator.Evaluator.set_best" title="Link to this definition"></a></dt>
 <dd><p>Find the best iteration for each dataset/post_processing_parameter/criterion</p>
@@ -215,7 +230,7 @@ for all 3 of these criteria</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.evaluator.Evaluator.bounds">
-<span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.evaluator.Evaluator.bounds" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.evaluator.Evaluator.bounds" title="Link to this definition"></a></dt>
 <dd><p>The bounds for this criterion</p>
 </dd></dl>
 
@@ -242,7 +257,7 @@ for all 3 of these criteria</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, William Patton, David Ackerman, Jan Funke.</p>
+    <p>&#169; Copyright 2024, Caroline Malin-Mayor, Jeff Rhoades, Marwan Zouinkhi, William Patton, David Ackerman, Jan Funke.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -27,9 +27,14 @@ Attributes
 
 .. autoapisummary::
 
+   dacapo.blockwise.empanada_function.logger
    dacapo.blockwise.empanada_function.default_parameters
    dacapo.blockwise.empanada_function.model_configs
 
+
+.. py:data:: logger
+
+   
 
 .. py:data:: default_parameters
 

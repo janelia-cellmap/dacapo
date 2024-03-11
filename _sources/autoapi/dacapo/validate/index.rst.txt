@@ -24,6 +24,7 @@ Attributes
 .. autoapisummary::
 
    dacapo.validate.logger
+   dacapo.validate.parser
 
 
 .. py:data:: logger
@@ -44,4 +45,8 @@ Attributes
    loaded correctly. Returns the best parameters and scores for this
    iteration.
 
+
+.. py:data:: parser
+
+   
 

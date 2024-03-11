@@ -108,7 +108,7 @@
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.segment_worker.start_worker" title="dacapo.blockwise.segment_worker.start_worker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_worker</span></code></a>(input_container, input_dataset, ...)</p></td>
-<td><p></p></td>
+<td><p>Start a worker to run a segment function on a given dataset.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.segment_worker.spawn_worker" title="dacapo.blockwise.segment_worker.spawn_worker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spawn_worker</span></code></a>(input_array_identifier, ...)</p></td>
 <td><p>Spawn a worker to predict on a given dataset.</p></td>
@@ -120,17 +120,25 @@
 <h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.segment_worker.fit" title="dacapo.blockwise.segment_worker.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.segment_worker.logger" title="dacapo.blockwise.segment_worker.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.segment_worker.read_write_conflict" title="dacapo.blockwise.segment_worker.read_write_conflict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_write_conflict</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.segment_worker.fit" title="dacapo.blockwise.segment_worker.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.segment_worker.path" title="dacapo.blockwise.segment_worker.path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.segment_worker.read_write_conflict" title="dacapo.blockwise.segment_worker.read_write_conflict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_write_conflict</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.segment_worker.path" title="dacapo.blockwise.segment_worker.path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
+<dl class="py data">
+<dt class="sig sig-object py" id="dacapo.blockwise.segment_worker.logger">
+<span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.segment_worker.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#dacapo.blockwise.segment_worker.logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.segment_worker.cli">
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.segment_worker.</span></span><span class="sig-name descname"><span class="pre">cli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.segment_worker.cli" title="Link to this definition"></a></dt>
@@ -154,7 +162,20 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.segment_worker.start_worker">
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.segment_worker.</span></span><span class="sig-name descname"><span class="pre">start_worker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_container</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_container</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmpdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.segment_worker.start_worker" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Start a worker to run a segment function on a given dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_container</strong> (<em>str</em>) – The input container.</p></li>
+<li><p><strong>input_dataset</strong> (<em>str</em>) – The input dataset.</p></li>
+<li><p><strong>output_container</strong> (<em>str</em>) – The output container.</p></li>
+<li><p><strong>output_dataset</strong> (<em>str</em>) – The output dataset.</p></li>
+<li><p><strong>tmpdir</strong> (<em>str</em>) – The temporary directory.</p></li>
+<li><p><strong>function_path</strong> (<em>str</em>) – The path to the segment function.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.segment_worker.spawn_worker">
@@ -186,7 +207,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, William Patton, David Ackerman, Jan Funke.</p>
+    <p>&#169; Copyright 2024, Caroline Malin-Mayor, Jeff Rhoades, Marwan Zouinkhi, William Patton, David Ackerman, Jan Funke.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

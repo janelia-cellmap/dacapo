@@ -69,7 +69,7 @@ Classes
       Wether or not higher is better for this criterion.
 
 
-   .. py:method:: bounds(criterion: str) -> Tuple[float, float]
+   .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
       :staticmethod:
 
       The bounds for this criterion
@@ -131,7 +131,7 @@ Classes
       Wether or not higher is better for this criterion.
 
 
-   .. py:method:: bounds(criterion: str) -> Tuple[float, float]
+   .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
       :staticmethod:
       :abstractmethod:
 
@@ -194,6 +194,15 @@ Classes
       Check if the provided score is the best for this dataset/parameter/criterion combo
 
 
+   .. py:method:: get_overall_best(dataset: dacapo.experiments.datasplits.datasets.Dataset, criterion: str)
+
+
+   .. py:method:: get_overall_best_parameters(dataset: dacapo.experiments.datasplits.datasets.Dataset, criterion: str)
+
+
+   .. py:method:: compare(score_1, score_2, criterion)
+
+
    .. py:method:: set_best(validation_scores: dacapo.experiments.validation_scores.ValidationScores) -> None
 
       Find the best iteration for each dataset/post_processing_parameter/criterion
@@ -204,7 +213,7 @@ Classes
       Wether or not higher is better for this criterion.
 
 
-   .. py:method:: bounds(criterion: str) -> Tuple[float, float]
+   .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
 
       The bounds for this criterion
 
@@ -243,7 +252,7 @@ Classes
       weights for this criterion.
 
 
-   .. py:method:: bounds(criterion: str) -> Tuple[float, float]
+   .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
       :staticmethod:
 
       The bounds for this criterion
@@ -380,7 +389,7 @@ Classes
       Wether or not higher is better for this criterion.
 
 
-   .. py:method:: bounds(criterion: str) -> Tuple[float, float]
+   .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
       :staticmethod:
 
       The bounds for this criterion
@@ -427,7 +436,7 @@ Classes
 
 
    .. py:attribute:: criteria
-      :value: ['voi_split', 'voi_merge', 'voi']
+      :value: ['voi_split', 'voi_merge', 'voi', 'avg_iou']
 
       
 
@@ -441,13 +450,18 @@ Classes
 
       
 
+   .. py:attribute:: avg_iou
+      :type: float
+
+      
+
    .. py:method:: higher_is_better(criterion: str) -> bool
       :staticmethod:
 
       Wether or not higher is better for this criterion.
 
 
-   .. py:method:: bounds(criterion: str) -> Tuple[float, float]
+   .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
       :staticmethod:
 
       The bounds for this criterion
@@ -476,7 +490,8 @@ Classes
 
 
    .. py:attribute:: criteria
-      :value: ['voi_merge', 'voi_split', 'voi']
+      :type: List[str]
+      :value: ['voi_merge', 'voi_split', 'voi', 'avg_iou']
 
       
 

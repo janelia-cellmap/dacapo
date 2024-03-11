@@ -122,7 +122,7 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.criteria">
-<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['voi_split',</span> <span class="pre">'voi_merge',</span> <span class="pre">'voi']</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.criteria" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['voi_split',</span> <span class="pre">'voi_merge',</span> <span class="pre">'voi',</span> <span class="pre">'avg_iou']</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.criteria" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -135,6 +135,11 @@
 <span class="sig-name descname"><span class="pre">voi_merge</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.voi_merge" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.avg_iou">
+<span class="sig-name descname"><span class="pre">avg_iou</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.avg_iou" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.higher_is_better">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.higher_is_better" title="Link to this definition"></a></dt>
@@ -143,7 +148,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.bounds">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.bounds" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.bounds" title="Link to this definition"></a></dt>
 <dd><p>The bounds for this criterion</p>
 </dd></dl>
 
@@ -171,7 +176,7 @@ weights for this criterion.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, William Patton, David Ackerman, Jan Funke.</p>
+    <p>&#169; Copyright 2024, Caroline Malin-Mayor, Jeff Rhoades, Marwan Zouinkhi, William Patton, David Ackerman, Jan Funke.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

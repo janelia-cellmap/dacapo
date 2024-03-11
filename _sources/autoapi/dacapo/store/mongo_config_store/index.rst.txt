@@ -40,7 +40,7 @@ Attributes
    .. py:method:: delete_config(database, config_name: str) -> None
 
 
-   .. py:method:: store_run_config(run_config)
+   .. py:method:: store_run_config(run_config, ignore=None)
 
       Store a run config. This should also store the configs that are part
       of the run config (i.e., task, architecture, trainer, and dataset
@@ -60,7 +60,7 @@ Attributes
       Retrieve all run config names.
 
 
-   .. py:method:: store_task_config(task_config)
+   .. py:method:: store_task_config(task_config, ignore=None)
 
       Store a task config.
 
@@ -75,7 +75,7 @@ Attributes
       Retrieve all task config names.
 
 
-   .. py:method:: store_architecture_config(architecture_config)
+   .. py:method:: store_architecture_config(architecture_config, ignore=None)
 
       Store a architecture config.
 
@@ -90,7 +90,7 @@ Attributes
       Retrieve all architecture config names.
 
 
-   .. py:method:: store_trainer_config(trainer_config)
+   .. py:method:: store_trainer_config(trainer_config, ignore=None)
 
       Store a trainer config.
 
@@ -105,7 +105,7 @@ Attributes
       Retrieve all trainer config names.
 
 
-   .. py:method:: store_datasplit_config(datasplit_config)
+   .. py:method:: store_datasplit_config(datasplit_config, ignore=None)
 
       Store a datasplit config.
 
@@ -120,7 +120,7 @@ Attributes
       Retrieve all datasplit names.
 
 
-   .. py:method:: store_dataset_config(dataset_config)
+   .. py:method:: store_dataset_config(dataset_config, ignore=None)
 
 
    .. py:method:: retrieve_dataset_config(dataset_name)
@@ -129,7 +129,7 @@ Attributes
    .. py:method:: retrieve_dataset_config_names()
 
 
-   .. py:method:: store_array_config(array_config)
+   .. py:method:: store_array_config(array_config, ignore=None)
 
       Store a array config.
 

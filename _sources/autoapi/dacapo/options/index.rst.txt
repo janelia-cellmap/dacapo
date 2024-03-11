@@ -43,7 +43,7 @@ Attributes
 
       
 
-   .. py:attribute:: compute_context_config
+   .. py:attribute:: compute_context
       :type: dict
 
       

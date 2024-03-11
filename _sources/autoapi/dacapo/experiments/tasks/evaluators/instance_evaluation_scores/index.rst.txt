@@ -28,7 +28,7 @@ Classes
 
 
    .. py:attribute:: criteria
-      :value: ['voi_split', 'voi_merge', 'voi']
+      :value: ['voi_split', 'voi_merge', 'voi', 'avg_iou']
 
       
 
@@ -42,13 +42,18 @@ Classes
 
       
 
+   .. py:attribute:: avg_iou
+      :type: float
+
+      
+
    .. py:method:: higher_is_better(criterion: str) -> bool
       :staticmethod:
 
       Wether or not higher is better for this criterion.
 
 
-   .. py:method:: bounds(criterion: str) -> Tuple[float, float]
+   .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
       :staticmethod:
 
       The bounds for this criterion
