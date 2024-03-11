@@ -101,9 +101,7 @@ def start_worker(
     input_size = input_voxel_size * input_shape
     output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
 
-    logger.info(
-        "Predicting with input size %s, output size %s", input_size, output_size
-    )
+    print("Predicting with input size %s, output size %s", input_size, output_size)
 
     # create gunpowder keys
 
@@ -167,12 +165,6 @@ def start_worker(
         output_size,
         voxel_size=output_voxel_size,
     )
-    # # use daisy requests to run pipeline
-    # pipeline += gp.DaisyRequestBlocks(
-    #     reference=request,
-    #     roi_map={raw: "read_roi", prediction: "write_roi"},
-    #     num_workers=1,
-    # )
 
     daisy_client = daisy.Client()
 
@@ -181,7 +173,7 @@ def start_worker(
             if block is None:
                 return
 
-            logger.info("Processing block %s", block)
+            print("Processing block %s", block)
 
             chunk_request = request.copy()
             chunk_request[raw].roi = block.read_roi

@@ -27,7 +27,7 @@ def validate(
     stored checkpoint. Returns the best parameters and scores for this
     iteration."""
 
-    logger.info("Validating run %s at iteration %d...", run_name, iteration)
+    print("Validating run %s at iteration %d...", run_name, iteration)
 
     # create run
 
@@ -78,7 +78,7 @@ def validate_run(
         or len(run.datasplit.validate) == 0
         or run.datasplit.validate[0].gt is None
     ):
-        logger.info("Cannot validate run %s. Continuing training!", run.name)
+        print("Cannot validate run %s. Continuing training!", run.name)
         return None, None
 
     # get array and weight store
@@ -100,9 +100,7 @@ def validate_run(
             )
             raise NotImplementedError
 
-        logger.info(
-            "Validating run %s on dataset %s", run.name, validation_dataset.name
-        )
+        print("Validating run %s on dataset %s", run.name, validation_dataset.name)
 
         (
             input_raw_array_identifier,
@@ -116,7 +114,7 @@ def validate_run(
                 f"{input_gt_array_identifier.container}/{input_gt_array_identifier.dataset}"
             ).exists()
         ):
-            logger.info("Copying validation inputs!")
+            print("Copying validation inputs!")
             input_voxel_size = validation_dataset.raw.voxel_size
             output_voxel_size = run.model.scale(input_voxel_size)
             input_shape = run.model.eval_input_shape
@@ -154,7 +152,7 @@ def validate_run(
             )
             input_gt[output_roi] = validation_dataset.gt[output_roi]
         else:
-            logger.info("validation inputs already copied!")
+            print("validation inputs already copied!")
 
         prediction_array_identifier = array_store.validation_prediction_array(
             run.name, iteration, validation_dataset.name
@@ -171,7 +169,7 @@ def validate_run(
             overwrite=overwrite,
         )
 
-        logger.info("Predicted on dataset %s", validation_dataset.name)
+        print("Predicted on dataset %s", validation_dataset.name)
 
         post_processor.set_prediction(prediction_array_identifier)
 

@@ -17,7 +17,7 @@ class LocalWeightsStore(WeightsStore):
     """A local store for network weights."""
 
     def __init__(self, basedir):
-        logger.info("Creating local weights store in directory %s", basedir)
+        print("Creating local weights store in directory %s", basedir)
 
         self.basedir = basedir
 
@@ -52,7 +52,7 @@ class LocalWeightsStore(WeightsStore):
     def retrieve_weights(self, run: str, iteration: int) -> Weights:
         """Retrieve the network weights of the given run."""
 
-        logger.info("Retrieving weights for run %s, iteration %d", run, iteration)
+        print("Retrieving weights for run %s, iteration %d", run, iteration)
 
         weights_name = self.__get_weights_dir(run) / "iterations" / str(iteration)
 
@@ -107,7 +107,7 @@ class LocalWeightsStore(WeightsStore):
             f.write(json.dumps({"iteration": iteration}))
 
     def retrieve_best(self, run: str, dataset: str | Dataset, criterion: str) -> int:
-        logger.info("Retrieving weights for run %s, criterion %s", run, criterion)
+        print("Retrieving weights for run %s, criterion %s", run, criterion)
 
         with (self.__get_weights_dir(run) / criterion / f"{dataset}.json").open(
             "r"
@@ -117,7 +117,7 @@ class LocalWeightsStore(WeightsStore):
         return weights_info["iteration"]
 
     def _load_best(self, run: Run, criterion: str):
-        logger.info("Retrieving weights for run %s, criterion %s", run, criterion)
+        print("Retrieving weights for run %s, criterion %s", run, criterion)
 
         weights_name = self.__get_weights_dir(run) / f"{criterion}"
 

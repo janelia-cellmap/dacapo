@@ -59,7 +59,7 @@ def apply(
     ), "Either validation_dataset and criterion, or iteration must be provided."
 
     # retrieving run
-    logger.info("Loading run %s", run_name)
+    print("Loading run %s", run_name)
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
@@ -70,7 +70,7 @@ def apply(
     # load weights
     if iteration is None:
         iteration = weights_store.retrieve_best(run_name, validation_dataset, criterion)  # type: ignore
-    logger.info("Loading weights for iteration %i", iteration)
+    print("Loading weights for iteration %i", iteration)
     weights_store.retrieve_weights(run_name, iteration)
 
     if parameters is None:
@@ -89,9 +89,7 @@ def apply(
             raise ValueError(
                 "validation_dataset must be a dataset name or a Dataset object, or parameters must be provided explicitly."
             )
-        logger.info(
-            "Finding best parameters for validation dataset %s", _validation_dataset
-        )
+        print("Finding best parameters for validation dataset %s", _validation_dataset)
         parameters = run.task.evaluator.get_overall_best_parameters(
             _validation_dataset, criterion
         )
@@ -151,7 +149,7 @@ def apply(
         output_container, f"output_{run_name}_{iteration}_{parameters}"
     )
 
-    logger.info(
+    print(
         "Applying best results from run %s at iteration %i to dataset %s",
         run.name,
         iteration,
@@ -186,7 +184,7 @@ def apply_run(
     """Apply the model to a dataset. If roi is None, the whole input dataset is used. Assumes model is already loaded."""
 
     # render prediction dataset
-    logger.info("Predicting on dataset %s", prediction_array_identifier)
+    print("Predicting on dataset %s", prediction_array_identifier)
     predict(
         run.name,
         iteration,
@@ -200,10 +198,10 @@ def apply_run(
     )
 
     # post-process the output
-    logger.info("Post-processing output to dataset %s", output_array_identifier)
+    print("Post-processing output to dataset %s", output_array_identifier)
     post_processor = run.task.post_processor
     post_processor.set_prediction(prediction_array_identifier)
     post_processor.process(parameters, output_array_identifier, num_workers=num_workers)
 
-    logger.info("Done")
+    print("Done")
     return

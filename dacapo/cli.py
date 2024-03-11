@@ -262,6 +262,7 @@ def run_blockwise(
         input_array.voxel_size,
         output_dtype,
         overwrite=overwrite,
+        write_size=write_roi.shape,
     )
 
     _run_blockwise(  # type: ignore
@@ -329,7 +330,6 @@ def run_blockwise(
 @click.option("-nw", "--num_workers", type=int, default=16)
 @click.option("-mr", "--max_retries", type=int, default=2)
 @click.option("-t", "--timeout", type=int, default=None)
-@click.option("-tp", "--tmp_prefix", type=str, default="tmp")
 @click.option("-ow", "--overwrite", is_flag=True, default=True)
 @click.option("-co", "--channels_out", type=int, default=None)
 @click.pass_context
@@ -347,7 +347,6 @@ def segment_blockwise(
     num_workers: int = 16,
     max_retries: int = 2,
     timeout=None,
-    tmp_prefix: str = "tmp",
     overwrite: bool = True,
     channels_out: Optional[int] = None,
     *args,
@@ -385,8 +384,9 @@ def segment_blockwise(
         input_array.voxel_size,
         np.uint64,
         overwrite=overwrite,
+        write_size=write_roi.shape,
     )
-    logger.info(
+    print(
         f"Created output array {output_array_identifier.container}:{output_array_identifier.dataset} with ROI {_total_roi}."
     )
 
@@ -401,7 +401,6 @@ def segment_blockwise(
         num_workers=num_workers,
         max_retries=max_retries,
         timeout=timeout,
-        tmp_prefix=tmp_prefix,
         parameters=parameters,
         *args,
         **kwargs,
@@ -409,7 +408,7 @@ def segment_blockwise(
 
 
 def unpack_ctx(ctx):
-    # logger.info(ctx.args)
+    # print(ctx.args)
     kwargs = {
         ctx.args[i].lstrip("-"): ctx.args[i + 1] for i in range(0, len(ctx.args), 2)
     }
@@ -418,8 +417,8 @@ def unpack_ctx(ctx):
             kwargs[k] = int(v)
         elif v.replace(".", "").isnumeric():
             kwargs[k] = float(v)
-        logger.info(f"{k}: {kwargs[k]}")
-        # logger.info(f"{type(k)}: {k} --> {type(kwargs[k])} {kwargs[k]}")
+        print(f"{k}: {kwargs[k]}")
+        # print(f"{type(k)}: {k} --> {type(kwargs[k])} {kwargs[k]}")
     return kwargs
 
 

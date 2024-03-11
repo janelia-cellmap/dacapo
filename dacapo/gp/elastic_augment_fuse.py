@@ -82,9 +82,9 @@ def _create_rotation_transformation(shape, angle, subsample=1, voxel_size=None):
     # rotate control points
     center = np.array([0.5 * (d - 1) * vs for d, vs in zip(shape, voxel_size)])
 
-    # logger.info("Creating rotation transformation with:")
-    # logger.info("\tangle : " + str(angle))
-    # logger.info("\tcenter: " + str(center))
+    # print("Creating rotation transformation with:")
+    # print("\tangle : " + str(angle))
+    # print("\tcenter: " + str(center))
 
     control_point_offsets = np.zeros((dims,) + control_points, dtype=np.float32)
     for control_point in np.ndindex(control_points):
@@ -116,9 +116,9 @@ def _create_uniform_3d_transformation(shape, rotation, subsample=1, voxel_size=N
     # rotate control points
     center = np.array([0.5 * (d - 1) * vs for d, vs in zip(shape, voxel_size)])
 
-    # logger.info("Creating rotation transformation with:")
-    # logger.info("\tangle : " + str(angle))
-    # logger.info("\tcenter: " + str(center))
+    # print("Creating rotation transformation with:")
+    # print("\tangle : " + str(angle))
+    # print("\tcenter: " + str(center))
 
     control_point_offsets = np.zeros((dims,) + control_points, dtype=np.float32)
     for control_point in np.ndindex(control_points):
