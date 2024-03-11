@@ -170,11 +170,15 @@ def start_worker(
             nodes = np.unique(edges)
 
             logger.info(f"Writing ids to {os.path.join(tmpdir, 'block_%d.npz')}")
-            np.savez_compressed(
-                os.path.join(tmpdir, "block_%d.npz" % block.block_id[1]),
-                nodes=nodes,
-                edges=edges,
-            )
+            assert os.path.exists(tmpdir)
+            with open(
+                os.path.join(tmpdir, f"block_{block.block_id[1]}.npz"), "wb"
+            ) as f:
+                np.savez_compressed(
+                    f,
+                    nodes=nodes,
+                    edges=edges,
+                )
 
 
 def spawn_worker(

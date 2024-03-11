@@ -24,7 +24,7 @@ class DaCapoConfig:
     runs_base_dir: Path = attr.ib(
         default=Path(expanduser("~/.dacapo")),
         metadata={
-            "help_text": "The path at DaCapo will use for reading and writing any necessary data."
+            "help_text": "The path at DaCapo will use for reading and writing any necessary data. This should be an absolute path."
         },
     )
     compute_context: dict = attr.ib(

@@ -329,7 +329,6 @@ def run_blockwise(
 @click.option("-nw", "--num_workers", type=int, default=16)
 @click.option("-mr", "--max_retries", type=int, default=2)
 @click.option("-t", "--timeout", type=int, default=None)
-@click.option("-tp", "--tmp_prefix", type=str, default="tmp")
 @click.option("-ow", "--overwrite", is_flag=True, default=True)
 @click.option("-co", "--channels_out", type=int, default=None)
 @click.pass_context
@@ -347,7 +346,6 @@ def segment_blockwise(
     num_workers: int = 16,
     max_retries: int = 2,
     timeout=None,
-    tmp_prefix: str = "tmp",
     overwrite: bool = True,
     channels_out: Optional[int] = None,
     *args,
@@ -401,7 +399,6 @@ def segment_blockwise(
         num_workers=num_workers,
         max_retries=max_retries,
         timeout=timeout,
-        tmp_prefix=tmp_prefix,
         parameters=parameters,
         *args,
         **kwargs,
