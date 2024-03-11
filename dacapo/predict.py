@@ -106,11 +106,9 @@ def predict(
     if isinstance(output_dtype, str):
         output_dtype = np.dtype(output_dtype)
 
-    logger.info(
-        "Predicting with input size %s, output size %s", input_size, output_size
-    )
+    print("Predicting with input size %s, output size %s", input_size, output_size)
 
-    logger.info("Total input ROI: %s, output ROI: %s", _input_roi, output_roi)
+    print("Total input ROI: %s, output ROI: %s", _input_roi, output_roi)
 
     # prepare prediction dataset
     axes = ["c"] + [axis for axis in raw_array.axes if axis != "c"]
@@ -126,7 +124,7 @@ def predict(
 
     # run blockwise prediction
     worker_file = str(Path(Path(dacapo.blockwise.__file__).parent, "predict_worker.py"))
-    logger.info("Running blockwise prediction with worker_file: ", worker_file)
+    print("Running blockwise prediction with worker_file: ", worker_file)
     run_blockwise(
         worker_file=worker_file,
         total_roi=_input_roi,

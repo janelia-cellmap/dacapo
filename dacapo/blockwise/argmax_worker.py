@@ -61,7 +61,7 @@ def start_worker(
     client = daisy.Client()
 
     while True:
-        logger.info("getting block")
+        print("getting block")
         with client.acquire_block() as block:
             if block is None:
                 break

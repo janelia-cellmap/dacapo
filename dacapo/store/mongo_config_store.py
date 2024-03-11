@@ -22,7 +22,7 @@ class MongoConfigStore(ConfigStore):
     """
 
     def __init__(self, db_host, db_name):
-        logger.info(
+        print(
             "Creating MongoConfigStore:\n\thost    : %s\n\tdatabase: %s",
             db_host,
             db_name,

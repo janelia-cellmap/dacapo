@@ -83,7 +83,7 @@ def run_blockwise(
         **kwargs,
     )
 
-    logger.info("Running blockwise with worker_file: ", worker_file)
+    print("Running blockwise with worker_file: ", worker_file)
     success = daisy.run_blockwise([task])
     return success
 
@@ -159,7 +159,7 @@ def segment_blockwise(
         options.runs_base_dir.mkdir(parents=True)
     tmpdir = tempfile.mkdtemp(dir=options.runs_base_dir)
 
-    logger.info(
+    print(
         "Running blockwise segmentation, with segment_function_file: ",
         segment_function_file,
         " in temp directory: ",
@@ -185,7 +185,7 @@ def segment_blockwise(
         *args,
         **kwargs,
     )
-    logger.info(
+    print(
         "Running blockwise segmentation with worker_file: ",
         str(Path(Path(dacapo.blockwise.__file__).parent, "segment_worker.py")),
     )
@@ -209,7 +209,7 @@ def segment_blockwise(
         *args,
         **kwargs,
     )
-    logger.info(
+    print(
         "Running blockwise relabeling with worker_file: ",
         str(Path(Path(dacapo.blockwise.__file__).parent, "relabel_worker.py")),
     )

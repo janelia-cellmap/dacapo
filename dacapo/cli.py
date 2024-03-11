@@ -384,7 +384,7 @@ def segment_blockwise(
         np.uint64,
         overwrite=overwrite,
     )
-    logger.info(
+    print(
         f"Created output array {output_array_identifier.container}:{output_array_identifier.dataset} with ROI {_total_roi}."
     )
 
@@ -406,7 +406,7 @@ def segment_blockwise(
 
 
 def unpack_ctx(ctx):
-    # logger.info(ctx.args)
+    # print(ctx.args)
     kwargs = {
         ctx.args[i].lstrip("-"): ctx.args[i + 1] for i in range(0, len(ctx.args), 2)
     }
@@ -415,8 +415,8 @@ def unpack_ctx(ctx):
             kwargs[k] = int(v)
         elif v.replace(".", "").isnumeric():
             kwargs[k] = float(v)
-        logger.info(f"{k}: {kwargs[k]}")
-        # logger.info(f"{type(k)}: {k} --> {type(kwargs[k])} {kwargs[k]}")
+        print(f"{k}: {kwargs[k]}")
+        # print(f"{type(k)}: {k} --> {type(kwargs[k])} {kwargs[k]}")
     return kwargs
 
 

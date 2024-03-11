@@ -27,7 +27,7 @@ def train(run_name: str):
     #     # we are done here.
     #     return
 
-    logger.info("Training run %s", run_name)
+    print("Training run %s", run_name)
 
     # create run
 
@@ -39,7 +39,7 @@ def train(run_name: str):
 
 
 def train_run(run: Run):
-    logger.info("Starting/resuming training for run %s...", run)
+    print("Starting/resuming training for run %s...", run)
 
     # create run
 
@@ -52,13 +52,13 @@ def train_run(run: Run):
     trained_until = run.training_stats.trained_until()
     validated_until = run.validation_scores.validated_until()
     if validated_until > trained_until:
-        logger.info(
+        print(
             f"Trained until {trained_until}, but validated until {validated_until}! "
             "Deleting extra validation stats"
         )
         run.validation_scores.delete_after(trained_until)
 
-    logger.info("Current state: trained until %d/%d", trained_until, run.train_until)
+    print("Current state: trained until %d/%d", trained_until, run.train_until)
 
     # read weights of the latest iteration
 
@@ -95,7 +95,7 @@ def train_run(run: Run):
             weights_store.retrieve_weights(run, iteration=trained_until)
 
         elif latest_weights_iteration == trained_until:
-            logger.info("Resuming training from iteration %d", trained_until)
+            print("Resuming training from iteration %d", trained_until)
 
             weights_store.retrieve_weights(run, iteration=trained_until)
 
@@ -204,4 +204,4 @@ def train_run(run: Run):
             run.move_optimizer(compute_context.device)
             run.model.train()
 
-    logger.info("Trained until %d, finished.", trained_until)
+    print("Trained until %d, finished.", trained_until)

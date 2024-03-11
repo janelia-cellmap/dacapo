@@ -60,21 +60,21 @@ def start_worker(
         function_path (str): The path to the segment function.
     """
 
-    logger.info("Starting worker")
+    print("Starting worker")
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    logger.info(f"Opening input array {input_array_identifier}")
+    print(f"Opening input array {input_array_identifier}")
     input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
 
     output_array_identifier = LocalArrayIdentifier(
         Path(output_container), output_dataset
     )
-    logger.info(f"Opening output array {output_array_identifier}")
+    print(f"Opening output array {output_array_identifier}")
     output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
 
     # Load segment function
     function_name = Path(function_path).stem
-    logger.info(f"Loading segment function from {str(function_path)}")
+    print(f"Loading segment function from {str(function_path)}")
     function = SourceFileLoader(function_name, str(function_path)).load_module()
     segment_function = function.segment_function
 
@@ -86,9 +86,7 @@ def start_worker(
 
     # load parameters saved in tmpdir
     if os.path.exists(os.path.join(tmpdir, "parameters.yaml")):
-        logger.info(
-            f"Loading parameters from {os.path.join(tmpdir, 'parameters.yaml')}"
-        )
+        print(f"Loading parameters from {os.path.join(tmpdir, 'parameters.yaml')}")
         with open(os.path.join(tmpdir, "parameters.yaml"), "r") as f:
             parameters.update(yaml.safe_load(f))
 
@@ -169,7 +167,7 @@ def start_worker(
             edges = unique_pairs[non_zero_filter]
             nodes = np.unique(edges)
 
-            logger.info(f"Writing ids to {os.path.join(tmpdir, 'block_%d.npz')}")
+            print(f"Writing ids to {os.path.join(tmpdir, 'block_%d.npz')}")
             assert os.path.exists(tmpdir)
             with open(
                 os.path.join(tmpdir, f"block_{block.block_id[1]}.npz"), "wb"

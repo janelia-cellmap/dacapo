@@ -196,7 +196,7 @@ class GunpowderTrainer(Trainer):
     def iterate(self, num_iterations, model, optimizer, device):
         t_start_fetch = time.time()
 
-        logger.info("Starting iteration!")
+        print("Starting iteration!")
 
         for iteration in range(self.iteration, self.iteration + num_iterations):
             raw, gt, target, weight, mask = self.next()
