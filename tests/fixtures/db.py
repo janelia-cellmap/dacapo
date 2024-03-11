@@ -36,7 +36,10 @@ def mongo_db_available():
 def options(request, tmp_path):
     # read the options from the users config file locally
     options = Options.instance(
-        type=request.param, runs_base_dir="tests", mongo_db_name="dacapo_tests"
+        type=request.param,
+        runs_base_dir="tests",
+        mongo_db_name="dacapo_tests",
+        compute_context={"type": "LocalTorch", "config": {"device": "cpu"}},
     )
 
     # change to a temporary directory for this test only
@@ -46,11 +49,10 @@ def options(request, tmp_path):
     # write the dacapo config in the current temporary directory. Now options
     # will be read from this file instead of the users config file letting
     # us test different configurations
-    config_file = Path("dacapo.yaml")
+    config_file = Path(tmp_path / "dacapo.yaml")
     with open(config_file, "w") as f:
         yaml.safe_dump(options.serialize(), f)
-    # config_file.write_text(options.serialize()
-    #      )
+    os.environ["OPTIONS_FILE"] = str(config_file)
 
     # yield the options
     yield options

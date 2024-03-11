@@ -18,5 +18,9 @@ scratch/
 # vscode stuff
 .vscode
 .mypy_cache
+.pytest_cache
 daisy_logs/
+tmp/
 
+*.zarr/
+*.n5/

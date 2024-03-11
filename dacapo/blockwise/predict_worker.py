@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 import torch
@@ -186,8 +187,8 @@ def start_worker(
             chunk_request[raw].roi = block.read_roi
             chunk_request[prediction].roi = block.write_roi
 
-        with gp.build(pipeline):
-            _ = pipeline.request_batch(chunk_request)
+            with gp.build(pipeline):
+                _ = pipeline.request_batch(chunk_request)
 
 
 def spawn_worker(
@@ -208,7 +209,8 @@ def spawn_worker(
 
     # Make the command for the worker to run
     command = [
-        "python",
+        # "python",
+        sys.executable,
         path,
         "start-worker",
         "--run-name",

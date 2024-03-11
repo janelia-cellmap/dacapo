@@ -1,6 +1,7 @@
 import numpy as np
+import logging
 
-import os
+logger = logging.getLogger(__name__)
 
 try:
     from empanada_napari.inference import Engine3d
@@ -73,7 +74,7 @@ def orthoplane_inference(engine, volume):
         # report instances per class
         for tracker in trackers:
             class_id = tracker.class_id
-            print(
+            logger.info(
                 f"Class {class_id}, axis {axis_name}, has {len(tracker.instances.keys())} instances"
             )
 
@@ -152,7 +153,7 @@ def empanada_segmenter(
             min_extent=min_extent,
             dtype=engine.dtype,
         ):
-            print(f"Yielding {class_name} volume of shape {vol.shape}")
+            logger.info(f"Yielding {class_name} volume of shape {vol.shape}")
             yield vol, class_name, tracker
 
     def start_consensus_worker(trackers_dict):
@@ -165,7 +166,7 @@ def empanada_segmenter(
             min_extent=min_extent,
             dtype=engine.dtype,
         ):
-            print(f"Yielding {class_name} volume of shape {vol.shape}")
+            logger.info(f"Yielding {class_name} volume of shape {vol.shape}")
             yield vol, class_name, tracker
 
     # verify that the image doesn't have extraneous channel dimensions
@@ -181,7 +182,7 @@ def empanada_segmenter(
         else:
             raise Exception(f"Image volume must be 3D, got image of shape {shape}")
 
-        print(
+        logger.info(
             f"Got 4D image of shape {shape}, extracted single channel of size {image.shape}"
         )
 
@@ -209,7 +210,7 @@ def stack_postprocessing(
 
     # create the final instance segmentations
     for class_id, class_name in class_names.items():
-        print(f"Creating stack segmentation for class {class_name}...")
+        logger.info(f"Creating stack segmentation for class {class_name}...")
 
         class_tracker = get_axis_trackers_by_class(trackers, class_id)[0]
         shape3d = class_tracker.shape3d
@@ -223,7 +224,7 @@ def stack_postprocessing(
             filters.remove_small_objects(stack_tracker, min_size=min_size)
             filters.remove_pancakes(stack_tracker, min_span=min_extent)
 
-        print(f"Total {class_name} objects {len(stack_tracker.instances.keys())}")
+        logger.info(f"Total {class_name} objects {len(stack_tracker.instances.keys())}")
 
         # decode and fill the instances
         stack_vol = np.zeros(shape3d, dtype=dtype)
@@ -253,7 +254,7 @@ def tracker_consensus(
     # create the final instance segmentations
     for class_id, class_name in class_names.items():
         # get the relevant trackers for the class_label
-        print(f"Creating consensus segmentation for class {class_name}...")
+        logger.info(f"Creating consensus segmentation for class {class_name}...")
 
         class_trackers = get_axis_trackers_by_class(trackers, class_id)
         shape3d = class_trackers[0].shape3d
@@ -270,7 +271,9 @@ def tracker_consensus(
                 class_trackers, pixel_vote_thr
             )
 
-        print(f"Total {class_name} objects {len(consensus_tracker.instances.keys())}")
+        logger.info(
+            f"Total {class_name} objects {len(consensus_tracker.instances.keys())}"
+        )
 
         # decode and fill the instances
         consensus_vol = np.zeros(shape3d, dtype=dtype)

@@ -32,6 +32,9 @@ def cli(log_level):
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
+logger = logging.getLogger(__name__)
+
+
 @cli.command()
 @click.option(
     "-r", "--run-name", required=True, type=str, help="The NAME of the run to train."
@@ -235,7 +238,7 @@ def run_blockwise(
     *args,
     **kwargs,
 ):
-    # get arubtrary args and kwargs
+    # get arbitrary args and kwargs
     parameters = unpack_ctx(ctx)
 
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
@@ -261,7 +264,7 @@ def run_blockwise(
         overwrite=overwrite,
     )
 
-    _run_blockwise(
+    _run_blockwise(  # type: ignore
         input_array_identifier=input_array_identifier,
         output_array_identifier=output_array_identifier,
         worker_file=worker_file,
@@ -383,11 +386,11 @@ def segment_blockwise(
         np.uint64,
         overwrite=overwrite,
     )
-    print(
+    logger.info(
         f"Created output array {output_array_identifier.container}:{output_array_identifier.dataset} with ROI {_total_roi}."
     )
 
-    _segment_blockwise(
+    _segment_blockwise(  # type: ignore
         input_array_identifier=input_array_identifier,
         output_array_identifier=output_array_identifier,
         segment_function_file=segment_function_file,
@@ -406,7 +409,7 @@ def segment_blockwise(
 
 
 def unpack_ctx(ctx):
-    # print(ctx.args)
+    # logger.info(ctx.args)
     kwargs = {
         ctx.args[i].lstrip("-"): ctx.args[i + 1] for i in range(0, len(ctx.args), 2)
     }
@@ -415,8 +418,8 @@ def unpack_ctx(ctx):
             kwargs[k] = int(v)
         elif v.replace(".", "").isnumeric():
             kwargs[k] = float(v)
-        print(f"{k}: {kwargs[k]}")
-        # print(f"{type(k)}: {k} --> {type(kwargs[k])} {kwargs[k]}")
+        logger.info(f"{k}: {kwargs[k]}")
+        # logger.info(f"{type(k)}: {k} --> {type(kwargs[k])} {kwargs[k]}")
     return kwargs
 
 

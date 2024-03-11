@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.compute_context import create_compute_context
@@ -60,7 +61,7 @@ def start_worker(
     client = daisy.Client()
 
     while True:
-        print("getting block")
+        logger.info("getting block")
         with client.acquire_block() as block:
             if block is None:
                 break
@@ -87,7 +88,8 @@ def spawn_worker(
 
     # Make the command for the worker to run
     command = [
-        "python",
+        # "python",
+        sys.executable,
         path,
         "start-worker",
         "--input_container",
