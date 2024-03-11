@@ -167,11 +167,10 @@ def start_worker(
             edges = unique_pairs[non_zero_filter]
             nodes = np.unique(edges)
 
-            print(f"Writing ids to {os.path.join(tmpdir, 'block_%d.npz')}")
             assert os.path.exists(tmpdir)
-            with open(
-                os.path.join(tmpdir, f"block_{block.block_id[1]}.npz"), "wb"
-            ) as f:
+            path = os.path.join(tmpdir, f"block_{block.block_id[1]}.npz")
+            print(f"Writing ids to {path}")
+            with open(path, "wb") as f:
                 np.savez_compressed(
                     f,
                     nodes=nodes,

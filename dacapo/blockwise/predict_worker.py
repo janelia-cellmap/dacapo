@@ -165,12 +165,6 @@ def start_worker(
         output_size,
         voxel_size=output_voxel_size,
     )
-    # # use daisy requests to run pipeline
-    # pipeline += gp.DaisyRequestBlocks(
-    #     reference=request,
-    #     roi_map={raw: "read_roi", prediction: "write_roi"},
-    #     num_workers=1,
-    # )
 
     daisy_client = daisy.Client()
 

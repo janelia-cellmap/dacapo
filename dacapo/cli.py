@@ -262,6 +262,7 @@ def run_blockwise(
         input_array.voxel_size,
         output_dtype,
         overwrite=overwrite,
+        write_size=write_roi.shape,
     )
 
     _run_blockwise(  # type: ignore
@@ -383,6 +384,7 @@ def segment_blockwise(
         input_array.voxel_size,
         np.uint64,
         overwrite=overwrite,
+        write_size=write_roi.shape,
     )
     print(
         f"Created output array {output_array_identifier.container}:{output_array_identifier.dataset} with ROI {_total_roi}."
