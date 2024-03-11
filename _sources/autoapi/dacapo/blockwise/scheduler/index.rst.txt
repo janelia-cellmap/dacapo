@@ -56,7 +56,7 @@ Attributes
    :returns: ``Bool``.
 
 
-.. py:function:: segment_blockwise(segment_function_file: str | pathlib.Path, context: funlib.geometry.Coordinate, total_roi: funlib.geometry.Roi, read_roi: funlib.geometry.Roi, write_roi: funlib.geometry.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, tmp_prefix='tmp', *args, **kwargs)
+.. py:function:: segment_blockwise(segment_function_file: str | pathlib.Path, context: funlib.geometry.Coordinate, total_roi: funlib.geometry.Roi, read_roi: funlib.geometry.Roi, write_roi: funlib.geometry.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, *args, **kwargs)
 
    Run a segmentation function in parallel over a large volume.
 
@@ -78,6 +78,10 @@ Attributes
                        (either due to failed post check or application crashes or network
                        failure)
    :type max_retries: ``int``
+   :param timeout: The maximum time in seconds to wait for a worker to complete a task.
+   :type timeout: ``int``
+   :param upstream_tasks: List of upstream tasks.
+   :type upstream_tasks: ``List``
    :param \*args: Additional positional arguments to pass to ``worker_function``.
    :param \*\*kwargs: Additional keyword arguments to pass to ``worker_function``.
 
