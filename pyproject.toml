@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 # https://peps.python.org/pep-0621/
 [project]
 name = "dacapo-ml"
-description = "Framework for easy composition of volumetric machine learning jobs."
+description = "Framework for deployment of volumetric machine learning models, and easy composition of training jobs."
 readme = "README.md"
 requires-python = ">=3.10"
 # license = { text = "BSD 3-Clause License" }
@@ -41,7 +41,7 @@ dependencies = [
         "attrs",
         "bokeh",
         "numpy-indexed>=0.3.7",
-        "daisy @ git+https://github.com/funkelab/daisy@dev/master",
+        "daisy @ git+https://github.com/funkelab/daisy",
         "funlib.math>=0.1",
         "funlib.geometry>=0.2",
         "mwatershed>=0.1",
