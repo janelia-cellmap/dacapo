@@ -27,7 +27,7 @@ class DaCapoConfig:
             "help_text": "The path at DaCapo will use for reading and writing any necessary data."
         },
     )
-    compute_context_config: dict = attr.ib(
+    compute_context: dict = attr.ib(
         default={"type": "LocalTorch", "config": {}},
         metadata={
             "help_text": "The configuration for the compute context to use. "
@@ -71,7 +71,7 @@ class Options:
 
         # options files in order of precedence (highest first)
         options_files += [
-            Path("./dacapo.yaml"),
+            Path(Path(__file__).parent.parent, "dacapo.yaml"),
             Path(expanduser("~/.config/dacapo/dacapo.yaml")),
         ]
         for path in options_files:

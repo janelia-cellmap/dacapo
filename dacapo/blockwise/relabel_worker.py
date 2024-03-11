@@ -1,5 +1,6 @@
 from glob import glob
 import os
+import sys
 import daisy
 from dacapo.compute_context import create_compute_context
 from dacapo.store.array_store import LocalArrayIdentifier
@@ -101,7 +102,8 @@ def spawn_worker(
 
     # Make the command for the worker to run
     command = [
-        "python",
+        # "python",
+        sys.executable,
         path,
         "start-worker",
         "--output_container",

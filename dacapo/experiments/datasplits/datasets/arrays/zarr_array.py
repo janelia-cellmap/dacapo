@@ -162,6 +162,13 @@ class ZarrArray(Array):
             zarr_dataset.attrs["axes"] = (
                 axes[::-1] if array_identifier.container.name.endswith("n5") else axes
             )
+            # to make display right in neuroglancer: TODO
+            zarr_dataset.attrs["dimension_units"] = [
+                f"{size} nm" for size in zarr_dataset.attrs["resolution"]
+            ]
+            zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = (
+                axes[::-1] if array_identifier.container.name.endswith("n5") else axes
+            )
         except zarr.errors.ContainsArrayError:
             zarr_dataset = zarr_container[array_identifier.dataset]
             assert (
