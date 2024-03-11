@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+import shutil
 from ..fixtures import *
 
 from dacapo.experiments import Run
@@ -24,6 +27,18 @@ def test_validate(
     options,
     run_config,
 ):
+    # set debug to True to run the test in a specific directory (for debugging)
+    debug = False
+    if debug:
+        tmp_path = f"{Path(__file__).parent}/tmp"
+        if os.path.exists(tmp_path):
+            shutil.rmtree(tmp_path, ignore_errors=True)
+        os.makedirs(tmp_path, exist_ok=True)
+        old_path = os.getcwd()
+        os.chdir(tmp_path)
+    # when done debugging, delete "tests/operations/tmp"
+    # -------------------------------------
+
     # create a store
 
     store = create_config_store()
@@ -49,3 +64,6 @@ def test_validate(
     # test validating weights that don't exist
     with pytest.raises(FileNotFoundError):
         validate(run_config.name, 2, num_workers=4)
+
+    if debug:
+        os.chdir(old_path)
