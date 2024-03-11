@@ -6,15 +6,15 @@ build-backend = "hatchling.build"
 # https://peps.python.org/pep-0621/
 [project]
 name = "dacapo-ml"
-description = "Framework for easy composition of volumetric machine learning jobs."
+description = "Framework for deployment of volumetric machine learning models, and easy composition of training jobs."
 readme = "README.md"
 requires-python = ">=3.10"
 # license = { text = "BSD 3-Clause License" }
 authors = [
-    { email = "funkej@janelia.hhmi.org", name = "Jan Funke" },
     { email = "pattonw@janelia.hhmi.org", name = "Will Patton" },
     { email = "rhoadesj@hhmi.org", name = "Jeff Rhoades" },
     { email = "zouinkhim@hhmi.org", name = "Marwan Zouinkhi" },
+    { email = "funkej@janelia.hhmi.org", name = "Jan Funke" },
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -45,7 +45,8 @@ dependencies = [
         "funlib.math>=0.1",
         "funlib.geometry>=0.2",
         "mwatershed>=0.1",
-        "funlib.persistence @ git+https://github.com/janelia-cellmap/funlib.persistence",
+        "funlib.persistence",
+        # "funlib.persistence @ git+https://github.com/janelia-cellmap/funlib.persistence",
         "funlib.evaluate @ git+https://github.com/pattonw/funlib.evaluate",
         "gunpowder>=1.3",
         # "lsds>=0.1.3",
