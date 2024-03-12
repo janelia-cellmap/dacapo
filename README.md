@@ -4,6 +4,8 @@
 
 # DaCapo ![DaCapo](https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/icon_dacapo.png)
 
+![Read the Docs](https://img.shields.io/readthedocs/dacapo)
+![Github Created At](https://img.shields.io/github/created-at/funkelab/dacapo)
 ![GitHub License](https://img.shields.io/github/license/janelia-cellmap/dacapo)
 ![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fjanelia-cellmap%2Fdacapo%2Fmain%2Fpyproject.toml)
 
