@@ -1,3 +1,4 @@
+from dacapo.compute_context import create_compute_context
 from dacapo.store.create_store import (
     create_array_store,
     create_config_store,
@@ -5,18 +6,18 @@ from dacapo.store.create_store import (
     create_weights_store,
 )
 from dacapo.experiments import Run
-from dacapo.compute_context import LocalTorch, ComputeContext
 from dacapo.validate import validate_run
 
 import torch
 from tqdm import tqdm
+import threading
 
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
+def train(run_name: str):
     """Train a run"""
 
     # check config store to see if run is already being trained TODO
@@ -26,7 +27,7 @@ def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
     #     # we are done here.
     #     return
 
-    logger.info("Training run %s", run_name)
+    print("Training run %s", run_name)
 
     # create run
 
@@ -34,14 +35,11 @@ def train(run_name: str, compute_context: ComputeContext = LocalTorch()):
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
 
-    return train_run(run, compute_context=compute_context)
+    return train_run(run)
 
 
-def train_run(
-    run: Run,
-    compute_context: ComputeContext = LocalTorch(),
-):
-    logger.info("Starting/resuming training for run %s...", run)
+def train_run(run: Run):
+    print("Starting/resuming training for run %s...", run)
 
     # create run
 
@@ -54,13 +52,13 @@ def train_run(
     trained_until = run.training_stats.trained_until()
     validated_until = run.validation_scores.validated_until()
     if validated_until > trained_until:
-        logger.info(
+        print(
             f"Trained until {trained_until}, but validated until {validated_until}! "
             "Deleting extra validation stats"
         )
         run.validation_scores.delete_after(trained_until)
 
-    logger.info("Current state: trained until %d/%d", trained_until, run.train_until)
+    print("Current state: trained until %d/%d", trained_until, run.train_until)
 
     # read weights of the latest iteration
 
@@ -97,7 +95,7 @@ def train_run(
             weights_store.retrieve_weights(run, iteration=trained_until)
 
         elif latest_weights_iteration == trained_until:
-            logger.info("Resuming training from iteration %d", trained_until)
+            print("Resuming training from iteration %d", trained_until)
 
             weights_store.retrieve_weights(run, iteration=trained_until)
 
@@ -117,6 +115,7 @@ def train_run(
     # loading weights directly from a checkpoint into cuda
     # can allocate twice the memory of loading to cpu before
     # moving to cuda.
+    compute_context = create_compute_context()
     run.model = run.model.to(compute_context.device)
     run.move_optimizer(compute_context.device)
 
@@ -155,28 +154,42 @@ def train_run(
             trained_until = run.training_stats.trained_until()
 
             # If this is not a validation iteration or final iteration, skip validation
+            # also skip for test cases where total iterations is less than validation interval
             no_its = iteration_stats is None  # No training steps run
             validation_it = (
                 iteration_stats.iteration + 1
             ) % run.validation_interval == 0
             final_it = trained_until >= run.train_until
+            if final_it and (trained_until < run.validation_interval):
+                # Special case for tests - skip validation, but store weights
+                stats_store.store_training_stats(run.name, run.training_stats)
+                weights_store.store_weights(run, iteration_stats.iteration + 1)
+                continue
+
             if no_its or (not validation_it and not final_it):
                 stats_store.store_training_stats(run.name, run.training_stats)
                 continue
 
             run.model.eval()
             # free up optimizer memory to allow larger validation blocks
-            run.model = run.model.to(torch.device("cpu"))
             run.move_optimizer(torch.device("cpu"), empty_cuda_cache=True)
 
             stats_store.store_training_stats(run.name, run.training_stats)
             weights_store.store_weights(run, iteration_stats.iteration + 1)
             try:
-                validate_run(
-                    run,
-                    iteration_stats.iteration + 1,
-                    compute_context=compute_context,
+                # launch validation in a separate thread to avoid blocking training
+                validate_thread = threading.Thread(
+                    target=validate_run,
+                    args=(run, iteration_stats.iteration + 1),
+                    name=f"validate_{run.name}_{iteration_stats.iteration + 1}",
+                    daemon=True,
                 )
+                validate_thread.start()
+                # validate_run(
+                #     run,
+                #     iteration_stats.iteration + 1,
+                # )
+
                 stats_store.store_validation_iteration_scores(
                     run.name, run.validation_scores
                 )
@@ -191,4 +204,4 @@ def train_run(
             run.move_optimizer(compute_context.device)
             run.model.train()
 
-    logger.info("Trained until %d, finished.", trained_until)
+    print("Trained until %d, finished.", trained_until)

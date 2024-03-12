@@ -2,16 +2,19 @@ from importlib.machinery import SourceFileLoader
 import logging
 import os
 from pathlib import Path
+import sys
 import click
 import daisy
 from funlib.persistence import Array
 
 import numpy as np
 import yaml
-from dacapo.compute_context import ComputeContext, LocalTorch
+from dacapo.compute_context import create_compute_context
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 
 from dacapo.store.array_store import LocalArrayIdentifier
+
+logger = logging.getLogger(__name__)
 
 
 @click.group()
@@ -28,6 +31,7 @@ def cli(log_level):
 
 fit = "shrink"
 read_write_conflict = True
+path = __file__
 
 
 @cli.command()
@@ -45,17 +49,32 @@ def start_worker(
     tmpdir: str,
     function_path: str,
 ):
+    """Start a worker to run a segment function on a given dataset.
+
+    Args:
+        input_container (str): The input container.
+        input_dataset (str): The input dataset.
+        output_container (str): The output container.
+        output_dataset (str): The output dataset.
+        tmpdir (str): The temporary directory.
+        function_path (str): The path to the segment function.
+    """
+
+    print("Starting worker")
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
+    print(f"Opening input array {input_array_identifier}")
     input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
 
     output_array_identifier = LocalArrayIdentifier(
         Path(output_container), output_dataset
     )
+    print(f"Opening output array {output_array_identifier}")
     output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
 
     # Load segment function
     function_name = Path(function_path).stem
+    print(f"Loading segment function from {str(function_path)}")
     function = SourceFileLoader(function_name, str(function_path)).load_module()
     segment_function = function.segment_function
 
@@ -67,6 +86,7 @@ def start_worker(
 
     # load parameters saved in tmpdir
     if os.path.exists(os.path.join(tmpdir, "parameters.yaml")):
+        print(f"Loading parameters from {os.path.join(tmpdir, 'parameters.yaml')}")
         with open(os.path.join(tmpdir, "parameters.yaml"), "r") as f:
             parameters.update(yaml.safe_load(f))
 
@@ -83,7 +103,9 @@ def start_worker(
 
             segmentation = segment_function(input_array, block, **parameters)
 
-            assert segmentation.dtype == np.uint64
+            assert (
+                segmentation.dtype == np.uint64
+            ), "Instance segmentations returned by segment_function is expected to be uint64"
 
             id_bump = block.block_id[1] * num_voxels_in_block
             segmentation += id_bump
@@ -95,7 +117,7 @@ def start_worker(
             )
 
             # store segmentation in out array
-            output_array._daisy_array[block.write_roi] = segmentation[block.write_roi]
+            output_array[block.write_roi] = segmentation[block.write_roi]
 
             neighbor_roi = block.write_roi.grow(
                 input_array.voxel_size, input_array.voxel_size
@@ -138,18 +160,22 @@ def start_worker(
                 )
 
             unique_pairs = np.concatenate(unique_pairs)
-            zero_u = unique_pairs[:, 0] == 0
-            zero_v = unique_pairs[:, 1] == 0
+            zero_u = unique_pairs[:, 0] == 0  # type: ignore
+            zero_v = unique_pairs[:, 1] == 0  # type: ignore
             non_zero_filter = np.logical_not(np.logical_or(zero_u, zero_v))
 
             edges = unique_pairs[non_zero_filter]
             nodes = np.unique(edges)
 
-            np.savez_compressed(
-                os.path.join(tmpdir, "block_%d.npz" % block.block_id[1]),
-                nodes=nodes,
-                edges=edges,
-            )
+            assert os.path.exists(tmpdir)
+            path = os.path.join(tmpdir, f"block_{block.block_id[1]}.npz")
+            print(f"Writing ids to {path}")
+            with open(path, "wb") as f:
+                np.savez_compressed(
+                    f,
+                    nodes=nodes,
+                    edges=edges,
+                )
 
 
 def spawn_worker(
@@ -157,7 +183,6 @@ def spawn_worker(
     output_array_identifier: LocalArrayIdentifier,
     tmpdir: str,
     function_path: str,
-    compute_context: ComputeContext = LocalTorch(),
 ):
     """Spawn a worker to predict on a given dataset.
 
@@ -165,12 +190,14 @@ def spawn_worker(
         model (Model): The model to use for prediction.
         raw_array (Array): The raw data to predict on.
         prediction_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
-        compute_context (ComputeContext, optional): The compute context to use. Defaults to LocalTorch().
     """
+    compute_context = create_compute_context()
+
     # Make the command for the worker to run
     command = [
-        "python",
-        __file__,
+        # "python",
+        sys.executable,
+        path,
         "start-worker",
         "--input_container",
         input_array_identifier.container,

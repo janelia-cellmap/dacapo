@@ -1,13 +1,11 @@
 from pathlib import Path
 
-import click
 from dacapo.blockwise import run_blockwise
+import dacapo.blockwise
 from dacapo.experiments import Run
-from dacapo.store.create_store import create_config_store
+from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.store.local_array_store import LocalArrayIdentifier
-from dacapo.compute_context import LocalTorch, ComputeContext
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
-from dacapo.cli import cli
 
 from funlib.geometry import Coordinate, Roi
 import numpy as np
@@ -24,45 +22,71 @@ def predict(
     iteration: int,
     input_container: Path | str,
     input_dataset: str,
-    output_path: Path | str,
+    output_path: LocalArrayIdentifier | Path | str,
     output_roi: Optional[Roi | str] = None,
-    num_workers: int = 30,
+    num_workers: int = 12,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
-    compute_context: ComputeContext | str = LocalTorch(),
     overwrite: bool = True,
 ):
-    """_summary_
+    """Predict with a trained model.
 
     Args:
-        run_name (str): _description_
-        iteration (int): _description_
-        input_container (Path | str): _description_
-        input_dataset (str): _description_
-        output_path (Path | str): _description_
-        output_roi (Optional[str], optional): Defaults to None. If output roi is None,
-            it will be set to the raw roi.
-        num_workers (int, optional): _description_. Defaults to 30.
-        output_dtype (np.dtype | str, optional): _description_. Defaults to np.uint8.
-        overwrite (bool, optional): _description_. Defaults to True.
+        run_name (str): The name of the run to predict with.
+        iteration (int): The training iteration of the model to use for prediction.
+        input_container (Path | str): The container of the input array.
+        input_dataset (str): The dataset name of the input array.
+        output_path (LocalArrayIdentifier | str): The path where the prediction array will be stored, or a LocalArryIdentifier for the prediction array.
+        output_roi (Optional[Roi | str], optional): The ROI of the output array. If None, the ROI of the input array will be used. Defaults to None.
+        num_workers (int, optional): The number of workers to use for blockwise prediction. Defaults to 30.
+        output_dtype (np.dtype | str, optional): The dtype of the output array. Defaults to np.uint8.
+        overwrite (bool, optional): If True, the output array will be overwritten if it already exists. Defaults to True.
     """
     # retrieving run
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
 
+    # check to see if we can load the weights
+    weights_store = create_weights_store()
+    try:
+        weights_store.retrieve_weights(run_name, iteration)
+    except FileNotFoundError:
+        raise ValueError(
+            f"No weights found for run {run_name} at iteration {iteration}."
+        )
+
     # get arrays
-    raw_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    raw_array = ZarrArray.open_from_array_identifier(raw_array_identifier)
-    output_container = Path(
-        output_path,
-        "".join(Path(input_container).name.split(".")[:-1]) + ".zarr",
-    )  # TODO: zarr hardcoded
-    prediction_array_identifier = LocalArrayIdentifier(
-        output_container, f"prediction_{run_name}_{iteration}"
-    )
+    input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
+    raw_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+    if isinstance(output_path, LocalArrayIdentifier):
+        output_array_identifier = output_path
+    else:
+        if ".zarr" in str(output_path) or ".n5" in str(output_path):
+            output_container = Path(output_path)
+        else:
+            output_container = Path(
+                output_path,
+                Path(input_container).stem + ".zarr",
+            )  # TODO: zarr hardcoded
+        output_array_identifier = LocalArrayIdentifier(
+            output_container, f"prediction_{run_name}_{iteration}"
+        )
+
+    # get the model's input and output size
+    model = run.model.eval()
+
+    input_voxel_size = Coordinate(raw_array.voxel_size)
+    output_voxel_size = model.scale(input_voxel_size)
+    input_shape = Coordinate(model.eval_input_shape)
+    input_size = input_voxel_size * input_shape
+    output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
+
+    # calculate input and output rois
+
+    context = (input_size - output_size) // 2
 
     if output_roi is None:
-        output_roi = raw_array.roi
+        output_roi = raw_array.roi.grow(-context, -context)
     elif isinstance(output_roi, str):
         start, end = zip(
             *[
@@ -76,36 +100,20 @@ def predict(
         )
         output_roi = output_roi.snap_to_grid(
             raw_array.voxel_size, mode="grow"
-        ).intersect(raw_array.roi)
+        ).intersect(raw_array.roi.grow(-context, -context))
+    _input_roi = output_roi.grow(context, context)  # type: ignore
 
     if isinstance(output_dtype, str):
         output_dtype = np.dtype(output_dtype)
 
-    model = run.model.eval()
+    print("Predicting with input size %s, output size %s", input_size, output_size)
 
-    # get the model's input and output size
-
-    input_voxel_size = Coordinate(raw_array.voxel_size)
-    output_voxel_size = model.scale(input_voxel_size)
-    input_shape = Coordinate(model.eval_input_shape)
-    input_size = input_voxel_size * input_shape
-    output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
-
-    logger.info(
-        "Predicting with input size %s, output size %s", input_size, output_size
-    )
-
-    # calculate input and output rois
-
-    context = (input_size - output_size) / 2
-    _input_roi = output_roi.grow(context, context)
-
-    logger.info("Total input ROI: %s, output ROI: %s", _input_roi, output_roi)
+    print("Total input ROI: %s, output ROI: %s", _input_roi, output_roi)
 
     # prepare prediction dataset
     axes = ["c"] + [axis for axis in raw_array.axes if axis != "c"]
     ZarrArray.create_from_array_identifier(
-        prediction_array_identifier,
+        output_array_identifier,
         axes,
         output_roi,
         model.num_out_channels,
@@ -115,24 +123,25 @@ def predict(
     )
 
     # run blockwise prediction
+    worker_file = str(Path(Path(dacapo.blockwise.__file__).parent, "predict_worker.py"))
+    print("Running blockwise prediction with worker_file: ", worker_file)
     run_blockwise(
-        worker_file=str(Path(Path(__file__).parent, "blockwise", "predict_worker.py")),
-        compute_context=compute_context,
+        worker_file=worker_file,
         total_roi=_input_roi,
         read_roi=Roi((0, 0, 0), input_size),
-        write_roi=Roi((0, 0, 0), output_size),
+        write_roi=Roi(context, output_size),
         num_workers=num_workers,
         max_retries=2,  # TODO: make this an option
         timeout=None,  # TODO: make this an option
         ######
         run_name=run_name,
         iteration=iteration,
-        raw_array_identifier=raw_array_identifier,
-        prediction_array_identifier=prediction_array_identifier,
+        input_array_identifier=input_array_identifier,
+        output_array_identifier=output_array_identifier,
     )
 
-    container = zarr.open(str(prediction_array_identifier.container))
-    dataset = container[prediction_array_identifier.dataset]
+    container = zarr.open(str(output_array_identifier.container))
+    dataset = container[output_array_identifier.dataset]
     dataset.attrs["axes"] = (  # type: ignore
         raw_array.axes if "c" in raw_array.axes else ["c"] + raw_array.axes
     )

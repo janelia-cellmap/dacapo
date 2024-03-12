@@ -1,7 +1,9 @@
 from glob import glob
 import os
+import sys
+from time import sleep
 import daisy
-from dacapo.compute_context import ComputeContext, LocalTorch
+from dacapo.compute_context import create_compute_context
 from dacapo.store.array_store import LocalArrayIdentifier
 from scipy.cluster.hierarchy import DisjointSet
 from funlib.persistence import open_ds
@@ -27,6 +29,7 @@ def cli(log_level):
 
 fit = "shrink"
 read_write_conflict = False
+path = __file__
 
 
 @cli.command()
@@ -46,14 +49,20 @@ def start_worker(
     nodes, edges = read_cross_block_merges(tmpdir)
 
     components = find_components(nodes, edges)
-    components = DisjointSet(nodes, edges)
 
     while True:
         with client.acquire_block() as block:
             if block is None:
                 break
 
-            relabel_in_block(array_out, nodes, components, block)
+            try:
+                relabel_in_block(array_out, nodes, components, block)
+            except OSError as e:
+                logging.error(
+                    f"Failed to relabel block {block.write_roi}: {e}. Trying again."
+                )
+                sleep(1)
+                relabel_in_block(array_out, nodes, components, block)
 
 
 def relabel_in_block(array_out, old_values, new_values, block):
@@ -88,7 +97,6 @@ def read_cross_block_merges(tmpdir):
 def spawn_worker(
     output_array_identifier: LocalArrayIdentifier,
     tmpdir: str,
-    compute_context: ComputeContext = LocalTorch(),
     *args,
     **kwargs,
 ):
@@ -97,12 +105,14 @@ def spawn_worker(
     Args:
         output_array_identifier (LocalArrayIdentifier): The output array identifier
         tmpdir (str): The temporary directory
-        compute_context (ComputeContext, optional): The compute context. Defaults to LocalTorch().
     """
+    compute_context = create_compute_context()
+
     # Make the command for the worker to run
     command = [
-        "python",
-        __file__,
+        # "python",
+        sys.executable,
+        path,
         "start-worker",
         "--output_container",
         output_array_identifier.container,

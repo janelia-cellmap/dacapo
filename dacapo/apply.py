@@ -12,7 +12,6 @@ from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
 import dacapo.experiments.tasks.post_processors as post_processors
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.predict import predict
-from dacapo.compute_context import LocalTorch, ComputeContext
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from dacapo.store.create_store import (
     create_config_store,
@@ -34,9 +33,8 @@ def apply(
     iteration: Optional[int] = None,
     parameters: Optional[PostProcessorParameters | str] = None,
     roi: Optional[Roi | str] = None,
-    num_workers: int = 30,
-    output_dtype: Optional[np.dtype | str] = np.uint8,  # type: ignore
-    compute_context: ComputeContext = LocalTorch(),
+    num_workers: int = 12,
+    output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
     file_format: str = "zarr",
 ):
@@ -61,7 +59,7 @@ def apply(
     ), "Either validation_dataset and criterion, or iteration must be provided."
 
     # retrieving run
-    logger.info("Loading run %s", run_name)
+    print("Loading run %s", run_name)
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
@@ -72,7 +70,7 @@ def apply(
     # load weights
     if iteration is None:
         iteration = weights_store.retrieve_best(run_name, validation_dataset, criterion)  # type: ignore
-    logger.info("Loading weights for iteration %i", iteration)
+    print("Loading weights for iteration %i", iteration)
     weights_store.retrieve_weights(run_name, iteration)
 
     if parameters is None:
@@ -91,10 +89,8 @@ def apply(
             raise ValueError(
                 "validation_dataset must be a dataset name or a Dataset object, or parameters must be provided explicitly."
             )
-        logger.info(
-            "Finding best parameters for validation dataset %s", _validation_dataset
-        )
-        parameters = run.task.evaluator.get_overall_best_parameters(  # TODO
+        print("Finding best parameters for validation dataset %s", _validation_dataset)
+        parameters = run.task.evaluator.get_overall_best_parameters(
             _validation_dataset, criterion
         )
         assert (
@@ -104,10 +100,10 @@ def apply(
     elif isinstance(parameters, str):
         try:
             post_processor_name = parameters.split("(")[0]
-            post_processor_kwargs = parameters.split("(")[1].strip(")").split(",")
+            _post_processor_kwargs = parameters.split("(")[1].strip(")").split(",")
             post_processor_kwargs = {
                 key.strip(): value.strip()
-                for key, value in [arg.split("=") for arg in post_processor_kwargs]
+                for key, value in [arg.split("=") for arg in _post_processor_kwargs]
             }
             for key, value in post_processor_kwargs.items():
                 if value.isdigit():
@@ -134,17 +130,17 @@ def apply(
     ), "Parameters must be parsable to a PostProcessorParameters object."
 
     # make array identifiers for input, predictions and outputs
-    input_array_identifier = LocalArrayIdentifier(input_container, input_dataset)
+    input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
     input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
     if roi is None:
-        roi = input_array.roi
+        _roi = input_array.roi
     else:
-        roi = roi.snap_to_grid(input_array.voxel_size, mode="grow").intersect(
+        _roi = roi.snap_to_grid(input_array.voxel_size, mode="grow").intersect(
             input_array.roi
         )
     output_container = Path(
         output_path,
-        "".join(Path(input_container).name.split(".")[:-1]) + f".{file_format}",
+        Path(input_container).stem + f".{file_format}",
     )
     prediction_array_identifier = LocalArrayIdentifier(
         output_container, f"prediction_{run_name}_{iteration}"
@@ -153,62 +149,59 @@ def apply(
         output_container, f"output_{run_name}_{iteration}_{parameters}"
     )
 
-    logger.info(
+    print(
         "Applying best results from run %s at iteration %i to dataset %s",
         run.name,
         iteration,
         Path(input_container, input_dataset),
     )
     return apply_run(
-        run.name,
+        run,
         iteration,
         parameters,
         input_array_identifier,
         prediction_array_identifier,
         output_array_identifier,
-        roi,
+        _roi,
         num_workers,
         output_dtype,
-        compute_context,
         overwrite,
     )
 
 
 def apply_run(
-    run_name: str,
+    run: Run,
     iteration: int,
     parameters: PostProcessorParameters,
     input_array_identifier: "LocalArrayIdentifier",
     prediction_array_identifier: "LocalArrayIdentifier",
     output_array_identifier: "LocalArrayIdentifier",
     roi: Optional[Roi] = None,
-    num_workers: int = 30,
-    output_dtype: Optional[np.dtype] = np.uint8,  # type: ignore
-    compute_context: ComputeContext = LocalTorch(),
+    num_workers: int = 12,
+    output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):
     """Apply the model to a dataset. If roi is None, the whole input dataset is used. Assumes model is already loaded."""
 
     # render prediction dataset
-    logger.info("Predicting on dataset %s", prediction_array_identifier)
+    print("Predicting on dataset %s", prediction_array_identifier)
     predict(
-        run_name,
+        run.name,
         iteration,
         input_container=input_array_identifier.container,
         input_dataset=input_array_identifier.dataset,
-        output_path=prediction_array_identifier.container,
+        output_path=prediction_array_identifier,
         output_roi=roi,
         num_workers=num_workers,
         output_dtype=output_dtype,
-        compute_context=compute_context,
         overwrite=overwrite,
     )
 
     # post-process the output
-    logger.info("Post-processing output to dataset %s", output_array_identifier)
+    print("Post-processing output to dataset %s", output_array_identifier)
     post_processor = run.task.post_processor
     post_processor.set_prediction(prediction_array_identifier)
-    post_processor.process(parameters, output_array_identifier)
+    post_processor.process(parameters, output_array_identifier, num_workers=num_workers)
 
-    logger.info("Done")
+    print("Done")
     return

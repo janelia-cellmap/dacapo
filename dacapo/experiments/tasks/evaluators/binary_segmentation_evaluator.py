@@ -41,7 +41,7 @@ class BinarySegmentationEvaluator(Evaluator):
         output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
         evaluation_data = evaluation_array[evaluation_array.roi]
         output_data = output_array[output_array.roi]
-        logger.info(
+        print(
             f"Evaluating binary segmentations on evaluation_data of shape: {evaluation_data.shape}"
         )
         assert (

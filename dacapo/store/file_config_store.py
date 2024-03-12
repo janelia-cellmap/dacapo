@@ -20,16 +20,16 @@ class FileConfigStore(ConfigStore):
     """
 
     def __init__(self, path):
-        logger.info("Creating FileConfigStore:\n\tpath    : %s", path)
+        print("Creating FileConfigStore:\n\tpath    : %s", path)
 
         self.path = Path(path)
 
         self.__open_collections()
         self.__init_db()
 
-    def store_run_config(self, run_config):
+    def store_run_config(self, run_config, ignore=None):
         run_doc = converter.unstructure(run_config)
-        self.__save_insert(self.runs, run_doc)
+        self.__save_insert(self.runs, run_doc, ignore)
 
     def retrieve_run_config(self, run_name):
         run_doc = self.__load(self.runs, run_name)
@@ -38,9 +38,9 @@ class FileConfigStore(ConfigStore):
     def retrieve_run_config_names(self):
         return [f.name[:-5] for f in self.runs.iterdir()]
 
-    def store_task_config(self, task_config):
+    def store_task_config(self, task_config, ignore=None):
         task_doc = converter.unstructure(task_config)
-        self.__save_insert(self.tasks, task_doc)
+        self.__save_insert(self.tasks, task_doc, ignore)
 
     def retrieve_task_config(self, task_name):
         task_doc = self.__load(self.tasks, task_name)
@@ -49,9 +49,9 @@ class FileConfigStore(ConfigStore):
     def retrieve_task_config_names(self):
         return [f.name[:-5] for f in self.tasks.iterdir()]
 
-    def store_architecture_config(self, architecture_config):
+    def store_architecture_config(self, architecture_config, ignore=None):
         architecture_doc = converter.unstructure(architecture_config)
-        self.__save_insert(self.architectures, architecture_doc)
+        self.__save_insert(self.architectures, architecture_doc, ignore)
 
     def retrieve_architecture_config(self, architecture_name):
         architecture_doc = self.__load(self.architectures, architecture_name)
@@ -60,9 +60,9 @@ class FileConfigStore(ConfigStore):
     def retrieve_architecture_config_names(self):
         return [f.name[:-5] for f in self.architectures.iterdir()]
 
-    def store_trainer_config(self, trainer_config):
+    def store_trainer_config(self, trainer_config, ignore=None):
         trainer_doc = converter.unstructure(trainer_config)
-        self.__save_insert(self.trainers, trainer_doc)
+        self.__save_insert(self.trainers, trainer_doc, ignore)
 
     def retrieve_trainer_config(self, trainer_name):
         trainer_doc = self.__load(self.trainers, trainer_name)
@@ -71,9 +71,9 @@ class FileConfigStore(ConfigStore):
     def retrieve_trainer_config_names(self):
         return [f.name[:-5] for f in self.trainers.iterdir()]
 
-    def store_datasplit_config(self, datasplit_config):
+    def store_datasplit_config(self, datasplit_config, ignore=None):
         datasplit_doc = converter.unstructure(datasplit_config)
-        self.__save_insert(self.datasplits, datasplit_doc)
+        self.__save_insert(self.datasplits, datasplit_doc, ignore)
 
     def retrieve_datasplit_config(self, datasplit_name):
         datasplit_doc = self.__load(self.datasplits, datasplit_name)
@@ -82,9 +82,9 @@ class FileConfigStore(ConfigStore):
     def retrieve_datasplit_config_names(self):
         return [f.name[:-5] for f in self.datasplits.iterdir()]
 
-    def store_array_config(self, array_config):
+    def store_array_config(self, array_config, ignore=None):
         array_doc = converter.unstructure(array_config)
-        self.__save_insert(self.arrays, array_doc)
+        self.__save_insert(self.arrays, array_doc, ignore)
 
     def retrieve_array_config(self, array_name):
         array_doc = self.__load(self.arrays, array_name)

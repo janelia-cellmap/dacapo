@@ -1,6 +1,6 @@
 from pathlib import Path
-from dacapo.blockwise.scheduler import run_blockwise
-from dacapo.compute_context import ComputeContext, LocalTorch
+from dacapo.blockwise import run_blockwise
+import dacapo.blockwise
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from dacapo.store.array_store import LocalArrayIdentifier
 from .argmax_post_processor_parameters import ArgmaxPostProcessorParameters
@@ -20,6 +20,7 @@ class ArgmaxPostProcessor(PostProcessor):
         yield ArgmaxPostProcessorParameters(id=1)
 
     def set_prediction(self, prediction_array_identifier):
+        self.prediction_array_identifier = prediction_array_identifier
         self.prediction_array = ZarrArray.open_from_array_identifier(
             prediction_array_identifier
         )
@@ -27,8 +28,7 @@ class ArgmaxPostProcessor(PostProcessor):
     def process(
         self,
         parameters,
-        output_array_identifier,
-        compute_context: ComputeContext | str = LocalTorch(),
+        output_array_identifier: "LocalArrayIdentifier",
         num_workers: int = 16,
         block_size: Coordinate = Coordinate((64, 64, 64)),
     ):
@@ -42,12 +42,11 @@ class ArgmaxPostProcessor(PostProcessor):
         )
 
         read_roi = Roi((0, 0, 0), self.prediction_array.voxel_size * block_size)
-        # run blockwise prediction
+        # run blockwise post-processing
         run_blockwise(
             worker_file=str(
-                Path(Path(__file__).parent, "blockwise", "predict_worker.py")
+                Path(Path(dacapo.blockwise.__file__).parent, "argmax_worker.py")
             ),
-            compute_context=compute_context,
             total_roi=self.prediction_array.roi,
             read_roi=read_roi,
             write_roi=read_roi,
@@ -55,9 +54,8 @@ class ArgmaxPostProcessor(PostProcessor):
             max_retries=2,  # TODO: make this an option
             timeout=None,  # TODO: make this an option
             ######
-            input_array_identifier=LocalArrayIdentifier(
-                self.prediction_array.file_name, self.prediction_array.dataset
-            ),
+            input_array_identifier=self.prediction_array_identifier,
             output_array_identifier=output_array_identifier,
         )
+
         return output_array

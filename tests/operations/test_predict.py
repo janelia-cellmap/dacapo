@@ -5,7 +5,7 @@ from ..fixtures import *
 
 from dacapo.experiments import Run
 from dacapo.store.create_store import create_config_store, create_weights_store
-from dacapo import apply
+from dacapo import predict
 
 import pytest
 from pytest_lazyfixture import lazy_fixture
@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.INFO)
         lazy_fixture("onehot_run"),
     ],
 )
-def test_apply(options, run_config, zarr_array, tmp_path):
+def test_predict(options, run_config, zarr_array, tmp_path):
     # set debug to True to run the test in a specific directory (for debugging)
     debug = False
     if debug:
@@ -50,40 +50,35 @@ def test_apply(options, run_config, zarr_array, tmp_path):
 
     # -------------------------------------
 
-    # apply
-    parameters = list(run.task.post_processor.enumerate_parameters())[0]
-
-    # test validating iterations for which we know there are weights
+    # predict
+    # test predicting with iterations for which we know there are weights
     weights_store.store_weights(run, 0)
-    apply(
+    predict(
         run_config.name,
-        zarr_array.file_name,
-        zarr_array.dataset,
-        output_path=tmp_path,
         iteration=0,
-        parameters=parameters,
+        input_container=zarr_array.file_name,
+        input_dataset=zarr_array.dataset,
+        output_path=tmp_path,
         num_workers=4,
     )
     weights_store.store_weights(run, 1)
-    apply(
+    predict(
         run_config.name,
-        zarr_array.file_name,
-        zarr_array.dataset,
-        output_path=tmp_path,
         iteration=1,
-        parameters=parameters,
+        input_container=zarr_array.file_name,
+        input_dataset=zarr_array.dataset,
+        output_path=tmp_path,
         num_workers=4,
     )
 
-    # test validating weights that don't exist
-    with pytest.raises(FileNotFoundError):
-        apply(
+    # test predicting with iterations for which we know there are no weights
+    with pytest.raises(ValueError):
+        predict(
             run_config.name,
-            zarr_array.file_name,
-            zarr_array.dataset,
-            output_path=tmp_path,
             iteration=2,
-            parameters=parameters,
+            input_container=zarr_array.file_name,
+            input_dataset=zarr_array.dataset,
+            output_path=tmp_path,
             num_workers=4,
         )
 

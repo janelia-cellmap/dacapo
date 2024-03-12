@@ -1,17 +1,18 @@
+import sys
 from pathlib import Path
 
 import torch
-from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
-from dacapo.gp.dacapo_array_source import DaCapoArraySource
+from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+from dacapo.gp import DaCapoArraySource
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.experiments import Run
-from dacapo.compute_context import ComputeContext, LocalTorch
+from dacapo.compute_context import create_compute_context
 import gunpowder as gp
 import gunpowder.torch as gp_torch
 
+from funlib.geometry import Coordinate
 import daisy
-from daisy import Coordinate
 
 import numpy as np
 import click
@@ -22,6 +23,7 @@ logger = logging.getLogger(__file__)
 
 read_write_conflict: bool = False
 fit: str = "valid"
+path = __file__
 
 
 @click.group()
@@ -66,7 +68,7 @@ def start_worker(
     input_dataset: str,
     output_container: Path | str,
     output_dataset: str,
-    device: str = "cuda",
+    device: str | torch.device = "cuda",
 ):
     # retrieving run
     config_store = create_config_store()
@@ -80,8 +82,8 @@ def start_worker(
     weights_store.retrieve_weights(run_name, iteration)
 
     # get arrays
-    raw_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    raw_array = ZarrArray.open_from_array_identifier(raw_array_identifier)
+    input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
+    raw_array = ZarrArray.open_from_array_identifier(input_array_identifier)
 
     output_array_identifier = LocalArrayIdentifier(
         Path(output_container), output_dataset
@@ -92,16 +94,15 @@ def start_worker(
     torch.backends.cudnn.benchmark = True
 
     # get the model's input and output size
-    model = run.model.eval()
+    model = run.model.eval().to(device)
     input_voxel_size = Coordinate(raw_array.voxel_size)
     output_voxel_size = model.scale(input_voxel_size)
     input_shape = Coordinate(model.eval_input_shape)
     input_size = input_voxel_size * input_shape
     output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
 
-    logger.info(
-        "Predicting with input size %s, output size %s", input_size, output_size
-    )
+    print("Predicting with input size %s, output size %s", input_size, output_size)
+
     # create gunpowder keys
 
     raw = gp.ArrayKey("RAW")
@@ -112,10 +113,12 @@ def start_worker(
     # prepare data source
     pipeline = DaCapoArraySource(raw_array, raw)
     # raw: (c, d, h, w)
-    pipeline += gp.Pad(raw, Coordinate((None,) * input_voxel_size.dims))
+    pipeline += gp.Pad(raw, None)
     # raw: (c, d, h, w)
     pipeline += gp.Unsqueeze([raw])
     # raw: (1, c, d, h, w)
+
+    pipeline += gp.Normalize(raw)
 
     # predict
     pipeline += gp_torch.Predict(
@@ -146,64 +149,74 @@ def start_worker(
         )  # assumes float32 is [0,1]
         pipeline += gp.AsType(prediction, output_array.dtype)
 
-    # wait for blocks to run pipeline
-    client = daisy.Client()
+    # write to output array
+    pipeline += gp.ZarrWrite(
+        {
+            prediction: output_array_identifier.dataset,
+        },
+        store=str(output_array_identifier.container),
+    )
+
+    # make reference batch request
+    request = gp.BatchRequest()
+    request.add(raw, input_size, voxel_size=input_voxel_size)
+    request.add(
+        prediction,
+        output_size,
+        voxel_size=output_voxel_size,
+    )
+
+    daisy_client = daisy.Client()
 
     while True:
-        print("getting block")
-        with client.acquire_block() as block:
+        with daisy_client.acquire_block() as block:
             if block is None:
-                break
+                return
 
-            ref_request = gp.BatchRequest()
-            ref_request[raw] = gp.ArraySpec(
-                roi=block.read_roi, voxel_size=input_voxel_size, dtype=raw_array.dtype
-            )
-            ref_request[prediction] = gp.ArraySpec(
-                roi=block.write_roi,
-                voxel_size=output_voxel_size,
-                dtype=output_array.dtype,
-            )
+            print("Processing block %s", block)
+
+            chunk_request = request.copy()
+            chunk_request[raw].roi = block.read_roi
+            chunk_request[prediction].roi = block.write_roi
 
             with gp.build(pipeline):
-                batch = pipeline.request_batch(ref_request)
-
-            # write to output array
-            output_array[block.write_roi] = batch.arrays[prediction].data
+                _ = pipeline.request_batch(chunk_request)
 
 
 def spawn_worker(
     run_name: str,
     iteration: int,
-    raw_array_identifier: "LocalArrayIdentifier",
-    prediction_array_identifier: "LocalArrayIdentifier",
-    compute_context: ComputeContext = LocalTorch(),
+    input_array_identifier: "LocalArrayIdentifier",
+    output_array_identifier: "LocalArrayIdentifier",
 ):
     """Spawn a worker to predict on a given dataset.
 
     Args:
-        model (Model): The model to use for prediction.
-        raw_array (Array): The raw data to predict on.
-        prediction_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
-        compute_context (ComputeContext, optional): The compute context to use. Defaults to LocalTorch().
+        run_name (str): The name of the run to apply.
+        iteration (int): The training iteration of the model to use for prediction.
+        input_array_identifier (LocalArrayIdentifier): The raw data to predict on.
+        output_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
     """
+    compute_context = create_compute_context()
+
     # Make the command for the worker to run
     command = [
-        "python",
-        __file__,
+        # "python",
+        sys.executable,
+        path,
         "start-worker",
         "--run-name",
         run_name,
         "--iteration",
         iteration,
         "--input_container",
-        raw_array_identifier.container,
+        input_array_identifier.container,
         "--input_dataset",
-        raw_array_identifier.dataset,
+        input_array_identifier.dataset,
         "--output_container",
-        prediction_array_identifier.container,
+        output_array_identifier.container,
         "--output_dataset",
-        prediction_array_identifier.dataset,
+        output_array_identifier.dataset,
         "--device",
         str(compute_context.device),
     ]

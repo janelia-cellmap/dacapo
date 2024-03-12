@@ -1,5 +1,9 @@
 from abc import ABC, abstractmethod
+import os
 import subprocess
+import sys
+
+from dacapo import Options, compute_context
 
 
 class ComputeContext(ABC):
@@ -18,4 +22,20 @@ class ComputeContext(ABC):
 
     def execute(self, command):
         # A helper method to run a command in the context specific way.
-        return subprocess.run(self.wrap_command(command))
+
+        # add pythonpath to the environment
+        os.environ["PYTHONPATH"] = sys.executable
+        subprocess.run(self.wrap_command(command))
+
+
+def create_compute_context():
+    """Create a compute context based on the global DaCapo options."""
+
+    options = Options.instance()
+
+    if hasattr(compute_context, options.compute_context["type"]):
+        return getattr(compute_context, options.compute_context["type"])(
+            **options.compute_context["config"]
+        )
+    else:
+        raise ValueError(f"Unknown store type {options.type}")
