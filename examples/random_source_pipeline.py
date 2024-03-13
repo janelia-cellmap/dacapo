@@ -71,9 +71,13 @@ class MakeRaw(gp.BatchFilter):
 
         # generate membrane-like structure
         if self.membrane_like:
-            distance = distance_transform_edt(raw)
-            inside_mask = distance > self.membrane_size  # type: ignore
-            raw[inside_mask] = self.inside_value
+            for id in np.unique(labels):
+                if id == 0:
+                    continue
+                mask = labels == id
+                distance = distance_transform_edt(mask)
+                inside_mask = distance > self.membrane_size  # type: ignore
+                raw[inside_mask] = self.inside_value
 
         # now add blur
         raw = gaussian_filter(raw, random.uniform(*self.gaussian_blur_args))
@@ -84,6 +88,7 @@ class MakeRaw(gp.BatchFilter):
         # normalize to [0, 1]
         raw -= raw.min()
         raw /= raw.max()
+        raw = 1 - raw  # invert
 
         # add to batch
         spec = self._spec[self.raw].copy()  # type: ignore
@@ -136,6 +141,7 @@ class RandomDilateLabels(gp.BatchFilter):
 
             # make sure we don't overlap existing labels
             dilated[labels > 0] = False
+            dilated[labels == id] = True
             new_labels[dilated] = id
 
         batch[self.labels].data = new_labels
