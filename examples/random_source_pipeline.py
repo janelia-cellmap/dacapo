@@ -3,7 +3,6 @@ import gunpowder as gp
 import logging
 import numpy as np
 import random
-import torch
 from scipy.ndimage import (
     binary_dilation,
     distance_transform_edt,
@@ -13,22 +12,6 @@ from scipy.ndimage import (
 from skimage.measure import label as relabel
 
 logging.basicConfig(level=logging.INFO)
-
-torch.backends.cudnn.benchmark = True
-
-
-def calc_max_padding(output_size, voxel_size, sigma, mode="shrink"):
-
-    method_padding = gp.Coordinate((sigma * 3,) * 3)
-
-    diag = np.sqrt(output_size[1] ** 2 + output_size[2] ** 2)
-
-    max_padding = gp.Roi(
-        (gp.Coordinate([i / 2 for i in [output_size[0], diag, diag]]) + method_padding),
-        (0,) * 3,
-    ).snap_to_grid(voxel_size, mode=mode)
-
-    return max_padding.get_begin()
 
 
 class CreatePoints(gp.BatchFilter):
@@ -77,7 +60,7 @@ class MakeRaw(gp.BatchFilter):
         self.inside_value = inside_value
 
     def setup(self):
-        spec = self.spec[self.labels].copy()
+        spec = self.spec[self.labels].copy()  # type: ignore
         spec.dtype = np.float32
         self.provides(self.raw, spec)
 
@@ -102,7 +85,10 @@ class MakeRaw(gp.BatchFilter):
         raw -= raw.min()
         raw /= raw.max()
 
-        batch[self.raw].data = raw
+        # add to batch
+        spec = self._spec[self.raw].copy()  # type: ignore
+        spec.roi = request[self.raw].roi
+        batch[self.raw] = gp.Array(raw, spec)
 
 
 class DilatePoints(gp.BatchFilter):
