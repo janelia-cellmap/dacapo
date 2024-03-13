@@ -20,7 +20,7 @@ class GunpowderTrainerConfig(TrainerConfig):
         augments (List[AugmentConfig]): This is the list of augments to apply during the training.
         snapshot_interval (Optional[int]): This is the number of iterations after which a new snapshot should be saved.
         min_masked (Optional[float]): This is the minimum masked value.
-        clip_raw (bool): This is a boolean value indicating if the raw data should be clipped or not.
+        clip_raw (bool): This is a boolean value indicating if the raw data should be clipped to the size of the GT data or not.
     """
 
     trainer_type = GunpowderTrainer
@@ -42,4 +42,4 @@ class GunpowderTrainerConfig(TrainerConfig):
         metadata={"help_text": "Number of iterations before saving a new snapshot."},
     )
     min_masked: Optional[float] = attr.ib(default=0.15)
-    clip_raw: bool = attr.ib(default=True)
+    clip_raw: bool = attr.ib(default=False)
