@@ -53,7 +53,7 @@ class Start(ABC):
 
         weights_store = create_weights_store()
         weights = weights_store._retrieve_weights(self.run, self.criterion)
-        logger.info(f"loading weights from run {self.run}, criterion: {self.criterion}")
+        print(f"loading weights from run {self.run}, criterion: {self.criterion}")
         # load the model weights (taken from torch load_state_dict source)
         try:
             model.load_state_dict(weights.model)
