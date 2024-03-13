@@ -22,6 +22,24 @@ Classes
 
 
 
-   This is just a Hot Distance Task that combine Binary and distance prediction.
+   A class to represent a hot distance task that use binary prediction and distance prediction.
+
+   Inherits from Task class.
+
+   .. attribute:: predictor
+
+      HotDistancePredictor object.
+
+   .. attribute:: loss
+
+      HotDistanceLoss object.
+
+   .. attribute:: post_processor
+
+      ThresholdPostProcessor object.
+
+   .. attribute:: evaluator
+
+      BinarySegmentationEvaluator object.
 
 

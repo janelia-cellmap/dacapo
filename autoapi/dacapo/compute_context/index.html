@@ -117,7 +117,7 @@
 <td><p>Helper class that provides a standard way to create an ABC using</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.compute_context.LocalTorch" title="dacapo.compute_context.LocalTorch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocalTorch</span></code></a></p></td>
-<td><p>Helper class that provides a standard way to create an ABC using</p></td>
+<td><p>The LocalTorch class is a subclass of the ComputeContext class.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.compute_context.Bsub" title="dacapo.compute_context.Bsub"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bsub</span></code></a></p></td>
 <td><p>Helper class that provides a standard way to create an ABC using</p></td>
@@ -165,12 +165,31 @@ inheritance.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.compute_context.LocalTorch">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.compute_context.</span></span><span class="sig-name descname"><span class="pre">LocalTorch</span></span><a class="headerlink" href="#dacapo.compute_context.LocalTorch" title="Link to this definition"></a></dt>
-<dd><p>Helper class that provides a standard way to create an ABC using
-inheritance.</p>
+<dd><p>The LocalTorch class is a subclass of the ComputeContext class.
+It is used to specify the context in which computations are to be done.
+LocalTorch is used to specify that computations are to be done on the local machine using PyTorch.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.compute_context.LocalTorch._device">
+<span class="sig-name descname"><span class="pre">_device</span></span><a class="headerlink" href="#dacapo.compute_context.LocalTorch._device" title="Link to this definition"></a></dt>
+<dd><p>This stores the type of device on which torch computations are to be done. It can</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">take</span> <span class="pre">&quot;cuda&quot;</span> <span class="pre">for</span> <span class="pre">GPU</span> <span class="pre">or</span> <span class="pre">&quot;cpu&quot;</span> <span class="pre">for</span> <span class="pre">CPU.</span> <span class="pre">None</span> <span class="pre">value</span> <span class="pre">results</span> <span class="pre">in</span> <span class="pre">automatic</span> <span class="pre">detection</span> <span class="pre">of</span> <span class="pre">device</span> <span class="pre">type.</span></span></dt>
+<dd></dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.compute_context.LocalTorch.device">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">device</span></span><a class="headerlink" href="#dacapo.compute_context.LocalTorch.device" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>A property method that returns the torch device object. It automatically detects and uses “cuda” (GPU) if
+available, else it falls back on using “cpu”.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -201,7 +220,7 @@ inheritance.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.compute_context.Bsub.billing">
-<span class="sig-name descname"><span class="pre">billing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dacapo.compute_context.Bsub.billing" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">billing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#dacapo.compute_context.Bsub.billing" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

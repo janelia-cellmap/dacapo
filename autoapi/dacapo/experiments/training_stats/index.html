@@ -105,40 +105,106 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.training_stats.TrainingStats" title="dacapo.experiments.training_stats.TrainingStats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainingStats</span></code></a></p></td>
-<td><p></p></td>
+<td><p>A class used to represent Training Statistics.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.training_stats.TrainingStats">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.training_stats.</span></span><span class="sig-name descname"><span class="pre">TrainingStats</span></span><a class="headerlink" href="#dacapo.experiments.training_stats.TrainingStats" title="Link to this definition"></a></dt>
-<dd><dl class="py attribute">
+<dd><p>A class used to represent Training Statistics.</p>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.training_stats.TrainingStats.iteration_stats">
-<span class="sig-name descname"><span class="pre">iteration_stats</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../training_iteration_stats/index.html#dacapo.experiments.training_iteration_stats.TrainingIterationStats" title="dacapo.experiments.training_iteration_stats.TrainingIterationStats"><span class="pre">dacapo.experiments.training_iteration_stats.TrainingIterationStats</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.training_stats.TrainingStats.iteration_stats" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">iteration_stats</span></span><a class="headerlink" href="#dacapo.experiments.training_stats.TrainingStats.iteration_stats" title="Link to this definition"></a></dt>
+<dd><p>List[TrainingIterationStats]
+an ordered list of training stats.</p>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.training_stats.TrainingStats.add_iteration_stats">
-<span class="sig-name descname"><span class="pre">add_iteration_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration_stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../training_iteration_stats/index.html#dacapo.experiments.training_iteration_stats.TrainingIterationStats" title="dacapo.experiments.training_iteration_stats.TrainingIterationStats"><span class="pre">dacapo.experiments.training_iteration_stats.TrainingIterationStats</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dacapo.experiments.training_stats.TrainingStats.add_iteration_stats" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">add_iteration_stats(iteration_stats</span></span></dt>
+<dd><p>TrainingIterationStats) -&gt; None:
+Add a new set of iterations stats to the existing list of iteration
+stats.</p>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.training_stats.TrainingStats.delete_after">
-<span class="sig-name descname"><span class="pre">delete_after</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dacapo.experiments.training_stats.TrainingStats.delete_after" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">delete_after(iteration</span></span></dt>
+<dd><p>int) -&gt; None:
+Deletes training stats after a specified iteration number.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.training_stats.TrainingStats.trained_until">
 <span class="sig-name descname"><span class="pre">trained_until</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#dacapo.experiments.training_stats.TrainingStats.trained_until" title="Link to this definition"></a></dt>
-<dd><p>The number of iterations trained for (the maximum iteration plus
-one).
-0 if no iterations trained yet.</p>
+<dd><p>Gets the number of iterations that the model has been trained for.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.training_stats.TrainingStats.to_xarray">
-<span class="sig-name descname"><span class="pre">to_xarray</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xarray.DataArray</span></span></span><a class="headerlink" href="#dacapo.experiments.training_stats.TrainingStats.to_xarray" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_xarray</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xr.DataArray</span></span></span><a class="headerlink" href="#dacapo.experiments.training_stats.TrainingStats.to_xarray" title="Link to this definition"></a></dt>
+<dd><p>Converts the iteration statistics to a xarray data array.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">iteration_stats</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../training_iteration_stats/index.html#dacapo.experiments.training_iteration_stats.TrainingIterationStats" title="dacapo.experiments.training_iteration_stats.TrainingIterationStats"><span class="pre">dacapo.experiments.training_iteration_stats.TrainingIterationStats</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.training_stats.TrainingStats.add_iteration_stats">
+<span class="sig-name descname"><span class="pre">add_iteration_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration_stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../training_iteration_stats/index.html#dacapo.experiments.training_iteration_stats.TrainingIterationStats" title="dacapo.experiments.training_iteration_stats.TrainingIterationStats"><span class="pre">dacapo.experiments.training_iteration_stats.TrainingIterationStats</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.experiments.training_stats.TrainingStats.add_iteration_stats" title="Link to this definition"></a></dt>
+<dd><p>Add a new iteration stats to the current iteration stats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>iteration_stats</strong> (<a class="reference internal" href="../index.html#dacapo.experiments.TrainingIterationStats" title="dacapo.experiments.TrainingIterationStats"><em>TrainingIterationStats</em></a>) – a new iteration stats object.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>assert</strong> – if the new iteration stats do not follow the order of existing iteration stats.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.training_stats.TrainingStats.delete_after">
+<span class="sig-name descname"><span class="pre">delete_after</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.experiments.training_stats.TrainingStats.delete_after" title="Link to this definition"></a></dt>
+<dd><p>Deletes training stats after a specified iteration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>iteration</strong> (<em>int</em>) – the iteration after which the stats are to be deleted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">trained_until</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>The number of iterations trained for (the maximum iteration plus one).
+Returns zero if no iterations trained yet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number of iterations that the model has been trained for.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">to_xarray</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xarray.DataArray</span></span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Converts the iteration stats to a data array format easily manipulatable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray DataArray of iteration losses.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>xr.DataArray</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

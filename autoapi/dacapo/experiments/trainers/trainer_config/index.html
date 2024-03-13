@@ -106,34 +106,77 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.trainer_config.TrainerConfig" title="dacapo.experiments.trainers.trainer_config.TrainerConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainerConfig</span></code></a></p></td>
-<td><p>Base class for trainer configurations. Each subclass of a <cite>Trainer</cite></p></td>
+<td><p>A class to represent the Trainer Configurations.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.trainer_config.TrainerConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.trainers.trainer_config.</span></span><span class="sig-name descname"><span class="pre">TrainerConfig</span></span><a class="headerlink" href="#dacapo.experiments.trainers.trainer_config.TrainerConfig" title="Link to this definition"></a></dt>
-<dd><p>Base class for trainer configurations. Each subclass of a <cite>Trainer</cite>
-should have a corresponding config class derived from <cite>TrainerConfig</cite>.</p>
+<dd><p>A class to represent the Trainer Configurations.</p>
+<p>It is the base class for trainer configurations. Each subclass of a <cite>Trainer</cite>
+should have a specific config class derived from <cite>TrainerConfig</cite>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.trainer_config.TrainerConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.trainers.trainer_config.TrainerConfig.name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.experiments.trainers.trainer_config.TrainerConfig.name" title="Link to this definition"></a></dt>
+<dd><p>A unique name for this trainer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.trainer_config.TrainerConfig.batch_size">
-<span class="sig-name descname"><span class="pre">batch_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.trainers.trainer_config.TrainerConfig.batch_size" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">batch_size</span></span><a class="headerlink" href="#dacapo.experiments.trainers.trainer_config.TrainerConfig.batch_size" title="Link to this definition"></a></dt>
+<dd><p>The batch size to be used during training.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.trainer_config.TrainerConfig.learning_rate">
-<span class="sig-name descname"><span class="pre">learning_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.trainers.trainer_config.TrainerConfig.learning_rate" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">learning_rate</span></span><a class="headerlink" href="#dacapo.experiments.trainers.trainer_config.TrainerConfig.learning_rate" title="Link to this definition"></a></dt>
+<dd><p>The learning rate of the optimizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">batch_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">learning_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.trainer_config.TrainerConfig.verify">
 <span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.trainers.trainer_config.TrainerConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>Check whether this is a valid Trainer</p>
+<dd><p>Verify whether this TrainerConfig is valid or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple containing a boolean indicating whether the
+TrainerConfig is valid and a message explaining why.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

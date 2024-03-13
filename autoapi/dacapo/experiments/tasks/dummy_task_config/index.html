@@ -106,34 +106,79 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig" title="dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyTaskConfig</span></code></a></p></td>
-<td><p>This is just a dummy task config used for testing. None of the</p></td>
+<td><p>A class for creating a dummy task configuration object.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.dummy_task_config.</span></span><span class="sig-name descname"><span class="pre">DummyTaskConfig</span></span><a class="headerlink" href="#dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig" title="Link to this definition"></a></dt>
-<dd><p>This is just a dummy task config used for testing. None of the
-attributes have any particular meaning.</p>
+<dd><p>A class for creating a dummy task configuration object.</p>
+<p>This class extends the TaskConfig class and initializes dummy task configuration
+with default attributes. It is mainly used for testing aspects
+of the application without the need of creating real task configurations.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig.task_type">
 <span class="sig-name descname"><span class="pre">task_type</span></span><a class="headerlink" href="#dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig.task_type" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The type of task. Here, set to DummyTask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>cls</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig.embedding_dims">
-<span class="sig-name descname"><span class="pre">embedding_dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig.embedding_dims" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">embedding_dims</span></span><a class="headerlink" href="#dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig.embedding_dims" title="Link to this definition"></a></dt>
+<dd><p>A dummy attribute represented as an integer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig.detection_threshold">
-<span class="sig-name descname"><span class="pre">detection_threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig.detection_threshold" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">detection_threshold</span></span><a class="headerlink" href="#dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig.detection_threshold" title="Link to this definition"></a></dt>
+<dd><p>Another dummy attribute represented as a float.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">task_type</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">embedding_dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">detection_threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig.verify">
 <span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>Check whether this is a valid Task</p>
+<dd><p>A method to verify the dummy task configuration.</p>
+<p>Whenever called, this method always returns False and a statement showing
+that the DummyTaskConfig object is never valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple containing a boolean status and a string message.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

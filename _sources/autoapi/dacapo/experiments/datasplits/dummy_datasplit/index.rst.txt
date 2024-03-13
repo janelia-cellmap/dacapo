@@ -22,8 +22,27 @@ Classes
 
 
 
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+   A class for creating a simple train dataset and no validation dataset.
+
+   It is derived from `DataSplit` class.
+
+   ...
+   .. attribute:: train
+
+      The list containing training datasets. In this class, it contains only one dataset for training.
+
+      :type: list
+
+   .. attribute:: validate
+
+      The list containing validation datasets. In this class, it is an empty list as no validation dataset is set.
+
+      :type: list
+
+   .. method:: __init__(self, datasplit_config):
+
+      The constructor for DummyDataSplit class. It initialises a list with training datasets according to the input configuration.
+
 
    .. py:attribute:: train
       :type: List[dacapo.experiments.datasplits.datasets.Dataset]

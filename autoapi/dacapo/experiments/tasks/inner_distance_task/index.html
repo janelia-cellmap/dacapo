@@ -106,14 +106,45 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.inner_distance_task.InnerDistanceTask" title="dacapo.experiments.tasks.inner_distance_task.InnerDistanceTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InnerDistanceTask</span></code></a></p></td>
-<td><p>This is just a dummy task for testing.</p></td>
+<td><p>This class extends the Task class for creating tasks related to computing inner distances.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.inner_distance_task.InnerDistanceTask">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.inner_distance_task.</span></span><span class="sig-name descname"><span class="pre">InnerDistanceTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task.InnerDistanceTask" title="Link to this definition"></a></dt>
-<dd><p>This is just a dummy task for testing.</p>
+<dd><p>This class extends the Task class for creating tasks related to computing inner distances.
+It provides methods for prediction, loss calculation and post-processing. It includes Binary Segmentation Evaluator for evaluation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.inner_distance_task.InnerDistanceTask.task_config">
+<span class="sig-name descname"><span class="pre">task_config</span></span><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task.InnerDistanceTask.task_config" title="Link to this definition"></a></dt>
+<dd><p>The configuration for the task.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.inner_distance_task.InnerDistanceTask.predictor">
+<span class="sig-name descname"><span class="pre">predictor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task.InnerDistanceTask.predictor" title="Link to this definition"></a></dt>
+<dd><p>Used for predicting the inner distances.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.inner_distance_task.InnerDistanceTask.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task.InnerDistanceTask.loss" title="Link to this definition"></a></dt>
+<dd><p>Used for calculating the mean square error loss.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.inner_distance_task.InnerDistanceTask.post_processor">
+<span class="sig-name descname"><span class="pre">post_processor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task.InnerDistanceTask.post_processor" title="Link to this definition"></a></dt>
+<dd><p>Used for applying threshold post-processing.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.inner_distance_task.InnerDistanceTask.evaluator">
+<span class="sig-name descname"><span class="pre">evaluator</span></span><a class="headerlink" href="#dacapo.experiments.tasks.inner_distance_task.InnerDistanceTask.evaluator" title="Link to this definition"></a></dt>
+<dd><p>Used for evaluating the results using binary segmentation.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>

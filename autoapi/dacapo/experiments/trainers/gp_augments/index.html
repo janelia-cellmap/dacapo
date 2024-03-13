@@ -122,13 +122,13 @@
 <td><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig" title="dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ElasticAugmentConfig</span></code></a></p></td>
-<td><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite></p></td>
+<td><p>A class that holds the configuration details for the elastic augmentations.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.gp_augments.SimpleAugmentConfig" title="dacapo.experiments.trainers.gp_augments.SimpleAugmentConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimpleAugmentConfig</span></code></a></p></td>
-<td><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite></p></td>
+<td><p>This class is an implementation of AugmentConfig that applies simple augmentations.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.gp_augments.GammaAugmentConfig" title="dacapo.experiments.trainers.gp_augments.GammaAugmentConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GammaAugmentConfig</span></code></a></p></td>
-<td><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite></p></td>
+<td><p>This class manages the configuration of gamma augmentation for a given dataset.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.gp_augments.IntensityAugmentConfig" title="dacapo.experiments.trainers.gp_augments.IntensityAugmentConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntensityAugmentConfig</span></code></a></p></td>
 <td><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite></p></td>
@@ -154,37 +154,116 @@ should have a corresponding config class derived from <cite>AugmentConfig</cite>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.trainers.gp_augments.</span></span><span class="sig-name descname"><span class="pre">ElasticAugmentConfig</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig" title="Link to this definition"></a></dt>
-<dd><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite>
-should have a corresponding config class derived from <cite>AugmentConfig</cite>.</p>
+<dd><p>A class that holds the configuration details for the elastic augmentations.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.control_point_spacing">
-<span class="sig-name descname"><span class="pre">control_point_spacing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.control_point_spacing" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">control_point_spacing</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.control_point_spacing" title="Link to this definition"></a></dt>
+<dd><p>Distance(in voxels per dimension) between control points for
+the elastic deformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[int]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.control_point_displacement_sigma">
-<span class="sig-name descname"><span class="pre">control_point_displacement_sigma</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.control_point_displacement_sigma" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">control_point_displacement_sigma</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.control_point_displacement_sigma" title="Link to this definition"></a></dt>
+<dd><p>Standard deviation of control point displacement
+distribution, in world coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[float]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.rotation_interval">
-<span class="sig-name descname"><span class="pre">rotation_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.rotation_interval" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">rotation_interval</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.rotation_interval" title="Link to this definition"></a></dt>
+<dd><p>An interval to randomly sample rotation angles from
+(0,2PI).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.subsample">
-<span class="sig-name descname"><span class="pre">subsample</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.subsample" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">subsample</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.subsample" title="Link to this definition"></a></dt>
+<dd><p>Downsample factor to perform the elastic augmentation
+on a grid. Default is 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.uniform_3d_rotation">
-<span class="sig-name descname"><span class="pre">uniform_3d_rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.uniform_3d_rotation" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">uniform_3d_rotation</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.uniform_3d_rotation" title="Link to this definition"></a></dt>
+<dd><p>Should 3D rotations be performed uniformly. The ‘rotation_interval’
+will be ignored. Default is False.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">control_point_spacing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">control_point_displacement_sigma</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">rotation_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">subsample</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">uniform_3d_rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.node">
 <span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_raw_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_gt_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mask_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.ElasticAugmentConfig.node" title="Link to this definition"></a></dt>
-<dd><p>return a gunpowder node that performs this augmentation</p>
+<dd><p>Returns the object of ElasticAugment with the given configuration details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>_raw_key</strong> – Unused variable, kept for future use.</p></li>
+<li><p><strong>_gt_key</strong> – Unused variable, kept for future use.</p></li>
+<li><p><strong>_mask_key</strong> – Unused variable, kept for future use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A ElasticAugment object configured with <cite>control_point_spacing</cite>,</dt><dd><p><cite>control_point_displacement_sigma</cite>, <cite>rotation_interval</cite>, <cite>subsample</cite> and
+<cite>uniform_3d_rotation</cite>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../../gp/elastic_augment_fuse/index.html#dacapo.gp.elastic_augment_fuse.ElasticAugment" title="dacapo.gp.elastic_augment_fuse.ElasticAugment">ElasticAugment</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -192,12 +271,41 @@ should have a corresponding config class derived from <cite>AugmentConfig</cite>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.SimpleAugmentConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.trainers.gp_augments.</span></span><span class="sig-name descname"><span class="pre">SimpleAugmentConfig</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.SimpleAugmentConfig" title="Link to this definition"></a></dt>
-<dd><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite>
-should have a corresponding config class derived from <cite>AugmentConfig</cite>.</p>
+<dd><p>This class is an implementation of AugmentConfig that applies simple augmentations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>_raw_key</strong> – Key for raw data. Not used in this implementation. Defaults to None.</p></li>
+<li><p><strong>_gt_key</strong> – Key for ground truth data. Not used in this implementation. Defaults to None.</p></li>
+<li><p><strong>_mask_key</strong> – Key for mask data. Not used in this implementation. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A node that can be included in a pipeline to perform simple data augmentations.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Gunpowder SimpleAugment Node</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.SimpleAugmentConfig.node">
 <span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_raw_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_gt_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mask_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.SimpleAugmentConfig.node" title="Link to this definition"></a></dt>
-<dd><p>return a gunpowder node that performs this augmentation</p>
+<dd><p>Get a gp.SimpleAugment node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>_raw_key</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – Specific key for raw data, not used in this implementation. Defaults to None.</p></li>
+<li><p><strong>_gt_key</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – Specific key for ground truth data, not used in this implementation. Defaults to None.</p></li>
+<li><p><strong>_mask_key</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – Specific key for mask data, not used in this implementation. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Simple augmentation node which can be incorporated in the pipeline.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gunpowder.SimpleAugment</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -205,17 +313,48 @@ should have a corresponding config class derived from <cite>AugmentConfig</cite>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.GammaAugmentConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.trainers.gp_augments.</span></span><span class="sig-name descname"><span class="pre">GammaAugmentConfig</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.GammaAugmentConfig" title="Link to this definition"></a></dt>
-<dd><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite>
-should have a corresponding config class derived from <cite>AugmentConfig</cite>.</p>
+<dd><p>This class manages the configuration of gamma augmentation for a given dataset.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.GammaAugmentConfig.gamma_range">
-<span class="sig-name descname"><span class="pre">gamma_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.GammaAugmentConfig.gamma_range" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">gamma_range</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.GammaAugmentConfig.gamma_range" title="Link to this definition"></a></dt>
+<dd><p>A tuple of float values represents the min and max range of gamma noise</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">to</span> <span class="pre">apply</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">raw</span> <span class="pre">data.</span></span></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.GammaAugmentConfig.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_gt_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mask_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.GammaAugmentConfig.node" title="Link to this definition"></a></dt>
-<dd><p>return a gunpowder node that performs this augmentation</p>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.GammaAugmentConfig.node" title="Link to this definition"></a></dt>
+<dd><p>Constructs a node in the augmentation pipeline.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">gamma_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_gt_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mask_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd><p>Constructs a node in the augmentation pipeline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw_key</strong> (<em>gp.ArrayKey</em>) – Key to an Array (volume) in the pipeline</p></li>
+<li><p><strong>_gt_key</strong> (<em>gp.ArrayKey</em><em>, </em><em>optional</em>) – Ground Truth key, not used in this function. Defaults to None.</p></li>
+<li><p><strong>_mask_key</strong> (<em>gp.ArrayKey</em><em>, </em><em>optional</em>) – Mask Key, not used in this function. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The augmentation method to be applied on the source data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>GammaAugment instance</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

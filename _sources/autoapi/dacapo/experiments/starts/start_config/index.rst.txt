@@ -20,8 +20,19 @@ Classes
 .. py:class:: StartConfig
 
 
-   Base class for task configurations. Each subclass of a `Task` should
-   have a corresponding config class derived from `TaskConfig`.
+   A class to represent the configuration for running tasks.
+
+   .. attribute:: run
+
+      The run to be used as a starting point for tasks.
+
+      :type: str
+
+   .. attribute:: criterion
+
+      The criterion to be used for choosing weights from run.
+
+      :type: str
 
    .. py:attribute:: run
       :type: str

@@ -24,9 +24,7 @@ Classes
 
 
 
-   Generic enumeration.
-
-   Derive from this class to define new enumerations.
+   Represent a base class for various types of keys in Dacapo library.
 
 
 .. py:class:: ArrayKey
@@ -34,9 +32,31 @@ Classes
 
 
 
-   Generic enumeration.
+   A unique enumeration representing different types of array keys
 
-   Derive from this class to define new enumerations.
+   .. attribute:: RAW
+
+      The raw data key.
+
+      :type: str
+
+   .. attribute:: GT
+
+      The ground truth data key.
+
+      :type: str
+
+   .. attribute:: MASK
+
+      The data mask key.
+
+      :type: str
+
+   .. attribute:: NON_EMPTY
+
+      The data key for non-empty mask.
+
+      :type: str
 
    .. py:attribute:: RAW
       :value: 'raw'
@@ -64,9 +84,13 @@ Classes
 
 
 
-   Generic enumeration.
+   A unique enumeration representing different types of graph keys
 
-   Derive from this class to define new enumerations.
+   .. attribute:: SPECIFIED_LOCATIONS
+
+      The key for specified locations in the graph.
+
+      :type: str
 
    .. py:attribute:: SPECIFIED_LOCATIONS
       :value: 'specified_locations'

@@ -22,8 +22,18 @@ Classes
 
 
 
-   This is just a dummy DataSplit config used for testing. None of the
-   attributes have any particular meaning.
+   A simple class representing config for Dummy DataSplit.
+
+   This class is derived from 'DataSplitConfig' and is initialized with
+   'DatasetConfig' for training dataset.
+
+   .. attribute:: datasplit_type
+
+      Class of dummy data split functionality.
+
+   .. attribute:: train_config
+
+      Config for the training dataset. Defaults to DummyDatasetConfig.
 
    .. py:attribute:: datasplit_type
 
@@ -36,7 +46,11 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      Check whether this is a valid data split
+      A method for verification. This method always return 'False' plus
+      a string indicating the condition.
+
+      :returns: A tuple contains a boolean 'False' and a string.
+      :rtype: Tuple[bool, str]
 
 
 

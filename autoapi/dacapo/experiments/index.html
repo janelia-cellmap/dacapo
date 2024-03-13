@@ -257,16 +257,16 @@
 <td><p>A trainable DaCapo model. Consists of an <code class="docutils literal notranslate"><span class="pre">Architecture</span></code> and a</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.RunConfig" title="dacapo.experiments.RunConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RunConfig</span></code></a></p></td>
-<td><p></p></td>
+<td><p>A class to represent a configuration of a run that helps to structure all the tasks,</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.TrainingIterationStats" title="dacapo.experiments.TrainingIterationStats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainingIterationStats</span></code></a></p></td>
-<td><p></p></td>
+<td><p>A class to represent the training iteration statistics.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.TrainingStats" title="dacapo.experiments.TrainingStats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainingStats</span></code></a></p></td>
-<td><p></p></td>
+<td><p>A class used to represent Training Statistics.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.ValidationIterationScores" title="dacapo.experiments.ValidationIterationScores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ValidationIterationScores</span></code></a></p></td>
-<td><p></p></td>
+<td><p>A class used to represent the validation iteration scores in an organized structure.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.ValidationScores" title="dacapo.experiments.ValidationScores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ValidationScores</span></code></a></p></td>
 <td><p></p></td>
@@ -275,7 +275,7 @@
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.Model">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="architectures/architecture/index.html#dacapo.experiments.architectures.architecture.Architecture" title="dacapo.experiments.architectures.architecture.Architecture"><span class="pre">dacapo.experiments.architectures.architecture.Architecture</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prediction_head</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.nn.Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_activation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.nn.Module</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.Model" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="architectures/architecture/index.html#dacapo.experiments.architectures.architecture.Architecture" title="dacapo.experiments.architectures.architecture.Architecture"><span class="pre">dacapo.experiments.architectures.architecture.Architecture</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prediction_head</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.nn.Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_activation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.nn.Module</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.Model" title="Link to this definition"></a></dt>
 <dd><p>A trainable DaCapo model. Consists of an <code class="docutils literal notranslate"><span class="pre">Architecture</span></code> and a
 prediction head. Models are generated by <a href="#id1"><span class="problematic" id="id2">``</span></a>Predictor``s.</p>
 <p>May include an optional eval_activation that is only executed when the model
@@ -315,7 +315,35 @@ shape as input.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.RunConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.</span></span><span class="sig-name descname"><span class="pre">RunConfig</span></span><a class="headerlink" href="#dacapo.experiments.RunConfig" title="Link to this definition"></a></dt>
-<dd><dl class="py attribute">
+<dd><p>A class to represent a configuration of a run that helps to structure all the tasks,
+architecture, training, and datasplit configurations.</p>
+<p>…</p>
+<section id="attributes">
+<h4>Attributes:<a class="headerlink" href="#attributes" title="Link to this heading"></a></h4>
+<dl>
+<dt>task_config: <cite>TaskConfig</cite></dt><dd><p>A config defining the Task to run that includes deciding the output of the model and
+different methods to achieve the goal.</p>
+</dd>
+<dt>architecture_config: <cite>ArchitectureConfig</cite></dt><dd><p>A config that defines the backbone architecture of the model. It impacts the model’s
+performance significantly.</p>
+</dd>
+<dt>trainer_config: <cite>TrainerConfig</cite></dt><dd><p>Defines how batches are generated and passed for training the model along with defining
+configurations like batch size, learning rate, number of cpu workers and snapshot logging.</p>
+</dd>
+<dt>datasplit_config: <cite>DataSplitConfig</cite></dt><dd><p>Configures the data available for the model during training or validation phases.</p>
+</dd>
+<dt>name: str</dt><dd><p>A unique name for this run to distinguish it.</p>
+</dd>
+<dt>repetition: int</dt><dd><p>The repetition number of this run.</p>
+</dd>
+<dt>num_iterations: int</dt><dd><p>The total number of iterations to train for during this run.</p>
+</dd>
+<dt>validation_interval: int</dt><dd><p>Specifies how often to perform validation during the run. It defaults to 1000.</p>
+</dd>
+<dt>start_config<span class="classifier"><cite>Optional[StartConfig]</cite></span></dt><dd><p>A starting point for continued training. It is optional and can be left out.</p>
+</dd>
+</dl>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.RunConfig.task_config">
 <span class="sig-name descname"><span class="pre">task_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="tasks/index.html#dacapo.experiments.tasks.TaskConfig" title="dacapo.experiments.tasks.TaskConfig"><span class="pre">dacapo.experiments.tasks.TaskConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.RunConfig.task_config" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -357,27 +385,62 @@ shape as input.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.RunConfig.start_config">
-<span class="sig-name descname"><span class="pre">start_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="starts/index.html#dacapo.experiments.starts.StartConfig" title="dacapo.experiments.starts.StartConfig"><span class="pre">dacapo.experiments.starts.StartConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dacapo.experiments.RunConfig.start_config" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">start_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="starts/index.html#dacapo.experiments.starts.StartConfig" title="dacapo.experiments.starts.StartConfig"><span class="pre">dacapo.experiments.starts.StartConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#dacapo.experiments.RunConfig.start_config" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+</section>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.TrainingIterationStats">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.</span></span><span class="sig-name descname"><span class="pre">TrainingIterationStats</span></span><a class="headerlink" href="#dacapo.experiments.TrainingIterationStats" title="Link to this definition"></a></dt>
-<dd><dl class="py attribute">
+<dd><p>A class to represent the training iteration statistics.</p>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.TrainingIterationStats.iteration">
-<span class="sig-name descname"><span class="pre">iteration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.TrainingIterationStats.iteration" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">iteration</span></span><a class="headerlink" href="#dacapo.experiments.TrainingIterationStats.iteration" title="Link to this definition"></a></dt>
+<dd><p>The iteration that produced these stats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.TrainingIterationStats.loss">
-<span class="sig-name descname"><span class="pre">loss</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.TrainingIterationStats.loss" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">loss</span></span><a class="headerlink" href="#dacapo.experiments.TrainingIterationStats.loss" title="Link to this definition"></a></dt>
+<dd><p>The loss value of this iteration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.TrainingIterationStats.time">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.TrainingIterationStats.time" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#dacapo.experiments.TrainingIterationStats.time" title="Link to this definition"></a></dt>
+<dd><p>The time it took to process this iteration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">iteration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">loss</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -385,47 +448,141 @@ shape as input.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.TrainingStats">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.</span></span><span class="sig-name descname"><span class="pre">TrainingStats</span></span><a class="headerlink" href="#dacapo.experiments.TrainingStats" title="Link to this definition"></a></dt>
-<dd><dl class="py attribute">
+<dd><p>A class used to represent Training Statistics.</p>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.TrainingStats.iteration_stats">
-<span class="sig-name descname"><span class="pre">iteration_stats</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="training_iteration_stats/index.html#dacapo.experiments.training_iteration_stats.TrainingIterationStats" title="dacapo.experiments.training_iteration_stats.TrainingIterationStats"><span class="pre">dacapo.experiments.training_iteration_stats.TrainingIterationStats</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.TrainingStats.iteration_stats" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">iteration_stats</span></span><a class="headerlink" href="#dacapo.experiments.TrainingStats.iteration_stats" title="Link to this definition"></a></dt>
+<dd><p>List[TrainingIterationStats]
+an ordered list of training stats.</p>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.TrainingStats.add_iteration_stats">
-<span class="sig-name descname"><span class="pre">add_iteration_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration_stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="training_iteration_stats/index.html#dacapo.experiments.training_iteration_stats.TrainingIterationStats" title="dacapo.experiments.training_iteration_stats.TrainingIterationStats"><span class="pre">dacapo.experiments.training_iteration_stats.TrainingIterationStats</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dacapo.experiments.TrainingStats.add_iteration_stats" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">add_iteration_stats(iteration_stats</span></span></dt>
+<dd><p>TrainingIterationStats) -&gt; None:
+Add a new set of iterations stats to the existing list of iteration
+stats.</p>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.TrainingStats.delete_after">
-<span class="sig-name descname"><span class="pre">delete_after</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dacapo.experiments.TrainingStats.delete_after" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">delete_after(iteration</span></span></dt>
+<dd><p>int) -&gt; None:
+Deletes training stats after a specified iteration number.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.TrainingStats.trained_until">
 <span class="sig-name descname"><span class="pre">trained_until</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#dacapo.experiments.TrainingStats.trained_until" title="Link to this definition"></a></dt>
-<dd><p>The number of iterations trained for (the maximum iteration plus
-one).
-0 if no iterations trained yet.</p>
+<dd><p>Gets the number of iterations that the model has been trained for.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.TrainingStats.to_xarray">
-<span class="sig-name descname"><span class="pre">to_xarray</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xarray.DataArray</span></span></span><a class="headerlink" href="#dacapo.experiments.TrainingStats.to_xarray" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_xarray</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xr.DataArray</span></span></span><a class="headerlink" href="#dacapo.experiments.TrainingStats.to_xarray" title="Link to this definition"></a></dt>
+<dd><p>Converts the iteration statistics to a xarray data array.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">iteration_stats</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="training_iteration_stats/index.html#dacapo.experiments.training_iteration_stats.TrainingIterationStats" title="dacapo.experiments.training_iteration_stats.TrainingIterationStats"><span class="pre">dacapo.experiments.training_iteration_stats.TrainingIterationStats</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.TrainingStats.add_iteration_stats">
+<span class="sig-name descname"><span class="pre">add_iteration_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration_stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="training_iteration_stats/index.html#dacapo.experiments.training_iteration_stats.TrainingIterationStats" title="dacapo.experiments.training_iteration_stats.TrainingIterationStats"><span class="pre">dacapo.experiments.training_iteration_stats.TrainingIterationStats</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.experiments.TrainingStats.add_iteration_stats" title="Link to this definition"></a></dt>
+<dd><p>Add a new iteration stats to the current iteration stats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>iteration_stats</strong> (<a class="reference internal" href="#dacapo.experiments.TrainingIterationStats" title="dacapo.experiments.TrainingIterationStats"><em>TrainingIterationStats</em></a>) – a new iteration stats object.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>assert</strong> – if the new iteration stats do not follow the order of existing iteration stats.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.TrainingStats.delete_after">
+<span class="sig-name descname"><span class="pre">delete_after</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.experiments.TrainingStats.delete_after" title="Link to this definition"></a></dt>
+<dd><p>Deletes training stats after a specified iteration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>iteration</strong> (<em>int</em>) – the iteration after which the stats are to be deleted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">trained_until</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd><p>The number of iterations trained for (the maximum iteration plus one).
+Returns zero if no iterations trained yet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number of iterations that the model has been trained for.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">to_xarray</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xarray.DataArray</span></span></span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd><p>Converts the iteration stats to a data array format easily manipulatable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray DataArray of iteration losses.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>xr.DataArray</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.ValidationIterationScores">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.</span></span><span class="sig-name descname"><span class="pre">ValidationIterationScores</span></span><a class="headerlink" href="#dacapo.experiments.ValidationIterationScores" title="Link to this definition"></a></dt>
-<dd><dl class="py attribute">
+<dd><p>A class used to represent the validation iteration scores in an organized structure.</p>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.ValidationIterationScores.iteration">
-<span class="sig-name descname"><span class="pre">iteration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.ValidationIterationScores.iteration" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">iteration</span></span><a class="headerlink" href="#dacapo.experiments.ValidationIterationScores.iteration" title="Link to this definition"></a></dt>
+<dd><p>The iteration associated with these validation scores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.ValidationIterationScores.scores">
-<span class="sig-name descname"><span class="pre">scores</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.ValidationIterationScores.scores" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">scores</span></span><a class="headerlink" href="#dacapo.experiments.ValidationIterationScores.scores" title="Link to this definition"></a></dt>
+<dd><p>A list of scores per dataset, post processor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[List[List[float]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">parameters,</span> <span class="pre">and</span> <span class="pre">evaluation</span> <span class="pre">criterion.</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">iteration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">scores</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -470,12 +627,12 @@ one).
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.ValidationScores.add_iteration_scores">
-<span class="sig-name descname"><span class="pre">add_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="validation_iteration_scores/index.html#dacapo.experiments.validation_iteration_scores.ValidationIterationScores" title="dacapo.experiments.validation_iteration_scores.ValidationIterationScores"><span class="pre">dacapo.experiments.validation_iteration_scores.ValidationIterationScores</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dacapo.experiments.ValidationScores.add_iteration_scores" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="validation_iteration_scores/index.html#dacapo.experiments.validation_iteration_scores.ValidationIterationScores" title="dacapo.experiments.validation_iteration_scores.ValidationIterationScores"><span class="pre">dacapo.experiments.validation_iteration_scores.ValidationIterationScores</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.experiments.ValidationScores.add_iteration_scores" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.ValidationScores.delete_after">
-<span class="sig-name descname"><span class="pre">delete_after</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dacapo.experiments.ValidationScores.delete_after" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">delete_after</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.experiments.ValidationScores.delete_after" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

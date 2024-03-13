@@ -107,33 +107,98 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset" title="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RawGTDataset</span></code></a></p></td>
-<td><p>Helper class that provides a standard way to create an ABC using</p></td>
+<td><p>A class to represent a dataset.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.raw_gt_dataset.</span></span><span class="sig-name descname"><span class="pre">RawGTDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset" title="Link to this definition"></a></dt>
-<dd><p>Helper class that provides a standard way to create an ABC using
-inheritance.</p>
+<dd><p>A class to represent a dataset.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.raw">
-<span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.raw" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">raw</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.raw" title="Link to this definition"></a></dt>
+<dd><p>The raw dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array">Array</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.gt">
-<span class="sig-name descname"><span class="pre">gt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.gt" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">gt</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.gt" title="Link to this definition"></a></dt>
+<dd><p>The ground truth data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array">Array</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.mask">
-<span class="sig-name descname"><span class="pre">mask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.mask" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">mask</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.mask" title="Link to this definition"></a></dt>
+<dd><p>The mask for the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array">Array</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.weight" title="Link to this definition"></a></dt>
+<dd><p>The weight of the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int, optional</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.sample_points">
-<span class="sig-name descname"><span class="pre">sample_points</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">funlib.geometry.Coordinate</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.sample_points" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">sample_points</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.sample_points" title="Link to this definition"></a></dt>
+<dd><p>The list of sample points in the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[Coordinate], optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">gt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">mask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">sample_points</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">funlib.geometry.Coordinate</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

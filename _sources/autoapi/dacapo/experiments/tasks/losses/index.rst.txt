@@ -39,17 +39,28 @@ Classes
 
 
 
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+   A class representing a dummy loss function that calculates the absolute difference between each prediction and target.
+
+   Inherits the Loss class.
+
+   .. method:: compute(prediction, target, weight=None)
+
+      Calculate the total loss between prediction and target.
+
 
    .. py:method:: compute(prediction, target, weight=None)
 
-      Compute the loss for the given prediction and target. Optionally, if
-      given, a loss weight should be considered.
+      Method to calculate the total dummy loss.
 
-      All arguments are ``torch`` tensors. The return type should be a
-      ``torch`` scalar that can be used with an optimizer, just as usual when
-      training with ``torch``.
+      :param prediction: predicted output
+      :type prediction: float or int
+      :param target: true output
+      :type target: float or int
+      :param weight: weight parameter for the loss, by default None
+      :type weight: float or int, optional
+
+      :returns: Total loss calculated as the sum of absolute differences between prediction and target.
+      :rtype: float or int
 
 
 
@@ -58,17 +69,35 @@ Classes
 
 
 
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+   A class used to represent the Mean Square Error Loss function (MSELoss).
+
+   .. attribute:: None
+
+
+
+   .. method:: compute(prediction, target, weight):
+
+      Computes the MSELoss with the given weight for the predictiom and target.
+
 
    .. py:method:: compute(prediction, target, weight)
 
-      Compute the loss for the given prediction and target. Optionally, if
-      given, a loss weight should be considered.
+      Function to compute the MSELoss for the provided prediction and target, with respect to the weight.
 
-      All arguments are ``torch`` tensors. The return type should be a
-      ``torch`` scalar that can be used with an optimizer, just as usual when
-      training with ``torch``.
+      Parameters:
+      ----------
+      prediction : torch.Tensor
+          The prediction tensor for which loss needs to be calculated.
+      target : torch.Tensor
+          The target tensor with respect to which loss is calculated.
+      weight : torch.Tensor
+          The weight tensor used to weigh the prediction in the loss calculation.
+
+      Returns:
+      -------
+      :
+      torch.Tensor
+          The computed MSELoss tensor.
 
 
 

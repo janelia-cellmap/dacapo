@@ -180,19 +180,19 @@
 <td><p>Base class for task configurations. Each subclass of a <cite>Task</cite> should</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.DummyTaskConfig" title="dacapo.experiments.tasks.DummyTaskConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyTaskConfig</span></code></a></p></td>
-<td><p>This is just a dummy task config used for testing. None of the</p></td>
+<td><p>A class for creating a dummy task configuration object.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.DummyTask" title="dacapo.experiments.tasks.DummyTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyTask</span></code></a></p></td>
-<td><p>This is just a dummy task for testing.</p></td>
+<td><p>A dummy task class that initializes all components (predictor, loss,</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.DistanceTaskConfig" title="dacapo.experiments.tasks.DistanceTaskConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DistanceTaskConfig</span></code></a></p></td>
 <td><p>This is a Distance task config used for generating and</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.DistanceTask" title="dacapo.experiments.tasks.DistanceTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DistanceTask</span></code></a></p></td>
-<td><p>This is just a dummy task for testing.</p></td>
+<td><p>DistanceTask is a subclass of Task for handling tasks associated</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.OneHotTaskConfig" title="dacapo.experiments.tasks.OneHotTaskConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OneHotTaskConfig</span></code></a></p></td>
-<td><p>This is a One Hot prediction task that outputs a probability vector</p></td>
+<td><p>Class that derives from the TaskConfig to perform one hot prediction tasks.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.OneHotTask" title="dacapo.experiments.tasks.OneHotTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OneHotTask</span></code></a></p></td>
 <td><p>Helper class that provides a standard way to create an ABC using</p></td>
@@ -213,13 +213,13 @@
 <td><p>This is a Distance task config used for generating and</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.InnerDistanceTask" title="dacapo.experiments.tasks.InnerDistanceTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InnerDistanceTask</span></code></a></p></td>
-<td><p>This is just a dummy task for testing.</p></td>
+<td><p>This class extends the Task class for creating tasks related to computing inner distances.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.HotDistanceTaskConfig" title="dacapo.experiments.tasks.HotDistanceTaskConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HotDistanceTaskConfig</span></code></a></p></td>
-<td><p>This is a Hot Distance task config used for generating and</p></td>
+<td><p>Class for generating TaskConfigs for the HotDistanceTask, which predicts one hot encodings of classes, as well as signed distance transforms of those classes.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.HotDistanceTask" title="dacapo.experiments.tasks.HotDistanceTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HotDistanceTask</span></code></a></p></td>
-<td><p>This is just a Hot Distance Task that combine Binary and distance prediction.</p></td>
+<td><p>A class to represent a hot distance task that use binary prediction and distance prediction.</p></td>
 </tr>
 </tbody>
 </table>
@@ -244,27 +244,72 @@ have a corresponding config class derived from <cite>TaskConfig</cite>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.DummyTaskConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.</span></span><span class="sig-name descname"><span class="pre">DummyTaskConfig</span></span><a class="headerlink" href="#dacapo.experiments.tasks.DummyTaskConfig" title="Link to this definition"></a></dt>
-<dd><p>This is just a dummy task config used for testing. None of the
-attributes have any particular meaning.</p>
+<dd><p>A class for creating a dummy task configuration object.</p>
+<p>This class extends the TaskConfig class and initializes dummy task configuration
+with default attributes. It is mainly used for testing aspects
+of the application without the need of creating real task configurations.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.DummyTaskConfig.task_type">
 <span class="sig-name descname"><span class="pre">task_type</span></span><a class="headerlink" href="#dacapo.experiments.tasks.DummyTaskConfig.task_type" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The type of task. Here, set to DummyTask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>cls</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.DummyTaskConfig.embedding_dims">
-<span class="sig-name descname"><span class="pre">embedding_dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.tasks.DummyTaskConfig.embedding_dims" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">embedding_dims</span></span><a class="headerlink" href="#dacapo.experiments.tasks.DummyTaskConfig.embedding_dims" title="Link to this definition"></a></dt>
+<dd><p>A dummy attribute represented as an integer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.DummyTaskConfig.detection_threshold">
-<span class="sig-name descname"><span class="pre">detection_threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.DummyTaskConfig.detection_threshold" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">detection_threshold</span></span><a class="headerlink" href="#dacapo.experiments.tasks.DummyTaskConfig.detection_threshold" title="Link to this definition"></a></dt>
+<dd><p>Another dummy attribute represented as a float.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">task_type</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">embedding_dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">detection_threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.DummyTaskConfig.verify">
 <span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.DummyTaskConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>Check whether this is a valid Task</p>
+<dd><p>A method to verify the dummy task configuration.</p>
+<p>Whenever called, this method always returns False and a statement showing
+that the DummyTaskConfig object is never valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple containing a boolean status and a string message.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -272,7 +317,53 @@ attributes have any particular meaning.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.DummyTask">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.</span></span><span class="sig-name descname"><span class="pre">DummyTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.DummyTask" title="Link to this definition"></a></dt>
-<dd><p>This is just a dummy task for testing.</p>
+<dd><p>A dummy task class that initializes all components (predictor, loss,
+post-processing, and evaluator) for the dummy task. Primarily used for testing purposes.
+Inherits from the Task class.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.DummyTask.predictor">
+<span class="sig-name descname"><span class="pre">predictor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.DummyTask.predictor" title="Link to this definition"></a></dt>
+<dd><p>Instance of DummyPredictor class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.DummyTask.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><a class="headerlink" href="#dacapo.experiments.tasks.DummyTask.loss" title="Link to this definition"></a></dt>
+<dd><p>Instance of DummyLoss class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.DummyTask.post_processor">
+<span class="sig-name descname"><span class="pre">post_processor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.DummyTask.post_processor" title="Link to this definition"></a></dt>
+<dd><p>Instance of DummyPostProcessor class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.DummyTask.evaluator">
+<span class="sig-name descname"><span class="pre">evaluator</span></span><a class="headerlink" href="#dacapo.experiments.tasks.DummyTask.evaluator" title="Link to this definition"></a></dt>
+<dd><p>Instance of DummyEvaluator class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Object</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -330,25 +421,71 @@ distinct objects, this cannot happen with distances.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.DistanceTask">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.</span></span><span class="sig-name descname"><span class="pre">DistanceTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.DistanceTask" title="Link to this definition"></a></dt>
-<dd><p>This is just a dummy task for testing.</p>
+<dd><p>DistanceTask is a subclass of Task for handling tasks associated
+with Distance.</p>
+<p>DistanceTask uses <cite>DistancePredictor</cite> for prediction, <cite>MSELoss</cite> for
+computing loss, <cite>ThresholdPostProcessor</cite> for post-processing the
+prediction, and <cite>BinarySegmentationEvaluator</cite> for evaluating the
+prediction.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.DistanceTask.predictor">
+<span class="sig-name descname"><span class="pre">predictor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.DistanceTask.predictor" title="Link to this definition"></a></dt>
+<dd><p>DistancePredictor object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.DistanceTask.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><a class="headerlink" href="#dacapo.experiments.tasks.DistanceTask.loss" title="Link to this definition"></a></dt>
+<dd><p>MSELoss object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.DistanceTask.post_processor">
+<span class="sig-name descname"><span class="pre">post_processor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.DistanceTask.post_processor" title="Link to this definition"></a></dt>
+<dd><p>ThresholdPostProcessor object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.DistanceTask.evaluator">
+<span class="sig-name descname"><span class="pre">evaluator</span></span><a class="headerlink" href="#dacapo.experiments.tasks.DistanceTask.evaluator" title="Link to this definition"></a></dt>
+<dd><p>BinarySegmentationEvaluator object</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.OneHotTaskConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.</span></span><span class="sig-name descname"><span class="pre">OneHotTaskConfig</span></span><a class="headerlink" href="#dacapo.experiments.tasks.OneHotTaskConfig" title="Link to this definition"></a></dt>
-<dd><p>This is a One Hot prediction task that outputs a probability vector
-of length <cite>c</cite> for each voxel where <cite>c</cite> is the number of classes.
-Each voxel prediction has all positive values an l1 norm equal to 1.</p>
-<p>Post processing is extremely easy, the class of each voxel is
-simply the argmax over the vector of output probabilities.</p>
+<dd><p>Class that derives from the TaskConfig to perform one hot prediction tasks.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.OneHotTaskConfig.task_type">
 <span class="sig-name descname"><span class="pre">task_type</span></span><a class="headerlink" href="#dacapo.experiments.tasks.OneHotTaskConfig.task_type" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>the type of task, in this case, OneHotTask.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.OneHotTaskConfig.classes">
-<span class="sig-name descname"><span class="pre">classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.tasks.OneHotTaskConfig.classes" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">classes</span></span><a class="headerlink" href="#dacapo.experiments.tasks.OneHotTaskConfig.classes" title="Link to this definition"></a></dt>
+<dd><p>a List of classes which starts from id 0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.OneHotTaskConfig.None">
+<span class="sig-name descname"><span class="pre">None</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.OneHotTaskConfig.None" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The class of each voxel is simply the argmax over the vector of output probabilities.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">task_type</span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -490,47 +627,141 @@ distinct objects, this cannot happen with distances.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.InnerDistanceTask">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.</span></span><span class="sig-name descname"><span class="pre">InnerDistanceTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.InnerDistanceTask" title="Link to this definition"></a></dt>
-<dd><p>This is just a dummy task for testing.</p>
+<dd><p>This class extends the Task class for creating tasks related to computing inner distances.
+It provides methods for prediction, loss calculation and post-processing. It includes Binary Segmentation Evaluator for evaluation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.InnerDistanceTask.task_config">
+<span class="sig-name descname"><span class="pre">task_config</span></span><a class="headerlink" href="#dacapo.experiments.tasks.InnerDistanceTask.task_config" title="Link to this definition"></a></dt>
+<dd><p>The configuration for the task.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.InnerDistanceTask.predictor">
+<span class="sig-name descname"><span class="pre">predictor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.InnerDistanceTask.predictor" title="Link to this definition"></a></dt>
+<dd><p>Used for predicting the inner distances.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.InnerDistanceTask.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><a class="headerlink" href="#dacapo.experiments.tasks.InnerDistanceTask.loss" title="Link to this definition"></a></dt>
+<dd><p>Used for calculating the mean square error loss.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.InnerDistanceTask.post_processor">
+<span class="sig-name descname"><span class="pre">post_processor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.InnerDistanceTask.post_processor" title="Link to this definition"></a></dt>
+<dd><p>Used for applying threshold post-processing.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.InnerDistanceTask.evaluator">
+<span class="sig-name descname"><span class="pre">evaluator</span></span><a class="headerlink" href="#dacapo.experiments.tasks.InnerDistanceTask.evaluator" title="Link to this definition"></a></dt>
+<dd><p>Used for evaluating the results using binary segmentation.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.HotDistanceTaskConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.</span></span><span class="sig-name descname"><span class="pre">HotDistanceTaskConfig</span></span><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTaskConfig" title="Link to this definition"></a></dt>
-<dd><p>This is a Hot Distance task config used for generating and
-evaluating signed distance transforms as a way of generating
-segmentations.</p>
-<p>The advantage of generating distance transforms over regular
-affinities is you can get a denser signal, i.e. 1 misclassified
-pixel in an affinity prediction could merge 2 otherwise very
-distinct objects, this cannot happen with distances.</p>
+<dd><p>Class for generating TaskConfigs for the HotDistanceTask, which predicts one hot encodings of classes, as well as signed distance transforms of those classes.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.HotDistanceTaskConfig.task_type">
 <span class="sig-name descname"><span class="pre">task_type</span></span><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTaskConfig.task_type" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>A reference to the Hot Distance Task class.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.HotDistanceTaskConfig.channels">
-<span class="sig-name descname"><span class="pre">channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTaskConfig.channels" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTaskConfig.channels" title="Link to this definition"></a></dt>
+<dd><p>A list of channel names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.HotDistanceTaskConfig.clip_distance">
-<span class="sig-name descname"><span class="pre">clip_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTaskConfig.clip_distance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">clip_distance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTaskConfig.clip_distance" title="Link to this definition"></a></dt>
+<dd><p>Maximum distance to consider for false positive/negatives.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.HotDistanceTaskConfig.tol_distance">
-<span class="sig-name descname"><span class="pre">tol_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTaskConfig.tol_distance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">tol_distance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTaskConfig.tol_distance" title="Link to this definition"></a></dt>
+<dd><p>Tolerance distance for counting false positives/negatives.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.HotDistanceTaskConfig.scale_factor">
-<span class="sig-name descname"><span class="pre">scale_factor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTaskConfig.scale_factor" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">scale_factor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTaskConfig.scale_factor" title="Link to this definition"></a></dt>
+<dd><p>The amount by which to scale distances before applying
+a tanh normalization. Defaults to 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.HotDistanceTaskConfig.mask_distances">
-<span class="sig-name descname"><span class="pre">mask_distances</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTaskConfig.mask_distances" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mask_distances</span></span><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTaskConfig.mask_distances" title="Link to this definition"></a></dt>
+<dd><p>Whether or not to mask out regions where the true distance to
+object boundary cannot be known. Defaults to False</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Generating distance transforms over regular affinities provides you with a denser
+signal, i.e., one misclassified pixel in an affinity prediction can merge 2
+otherwise very distinct objects, a situation that cannot happen with distances.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">task_type</span></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">clip_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">tol_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">scale_factor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">mask_distances</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -538,7 +769,32 @@ distinct objects, this cannot happen with distances.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.HotDistanceTask">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.</span></span><span class="sig-name descname"><span class="pre">HotDistanceTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTask" title="Link to this definition"></a></dt>
-<dd><p>This is just a Hot Distance Task that combine Binary and distance prediction.</p>
+<dd><p>A class to represent a hot distance task that use binary prediction and distance prediction.</p>
+<p>Inherits from Task class.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.HotDistanceTask.predictor">
+<span class="sig-name descname"><span class="pre">predictor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTask.predictor" title="Link to this definition"></a></dt>
+<dd><p>HotDistancePredictor object.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.HotDistanceTask.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTask.loss" title="Link to this definition"></a></dt>
+<dd><p>HotDistanceLoss object.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.HotDistanceTask.post_processor">
+<span class="sig-name descname"><span class="pre">post_processor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTask.post_processor" title="Link to this definition"></a></dt>
+<dd><p>ThresholdPostProcessor object.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.HotDistanceTask.evaluator">
+<span class="sig-name descname"><span class="pre">evaluator</span></span><a class="headerlink" href="#dacapo.experiments.tasks.HotDistanceTask.evaluator" title="Link to this definition"></a></dt>
+<dd><p>BinarySegmentationEvaluator object.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>

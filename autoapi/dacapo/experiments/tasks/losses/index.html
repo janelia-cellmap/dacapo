@@ -118,10 +118,10 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.losses.DummyLoss" title="dacapo.experiments.tasks.losses.DummyLoss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyLoss</span></code></a></p></td>
-<td><p>Helper class that provides a standard way to create an ABC using</p></td>
+<td><p>A class representing a dummy loss function that calculates the absolute difference between each prediction and target.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.losses.MSELoss" title="dacapo.experiments.tasks.losses.MSELoss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MSELoss</span></code></a></p></td>
-<td><p>Helper class that provides a standard way to create an ABC using</p></td>
+<td><p>A class used to represent the Mean Square Error Loss function (MSELoss).</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.losses.Loss" title="dacapo.experiments.tasks.losses.Loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Loss</span></code></a></p></td>
 <td><p>Helper class that provides a standard way to create an ABC using</p></td>
@@ -137,16 +137,33 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.DummyLoss">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.losses.</span></span><span class="sig-name descname"><span class="pre">DummyLoss</span></span><a class="headerlink" href="#dacapo.experiments.tasks.losses.DummyLoss" title="Link to this definition"></a></dt>
-<dd><p>Helper class that provides a standard way to create an ABC using
-inheritance.</p>
+<dd><p>A class representing a dummy loss function that calculates the absolute difference between each prediction and target.</p>
+<p>Inherits the Loss class.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.DummyLoss.compute">
 <span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.losses.DummyLoss.compute" title="Link to this definition"></a></dt>
-<dd><p>Compute the loss for the given prediction and target. Optionally, if
-given, a loss weight should be considered.</p>
-<p>All arguments are <code class="docutils literal notranslate"><span class="pre">torch</span></code> tensors. The return type should be a
-<code class="docutils literal notranslate"><span class="pre">torch</span></code> scalar that can be used with an optimizer, just as usual when
-training with <code class="docutils literal notranslate"><span class="pre">torch</span></code>.</p>
+<dd><p>Calculate the total loss between prediction and target.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the total dummy loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prediction</strong> (<em>float</em><em> or </em><em>int</em>) – predicted output</p></li>
+<li><p><strong>target</strong> (<em>float</em><em> or </em><em>int</em>) – true output</p></li>
+<li><p><strong>weight</strong> (<em>float</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – weight parameter for the loss, by default None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Total loss calculated as the sum of absolute differences between prediction and target.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float or int</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -154,16 +171,41 @@ training with <code class="docutils literal notranslate"><span class="pre">torch
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.MSELoss">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.losses.</span></span><span class="sig-name descname"><span class="pre">MSELoss</span></span><a class="headerlink" href="#dacapo.experiments.tasks.losses.MSELoss" title="Link to this definition"></a></dt>
-<dd><p>Helper class that provides a standard way to create an ABC using
-inheritance.</p>
+<dd><p>A class used to represent the Mean Square Error Loss function (MSELoss).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.MSELoss.None">
+<span class="sig-name descname"><span class="pre">None</span></span><a class="headerlink" href="#dacapo.experiments.tasks.losses.MSELoss.None" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">compute(prediction,</span> <span class="pre">target,</span> <span class="pre">weight):</span></span></dt>
+<dd><p>Computes the MSELoss with the given weight for the predictiom and target.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.MSELoss.compute">
 <span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.losses.MSELoss.compute" title="Link to this definition"></a></dt>
-<dd><p>Compute the loss for the given prediction and target. Optionally, if
-given, a loss weight should be considered.</p>
-<p>All arguments are <code class="docutils literal notranslate"><span class="pre">torch</span></code> tensors. The return type should be a
-<code class="docutils literal notranslate"><span class="pre">torch</span></code> scalar that can be used with an optimizer, just as usual when
-training with <code class="docutils literal notranslate"><span class="pre">torch</span></code>.</p>
+<dd><p>Function to compute the MSELoss for the provided prediction and target, with respect to the weight.</p>
+<section id="parameters">
+<h4>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
+<dl class="simple">
+<dt>prediction<span class="classifier">torch.Tensor</span></dt><dd><p>The prediction tensor for which loss needs to be calculated.</p>
+</dd>
+<dt>target<span class="classifier">torch.Tensor</span></dt><dd><p>The target tensor with respect to which loss is calculated.</p>
+</dd>
+<dt>weight<span class="classifier">torch.Tensor</span></dt><dd><p>The weight tensor used to weigh the prediction in the loss calculation.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h4>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h4>
+<p>:
+torch.Tensor</p>
+<blockquote>
+<div><p>The computed MSELoss tensor.</p>
+</div></blockquote>
+</section>
 </dd></dl>
 
 </dd></dl>
@@ -175,7 +217,7 @@ training with <code class="docutils literal notranslate"><span class="pre">torch
 inheritance.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.Loss.compute">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.losses.Loss.compute" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.losses.Loss.compute" title="Link to this definition"></a></dt>
 <dd><p>Compute the loss for the given prediction and target. Optionally, if
 given, a loss weight should be considered.</p>
 <p>All arguments are <code class="docutils literal notranslate"><span class="pre">torch</span></code> tensors. The return type should be a

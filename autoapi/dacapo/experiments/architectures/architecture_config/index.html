@@ -106,25 +106,49 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.architectures.architecture_config.ArchitectureConfig" title="dacapo.experiments.architectures.architecture_config.ArchitectureConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArchitectureConfig</span></code></a></p></td>
-<td><p>Base class for architecture configurations. Each subclass of an</p></td>
+<td><p>A class to represent the base configurations of any architecture.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.architecture_config.ArchitectureConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.architectures.architecture_config.</span></span><span class="sig-name descname"><span class="pre">ArchitectureConfig</span></span><a class="headerlink" href="#dacapo.experiments.architectures.architecture_config.ArchitectureConfig" title="Link to this definition"></a></dt>
-<dd><p>Base class for architecture configurations. Each subclass of an
-<cite>Architecture</cite> should have a corresponding config class derived from
-<cite>ArchitectureConfig</cite>.</p>
+<dd><p>A class to represent the base configurations of any architecture.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.architecture_config.ArchitectureConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.architectures.architecture_config.ArchitectureConfig.name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.experiments.architectures.architecture_config.ArchitectureConfig.name" title="Link to this definition"></a></dt>
+<dd><p>a unique name for the architecture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.architecture_config.ArchitectureConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.architectures.architecture_config.ArchitectureConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>Check whether this is a valid architecture</p>
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.architecture_config.ArchitectureConfig.verify" title="Link to this definition"></a></dt>
+<dd><p>validates the given architecture.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>A method to validate an architecture configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><em>bool</em> – A flag indicating whether the config is valid or not.</p></li>
+<li><p><em>str</em> – A description of the architecture.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

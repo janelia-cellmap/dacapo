@@ -107,23 +107,40 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.losses.dummy_loss.DummyLoss" title="dacapo.experiments.tasks.losses.dummy_loss.DummyLoss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyLoss</span></code></a></p></td>
-<td><p>Helper class that provides a standard way to create an ABC using</p></td>
+<td><p>A class representing a dummy loss function that calculates the absolute difference between each prediction and target.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.dummy_loss.DummyLoss">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.losses.dummy_loss.</span></span><span class="sig-name descname"><span class="pre">DummyLoss</span></span><a class="headerlink" href="#dacapo.experiments.tasks.losses.dummy_loss.DummyLoss" title="Link to this definition"></a></dt>
-<dd><p>Helper class that provides a standard way to create an ABC using
-inheritance.</p>
+<dd><p>A class representing a dummy loss function that calculates the absolute difference between each prediction and target.</p>
+<p>Inherits the Loss class.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.dummy_loss.DummyLoss.compute">
 <span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.losses.dummy_loss.DummyLoss.compute" title="Link to this definition"></a></dt>
-<dd><p>Compute the loss for the given prediction and target. Optionally, if
-given, a loss weight should be considered.</p>
-<p>All arguments are <code class="docutils literal notranslate"><span class="pre">torch</span></code> tensors. The return type should be a
-<code class="docutils literal notranslate"><span class="pre">torch</span></code> scalar that can be used with an optimizer, just as usual when
-training with <code class="docutils literal notranslate"><span class="pre">torch</span></code>.</p>
+<dd><p>Calculate the total loss between prediction and target.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Method to calculate the total dummy loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prediction</strong> (<em>float</em><em> or </em><em>int</em>) – predicted output</p></li>
+<li><p><strong>target</strong> (<em>float</em><em> or </em><em>int</em>) – true output</p></li>
+<li><p><strong>weight</strong> (<em>float</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – weight parameter for the loss, by default None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Total loss calculated as the sum of absolute differences between prediction and target.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float or int</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

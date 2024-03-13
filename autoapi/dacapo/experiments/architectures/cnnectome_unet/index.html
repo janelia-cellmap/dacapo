@@ -106,7 +106,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet" title="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CNNectomeUNet</span></code></a></p></td>
-<td><p>Base class for all neural network modules.</p></td>
+<td><p>An abstract base class for defining the architecture of a neural network model.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule" title="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CNNectomeUNetModule</span></code></a></p></td>
 <td><p>Base class for all neural network modules.</p></td>
@@ -128,60 +128,65 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.architectures.cnnectome_unet.</span></span><span class="sig-name descname"><span class="pre">CNNectomeUNet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet" title="Link to this definition"></a></dt>
-<dd><p>Base class for all neural network modules.</p>
-<p>Your models should also subclass this class.</p>
-<p>Modules can also contain other Modules, allowing to nest them in
-a tree structure. You can assign the submodules as regular attributes:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
-
-<span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Submodules assigned in this way will be registered, and will have their
-parameters converted too when you call <code class="xref py py-meth docutils literal notranslate"><span class="pre">to()</span></code>, etc.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>As per the example above, an <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> call to the parent class
-must be made before assignment on the child.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Variables<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>training</strong> (<em>bool</em>) – Boolean represents whether this module is in training or
-evaluation mode.</p>
-</dd>
-</dl>
+<dd><p>An abstract base class for defining the architecture of a neural network model.
+It is inherited from PyTorch’s Module and built-in class <cite>ABC</cite> (Abstract Base Classes).
+Other classes can inherit this class to define their own specific variations of architecture.
+It requires to implement several property methods, and also includes additional methods related to the architecture design.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.eval_shape_increase">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eval_shape_increase</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.eval_shape_increase" title="Link to this definition"></a></dt>
-<dd><p>How much to increase the input shape during prediction.</p>
+<dd><p>Provides information about how much to increase the input shape during prediction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instance representing the amount to increase in each dimension of the input shape.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Coordinate</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.input_shape">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">input_shape</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.input_shape" title="Link to this definition"></a></dt>
-<dd><p>The spatial input shape (i.e., not accounting for channels and batch
-dimensions) of this architecture.</p>
+<dd><p>Abstract method to define the spatial input shape for the neural network architecture.
+The shape should not account for the channels and batch dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The spatial input shape.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Coordinate</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.num_in_channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_in_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.num_in_channels" title="Link to this definition"></a></dt>
-<dd><p>Return the number of input channels this architecture expects.</p>
+<dd><p>Abstract method to return number of input channels required by the architecture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Required number of input channels.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.num_out_channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_out_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.num_out_channels" title="Link to this definition"></a></dt>
-<dd><p>Return the number of output channels of this architecture.</p>
+<dd><p>Abstract method to return the number of output channels provided by the architecture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Number of output channels.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -192,7 +197,19 @@ dimensions) of this architecture.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.scale">
 <span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">voxel_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.scale" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Method to scale the input voxel size as required by the architecture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_voxel_size</strong> (<em>Coordinate</em>) – The original size of the input voxel.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The scaled voxel size.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Coordinate</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.forward">

@@ -129,13 +129,13 @@
 <td><p>An array containing signed distances to the nearest boundary voxel for a particular label class.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.arraytypes.Mask" title="dacapo.experiments.arraytypes.Mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Mask</span></code></a></p></td>
-<td><p>The type of data provided by an array. The ArrayType class helps to keep</p></td>
+<td><p>A class that inherits the ArrayType class. This is a representation of a Mask in the system.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.arraytypes.EmbeddingArray" title="dacapo.experiments.arraytypes.EmbeddingArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EmbeddingArray</span></code></a></p></td>
 <td><p>A generic output of a model that could represent almost anything. Assumed to be</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.arraytypes.ProbabilityArray" title="dacapo.experiments.arraytypes.ProbabilityArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProbabilityArray</span></code></a></p></td>
-<td><p>An array containing probabilities for each voxel. I.e. each voxel has a vector</p></td>
+<td><p>Class to represent an array containing probability distributions for each voxel pointed by its coordinate.</p></td>
 </tr>
 </tbody>
 </table>
@@ -147,7 +147,17 @@ voxel has a value associated with its class.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.AnnotationArray.interpolatable">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpolatable</span></span><a class="headerlink" href="#dacapo.experiments.arraytypes.AnnotationArray.interpolatable" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>This is an abstract method which should be overridden in each of the subclasses
+to determine if an array is interpolatable or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the array is interpolatable, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.AnnotationArray.classes">
@@ -163,7 +173,17 @@ voxel has a value associated with its class.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.IntensitiesArray.interpolatable">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpolatable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.arraytypes.IntensitiesArray.interpolatable" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>This is an abstract method which should be overridden in each of the subclasses
+to determine if an array is interpolatable or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the array is interpolatable, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.IntensitiesArray.channels">
@@ -190,7 +210,17 @@ Distances should be positive outside an object and negative inside an object.</p
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.DistanceArray.interpolatable">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpolatable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.arraytypes.DistanceArray.interpolatable" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>This is an abstract method which should be overridden in each of the subclasses
+to determine if an array is interpolatable or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the array is interpolatable, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.DistanceArray.classes">
@@ -202,15 +232,26 @@ Distances should be positive outside an object and negative inside an object.</p
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.Mask">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.arraytypes.</span></span><span class="sig-name descname"><span class="pre">Mask</span></span><a class="headerlink" href="#dacapo.experiments.arraytypes.Mask" title="Link to this definition"></a></dt>
-<dd><p>The type of data provided by an array. The ArrayType class helps to keep
-track of the semantic meaning of an Array. Additionally the ArrayType
-keeps track of metadata that is specific to this datatype such as
-num_classes for an annotated volume or channel names for intensity
-arrays.</p>
+<dd><p>A class that inherits the ArrayType class. This is a representation of a Mask in the system.</p>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">interpolatable():</span></span></dt>
+<dd><p>It is a method that returns False.</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.Mask.interpolatable">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpolatable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.arraytypes.Mask.interpolatable" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Method to return False.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Returns a boolean value of False representing that the values are not interpolatable.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -222,7 +263,17 @@ float, interpolatable, and have sum number of channels.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.EmbeddingArray.interpolatable">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpolatable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.arraytypes.EmbeddingArray.interpolatable" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>This is an abstract method which should be overridden in each of the subclasses
+to determine if an array is interpolatable or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the array is interpolatable, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.EmbeddingArray.embedding_dims">
@@ -234,18 +285,38 @@ float, interpolatable, and have sum number of channels.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.ProbabilityArray">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.arraytypes.</span></span><span class="sig-name descname"><span class="pre">ProbabilityArray</span></span><a class="headerlink" href="#dacapo.experiments.arraytypes.ProbabilityArray" title="Link to this definition"></a></dt>
-<dd><p>An array containing probabilities for each voxel. I.e. each voxel has a vector
-of length <cite>c</cite> where <cite>c</cite> is the number of classes. The l1 norm of this vector should
-always be 1. The class of this voxel can be determined by simply taking the
-argmax.</p>
+<dd><p>Class to represent an array containing probability distributions for each voxel pointed by its coordinate.</p>
+<p>The class defines a ProbabilityArray object with each voxel having a vector of length <cite>c</cite>, where <cite>c</cite> is the
+number of classes. The l1 norm of this vector should always be 1. The class of each voxel can be
+determined by simply taking the argmax.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.arraytypes.ProbabilityArray.classes">
+<span class="sig-name descname"><span class="pre">classes</span></span><a class="headerlink" href="#dacapo.experiments.arraytypes.ProbabilityArray.classes" title="Link to this definition"></a></dt>
+<dd><p>A mapping from channel to class on which distances were calculated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.ProbabilityArray.interpolatable">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpolatable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.arraytypes.ProbabilityArray.interpolatable" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Checks if the array is interpolatable. Returns True for this class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True indicating that the data can be interpolated.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.arraytypes.ProbabilityArray.classes">
-<span class="sig-name descname"><span class="pre">classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.arraytypes.ProbabilityArray.classes" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

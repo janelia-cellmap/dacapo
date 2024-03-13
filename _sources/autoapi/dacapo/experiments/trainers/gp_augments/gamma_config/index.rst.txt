@@ -22,8 +22,20 @@ Classes
 
 
 
-   Base class for gunpowder augment configurations. Each subclass of a `Augment`
-   should have a corresponding config class derived from `AugmentConfig`.
+   This class manages the configuration of gamma augmentation for a given dataset.
+
+   .. attribute:: gamma_range
+
+      A tuple of float values represents the min and max range of gamma noise
+
+   .. attribute:: to apply on the raw data.
+
+      
+
+   .. method:: node()
+
+      Constructs a node in the augmentation pipeline.
+      
 
    .. py:attribute:: gamma_range
       :type: Tuple[float, float]
@@ -32,7 +44,17 @@ Classes
 
    .. py:method:: node(raw_key: gunpowder.ArrayKey, _gt_key=None, _mask_key=None)
 
-      return a gunpowder node that performs this augmentation
+      Constructs a node in the augmentation pipeline.
+
+      :param raw_key: Key to an Array (volume) in the pipeline
+      :type raw_key: gp.ArrayKey
+      :param _gt_key: Ground Truth key, not used in this function. Defaults to None.
+      :type _gt_key: gp.ArrayKey, optional
+      :param _mask_key: Mask Key, not used in this function. Defaults to None.
+      :type _mask_key: gp.ArrayKey, optional
+
+      :returns: The augmentation method to be applied on the source data.
+      :rtype: GammaAugment instance
 
 
 

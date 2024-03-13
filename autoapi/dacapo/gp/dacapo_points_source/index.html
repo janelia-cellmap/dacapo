@@ -105,42 +105,64 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.gp.dacapo_points_source.GraphSource" title="dacapo.gp.dacapo_points_source.GraphSource"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GraphSource</span></code></a></p></td>
-<td><p>Superclass for all nodes in a <cite>gunpowder</cite> graph.</p></td>
+<td><p>A provider for serving graph data in gunpowder pipelines.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.gp.dacapo_points_source.GraphSource">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.gp.dacapo_points_source.</span></span><span class="sig-name descname"><span class="pre">GraphSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.GraphKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.Graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.dacapo_points_source.GraphSource" title="Link to this definition"></a></dt>
-<dd><p>Superclass for all nodes in a <cite>gunpowder</cite> graph.</p>
-<p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchProvider</span></code> provides <code class="xref py py-class docutils literal notranslate"><span class="pre">Batches</span></code> containing
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Arrays</span></code> and/or <code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code>. The available data is
-specified in a <code class="xref py py-class docutils literal notranslate"><span class="pre">ProviderSpec</span></code> instance, accessible via <code class="xref py py-attr docutils literal notranslate"><span class="pre">spec</span></code>.</p>
-<p>To create a new node, subclass this class and implement (at least)
-<a class="reference internal" href="#dacapo.gp.dacapo_points_source.GraphSource.setup" title="dacapo.gp.dacapo_points_source.GraphSource.setup"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup()</span></code></a> and <a class="reference internal" href="#dacapo.gp.dacapo_points_source.GraphSource.provide" title="dacapo.gp.dacapo_points_source.GraphSource.provide"><code class="xref py py-func docutils literal notranslate"><span class="pre">provide()</span></code></a>.</p>
-<p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchProvider</span></code> can be linked to any number of other
-<code class="xref py py-class docutils literal notranslate"><span class="pre">BatchProviders</span></code> upstream. If your node accepts
-exactly one upstream provider, consider subclassing <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchFilter</span></code>
-instead.</p>
+<dd><p>A provider for serving graph data in gunpowder pipelines.</p>
+<p>The Graph Source loads a single graph to serve to the pipeline based on
+ROI requests it receives.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.dacapo_points_source.GraphSource.key">
+<span class="sig-name descname"><span class="pre">key</span></span><a class="headerlink" href="#dacapo.gp.dacapo_points_source.GraphSource.key" title="Link to this definition"></a></dt>
+<dd><p>The key of the graph to be served.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gp.GraphKey</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.dacapo_points_source.GraphSource.graph">
+<span class="sig-name descname"><span class="pre">graph</span></span><a class="headerlink" href="#dacapo.gp.dacapo_points_source.GraphSource.graph" title="Link to this definition"></a></dt>
+<dd><p>The graph to be served.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gp.Graph</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.dacapo_points_source.GraphSource.setup">
 <span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.dacapo_points_source.GraphSource.setup" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>Called during initialization of the DAG. Callees can assume that all
-upstream providers are set up already.</p>
-<p>In setup, call <code class="xref py py-func docutils literal notranslate"><span class="pre">provides()</span></code> to announce the arrays and points
-provided by this node.</p>
+<dd><p>Set up the provider. This function sets the provider to provide the
+graph with the given key.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.dacapo_points_source.GraphSource.provide">
 <span class="sig-name descname"><span class="pre">provide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.dacapo_points_source.GraphSource.provide" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>This function takes a <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code> and should return the
-corresponding <code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code>.</p>
+<dd><p>Provides the graph for the requested ROI.</p>
+<p>This method will be passively called by gunpowder to get a batch.
+Depending on the request we provide a subgraph of our data, or nothing
+at all.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code>) – The request to process.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>gp.BatchRequest</em>) – BatchRequest with the same ROI for</p></li>
+<li><p><strong>graph.</strong> (<em>each requested array and</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The graph contained in a Batch.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>outputs (gp.Batch)</p>
 </dd>
 </dl>
 </dd></dl>

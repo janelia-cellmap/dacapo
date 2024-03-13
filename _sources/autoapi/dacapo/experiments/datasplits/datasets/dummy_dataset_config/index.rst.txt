@@ -22,8 +22,20 @@ Classes
 
 
 
-   This is just a dummy DataSplit config used for testing. None of the
-   attributes have any particular meaning.
+   A dummy configuration class for test datasets.
+
+   .. attribute:: dataset_type
+
+      Clearly mentions the type of dataset
+
+   .. attribute:: raw_config
+
+      This attribute holds the configurations related to dataset arrays.
+
+   .. method:: verify
+
+      A dummy verification method for testing purposes, always returns False and a message.
+      
 
    .. py:attribute:: dataset_type
 
@@ -36,7 +48,9 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      Check whether this is a valid DataSet
+      A dummy method that always indicates the dataset config is not valid.
+
+      :returns: A tuple of False and a message indicating the invalidity.
 
 
 

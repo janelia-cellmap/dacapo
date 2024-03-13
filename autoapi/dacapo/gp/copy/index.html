@@ -105,49 +105,105 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.gp.copy.CopyMask" title="dacapo.gp.copy.CopyMask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CopyMask</span></code></a></p></td>
-<td><p>Copies a mask into a new key, with the option of dropping channels via a max collapse</p></td>
+<td><p>A class to copy a mask into a new key with the option to drop channels via max collapse.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.gp.copy.CopyMask">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.gp.copy.</span></span><span class="sig-name descname"><span class="pre">CopyMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.copy.CopyMask" title="Link to this definition"></a></dt>
-<dd><p>Copies a mask into a new key, with the option of dropping channels via a max collapse</p>
+<dd><p>A class to copy a mask into a new key with the option to drop channels via max collapse.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.copy.CopyMask.array_key">
+<span class="sig-name descname"><span class="pre">array_key</span></span><a class="headerlink" href="#dacapo.gp.copy.CopyMask.array_key" title="Link to this definition"></a></dt>
+<dd><p>Original key of the array from where the mask will be copied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gp.ArrayKey</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.copy.CopyMask.copy_key">
+<span class="sig-name descname"><span class="pre">copy_key</span></span><a class="headerlink" href="#dacapo.gp.copy.CopyMask.copy_key" title="Link to this definition"></a></dt>
+<dd><p>New key where the copied mask will reside.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gp.ArrayKey</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.copy.CopyMask.drop_channels">
+<span class="sig-name descname"><span class="pre">drop_channels</span></span><a class="headerlink" href="#dacapo.gp.copy.CopyMask.drop_channels" title="Link to this definition"></a></dt>
+<dd><p>If True, channels will be dropped via a max collapse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.copy.CopyMask.setup">
 <span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.copy.CopyMask.setup" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>Called during initialization of the DAG. Callees can assume that all
-upstream providers are set up already.</p>
-<p>In setup, call <code class="xref py py-func docutils literal notranslate"><span class="pre">provides()</span></code> or <code class="xref py py-func docutils literal notranslate"><span class="pre">updates()</span></code> to announce the
-arrays and points provided or changed by this node.</p>
+<dd><p>Sets up the filter by enabling autoskip and providing the copied key.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.copy.CopyMask.prepare">
-<span class="sig-name descname"><span class="pre">prepare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.copy.CopyMask.prepare" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>Prepare for a batch request. Should return a <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code> of
-needed dependencies. If None is returned, it will be assumed that all
-of request is needed.</p>
+<span class="sig-name descname"><span class="pre">prepare</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.copy.CopyMask.prepare" title="Link to this definition"></a></dt>
+<dd><p>Prepares the filter by copying the request of copy_key into a dependency.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.copy.CopyMask.process">
-<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.copy.CopyMask.process" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>Filter a batch, will be called after <a class="reference internal" href="#dacapo.gp.copy.CopyMask.prepare" title="dacapo.gp.copy.CopyMask.prepare"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare()</span></code></a>. Should return a
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code> containing modified Arrays and Graphs. Keys in the returned
-batch will replace the associated data in the original batch. If None is
-returned it is assumed that the batch has been modified in place. <code class="docutils literal notranslate"><span class="pre">request</span></code>
-is the same as passed to <a class="reference internal" href="#dacapo.gp.copy.CopyMask.prepare" title="dacapo.gp.copy.CopyMask.prepare"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare()</span></code></a>, provided for convenience.</p>
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.copy.CopyMask.process" title="Link to this definition"></a></dt>
+<dd><p>Processes the batch by copying the mask from the array_key to the copy_key.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Sets up the filter by enabling autoskip and providing the copied key.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">prepare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Prepares the filter by copying the request of copy_key into a dependency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> – The request to prepare.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The prepared dependencies.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>deps</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Processes the batch by copying the mask from the array_key to the copy_key.</p>
+<p>If “drop_channels” attribute is True, it performs max collapse.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>batch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code>) – The batch received from upstream to be modified by this node.</p></li>
-<li><p><strong>request</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code>) – The request this node received. The updated batch should meet
-this request.</p></li>
+<li><p><strong>batch</strong> – The batch to process.</p></li>
+<li><p><strong>request</strong> – The request for processing.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The processed outputs.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>outputs</p>
 </dd>
 </dl>
 </dd></dl>

@@ -27,6 +27,11 @@ Classes
 
    .. py:property:: interpolatable
 
+      This is an abstract method which should be overridden in each of the subclasses
+      to determine if an array is interpolatable or not.
+
+      :returns: True if the array is interpolatable, False otherwise.
+      :rtype: bool
 
    .. py:attribute:: classes
       :type: Dict[int, str]

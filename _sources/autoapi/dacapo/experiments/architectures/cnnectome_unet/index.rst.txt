@@ -27,60 +27,54 @@ Classes
 
 
 
-   Base class for all neural network modules.
-
-   Your models should also subclass this class.
-
-   Modules can also contain other Modules, allowing to nest them in
-   a tree structure. You can assign the submodules as regular attributes::
-
-       import torch.nn as nn
-       import torch.nn.functional as F
-
-       class Model(nn.Module):
-           def __init__(self):
-               super().__init__()
-               self.conv1 = nn.Conv2d(1, 20, 5)
-               self.conv2 = nn.Conv2d(20, 20, 5)
-
-           def forward(self, x):
-               x = F.relu(self.conv1(x))
-               return F.relu(self.conv2(x))
-
-   Submodules assigned in this way will be registered, and will have their
-   parameters converted too when you call :meth:`to`, etc.
-
-   .. note::
-       As per the example above, an ``__init__()`` call to the parent class
-       must be made before assignment on the child.
-
-   :ivar training: Boolean represents whether this module is in training or
-                   evaluation mode.
-   :vartype training: bool
+   An abstract base class for defining the architecture of a neural network model.
+   It is inherited from PyTorch's Module and built-in class `ABC` (Abstract Base Classes).
+   Other classes can inherit this class to define their own specific variations of architecture.
+   It requires to implement several property methods, and also includes additional methods related to the architecture design.
 
    .. py:property:: eval_shape_increase
 
-      How much to increase the input shape during prediction.
+      Provides information about how much to increase the input shape during prediction.
+
+      :returns: An instance representing the amount to increase in each dimension of the input shape.
+      :rtype: Coordinate
 
    .. py:property:: input_shape
 
-      The spatial input shape (i.e., not accounting for channels and batch
-      dimensions) of this architecture.
+      Abstract method to define the spatial input shape for the neural network architecture.
+      The shape should not account for the channels and batch dimensions.
+
+      :returns: The spatial input shape.
+      :rtype: Coordinate
 
    .. py:property:: num_in_channels
       :type: int
 
-      Return the number of input channels this architecture expects.
+      Abstract method to return number of input channels required by the architecture.
+
+      :returns: Required number of input channels.
+      :rtype: int
 
    .. py:property:: num_out_channels
       :type: int
 
-      Return the number of output channels of this architecture.
+      Abstract method to return the number of output channels provided by the architecture.
+
+      :returns: Number of output channels.
+      :rtype: int
 
    .. py:method:: module()
 
 
    .. py:method:: scale(voxel_size)
+
+      Method to scale the input voxel size as required by the architecture.
+
+      :param input_voxel_size: The original size of the input voxel.
+      :type input_voxel_size: Coordinate
+
+      :returns: The scaled voxel size.
+      :rtype: Coordinate
 
 
    .. py:method:: forward(x)

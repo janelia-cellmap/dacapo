@@ -106,23 +106,54 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.arraytypes.binary.BinaryArray" title="dacapo.experiments.arraytypes.binary.BinaryArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinaryArray</span></code></a></p></td>
-<td><p>An BinaryArray is a bool or uint8 Array where each</p></td>
+<td><p>A subclass of ArrayType representing BinaryArray. The BinaryArray object is created with two attributes; channels.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.binary.BinaryArray">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.arraytypes.binary.</span></span><span class="sig-name descname"><span class="pre">BinaryArray</span></span><a class="headerlink" href="#dacapo.experiments.arraytypes.binary.BinaryArray" title="Link to this definition"></a></dt>
-<dd><p>An BinaryArray is a bool or uint8 Array where each
-voxel is either 1 or 0.</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="dacapo.experiments.arraytypes.binary.BinaryArray.interpolatable">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpolatable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.arraytypes.binary.BinaryArray.interpolatable" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
+<dd><p>A subclass of ArrayType representing BinaryArray. The BinaryArray object is created with two attributes; channels.
+Each voxel in this array is either 1 or 0.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.binary.BinaryArray.channels">
-<span class="sig-name descname"><span class="pre">channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.arraytypes.binary.BinaryArray.channels" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#dacapo.experiments.arraytypes.binary.BinaryArray.channels" title="Link to this definition"></a></dt>
+<dd><p>A dictionary attribute representing channel mapping with its binary classification.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[int, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channels</strong> (<em>Dict</em><em>[</em><em>int</em><em>, </em><em>str</em><em>]</em>) – A dictionary input where keys are channel numbers and values are their corresponding class for binary classification.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.arraytypes.binary.BinaryArray.interpolatable">
+<span class="sig-name descname"><span class="pre">interpolatable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.arraytypes.binary.BinaryArray.interpolatable" title="Link to this definition"></a></dt>
+<dd><p>Returns False as binary array type is not interpolatable.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpolatable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>This function returns the interpolatable property value of the binary array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Always returns False because interpolation is not possible.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

@@ -51,6 +51,7 @@ Functions
 .. autoapisummary::
 
    dacapo.apply
+   dacapo.train
    dacapo.validate
    dacapo.predict
 
@@ -71,6 +72,11 @@ Functions
 .. py:function:: apply(run_name: str, input_container: pathlib.Path | str, input_dataset: str, output_path: pathlib.Path | str, validation_dataset: Optional[dacapo.experiments.datasplits.datasets.dataset.Dataset | str] = None, criterion: str = 'voi', iteration: Optional[int] = None, parameters: Optional[dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters | str] = None, roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True, file_format: str = 'zarr')
 
    Load weights and apply a model to a dataset. If iteration is None, the best iteration based on the criterion is used. If roi is None, the whole input dataset is used.
+
+
+.. py:function:: train(run_name: str)
+
+   Train a run
 
 
 .. py:function:: validate(run_name: str, iteration: int, num_workers: int = 30, output_dtype: str = 'uint8', overwrite: bool = True)

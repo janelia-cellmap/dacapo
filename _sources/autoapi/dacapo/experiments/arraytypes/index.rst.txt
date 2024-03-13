@@ -48,6 +48,11 @@ Classes
 
    .. py:property:: interpolatable
 
+      This is an abstract method which should be overridden in each of the subclasses
+      to determine if an array is interpolatable or not.
+
+      :returns: True if the array is interpolatable, False otherwise.
+      :rtype: bool
 
    .. py:attribute:: classes
       :type: Dict[int, str]
@@ -65,6 +70,11 @@ Classes
    .. py:property:: interpolatable
       :type: bool
 
+      This is an abstract method which should be overridden in each of the subclasses
+      to determine if an array is interpolatable or not.
+
+      :returns: True if the array is interpolatable, False otherwise.
+      :rtype: bool
 
    .. py:attribute:: channels
       :type: Dict[int, str]
@@ -93,6 +103,11 @@ Classes
    .. py:property:: interpolatable
       :type: bool
 
+      This is an abstract method which should be overridden in each of the subclasses
+      to determine if an array is interpolatable or not.
+
+      :returns: True if the array is interpolatable, False otherwise.
+      :rtype: bool
 
    .. py:attribute:: classes
       :type: Dict[int, str]
@@ -105,15 +120,20 @@ Classes
 
 
 
-   The type of data provided by an array. The ArrayType class helps to keep
-   track of the semantic meaning of an Array. Additionally the ArrayType
-   keeps track of metadata that is specific to this datatype such as
-   num_classes for an annotated volume or channel names for intensity
-   arrays.
+   A class that inherits the ArrayType class. This is a representation of a Mask in the system.
+
+   .. method:: interpolatable():
+
+      It is a method that returns False.
+
 
    .. py:property:: interpolatable
       :type: bool
 
+      Method to return False.
+
+      :returns: Returns a boolean value of False representing that the values are not interpolatable.
+      :rtype: bool
 
 
 .. py:class:: EmbeddingArray
@@ -127,6 +147,11 @@ Classes
    .. py:property:: interpolatable
       :type: bool
 
+      This is an abstract method which should be overridden in each of the subclasses
+      to determine if an array is interpolatable or not.
+
+      :returns: True if the array is interpolatable, False otherwise.
+      :rtype: bool
 
    .. py:attribute:: embedding_dims
       :type: int
@@ -139,14 +164,25 @@ Classes
 
 
 
-   An array containing probabilities for each voxel. I.e. each voxel has a vector
-   of length `c` where `c` is the number of classes. The l1 norm of this vector should
-   always be 1. The class of this voxel can be determined by simply taking the
-   argmax.
+   Class to represent an array containing probability distributions for each voxel pointed by its coordinate.
+
+   The class defines a ProbabilityArray object with each voxel having a vector of length `c`, where `c` is the
+   number of classes. The l1 norm of this vector should always be 1. The class of each voxel can be
+   determined by simply taking the argmax.
+
+   .. attribute:: classes
+
+      A mapping from channel to class on which distances were calculated.
+
+      :type: List[str]
 
    .. py:property:: interpolatable
       :type: bool
 
+      Checks if the array is interpolatable. Returns True for this class.
+
+      :returns: True indicating that the data can be interpolated.
+      :rtype: bool
 
    .. py:attribute:: classes
       :type: List[str]

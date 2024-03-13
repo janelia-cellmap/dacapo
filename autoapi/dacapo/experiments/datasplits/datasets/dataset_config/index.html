@@ -107,29 +107,66 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig" title="dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DatasetConfig</span></code></a></p></td>
-<td><p>Configuration class for datasets, to be used to create a <code class="docutils literal notranslate"><span class="pre">Dataset</span></code></p></td>
+<td><p>A class used to define configuration for datasets. This provides the</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.dataset_config.</span></span><span class="sig-name descname"><span class="pre">DatasetConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig" title="Link to this definition"></a></dt>
-<dd><p>Configuration class for datasets, to be used to create a <code class="docutils literal notranslate"><span class="pre">Dataset</span></code>
-instance.</p>
+<dd><p>A class used to define configuration for datasets. This provides the
+framework to create a Dataset instance.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig.name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig.name" title="Link to this definition"></a></dt>
+<dd><p>str (eg: “sample_dataset”).
+A unique identifier to name the dataset.
+It aids in easy identification and reusability of this dataset.
+Advised to keep it short and refrain from using special characters.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig.weight">
-<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig.weight" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">weight</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig.weight" title="Link to this definition"></a></dt>
+<dd><p>int (default=1).
+A numeric value that indicates how frequently this dataset should be
+sampled in comparison to others. Higher the weight, more frequently it
+gets sampled.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>Check whether this is a valid DataSet</p>
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig.verify" title="Link to this definition"></a></dt>
+<dd><p>Checks and validates the dataset configuration. The specific rules for
+validation need to be defined by the user.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Method to verify the dataset configuration.</p>
+<p>Since there is no specific validation logic defined for this DataSet, this
+method will always return True as default reaction and a message stating
+the lack of validation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple of boolean value indicating the check (True or False) and
+message specifying result of validation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

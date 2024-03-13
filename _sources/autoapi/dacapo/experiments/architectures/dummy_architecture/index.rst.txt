@@ -22,51 +22,58 @@ Classes
 
 
 
-   Base class for all neural network modules.
+   A class used to represent a dummy architecture layer for a 3D CNN.
 
-   Your models should also subclass this class.
+   .. attribute:: channels_in
 
-   Modules can also contain other Modules, allowing to nest them in
-   a tree structure. You can assign the submodules as regular attributes::
+      An integer representing the number of input channels.
 
-       import torch.nn as nn
-       import torch.nn.functional as F
+   .. attribute:: channels_out
 
-       class Model(nn.Module):
-           def __init__(self):
-               super().__init__()
-               self.conv1 = nn.Conv2d(1, 20, 5)
-               self.conv2 = nn.Conv2d(20, 20, 5)
+      An integer representing the number of output channels.
 
-           def forward(self, x):
-               x = F.relu(self.conv1(x))
-               return F.relu(self.conv2(x))
+   .. attribute:: conv
 
-   Submodules assigned in this way will be registered, and will have their
-   parameters converted too when you call :meth:`to`, etc.
+      A 3D convolution object.
 
-   .. note::
-       As per the example above, an ``__init__()`` call to the parent class
-       must be made before assignment on the child.
+   .. attribute:: input_shape
 
-   :ivar training: Boolean represents whether this module is in training or
-                   evaluation mode.
-   :vartype training: bool
+      A coordinate object representing the shape of the input.
+
+   .. method:: forward(x)
+
+      Performs the forward pass of the network.
+      
 
    .. py:property:: input_shape
 
-      The spatial input shape (i.e., not accounting for channels and batch
-      dimensions) of this architecture.
+      Returns the input shape for this architecture.
+
+      :returns: Input shape of the architecture.
+      :rtype: Coordinate
 
    .. py:property:: num_in_channels
 
-      Return the number of input channels this architecture expects.
+      Returns the number of input channels for this architecture.
+
+      :returns: Number of input channels.
+      :rtype: int
 
    .. py:property:: num_out_channels
 
-      Return the number of output channels of this architecture.
+      Returns the number of output channels for this architecture.
+
+      :returns: Number of output channels.
+      :rtype: int
 
    .. py:method:: forward(x)
+
+      Perform the forward pass of the network.
+
+      :param x: Input tensor.
+
+      :returns: Output tensor after the forward pass.
+      :rtype: Tensor
 
 
 

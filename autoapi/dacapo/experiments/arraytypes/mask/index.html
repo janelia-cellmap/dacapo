@@ -106,22 +106,33 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.arraytypes.mask.Mask" title="dacapo.experiments.arraytypes.mask.Mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Mask</span></code></a></p></td>
-<td><p>The type of data provided by an array. The ArrayType class helps to keep</p></td>
+<td><p>A class that inherits the ArrayType class. This is a representation of a Mask in the system.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.mask.Mask">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.arraytypes.mask.</span></span><span class="sig-name descname"><span class="pre">Mask</span></span><a class="headerlink" href="#dacapo.experiments.arraytypes.mask.Mask" title="Link to this definition"></a></dt>
-<dd><p>The type of data provided by an array. The ArrayType class helps to keep
-track of the semantic meaning of an Array. Additionally the ArrayType
-keeps track of metadata that is specific to this datatype such as
-num_classes for an annotated volume or channel names for intensity
-arrays.</p>
+<dd><p>A class that inherits the ArrayType class. This is a representation of a Mask in the system.</p>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">interpolatable():</span></span></dt>
+<dd><p>It is a method that returns False.</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.mask.Mask.interpolatable">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpolatable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.arraytypes.mask.Mask.interpolatable" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Method to return False.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Returns a boolean value of False representing that the values are not interpolatable.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

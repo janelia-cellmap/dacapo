@@ -34,10 +34,32 @@ Attributes
 
 
 
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+   This class interfaces with the dacapo store to retrieve and load the
+   weights of the starter model used for finetuning.
+
+   .. attribute:: run
+
+      The specified run to retrieve weights for the model.
+
+      :type: str
+
+   .. attribute:: criterion
+
+      The policy that was used to decide when to store the weights.
+
+      :type: str
 
    .. py:method:: initialize_weights(model)
+
+      Retrieves the weights from the dacapo store and load them into
+      the model.
+
+      :param model: The model to which the weights are to be loaded.
+      :type model: obj
+
+      :raises RuntimeError: If weights of a non-existing or mismatched layer are being
+          loaded, a RuntimeError exception is thrown which is logged
+          and handled by loading only the common layers from weights.
 
 
 

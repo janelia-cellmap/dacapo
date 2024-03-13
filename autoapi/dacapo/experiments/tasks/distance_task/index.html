@@ -106,14 +106,43 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.distance_task.DistanceTask" title="dacapo.experiments.tasks.distance_task.DistanceTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DistanceTask</span></code></a></p></td>
-<td><p>This is just a dummy task for testing.</p></td>
+<td><p>DistanceTask is a subclass of Task for handling tasks associated</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.distance_task.DistanceTask">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.distance_task.</span></span><span class="sig-name descname"><span class="pre">DistanceTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.distance_task.DistanceTask" title="Link to this definition"></a></dt>
-<dd><p>This is just a dummy task for testing.</p>
+<dd><p>DistanceTask is a subclass of Task for handling tasks associated
+with Distance.</p>
+<p>DistanceTask uses <cite>DistancePredictor</cite> for prediction, <cite>MSELoss</cite> for
+computing loss, <cite>ThresholdPostProcessor</cite> for post-processing the
+prediction, and <cite>BinarySegmentationEvaluator</cite> for evaluating the
+prediction.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.distance_task.DistanceTask.predictor">
+<span class="sig-name descname"><span class="pre">predictor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.distance_task.DistanceTask.predictor" title="Link to this definition"></a></dt>
+<dd><p>DistancePredictor object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.distance_task.DistanceTask.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><a class="headerlink" href="#dacapo.experiments.tasks.distance_task.DistanceTask.loss" title="Link to this definition"></a></dt>
+<dd><p>MSELoss object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.distance_task.DistanceTask.post_processor">
+<span class="sig-name descname"><span class="pre">post_processor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.distance_task.DistanceTask.post_processor" title="Link to this definition"></a></dt>
+<dd><p>ThresholdPostProcessor object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.distance_task.DistanceTask.evaluator">
+<span class="sig-name descname"><span class="pre">evaluator</span></span><a class="headerlink" href="#dacapo.experiments.tasks.distance_task.DistanceTask.evaluator" title="Link to this definition"></a></dt>
+<dd><p>BinarySegmentationEvaluator object</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>

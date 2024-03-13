@@ -89,8 +89,29 @@ Classes
 
 
 
-   This is just a dummy task config used for testing. None of the
-   attributes have any particular meaning.
+   A class for creating a dummy task configuration object.
+
+   This class extends the TaskConfig class and initializes dummy task configuration
+   with default attributes. It is mainly used for testing aspects
+   of the application without the need of creating real task configurations.
+
+   .. attribute:: task_type
+
+      The type of task. Here, set to DummyTask.
+
+      :type: cls
+
+   .. attribute:: embedding_dims
+
+      A dummy attribute represented as an integer.
+
+      :type: int
+
+   .. attribute:: detection_threshold
+
+      Another dummy attribute represented as a float.
+
+      :type: float
 
    .. py:attribute:: task_type
 
@@ -108,7 +129,13 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      Check whether this is a valid Task
+      A method to verify the dummy task configuration.
+
+      Whenever called, this method always returns False and a statement showing
+      that the DummyTaskConfig object is never valid.
+
+      :returns: A tuple containing a boolean status and a string message.
+      :rtype: tuple
 
 
 
@@ -117,7 +144,33 @@ Classes
 
 
 
-   This is just a dummy task for testing.
+   A dummy task class that initializes all components (predictor, loss,
+   post-processing, and evaluator) for the dummy task. Primarily used for testing purposes.
+   Inherits from the Task class.
+
+   .. attribute:: predictor
+
+      Instance of DummyPredictor class.
+
+      :type: Object
+
+   .. attribute:: loss
+
+      Instance of DummyLoss class.
+
+      :type: Object
+
+   .. attribute:: post_processor
+
+      Instance of DummyPostProcessor class.
+
+      :type: Object
+
+   .. attribute:: evaluator
+
+      Instance of DummyEvaluator class.
+
+      :type: Object
 
 
 .. py:class:: DistanceTaskConfig
@@ -179,7 +232,29 @@ Classes
 
 
 
-   This is just a dummy task for testing.
+   DistanceTask is a subclass of Task for handling tasks associated
+   with Distance.
+
+   DistanceTask uses `DistancePredictor` for prediction, `MSELoss` for
+   computing loss, `ThresholdPostProcessor` for post-processing the
+   prediction, and `BinarySegmentationEvaluator` for evaluating the
+   prediction.
+
+   .. attribute:: predictor
+
+      DistancePredictor object
+
+   .. attribute:: loss
+
+      MSELoss object
+
+   .. attribute:: post_processor
+
+      ThresholdPostProcessor object
+
+   .. attribute:: evaluator
+
+      BinarySegmentationEvaluator object
 
 
 .. py:class:: OneHotTaskConfig
@@ -187,12 +262,22 @@ Classes
 
 
 
-   This is a One Hot prediction task that outputs a probability vector
-   of length `c` for each voxel where `c` is the number of classes.
-   Each voxel prediction has all positive values an l1 norm equal to 1.
+   Class that derives from the TaskConfig to perform one hot prediction tasks.
 
-   Post processing is extremely easy, the class of each voxel is
-   simply the argmax over the vector of output probabilities.
+   .. attribute:: task_type
+
+      the type of task, in this case, OneHotTask.
+
+   .. attribute:: classes
+
+      a List of classes which starts from id 0.
+
+   .. method:: None
+
+      
+      
+
+   .. note:: The class of each voxel is simply the argmax over the vector of output probabilities.
 
    .. py:attribute:: task_type
 
@@ -350,7 +435,28 @@ Classes
 
 
 
-   This is just a dummy task for testing.
+   This class extends the Task class for creating tasks related to computing inner distances.
+   It provides methods for prediction, loss calculation and post-processing. It includes Binary Segmentation Evaluator for evaluation.
+
+   .. attribute:: task_config
+
+      The configuration for the task.
+
+   .. attribute:: predictor
+
+      Used for predicting the inner distances.
+
+   .. attribute:: loss
+
+      Used for calculating the mean square error loss.
+
+   .. attribute:: post_processor
+
+      Used for applying threshold post-processing.
+
+   .. attribute:: evaluator
+
+      Used for evaluating the results using binary segmentation.
 
 
 .. py:class:: HotDistanceTaskConfig
@@ -358,14 +464,49 @@ Classes
 
 
 
-   This is a Hot Distance task config used for generating and
-   evaluating signed distance transforms as a way of generating
-   segmentations.
+   Class for generating TaskConfigs for the HotDistanceTask, which predicts one hot encodings of classes, as well as signed distance transforms of those classes.
 
-   The advantage of generating distance transforms over regular
-   affinities is you can get a denser signal, i.e. 1 misclassified
-   pixel in an affinity prediction could merge 2 otherwise very
-   distinct objects, this cannot happen with distances.
+   .. attribute:: task_type
+
+      A reference to the Hot Distance Task class.
+
+   .. attribute:: channels
+
+      A list of channel names.
+
+      :type: List[str]
+
+   .. attribute:: clip_distance
+
+      Maximum distance to consider for false positive/negatives.
+
+      :type: float
+
+   .. attribute:: tol_distance
+
+      Tolerance distance for counting false positives/negatives.
+
+      :type: float
+
+   .. attribute:: scale_factor
+
+      The amount by which to scale distances before applying
+      a tanh normalization. Defaults to 1.
+
+      :type: float
+
+   .. attribute:: mask_distances
+
+      Whether or not to mask out regions where the true distance to
+      object boundary cannot be known. Defaults to False
+
+      :type: bool
+
+   .. note::
+
+      Generating distance transforms over regular affinities provides you with a denser
+      signal, i.e., one misclassified pixel in an affinity prediction can merge 2
+      otherwise very distinct objects, a situation that cannot happen with distances.
 
    .. py:attribute:: task_type
 
@@ -402,6 +543,24 @@ Classes
 
 
 
-   This is just a Hot Distance Task that combine Binary and distance prediction.
+   A class to represent a hot distance task that use binary prediction and distance prediction.
+
+   Inherits from Task class.
+
+   .. attribute:: predictor
+
+      HotDistancePredictor object.
+
+   .. attribute:: loss
+
+      HotDistanceLoss object.
+
+   .. attribute:: post_processor
+
+      ThresholdPostProcessor object.
+
+   .. attribute:: evaluator
+
+      BinarySegmentationEvaluator object.
 
 

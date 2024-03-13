@@ -106,29 +106,51 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.dummy_datasplit_config.DummyDataSplitConfig" title="dacapo.experiments.datasplits.dummy_datasplit_config.DummyDataSplitConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyDataSplitConfig</span></code></a></p></td>
-<td><p>This is just a dummy DataSplit config used for testing. None of the</p></td>
+<td><p>A simple class representing config for Dummy DataSplit.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.dummy_datasplit_config.DummyDataSplitConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.dummy_datasplit_config.</span></span><span class="sig-name descname"><span class="pre">DummyDataSplitConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.dummy_datasplit_config.DummyDataSplitConfig" title="Link to this definition"></a></dt>
-<dd><p>This is just a dummy DataSplit config used for testing. None of the
-attributes have any particular meaning.</p>
+<dd><p>A simple class representing config for Dummy DataSplit.</p>
+<p>This class is derived from ‘DataSplitConfig’ and is initialized with
+‘DatasetConfig’ for training dataset.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.dummy_datasplit_config.DummyDataSplitConfig.datasplit_type">
 <span class="sig-name descname"><span class="pre">datasplit_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.dummy_datasplit_config.DummyDataSplitConfig.datasplit_type" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Class of dummy data split functionality.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.dummy_datasplit_config.DummyDataSplitConfig.train_config">
-<span class="sig-name descname"><span class="pre">train_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../datasets/index.html#dacapo.experiments.datasplits.datasets.DatasetConfig" title="dacapo.experiments.datasplits.datasets.DatasetConfig"><span class="pre">dacapo.experiments.datasplits.datasets.DatasetConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.dummy_datasplit_config.DummyDataSplitConfig.train_config" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">train_config</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.dummy_datasplit_config.DummyDataSplitConfig.train_config" title="Link to this definition"></a></dt>
+<dd><p>Config for the training dataset. Defaults to DummyDatasetConfig.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">datasplit_type</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">train_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../datasets/index.html#dacapo.experiments.datasplits.datasets.DatasetConfig" title="dacapo.experiments.datasplits.datasets.DatasetConfig"><span class="pre">dacapo.experiments.datasplits.datasets.DatasetConfig</span></a></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.dummy_datasplit_config.DummyDataSplitConfig.verify">
 <span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.datasplits.dummy_datasplit_config.DummyDataSplitConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>Check whether this is a valid data split</p>
+<dd><p>A method for verification. This method always return ‘False’ plus
+a string indicating the condition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple contains a boolean ‘False’ and a string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[bool, str]</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

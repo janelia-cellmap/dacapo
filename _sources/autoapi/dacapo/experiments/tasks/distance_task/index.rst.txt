@@ -22,6 +22,28 @@ Classes
 
 
 
-   This is just a dummy task for testing.
+   DistanceTask is a subclass of Task for handling tasks associated
+   with Distance.
+
+   DistanceTask uses `DistancePredictor` for prediction, `MSELoss` for
+   computing loss, `ThresholdPostProcessor` for post-processing the
+   prediction, and `BinarySegmentationEvaluator` for evaluating the
+   prediction.
+
+   .. attribute:: predictor
+
+      DistancePredictor object
+
+   .. attribute:: loss
+
+      MSELoss object
+
+   .. attribute:: post_processor
+
+      ThresholdPostProcessor object
+
+   .. attribute:: evaluator
+
+      BinarySegmentationEvaluator object
 
 

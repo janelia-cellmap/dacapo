@@ -106,23 +106,44 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.starts.start_config.StartConfig" title="dacapo.experiments.starts.start_config.StartConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StartConfig</span></code></a></p></td>
-<td><p>Base class for task configurations. Each subclass of a <cite>Task</cite> should</p></td>
+<td><p>A class to represent the configuration for running tasks.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.start_config.StartConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.starts.start_config.</span></span><span class="sig-name descname"><span class="pre">StartConfig</span></span><a class="headerlink" href="#dacapo.experiments.starts.start_config.StartConfig" title="Link to this definition"></a></dt>
-<dd><p>Base class for task configurations. Each subclass of a <cite>Task</cite> should
-have a corresponding config class derived from <cite>TaskConfig</cite>.</p>
+<dd><p>A class to represent the configuration for running tasks.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.start_config.StartConfig.run">
-<span class="sig-name descname"><span class="pre">run</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.starts.start_config.StartConfig.run" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">run</span></span><a class="headerlink" href="#dacapo.experiments.starts.start_config.StartConfig.run" title="Link to this definition"></a></dt>
+<dd><p>The run to be used as a starting point for tasks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.start_config.StartConfig.criterion">
-<span class="sig-name descname"><span class="pre">criterion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.starts.start_config.StartConfig.criterion" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">criterion</span></span><a class="headerlink" href="#dacapo.experiments.starts.start_config.StartConfig.criterion" title="Link to this definition"></a></dt>
+<dd><p>The criterion to be used for choosing weights from run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">run</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">criterion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

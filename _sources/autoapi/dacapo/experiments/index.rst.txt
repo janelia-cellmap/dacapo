@@ -91,6 +91,43 @@ Classes
 .. py:class:: RunConfig
 
 
+   A class to represent a configuration of a run that helps to structure all the tasks,
+   architecture, training, and datasplit configurations.
+
+   ...
+
+   Attributes:
+   -----------
+   task_config: `TaskConfig`
+       A config defining the Task to run that includes deciding the output of the model and
+       different methods to achieve the goal.
+
+   architecture_config: `ArchitectureConfig`
+        A config that defines the backbone architecture of the model. It impacts the model's
+        performance significantly.
+
+   trainer_config: `TrainerConfig`
+       Defines how batches are generated and passed for training the model along with defining
+       configurations like batch size, learning rate, number of cpu workers and snapshot logging.
+
+   datasplit_config: `DataSplitConfig`
+       Configures the data available for the model during training or validation phases.
+
+   name: str
+       A unique name for this run to distinguish it.
+
+   repetition: int
+       The repetition number of this run.
+
+   num_iterations: int
+       The total number of iterations to train for during this run.
+
+   validation_interval: int
+       Specifies how often to perform validation during the run. It defaults to 1000.
+
+   start_config : `Optional[StartConfig]`
+       A starting point for continued training. It is optional and can be left out.
+
    .. py:attribute:: task_config
       :type: dacapo.experiments.tasks.TaskConfig
 
@@ -140,6 +177,26 @@ Classes
 .. py:class:: TrainingIterationStats
 
 
+   A class to represent the training iteration statistics.
+
+   .. attribute:: iteration
+
+      The iteration that produced these stats.
+
+      :type: int
+
+   .. attribute:: loss
+
+      The loss value of this iteration.
+
+      :type: float
+
+   .. attribute:: time
+
+      The time it took to process this iteration.
+
+      :type: float
+
    .. py:attribute:: iteration
       :type: int
 
@@ -159,6 +216,35 @@ Classes
 .. py:class:: TrainingStats
 
 
+   A class used to represent Training Statistics.
+
+   .. attribute:: iteration_stats
+
+      List[TrainingIterationStats]
+      an ordered list of training stats.
+
+   .. method:: add_iteration_stats(iteration_stats
+
+      TrainingIterationStats) -> None:
+      Add a new set of iterations stats to the existing list of iteration
+      stats.
+
+   .. method:: delete_after(iteration
+
+      int) -> None:
+      Deletes training stats after a specified iteration number.
+
+   .. method:: trained_until() -> int
+
+      
+      Gets the number of iterations that the model has been trained for.
+
+   .. method:: to_xarray() -> xr.DataArray
+
+      
+      Converts the iteration statistics to a xarray data array.
+      
+
    .. py:attribute:: iteration_stats
       :type: List[dacapo.experiments.training_iteration_stats.TrainingIterationStats]
 
@@ -166,23 +252,60 @@ Classes
 
    .. py:method:: add_iteration_stats(iteration_stats: dacapo.experiments.training_iteration_stats.TrainingIterationStats) -> None
 
+      Add a new iteration stats to the current iteration stats.
+
+      :param iteration_stats: a new iteration stats object.
+      :type iteration_stats: TrainingIterationStats
+
+      :raises assert: if the new iteration stats do not follow the order of existing iteration stats.
+
 
    .. py:method:: delete_after(iteration: int) -> None
+
+      Deletes training stats after a specified iteration.
+
+      :param iteration: the iteration after which the stats are to be deleted.
+      :type iteration: int
 
 
    .. py:method:: trained_until() -> int
 
-      The number of iterations trained for (the maximum iteration plus
-      one).
-      0 if no iterations trained yet.
+      The number of iterations trained for (the maximum iteration plus one).
+      Returns zero if no iterations trained yet.
+
+      :returns: number of iterations that the model has been trained for.
+      :rtype: int
 
 
    .. py:method:: to_xarray() -> xarray.DataArray
+
+      Converts the iteration stats to a data array format easily manipulatable.
+
+      :returns: xarray DataArray of iteration losses.
+      :rtype: xr.DataArray
 
 
 
 .. py:class:: ValidationIterationScores
 
+
+   A class used to represent the validation iteration scores in an organized structure.
+
+   .. attribute:: iteration
+
+      The iteration associated with these validation scores.
+
+      :type: int
+
+   .. attribute:: scores
+
+      A list of scores per dataset, post processor
+
+      :type: List[List[List[float]]]
+
+   .. attribute:: parameters, and evaluation criterion.
+
+      
 
    .. py:attribute:: iteration
       :type: int

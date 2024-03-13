@@ -105,7 +105,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.gp.gamma_noise.GammaAugment" title="dacapo.gp.gamma_noise.GammaAugment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GammaAugment</span></code></a></p></td>
-<td><p>An Augment to apply gamma noise</p></td>
+<td><p>Class for applying gamma noise augmentation.</p></td>
 </tr>
 </tbody>
 </table>
@@ -127,32 +127,58 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.gp.gamma_noise.GammaAugment">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.gp.gamma_noise.</span></span><span class="sig-name descname"><span class="pre">GammaAugment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arrays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_max</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.gamma_noise.GammaAugment" title="Link to this definition"></a></dt>
-<dd><p>An Augment to apply gamma noise</p>
+<dd><p>Class for applying gamma noise augmentation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.gamma_noise.GammaAugment.arrays">
+<span class="sig-name descname"><span class="pre">arrays</span></span><a class="headerlink" href="#dacapo.gp.gamma_noise.GammaAugment.arrays" title="Link to this definition"></a></dt>
+<dd><p>An iterable collection of np arrays to augment</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.gamma_noise.GammaAugment.gamma_min">
+<span class="sig-name descname"><span class="pre">gamma_min</span></span><a class="headerlink" href="#dacapo.gp.gamma_noise.GammaAugment.gamma_min" title="Link to this definition"></a></dt>
+<dd><p>A float representing the lower limit of gamma perturbation</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.gamma_noise.GammaAugment.gamma_max">
+<span class="sig-name descname"><span class="pre">gamma_max</span></span><a class="headerlink" href="#dacapo.gp.gamma_noise.GammaAugment.gamma_max" title="Link to this definition"></a></dt>
+<dd><p>A float representing the upper limit of gamma perturbation</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.gamma_noise.GammaAugment.setup">
 <span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.gamma_noise.GammaAugment.setup" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>Called during initialization of the DAG. Callees can assume that all
-upstream providers are set up already.</p>
-<p>In setup, call <code class="xref py py-func docutils literal notranslate"><span class="pre">provides()</span></code> or <code class="xref py py-func docutils literal notranslate"><span class="pre">updates()</span></code> to announce the
-arrays and points provided or changed by this node.</p>
+<dd><p>Method to configure the internal state of the class</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.gamma_noise.GammaAugment.process">
-<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.gamma_noise.GammaAugment.process" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>Filter a batch, will be called after <code class="xref py py-func docutils literal notranslate"><span class="pre">prepare()</span></code>. Should return a
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code> containing modified Arrays and Graphs. Keys in the returned
-batch will replace the associated data in the original batch. If None is
-returned it is assumed that the batch has been modified in place. <code class="docutils literal notranslate"><span class="pre">request</span></code>
-is the same as passed to <code class="xref py py-func docutils literal notranslate"><span class="pre">prepare()</span></code>, provided for convenience.</p>
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.gamma_noise.GammaAugment.process" title="Link to this definition"></a></dt>
+<dd><p>Method to apply gamma noise to the desired arrays</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.gp.gamma_noise.GammaAugment.__augment">
+<span class="sig-name descname"><span class="pre">__augment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.gamma_noise.GammaAugment.__augment" title="Link to this definition"></a></dt>
+<dd><p>Private method to perform the actual augmentation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Configuring the internal state by iterating over arrays.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Method to apply gamma noise to the desired arrays.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>batch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code>) – The batch received from upstream to be modified by this node.</p></li>
-<li><p><strong>request</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code>) – The request this node received. The updated batch should meet
-this request.</p></li>
+<li><p><strong>batch</strong> – The input batch to be processed.</p></li>
+<li><p><strong>request</strong> – An object which holds the requested output location.</p></li>
 </ul>
 </dd>
 </dl>

@@ -107,19 +107,48 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.gp_augments.simple_config.SimpleAugmentConfig" title="dacapo.experiments.trainers.gp_augments.simple_config.SimpleAugmentConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimpleAugmentConfig</span></code></a></p></td>
-<td><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite></p></td>
+<td><p>This class is an implementation of AugmentConfig that applies simple augmentations.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.simple_config.SimpleAugmentConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.trainers.gp_augments.simple_config.</span></span><span class="sig-name descname"><span class="pre">SimpleAugmentConfig</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.simple_config.SimpleAugmentConfig" title="Link to this definition"></a></dt>
-<dd><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite>
-should have a corresponding config class derived from <cite>AugmentConfig</cite>.</p>
+<dd><p>This class is an implementation of AugmentConfig that applies simple augmentations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>_raw_key</strong> – Key for raw data. Not used in this implementation. Defaults to None.</p></li>
+<li><p><strong>_gt_key</strong> – Key for ground truth data. Not used in this implementation. Defaults to None.</p></li>
+<li><p><strong>_mask_key</strong> – Key for mask data. Not used in this implementation. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A node that can be included in a pipeline to perform simple data augmentations.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Gunpowder SimpleAugment Node</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.simple_config.SimpleAugmentConfig.node">
 <span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_raw_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_gt_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mask_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.simple_config.SimpleAugmentConfig.node" title="Link to this definition"></a></dt>
-<dd><p>return a gunpowder node that performs this augmentation</p>
+<dd><p>Get a gp.SimpleAugment node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>_raw_key</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – Specific key for raw data, not used in this implementation. Defaults to None.</p></li>
+<li><p><strong>_gt_key</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – Specific key for ground truth data, not used in this implementation. Defaults to None.</p></li>
+<li><p><strong>_mask_key</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – Specific key for mask data, not used in this implementation. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Simple augmentation node which can be incorporated in the pipeline.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gunpowder.SimpleAugment</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
