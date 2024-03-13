@@ -6,15 +6,15 @@ build-backend = "hatchling.build"
 # https://peps.python.org/pep-0621/
 [project]
 name = "dacapo-ml"
-description = "Framework for easy composition of volumetric machine learning jobs."
+description = "Framework for deployment of volumetric machine learning models, and easy composition of training jobs."
 readme = "README.md"
 requires-python = ">=3.10"
 # license = { text = "BSD 3-Clause License" }
 authors = [
-    { email = "funkej@janelia.hhmi.org", name = "Jan Funke" },
     { email = "pattonw@janelia.hhmi.org", name = "Will Patton" },
     { email = "rhoadesj@hhmi.org", name = "Jeff Rhoades" },
     { email = "zouinkhim@hhmi.org", name = "Marwan Zouinkhi" },
+    { email = "funkej@janelia.hhmi.org", name = "Jan Funke" },
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -41,11 +41,12 @@ dependencies = [
         "attrs",
         "bokeh",
         "numpy-indexed>=0.3.7",
-        "daisy>=1.0",
+        "daisy @ git+https://github.com/funkelab/daisy",
         "funlib.math>=0.1",
         "funlib.geometry>=0.2",
         "mwatershed>=0.1",
-        "funlib.persistence @ git+https://github.com/janelia-cellmap/funlib.persistence",
+        "funlib.persistence",
+        # "funlib.persistence @ git+https://github.com/janelia-cellmap/funlib.persistence",
         "funlib.evaluate @ git+https://github.com/pattonw/funlib.evaluate",
         "gunpowder>=1.3",
         # "lsds>=0.1.3",
@@ -53,7 +54,9 @@ dependencies = [
         "xarray",
         "cattrs",
         "numpy-indexed",
-        "click",]
+        "click",
+        "pyyaml",
+        ]
 
 # extras
 # https://peps.python.org/pep-0621/#dependencies-optional-dependencies
@@ -67,19 +70,28 @@ dev = [
     "rich",
     "ruff",
     "pre-commit",
+    "jupyter",
 ]
 docs = [
     "sphinx-autodoc-typehints",
-    "sphinx-material",
+    "sphinx-autoapi",
+    "sphinx-click",
+    "sphinx-rtd-theme",
+    "myst-parser",
 ]
 examples = [
     "ipython",
     "ipykernel",
     "jupyter",
 ]
+pretrained = [
+    "pyqt5",
+    "empanada-napari",    
+    ]
+all = ["dacapo-ml[test,dev,docs,examples,pretrained]"]
 
 [project.urls]
-homepage = "https://github.com/janelia-cellmap/dacapo"
+homepage = "https://github.io/janelia-cellmap/dacapo"
 repository = "https://github.com/janelia-cellmap/dacapo"
 
 # https://hatch.pypa.io/latest/config/metadata/
@@ -103,22 +115,27 @@ dacapo = "dacapo.cli:cli"
 line-length = 88
 target-version = "py310"
 src = ["dacapo"]
+
+[tool.ruff.lint]
 # https://beta.ruff.rs/docs/rules/
+# We may want to enable some of these options later
 select = [
     "E",    # style errors
-    "W",    # style warnings
+#    "W",    # style warnings
     "F",    # flakes
-    "D",    # pydocstyle
-    "I",    # isort
-    "UP",   # pyupgrade
-    "C4",   # flake8-comprehensions
-    "B",    # flake8-bugbear
-    "A001", # flake8-builtins
-    "RUF",  # ruff-specific rules
+#    "D",    # pydocstyle
+#    "I",    # isort
+#    "UP",   # pyupgrade
+#    "C4",   # flake8-comprehensions
+#    "B",    # flake8-bugbear
+#    "A001", # flake8-builtins
+#    "RUF",  # ruff-specific rules
 ]
+extend-ignore = ["E501"]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "tests/*.py" = ["D", "S"]
+"__init__.py" = ["F401"]
 
 # https://docs.pytest.org/en/6.2.x/customize.html
 [tool.pytest.ini_options]
@@ -128,22 +145,52 @@ filterwarnings = [
     "error",
     "ignore::DeprecationWarning",
     ]
-
-
+    
 # https://mypy.readthedocs.io/en/stable/config_file.html
 [tool.mypy]
 files = "dacapo/**/"
-strict = true
+strict = false
 disallow_any_generics = false
 disallow_subclassing_any = false
 show_error_codes = true
 pretty = true
+exclude = [
+    "scratch/*",
+]
+
 
 # # module specific overrides
-# [[tool.mypy.overrides]]
-# module = ["numpy.*",]
-# ignore_errors = true
-
+[[tool.mypy.overrides]]
+module = [
+    "funlib.*",
+    "toml.*", 
+    "gunpowder.*",
+    "scipy.*",
+    "augment.*",
+    "tifffile.*",
+    "daisy.*",
+    "lazy_property.*",
+    "skimage.*",
+    "fibsem_tools.*",
+    "neuroglancer.*",
+    "tqdm.*",
+    "zarr.*",
+    "pymongo.*",
+    "bson.*",
+    "affogato.*",
+    "SimpleITK.*",
+    "bokeh.*",
+    "lsd.*",
+    "yaml.*",
+    "pytest_lazyfixture.*",
+    "neuclease.dvid.*",
+    "mwatershed.*",
+    "numpy_indexed.*",
+    "empanada_napari.*",
+    "napari.*",
+    "empanada.*",
+]
+ignore_missing_imports = true
 
 # https://coverage.readthedocs.io/en/6.4/config.html
 [tool.coverage.report]

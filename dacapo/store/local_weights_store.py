@@ -1,3 +1,4 @@
+from dacapo.experiments.datasplits.datasets.dataset import Dataset
 from .weights_store import WeightsStore, Weights
 from dacapo.experiments.run import Run
 
@@ -16,7 +17,7 @@ class LocalWeightsStore(WeightsStore):
     """A local store for network weights."""
 
     def __init__(self, basedir):
-        logger.info("Creating local weights store in directory %s", basedir)
+        print("Creating local weights store in directory %s", basedir)
 
         self.basedir = basedir
 
@@ -51,7 +52,7 @@ class LocalWeightsStore(WeightsStore):
     def retrieve_weights(self, run: str, iteration: int) -> Weights:
         """Retrieve the network weights of the given run."""
 
-        logger.info("Retrieving weights for run %s, iteration %d", run, iteration)
+        print("Retrieving weights for run %s, iteration %d", run, iteration)
 
         weights_name = self.__get_weights_dir(run) / "iterations" / str(iteration)
 
@@ -82,7 +83,7 @@ class LocalWeightsStore(WeightsStore):
         """
         Store the best weights in a easy to find location.
         Symlinks weights from appropriate iteration
-        # TODO: simply store a toml of dataset/criterion -> iteration/parameter id
+        # TODO: simply store a yaml of dataset/criterion -> iteration/parameter id
         """
 
         # must exist since we must read run/iteration weights
@@ -96,12 +97,17 @@ class LocalWeightsStore(WeightsStore):
 
         if best_weights.exists():
             best_weights.unlink()
-        best_weights.symlink_to(iteration_weights)
+        try:
+            best_weights.symlink_to(iteration_weights)
+        except FileExistsError:
+            best_weights.unlink()
+            best_weights.symlink_to(iteration_weights)
+
         with best_weights_json.open("w") as f:
             f.write(json.dumps({"iteration": iteration}))
 
-    def retrieve_best(self, run: str, dataset: str, criterion: str) -> int:
-        logger.info("Retrieving weights for run %s, criterion %s", run, criterion)
+    def retrieve_best(self, run: str, dataset: str | Dataset, criterion: str) -> int:
+        print("Retrieving weights for run %s, criterion %s", run, criterion)
 
         with (self.__get_weights_dir(run) / criterion / f"{dataset}.json").open(
             "r"
@@ -111,7 +117,7 @@ class LocalWeightsStore(WeightsStore):
         return weights_info["iteration"]
 
     def _load_best(self, run: Run, criterion: str):
-        logger.info("Retrieving weights for run %s, criterion %s", run, criterion)
+        print("Retrieving weights for run %s, criterion %s", run, criterion)
 
         weights_name = self.__get_weights_dir(run) / f"{criterion}"
 

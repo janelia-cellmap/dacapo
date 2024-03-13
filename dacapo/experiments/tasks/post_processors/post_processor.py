@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from funlib.geometry import Coordinate
 
 from typing import Iterable, TYPE_CHECKING
 
@@ -33,6 +34,8 @@ class PostProcessor(ABC):
         self,
         parameters: "PostProcessorParameters",
         output_array_identifier: "LocalArrayIdentifier",
+        num_workers: int = 16,
+        chunk_size: Coordinate = Coordinate((64, 64, 64)),
     ) -> "Array":
         """Convert predictions into the final output."""
         pass

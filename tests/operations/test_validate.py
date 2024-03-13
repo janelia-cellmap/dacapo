@@ -1,8 +1,10 @@
+import os
+from pathlib import Path
+import shutil
 from ..fixtures import *
 
 from dacapo.experiments import Run
-from dacapo.compute_context import LocalTorch
-from dacapo.store import create_config_store, create_weights_store
+from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo import validate
 
 import pytest
@@ -25,7 +27,17 @@ def test_validate(
     options,
     run_config,
 ):
-    compute_context = LocalTorch(device="cpu")
+    # set debug to True to run the test in a specific directory (for debugging)
+    debug = False
+    if debug:
+        tmp_path = f"{Path(__file__).parent}/tmp"
+        if os.path.exists(tmp_path):
+            shutil.rmtree(tmp_path, ignore_errors=True)
+        os.makedirs(tmp_path, exist_ok=True)
+        old_path = os.getcwd()
+        os.chdir(tmp_path)
+    # when done debugging, delete "tests/operations/tmp"
+    # -------------------------------------
 
     # create a store
 
@@ -45,10 +57,13 @@ def test_validate(
 
     # test validating iterations for which we know there are weights
     weights_store.store_weights(run, 0)
-    validate(run_config.name, 0, compute_context=compute_context)
+    validate(run_config.name, 0, num_workers=4)
     weights_store.store_weights(run, 1)
-    validate(run_config.name, 1, compute_context=compute_context)
+    validate(run_config.name, 1, num_workers=4)
 
     # test validating weights that don't exist
     with pytest.raises(FileNotFoundError):
-        validate(run_config.name, 2, compute_context=compute_context)
+        validate(run_config.name, 2, num_workers=4)
+
+    if debug:
+        os.chdir(old_path)

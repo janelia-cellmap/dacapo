@@ -116,6 +116,7 @@ class ZarrArray(Array):
         dtype,
         write_size=None,
         name=None,
+        overwrite=False,
     ):
         """
         Create a new ZarrArray given an array identifier. It is assumed that
@@ -145,6 +146,7 @@ class ZarrArray(Array):
                 dtype,
                 num_channels=num_channels,
                 write_size=write_size,
+                delete=overwrite,
             )
             zarr_dataset = zarr_container[array_identifier.dataset]
             zarr_dataset.attrs["offset"] = (
@@ -158,6 +160,13 @@ class ZarrArray(Array):
                 else voxel_size
             )
             zarr_dataset.attrs["axes"] = (
+                axes[::-1] if array_identifier.container.name.endswith("n5") else axes
+            )
+            # to make display right in neuroglancer: TODO
+            zarr_dataset.attrs["dimension_units"] = [
+                f"{size} nm" for size in zarr_dataset.attrs["resolution"]
+            ]
+            zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = (
                 axes[::-1] if array_identifier.container.name.endswith("n5") else axes
             )
         except zarr.errors.ContainsArrayError:

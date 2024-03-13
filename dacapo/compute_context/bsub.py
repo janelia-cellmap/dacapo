@@ -1,8 +1,10 @@
+import os
+from pathlib import Path
 from .compute_context import ComputeContext
+import daisy
 
 import attr
 
-import subprocess
 from typing import Optional
 
 
@@ -24,35 +26,46 @@ class Bsub(ComputeContext):
         default=None,
         metadata={"help_text": "Project name that will be paying for this Job."},
     )
+    # log_dir: Optional[str] = attr.ib(
+    #     default="~/logs/dacapo/",
+    #     metadata={"help_text": "The directory to store the logs in."},
+    # )
 
     @property
     def device(self):
-        return None
+        if self.num_gpus > 0:
+            return "cuda"
+        else:
+            return "cpu"
 
-    def command(self, run_name):
-        return [
-            "bsub",
-            "-q",
-            f"{self.queue}",
-            "-n",
-            f"{self.num_cpus}",
-            "-gpu",
-            f"num={self.num_gpus}",
-            "-J",
-            run_name,
-            "-o",
-            f"{run_name}_train.out",
-            "-e",
-            f"{run_name}_train.err",
-        ] + (
-            [
-                "-P",
-                f"{self.billing}",
-            ]
-            if self.billing is not None
-            else []
+    def _wrap_command(self, command):
+        client = daisy.Client()
+        basename = str(
+            Path("./daisy_logs", client.task_id, f"worker_{client.worker_id}")
         )
-
-    def train(self, run_name):
-        subprocess.run(self.command(run_name) + ["dacapo", "train", "-r", run_name])
-        return True
+        return (
+            [
+                "bsub",
+                "-q",
+                f"{self.queue}",
+                "-n",
+                f"{self.num_cpus}",
+                "-gpu",
+                f"num={self.num_gpus}",
+                "-J",
+                "dacapo",
+                "-o",
+                f"{basename}.out",
+                "-e",
+                f"{basename}.err",
+            ]
+            + (
+                [
+                    "-P",
+                    f"{self.billing}",
+                ]
+                if self.billing is not None
+                else []
+            )
+            + command
+        )

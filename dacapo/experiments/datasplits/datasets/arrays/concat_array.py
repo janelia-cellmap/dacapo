@@ -102,9 +102,11 @@ class ConcatArray(Array):
             else self.default_array[roi]
         )
         arrays = [
-            self.source_arrays[channel][roi]
-            if channel in self.source_arrays
-            else default
+            (
+                self.source_arrays[channel][roi]
+                if channel in self.source_arrays
+                else default
+            )
             for channel in self.channels
         ]
         shapes = [array.shape for array in arrays]
@@ -119,7 +121,7 @@ class ConcatArray(Array):
             axis=0,
         )
         if concatenated.shape[0] == 1:
-            logger.info(
+            print(
                 f"Concatenated array has only one channel: {self.name} {concatenated.shape}"
             )
         return concatenated

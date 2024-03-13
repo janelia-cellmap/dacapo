@@ -28,6 +28,7 @@ class AffinitiesPredictor(Predictor):
         affs_weight_clipmax: float = 0.95,
         lsd_weight_clipmin: float = 0.05,
         lsd_weight_clipmax: float = 0.95,
+        background_as_object: bool = False,
     ):
         self.neighborhood = neighborhood
         self.lsds = lsds
@@ -50,6 +51,8 @@ class AffinitiesPredictor(Predictor):
         self.affs_weight_clipmax = affs_weight_clipmax
         self.lsd_weight_clipmin = lsd_weight_clipmin
         self.lsd_weight_clipmax = lsd_weight_clipmax
+
+        self.background_as_object = background_as_object
 
     def extractor(self, voxel_size):
         if self._extractor is None:
@@ -105,10 +108,12 @@ class AffinitiesPredictor(Predictor):
             label_data = label_data[0]
         else:
             axes = ["c"] + axes
-        affinities = seg_to_affgraph(label_data, self.neighborhood).astype(np.float32)
+        affinities = seg_to_affgraph(
+            label_data + int(self.background_as_object), self.neighborhood
+        ).astype(np.float32)
         if self.lsds:
             descriptors = self.extractor(gt.voxel_size).get_descriptors(
-                segmentation=label_data,
+                segmentation=label_data + int(self.background_as_object),
                 voxel_size=gt.voxel_size,
             )
             return NumpyArray.from_np_array(
@@ -208,7 +213,9 @@ class AffinitiesPredictor(Predictor):
                     for a, b in zip(pad_pos, self.lsd_pad(target_spec.voxel_size))
                 ]
             )
-        gt_spec.roi = gt_spec.roi.grow(pad_neg, pad_pos)
+        gt_spec.roi = gt_spec.roi.grow(pad_neg, pad_pos).snap_to_grid(
+            target_spec.voxel_size
+        )
         gt_spec.dtype = None
         return gt_spec
 

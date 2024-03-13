@@ -1,14 +1,13 @@
+from pathlib import Path
+import dacapo.blockwise
+from dacapo.blockwise.scheduler import segment_blockwise
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+from dacapo.store.array_store import LocalArrayIdentifier
 
 from .watershed_post_processor_parameters import WatershedPostProcessorParameters
 from .post_processor import PostProcessor
 
-from funlib.geometry import Coordinate
-import numpy_indexed as npi
-
-import mwatershed as mws
-
-from scipy.ndimage import measurements
+from funlib.geometry import Coordinate, Roi
 
 
 import numpy as np
@@ -28,11 +27,18 @@ class WatershedPostProcessor(PostProcessor):
             yield WatershedPostProcessorParameters(id=i, bias=bias)
 
     def set_prediction(self, prediction_array_identifier):
+        self.prediction_array_identifier = prediction_array_identifier
         self.prediction_array = ZarrArray.open_from_array_identifier(
             prediction_array_identifier
         )
 
-    def process(self, parameters, output_array_identifier):
+    def process(
+        self,
+        parameters: WatershedPostProcessorParameters,  # type: ignore[override]
+        output_array_identifier: "LocalArrayIdentifier",
+        num_workers: int = 16,
+        block_size: Coordinate = Coordinate((64, 64, 64)),
+    ):
         output_array = ZarrArray.create_from_array_identifier(
             output_array_identifier,
             [axis for axis in self.prediction_array.axes if axis != "c"],
@@ -41,36 +47,29 @@ class WatershedPostProcessor(PostProcessor):
             self.prediction_array.voxel_size,
             np.uint64,
         )
-        # if a previous segmentation is provided, it must have a "grid graph"
-        # in its metadata.
-        pred_data = self.prediction_array[self.prediction_array.roi]
-        affs = pred_data[: len(self.offsets)].astype(np.float64)
-        segmentation = mws.agglom(
-            affs - parameters.bias,
-            self.offsets,
+
+        read_roi = Roi((0, 0, 0), self.prediction_array.voxel_size * block_size)
+        # run blockwise prediction
+        pars = {
+            "offsets": self.offsets,
+            "bias": parameters.bias,
+            "context": parameters.context,
+        }
+        segment_blockwise(
+            segment_function_file=str(
+                Path(Path(dacapo.blockwise.__file__).parent, "watershed_function.py")
+            ),
+            context=parameters.context,
+            total_roi=self.prediction_array.roi,
+            read_roi=read_roi.grow(parameters.context, parameters.context),
+            write_roi=read_roi,
+            num_workers=num_workers,
+            max_retries=2,  # TODO: make this an option
+            timeout=None,  # TODO: make this an option
+            ######
+            input_array_identifier=self.prediction_array_identifier,
+            output_array_identifier=output_array_identifier,
+            parameters=pars,
         )
-        # filter fragments
-        average_affs = np.mean(affs, axis=0)
-
-        filtered_fragments = []
-
-        fragment_ids = np.unique(segmentation)
-
-        for fragment, mean in zip(
-            fragment_ids, measurements.mean(average_affs, segmentation, fragment_ids)
-        ):
-            if mean < parameters.bias:
-                filtered_fragments.append(fragment)
-
-        filtered_fragments = np.array(filtered_fragments, dtype=segmentation.dtype)
-        replace = np.zeros_like(filtered_fragments)
-
-        # DGA: had to add in flatten and reshape since remap (in particular indices) didn't seem to work with ndarrays for the input
-        if filtered_fragments.size > 0:
-            segmentation = npi.remap(
-                segmentation.flatten(), filtered_fragments, replace
-            ).reshape(segmentation.shape)
-
-        output_array[self.prediction_array.roi] = segmentation
 
         return output_array

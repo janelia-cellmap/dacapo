@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, TYPE_CHECKING
+from typing import Any, List, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from dacapo.experiments.run_config import RunConfig
@@ -16,6 +16,18 @@ class DuplicateNameError(Exception):
 
 class ConfigStore(ABC):
     """Base class for configuration stores."""
+
+    runs: Any
+    datasplits: Any
+    datasets: Any
+    arrays: Any
+    tasks: Any
+    trainers: Any
+    architectures: Any
+
+    @abstractmethod
+    def delete_config(self, database, config_name: str) -> None:
+        pass
 
     @abstractmethod
     def store_run_config(self, run_config: "RunConfig") -> None:
@@ -34,6 +46,9 @@ class ConfigStore(ABC):
         """Retrieve all run config names."""
         pass
 
+    def delete_run_config(self, run_name: str) -> None:
+        self.delete_config(self.runs, run_name)
+
     @abstractmethod
     def store_task_config(self, task_config: "TaskConfig") -> None:
         """Store a task config."""
@@ -48,6 +63,9 @@ class ConfigStore(ABC):
     def retrieve_task_config_names(self) -> List[str]:
         """Retrieve all task config names."""
         pass
+
+    def delete_task_config(self, task_name: str) -> None:
+        self.delete_config(self.tasks, task_name)
 
     @abstractmethod
     def store_architecture_config(
@@ -68,6 +86,9 @@ class ConfigStore(ABC):
         """Retrieve all architecture config names."""
         pass
 
+    def delete_architecture_config(self, architecture_name: str) -> None:
+        self.delete_config(self.architectures, architecture_name)
+
     @abstractmethod
     def store_trainer_config(self, trainer_config: "TrainerConfig") -> None:
         """Store a trainer config."""
@@ -82,6 +103,9 @@ class ConfigStore(ABC):
     def retrieve_trainer_config_names(self) -> List[str]:
         """Retrieve all trainer config names."""
         pass
+
+    def delete_trainer_config(self, trainer_name: str) -> None:
+        self.delete_config(self.trainers, trainer_name)
 
     @abstractmethod
     def store_datasplit_config(self, datasplit_config: "DataSplitConfig") -> None:
@@ -98,6 +122,9 @@ class ConfigStore(ABC):
         """Retrieve all datasplit names."""
         pass
 
+    def delete_datasplit_config(self, datasplit_name: str) -> None:
+        self.delete_config(self.datasplits, datasplit_name)
+
     @abstractmethod
     def store_array_config(self, array_config: "ArrayConfig") -> None:
         """Store a array config."""
@@ -112,3 +139,6 @@ class ConfigStore(ABC):
     def retrieve_array_config_names(self) -> List[str]:
         """Retrieve all array names."""
         pass
+
+    def delete_array_config(self, array_name: str) -> None:
+        self.delete_config(self.arrays, array_name)

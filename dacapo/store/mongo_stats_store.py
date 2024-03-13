@@ -16,7 +16,7 @@ class MongoStatsStore(StatsStore):
     """
 
     def __init__(self, db_host, db_name):
-        logger.info(
+        print(
             "Creating MongoStatsStore:\n\thost    : %s\n\tdatabase: %s",
             db_host,
             db_name,
@@ -41,7 +41,7 @@ class MongoStatsStore(StatsStore):
                 if stats.trained_until() > existing_stats.trained_until():
                     # current stats go further than the one in DB
                     store_from_iteration = existing_stats.trained_until()
-                    logger.info(
+                    print(
                         "Updating training stats of run %s after iteration %d",
                         run_name,
                         store_from_iteration,
@@ -76,7 +76,7 @@ class MongoStatsStore(StatsStore):
             self.__delete_validation_scores(run_name)
 
         if store_from_iteration > 0:
-            logger.info(
+            print(
                 "Updating validation scores of run %s after iteration " "%d",
                 run_name,
                 store_from_iteration,

@@ -14,17 +14,15 @@ def create_config_store():
 
     options = Options.instance()
 
-    try:
-        store_type = options.type
-    except RuntimeError:
-        store_type = "mongo"
-    if store_type == "mongo":
+    if options.type == "mongo":
         db_host = options.mongo_db_host
         db_name = options.mongo_db_name
         return MongoConfigStore(db_host, db_name)
-    elif store_type == "files":
+    elif options.type == "files":
         store_path = Path(options.runs_base_dir).expanduser()
         return FileConfigStore(store_path / "configs")
+    else:
+        raise ValueError(f"Unknown store type {options.type}")
 
 
 def create_stats_store():
@@ -32,17 +30,15 @@ def create_stats_store():
 
     options = Options.instance()
 
-    try:
-        store_type = options.type
-    except RuntimeError:
-        store_type = "mongo"
-    if store_type == "mongo":
+    if options.type == "mongo":
         db_host = options.mongo_db_host
         db_name = options.mongo_db_name
         return MongoStatsStore(db_host, db_name)
-    elif store_type == "files":
+    elif options.type == "files":
         store_path = Path(options.runs_base_dir).expanduser()
         return FileStatsStore(store_path / "stats")
+    else:
+        raise ValueError(f"Unknown store type {options.type}")
 
 
 def create_weights_store():

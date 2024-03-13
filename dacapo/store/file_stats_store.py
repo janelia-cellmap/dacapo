@@ -17,7 +17,7 @@ class FileStatsStore(StatsStore):
     """
 
     def __init__(self, path):
-        logger.info("Creating MongoStatsStore:\n\tpath    : %s", path)
+        print("Creating MongoStatsStore:\n\tpath    : %s", path)
 
         self.path = Path(path)
 
@@ -35,7 +35,7 @@ class FileStatsStore(StatsStore):
                 if stats.trained_until() > existing_stats.trained_until():
                     # current stats go further than the one in DB
                     store_from_iteration = existing_stats.trained_until()
-                    logger.info(
+                    print(
                         "Updating training stats of run %s after iteration %d",
                         run_name,
                         store_from_iteration,
@@ -65,7 +65,7 @@ class FileStatsStore(StatsStore):
             self.__delete_validation_iteration_scores(run_name)
 
         if store_from_iteration > 0:
-            logger.info(
+            print(
                 "Updating validation scores of run %s after iteration " "%d",
                 run_name,
                 store_from_iteration,
