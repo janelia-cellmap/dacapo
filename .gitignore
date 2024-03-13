@@ -24,3 +24,6 @@ tmp/
 
 *.zarr/
 *.n5/
+
+# daisy logs
+daisy_logs/
