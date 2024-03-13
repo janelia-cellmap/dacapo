@@ -8,9 +8,47 @@ from .starts import StartConfig
 
 from typing import Optional
 
-
 @attr.s
 class RunConfig:
+    """
+    A class to represent a configuration of a run that helps to structure all the tasks, 
+    architecture, training, and datasplit configurations.
+
+    ... 
+
+    Attributes:
+    -----------
+    task_config: `TaskConfig`
+        A config defining the Task to run that includes deciding the output of the model and 
+        different methods to achieve the goal.
+
+    architecture_config: `ArchitectureConfig`
+         A config that defines the backbone architecture of the model. It impacts the model's
+         performance significantly.
+
+    trainer_config: `TrainerConfig`
+        Defines how batches are generated and passed for training the model along with defining 
+        configurations like batch size, learning rate, number of cpu workers and snapshot logging.
+
+    datasplit_config: `DataSplitConfig`
+        Configures the data available for the model during training or validation phases.
+
+    name: str
+        A unique name for this run to distinguish it. 
+
+    repetition: int
+        The repetition number of this run.
+
+    num_iterations: int
+        The total number of iterations to train for during this run. 
+
+    validation_interval: int
+        Specifies how often to perform validation during the run. It defaults to 1000.
+
+    start_config : `Optional[StartConfig]`
+        A starting point for continued training. It is optional and can be left out.
+    """
+
     task_config: TaskConfig = attr.ib(
         metadata={
             "help_text": "A config defining the Task to run. The task defines the output "
