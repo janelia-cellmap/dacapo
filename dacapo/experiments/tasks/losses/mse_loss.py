@@ -1,6 +1,7 @@
 from .loss import Loss
 import torch
 
+
 class MSELoss(Loss):
     """
     A class used to represent the Mean Square Error Loss function (MSELoss).

@@ -1,5 +1,6 @@
 import gunpowder as gp
 
+
 class CopyMask(gp.BatchFilter):
     """
     A class to copy a mask into a new key with the option to drop channels via max collapse.
@@ -8,12 +9,13 @@ class CopyMask(gp.BatchFilter):
         array_key (gp.ArrayKey): Original key of the array from where the mask will be copied.
         copy_key (gp.ArrayKey): New key where the copied mask will reside.
         drop_channels (bool): If True, channels will be dropped via a max collapse.
-        
+
     Methods:
         setup: Sets up the filter by enabling autoskip and providing the copied key.
         prepare: Prepares the filter by copying the request of copy_key into a dependency.
         process: Processes the batch by copying the mask from the array_key to the copy_key.
     """
+
     def __init__(
         self, array_key: gp.ArrayKey, copy_key: gp.ArrayKey, drop_channels: bool = False
     ):

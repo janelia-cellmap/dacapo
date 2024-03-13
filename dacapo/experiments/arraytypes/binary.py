@@ -31,7 +31,7 @@ class BinaryArray(ArrayType):
     def interpolatable(self) -> bool:
         """
         This function returns the interpolatable property value of the binary array.
-        
+
         Returns:
             bool: Always returns False because interpolation is not possible.
         """

@@ -20,14 +20,15 @@ class RawGTDatasetConfig(DatasetConfig):
     will be extracted.
 
     Attributes:
-        dataset_type (class): The type of dataset that is being configured. 
-        raw_config (Optional[ArrayConfig]): Configuration for the raw data associated with this dataset. 
-        gt_config (Optional[ArrayConfig]): Configuration for the ground truth data associated with this dataset. 
-        mask_config (Optional[ArrayConfig]): An optional mask configuration that sets the loss 
+        dataset_type (class): The type of dataset that is being configured.
+        raw_config (Optional[ArrayConfig]): Configuration for the raw data associated with this dataset.
+        gt_config (Optional[ArrayConfig]): Configuration for the ground truth data associated with this dataset.
+        mask_config (Optional[ArrayConfig]): An optional mask configuration that sets the loss
                                              equal to zero on voxels where the mask is 1.
-        sample_points (Optional[List[Coordinate]]): An optional list of points around which 
+        sample_points (Optional[List[Coordinate]]): An optional list of points around which
                                                     training samples will be extracted.
     """
+
     dataset_type = RawGTDataset
 
     raw_config: Optional[ArrayConfig] = attr.ib(

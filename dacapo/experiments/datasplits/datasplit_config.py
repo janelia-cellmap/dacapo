@@ -20,7 +20,7 @@ class DataSplitConfig:
     verify() -> Tuple[bool, str]:
         Validates if it is a valid data split configuration.
     """
-    
+
     name: str = attr.ib(
         metadata={
             "help_text": "A unique name for this datasplit. This will be saved so "
@@ -36,7 +36,7 @@ class DataSplitConfig:
         Returns
         -------
         Tuple[bool, str]
-            True if the configuration is valid, 
+            True if the configuration is valid,
             False otherwise along with respective validation error message.
         """
         return True, "No validation for this DataSplit"

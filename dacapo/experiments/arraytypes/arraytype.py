@@ -15,7 +15,7 @@ class ArrayType(ABC):
     @abstractmethod
     def interpolatable(self) -> bool:
         """
-        This is an abstract method which should be overridden in each of the subclasses 
+        This is an abstract method which should be overridden in each of the subclasses
         to determine if an array is interpolatable or not.
 
         Returns:

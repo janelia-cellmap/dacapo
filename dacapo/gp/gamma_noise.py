@@ -5,6 +5,7 @@ import logging
 
 logger = logging.getLogger(__file__)
 
+
 class GammaAugment(BatchFilter):
     """
     Class for applying gamma noise augmentation.
@@ -19,6 +20,7 @@ class GammaAugment(BatchFilter):
         process(): Method to apply gamma noise to the desired arrays
         __augment(): Private method to perform the actual augmentation
     """
+
     def __init__(self, arrays, gamma_min, gamma_max):
         """
         Initializing the Variables.
@@ -29,7 +31,9 @@ class GammaAugment(BatchFilter):
             gamma_max : A float representing the upper limit of gamma perturbation
         """
         if not isinstance(arrays, Iterable):
-            arrays = [arrays,]
+            arrays = [
+                arrays,
+            ]
         self.arrays = arrays
         self.gamma_min = gamma_min
         self.gamma_max = gamma_max

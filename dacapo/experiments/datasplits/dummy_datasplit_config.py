@@ -6,12 +6,13 @@ import attr
 
 from typing import Tuple
 
+
 @attr.s
 class DummyDataSplitConfig(DataSplitConfig):
     """A simple class representing config for Dummy DataSplit.
 
-    This class is derived from 'DataSplitConfig' and is initialized with 
-    'DatasetConfig' for training dataset. 
+    This class is derived from 'DataSplitConfig' and is initialized with
+    'DatasetConfig' for training dataset.
 
     Attributes:
         datasplit_type: Class of dummy data split functionality.

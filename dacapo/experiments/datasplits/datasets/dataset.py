@@ -3,6 +3,7 @@ from funlib.geometry import Coordinate
 from abc import ABC
 from typing import Optional, Any, List
 
+
 class Dataset(ABC):
     """
     A class to represent a dataset.
@@ -15,7 +16,7 @@ class Dataset(ABC):
         weight (int, optional): The weight of the dataset.
         sample_points (list[Coordinate], optional): The list of sample points in the dataset.
     """
-    
+
     name: str
     raw: Array
     gt: Optional[Array]
@@ -49,7 +50,7 @@ class Dataset(ABC):
         Returns the official string representation of the dataset object.
 
         Returns:
-            str: String representation of the dataset. 
+            str: String representation of the dataset.
         """
         return f"Dataset({self.name})"
 
@@ -58,7 +59,7 @@ class Dataset(ABC):
         Returns the string representation of the dataset object.
 
         Returns:
-            str: String representation of the dataset. 
+            str: String representation of the dataset.
         """
         return f"Dataset({self.name})"
 

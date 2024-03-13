@@ -6,12 +6,12 @@ from .task import Task
 
 
 class DistanceTask(Task):
-    """DistanceTask is a subclass of Task for handling tasks associated 
+    """DistanceTask is a subclass of Task for handling tasks associated
     with Distance.
 
-    DistanceTask uses `DistancePredictor` for prediction, `MSELoss` for 
-    computing loss, `ThresholdPostProcessor` for post-processing the 
-    prediction, and `BinarySegmentationEvaluator` for evaluating the 
+    DistanceTask uses `DistancePredictor` for prediction, `MSELoss` for
+    computing loss, `ThresholdPostProcessor` for post-processing the
+    prediction, and `BinarySegmentationEvaluator` for evaluating the
     prediction.
 
     Attributes:
@@ -20,10 +20,11 @@ class DistanceTask(Task):
         post_processor: ThresholdPostProcessor object
         evaluator: BinarySegmentationEvaluator object
     """
+
     def __init__(self, task_config):
         """Initializes attributes of DistanceTask.
 
-        It initializes predictor, loss, post processor, and evaluator 
+        It initializes predictor, loss, post processor, and evaluator
         based on the controls provided in task_config.
 
         Args:

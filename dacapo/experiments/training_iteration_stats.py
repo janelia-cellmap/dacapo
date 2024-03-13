@@ -1,5 +1,6 @@
 import attr
 
+
 @attr.s
 class TrainingIterationStats:
     """
@@ -11,6 +12,7 @@ class TrainingIterationStats:
         time (float): The time it took to process this iteration.
 
     """
+
     iteration: int = attr.ib(
         metadata={"help_text": "The iteration that produced these stats."}
     )
