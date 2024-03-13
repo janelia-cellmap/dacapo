@@ -153,20 +153,20 @@ class ZerosSource(gp.BatchProvider):
         return batch
 
 
-def random_source_pipeline():
+def random_source_pipeline(voxel_size=(8, 8, 8), input_shape=(148, 148, 148)):
     """Create a random source pipeline and batch request for example training.
 
+    Args:
 
     Returns:
         gunpowder.Pipeline: The batch generating Gunpowder pipeline.
         gunpowder.BatchRequest: The batch request for the pipeline.
     """
 
+    voxel_size = gp.Coordinate(voxel_size)
+    input_shape = gp.Coordinate(input_shape)
+
     labels = gp.ArrayKey("LABELS")
-
-    voxel_size = gp.Coordinate((8, 8, 8))
-
-    input_shape = gp.Coordinate((148, 148, 148))
 
     input_size = input_shape * voxel_size
 
