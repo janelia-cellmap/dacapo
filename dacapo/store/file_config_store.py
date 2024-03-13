@@ -20,7 +20,7 @@ class FileConfigStore(ConfigStore):
     """
 
     def __init__(self, path):
-        print("Creating FileConfigStore:\n\tpath    : %s", path)
+        print("Creating FileConfigStore:\n\tpath: %s" % path)
 
         self.path = Path(path)
 
@@ -103,7 +103,7 @@ class FileConfigStore(ConfigStore):
 
         else:
             with file_store.open("r") as f:
-                existing = yaml.safe_load(f)
+                existing = yaml.full_load(f)
 
             if not self.__same_doc(existing, data, ignore):
                 raise DuplicateNameError(
@@ -116,7 +116,7 @@ class FileConfigStore(ConfigStore):
         file_store = collection / f"{name}.yaml"
         if file_store.exists():
             with file_store.open("r") as f:
-                return yaml.safe_load(f)
+                return yaml.full_load(f)
         else:
             raise ValueError(f"No config with name: {name} in collection: {collection}")
 
