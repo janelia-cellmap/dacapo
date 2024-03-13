@@ -13,7 +13,7 @@ class MSELoss(Loss):
     Methods
     -------
     compute(prediction, target, weight):
-        Computes the MSELoss with the given weight for the predictiom amd target.
+        Computes the MSELoss with the given weight for the predictiom and target.
     """
 
     def compute(self, prediction, target, weight):
