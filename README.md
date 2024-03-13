@@ -1,6 +1,13 @@
+![GitHub Org's stars](https://img.shields.io/github/stars/Janelia-cellmap)
+
 <img src="https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/CellMapLogo.png" alt="CellMap logo" width="85%">
 
 # DaCapo ![DaCapo](https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/icon_dacapo.png)
+
+[![Documentation Status](https://readthedocs.org/projects/dacapo/badge/?version=stable)](https://dacapo.readthedocs.io/en/stable/?badge=stable)
+![Github Created At](https://img.shields.io/github/created-at/funkelab/dacapo)
+![GitHub License](https://img.shields.io/github/license/janelia-cellmap/dacapo)
+![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fjanelia-cellmap%2Fdacapo%2Fmain%2Fpyproject.toml)
 
 [![tests](https://github.com/janelia-cellmap/dacapo/actions/workflows/tests.yaml/badge.svg)](https://github.com/janelia-cellmap/dacapo/actions/workflows/tests.yaml)
 [![black](https://github.com/janelia-cellmap/dacapo/actions/workflows/black.yaml/badge.svg)](https://github.com/janelia-cellmap/dacapo/actions/workflows/black.yaml)
