@@ -7,11 +7,12 @@ from abc import ABC, abstractmethod
 
 class Architecture(torch.nn.Module, ABC):
     """
-    An abstract base class for defining the architecture of a neural network model. 
+    An abstract base class for defining the architecture of a neural network model.
     It is inherited from PyTorch's Module and built-in class `ABC` (Abstract Base Classes).
     Other classes can inherit this class to define their own specific variations of architecture.
     It requires to implement several property methods, and also includes additional methods related to the architecture design.
     """
+
     @property
     @abstractmethod
     def input_shape(self) -> Coordinate:
@@ -60,9 +61,9 @@ class Architecture(torch.nn.Module, ABC):
     def dims(self) -> int:
         """
         Returns the number of dimensions of the input shape.
-        
+
         Returns:
-            int: The number of dimensions. 
+            int: The number of dimensions.
         """
         return self.input_shape.dims
 

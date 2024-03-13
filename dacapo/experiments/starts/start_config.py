@@ -1,5 +1,6 @@
 import attr
 
+
 @attr.s
 class StartConfig:
     """
@@ -9,7 +10,7 @@ class StartConfig:
     ----------
     run : str
         The run to be used as a starting point for tasks.
-    
+
     criterion : str
         The criterion to be used for choosing weights from run.
 

@@ -1,7 +1,9 @@
 from enum import Enum, unique
 
+
 class DataKey(Enum):
     """Represent a base class for various types of keys in Dacapo library."""
+
     pass
 
 
@@ -21,6 +23,7 @@ class ArrayKey(DataKey):
     NON_EMPTY: str
         The data key for non-empty mask.
     """
+
     RAW = "raw"
     GT = "gt"
     MASK = "mask"
@@ -37,4 +40,5 @@ class GraphKey(DataKey):
     SPECIFIED_LOCATIONS: str
         The key for specified locations in the graph.
     """
+
     SPECIFIED_LOCATIONS = "specified_locations"

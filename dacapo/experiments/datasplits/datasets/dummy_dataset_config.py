@@ -30,5 +30,5 @@ class DummyDatasetConfig(DatasetConfig):
         Returns:
             A tuple of False and a message indicating the invalidity.
         """
-        
+
         return False, "This is a DummyDatasetConfig and is never valid"

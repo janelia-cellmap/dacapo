@@ -10,23 +10,23 @@ from typing import List
 class HotDistanceTaskConfig(TaskConfig):
     """Class for generating and evaluating signed distance transforms as a way of generating
     segmentations for the Hot Distance task config.
-    
+
     Attributes:
         task_type: A reference to the Hot Distance Task class.
         channels (List[str]): A list of channel names.
         clip_distance (float): Maximum distance to consider for false positive/negatives.
         tol_distance (float): Tolerance distance for counting false positives/negatives.
-        scale_factor (float): The amount by which to scale distances before applying 
+        scale_factor (float): The amount by which to scale distances before applying
                               a tanh normalization. Defaults to 1.
-        mask_distances (bool): Whether or not to mask out regions where the true distance to 
+        mask_distances (bool): Whether or not to mask out regions where the true distance to
                                object boundary cannot be known. Defaults to False
-                               
+
     Note:
-        Generating distance transforms over regular affinities provides you with a denser 
-        signal, i.e., one misclassified pixel in an affinity prediction can merge 2 
+        Generating distance transforms over regular affinities provides you with a denser
+        signal, i.e., one misclassified pixel in an affinity prediction can merge 2
         otherwise very distinct objects, a situation that cannot happen with distances.
     """
-    
+
     task_type = HotDistanceTask
 
     channels: List[str] = attr.ib(metadata={"help_text": "A list of channel names."})

@@ -4,11 +4,12 @@ import gunpowder as gp
 
 import attr
 
+
 @attr.s
 class SimpleAugmentConfig(AugmentConfig):
     """
     This class is an implementation of AugmentConfig that applies simple augmentations.
-    
+
     Arguments:
         _raw_key: Key for raw data. Not used in this implementation. Defaults to None.
         _gt_key: Key for ground truth data. Not used in this implementation. Defaults to None.

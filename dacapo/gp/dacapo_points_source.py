@@ -2,6 +2,7 @@ import gunpowder as gp
 
 import copy
 
+
 class GraphSource(gp.BatchProvider):
     """
     A provider for serving graph data in gunpowder pipelines.
@@ -15,7 +16,7 @@ class GraphSource(gp.BatchProvider):
     """
 
     def __init__(self, key: gp.GraphKey, graph: gp.Graph):
-        """        
+        """
         Args:
             key (gp.GraphKey): The key of the graph to be served.
             graph (gp.Graph): The graph to be served.
@@ -39,13 +40,15 @@ class GraphSource(gp.BatchProvider):
         at all.
 
         Args:
-            request (gp.BatchRequest): BatchRequest with the same ROI for 
+            request (gp.BatchRequest): BatchRequest with the same ROI for
             each requested array and graph.
-        
+
         Returns:
             outputs (gp.Batch): The graph contained in a Batch.
         """
         outputs = gp.Batch()
         if self.key in request:
-            outputs[self.key] = copy.deepcopy(self.graph.crop(request[self.key].roi).trim(request[self.key].roi))
+            outputs[self.key] = copy.deepcopy(
+                self.graph.crop(request[self.key].roi).trim(request[self.key].roi)
+            )
         return outputs

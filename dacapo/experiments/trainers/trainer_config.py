@@ -41,7 +41,7 @@ class TrainerConfig:
         Verify whether this TrainerConfig is valid or not.
 
         Returns:
-            tuple: A tuple containing a boolean indicating whether the 
+            tuple: A tuple containing a boolean indicating whether the
             TrainerConfig is valid and a message explaining why.
         """
         return True, "No validation for this Trainer"

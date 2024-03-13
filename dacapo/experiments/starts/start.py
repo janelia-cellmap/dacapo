@@ -6,7 +6,7 @@ logger = logging.getLogger(__file__)
 
 class Start(ABC):
     """
-    This class interfaces with the dacapo store to retrieve and load the 
+    This class interfaces with the dacapo store to retrieve and load the
     weights of the starter model used for finetuning.
 
     Attributes
@@ -19,14 +19,14 @@ class Start(ABC):
 
     def __init__(self, start_config):
         """
-        Initializes the Start class with specified config to run the 
-        initialization of weights for a model associated with a specific 
+        Initializes the Start class with specified config to run the
+        initialization of weights for a model associated with a specific
         criterion.
 
         Parameters
         ----------
         start_config : obj
-            An object containing configuration details for the model 
+            An object containing configuration details for the model
             initialization.
         """
         self.run = start_config.run
@@ -34,19 +34,19 @@ class Start(ABC):
 
     def initialize_weights(self, model):
         """
-        Retrieves the weights from the dacapo store and load them into 
+        Retrieves the weights from the dacapo store and load them into
         the model.
 
         Parameters
         ----------
-        model : obj 
+        model : obj
             The model to which the weights are to be loaded.
 
         Raises
         ------
         RuntimeError
-            If weights of a non-existing or mismatched layer are being 
-            loaded, a RuntimeError exception is thrown which is logged 
+            If weights of a non-existing or mismatched layer are being
+            loaded, a RuntimeError exception is thrown which is logged
             and handled by loading only the common layers from weights.
         """
         from dacapo.store.create_store import create_weights_store
