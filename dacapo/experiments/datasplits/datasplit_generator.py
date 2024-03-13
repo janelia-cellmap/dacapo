@@ -1,326 +1,323 @@
 from dacapo.experiments.tasks import TaskConfig
 from pathlib import Path
 from typing import List
-from enum import Enum
-import os
-import numpy as np
+from enum import Enum, EnumMeta
+from funlib.geometry import Coordinate
+from typing import Union
+
+import zarr
 from dacapo.experiments.datasplits.datasets.arrays import (
-    ArrayConfig,
     ZarrArrayConfig,
     ZarrArray,
     ResampledArrayConfig,
     BinarizeArrayConfig,
     IntensitiesArrayConfig,
-    IntensitiesArray,
-    MissingAnnotationsMaskConfig,
-    OnesArrayConfig,
-    ConcatArrayConfig,
-    LogicalOrArrayConfig,
-    CropArrayConfig,
-    MergeInstancesArrayConfig,
 )
+from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
+from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
 import logging
 
 logger = logging.getLogger(__name__)
 
-class DatasetType(Enum):
+
+def is_zarr_group(file_name: str, dataset: str):
+    zarr_file = zarr.open(str(file_name))
+    return isinstance(zarr_file[dataset], zarr.hierarchy.Group)
+
+
+def resize_if_needed(
+    array_config: ZarrArrayConfig, target_resolution: Coordinate, extra_str=""
+):
+    zarr_array = ZarrArray(array_config)
+    raw_voxel_size = zarr_array.voxel_size
+
+    raw_upsample = raw_voxel_size / target_resolution
+    raw_downsample = target_resolution / raw_voxel_size
+    if any([u > 1 or d > 1 for u, d in zip(raw_upsample, raw_downsample)]):
+        return ResampledArrayConfig(
+            name=f"{array_config.name}_resampled",
+            source_array_config=array_config,
+            upsample=raw_upsample,
+            downsample=raw_downsample,
+            interp_order=False,
+        )
+    else:
+        return array_config
+
+
+def get_right_resolution_array_config(
+    container, dataset, target_resolution, extra_str=""
+):
+    level = 0
+    current_dataset_path = Path(dataset, f"s{level}")
+    if not (container / current_dataset_path).exists():
+        raise FileNotFoundError(
+            f"Path {container} is a Zarr Group and /s0 does not exist."
+        )
+
+    zarr_config = ZarrArrayConfig(
+        name=f"{extra_str}_{dataset}_uint8",
+        file_name=container,
+        dataset=str(current_dataset_path),
+        snap_to_grid=target_resolution,
+    )
+    zarr_array = ZarrArray(zarr_config)
+    while (
+        sum(zarr_array.voxel_size) <= sum(target_resolution / 2)
+        and Path(container, Path(dataset, f"s{level+1}")).exists()
+    ):
+        level += 1
+        zarr_config = ZarrArrayConfig(
+            name=f"{extra_str}_{dataset}_uint8",
+            file_name=container,
+            dataset=str(Path(dataset, f"s{level}")),
+            snap_to_grid=target_resolution,
+        )
+
+        zarr_array = ZarrArray(zarr_config)
+    return resize_if_needed(zarr_config, target_resolution, extra_str)
+
+
+class CustomEnumMeta(EnumMeta):
+    def __getitem__(self, item):
+        if item not in self._member_names_:
+            raise KeyError(
+                f"{item} is not a valid option of {self.__name__}, the valid options are {self._member_names_}"
+            )
+        return super().__getitem__(item)
+
+
+class DatasetType(Enum, metaclass=CustomEnumMeta):
     val = 1
     train = 2
 
 
-max_gt_downsample: 32 # Unlikely to run into oom errors since gt is generally small
-max_gt_upsample: 4 # Avoid training on excessively upsampled gt
-max_raw_training_downsample: 16 # only issue if pyramid doesn't exist, can cause oom errors
-max_raw_training_upsample: 2 # avoid training on excessively upsampled raw (probably never an issue)
-max_raw_validation_downsample: 8 # only issue if pyramid doesn't exist. Can cause oom errors
-max_raw_validation_upsample: 2 # probably never an issue
-# for low res models, at what point do we drop crops from datasplit
-min_training_volume_size: 8_000 # 20**3
-
-def generate_dataspec_from_csv(csv_path: Path):
-    datasets = []
-    if not os.path.exists(csv_path):
-        raise FileNotFoundError(f"CSV file {csv_path} does not exist.")
-    with open(csv_path, "r") as f:
-        for line in f:
-            dataset_type,raw_path, gt_path = line.strip().split(",")
-            datasets.append(DatasetSpec(
-                dataset_type=DatasetType[dataset_type.lower()],
-                raw_path=Path(raw_path),
-                gt_path=Path(gt_path)
-            ))
-        
-    return datasets
+class SegmentationType(Enum, metaclass=CustomEnumMeta):
+    semantic = 1
+    instance = 2
 
 
 class DatasetSpec:
-    dataset_type: DatasetType
-    raw_path: Path
-    raw_dataset : str
-    gt_path: Path
-    gt_dataset : str
+    def __init__(
+        self,
+        dataset_type: Union[str, DatasetType],
+        raw_container: Union[str, Path],
+        raw_dataset: str,
+        gt_container: Union[str, Path],
+        gt_dataset: str,
+    ):
 
-    def __init__(self, dataset_type: DatasetType, raw_path: Path, raw_dataset: str, gt_path: Path, gt_dataset: str):
+        if isinstance(dataset_type, str):
+            dataset_type = DatasetType[dataset_type.lower()]
+
+        if isinstance(raw_container, str):
+            raw_container = Path(raw_container)
+
+        if isinstance(gt_container, str):
+            gt_container = Path(gt_container)
+
         self.dataset_type = dataset_type
-        self.raw_path = raw_path
+        self.raw_container = raw_container
         self.raw_dataset = raw_dataset
-        self.gt_path = gt_path
+        self.gt_container = gt_container
         self.gt_dataset = gt_dataset
 
 
+def generate_dataspec_from_csv(csv_path: Path):
+    datasets = []
+    if not csv_path.exists():
+        raise FileNotFoundError(f"CSV file {csv_path} does not exist.")
+    with open(csv_path, "r") as f:
+        for line in f:
+            dataset_type, raw_container, raw_dataset, gt_container, gt_dataset = (
+                line.strip().split(",")
+            )
+            datasets.append(
+                DatasetSpec(
+                    dataset_type=DatasetType[dataset_type.lower()],
+                    raw_container=Path(raw_container),
+                    raw_dataset=raw_dataset,
+                    gt_container=Path(gt_container),
+                    gt_dataset=gt_dataset,
+                )
+            )
+
+    return datasets
+
+
 class DataSplitGenerator:
+    """Generates DataSplitConfig for a given task config and datasets.
+    Currently only supports:
+     - semantic segmentation.
+     - one channel raw and one channel gt.
+     - no resizing
 
-    def __init__(self, datasets: List[DatasetSpec]):
+    """
+
+    def __init__(
+        self,
+        name: str,
+        datasets: List[DatasetSpec],
+        input_resolution: Coordinate,
+        output_resolution: Coordinate,
+        segmentation_type: Union[str, SegmentationType] = "semantic",
+        max_gt_downsample=32,
+        max_gt_upsample=4,
+        max_raw_training_downsample=16,
+        max_raw_training_upsample=2,
+        max_raw_validation_downsample=8,
+        max_raw_validation_upsample=2,
+        min_training_volume_size=8_000,  # 20**3
+        raw_min=0,
+        raw_max=255,
+    ):
+        self.name = name
         self.datasets = datasets
+        self.input_resolution = input_resolution
+        self.output_resolution = output_resolution
+        self.target_class_name = None
 
-    # TODO
-    def generate(self, task_config: TaskConfig):
-        # TODO get instance seg / semantic seg from somewhere
-        instance_seg = False
-        if instance_seg:
-            return self._generate_instance_seg_datasplit(task_config)
+        if isinstance(segmentation_type, str):
+            segmentation_type = SegmentationType[segmentation_type.lower()]
+
+        self.segmentation_type = segmentation_type
+        self.max_gt_downsample = max_gt_downsample
+        self.max_gt_upsample = max_gt_upsample
+        self.max_raw_training_downsample = max_raw_training_downsample
+        self.max_raw_training_upsample = max_raw_training_upsample
+        self.max_raw_validation_downsample = max_raw_validation_downsample
+        self.max_raw_validation_upsample = max_raw_validation_upsample
+        self.min_training_volume_size = min_training_volume_size
+        self.raw_min = raw_min
+        self.raw_max = raw_max
+
+    @property
+    def class_name(self):
+        if self.target_class_name is None:
+            raise ValueError("Class name not set yet.")
+        return self.target_class_name
+
+    def check_class_name(self, class_name):
+        if self.target_class_name is None:
+            self.target_class_name = class_name
+        elif self.target_class_name != class_name:
+            raise ValueError(
+                f"Datasets are having different class names:  {class_name} does not match {self.target_class_name}"
+            )
+
+    def compute(self):
+        if self.segmentation_type == SegmentationType.semantic:
+            return self.__generate_semantic_seg_datasplit()
         else:
-            return self._generate_semantic_seg_datasplit(task_config)
-    
-    def _generate_instance_seg_datasplit(self, task_config: TaskConfig):
-        for dataset in self.datasets:
-            labels_config, mask_config, sample_points = self._generate_instance_seg_dataspec(dataset, task_config)
-                if labels_config is not None:
-                    yield labels_config, mask_config, sample_points
+            raise NotImplementedError(
+                f"{self.segmentation_type} segmentation not implemented yet!"
+            )
 
-    def _generate_instance_seg_dataspec(self, dataset: DatasetSpec, task_config: TaskConfig):
-        raw_path = dataset.raw_path
+    def __generate_semantic_seg_datasplit(self):
+        train_dataset_configs = []
+        validation_dataset_configs = []
+        for dataset in self.datasets:
+            raw_config, gt_config = self.__generate_semantic_seg_dataset_crop(dataset)
+            if dataset.dataset_type == DatasetType.train:
+                train_dataset_configs.append(
+                    RawGTDatasetConfig(
+                        name=f"{dataset}_{self.class_name}_{self.output_resolution[0]}nm",
+                        raw_config=raw_config,
+                        gt_config=gt_config,
+                    )
+                )
+            else:
+                validation_dataset_configs.append(
+                    RawGTDatasetConfig(
+                        name=f"{dataset}_{self.class_name}_{self.output_resolution[0]}nm",
+                        raw_config=raw_config,
+                        gt_config=gt_config,
+                    )
+                )
+        return TrainValidateDataSplitConfig(
+            name=f"{self.name}_{self.segmentation_type}_{self.class_name}_{self.output_resolution[0]}nm",
+            train_configs=train_dataset_configs,
+            validate_configs=validation_dataset_configs,
+        )
+
+    def __generate_semantic_seg_dataset_crop(self, dataset: DatasetSpec):
+        raw_container = dataset.raw_container
         raw_dataset = dataset.raw_dataset
-        gt_path = dataset.gt_path
+        gt_path = dataset.gt_container
         gt_dataset = dataset.gt_dataset
 
-        # TODO
-        resolution = task_config.resolution
+        current_class_name = Path(gt_dataset).stem
+        self.check_class_name(current_class_name)
 
-        if not (raw_path/raw_dataset).exists():
-            raise FileNotFoundError(f"Raw path {raw_path/raw_dataset} does not exist.")
-        
-        if not (gt_path/gt_dataset).exists():
+        if not (raw_container / raw_dataset).exists():
+            raise FileNotFoundError(
+                f"Raw path {raw_container/raw_dataset} does not exist."
+            )
+
+        if not (gt_path / gt_dataset).exists():
             raise FileNotFoundError(f"GT path {gt_path/gt_dataset} does not exist.")
-            
 
-        array_name = f"{gt_path.name}"
-        gt_labels_config = ZarrArrayConfig(
-                        name=f"gt_{array_name}",
-                        file_name=gt_path,
-                        dataset=gt_dataset,
-                        snap_to_grid=input_voxel_size,
-                    )
-        labels = gt_labels_config.array_type(gt_labels_config)
-        label_voxel_size = labels.voxel_size
-        label_roi = labels.roi
-        if (
-            min_training_volume_size is not None
-            and np.prod(label_roi.shape / resolution) < min_training_volume_size
-        ):
-            logger.debug(
-                f"{gt_path/gt_dataset}, shape: {label_roi.shape / resolution} at resolution: {resolution}! Too small"
-            )
-            return None, None, None
-
-                    upsample = label_voxel_size / resolution
-                    downsample = resolution / label_voxel_size
-                    if any([u > 1 or d > 1 for u, d in zip(upsample, downsample)]):
-                        if skip_large_sampling_factor and any(
-                            [x > constants["max_gt_upsample"] for x in upsample]
-                            + [
-                                x > constants["max_gt_downsample"]
-                                for x in downsample
-                            ]
-                        ):
-                            # resampling too extreme. Can lead to memory errors:
-                            logger.debug(
-                                f"skipping crop {crop_num} due to extreme resampling"
-                            )
-                            return None, None, None
-                        sub_labels_config = ResampledArrayConfig(
-                            name=f"{sub_labels_config.name}_resampled_{resolution[0]}nm",
-                            source_array_config=sub_labels_config,
-                            upsample=upsample,
-                            downsample=downsample,
-                            interp_order=0,
-                        )
-                    labels_configs.append(sub_labels_config)
-            labels_config = MergeInstancesArrayConfig(
-                name=f"{dataset}_{crop_num}_gt",
-                source_array_configs=labels_configs,
-            )
-            mask_config = BinarizeArrayConfig(
-                f"{dataset}_{crop_num}_{targets}_{resolution[0]}nm_mask_1",
-                groupings=[("nerve_mask", [x for x in range(1, 1000)])],
-                source_array_config=labels_config,
+        if is_zarr_group(str(raw_container), raw_dataset):
+            raw_config = get_right_resolution_array_config(
+                raw_container, raw_dataset, self.input_resolution, "raw"
             )
         else:
-            labels_config = ZarrArrayConfig(
-                name=f"{dataset}_{crop_num}_gt",
-                file_name=container_path,
-                dataset=array_name,
-                snap_to_grid=input_voxel_size,
+            raw_config = resize_if_needed(
+                ZarrArrayConfig(
+                    name=f"raw_{raw_dataset}_uint8",
+                    file_name=raw_container,
+                    dataset=raw_dataset,
+                ),
+                self.input_resolution,
+                "raw",
             )
-
-            labels = labels_config.array_type(labels_config)
-            label_voxel_size = labels.voxel_size
-            label_roi = labels.roi
-            if (
-                min_size is not None
-                and np.prod(label_roi.shape / resolution) < min_size
-            ):
-                logger.debug(
-                    f"{dataset}, {crop_num} shape: {label_roi.shape / resolution} at resolution: {resolution}! Too small"
-                )
-                return None, None, None
-
-            upsample = label_voxel_size / resolution
-            downsample = resolution / label_voxel_size
-            if any([u > 1 or d > 1 for u, d in zip(upsample, downsample)]):
-                if skip_large_sampling_factor and any(
-                    [x > constants["max_gt_upsample"] for x in upsample]
-                    + [x > constants["max_gt_downsample"] for x in downsample]
-                ):
-                    # resampling too extreme. Can lead to memory errors:
-                    logger.debug(
-                        f"skipping crop {crop_num} due to extreme resampling"
-                    )
-                    return None, None, None
-                labels_config = ResampledArrayConfig(
-                    name=f"{labels_config.name}_resampled_{resolution[0]}nm",
-                    source_array_config=labels_config,
-                    upsample=upsample,
-                    downsample=downsample,
-                    interp_order=0,
-                )
-            mask_config = OnesArrayConfig(
-                f"{dataset}_{crop_num}_{targets}_{resolution[0]}nm_mask_1",
-                source_array_config=labels_config,
-            )
-        return labels_config, mask_config, sample_points
-    else:
-        return None, None, None
-    
-
-    def _generate_semantic_seg_datasplit(self, task_config: TaskConfig):
-        class_arrays = {}
-        for class, _ in targets[1]:
-            array_name = f"{labels_group}/{class}"
-            if Path(container_path, array_name).exists():
-                class_labels_config = ZarrArrayConfig(
-                    f"{dataset}_{crop_num}_{class}",
-                    container_path,
-                    array_name,
-                    snap_to_grid=input_voxel_size,
-                )
-
-                class_labels = ZarrArray(class_labels_config)
-                if no_useful_data(class_labels, targets):
-                    logger.debug(
-                        f"Skipping {dataset}, {crop_num} due to not containing "
-                        f"relevant data for target: {targets[0]}"
-                    )
-                    continue
-                class_labels.attrs["labels"]
-                label_voxel_size = class_labels.voxel_size
-
-                upsample = label_voxel_size / resolution
-                downsample = resolution / label_voxel_size
-                if any([u > 1 or d > 1 for u, d in zip(upsample, downsample)]):
-                    if skip_large_sampling_factor and any(
-                        [x > constants["max_gt_upsample"] for x in upsample]
-                        + [x > constants["max_gt_downsample"] for x in downsample]
-                    ):
-                        # resampling too extreme. Can lead to memory errors:
-                        logger.debug(
-                            f"skipping crop {crop_num} due to extreme resampling"
-                        )
-                        return None, None, None
-                    class_labels_config = ResampledArrayConfig(
-                        name=f"{class_labels_config.name}_resampled_{resolution[0]}nm",
-                        source_array_config=class_labels_config,
-                        upsample=upsample,
-                        downsample=downsample,
-                        interp_order=0,
-                    )
-
-                # binarize everything into 0 or 1
-                class_gt_config = BinarizeArrayConfig(
-                    f"{dataset}_{crop_num}_{class}_{resolution[0]}nm_binarized",
-                    source_array_config=class_labels_config,
-                    groupings=[(class, [])],
-                )
-                # mask in everything in this array
-                class_mask_config = OnesArrayConfig(
-                    f"{dataset}_{crop_num}_{class}_{resolution[0]}nm_mask_1",
-                    source_array_config=class_gt_config,
-                )
-                class_arrays[class] = (
-                    class_gt_config,
-                    class_mask_config,
-                )
-
-        # Concatenates multiple arrays along the channel dimension, giving each channel
-        # the name of the class from which it came. If no array is provided for
-        # a channel it will be filled with zeros
-
-        # Assume mutual exclusivity. e.g. nucleus cannot also be mito. So although
-        # mitos may not be annotated in a nucleus crop, we can at least train the
-        # negative case wherever there is nucleus.
-        gt_config = ConcatArrayConfig(
-            name=f"{dataset}_{crop_num}_{resolution[0]}nm_gt",
-            channels=[class for class, _ in targets[1]],
-            source_array_configs={k: gt for k, (gt, _) in class_arrays.items()},
+        raw_config = IntensitiesArrayConfig(
+            name=f"raw_{raw_dataset}_uint8",
+            source_array_config=raw_config,
+            min=self.raw_min,
+            max=self.raw_max,
         )
-        label_mask_config = LogicalOrArrayConfig(
-            name=f"{dataset}_{crop_num}_{resolution[0]}nm_labelled_voxels",
+
+        if is_zarr_group(str(gt_path), gt_dataset):
+            gt_config = get_right_resolution_array_config(
+                gt_path, gt_dataset, self.output_resolution, "gt"
+            )
+        else:
+            gt_config = resize_if_needed(
+                ZarrArrayConfig(
+                    name=f"gt_{gt_dataset}_uint8",
+                    file_name=gt_path,
+                    dataset=gt_dataset,
+                ),
+                self.output_resolution,
+                "gt",
+            )
+        gt_config = BinarizeArrayConfig(
+            f"{dataset}_{self.class_name}_{self.output_resolution[0]}nm_binarized",
             source_array_config=gt_config,
+            groupings=[(self.class_name, [])],
         )
-        mask_config = ConcatArrayConfig(
-            name=f"{dataset}_{crop_num}_{resolution[0]}nm_mask",
-            channels=[class for class, _ in targets[1]],
-            source_array_configs={k: mask for k, (_, mask) in class_arrays.items()},
-            default_config=label_mask_config,
-        )
-        if (
-            len(gt_config.source_array_configs) == 0
-            or len(mask_config.source_array_configs) == 0
-        ):
-            return None, None, None
-        else:
-            return gt_config, mask_config, None
-        return datasplit
-    
+        return raw_config, gt_config
+
     def generate_csv(self, csv_path: Path):
         print(f"Writing dataspecs to {csv_path}")
         with open(csv_path, "w") as f:
             for dataset in self.datasets:
-                f.write(f"{dataset.dataset_type.name},{dataset.raw_path},{dataset.gt_path}\n")
+                f.write(
+                    f"{dataset.dataset_type.name},{str(dataset.raw_container)},{dataset.raw_dataset},{str(dataset.gt_container)},{dataset.gt_dataset}\n"
+                )
 
     @staticmethod
-    def generate_from_csv(csv_path: Path):
-        return DataSplitGenerator(generate_dataspec_from_csv(csv_path))
-
-
-# datasplit = DataSplitGenerator.generate_from_csv(Path("")).generate(
-#     task_config=task_config
-# )
-
-
-
-# create test csv
-csv_path = Path("/groups/cellmap/cellmap/zouinkhim/refactor/dacapo_11/dacapo/dacapo/experiments/datasplits/test.csv")
-datasets = [
-    DatasetSpec(
-        dataset_type=DatasetType.val,
-        raw_path=Path("/groups/funke/funkelab/projects/livseg/data/training_data/moa1.zarr/raw"),
-        gt_path=Path("/groups/funke/funkelab/projects/livseg/data/training_data/moa1.zarr/label")
-    ),
-    DatasetSpec(
-        dataset_type=DatasetType.train,
-        raw_path=Path("/groups/funke/funkelab/projects/livseg/data/training_data/cc1.zarr/raw"),
-        gt_path=Path("/groups/funke/funkelab/projects/livseg/data/training_data/cc1.zarr/label")
-    )
-]
-DataSplitGenerator(datasets).generate_csv(csv_path)
+    def generate_from_csv(
+        csv_path: Path,
+        intput_resolution: Coordinate,
+        output_resolution: Coordinate,
+        **kwargs,
+    ):
+        return DataSplitGenerator(
+            csv_path.stem,
+            generate_dataspec_from_csv(csv_path),
+            intput_resolution,
+            output_resolution,
+            **kwargs,
+        )
