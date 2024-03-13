@@ -53,6 +53,21 @@ class CreatePoints(gp.BatchFilter):
         batch[self.labels].data = labels
 
 
+class MakeRaw(gp.BatchFilter):
+    def __init__(self, raw, labels):
+        self.raw = raw
+        self.labels = labels
+
+    def process(self, batch, request):
+        labels = batch[self.labels].data
+        raw = np.zeros_like(labels, dtype=np.float32)
+        raw[labels > 0] = 1
+
+        # now add noise
+        raw += np.random.normal(0, 0.1, raw.shape)
+        batch[self.raw].data = raw
+
+
 class DilatePoints(gp.BatchFilter):
     def __init__(self, labels, dilations=2):
 
@@ -170,12 +185,14 @@ def random_source_pipeline(
     input_shape = gp.Coordinate(input_shape)
 
     labels = gp.ArrayKey("LABELS")
+    raw = gp.ArrayKey("RAW")
 
     input_size = input_shape * voxel_size
 
     request = gp.BatchRequest()
 
     request.add(labels, input_size)
+    request.add(raw, input_size)
 
     source_spec = gp.ArraySpec(
         roi=gp.Roi((0, 0, 0), input_size), voxel_size=voxel_size, dtype=dtype
