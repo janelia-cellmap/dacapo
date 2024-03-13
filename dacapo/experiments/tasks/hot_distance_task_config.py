@@ -8,8 +8,7 @@ from typing import List
 
 @attr.s
 class HotDistanceTaskConfig(TaskConfig):
-    """Class for generating and evaluating signed distance transforms as a way of generating
-    segmentations for the Hot Distance task config.
+    """Class for generating TaskConfigs for the HotDistanceTask, which predicts one hot encodings of classes, as well as signed distance transforms of those classes.
 
     Attributes:
         task_type: A reference to the Hot Distance Task class.
