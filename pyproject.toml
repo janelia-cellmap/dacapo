@@ -86,7 +86,7 @@ examples = [
 ]
 pretrained = [
     "pyqt5",
-    "empanada-napari",    
+    "empanada-napari",
     ]
 all = ["dacapo-ml[test,dev,docs,examples,pretrained]"]
 
