@@ -1,3 +1,4 @@
+from typing import Iterable
 import gunpowder as gp
 import logging
 import numpy as np
@@ -7,6 +8,7 @@ from scipy.ndimage import (
     binary_dilation,
     distance_transform_edt,
     generate_binary_structure,
+    gaussian_filter,
 )
 from skimage.measure import label as relabel
 
@@ -33,15 +35,17 @@ class CreatePoints(gp.BatchFilter):
     def __init__(
         self,
         labels,
+        num_points=(20, 150),
     ):
 
         self.labels = labels
+        self.num_points = num_points
 
     def process(self, batch, request):
 
         labels = batch[self.labels].data
 
-        num_points = random.randint(20, 150)
+        num_points = random.randint(*self.num_points)
 
         for n in range(num_points):
             z = random.randint(1, labels.shape[0] - 1)
@@ -54,32 +58,62 @@ class CreatePoints(gp.BatchFilter):
 
 
 class MakeRaw(gp.BatchFilter):
-    def __init__(self, raw, labels):
+    def __init__(
+        self,
+        raw,
+        labels,
+        gaussian_noise_args: Iterable = (0, 0.1),
+        gaussian_blur_args: Iterable = (0.5, 1.5),
+        membrane_like=True,
+        membrane_size=3,
+        inside_value=0.5,
+    ):
         self.raw = raw
         self.labels = labels
+        self.gaussian_noise_args = gaussian_noise_args
+        self.gaussian_blur_args = gaussian_blur_args
+        self.membrane_like = membrane_like
+        self.membrane_size = membrane_size
+        self.inside_value = inside_value
 
     def process(self, batch, request):
         labels = batch[self.labels].data
         raw = np.zeros_like(labels, dtype=np.float32)
         raw[labels > 0] = 1
 
+        # generate membrane-like structure
+        if self.membrane_like:
+            distance = distance_transform_edt(raw)
+            inside_mask = distance > self.membrane_size  # type: ignore
+            raw[inside_mask] = self.inside_value
+
+        # now add blur
+        raw = gaussian_filter(raw, random.uniform(*self.gaussian_blur_args))
+
         # now add noise
-        raw += np.random.normal(0, 0.1, raw.shape)
+        raw += np.random.normal(*self.gaussian_noise_args, raw.shape)  # type: ignore
+
+        # normalize to [0, 1]
+        raw -= raw.min()
+        raw /= raw.max()
+
         batch[self.raw].data = raw
 
 
 class DilatePoints(gp.BatchFilter):
-    def __init__(self, labels, dilations=2):
+    def __init__(self, labels, dilations=[2, 8], connectivity=2):
 
         self.labels = labels
+        self.dilations = dilations
+        self.connectivity = connectivity
 
     def process(self, batch, request):
 
         labels = batch[self.labels].data
 
-        struct = generate_binary_structure(labels.ndim, 2)
+        struct = generate_binary_structure(labels.ndim, connectivity=self.connectivity)
 
-        dilations = random.randint(2, 8)
+        dilations = random.randint(*self.dilations)
 
         dilated = binary_dilation(labels, structure=struct, iterations=dilations)
 
@@ -88,16 +122,45 @@ class DilatePoints(gp.BatchFilter):
         batch[self.labels].data = labels
 
 
-class Relabel(gp.BatchFilter):
-    def __init__(self, labels):
+class RandomDilateLabels(gp.BatchFilter):
+    def __init__(self, labels, dilations=[2, 8], connectivity=2):
 
         self.labels = labels
+        self.dilations = dilations
+        self.connectivity = connectivity
 
     def process(self, batch, request):
 
         labels = batch[self.labels].data
 
-        relabeled = relabel(labels, connectivity=1).astype(labels.dtype)  # type: ignore
+        struct = generate_binary_structure(labels.ndim, connectivity=self.connectivity)
+
+        new_labels = np.zeros_like(labels)
+        for id in np.unique(labels):
+            if id == 0:
+                continue
+            mask = labels == id
+            dilations = random.randint(*self.dilations)
+            dilated = binary_dilation(mask, structure=struct, iterations=dilations)
+
+            # make sure we don't overlap existing labels
+            dilated[labels > 0] = False
+            new_labels[dilated] = id
+
+        batch[self.labels].data = new_labels
+
+
+class Relabel(gp.BatchFilter):
+    def __init__(self, labels, connectivity=1):
+
+        self.labels = labels
+        self.connectivity = connectivity
+
+    def process(self, batch, request):
+
+        labels = batch[self.labels].data
+
+        relabeled = relabel(labels, connectivity=self.connectivity).astype(labels.dtype)  # type: ignore
 
         batch[self.labels].data = relabeled
 
@@ -131,20 +194,6 @@ class ExpandLabels(gp.BatchFilter):
         batch[self.labels].data = expanded_labels
 
 
-class ChangeBackground(gp.BatchFilter):
-    def __init__(self, labels):
-
-        self.labels = labels
-
-    def process(self, batch, request):
-
-        labels = batch[self.labels].data
-
-        labels[labels == 0] = np.max(labels) + 1
-
-        batch[self.labels].data = labels
-
-
 class ZerosSource(gp.BatchProvider):
     def __init__(self, key, spec):
         self.key = key
@@ -171,12 +220,38 @@ def random_source_pipeline(
     input_shape=(148, 148, 148),
     dtype=np.uint8,
     expand_labels=False,
+    relabel_connectivity=1,
+    dilate_connectivity=2,
+    random_dilate=True,
+    random_dilate_connectivity=2,
+    num_points=(20, 150),
+    gaussian_noise_args=(0, 0.1),
+    gaussian_blur_args=(0.5, 1.5),
+    membrane_like=True,
+    membrane_size=3,
+    inside_value=0.5,
 ):
     """Create a random source pipeline and batch request for example training.
 
     Args:
 
+        voxel_size (tuple of int): The size of a voxel in world units.
+        input_shape (tuple of int): The shape of the input arrays.
+        dtype (numpy.dtype): The dtype of the label arrays.
+        expand_labels (bool): Whether to expand the labels into the background.
+        relabel_connectivity (int): The connectivity used for for relabeling.
+        dilate_connectivity (int): The connectivity of the binary structure used for dilation.
+        random_dilate (bool): Whether to randomly dilate the individual labels.
+        random_dilate_connectivity (int): The connectivity of the binary structure used for random dilation.
+        num_points (tuple of int): The range of the number of points to add to the labels.
+        gaussian_noise_args (tuple of float): The mean and standard deviation of the Gaussian noise to add to the raw array.
+        gaussian_blur_args (tuple of float): The mean and standard deviation of the Gaussian blur to apply to the raw array.
+        membrane_like (bool): Whether to generate a membrane-like structure in the raw array.
+        membrane_size (int): The width of the membrane-like structure on the outside of the objects.
+        inside_value (float): The value to set inside the membranes of objects.
+
     Returns:
+
         gunpowder.Pipeline: The batch generating Gunpowder pipeline.
         gunpowder.BatchRequest: The batch request for the pipeline.
     """
@@ -202,22 +277,34 @@ def random_source_pipeline(
     pipeline = source
 
     # randomly sample some points and write them into our zeros array as ones
-    pipeline += CreatePoints(labels)
+    pipeline += CreatePoints(labels, num_points=num_points)
 
     # grow the boundaries
-    pipeline += DilatePoints(labels)
+    pipeline += DilatePoints(labels, connectivity=dilate_connectivity)
 
     # relabel connected components
-    pipeline += Relabel(labels)
+    pipeline += Relabel(labels, connectivity=relabel_connectivity)
 
     if expand_labels:
         # expand the labels outwards into the background
         pipeline += ExpandLabels(labels)
 
-    # there will still be some background, change this to max id + 1
-    # pipeline += ChangeBackground(labels)
-
     # relabel ccs again to deal with incorrectly connected background
-    pipeline += Relabel(labels)
+    pipeline += Relabel(labels, connectivity=relabel_connectivity)
+
+    # randomly dilate labels
+    if random_dilate:
+        pipeline += RandomDilateLabels(labels, connectivity=random_dilate_connectivity)
+
+    # make a raw array
+    pipeline += MakeRaw(
+        raw,
+        labels,
+        gaussian_noise_args=gaussian_noise_args,
+        gaussian_blur_args=gaussian_blur_args,
+        membrane_like=membrane_like,
+        membrane_size=membrane_size,
+        inside_value=inside_value,
+    )
 
     return pipeline, request
