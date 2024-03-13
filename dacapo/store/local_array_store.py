@@ -113,7 +113,7 @@ class LocalArrayStore(ArrayStore):
             )
             return
 
-        logger.info("Removing dataset %s in container %s", dataset, container)
+        print("Removing dataset %s in container %s", dataset, container)
         shutil.rmtree(path)
 
     def __get_run_dir(self, run_name: str) -> Path:

@@ -1,7 +1,7 @@
 from .evaluation_scores import EvaluationScores
 import attr
 
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 
 @attr.s
@@ -109,7 +109,9 @@ class BinarySegmentationEvaluationScores(EvaluationScores):
         return mapping[criterion]
 
     @staticmethod
-    def bounds(criterion: str) -> Tuple[float, float]:
+    def bounds(
+        criterion: str,
+    ) -> Tuple[Union[int, float, None], Union[int, float, None]]:
         mapping = {
             "dice": (0, 1),
             "jaccard": (0, 1),
@@ -164,6 +166,8 @@ class MultiChannelBinarySegmentationEvaluationScores(EvaluationScores):
         return BinarySegmentationEvaluationScores.store_best(criterion)
 
     @staticmethod
-    def bounds(criterion: str) -> Tuple[float, float]:
+    def bounds(
+        criterion: str,
+    ) -> Tuple[Union[int, float, None], Union[int, float, None]]:
         _, criterion = criterion.split("__")
         return BinarySegmentationEvaluationScores.bounds(criterion)
