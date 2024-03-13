@@ -76,6 +76,11 @@ class MakeRaw(gp.BatchFilter):
         self.membrane_size = membrane_size
         self.inside_value = inside_value
 
+    def setup(self):
+        spec = self.spec[self.labels].copy()
+        spec.dtype = np.float32
+        self.provides(self.raw, spec)
+
     def process(self, batch, request):
         labels = batch[self.labels].data
         raw = np.zeros_like(labels, dtype=np.float32)
