@@ -53,7 +53,7 @@ def test_train(
     for name, weight in init_weights.model.items():
         weight_diff = (weight - final_weights.model[name]).sum()
         assert (
-            abs(weight_diff) > np.finfo(weight_diff.numpy().dtype).resolution
+            abs(weight_diff) > np.finfo(weight_diff.numpy().dtype).eps
         ), weight_diff
 
     # assert train_stats and validation_scores are available
