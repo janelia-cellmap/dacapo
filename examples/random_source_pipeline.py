@@ -62,15 +62,13 @@ class DilatePoints(gp.BatchFilter):
 
         labels = batch[self.labels].data
 
-        struct = generate_binary_structure(2, 2)
+        struct = generate_binary_structure(labels.ndim, 2)
 
         dilations = random.randint(2, 8)
 
-        for z in range(labels.shape[0]):
+        dilated = binary_dilation(labels, structure=struct, iterations=dilations)
 
-            dilated = binary_dilation(labels[z], structure=struct, iterations=dilations)
-
-            labels[z] = dilated.astype(labels.dtype)
+        labels = dilated.astype(labels.dtype)
 
         batch[self.labels].data = labels
 
@@ -148,12 +146,17 @@ class ZerosSource(gp.BatchProvider):
         spec = self._spec[self.key].copy()
         spec.roi = roi
 
-        batch.arrays[self.key] = gp.Array(np.zeros(shape), spec)
+        batch.arrays[self.key] = gp.Array(np.zeros(shape, dtype=spec.dtype), spec)
 
         return batch
 
 
-def random_source_pipeline(voxel_size=(8, 8, 8), input_shape=(148, 148, 148)):
+def random_source_pipeline(
+    voxel_size=(8, 8, 8),
+    input_shape=(148, 148, 148),
+    dtype=np.uint8,
+    expand_labels=False,
+):
     """Create a random source pipeline and batch request for example training.
 
     Args:
@@ -174,7 +177,9 @@ def random_source_pipeline(voxel_size=(8, 8, 8), input_shape=(148, 148, 148)):
 
     request.add(labels, input_size)
 
-    source_spec = gp.ArraySpec(roi=gp.Roi((0, 0, 0), input_size), voxel_size=voxel_size)
+    source_spec = gp.ArraySpec(
+        roi=gp.Roi((0, 0, 0), input_size), voxel_size=voxel_size, dtype=dtype
+    )
     source = ZerosSource(labels, source_spec)
 
     pipeline = source
@@ -188,11 +193,12 @@ def random_source_pipeline(voxel_size=(8, 8, 8), input_shape=(148, 148, 148)):
     # relabel connected components
     pipeline += Relabel(labels)
 
-    # expand the labels outwards into the background
-    pipeline += ExpandLabels(labels)
+    if expand_labels:
+        # expand the labels outwards into the background
+        pipeline += ExpandLabels(labels)
 
     # there will still be some background, change this to max id + 1
-    pipeline += ChangeBackground(labels)
+    # pipeline += ChangeBackground(labels)
 
     # relabel ccs again to deal with incorrectly connected background
     pipeline += Relabel(labels)
