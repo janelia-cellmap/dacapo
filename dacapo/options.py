@@ -71,7 +71,7 @@ class Options:
 
         # options files in order of precedence (highest first)
         options_files += [
-            Path("./dacapo"),
+            Path("./dacapo.yaml"),
             Path(Path(__file__).parent.parent, "dacapo.yaml"),
             Path(expanduser("~/.config/dacapo/dacapo.yaml")),
         ]
