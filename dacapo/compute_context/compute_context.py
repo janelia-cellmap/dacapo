@@ -28,12 +28,13 @@ class ComputeContext(ABC):
 
 def create_compute_context():
     """Create a compute context based on the global DaCapo options."""
+    return compute_context.Bsub()
 
-    options = Options.instance()
+    # options = Options.instance()
 
-    if hasattr(compute_context, options.compute_context_config["type"]):
-        return getattr(compute_context, options.compute_context_config["type"])(
-            **options.compute_context_config["config"]
-        )
-    else:
-        raise ValueError(f"Unknown store type {options.type}")
+    # if hasattr(compute_context, options.compute_context["type"]):
+    #     return getattr(compute_context, options.compute_context["type"])(
+    #         **options.compute_context["config"]
+    #     )
+    # else:
+    #     raise ValueError(f"Unknown store type {options.type}")

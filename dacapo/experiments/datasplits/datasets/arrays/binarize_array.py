@@ -96,15 +96,17 @@ class BinarizeArray(Array):
 
     def _neuroglancer_source(self):
         return self._source_array._neuroglancer_source()
+    
 
     def _neuroglancer_layer(self):
         # Generates an Segmentation layer
+        return self._source_array._neuroglancer_layer()
 
-        layer = neuroglancer.SegmentationLayer(source=self._neuroglancer_source())
-        kwargs = {
-            "visible": False,
-        }
-        return layer, kwargs
+        # layer = neuroglancer.SegmentationLayer(source=self._neuroglancer_source())
+        # kwargs = {
+        #     "visible": False,
+        # }
+        # return layer, kwargs
 
     def _source_name(self):
         return self._source_array._source_name()

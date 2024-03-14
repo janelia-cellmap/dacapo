@@ -33,7 +33,7 @@ def apply(
     iteration: Optional[int] = None,
     parameters: Optional[PostProcessorParameters | str] = None,
     roi: Optional[Roi | str] = None,
-    num_workers: int = 12,
+    num_workers: int = 4,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
     file_format: str = "zarr",
@@ -179,7 +179,7 @@ def apply_run(
     prediction_array_identifier: "LocalArrayIdentifier",
     output_array_identifier: "LocalArrayIdentifier",
     roi: Optional[Roi] = None,
-    num_workers: int = 12,
+    num_workers: int = 4,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):

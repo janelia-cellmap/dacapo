@@ -94,7 +94,7 @@ def apply(
     iteration: Optional[int] = None,
     parameters: Optional[PostProcessorParameters | str] = None,
     roi: Optional[Roi | str] = None,
-    num_workers: int = 30,
+    num_workers: int = 4,
     output_dtype: np.dtype | str = "uint8",
     overwrite: bool = True,
 ):
@@ -150,7 +150,7 @@ def predict(
     input_dataset: str,
     output_path: Path | str,
     output_roi: Optional[str | Roi] = None,
-    num_workers: int = 30,
+    num_workers: int = 4,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):
@@ -226,7 +226,7 @@ def run_blockwise(
     total_roi: str | None,
     read_roi_size: str,
     write_roi_size: str,
-    num_workers: int = 16,
+    num_workers: int = 4,
     max_retries: int = 2,
     timeout=None,
     overwrite: bool = True,
@@ -341,7 +341,7 @@ def segment_blockwise(
     read_roi_size: str,
     write_roi_size: str,
     context: str | None,
-    num_workers: int = 16,
+    num_workers: int = 4,
     max_retries: int = 2,
     timeout=None,
     tmp_prefix: str = "tmp",
@@ -379,6 +379,9 @@ def segment_blockwise(
         input_array.voxel_size,
         np.uint64,
         overwrite=overwrite,
+    )
+    print(
+        f"Created output array {output_array_identifier.container}:{output_array_identifier.dataset} with ROI {_total_roi}."
     )
 
     _segment_blockwise(

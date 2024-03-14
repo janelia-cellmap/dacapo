@@ -87,6 +87,9 @@ class ResampledArray(Array):
         )
         return resampled_array.to_ndarray(roi)
 
+    def _neuroglancer_source(self):
+        return self._source_array._neuroglancer_source()
+    
     def _can_neuroglance(self):
         return self._source_array._can_neuroglance()
 

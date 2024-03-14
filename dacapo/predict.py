@@ -24,7 +24,7 @@ def predict(
     input_dataset: str,
     output_path: LocalArrayIdentifier | Path | str,
     output_roi: Optional[Roi | str] = None,
-    num_workers: int = 12,
+    num_workers: int = 4,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):

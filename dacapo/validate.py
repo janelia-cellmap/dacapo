@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 def validate(
     run_name: str,
     iteration: int,
-    num_workers: int = 30,
+    num_workers: int = 4,
     output_dtype: str = "uint8",
     overwrite: bool = True,
 ):
@@ -113,7 +113,7 @@ def validate_run_using_datasplit(
         evaluator = run.task.evaluator
 
         # Initialize the evaluator with the best scores seen so far
-        # evaluator.set_best(run.validation_scores)
+        evaluator.set_best(run.validation_scores)
 
         for validation_dataset in datasplit.validate:
             if validation_dataset.gt is None:

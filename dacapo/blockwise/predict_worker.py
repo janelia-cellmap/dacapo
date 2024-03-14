@@ -6,11 +6,12 @@ from dacapo.gp import DaCapoArraySource
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.experiments import Run
-from dacapo.compute_context import create_compute_context
+from dacapo.compute_context.bsub import Bsub
 import gunpowder as gp
 import gunpowder.torch as gp_torch
 
 from funlib.geometry import Coordinate
+import daisy
 
 import numpy as np
 import click
@@ -166,15 +167,28 @@ def start_worker(
         output_size,
         voxel_size=output_voxel_size,
     )
-    # use daisy requests to run pipeline
-    pipeline += gp.DaisyRequestBlocks(
-        reference=request,
-        roi_map={raw: "read_roi", prediction: "write_roi"},
-        num_workers=1,
-    )
+    # # use daisy requests to run pipeline
+    # pipeline += gp.DaisyRequestBlocks(
+    #     reference=request,
+    #     roi_map={raw: "read_roi", prediction: "write_roi"},
+    #     num_workers=1,
+    # )
 
-    with gp.build(pipeline):
-        batch = pipeline.request_batch(gp.BatchRequest())
+    daisy_client = daisy.Client()
+
+    while True:
+        with daisy_client.acquire_block() as block:
+            if block is None:
+                return
+
+            logger.info("Processing block %s", block)
+
+            chunk_request = request.copy()
+            chunk_request[raw].roi = block.read_roi
+            chunk_request[prediction].roi = block.write_roi
+
+        with gp.build(pipeline):
+            _ = pipeline.request_batch(chunk_request)
 
 
 def spawn_worker(
@@ -193,7 +207,7 @@ def spawn_worker(
     """
 
     logger.warning("Spawning worker")
-    compute_context = create_compute_context()
+    # compute_context = create_compute_context()
 
     # Make the command for the worker to run
     command = [
@@ -213,13 +227,15 @@ def spawn_worker(
         "--output_dataset",
         output_array_identifier.dataset,
         "--device",
-        str(compute_context.device),
+        str("cuda"),
     ]
 
     def run_worker():
+        import subprocess
         # Run the worker in the given compute context
         logger.warning("Running worker with command: %s", command)
-        compute_context.execute(command)
+        Bsub().execute(command)
+        subprocess.run(Bsub()._wrap_command(command))
 
     run_worker()
 

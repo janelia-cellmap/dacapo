@@ -34,7 +34,7 @@ class PostProcessor(ABC):
         self,
         parameters: "PostProcessorParameters",
         output_array_identifier: "LocalArrayIdentifier",
-        num_workers: int = 16,
+        num_workers: int = 4,
         chunk_size: Coordinate = Coordinate((64, 64, 64)),
     ) -> "Array":
         """Convert predictions into the final output."""

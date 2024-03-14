@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 from typing import Tuple, Dict, Optional, List, TYPE_CHECKING
 import math
 import itertools
+import logging
+
 
 if TYPE_CHECKING:
     from dacapo.experiments.tasks.evaluators.evaluation_scores import EvaluationScores
@@ -19,6 +21,7 @@ Iteration = int
 Score = float
 BestScore = Optional[Tuple[Iteration, Score]]
 
+logger = logging.getLogger(__name__)
 
 class Evaluator(ABC):
     """Base class of all evaluators.
@@ -79,25 +82,29 @@ class Evaluator(ABC):
                 return getattr(score, criterion) < previous_best_score
 
     def get_overall_best(self, dataset: "Dataset", criterion: str):
-        overall_best = None
-        if self.best_scores:
-            for _, parameter, _ in self.best_scores.keys():
-                score = self.best_scores[(dataset, parameter, criterion)]
-                if score is None:
-                    overall_best = None
-                else:
-                    _, current_parameter_score = score
-                    if overall_best is None:
-                        overall_best = current_parameter_score
+        try:
+            overall_best = None
+            if self.best_scores:
+                for _, parameter, _ in self.best_scores.keys():
+                    score = self.best_scores[(dataset, parameter, criterion)]
+                    if score is None:
+                        overall_best = None
                     else:
-                        if current_parameter_score:
-                            if self.higher_is_better(criterion):
-                                if current_parameter_score > overall_best:
-                                    overall_best = current_parameter_score
-                            else:
-                                if current_parameter_score < overall_best:
-                                    overall_best = current_parameter_score
-        return overall_best
+                        _, current_parameter_score = score
+                        if overall_best is None:
+                            overall_best = current_parameter_score
+                        else:
+                            if current_parameter_score:
+                                if self.higher_is_better(criterion):
+                                    if current_parameter_score > overall_best:
+                                        overall_best = current_parameter_score
+                                else:
+                                    if current_parameter_score < overall_best:
+                                        overall_best = current_parameter_score
+            return overall_best
+        except Exception as e:
+            logger.error(f"Error getting overall best: {e}")
+            return 0
 
     def get_overall_best_parameters(self, dataset: "Dataset", criterion: str):
         overall_best = None

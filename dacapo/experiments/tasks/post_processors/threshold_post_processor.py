@@ -30,7 +30,7 @@ class ThresholdPostProcessor(PostProcessor):
         self,
         parameters: "ThresholdPostProcessorParameters",  # type: ignore[override]
         output_array_identifier: "LocalArrayIdentifier",
-        num_workers: int = 16,
+        num_workers: int = 4,
         block_size: Coordinate = Coordinate((64, 64, 64)),
     ) -> ZarrArray:
         # TODO: Investigate Liskov substitution princple and whether it is a problem here
@@ -62,7 +62,7 @@ class ThresholdPostProcessor(PostProcessor):
             total_roi=self.prediction_array.roi,
             read_roi=read_roi,
             write_roi=read_roi,
-            num_workers=num_workers,
+            num_workers=2,
             max_retries=2,  # TODO: make this an option
             timeout=None,  # TODO: make this an option
             ######
