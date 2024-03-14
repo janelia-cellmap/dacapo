@@ -120,6 +120,7 @@ def predict(
         output_voxel_size,
         output_dtype,
         overwrite=overwrite,
+        write_size=output_size,
     )
 
     # run blockwise prediction

@@ -51,6 +51,7 @@ class ThresholdPostProcessor(PostProcessor):
             self.prediction_array.num_channels,
             self.prediction_array.voxel_size,
             np.uint8,
+            block_size,
         )
 
         read_roi = Roi((0, 0, 0), self.prediction_array.voxel_size * block_size)
