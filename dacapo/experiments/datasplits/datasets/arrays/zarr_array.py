@@ -53,9 +53,9 @@ class ZarrArray(Array):
             logger.debug(
                 "DaCapo expects Zarr datasets to have an 'axes' attribute!\n"
                 f"Zarr {self.file_name} and dataset {self.dataset} has attributes: {list(self._attributes.items())}\n"
-                f"Using default {['c', 'z', 'y', 'x'][-self.dims::]}",
+                f"Using default {['s', 'c', 'z', 'y', 'x'][-self.dims::]}",
             )
-            return ["c", "z", "y", "x"][-self.dims : :]
+            return ["s", "c", "z", "y", "x"][-self.dims : :]
 
     @property
     def dims(self) -> int:
@@ -150,26 +150,33 @@ class ZarrArray(Array):
                 delete=overwrite,
             )
             zarr_dataset = zarr_container[array_identifier.dataset]
-            zarr_dataset.attrs["offset"] = (
-                roi.offset[::-1]
-                if array_identifier.container.name.endswith("n5")
-                else roi.offset
-            )
-            zarr_dataset.attrs["resolution"] = (
-                voxel_size[::-1]
-                if array_identifier.container.name.endswith("n5")
-                else voxel_size
-            )
-            zarr_dataset.attrs["axes"] = (
-                axes[::-1] if array_identifier.container.name.endswith("n5") else axes
-            )
-            # to make display right in neuroglancer: TODO
-            zarr_dataset.attrs["dimension_units"] = [
-                f"{size} nm" for size in zarr_dataset.attrs["resolution"]
-            ]
-            zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = (
-                axes[::-1] if array_identifier.container.name.endswith("n5") else axes
-            )
+            if array_identifier.container.name.endswith("n5"):
+                zarr_dataset.attrs["offset"] = roi.offset[::-1]
+                zarr_dataset.attrs["resolution"] = voxel_size[::-1]
+                zarr_dataset.attrs["axes"] = axes[::-1]
+                # to make display right in neuroglancer: TODO ADD CHANNELS
+                zarr_dataset.attrs["dimension_units"] = [
+                    f"{size} nm" for size in voxel_size[::-1]
+                ]
+                zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = axes[::-1]
+            else:
+                zarr_dataset.attrs["offset"] = roi.offset
+                zarr_dataset.attrs["resolution"] = voxel_size
+                zarr_dataset.attrs["axes"] = axes
+                # to make display right in neuroglancer: TODO ADD CHANNELS
+                zarr_dataset.attrs["dimension_units"] = [
+                    f"{size} nm" for size in voxel_size
+                ]
+                zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = axes
+            if num_channels is not None:
+                if cls.axes.index("c") == 0:
+                    zarr_dataset.attrs["dimension_units"] = [
+                        cls.num_channels
+                    ] + zarr_dataset.attrs["dimension_units"]
+                else:
+                    zarr_dataset.attrs["dimension_units"] = zarr_dataset.attrs[
+                        "dimension_units"
+                    ] + [cls.num_channels]
         except zarr.errors.ContainsArrayError:
             zarr_dataset = zarr_container[array_identifier.dataset]
             assert (
