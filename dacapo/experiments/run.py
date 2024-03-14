@@ -54,11 +54,10 @@ class Run:
         )
 
         # preloaded weights from previous run
-        self.start = (
-            Start(run_config.start_config)
-            if run_config.start_config is not None
-            else None
-        )
+        if run_config.start_config is not None:
+            self.start = run_config.start_config.start_type(run_config.start_config)
+        else:
+            self.start = None
         if self.start is not None:
             self.start.initialize_weights(self.model)
 

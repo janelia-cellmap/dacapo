@@ -1,12 +1,15 @@
 import attr
 from typing import Iterable, Tuple
-from dacapo.experiments.architectures import ArchitectureConfig
+from . import ArchitectureConfig
+from . import CellMapPretrained
 import cellmap_models
 
 
 @attr.s
 class CellMapPretrainedConfig(ArchitectureConfig):
     """ """
+
+    architecture_type = CellMapPretrained
 
     name: str = attr.ib(
         metadata={

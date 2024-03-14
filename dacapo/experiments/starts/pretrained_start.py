@@ -1,10 +1,10 @@
-from abc import ABC
 import logging
+from dacapo.experiments.starts import Start
 
 logger = logging.getLogger(__file__)
 
 
-class Start(ABC):
+class PretrainedStart(Start):
     """
     This class interfaces with the dacapo store to retrieve and load the
     weights of the starter model used for finetuning.

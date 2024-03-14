@@ -1,8 +1,9 @@
 import attr
+from . import StartConfig, PretrainedStart
 
 
 @attr.s
-class StartConfig:
+class PretrainedStartConfig(StartConfig):
     """
     A class to represent the configuration for running tasks.
 
@@ -15,6 +16,8 @@ class StartConfig:
         The criterion to be used for choosing weights from run.
 
     """
+
+    start_type = PretrainedStart
 
     run: str = attr.ib(metadata={"help_text": "The Run to use as a starting point."})
     criterion: str = attr.ib(

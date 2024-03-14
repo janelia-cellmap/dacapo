@@ -1,7 +1,7 @@
 from funlib.geometry import Coordinate
 
 import torch
-from dacapo.experiments.architectures import Architecture
+from . import Architecture
 import cellmap_models
 
 

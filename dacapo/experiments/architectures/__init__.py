@@ -5,3 +5,7 @@ from .dummy_architecture_config import (
     DummyArchitecture,
 )  # noqa
 from .cnnectome_unet_config import CNNectomeUNetConfig, CNNectomeUNet  # noqa
+from .cellmap_pretrained_config import (
+    CellMapPretrainedConfig,
+    CellMapPretrained,
+)  # noqa

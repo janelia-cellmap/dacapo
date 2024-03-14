@@ -5,6 +5,9 @@ import torch
 
 class PretrainedTask(Task):
     def __init__(self, task_config):
+        DeprecationWarning(
+            "PretrainedTask is deprecated and will be removed in the future and is incongruent with other uses of `pretrained` terminology in DaCapo."
+        )
         sub_task = task_config.sub_task_config.task_type(task_config.sub_task_config)
         self.weights = task_config.weights
 
