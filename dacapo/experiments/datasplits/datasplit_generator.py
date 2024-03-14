@@ -46,7 +46,7 @@ def resize_if_needed(
 
 
 def get_right_resolution_array_config(
-    container, dataset, target_resolution, extra_str=""
+    container: Path, dataset, target_resolution, extra_str=""
 ):
     level = 0
     current_dataset_path = Path(dataset, f"s{level}")
@@ -56,7 +56,7 @@ def get_right_resolution_array_config(
         )
 
     zarr_config = ZarrArrayConfig(
-        name=f"{extra_str}_{dataset}_uint8",
+        name=f"{extra_str}_{container.stem}_uint8",
         file_name=container,
         dataset=str(current_dataset_path),
         snap_to_grid=target_resolution,
@@ -65,7 +65,6 @@ def get_right_resolution_array_config(
     while (
         all([z < t for (z, t) in zip(zarr_array.voxel_size, target_resolution)])
         and Path(container, Path(dataset, f"s{level+1}")).exists()
-        and (zarr_array.voxel_size != target_resolution).any()
     ):
         level += 1
         zarr_config = ZarrArrayConfig(
@@ -86,14 +85,21 @@ class CustomEnumMeta(EnumMeta):
                 f"{item} is not a valid option of {self.__name__}, the valid options are {self._member_names_}"
             )
         return super().__getitem__(item)
+    
+class CustomEnum(Enum, metaclass=CustomEnumMeta):
+    def __str__(self) -> str:
+        return self.name
+    
+    def __str__(self) -> str:
+        return super().name
 
 
-class DatasetType(Enum, metaclass=CustomEnumMeta):
+class DatasetType(CustomEnum):
     val = 1
     train = 2
 
 
-class SegmentationType(Enum, metaclass=CustomEnumMeta):
+class SegmentationType(CustomEnum):
     semantic = 1
     instance = 2
 
@@ -123,6 +129,9 @@ class DatasetSpec:
         self.gt_container = gt_container
         self.gt_dataset = gt_dataset
 
+    def __str__(self) -> str:
+        return f"{self.raw_container.stem}"
+
 
 def generate_dataspec_from_csv(csv_path: Path):
     datasets = []
@@ -151,8 +160,6 @@ class DataSplitGenerator:
     Currently only supports:
      - semantic segmentation.
      - one channel raw and one channel gt.
-     - no resizing
-
     """
 
     def __init__(
@@ -191,6 +198,9 @@ class DataSplitGenerator:
         self.min_training_volume_size = min_training_volume_size
         self.raw_min = raw_min
         self.raw_max = raw_max
+
+    def __str__(self) -> str:
+        return f"DataSplitGenerator:{self.name}_{self.segmentation_type}_{self.class_name}_{self.output_resolution[0]}nm"
 
     @property
     def class_name(self):
@@ -257,6 +267,8 @@ class DataSplitGenerator:
 
         if not (gt_path / gt_dataset).exists():
             raise FileNotFoundError(f"GT path {gt_path/gt_dataset} does not exist.")
+        
+        print(f"Processing raw_container:{raw_container} raw_dataset:{raw_dataset} gt_path:{gt_path} gt_dataset:{gt_dataset}")
 
         if is_zarr_group(str(raw_container), raw_dataset):
             raw_config = get_right_resolution_array_config(
@@ -265,7 +277,7 @@ class DataSplitGenerator:
         else:
             raw_config = resize_if_needed(
                 ZarrArrayConfig(
-                    name=f"raw_{raw_dataset}_uint8",
+                    name=f"raw_{raw_container.stem}_uint8",
                     file_name=raw_container,
                     dataset=raw_dataset,
                 ),
@@ -273,7 +285,7 @@ class DataSplitGenerator:
                 "raw",
             )
         raw_config = IntensitiesArrayConfig(
-            name=f"raw_{raw_dataset}_uint8",
+            name=f"raw_{raw_container.stem}_uint8",
             source_array_config=raw_config,
             min=self.raw_min,
             max=self.raw_max,
@@ -286,7 +298,7 @@ class DataSplitGenerator:
         else:
             gt_config = resize_if_needed(
                 ZarrArrayConfig(
-                    name=f"gt_{gt_dataset}_uint8",
+                    name=f"gt_{gt_path.stem}_uint8",
                     file_name=gt_path,
                     dataset=gt_dataset,
                 ),
@@ -300,10 +312,11 @@ class DataSplitGenerator:
         )
         return raw_config, gt_config
 
-    def generate_csv(self, csv_path: Path):
+    @staticmethod
+    def generate_csv(datasets: List[DatasetSpec], csv_path: Path):
         print(f"Writing dataspecs to {csv_path}")
         with open(csv_path, "w") as f:
-            for dataset in self.datasets:
+            for dataset in datasets:
                 f.write(
                     f"{dataset.dataset_type.name},{str(dataset.raw_container)},{dataset.raw_dataset},{str(dataset.gt_container)},{dataset.gt_dataset}\n"
                 )
@@ -315,6 +328,9 @@ class DataSplitGenerator:
         output_resolution: Coordinate,
         **kwargs,
     ):
+        if isinstance(csv_path, str):
+            csv_path = Path(csv_path)
+            
         return DataSplitGenerator(
             csv_path.stem,
             generate_dataspec_from_csv(csv_path),
