@@ -35,7 +35,7 @@ def resize_if_needed(
     raw_downsample = target_resolution / raw_voxel_size
     if any([u > 1 or d > 1 for u, d in zip(raw_upsample, raw_downsample)]):
         return ResampledArrayConfig(
-            name=f"{array_config.name}_resampled",
+            name=f"{extra_str}_{array_config.name}_{array_config.dataset}_resampled",
             source_array_config=array_config,
             upsample=raw_upsample,
             downsample=raw_downsample,
@@ -56,7 +56,7 @@ def get_right_resolution_array_config(
         )
 
     zarr_config = ZarrArrayConfig(
-        name=f"{extra_str}_{container.stem}_uint8",
+        name=f"{extra_str}_{container.stem}_{dataset}_uint8",
         file_name=container,
         dataset=str(current_dataset_path),
         snap_to_grid=target_resolution,
@@ -68,7 +68,7 @@ def get_right_resolution_array_config(
     ):
         level += 1
         zarr_config = ZarrArrayConfig(
-            name=f"{extra_str}_{dataset}_uint8",
+            name=f"{extra_str}_{container.stem}_{dataset}_s{level}_uint8",
             file_name=container,
             dataset=str(Path(dataset, f"s{level}")),
             snap_to_grid=target_resolution,
@@ -130,7 +130,7 @@ class DatasetSpec:
         self.gt_dataset = gt_dataset
 
     def __str__(self) -> str:
-        return f"{self.raw_container.stem}"
+        return f"{self.raw_container.stem}_{self.gt_dataset}"
 
 
 def generate_dataspec_from_csv(csv_path: Path):
@@ -298,7 +298,7 @@ class DataSplitGenerator:
         else:
             gt_config = resize_if_needed(
                 ZarrArrayConfig(
-                    name=f"gt_{gt_path.stem}_uint8",
+                    name=f"gt_{gt_path.stem}_{gt_dataset}_uint8",
                     file_name=gt_path,
                     dataset=gt_dataset,
                 ),
