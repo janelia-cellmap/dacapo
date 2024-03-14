@@ -63,8 +63,9 @@ def get_right_resolution_array_config(
     )
     zarr_array = ZarrArray(zarr_config)
     while (
-        sum(zarr_array.voxel_size) <= sum(target_resolution / 2)
+        all([z < t for (z, t) in zip(zarr_array.voxel_size, target_resolution)])
         and Path(container, Path(dataset, f"s{level+1}")).exists()
+        and (zarr_array.voxel_size != target_resolution).any()
     ):
         level += 1
         zarr_config = ZarrArrayConfig(
@@ -310,14 +311,14 @@ class DataSplitGenerator:
     @staticmethod
     def generate_from_csv(
         csv_path: Path,
-        intput_resolution: Coordinate,
+        input_resolution: Coordinate,
         output_resolution: Coordinate,
         **kwargs,
     ):
         return DataSplitGenerator(
             csv_path.stem,
             generate_dataspec_from_csv(csv_path),
-            intput_resolution,
+            input_resolution,
             output_resolution,
             **kwargs,
         )
