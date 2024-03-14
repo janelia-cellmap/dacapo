@@ -168,14 +168,14 @@ class ZarrArray(Array):
                 ]
                 zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = axes
             if num_channels is not None:
-                if cls.axes.index("c") == 0:
+                if axes.index("c") == 0:
                     zarr_dataset.attrs["dimension_units"] = [
-                        cls.num_channels
+                        num_channels
                     ] + zarr_dataset.attrs["dimension_units"]
                 else:
                     zarr_dataset.attrs["dimension_units"] = zarr_dataset.attrs[
                         "dimension_units"
-                    ] + [cls.num_channels]
+                    ] + [num_channels]
         except zarr.errors.ContainsArrayError:
             zarr_dataset = zarr_container[array_identifier.dataset]
             assert (
