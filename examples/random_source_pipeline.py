@@ -117,6 +117,7 @@ class RandomDilateLabels(gp.BatchFilter):
         labels = batch[self.labels].data
 
         new_labels = np.zeros_like(labels)
+        bg_mask = labels == 0
         for id in np.unique(labels):
             if id == 0:
                 continue
@@ -131,7 +132,7 @@ class RandomDilateLabels(gp.BatchFilter):
                 np.logical_or(
                     labels == id,
                     np.logical_and(
-                        distance_transform_edt(labels != id) <= dilations, labels == 0
+                        distance_transform_edt(labels != id) <= dilations, bg_mask
                     ),
                 )
             ] = id  # type: ignore
@@ -291,5 +292,7 @@ def random_source_pipeline(
         membrane_size=membrane_size,
         inside_value=inside_value,
     )
+
+    pipeline += gp.PrintProfilingStats(every=1)
 
     return pipeline, request
