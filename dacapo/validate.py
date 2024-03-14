@@ -228,6 +228,7 @@ def validate_run(
                                 post_processed_array.num_channels,
                                 post_processed_array.voxel_size,
                                 post_processed_array.dtype,
+                                output_size,
                             )
                             best_array[best_array.roi] = post_processed_array[
                                 post_processed_array.roi

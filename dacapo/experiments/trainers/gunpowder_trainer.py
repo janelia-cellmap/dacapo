@@ -260,6 +260,7 @@ class GunpowderTrainer(Trainer):
                             v.num_channels,
                             v.voxel_size,
                             v.dtype if not v.dtype == bool else np.float32,
+                            model.output_shape,
                         )
                         dataset = snapshot_zarr[k]
                     else:
