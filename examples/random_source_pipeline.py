@@ -4,9 +4,7 @@ import logging
 import numpy as np
 import random
 from scipy.ndimage import (
-    binary_dilation,
     distance_transform_edt,
-    generate_binary_structure,
     gaussian_filter,
 )
 from skimage.measure import label as relabel
@@ -30,12 +28,11 @@ class CreatePoints(gp.BatchFilter):
 
         num_points = random.randint(*self.num_points)
 
-        for n in range(num_points):
-            z = random.randint(1, labels.shape[0] - 1)
-            y = random.randint(1, labels.shape[1] - 1)
-            x = random.randint(1, labels.shape[2] - 1)
+        z = np.random.randint(1, labels.shape[0] - 1, num_points)
+        y = np.random.randint(1, labels.shape[1] - 1, num_points)
+        x = np.random.randint(1, labels.shape[2] - 1, num_points)
 
-            labels[z, y, x] = 1
+        labels[z, y, x] = 1
 
         batch[self.labels].data = labels
 
@@ -74,10 +71,7 @@ class MakeRaw(gp.BatchFilter):
             for id in np.unique(labels):
                 if id == 0:
                     continue
-                mask = labels == id
-                distance = distance_transform_edt(mask)
-                inside_mask = distance > self.membrane_size  # type: ignore
-                raw[inside_mask] = self.inside_value
+                raw[distance_transform_edt(labels == id) > self.membrane_size] = self.inside_value  # type: ignore
 
         # now add blur
         raw = gaussian_filter(raw, random.uniform(*self.gaussian_blur_args))
@@ -97,52 +91,50 @@ class MakeRaw(gp.BatchFilter):
 
 
 class DilatePoints(gp.BatchFilter):
-    def __init__(self, labels, dilations=[2, 8], connectivity=2):
+    def __init__(self, labels, dilations=[2, 8]):
 
         self.labels = labels
         self.dilations = dilations
-        self.connectivity = connectivity
 
     def process(self, batch, request):
 
         labels = batch[self.labels].data
 
-        struct = generate_binary_structure(labels.ndim, connectivity=self.connectivity)
-
         dilations = random.randint(*self.dilations)
-
-        dilated = binary_dilation(labels, structure=struct, iterations=dilations)
-
-        labels = dilated.astype(labels.dtype)
+        labels = (distance_transform_edt(labels == 0) <= dilations).astype(labels.dtype)  # type: ignore
 
         batch[self.labels].data = labels
 
 
 class RandomDilateLabels(gp.BatchFilter):
-    def __init__(self, labels, dilations=[2, 8], connectivity=2):
+    def __init__(self, labels, dilations=[2, 8]):
 
         self.labels = labels
         self.dilations = dilations
-        self.connectivity = connectivity
 
     def process(self, batch, request):
 
         labels = batch[self.labels].data
 
-        struct = generate_binary_structure(labels.ndim, connectivity=self.connectivity)
-
         new_labels = np.zeros_like(labels)
         for id in np.unique(labels):
             if id == 0:
                 continue
-            mask = labels == id
-            dilations = random.randint(*self.dilations)
-            dilated = binary_dilation(mask, structure=struct, iterations=dilations)
+            dilations = np.random.randint(*self.dilations)
+            # dilated = distance_transform_edt(labels != id) <= dilations  # type: ignore
 
-            # make sure we don't overlap existing labels
-            dilated[labels > 0] = False
-            dilated[labels == id] = True
-            new_labels[dilated] = id
+            # # make sure we don't overlap existing labels
+            # dilated[labels > 0] = False
+            # dilated[labels == id] = True
+            # new_labels[dilated] = id
+            new_labels[
+                np.logical_or(
+                    labels == id,
+                    np.logical_and(
+                        distance_transform_edt(labels != id) <= dilations, labels == 0
+                    ),
+                )
+            ] = id  # type: ignore
 
         batch[self.labels].data = new_labels
 
@@ -218,9 +210,7 @@ def random_source_pipeline(
     dtype=np.uint8,
     expand_labels=False,
     relabel_connectivity=1,
-    dilate_connectivity=2,
     random_dilate=True,
-    random_dilate_connectivity=2,
     num_points=(20, 150),
     gaussian_noise_args=(0, 0.1),
     gaussian_blur_args=(0.5, 1.5),
@@ -237,9 +227,7 @@ def random_source_pipeline(
         dtype (numpy.dtype): The dtype of the label arrays.
         expand_labels (bool): Whether to expand the labels into the background.
         relabel_connectivity (int): The connectivity used for for relabeling.
-        dilate_connectivity (int): The connectivity of the binary structure used for dilation.
         random_dilate (bool): Whether to randomly dilate the individual labels.
-        random_dilate_connectivity (int): The connectivity of the binary structure used for random dilation.
         num_points (tuple of int): The range of the number of points to add to the labels.
         gaussian_noise_args (tuple of float): The mean and standard deviation of the Gaussian noise to add to the raw array.
         gaussian_blur_args (tuple of float): The mean and standard deviation of the Gaussian blur to apply to the raw array.
@@ -277,7 +265,7 @@ def random_source_pipeline(
     pipeline += CreatePoints(labels, num_points=num_points)
 
     # grow the boundaries
-    pipeline += DilatePoints(labels, connectivity=dilate_connectivity)
+    pipeline += DilatePoints(labels)
 
     # relabel connected components
     pipeline += Relabel(labels, connectivity=relabel_connectivity)
@@ -286,12 +274,12 @@ def random_source_pipeline(
         # expand the labels outwards into the background
         pipeline += ExpandLabels(labels)
 
-    # relabel ccs again to deal with incorrectly connected background
-    pipeline += Relabel(labels, connectivity=relabel_connectivity)
+        # relabel ccs again to deal with incorrectly connected background
+        pipeline += Relabel(labels, connectivity=relabel_connectivity)
 
     # randomly dilate labels
     if random_dilate:
-        pipeline += RandomDilateLabels(labels, connectivity=random_dilate_connectivity)
+        pipeline += RandomDilateLabels(labels)
 
     # make a raw array
     pipeline += MakeRaw(
