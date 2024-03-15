@@ -12,7 +12,7 @@ class DataSplit(ABC):
     train: List[Dataset]
     validate: Optional[List[Dataset]]
 
-    def _neuroglancer(self):
+    def _neuroglancer(self,embedded = False):
         neuroglancer.set_server_bind_address('0.0.0.0')
         viewer = neuroglancer.Viewer()
         with viewer.txn() as s:
@@ -53,4 +53,7 @@ class DataSplit(ABC):
                 ]
             )
         print(f"Neuroglancer link: {viewer}")
+        if embedded:
+            from IPython.display import IFrame
+            return IFrame(viewer.get_viewer_url(), width=800, height=600)
         return viewer
