@@ -170,10 +170,6 @@ def train_run(run: Run):
                 stats_store.store_training_stats(run.name, run.training_stats)
                 continue
 
-            run.model.eval()
-            # free up optimizer memory to allow larger validation blocks
-            run.move_optimizer(torch.device("cpu"), empty_cuda_cache=True)
-
             stats_store.store_training_stats(run.name, run.training_stats)
             weights_store.store_weights(run, iteration_stats.iteration + 1)
             try:
@@ -199,9 +195,5 @@ def train_run(run: Run):
                     f"{iteration_stats.iteration + 1}.",
                     exc_info=e,
                 )
-
-            # make sure to move optimizer back to the correct device
-            run.move_optimizer(compute_context.device)
-            run.model.train()
 
     print("Trained until %d, finished.", trained_until)
