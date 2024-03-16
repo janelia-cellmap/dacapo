@@ -352,7 +352,7 @@ def segment_blockwise(
     *args,
     **kwargs,
 ):
-    # get arubtrary args and kwargs
+    # get arbitrary args and kwargs
     parameters = unpack_ctx(ctx)
 
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)

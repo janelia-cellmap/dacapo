@@ -221,8 +221,11 @@ def spawn_worker(
         str(compute_context.device),
     ]
 
+    print("Defining worker with command: ", compute_context.wrap_command(command))
+
     def run_worker():
         # Run the worker in the given compute context
+        print("Running worker with command: ", command)
         compute_context.execute(command)
 
     return run_worker
