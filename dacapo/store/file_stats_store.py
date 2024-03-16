@@ -17,7 +17,7 @@ class FileStatsStore(StatsStore):
     """
 
     def __init__(self, path):
-        print("Creating MongoStatsStore:\n\tpath    : %s", path)
+        print("Creating FileStatsStore:\n\tpath    : %s", path)
 
         self.path = Path(path)
 
