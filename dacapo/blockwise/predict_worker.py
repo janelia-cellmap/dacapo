@@ -60,7 +60,6 @@ def cli(log_level):
     "-oc", "--output_container", required=True, type=click.Path(file_okay=False)
 )
 @click.option("-od", "--output_dataset", required=True, type=str)
-@click.option("-d", "--device", type=str, default="cuda")
 def start_worker(
     run_name: str,
     iteration: int,
@@ -68,8 +67,10 @@ def start_worker(
     input_dataset: str,
     output_container: Path | str,
     output_dataset: str,
-    device: str | torch.device = "cuda",
 ):
+    compute_context = create_compute_context()
+    device = compute_context.device
+
     # retrieving run
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(run_name)
@@ -217,8 +218,6 @@ def spawn_worker(
         output_array_identifier.container,
         "--output_dataset",
         output_array_identifier.dataset,
-        "--device",
-        str(compute_context.device),
     ]
 
     print("Defining worker with command: ", compute_context.wrap_command(command))
