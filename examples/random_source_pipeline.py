@@ -18,12 +18,10 @@ class CreatePoints(gp.BatchFilter):
         labels,
         num_points=(20, 150),
     ):
-
         self.labels = labels
         self.num_points = num_points
 
     def process(self, batch, request):
-
         labels = batch[self.labels].data
 
         num_points = random.randint(*self.num_points)
@@ -92,12 +90,10 @@ class MakeRaw(gp.BatchFilter):
 
 class DilatePoints(gp.BatchFilter):
     def __init__(self, labels, dilations=[2, 8]):
-
         self.labels = labels
         self.dilations = dilations
 
     def process(self, batch, request):
-
         labels = batch[self.labels].data
 
         dilations = random.randint(*self.dilations)
@@ -108,12 +104,10 @@ class DilatePoints(gp.BatchFilter):
 
 class RandomDilateLabels(gp.BatchFilter):
     def __init__(self, labels, dilations=[2, 8]):
-
         self.labels = labels
         self.dilations = dilations
 
     def process(self, batch, request):
-
         labels = batch[self.labels].data
 
         new_labels = np.zeros_like(labels)
@@ -142,12 +136,10 @@ class RandomDilateLabels(gp.BatchFilter):
 
 class Relabel(gp.BatchFilter):
     def __init__(self, labels, connectivity=1):
-
         self.labels = labels
         self.connectivity = connectivity
 
     def process(self, batch, request):
-
         labels = batch[self.labels].data
 
         relabeled = relabel(labels, connectivity=self.connectivity).astype(labels.dtype)  # type: ignore
@@ -161,7 +153,6 @@ class ExpandLabels(gp.BatchFilter):
         self.background = background
 
     def process(self, batch, request):
-
         labels_data = batch[self.labels].data
         distance = labels_data.shape[0]
 
