@@ -60,12 +60,54 @@ from dacapo.store.create_store import create_config_store
 config_store = create_config_store()
 
 # %%
+# Then let's make sure we have data to train on
+from pathlib import Path
+from dacapo import Options
+from examples.utils import get_viewer
+from examples.synthetic_source_worker import generate_synthetic_dataset
+from funlib.geometry import Coordinate
+from funlib.persistence import open_ds
+
+options = Options.instance()
+runs_base_dir = options.runs_base_dir
+
+# First for training data
+train_data_path = Path(runs_base_dir, "example_train.zarr")
+force = True
+try:
+    assert not force
+    raw_array = open_ds(str(train_data_path), "raw")
+    labels_array = open_ds(str(train_data_path), "labels")
+except:
+    train_shape = Coordinate((512, 512, 512))
+    generate_synthetic_dataset(train_data_path, shape=train_shape, overwrite=True)
+    raw_array = open_ds(str(train_data_path), "raw")
+    labels_array = open_ds(str(train_data_path), "labels")
+
+get_viewer(raw_array, labels_array)
+
+# %%
+# Then for validation data
+validate_data_path = Path(runs_base_dir, "example_validate.zarr")
+force = False
+try:
+    assert not force
+    raw_array = ZarrArray.open_from_array_identifier(
+        LocalArrayIdentifier(validate_data_path, "raw")
+    )
+    labels_array = ZarrArray.open_from_array_identifier(
+        LocalArrayIdentifier(validate_data_path, "labels")
+    )
+except:
+    validate_shape = Coordinate((256, 256, 256))
+    generate_synthetic_dataset(validate_data_path, shape=validate_shape, overwrite=True)
+
+get_viewer(raw_array, labels_array)
+
+# %%
 # TODO: REMOVE BELOW =============================================
 from examples.random_source_pipeline import random_source_pipeline
 import gunpowder as gp
-import neuroglancer
-import numpy as np
-from IPython.display import IFrame
 
 pipeline, request = random_source_pipeline()
 
@@ -81,40 +123,41 @@ batch = next(batch_gen)
 raw_array = batch.arrays[gp.ArrayKey("RAW")]
 labels_array = batch.arrays[gp.ArrayKey("LABELS")]
 
+get_viewer(raw_array, labels_array)
 
-labels_data = labels_array.data
-raw_data = raw_array.data
+# labels_data = labels_array.data
+# raw_data = raw_array.data
 
-neuroglancer.set_server_bind_address("0.0.0.0")
-viewer = neuroglancer.Viewer()
-with viewer.txn() as state:
-    state.showSlices = False
-    state.layers["segs"] = neuroglancer.SegmentationLayer(
-        # segments=[str(i) for i in np.unique(data[data > 0])], # this line will cause all objects to be selected and thus all meshes to be generated...will be slow if lots of high res meshes
-        source=neuroglancer.LocalVolume(
-            data=labels_data,
-            dimensions=neuroglancer.CoordinateSpace(
-                names=["z", "y", "x"],
-                units=["nm", "nm", "nm"],
-                scales=labels_array.spec.voxel_size,
-            ),
-            # voxel_offset=ds.roi.begin / ds.voxel_size,
-        ),
-        segments=np.unique(labels_data[labels_data > 0]),
-    )
+# neuroglancer.set_server_bind_address("0.0.0.0")
+# viewer = neuroglancer.Viewer()
+# with viewer.txn() as state:
+#     state.showSlices = False
+#     state.layers["segs"] = neuroglancer.SegmentationLayer(
+#         # segments=[str(i) for i in np.unique(data[data > 0])], # this line will cause all objects to be selected and thus all meshes to be generated...will be slow if lots of high res meshes
+#         source=neuroglancer.LocalVolume(
+#             data=labels_data,
+#             dimensions=neuroglancer.CoordinateSpace(
+#                 names=["z", "y", "x"],
+#                 units=["nm", "nm", "nm"],
+#                 scales=labels_array.spec.voxel_size,
+#             ),
+#             # voxel_offset=ds.roi.begin / ds.voxel_size,
+#         ),
+#         segments=np.unique(labels_data[labels_data > 0]),
+#     )
 
-    state.layers["raw"] = neuroglancer.ImageLayer(
-        source=neuroglancer.LocalVolume(
-            data=raw_data,
-            dimensions=neuroglancer.CoordinateSpace(
-                names=["z", "y", "x"],
-                units=["nm", "nm", "nm"],
-                scales=raw_array.spec.voxel_size,
-            ),
-        ),
-    )
+#     state.layers["raw"] = neuroglancer.ImageLayer(
+#         source=neuroglancer.LocalVolume(
+#             data=raw_data,
+#             dimensions=neuroglancer.CoordinateSpace(
+#                 names=["z", "y", "x"],
+#                 units=["nm", "nm", "nm"],
+#                 scales=raw_array.spec.voxel_size,
+#             ),
+#         ),
+#     )
 
-IFrame(src=viewer, width=1500, height=600)
+# IFrame(src=viewer, width=1500, height=600)
 
 # TODO: REMOVE ABOVE=============================================
 
@@ -133,11 +176,7 @@ from dacapo.experiments.datasplits.datasets.arrays import (
 )
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
 from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
-from pathlib import PosixPath
-from dacapo import Options
 
-options = Options.instance()
-runs_base_dir = options.runs_base_dir
 
 datasplit_config = TrainValidateDataSplitConfig(
     name="synthetic_datasplit_config",
@@ -149,8 +188,8 @@ datasplit_config = TrainValidateDataSplitConfig(
                 name="raw_train_data",
                 source_array_config=ZarrArrayConfig(
                     name="raw_train_data_uint8",
-                    file_name=PosixPath(runs_base_dir, "example_train.zarr"),
-                    dataset="RAW",
+                    file_name=Path(runs_base_dir, "example_train.zarr"),
+                    dataset="raw",
                 ),
                 min=0.0,
                 max=255.0,
@@ -159,8 +198,8 @@ datasplit_config = TrainValidateDataSplitConfig(
                 name="gt_train_data",
                 source_array_config=ZarrArrayConfig(
                     name="gt_train_data_zarr",
-                    file_name=PosixPath(runs_base_dir, "example_train.zarr"),
-                    dataset="LABELS",
+                    file_name=Path(runs_base_dir, "example_train.zarr"),
+                    dataset="labels",
                 ),
                 groupings=[("labels", [1])],
             ),
@@ -174,8 +213,8 @@ datasplit_config = TrainValidateDataSplitConfig(
                 name="raw_validate_data",
                 source_array_config=ZarrArrayConfig(
                     name="raw_validate_data_uint8",
-                    file_name=PosixPath(runs_base_dir, "example_validate.zarr"),
-                    dataset="RAW",
+                    file_name=Path(runs_base_dir, "example_validate.zarr"),
+                    dataset="raw",
                 ),
                 min=0.0,
                 max=255.0,
@@ -184,8 +223,8 @@ datasplit_config = TrainValidateDataSplitConfig(
                 name="gt_validate_data",
                 source_array_config=ZarrArrayConfig(
                     name="gt_validate_data_zarr",
-                    file_name=PosixPath(runs_base_dir, "example_validate.zarr"),
-                    dataset="LABELS",
+                    file_name=Path(runs_base_dir, "example_validate.zarr"),
+                    dataset="labels",
                 ),
                 groupings=[("labels", [1])],
             ),

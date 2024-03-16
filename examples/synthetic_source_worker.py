@@ -7,8 +7,10 @@ import sys
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.compute_context import create_compute_context
+import dacapo
 
 import daisy
+from funlib.geometry import Coordinate, Roi
 
 import numpy as np
 import click
@@ -32,6 +34,108 @@ path = __file__
 )
 def cli(log_level):
     logging.basicConfig(level=getattr(logging, log_level.upper()))
+
+
+fit = "valid"
+
+
+# @cli.command()
+# @click.option(
+#     "-oc", "--output_container", required=True, type=click.Path(file_okay=False)
+# )
+# @click.option("-rod", "--raw_output_dataset", required=True, type=str, default="raw")
+# @click.option(
+#     "-lod", "--labels_output_dataset", required=True, type=str, default="labels"
+# )
+# @click.option(
+#     "-shape",
+#     "--shape",
+#     required=True,
+#     type=str,
+#     help="The shape of the volume to generate data for in voxels, formatted as z,y,x.",
+#     default="512,512,512",
+# )
+# @click.option(
+#     "-vs",
+#     "--voxel_size",
+#     required=True,
+#     type=str,
+#     help="The voxel size of the output data in nm, formatted as z,y,x.",
+#     default="8,8,8",
+# )
+# @click.option(
+#     "-ws",
+#     "--write_shape",
+#     required=True,
+#     type=str,
+#     help="The shape of the blocks to write in voxels, formatted as z,y,x.",
+#     default="128,128,128",
+# )
+# @click.option("-nw", "--num_workers", type=int, default=16)
+# @click.option("-ow", "--overwrite", is_flag=True)
+def generate_synthetic_dataset(
+    output_container: Path | str,
+    raw_output_dataset: str = "raw",
+    labels_output_dataset: str = "labels",
+    shape: str | Coordinate = Coordinate((512, 512, 512)),
+    voxel_size: str | Coordinate = Coordinate((8, 8, 8)),
+    write_shape: str | Coordinate = Coordinate((128, 128, 128)),
+    num_workers: int = 16,
+    overwrite: bool = False,
+):
+    # get ROI from string
+    if isinstance(voxel_size, str):
+        _voxel_size = Coordinate([int(v) for v in voxel_size.split(",")])
+    else:
+        _voxel_size = voxel_size
+    if isinstance(shape, str):
+        _shape = Coordinate([int(v) for v in shape.split(",")])
+    else:
+        _shape = shape
+    if isinstance(write_shape, str):
+        _write_shape = Coordinate([int(v) for v in write_shape.split(",")])
+    else:
+        _write_shape = write_shape
+    roi = Roi((0, 0, 0), _shape * _voxel_size)
+    read_roi = write_roi = Roi((0, 0, 0), _write_shape * _voxel_size)
+
+    # get arrays
+    raw_output_array_identifier = LocalArrayIdentifier(
+        Path(output_container), raw_output_dataset
+    )
+    raw_output_array = ZarrArray.create_from_array_identifier(
+        raw_output_array_identifier,
+        roi=roi,
+        dtype=np.uint8,
+        voxel_size=_voxel_size,
+        num_channels=None,
+        axes="zyx",
+        overwrite=overwrite,
+    )
+
+    labels_output_array_identifier = LocalArrayIdentifier(
+        Path(output_container), labels_output_dataset
+    )
+    labels_output_array = ZarrArray.create_from_array_identifier(
+        labels_output_array_identifier,
+        roi=roi,
+        dtype=np.uint32,
+        voxel_size=_voxel_size,
+        num_channels=None,
+        axes="zyx",
+        overwrite=overwrite,
+    )
+
+    # make daisy blockwise task
+    dacapo.run_blockwise(
+        __file__,
+        roi,
+        read_roi,
+        write_roi,
+        num_workers=num_workers,
+        raw_output_array_identifier=raw_output_array_identifier,
+        labels_output_array_identifier=labels_output_array_identifier,
+    )
 
 
 @cli.command()
@@ -58,14 +162,15 @@ def start_worker(
         labels_output_array_identifier
     )
 
-    pipeline, request = random_source_pipeline()
-
-    def batch_generator():
+    def batch_generator(shape=(128, 128, 128), voxel_size=(8, 8, 8)):
+        pipeline, request = random_source_pipeline(
+            input_shape=shape, voxel_size=voxel_size
+        )
         with gp.build(pipeline):
             while True:
                 yield pipeline.request_batch(request)
 
-    batch_gen = batch_generator()
+    batch_gen = None
 
     # wait for blocks to run pipeline
     client = daisy.Client()
@@ -76,6 +181,14 @@ def start_worker(
             if block is None:
                 break
 
+            if batch_gen is None:
+                size = block.write_roi.get_shape()
+                voxel_size = raw_output_array.voxel_size
+                shape = Coordinate(size / voxel_size)
+                batch_gen = batch_generator(
+                    shape=shape,
+                    voxel_size=voxel_size,
+                )
             batch = next(batch_gen)
             raw_array = batch.arrays[gp.ArrayKey("RAW")]
             labels_array = batch.arrays[gp.ArrayKey("LABELS")]
