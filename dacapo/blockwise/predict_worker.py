@@ -102,7 +102,7 @@ def start_worker(
     input_size = input_voxel_size * input_shape
     output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
 
-    print("Predicting with input size %s, output size %s", input_size, output_size)
+    print(f"Predicting with input size {input_size}, output size {output_size}")
 
     # create gunpowder keys
 
@@ -174,7 +174,7 @@ def start_worker(
             if block is None:
                 return
 
-            print("Processing block %s", block)
+            print(f"Processing block {block}")
 
             chunk_request = request.copy()
             chunk_request[raw].roi = block.read_roi

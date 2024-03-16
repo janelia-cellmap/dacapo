@@ -158,7 +158,9 @@ class ZarrArray(Array):
                 zarr_dataset.attrs["dimension_units"] = [
                     f"{size} nm" for size in voxel_size[::-1]
                 ]
-                zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = axes[::-1]
+                zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = [
+                    a if a != "c" else "c^" for a in axes[::-1]
+                ]
             else:
                 zarr_dataset.attrs["offset"] = roi.offset
                 zarr_dataset.attrs["resolution"] = voxel_size
@@ -167,16 +169,18 @@ class ZarrArray(Array):
                 zarr_dataset.attrs["dimension_units"] = [
                     f"{size} nm" for size in voxel_size
                 ]
-                zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = axes
+                zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = [
+                    a if a != "c" else "c^" for a in axes
+                ]
             if num_channels is not None:
                 if axes.index("c") == 0:
                     zarr_dataset.attrs["dimension_units"] = [
-                        num_channels
+                        str(num_channels)
                     ] + zarr_dataset.attrs["dimension_units"]
                 else:
                     zarr_dataset.attrs["dimension_units"] = zarr_dataset.attrs[
                         "dimension_units"
-                    ] + [num_channels]
+                    ] + [str(num_channels)]
         except zarr.errors.ContainsArrayError:
             zarr_dataset = zarr_container[array_identifier.dataset]
             assert (

@@ -106,9 +106,9 @@ def predict(
     if isinstance(output_dtype, str):
         output_dtype = np.dtype(output_dtype)
 
-    print("Predicting with input size %s, output size %s", input_size, output_size)
+    print(f"Predicting with input size {input_size}, output size {output_size}")
 
-    print("Total input ROI: %s, output ROI: %s", _input_roi, output_roi)
+    print(f"Total input ROI: {_input_roi}, output ROI: {output_roi}")
 
     # prepare prediction dataset
     axes = ["c"] + [axis for axis in raw_array.axes if axis != "c"]

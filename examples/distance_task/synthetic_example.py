@@ -123,6 +123,7 @@ IFrame(src=viewer, width=1500, height=600)
 # Where can you find your data? What format is it in? Does it need to be normalized? What data do you want to use for validation?
 
 # We'll assume your data is in a zarr file, and that you have a raw and a ground truth dataset, all stored in your `runs_base_dir` as `example_{type}.zarr` where `{type}` is either `train` or `validate`.
+# NOTE: You may need to delete old config stores if you are re-running this cell with modifications to the configs. The config names are unique and will throw an error if you try to store a config with the same name as an existing config. For the `files` backend, you can delete the `runs_base_dir/configs` directory to remove all stored configs.
 
 # %%
 from dacapo.experiments.datasplits.datasets.arrays import (
@@ -161,7 +162,7 @@ datasplit_config = TrainValidateDataSplitConfig(
                     file_name=PosixPath(runs_base_dir, "example_train.zarr"),
                     dataset="LABELS",
                 ),
-                groupings=[("label", [1])],
+                groupings=[("labels", [1])],
             ),
         )
     ],
@@ -186,7 +187,7 @@ datasplit_config = TrainValidateDataSplitConfig(
                     file_name=PosixPath(runs_base_dir, "example_validate.zarr"),
                     dataset="LABELS",
                 ),
-                groupings=[("label", [1])],
+                groupings=[("labels", [1])],
             ),
         ),
     ],
@@ -225,7 +226,6 @@ from dacapo.experiments.architectures import CNNectomeUNetConfig
 
 architecture_config = CNNectomeUNetConfig(
     name="example_attention-unet",
-    # input_shape=(216, 216, 216),
     input_shape=(172, 172, 172),
     fmaps_out=24,
     fmaps_in=1,
@@ -268,8 +268,8 @@ trainer_config = GunpowderTrainerConfig(
         GammaAugmentConfig(gamma_range=(0.5, 2.0)),
         IntensityScaleShiftAugmentConfig(scale=2.0, shift=-1.0),
     ],
-    snapshot_interval=1000,
-    min_masked=0.05,
+    # snapshot_interval=1000,
+    # min_masked=0.05,
 )
 config_store.store_trainer_config(trainer_config)
 
@@ -291,7 +291,7 @@ start_config = None
 # )
 
 iterations = 200
-validation_interval = 100
+validation_interval = 200
 repetitions = 1
 for i in range(repetitions):
     run_config = RunConfig(
@@ -324,9 +324,8 @@ for i in range(repetitions):
 # %% [markdown]
 # ## Train
 
-# %% [markdown]
 # To train one of the runs, you can either do it by first creating a **Run** directly from the run config
-
+# NOTE: The run stats are stored in the `runs_base_dir/stats` directory. You can delete this directory to remove all stored stats if you want to re-run training. Otherwise, the stats will be appended to the existing files, and the run won't start from scratch. This may cause errors
 # %%
 from dacapo.train import train_run
 

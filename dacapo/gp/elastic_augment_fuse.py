@@ -195,18 +195,13 @@ class ElasticAugment(BatchFilter):
         self.do_augment = False
 
         logger.debug(
-            "initialized with parameters "
-            "control_point_spacing=%s "
-            "control_point_displacement_sigma=%s "
-            "rotation_start=%f "
-            "rotation_max_amount=%f "
-            "subsample=%f "
-            "seed=%d",
-            self.control_point_spacing,
-            self.control_point_displacement_sigma,
-            self.rotation_start,
-            self.rotation_max_amount,
-            self.subsample,
+            f"initialized with parameters "
+            f"control_point_spacing={self.control_point_spacing} "
+            f"control_point_displacement_sigma={self.control_point_displacement_sigma} "
+            f"rotation_start={self.rotation_start} "
+            f"rotation_max_amount={self.rotation_max_amount} "
+            f"subsample={self.subsample} "
+            f"seed={seed}"
         )
 
         assert isinstance(self.subsample, int), "subsample has to be integer"
@@ -229,27 +224,25 @@ class ElasticAugment(BatchFilter):
 
     def prepare(self, request):
         logger.debug(
-            "%s preparing request %s with transformation voxel size %s",
-            type(self).__name__,
-            request,
-            self.voxel_size,
+            logger.debug(
+                f"{type(self).__name__} preparing request {request} with transformation voxel size {self.voxel_size}"
+            )
         )
 
         total_roi = request.get_total_roi()
         master_roi = self._spatial_roi(total_roi)
-        logger.debug("master roi is %s with voxel size %s", master_roi, self.voxel_size)
+        logger.debug(f"master roi is {master_roi} with voxel size {self.voxel_size}")
 
         uniform_random_sample = np.random.rand()
         logger.debug(
-            "Prepare: Uniform random sample is %f, probability to augment is %f",
-            uniform_random_sample,
-            self.augmentation_probability,
+            f"Prepare: Uniform random sample is {uniform_random_sample}, probability to augment is {self.augmentation_probability}",
         )
         self.do_augment = uniform_random_sample < self.augmentation_probability
         if not self.do_augment:
             logger.debug(
-                "Prepare: Randomly not augmenting at all. (probabilty to augment: %f)",
-                self.augmentation_probability,
+                logger.debug(
+                    f"Prepare: Randomly not augmenting at all. (probability to augment: {self.augmentation_probability})"
+                )
             )
             return
 
@@ -263,7 +256,7 @@ class ElasticAugment(BatchFilter):
         self.target_rois.clear()
 
         logger.debug(
-            "Master transformation statistics: %s", _min_max_mean_std(master_transform)
+            f"Master transformation statistics: {_min_max_mean_std(master_transform)}"
         )
 
         for key, spec in request.items():

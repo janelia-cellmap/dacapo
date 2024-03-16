@@ -27,7 +27,7 @@ def validate(
     stored checkpoint. Returns the best parameters and scores for this
     iteration."""
 
-    print("Validating run %s at iteration %d...", run_name, iteration)
+    print(f"Validating run {run_name} at iteration {iteration}...")
 
     # create run
 
@@ -78,7 +78,7 @@ def validate_run(
         or len(run.datasplit.validate) == 0
         or run.datasplit.validate[0].gt is None
     ):
-        print("Cannot validate run %s. Continuing training!", run.name)
+        print(f"Cannot validate run {run.name}. Continuing training!")
         return None, None
 
     # get array and weight store
@@ -100,12 +100,22 @@ def validate_run(
             )
             raise NotImplementedError
 
-        print("Validating run %s on dataset %s", run.name, validation_dataset.name)
+        print(f"Validating run {run.name} on dataset {validation_dataset.name}")
 
         (
             input_raw_array_identifier,
             input_gt_array_identifier,
         ) = array_store.validation_input_arrays(run.name, validation_dataset.name)
+
+        input_voxel_size = validation_dataset.raw.voxel_size
+        output_voxel_size = run.model.scale(input_voxel_size)
+        input_shape = run.model.eval_input_shape
+        input_size = input_voxel_size * input_shape
+        output_shape = run.model.compute_output_shape(input_shape)[1]
+        output_size = output_voxel_size * output_shape
+        context = (input_size - output_size) / 2
+        output_roi = validation_dataset.gt.roi
+
         if (
             not Path(
                 f"{input_raw_array_identifier.container}/{input_raw_array_identifier.dataset}"
@@ -115,14 +125,6 @@ def validate_run(
             ).exists()
         ):
             print("Copying validation inputs!")
-            input_voxel_size = validation_dataset.raw.voxel_size
-            output_voxel_size = run.model.scale(input_voxel_size)
-            input_shape = run.model.eval_input_shape
-            input_size = input_voxel_size * input_shape
-            output_shape = run.model.compute_output_shape(input_shape)[1]
-            output_size = output_voxel_size * output_shape
-            context = (input_size - output_size) / 2
-            output_roi = validation_dataset.gt.roi
 
             input_roi = (
                 output_roi.grow(context, context)
@@ -169,7 +171,7 @@ def validate_run(
             overwrite=overwrite,
         )
 
-        print("Predicted on dataset %s", validation_dataset.name)
+        print(f"Predicted on dataset {validation_dataset.name}")
 
         post_processor.set_prediction(prediction_array_identifier)
 
