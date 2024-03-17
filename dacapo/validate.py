@@ -141,7 +141,7 @@ def validate_run(
                 name=f"{run.name}_validation_raw",
                 write_size=input_size,
             )
-            input_raw[input_roi] = validation_dataset.raw[input_roi]
+            input_raw[input_roi] = validation_dataset.raw[input_roi].squeeze()
             input_gt = ZarrArray.create_from_array_identifier(
                 input_gt_array_identifier,
                 validation_dataset.gt.axes,
@@ -152,7 +152,7 @@ def validate_run(
                 name=f"{run.name}_validation_gt",
                 write_size=output_size,
             )
-            input_gt[output_roi] = validation_dataset.gt[output_roi]
+            input_gt[output_roi] = validation_dataset.gt[output_roi].squeeze()
         else:
             print("validation inputs already copied!")
 
@@ -248,16 +248,15 @@ def validate_run(
                                 validation_dataset.name,
                                 criterion,
                             )
+                dataset_iteration_scores.append(
+                    [getattr(scores, criterion) for criterion in scores.criteria]
+                )
             except:
                 logger.error(
                     f"Could not evaluate run {run.name} on dataset {validation_dataset.name} with parameters {parameters}.",
                     exc_info=True,
                     stack_info=True,
                 )
-
-            dataset_iteration_scores.append(
-                [getattr(scores, criterion) for criterion in scores.criteria]
-            )
 
         if not any_overall_best:
             # We only keep the best outputs as determined by the evaluator

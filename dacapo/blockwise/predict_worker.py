@@ -133,29 +133,7 @@ def start_worker(
             )
         },
         spawn_subprocess=False,
-        device=device,  # type: ignore
-    )
-    # raw: (1, c, d, h, w)
-    # prediction: (1, [c,] d, h, w)
-
-    # prepare writing
-    pipeline += gp.Squeeze([raw, prediction])
-    # raw: (c, d, h, w)
-    # prediction: (c, d, h, w)
-
-    # convert to uint8 if necessary:
-    if output_array.dtype == np.uint8:
-        pipeline += gp.IntensityScaleShift(
-            prediction, scale=255.0, shift=0.0
-        )  # assumes float32 is [0,1]
-        pipeline += gp.AsType(prediction, output_array.dtype)
-
-    # write to output array
-    pipeline += gp.ZarrWrite(
-        {
-            prediction: output_array_identifier.dataset,
-        },
-        store=str(output_array_identifier.container),
+        device=str(device),
     )
 
     # make reference batch request
@@ -181,7 +159,17 @@ def start_worker(
             chunk_request[prediction].roi = block.write_roi
 
             with gp.build(pipeline):
-                _ = pipeline.request_batch(chunk_request)
+                batch = pipeline.request_batch(chunk_request)
+            # prediction: (1, [c,] d, h, w)
+            output = batch.arrays[prediction].data.squeeze()
+
+            # convert to uint8 if necessary:
+            if output_array.dtype == np.uint8:
+                output -= output.min()
+                output /= output.max()
+                output *= 255
+                output = output.astype(np.uint8)
+            output_array[block.write_roi] = output
 
 
 def spawn_worker(
