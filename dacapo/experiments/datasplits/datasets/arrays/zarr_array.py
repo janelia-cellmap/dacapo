@@ -148,6 +148,7 @@ class ZarrArray(Array):
                 num_channels=num_channels,
                 write_size=write_size,
                 delete=overwrite,
+                force_exact_write_size=True,
             )
             zarr_dataset = zarr_container[array_identifier.dataset]
             if array_identifier.container.name.endswith("n5"):
