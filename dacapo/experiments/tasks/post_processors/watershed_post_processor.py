@@ -46,6 +46,7 @@ class WatershedPostProcessor(PostProcessor):
             None,
             self.prediction_array.voxel_size,
             np.uint64,
+            block_size,
         )
 
         read_roi = Roi((0, 0, 0), self.prediction_array.voxel_size * block_size)

@@ -5,7 +5,30 @@ logger = logging.getLogger(__file__)
 
 
 class Start(ABC):
+    """
+    This class interfaces with the dacapo store to retrieve and load the
+    weights of the starter model used for finetuning.
+
+    Attributes
+    ----------
+    run : str
+        The specified run to retrieve weights for the model.
+    criterion : str
+        The policy that was used to decide when to store the weights.
+    """
+
     def __init__(self, start_config):
+        """
+        Initializes the Start class with specified config to run the
+        initialization of weights for a model associated with a specific
+        criterion.
+
+        Parameters
+        ----------
+        start_config : obj
+            An object containing configuration details for the model
+            initialization.
+        """
         self.run = start_config.run
         self.criterion = start_config.criterion
 

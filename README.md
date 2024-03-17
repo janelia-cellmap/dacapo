@@ -1,8 +1,6 @@
-![GitHub Org's stars](https://img.shields.io/github/stars/Janelia-cellmap)
-
 <img src="https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/CellMapLogo.png" alt="CellMap logo" width="85%">
 
-# DaCapo ![DaCapo](https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/icon_dacapo.png)
+# DaCapo ![DaCapo](https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/icon_dacapo.png) ![GitHub Org's stars](https://img.shields.io/github/stars/Janelia-cellmap/dacapo)
 
 [![Documentation Status](https://readthedocs.org/projects/dacapo/badge/?version=stable)](https://dacapo.readthedocs.io/en/stable/?badge=stable)
 ![Github Created At](https://img.shields.io/github/created-at/funkelab/dacapo)
