@@ -21,6 +21,6 @@ jobs:
         uses: actions/checkout@v2
       - name: mypy
         run: |
-          pip install .
+          pip install ".[pretrained]"
           pip install --upgrade mypy
           mypy dacapo
