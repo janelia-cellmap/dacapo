@@ -218,7 +218,7 @@ class DistancePredictor(Predictor):
         # diff  :   0 0 0 1 0 1 0 0 0 1 0       n - 1
         # bound.: 00000001000100000001000      2n - 1
 
-        logger.debug("computing boundaries for %s", labels.shape)
+        logger.debug(f"computing boundaries for {labels.shape}")
 
         dims = len(labels.shape)
         in_shape = labels.shape
@@ -226,10 +226,10 @@ class DistancePredictor(Predictor):
 
         boundaries = np.zeros(out_shape, dtype=bool)
 
-        logger.debug("boundaries shape is %s", boundaries.shape)
+        logger.debug(f"boundaries shape is {boundaries.shape}")
 
         for d in range(dims):
-            logger.debug("processing dimension %d", d)
+            logger.debug(f"processing dimension {d}")
 
             shift_p = [slice(None)] * dims
             shift_p[d] = slice(1, in_shape[d])
@@ -239,12 +239,12 @@ class DistancePredictor(Predictor):
 
             diff = (labels[tuple(shift_p)] - labels[tuple(shift_n)]) != 0
 
-            logger.debug("diff shape is %s", diff.shape)
+            logger.debug(f"diff shape is {diff.shape}")
 
             target = [slice(None, None, 2)] * dims
             target[d] = slice(1, out_shape[d], 2)
 
-            logger.debug("target slices are %s", target)
+            logger.debug(f"target slices are {target}")
 
             boundaries[tuple(target)] = diff
 

@@ -231,7 +231,7 @@ def run_blockwise(
     write_roi_size: str,
     num_workers: int = 16,
     max_retries: int = 2,
-    timeout=None,
+    timeout: int | None = None,
     overwrite: bool = True,
     channels_out: Optional[int] = None,
     output_dtype: np.dtype | str = "uint8",
@@ -352,7 +352,7 @@ def segment_blockwise(
     *args,
     **kwargs,
 ):
-    # get arubtrary args and kwargs
+    # get arbitrary args and kwargs
     parameters = unpack_ctx(ctx)
 
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)

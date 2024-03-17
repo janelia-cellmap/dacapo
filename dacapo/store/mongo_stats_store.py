@@ -17,8 +17,7 @@ class MongoStatsStore(StatsStore):
 
     def __init__(self, db_host, db_name):
         print(
-            "Creating MongoStatsStore:\n\thost    : %s\n\tdatabase: %s",
-            db_host,
+            "Creating MongoStatsStore:\n\thost    : %s\n\tdatabase: %s" % db_host,
             db_name,
         )
 
@@ -42,14 +41,14 @@ class MongoStatsStore(StatsStore):
                     # current stats go further than the one in DB
                     store_from_iteration = existing_stats.trained_until()
                     print(
-                        "Updating training stats of run %s after iteration %d",
-                        run_name,
+                        "Updating training stats of run %s after iteration %d"
+                        % run_name,
                         store_from_iteration,
                     )
                 else:
                     # current stats are behind DB--drop DB
                     logger.warn(
-                        "Overwriting previous training stats for run %s", run_name
+                        "Overwriting previous training stats for run %s" % run_name
                     )
                     self.__delete_training_stats(run_name)
 
@@ -72,13 +71,12 @@ class MongoStatsStore(StatsStore):
 
         if drop_db:
             # current scores are behind DB--drop DB
-            logger.warn("Overwriting previous validation scores for run %s", run_name)
+            logger.warn("Overwriting previous validation scores for run %s" % run_name)
             self.__delete_validation_scores(run_name)
 
         if store_from_iteration > 0:
             print(
-                "Updating validation scores of run %s after iteration " "%d",
-                run_name,
+                "Updating validation scores of run %s after iteration " "%d" % run_name,
                 store_from_iteration,
             )
 

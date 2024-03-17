@@ -154,17 +154,134 @@
 
 # # write_data("training", training_batch)
 # write_data("validation", validation_batch)
+# type: files
+# runs_base_dir: /path/to/my/data/storage
+# ```
+# The `runs_base_dir` defines where your on-disk data will be stored. The `type` setting determines the database backend. The default is `files`, which stores the data in a file tree on disk. Alternatively, you can use `mongodb` to store the data in a MongoDB database. To use MongoDB, you will need to provide a `mongodbhost` and `mongodbname` in the configuration file:
+#
+# ```yaml
+# mongodbhost: mongodb://dbuser:dbpass@dburl:dbport/
+# mongodbname: dacapo
+
+# %%
+# First we need to create a config store to store our configurations
+from dacapo.store.create_store import create_config_store
+
+config_store = create_config_store()
+
+# %%
+# Then let's make sure we have data to train on
+from pathlib import Path
+from dacapo import Options
+from examples.utils import get_viewer
+from examples.synthetic_source_worker import generate_synthetic_dataset
+from funlib.geometry import Coordinate
+from funlib.persistence import open_ds
+
+options = Options.instance()
+runs_base_dir = options.runs_base_dir
+
+# First for training data
+train_data_path = Path(runs_base_dir, "example_train.zarr")
+force = True
+try:
+    assert not force
+    raw_array = open_ds(str(train_data_path), "raw")
+    labels_array = open_ds(str(train_data_path), "labels")
+except:
+    train_shape = Coordinate((512, 512, 512))
+    generate_synthetic_dataset(train_data_path, shape=train_shape, overwrite=True)
+    raw_array = open_ds(str(train_data_path), "raw")
+    labels_array = open_ds(str(train_data_path), "labels")
+
+get_viewer(raw_array, labels_array)
+
+# %%
+# Then for validation data
+validate_data_path = Path(runs_base_dir, "example_validate.zarr")
+force = False
+try:
+    assert not force
+    raw_array = ZarrArray.open_from_array_identifier(
+        LocalArrayIdentifier(validate_data_path, "raw")
+    )
+    labels_array = ZarrArray.open_from_array_identifier(
+        LocalArrayIdentifier(validate_data_path, "labels")
+    )
+except:
+    validate_shape = Coordinate((256, 256, 256))
+    generate_synthetic_dataset(validate_data_path, shape=validate_shape, overwrite=True)
+
+get_viewer(raw_array, labels_array)
+
+# %%
+# TODO: REMOVE BELOW =============================================
+from examples.random_source_pipeline import random_source_pipeline
+import gunpowder as gp
+
+pipeline, request = random_source_pipeline()
+
+
+def batch_generator():
+    with gp.build(pipeline):
+        while True:
+            yield pipeline.request_batch(request)
+
+
+batch_gen = batch_generator()
+batch = next(batch_gen)
+raw_array = batch.arrays[gp.ArrayKey("RAW")]
+labels_array = batch.arrays[gp.ArrayKey("LABELS")]
+
+get_viewer(raw_array, labels_array)
+
+# labels_data = labels_array.data
+# raw_data = raw_array.data
+
+# neuroglancer.set_server_bind_address("0.0.0.0")
+# viewer = neuroglancer.Viewer()
+# with viewer.txn() as state:
+#     state.showSlices = False
+#     state.layers["segs"] = neuroglancer.SegmentationLayer(
+#         # segments=[str(i) for i in np.unique(data[data > 0])], # this line will cause all objects to be selected and thus all meshes to be generated...will be slow if lots of high res meshes
+#         source=neuroglancer.LocalVolume(
+#             data=labels_data,
+#             dimensions=neuroglancer.CoordinateSpace(
+#                 names=["z", "y", "x"],
+#                 units=["nm", "nm", "nm"],
+#                 scales=labels_array.spec.voxel_size,
+#             ),
+#             # voxel_offset=ds.roi.begin / ds.voxel_size,
+#         ),
+#         segments=np.unique(labels_data[labels_data > 0]),
+#     )
+
+#     state.layers["raw"] = neuroglancer.ImageLayer(
+#         source=neuroglancer.LocalVolume(
+#             data=raw_data,
+#             dimensions=neuroglancer.CoordinateSpace(
+#                 names=["z", "y", "x"],
+#                 units=["nm", "nm", "nm"],
+#                 scales=raw_array.spec.voxel_size,
+#             ),
+#         ),
+#     )
+
+# IFrame(src=viewer, width=1500, height=600)
+
+# TODO: REMOVE ABOVE=============================================
 
 # %% [markdown]
 # ## Datasplit
 # Where can you find your data? What format is it in? Does it need to be normalized? What data do you want to use for validation?
-# %%
-from dacapo.store.create_store import create_config_store
 
-config_store = create_config_store()
+# We'll assume your data is in a zarr file, and that you have a raw and a ground truth dataset, all stored in your `runs_base_dir` as `example_{type}.zarr` where `{type}` is either `train` or `validate`.
+# NOTE: You may need to delete old config stores if you are re-running this cell with modifications to the configs. The config names are unique and will throw an error if you try to store a config with the same name as an existing config. For the `files` backend, you can delete the `runs_base_dir/configs` directory to remove all stored configs.
+
 # %%
 from dacapo.experiments.datasplits.datasets.arrays import (
     BinarizeArrayConfig,
+    IntensitiesArrayConfig,
     ZarrArrayConfig,
 )
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
@@ -236,14 +353,11 @@ config_store.store_datasplit_config(datasplit_config)
 from dacapo.experiments.tasks import DistanceTaskConfig
 
 task_config = DistanceTaskConfig(
-    name="example_synthetic_distance_task_config",
+    name="example_distance_task",
     channels=["labels"],
     clip_distance=80.0,
     tol_distance=80.0,
     scale_factor=160.0,
-    mask_distances=True,
-    clipmin=0.05,
-    clipmax=0.95,
 )
 config_store.store_task_config(task_config)
 
@@ -282,7 +396,7 @@ from dacapo.experiments.trainers.gp_augments import (
 )
 
 trainer_config = GunpowderTrainerConfig(
-    name="example_synthetic_trainer_config",
+    name="default",
     batch_size=1,
     learning_rate=0.0001,
     num_data_fetchers=20,
@@ -309,6 +423,7 @@ config_store.store_trainer_config(trainer_config)
 # Now that we have our components configured, we just need to combine them into a run and start training. We can have multiple repetitions of a single set of configs in order to increase our chances of finding an optimum.
 
 # %%
+from dacapo.experiments.starts import StartConfig
 from dacapo.experiments import RunConfig
 from dacapo.experiments.run import Run
 
@@ -320,22 +435,24 @@ start_config = None
 #     "best",
 # )
 
-iterations = 100000
-validation_interval = 50
+iterations = 200
+validation_interval = 200
 repetitions = 1
 for i in range(repetitions):
     run_config = RunConfig(
-        name=("_").join(
-            [
-                "example",
-                "scratch" if start_config is None else "finetuned",
-                datasplit_config.name,
-                task_config.name,
-                architecture_config.name,
-                trainer_config.name,
-            ]
-        )
-        + f"__{i}",
+        name="example_synthetic_distance_run",
+        # # NOTE: This is a template for the name of the run. You can customize it as you see fit.
+        # name=("_").join(
+        #     [
+        #         "example",
+        #         "scratch" if start_config is None else "finetuned",
+        #         datasplit_config.name,
+        #         task_config.name,
+        #         architecture_config.name,
+        #         trainer_config.name,
+        #     ]
+        # )
+        # + f"__{i}",
         datasplit_config=datasplit_config,
         task_config=task_config,
         architecture_config=architecture_config,
@@ -352,27 +469,13 @@ for i in range(repetitions):
 # %% [markdown]
 # ## Train
 
-# %% [markdown]
 # To train one of the runs, you can either do it by first creating a **Run** directly from the run config
-
+# NOTE: The run stats are stored in the `runs_base_dir/stats` directory. You can delete this directory to remove all stored stats if you want to re-run training. Otherwise, the stats will be appended to the existing files, and the run won't start from scratch. This may cause errors
 # %%
 from dacapo.train import train_run
 
-
-run_name = "example_scratch_example_synthetic_datasplit_config_example_synthetic_distance_task_config_example_synthetic_unet_example_synthetic_trainer_config__0"
-
-run = Run(config_store.retrieve_run_config(run_name))
+run = Run(config_store.retrieve_run_config(run_config.name))
 train_run(run)
 
 # %% [markdown]
 # If you want to start your run on some compute cluster, you might want to use the command line interface: dacapo train -r {run_config.name}. This makes it particularly convenient to run on compute nodes where you can specify specific compute requirements.
-
-# %%
-# from dacapo.validate import validate
-
-# validate(
-#     "example_scratch_example_synthetic_datasplit_config_example_synthetic_distance_task_config_example_synthetic_unet_example_synthetic_trainer_config__0",
-#     iteration=10000,
-# )
-
-# %%
