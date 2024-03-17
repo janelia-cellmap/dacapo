@@ -98,8 +98,8 @@ class LocalArrayStore(ArrayStore):
 
         if not path.exists():
             logger.warning(
-                "Asked to remove dataset %s in container %s, but it doesn't exist.",
-                dataset,
+                "Asked to remove dataset %s in container %s, but it doesn't exist."
+                % dataset,
                 container,
             )
             return
@@ -107,13 +107,12 @@ class LocalArrayStore(ArrayStore):
         if not path.is_dir():
             logger.warning(
                 "Asked to remove dataset %s in container %s, but it is not "
-                "a directory. Will not delete.",
-                dataset,
+                "a directory. Will not delete." % dataset,
                 container,
             )
             return
 
-        print("Removing dataset %s in container %s", dataset, container)
+        print("Removing dataset %s in container %s" % dataset, container)
         shutil.rmtree(path)
 
     def __get_run_dir(self, run_name: str) -> Path:
