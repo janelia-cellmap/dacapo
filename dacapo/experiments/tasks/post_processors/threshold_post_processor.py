@@ -17,7 +17,7 @@ class ThresholdPostProcessor(PostProcessor):
 
     def enumerate_parameters(self) -> Iterable["ThresholdPostProcessorParameters"]:
         """Enumerate all possible parameters of this post-processor."""
-        for i, threshold in enumerate([-0.1, 0.0, 0.1]):
+        for i, threshold in enumerate([100, 127, 150]):
             yield ThresholdPostProcessorParameters(id=i, threshold=threshold)
 
     def set_prediction(self, prediction_array_identifier):

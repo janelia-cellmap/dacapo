@@ -53,13 +53,12 @@ class RejectIfEmpty(BatchFilter):
             if empty and have_good_batch:
                 num_rejected += 1
                 logger.debug(
-                    "reject empty gt at %s" % batch.arrays[self.gt].spec.roi,
+                    f"reject empty gt at {batch.arrays[self.gt].spec.roi}",
                 )
                 if timing.elapsed() > report_next_timeout:
                     logger.warning(
-                        "rejected %d batches, been waiting for a good one "
-                        "since %ds" % num_rejected,
-                        report_next_timeout,
+                        f"rejected {num_rejected} batches, been waiting for a good one "
+                        f"since {report_next_timeout}s",
                     )
                     report_next_timeout *= 2
                 if report_next_timeout > 20:
