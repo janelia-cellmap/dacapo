@@ -46,6 +46,7 @@ dependencies = [
         "funlib.geometry>=0.2",
         "mwatershed>=0.1",
         "funlib.persistence",
+        "funlib.show.neuroglancer @ git+https://github.com/funkelab/funlib.show.neuroglancer",
         # "funlib.persistence @ git+https://github.com/janelia-cellmap/funlib.persistence",
         "funlib.evaluate @ git+https://github.com/pattonw/funlib.evaluate",
         "gunpowder>=1.3",
