@@ -281,7 +281,6 @@ get_viewer(raw_array, labels_array)
 # %%
 from dacapo.experiments.datasplits.datasets.arrays import (
     BinarizeArrayConfig,
-    IntensitiesArrayConfig,
     ZarrArrayConfig,
 )
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
@@ -423,7 +422,6 @@ config_store.store_trainer_config(trainer_config)
 # Now that we have our components configured, we just need to combine them into a run and start training. We can have multiple repetitions of a single set of configs in order to increase our chances of finding an optimum.
 
 # %%
-from dacapo.experiments.starts import StartConfig
 from dacapo.experiments import RunConfig
 from dacapo.experiments.run import Run
 
