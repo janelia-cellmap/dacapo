@@ -7,21 +7,10 @@ from .start import Start
 logger = logging.getLogger(__file__)
 
 
-def format_name(name):
-    if "/" in name:
-        run, criterion = name.split("/")
-        return run, criterion
-    else:
-        raise ValueError(
-            f"Invalid starter name format {name}. Must be in the format run/criterion"
-        )
-
-
 class CosemStart(Start):
     def __init__(self, start_config):
-        run, criterion = format_name(start_config.name)
-        self.name = start_config.name
-        super().__init__(run, criterion)
+        self.name = f"{self.run}/{self.criterion}"
+        super().__init__(start_config)
 
     def initialize_weights(self, model):
         from dacapo.store.create_store import create_weights_store
