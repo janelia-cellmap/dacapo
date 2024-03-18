@@ -76,3 +76,6 @@ class IntensitiesArray(Array):
 
     def _source_name(self):
         return self._source_array._source_name()
+    
+    def _neuroglancer_source(self):
+        return self._source_array._neuroglancer_source()
