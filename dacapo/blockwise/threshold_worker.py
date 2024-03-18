@@ -5,6 +5,7 @@ from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.compute_context import create_compute_context
 
 import daisy
+from funlib.persistence import open_ds
 
 import numpy as np
 import click
@@ -57,7 +58,12 @@ def start_worker(
     output_array_identifier = LocalArrayIdentifier(
         Path(output_container), output_dataset
     )
-    output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
+    # output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
+    output_array = open_ds(
+        str(output_array_identifier.container),
+        output_array_identifier.dataset,
+        mode="a",
+    )
 
     # wait for blocks to run pipeline
     client = daisy.Client()

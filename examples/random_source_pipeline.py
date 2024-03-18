@@ -42,7 +42,7 @@ class MakeRaw(gp.BatchFilter):
         self,
         raw,
         labels,
-        gaussian_noise_args: Iterable = (0, 0.1),
+        gaussian_noise_args: Iterable = (0, 0.2),
         gaussian_blur_args: Iterable = (0.5, 1.5),
         membrane_like=True,
         membrane_size=3,
@@ -63,7 +63,7 @@ class MakeRaw(gp.BatchFilter):
 
     def process(self, batch, request):
         labels = batch[self.labels].data
-        raw = np.zeros_like(labels, dtype=np.float32)
+        raw: np.ndarray = np.zeros_like(labels, dtype=np.float32)
         raw[labels > 0] = 1
 
         # generate membrane-like structure
@@ -77,12 +77,13 @@ class MakeRaw(gp.BatchFilter):
         raw = gaussian_filter(raw, random.uniform(*self.gaussian_blur_args))
 
         # now add noise
-        raw += np.random.normal(*self.gaussian_noise_args, raw.shape)  # type: ignore
+        noise = np.random.normal(*self.gaussian_noise_args, raw.shape)  # type: ignore
+        noise -= noise.min()
+        noise.clip(0, 1, out=noise)
 
-        # normalize to [0, 1]
-        raw -= raw.min()
-        raw /= raw.max()
+        raw -= noise
         raw = 1 - raw  # invert
+        raw.clip(0, 1, out=raw)
 
         # add to batch
         spec = self._spec[self.raw].copy()  # type: ignore
@@ -121,12 +122,8 @@ class RandomDilateLabels(gp.BatchFilter):
             if id == 0:
                 continue
             dilations = np.random.randint(*self.dilations)
-            # dilated = distance_transform_edt(labels != id) <= dilations  # type: ignore
 
             # # make sure we don't overlap existing labels
-            # dilated[labels > 0] = False
-            # dilated[labels == id] = True
-            # new_labels[dilated] = id
             new_labels[
                 np.logical_or(
                     labels == id,

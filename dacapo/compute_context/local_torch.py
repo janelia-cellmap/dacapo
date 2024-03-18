@@ -26,7 +26,7 @@ class LocalTorch(ComputeContext):
     )
 
     oom_limit: Optional[float | int] = attr.ib(
-        default=2.0,
+        default=4.2,
         metadata={
             "help_text": "The out of GPU memory to leave free in GB. If the free memory is below this limit, we will fall back on CPU."
         },
