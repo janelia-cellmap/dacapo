@@ -37,7 +37,7 @@ class WatershedPostProcessor(PostProcessor):
         parameters: WatershedPostProcessorParameters,  # type: ignore[override]
         output_array_identifier: "LocalArrayIdentifier",
         num_workers: int = 16,
-        block_size: Coordinate = Coordinate((64, 64, 64)),
+        block_size: Coordinate = Coordinate((256, 256, 256)),
     ):
         output_array = ZarrArray.create_from_array_identifier(
             output_array_identifier,

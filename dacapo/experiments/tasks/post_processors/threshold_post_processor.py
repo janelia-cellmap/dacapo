@@ -31,7 +31,7 @@ class ThresholdPostProcessor(PostProcessor):
         parameters: "ThresholdPostProcessorParameters",  # type: ignore[override]
         output_array_identifier: "LocalArrayIdentifier",
         num_workers: int = 16,
-        block_size: Coordinate = Coordinate((64, 64, 64)),
+        block_size: Coordinate = Coordinate((256, 256, 256)),
     ) -> ZarrArray:
         # TODO: Investigate Liskov substitution princple and whether it is a problem here
         # OOP theory states the super class should always be replaceable with its subclasses
