@@ -164,6 +164,7 @@ exclude = [
 # # module specific overrides
 [[tool.mypy.overrides]]
 module = [
+    "cellmap_models.*",
     "funlib.*",
     "toml.*", 
     "gunpowder.*",
