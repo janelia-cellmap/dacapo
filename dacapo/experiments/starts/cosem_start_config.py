@@ -2,6 +2,7 @@ import attr
 from .cosem_start import CosemStart
 from .start_config import StartConfig
 
+
 @attr.s
 class CosemStartConfig(StartConfig):
     """Starter for COSEM pretained models. This is a subclass of `StartConfig` and
