@@ -14,6 +14,7 @@ class CosemStart(Start):
 
     def check(self):
         from dacapo.store.create_store import create_weights_store
+
         weights_store = create_weights_store()
         weights_dir = Path(weights_store.basedir, self.run, "checkpoints", "iterations")
         if not (weights_dir / self.criterion).exists():
