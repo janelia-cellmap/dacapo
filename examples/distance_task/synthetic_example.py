@@ -211,7 +211,7 @@ config_store.store_task_config(task_config)
 from dacapo.experiments.architectures import CNNectomeUNetConfig
 
 architecture_config = CNNectomeUNetConfig(
-    name="example_attention-unet",
+    name="example-unet",
     input_shape=(172, 172, 172),
     fmaps_out=24,
     fmaps_in=1,
@@ -331,7 +331,7 @@ train_run(run)
 # %%
 from dacapo.validate import validate
 
-validate(run_config.name, iterations, num_workers=32)
+validate(run_config.name, iterations, num_workers=16, overwrite=True)
 
 # %% [markdown]
 # ## Predict
@@ -368,4 +368,7 @@ predict(
     num_workers=32,
     overwrite=True,
     output_dtype="float32",
+    output_roi=raw_array.roi,
 )
+
+# %%
