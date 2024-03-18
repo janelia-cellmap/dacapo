@@ -46,6 +46,7 @@ dependencies = [
         "funlib.geometry>=0.2",
         "mwatershed>=0.1",
         "funlib.persistence",
+        "cellmap-models",
         # "funlib.persistence @ git+https://github.com/janelia-cellmap/funlib.persistence",
         "funlib.evaluate @ git+https://github.com/pattonw/funlib.evaluate",
         "gunpowder>=1.3",
@@ -163,6 +164,7 @@ exclude = [
 # # module specific overrides
 [[tool.mypy.overrides]]
 module = [
+    "cellmap_models.*",
     "funlib.*",
     "toml.*", 
     "gunpowder.*",
