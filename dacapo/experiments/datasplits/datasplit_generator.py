@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List
 from enum import Enum, EnumMeta
 from funlib.geometry import Coordinate
-from typing import Union
+from typing import Union, Optional
 
 import zarr
 from dacapo.experiments.datasplits.datasets.arrays import (
@@ -12,12 +12,15 @@ from dacapo.experiments.datasplits.datasets.arrays import (
     ResampledArrayConfig,
     BinarizeArrayConfig,
     IntensitiesArrayConfig,
+    ConcatArrayConfig,
 )
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
 from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
 import logging
 
 logger = logging.getLogger(__name__)
+
+__SEPARATOR_CARACTER = "&"
 
 
 def is_zarr_group(file_name: str, dataset: str):
@@ -85,13 +88,11 @@ class CustomEnumMeta(EnumMeta):
                 f"{item} is not a valid option of {self.__name__}, the valid options are {self._member_names_}"
             )
         return super().__getitem__(item)
-    
+
+
 class CustomEnum(Enum, metaclass=CustomEnumMeta):
     def __str__(self) -> str:
         return self.name
-    
-    def __str__(self) -> str:
-        return super().name
 
 
 class DatasetType(CustomEnum):
@@ -157,9 +158,13 @@ def generate_dataspec_from_csv(csv_path: Path):
 
 class DataSplitGenerator:
     """Generates DataSplitConfig for a given task config and datasets.
+    class names in gt_dataset shoulb be within [] e.g. [mito&peroxisome&er] for mutiple classes or [mito] for one class
     Currently only supports:
      - semantic segmentation.
-     - one channel raw and one channel gt.
+     Supports:
+        - 2D and 3D datasets.
+        - Zarr, N5 and OME-Zarr datasets.
+        - Multi class targets.
     """
 
     def __init__(
@@ -168,6 +173,7 @@ class DataSplitGenerator:
         datasets: List[DatasetSpec],
         input_resolution: Coordinate,
         output_resolution: Coordinate,
+        targets: Optional[List[str]] = None,
         segmentation_type: Union[str, SegmentationType] = "semantic",
         max_gt_downsample=32,
         max_gt_upsample=4,
@@ -183,7 +189,8 @@ class DataSplitGenerator:
         self.datasets = datasets
         self.input_resolution = input_resolution
         self.output_resolution = output_resolution
-        self.target_class_name = None
+        self.targets = targets
+        self._class_name = None
 
         if isinstance(segmentation_type, str):
             segmentation_type = SegmentationType[segmentation_type.lower()]
@@ -204,17 +211,30 @@ class DataSplitGenerator:
 
     @property
     def class_name(self):
-        if self.target_class_name is None:
-            raise ValueError("Class name not set yet.")
-        return self.target_class_name
+        return self._class_name
+
+    # Goal is to force class_name to be set only once, so we have the same classes for all datasets
+    @class_name.setter
+    def class_name(self, class_name):
+        if self._class_name is not None:
+            raise ValueError(
+                f"Class name already set. Current class name is {self.class_name} and new class name is {class_name}"
+            )
+        self._class_name = class_name
 
     def check_class_name(self, class_name):
-        if self.target_class_name is None:
-            self.target_class_name = class_name
-        elif self.target_class_name != class_name:
+        datasets, classes = format_class_name(class_name)
+        if self.class_name is None:
+            self.class_name = classes
+            if self.targets is None:
+                logger.warning(
+                    f" No targets specified, using all classes in the dataset as target {classes}."
+                )
+        elif self.class_name != classes:
             raise ValueError(
-                f"Datasets are having different class names:  {class_name} does not match {self.target_class_name}"
+                f"Datasets are having different classes names:  {classes} does not match {self.class_name}"
             )
+        return datasets, classes
 
     def compute(self):
         if self.segmentation_type == SegmentationType.semantic:
@@ -257,18 +277,14 @@ class DataSplitGenerator:
         gt_path = dataset.gt_container
         gt_dataset = dataset.gt_dataset
 
-        current_class_name = Path(gt_dataset).stem
-        self.check_class_name(current_class_name)
-
         if not (raw_container / raw_dataset).exists():
             raise FileNotFoundError(
                 f"Raw path {raw_container/raw_dataset} does not exist."
             )
 
-        if not (gt_path / gt_dataset).exists():
-            raise FileNotFoundError(f"GT path {gt_path/gt_dataset} does not exist.")
-        
-        print(f"Processing raw_container:{raw_container} raw_dataset:{raw_dataset} gt_path:{gt_path} gt_dataset:{gt_dataset}")
+        # print(
+        #     f"Processing raw_container:{raw_container} raw_dataset:{raw_dataset} gt_path:{gt_path} gt_dataset:{gt_dataset}"
+        # )
 
         if is_zarr_group(str(raw_container), raw_dataset):
             raw_config = get_right_resolution_array_config(
@@ -290,51 +306,86 @@ class DataSplitGenerator:
             min=self.raw_min,
             max=self.raw_max,
         )
-
-        if is_zarr_group(str(gt_path), gt_dataset):
-            gt_config = get_right_resolution_array_config(
-                gt_path, gt_dataset, self.output_resolution, "gt"
+        organelle_arrays = {}
+        classes_datasets, classes = self.check_class_name(gt_dataset)
+        for current_class_dataset, current_class_name in zip(classes_datasets, classes):
+            if not (gt_path / current_class_dataset).exists():
+                raise FileNotFoundError(
+                    f"GT path {gt_path/current_class_dataset} does not exist."
+                )
+            if is_zarr_group(str(gt_path), current_class_dataset):
+                gt_config = get_right_resolution_array_config(
+                    gt_path, current_class_dataset, self.output_resolution, "gt"
+                )
+            else:
+                gt_config = resize_if_needed(
+                    ZarrArrayConfig(
+                        name=f"gt_{gt_path.stem}_{current_class_dataset}_uint8",
+                        file_name=gt_path,
+                        dataset=current_class_dataset,
+                    ),
+                    self.output_resolution,
+                    "gt",
+                )
+            gt_config = BinarizeArrayConfig(
+                f"{dataset}_{current_class_name}_{self.output_resolution[0]}nm_binarized",
+                source_array_config=gt_config,
+                groupings=[(current_class_name, [])],
             )
+            organelle_arrays[current_class_name] = gt_config
+        if self.targets is None:
+            targets_str = "_".join(classes)
+            current_targets = classes
         else:
-            gt_config = resize_if_needed(
-                ZarrArrayConfig(
-                    name=f"gt_{gt_path.stem}_{gt_dataset}_uint8",
-                    file_name=gt_path,
-                    dataset=gt_dataset,
-                ),
-                self.output_resolution,
-                "gt",
+            current_targets = self.targets
+            targets_str = "_".join(self.targets)
+        if len(organelle_arrays) > 1:
+            gt_config = ConcatArrayConfig(
+                name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_gt",
+                channels=[organelle for organelle in current_targets],
+                source_array_configs={k: gt for k, gt in organelle_arrays.items()},
             )
-        gt_config = BinarizeArrayConfig(
-            f"{dataset}_{self.class_name}_{self.output_resolution[0]}nm_binarized",
-            source_array_config=gt_config,
-            groupings=[(self.class_name, [])],
-        )
+
         return raw_config, gt_config
 
-    @staticmethod
-    def generate_csv(datasets: List[DatasetSpec], csv_path: Path):
-        print(f"Writing dataspecs to {csv_path}")
-        with open(csv_path, "w") as f:
-            for dataset in datasets:
-                f.write(
-                    f"{dataset.dataset_type.name},{str(dataset.raw_container)},{dataset.raw_dataset},{str(dataset.gt_container)},{dataset.gt_dataset}\n"
-                )
+    # @staticmethod
+    # def generate_csv(datasets: List[DatasetSpec], csv_path: Path):
+    #     print(f"Writing dataspecs to {csv_path}")
+    #     with open(csv_path, "w") as f:
+    #         for dataset in datasets:
+    #             f.write(
+    #                 f"{dataset.dataset_type.name},{str(dataset.raw_container)},{dataset.raw_dataset},{str(dataset.gt_container)},{dataset.gt_dataset}\n"
+    #             )
 
     @staticmethod
     def generate_from_csv(
         csv_path: Path,
         input_resolution: Coordinate,
         output_resolution: Coordinate,
+        name: Optional[str] = None,
         **kwargs,
     ):
         if isinstance(csv_path, str):
             csv_path = Path(csv_path)
-            
+
+        if name is None:
+            name = csv_path.stem
+
         return DataSplitGenerator(
-            csv_path.stem,
+            name,
             generate_dataspec_from_csv(csv_path),
             input_resolution,
             output_resolution,
             **kwargs,
         )
+
+
+def format_class_name(class_name):
+    if "[" in class_name:
+        if "]" not in class_name:
+            raise ValueError(f"Invalid class name {class_name} missing ']'")
+        classes = class_name.split("[")[1].split("]")[0].split(__SEPARATOR_CARACTER)
+        base_class_name = class_name.split("[")[0]
+        return [f"{base_class_name}{c}" for c in classes], classes
+    else:
+        raise ValueError(f"Invalid class name {class_name} missing '[' and ']'")

@@ -1,7 +1,6 @@
 from .array import Array
-from .array_utils import open_dataset
 from dacapo import Options
-
+from funlib.persistence import open_ds
 from funlib.geometry import Coordinate, Roi
 import funlib.persistence
 
@@ -228,19 +227,20 @@ class ZarrArray(Array):
         return True
 
     def _neuroglancer_source(self):
-        return open_dataset(str(self.file_name), self.dataset)
-
+        d = open_ds(str(self.file_name), self.dataset)
+        return neuroglancer.LocalVolume(
+            data=d.data,
+            dimensions=neuroglancer.CoordinateSpace(
+                names=["z", "y", "x"],
+                units=["nm", "nm", "nm"],
+                scales=self.voxel_size,
+            ),
+            voxel_offset=self.roi.get_begin() / self.voxel_size,
+        )
 
     def _neuroglancer_layer(self) -> Tuple[neuroglancer.ImageLayer, Dict[str, Any]]:
-        # Generates an Image layer. May not be correct if this crop contains a segmentation
-        # this is broke, needs to be re done
-
         layer = neuroglancer.ImageLayer(source=self._neuroglancer_source())
-        kwargs = {
-            "visible": False,
-            "blend": "additive",
-        }
-        return layer, kwargs
+        return layer
 
     def _transform_matrix(self):
         is_zarr = self.file_name.name.endswith(".zarr")
@@ -288,4 +288,3 @@ class ZarrArray(Array):
         dataset = zarr.open(self.file_name, mode="a")[self.dataset]
         for k, v in metadata.items():
             dataset.attrs[k] = v
-
