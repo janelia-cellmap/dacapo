@@ -25,6 +25,13 @@ class LocalTorch(ComputeContext):
         },
     )
 
+    oom_limit: Optional[float | int] = attr.ib(
+        default=2.0,
+        metadata={
+            "help_text": "The out of GPU memory to leave free in GB. If the free memory is below this limit, we will fall back on CPU."
+        },
+    )
+
     @property
     def device(self):
         """
@@ -33,6 +40,10 @@ class LocalTorch(ComputeContext):
         """
         if self._device is None:
             if torch.cuda.is_available():
+                # TODO: make this more sophisticated, for multiple GPUs for instance
+                free = torch.cuda.mem_get_info()[0] / 1024**3
+                if free < self.oom_limit:  # less than 1 GB free, decrease chance of OOM
+                    return torch.device("cpu")
                 return torch.device("cuda")
             else:
                 return torch.device("cpu")

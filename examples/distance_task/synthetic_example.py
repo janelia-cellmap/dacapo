@@ -180,17 +180,20 @@ from funlib.persistence import open_ds
 
 options = Options.instance()
 runs_base_dir = options.runs_base_dir
+force = False
+num_workers = 32
 
 # First for training data
 train_data_path = Path(runs_base_dir, "example_train.zarr")
-force = True
 try:
     assert not force
     raw_array = open_ds(str(train_data_path), "raw")
     labels_array = open_ds(str(train_data_path), "labels")
 except:
     train_shape = Coordinate((512, 512, 512))
-    generate_synthetic_dataset(train_data_path, shape=train_shape, overwrite=True)
+    generate_synthetic_dataset(
+        train_data_path, shape=train_shape, overwrite=True, num_workers=num_workers
+    )
     raw_array = open_ds(str(train_data_path), "raw")
     labels_array = open_ds(str(train_data_path), "labels")
 
@@ -202,77 +205,21 @@ from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from dacapo.store.array_store import LocalArrayIdentifier
 
 validate_data_path = Path(runs_base_dir, "example_validate.zarr")
-force = False
 try:
     assert not force
-    raw_array = ZarrArray.open_from_array_identifier(
-        LocalArrayIdentifier(validate_data_path, "raw")
-    )
-    labels_array = ZarrArray.open_from_array_identifier(
-        LocalArrayIdentifier(validate_data_path, "labels")
-    )
+    raw_array = open_ds(str(validate_data_path), "raw")
+    labels_array = open_ds(str(validate_data_path), "labels")
 except:
-    validate_shape = Coordinate((108, 108, 108))
-    generate_synthetic_dataset(validate_data_path, shape=validate_shape, overwrite=True)
+    validate_shape = Coordinate((152, 152, 152)) * 3
+    generate_synthetic_dataset(
+        validate_data_path,
+        shape=validate_shape,
+        write_shape=Coordinate((152, 152, 152)),
+        overwrite=True,
+        num_workers=num_workers,
+    )
 
 get_viewer(raw_array, labels_array)
-
-# %%
-# TODO: REMOVE BELOW =============================================
-from examples.random_source_pipeline import random_source_pipeline
-import gunpowder as gp
-
-pipeline, request = random_source_pipeline()
-
-
-def batch_generator():
-    with gp.build(pipeline):
-        while True:
-            yield pipeline.request_batch(request)
-
-
-batch_gen = batch_generator()
-batch = next(batch_gen)
-raw_array = batch.arrays[gp.ArrayKey("RAW")]
-labels_array = batch.arrays[gp.ArrayKey("LABELS")]
-
-get_viewer(raw_array, labels_array)
-
-# labels_data = labels_array.data
-# raw_data = raw_array.data
-
-# neuroglancer.set_server_bind_address("0.0.0.0")
-# viewer = neuroglancer.Viewer()
-# with viewer.txn() as state:
-#     state.showSlices = False
-#     state.layers["segs"] = neuroglancer.SegmentationLayer(
-#         # segments=[str(i) for i in np.unique(data[data > 0])], # this line will cause all objects to be selected and thus all meshes to be generated...will be slow if lots of high res meshes
-#         source=neuroglancer.LocalVolume(
-#             data=labels_data,
-#             dimensions=neuroglancer.CoordinateSpace(
-#                 names=["z", "y", "x"],
-#                 units=["nm", "nm", "nm"],
-#                 scales=labels_array.spec.voxel_size,
-#             ),
-#             # voxel_offset=ds.roi.begin / ds.voxel_size,
-#         ),
-#         segments=np.unique(labels_data[labels_data > 0]),
-#     )
-
-#     state.layers["raw"] = neuroglancer.ImageLayer(
-#         source=neuroglancer.LocalVolume(
-#             data=raw_data,
-#             dimensions=neuroglancer.CoordinateSpace(
-#                 names=["z", "y", "x"],
-#                 units=["nm", "nm", "nm"],
-#                 scales=raw_array.spec.voxel_size,
-#             ),
-#         ),
-#     )
-
-# IFrame(src=viewer, width=1500, height=600)
-
-# TODO: REMOVE ABOVE=============================================
 
 # %% [markdown]
 # ## Datasplit
@@ -285,60 +232,67 @@ get_viewer(raw_array, labels_array)
 from dacapo.experiments.datasplits.datasets.arrays import (
     BinarizeArrayConfig,
     ZarrArrayConfig,
+    IntensitiesArrayConfig
 )
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
 from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
-from pathlib import PosixPath
+from pathlib import Path
+from dacapo import Options
+
+options = Options.instance()
+runs_base_dir = options.runs_base_dir
 
 datasplit_config = TrainValidateDataSplitConfig(
-    name="example_synthetic_datasplit_config",
+    name="synthetic_datasplit_config",
     train_configs=[
         RawGTDatasetConfig(
-            name="training_config",
-            raw_config=ZarrArrayConfig(
-                name="raw",
-                file_name=PosixPath("./tmp/training.zarr"),
-                dataset="RAW",
-                snap_to_grid=(8, 8, 8),
-                axes=None,
+            name="train_data",
+            weight=1,
+            raw_config=IntensitiesArrayConfig(
+                name="raw_train_data",
+                source_array_config=ZarrArrayConfig(
+                    name="raw_train_data_uint8",
+                    file_name=Path(runs_base_dir, "example_train.zarr"),
+                    dataset="raw",
+                ),
+                min=0.0,
+                max=255.0,
             ),
             gt_config=BinarizeArrayConfig(
-                name="training_gt",
+                name="gt_train_data",
                 source_array_config=ZarrArrayConfig(
-                    name="gt",
-                    file_name=PosixPath("./tmp/training.zarr"),
-                    dataset="LABELS",
-                    snap_to_grid=(8, 8, 8),
-                    axes=None,
+                    name="gt_train_data_zarr",
+                    file_name=Path(runs_base_dir, "example_train.zarr"),
+                    dataset="labels",
                 ),
                 groupings=[("labels", [])],
-                background=0,
             ),
-        ),
+        )
     ],
     validate_configs=[
         RawGTDatasetConfig(
-            name="validation_config",
-            raw_config=ZarrArrayConfig(
-                name="raw",
-                file_name=PosixPath("./tmp/validation.zarr"),
-                dataset="RAW",
-                snap_to_grid=(8, 8, 8),
-                axes=None,
+            name="validate_data",
+            weight=1,
+            raw_config=IntensitiesArrayConfig(
+                name="raw_validate_data",
+                source_array_config=ZarrArrayConfig(
+                    name="raw_validate_data_uint8",
+                    file_name=Path(runs_base_dir, "example_validate.zarr"),
+                    dataset="raw",
+                ),
+                min=0.0,
+                max=255.0,
             ),
             gt_config=BinarizeArrayConfig(
-                name="validation_gt",
+                name="gt_validate_data",
                 source_array_config=ZarrArrayConfig(
-                    name="gt",
-                    file_name=PosixPath("./tmp/validation.zarr"),
-                    dataset="LABELS",
-                    snap_to_grid=(8, 8, 8),
-                    axes=None,
+                    name="gt_validate_data_zarr",
+                    file_name=Path(runs_base_dir, "example_validate.zarr"),
+                    dataset="labels",
                 ),
                 groupings=[("labels", [])],
-                background=0,
             ),
-        )
+        ),
     ],
 )
 
@@ -437,7 +391,7 @@ start_config = None
 # )
 
 iterations = 200
-validation_interval = 200
+validation_interval = 50
 repetitions = 1
 for i in range(repetitions):
     run_config = RunConfig(
@@ -474,9 +428,65 @@ for i in range(repetitions):
 # NOTE: The run stats are stored in the `runs_base_dir/stats` directory. You can delete this directory to remove all stored stats if you want to re-run training. Otherwise, the stats will be appended to the existing files, and the run won't start from scratch. This may cause errors
 # %%
 from dacapo.train import train_run
+from dacapo.experiments.run import Run
+from dacapo.store.create_store import create_config_store
 
-run = Run(config_store.retrieve_run_config(run_config.name))
+config_store = create_config_store()
+
+run = Run(config_store.retrieve_run_config("example_synthetic_distance_run"))
 train_run(run)
 
 # %% [markdown]
 # If you want to start your run on some compute cluster, you might want to use the command line interface: dacapo train -r {run_config.name}. This makes it particularly convenient to run on compute nodes where you can specify specific compute requirements.
+
+
+# %% [markdown]
+# ## Validate
+
+# Once you have trained your model, you can validate it on the validation datasets used during training. You can use the `dacapo.validate` function to do this. You can also use the command line interface to validate a run: dacapo validate -r {run_config.name} -i {iteration}
+
+# Generally we setup training to automatically validate at a set interval and the model checkpoints are saved at these intervals.
+
+# %%
+from dacapo.validate import validate
+
+validate(run.name, iterations, num_workers=32)
+
+# %% [markdown]
+# ## Predict
+# Once you have trained and validated your model, you can use it to predict on new data. You can use the `dacapo.predict` function to do this. You can also use the command line interface to predict on a run: dacapo predict -r {run_config.name} -i {iteration} -ic {input_container} -id {input_dataset} -op {output_path}
+
+# %%
+# First let's make some test data
+test_data_path = Path(runs_base_dir, "example_test.zarr")
+try:
+    assert not force
+    raw_array = open_ds(str(test_data_path), "raw")
+    labels_array = open_ds(str(test_data_path), "labels")
+except:
+    test_shape = Coordinate((152, 152, 152)) * 3
+    generate_synthetic_dataset(
+        test_data_path,
+        shape=test_shape,
+        overwrite=True,
+        num_workers=num_workers,
+    )
+
+get_viewer(raw_array, labels_array)
+
+# %%
+from dacapo.predict import predict
+
+predict(
+    run.name,
+    iterations,
+    test_data_path,
+    "raw",
+    Path(runs_base_dir, "example_test.zarr"),
+    num_workers=32,
+    overwrite=True,
+)
+# %%
+from dacapo.validate import validate_run
+
+validate_run(run.name, 50, num_workers=32)

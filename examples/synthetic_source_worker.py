@@ -20,7 +20,7 @@ import logging
 logger = logging.getLogger(__file__)
 
 read_write_conflict: bool = False
-fit: str = "valid"
+fit: str = "shrink"
 path = __file__
 
 
@@ -109,8 +109,9 @@ def generate_synthetic_dataset(
         dtype=np.uint8,
         voxel_size=_voxel_size,
         num_channels=None,
-        axes="zyx",
+        axes=["z", "y", "x"],
         overwrite=overwrite,
+        write_size=_write_shape * voxel_size,
     )
 
     labels_output_array_identifier = LocalArrayIdentifier(
@@ -119,11 +120,12 @@ def generate_synthetic_dataset(
     labels_output_array = ZarrArray.create_from_array_identifier(
         labels_output_array_identifier,
         roi=roi,
-        dtype=np.uint32,
+        dtype=np.uint64,
         voxel_size=_voxel_size,
         num_channels=None,
-        axes="zyx",
+        axes=["z", "y", "x"],
         overwrite=overwrite,
+        write_size=_write_shape * voxel_size,
     )
 
     # make daisy blockwise task
@@ -162,6 +164,8 @@ def start_worker(
         labels_output_array_identifier
     )
 
+    # get data generator
+
     def batch_generator(shape=(128, 128, 128), voxel_size=(8, 8, 8)):
         pipeline, request = random_source_pipeline(
             input_shape=shape, voxel_size=voxel_size
@@ -172,6 +176,8 @@ def start_worker(
 
     batch_gen = None
 
+    id_offset = None
+
     # wait for blocks to run pipeline
     client = daisy.Client()
 
@@ -181,7 +187,7 @@ def start_worker(
             if block is None:
                 break
 
-            if batch_gen is None:
+            if batch_gen is None or id_offset is None:
                 size = block.write_roi.get_shape()
                 voxel_size = raw_output_array.voxel_size
                 shape = Coordinate(size / voxel_size)
@@ -189,6 +195,7 @@ def start_worker(
                     shape=shape,
                     voxel_size=voxel_size,
                 )
+                id_offset = np.prod(shape)  # number of voxels in the block
             batch = next(batch_gen)
             raw_array = batch.arrays[gp.ArrayKey("RAW")]
             labels_array = batch.arrays[gp.ArrayKey("LABELS")]
@@ -198,7 +205,9 @@ def start_worker(
             raw_data /= raw_data.max()
             raw_data *= 255
             raw_data = raw_data.astype(np.uint8)
-            labels_data = labels_array.data.astype(np.uint32)
+            labels_data = labels_array.data.astype(np.uint64)
+            labels_data += np.uint64(id_offset * block.block_id[1])
+            labels_data[labels_data == np.uint64(id_offset * block.block_id[1])] = 0
 
             # write to output array
             raw_output_array[block.write_roi] = raw_data

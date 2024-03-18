@@ -23,8 +23,7 @@ class MongoConfigStore(ConfigStore):
 
     def __init__(self, db_host, db_name):
         print(
-            "Creating MongoConfigStore:\n\thost    : %s\n\tdatabase: %s" % db_host,
-            db_name,
+            f"Creating MongoConfigStore:\n\thost    : {db_host}\n\tdatabase: {db_name}"
         )
 
         self.db_host = db_host

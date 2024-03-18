@@ -137,6 +137,11 @@ class ZarrArray(Array):
             write_size = Coordinate((axis_length,) * voxel_size.dims) * voxel_size
         write_size = Coordinate((min(a, b) for a, b in zip(write_size, roi.shape)))
         zarr_container = zarr.open(array_identifier.container, "a")
+        if num_channels is None or num_channels == 1:
+            axes = [axis for axis in axes if "c" not in axis]
+            num_channels = None
+        else:
+            axes = ["c^"] + [axis for axis in axes if "c" not in axis]
         try:
             funlib.persistence.prepare_ds(
                 f"{array_identifier.container}",
@@ -172,8 +177,8 @@ class ZarrArray(Array):
                 zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = [
                     a if a != "c" else "c^" for a in axes
                 ]
-            if num_channels is not None:
-                if axes.index("c") == 0:
+            if "c^" in axes:
+                if axes.index("c^") == 0:
                     zarr_dataset.attrs["dimension_units"] = [
                         str(num_channels)
                     ] + zarr_dataset.attrs["dimension_units"]

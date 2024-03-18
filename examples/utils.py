@@ -1,3 +1,4 @@
+from typing import Optional
 import neuroglancer
 from IPython.display import IFrame
 import numpy as np
@@ -19,54 +20,47 @@ import json
 def get_viewer(
     raw_array: gp.Array | Array | ZarrArray,
     labels_array: gp.Array | Array | ZarrArray,
-    width=1500,
-    height=600,
+    pred_array: Optional[gp.Array | Array | ZarrArray] = None,
+    pred_labels_array: Optional[gp.Array | Array | ZarrArray] = None,
+    width: int = 1500,
+    height: int = 600,
 ) -> IFrame:
-    if hasattr(labels_array, "to_ndarray"):
-        labels_data = labels_array.to_ndarray()
-    else:
-        labels_data = labels_array.data
-    if hasattr(raw_array, "to_ndarray"):
-        raw_data = raw_array.to_ndarray()
-    else:
-        raw_data = raw_array.data
+    arrays = {
+        "raw": raw_array,
+        "labels": labels_array,
+    }
+    if pred_array is not None:
+        arrays["pred"] = pred_array
+    if pred_labels_array is not None:
+        arrays["pred_labels"] = pred_labels_array
 
-    if hasattr(labels_array, "voxel_size"):
-        labels_voxel_size = labels_array.voxel_size
-    else:
-        labels_voxel_size = labels_array.spec.voxel_size
-    if hasattr(raw_array, "voxel_size"):
-        raw_voxel_size = raw_array.voxel_size
-    else:
-        raw_voxel_size = raw_array.spec.voxel_size
+    data = {}
+    voxel_sizes = {}
+    for name, array in arrays.items():
+        if hasattr(array, "to_ndarray"):
+            data[name] = array.to_ndarray()
+        else:
+            data[name] = array.data
+        if hasattr(array, "voxel_size"):
+            voxel_sizes[name] = array.voxel_size
+        else:
+            voxel_sizes[name] = array.spec.voxel_size
+
     neuroglancer.set_server_bind_address("0.0.0.0")
     viewer = neuroglancer.Viewer()
     with viewer.txn() as state:
         state.showSlices = False
-        state.layers["segs"] = neuroglancer.SegmentationLayer(
-            # segments=[str(i) for i in np.unique(data[data > 0])], # this line will cause all objects to be selected and thus all meshes to be generated...will be slow if lots of high res meshes
-            source=neuroglancer.LocalVolume(
-                data=labels_data,
-                dimensions=neuroglancer.CoordinateSpace(
-                    names=["z", "y", "x"],
-                    units=["nm", "nm", "nm"],
-                    scales=labels_voxel_size,
-                ),
-                # voxel_offset=ds.roi.begin / ds.voxel_size,
-            ),
-            segments=np.unique(labels_data[labels_data > 0]),
-        )
+        add_seg_layer(state, "labels", data["labels"], voxel_sizes["labels"])
 
-        state.layers["raw"] = neuroglancer.ImageLayer(
-            source=neuroglancer.LocalVolume(
-                data=raw_data,
-                dimensions=neuroglancer.CoordinateSpace(
-                    names=["z", "y", "x"],
-                    units=["nm", "nm", "nm"],
-                    scales=raw_voxel_size,
-                ),
-            ),
-        )
+        add_scalar_layer(state, "raw", data["raw"], voxel_sizes["raw"])
+
+        if "pred" in data:
+            add_scalar_layer(state, "pred", data["pred"], voxel_sizes["pred"])
+
+        if "pred_labels" in data:
+            add_seg_layer(
+                state, "pred_labels", data["pred_labels"], voxel_sizes["pred_labels"]
+            )
 
     return IFrame(src=viewer, width=width, height=height)
 
@@ -219,3 +213,30 @@ class NeuroglancerRunViewer:
                             self.most_recent_iteration,
                             validation_dataset.name,
                         )
+                        
+def add_seg_layer(state, name, data, voxel_size):
+    state.layers[name] = neuroglancer.SegmentationLayer(
+        # segments=[str(i) for i in np.unique(data[data > 0])], # this line will cause all objects to be selected and thus all meshes to be generated...will be slow if lots of high res meshes
+        source=neuroglancer.LocalVolume(
+            data=data,
+            dimensions=neuroglancer.CoordinateSpace(
+                names=["z", "y", "x"],
+                units=["nm", "nm", "nm"],
+                scales=voxel_size,
+            ),
+        ),
+        segments=np.unique(data[data > 0]),
+    )
+
+
+def add_scalar_layer(state, name, data, voxel_size):
+    state.layers[name] = neuroglancer.ImageLayer(
+        source=neuroglancer.LocalVolume(
+            data=data,
+            dimensions=neuroglancer.CoordinateSpace(
+                names=["z", "y", "x"],
+                units=["nm", "nm", "nm"],
+                scales=voxel_size,
+            ),
+        ),
+    )

@@ -262,9 +262,9 @@ class ElasticAugment(BatchFilter):
         for key, spec in request.items():
             assert isinstance(key, ArrayKey) or isinstance(
                 key, GraphKey
-            ), "Only ArrayKey/GraphKey supported but got %s in request" % type(key)
+            ), f"Only ArrayKey/GraphKey supported but got {type(key)} in request"
 
-            logger.debug("key %s: preparing with spec %s" % key, spec)
+            logger.debug(f"key {key}: preparing with spec {spec}")
 
             if isinstance(key, ArrayKey):
                 voxel_size = self.spec[key].voxel_size
@@ -285,25 +285,26 @@ class ElasticAugment(BatchFilter):
             scale = vs_ratio
             offset = offset_world / self.voxel_size
 
-            logger.debug("key %s: scale %s and offset %s" % key, scale, offset)
+            logger.debug(f"key {key}: scale {scale} and offset {offset}")
 
             # need to pass inverse transform, hence -offset
             transform = self._affine(master_transform, scale, offset, target_roi_voxels)
             logger.debug(
-                "key %s: transformed transform statistics          %s",
-                key,
-                _min_max_mean_std(transform),
+                logger.debug(
+                    f"key {key}: transformed transform statistics {_min_max_mean_std(transform)}"
+                )
             )
             source_roi = self._get_source_roi(transform).snap_to_grid(voxel_size)
             logger.debug(
-                "key %s: source roi (target roi) is %s (%s)" % key,
-                source_roi,
-                target_roi,
+                logger.debug(
+                    f"key {key}: source roi (target roi) is {source_roi} ({target_roi})"
+                )
             )
             self._shift_transformation(-target_roi.get_begin(), transform)
             logger.debug(
-                "key %s: shifted transformed transform statistics: %s" % key,
-                _min_max_mean_std(transform),
+                logger.debug(
+                    f"key {key}: shifted transformed transform statistics: {_min_max_mean_std(transform)}"
+                )
             )
             for d, (vs, b1, b2) in enumerate(
                 zip(voxel_size, target_roi.get_begin(), source_roi.get_begin())
@@ -311,8 +312,9 @@ class ElasticAugment(BatchFilter):
                 pixel_offset = (b1 - b2) / vs
                 transform[d] = transform[d] / vs + pixel_offset
             logger.debug(
-                "key %s: pixel-space transform statistics:         %s" % key,
-                _min_max_mean_std(transform),
+                logger.debug(
+                    f"key {key}: pixel-space transform statistics: {_min_max_mean_std(transform)}"
+                )
             )
 
             self.transformations[key] = transform
@@ -328,8 +330,7 @@ class ElasticAugment(BatchFilter):
     def process(self, batch, request):
         if not self.do_augment:
             logger.debug(
-                "Process: Randomly not augmenting at all. (probabilty to augment: %f)"
-                % self.augmentation_probability,
+                f"Process: Randomly not augmenting at all. (probability to augment: {self.augmentation_probability})"
             )
             return
 
@@ -340,7 +341,7 @@ class ElasticAugment(BatchFilter):
                 batch[key].spec.roi = request[key].roi
                 continue
 
-            assert key in batch.arrays, "only arrays supported but got %s" % key
+            assert key in batch.arrays, f"only arrays supported but got {key}"
             array = batch.arrays[key]
 
             # for arrays, the target ROI and the requested ROI should be the
@@ -362,9 +363,9 @@ class ElasticAugment(BatchFilter):
             shape = array.data.shape
             data = array.data.reshape((-1,) + shape[-self.spatial_dims :])
             logger.debug(
-                "key %s: applying transform with statistics %s %s" % key,
-                tuple(map(np.mean, self.transformations[key])),
-                tuple(map(np.std, self.transformations[key])),
+                logger.debug(
+                    f"key {key}: applying transform with statistics {tuple(map(np.mean, self.transformations[key]))} {tuple(map(np.std, self.transformations[key]))}"
+                )
             )
 
             # apply transformation on each channel
@@ -389,8 +390,7 @@ class ElasticAugment(BatchFilter):
 
     def _create_transformation(self, target_shape, offset):
         logger.debug(
-            "creating displacement for shape %s, subsample %d" % target_shape,
-            self.subsample,
+            f"creating displacement for shape {target_shape}, subsample {self.subsample}",
         )
         transformation = _create_identity_transformation(
             target_shape,
@@ -400,9 +400,7 @@ class ElasticAugment(BatchFilter):
         )
         if np.any(np.asarray(self.control_point_displacement_sigma) > 0):
             logger.debug(
-                "Jittering with sigma=%s and spacing=%s"
-                % self.control_point_displacement_sigma,
-                self.control_point_spacing,
+                f"Jittering with sigma={self.control_point_displacement_sigma} and spacing={self.control_point_spacing}",
             )
             elastic = augment.create_elastic_transformation(
                 target_shape,
@@ -411,7 +409,7 @@ class ElasticAugment(BatchFilter):
                 subsample=self.subsample,
             )
             logger.debug(
-                "elastic displacements statistics: %s" % _min_max_mean_std(elastic)
+                f"elastic displacements statistics: {_min_max_mean_std(elastic)}"
             )
             transformation += elastic
         if not self.uniform_3d_rotation:
@@ -419,7 +417,7 @@ class ElasticAugment(BatchFilter):
                 np.random.random() * self.rotation_max_amount + self.rotation_start
             )
             if rotation != 0:
-                logger.debug("rotating with rotation=%f" % rotation)
+                logger.debug(f"rotating with rotation={rotation}")
                 transformation += _create_rotation_transformation(
                     target_shape,
                     rotation,
@@ -437,13 +435,11 @@ class ElasticAugment(BatchFilter):
 
         if self.subsample > 1:
             logger.debug(
-                "transform statistics before upscale: %s"
-                % _min_max_mean_std(transformation),
+                f"transform statistics before upscale: {_min_max_mean_std(transformation)}",
             )
             transformation = _upscale_transformation(transformation, target_shape)
             logger.debug(
-                "transform statistics after  upscale: %s"
-                % _min_max_mean_std(transformation),
+                f"transform statistics after upscale: {_min_max_mean_std(transformation)}",
             )
 
         return transformation
