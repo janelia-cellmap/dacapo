@@ -27,3 +27,5 @@ tmp/
 
 # daisy logs
 daisy_logs/
+
+*.csv

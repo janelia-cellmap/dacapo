@@ -139,7 +139,7 @@ from dacapo.experiments.trainers.gp_augments import (
 )
 
 trainer_config = GunpowderTrainerConfig(
-    name="default",
+    name="cosem",
     batch_size=1,
     learning_rate=0.0001,
     num_data_fetchers=20,
