@@ -390,7 +390,7 @@ start_config = None
 #     "best",
 # )
 
-iterations = 200
+iterations = 50
 validation_interval = 50
 repetitions = 1
 for i in range(repetitions):
