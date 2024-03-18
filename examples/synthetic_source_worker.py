@@ -38,41 +38,6 @@ def cli(log_level):
 
 fit = "valid"
 
-
-# @cli.command()
-# @click.option(
-#     "-oc", "--output_container", required=True, type=click.Path(file_okay=False)
-# )
-# @click.option("-rod", "--raw_output_dataset", required=True, type=str, default="raw")
-# @click.option(
-#     "-lod", "--labels_output_dataset", required=True, type=str, default="labels"
-# )
-# @click.option(
-#     "-shape",
-#     "--shape",
-#     required=True,
-#     type=str,
-#     help="The shape of the volume to generate data for in voxels, formatted as z,y,x.",
-#     default="512,512,512",
-# )
-# @click.option(
-#     "-vs",
-#     "--voxel_size",
-#     required=True,
-#     type=str,
-#     help="The voxel size of the output data in nm, formatted as z,y,x.",
-#     default="8,8,8",
-# )
-# @click.option(
-#     "-ws",
-#     "--write_shape",
-#     required=True,
-#     type=str,
-#     help="The shape of the blocks to write in voxels, formatted as z,y,x.",
-#     default="128,128,128",
-# )
-# @click.option("-nw", "--num_workers", type=int, default=16)
-# @click.option("-ow", "--overwrite", is_flag=True)
 def generate_synthetic_dataset(
     output_container: Path | str,
     raw_output_dataset: str = "raw",
