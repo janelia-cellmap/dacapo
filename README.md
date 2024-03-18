@@ -31,11 +31,9 @@ Currently, python>=3.10 is supported. We recommend creating a new conda environm
 conda create -n dacapo python=3.10
 ```
 
-Then clone this repository, go into the directory, and install:
+Then install DaCapo using pip with the following command:
 ```
-git clone git@github.com:janelia-cellmap/dacapo.git
-cd dacapo
-pip install .
+pip install git+https://github.com/janelia-cellmap/dacapo
 ```
 This will install the minimum required dependencies. 
 
