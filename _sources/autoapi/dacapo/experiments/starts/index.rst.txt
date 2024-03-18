@@ -10,6 +10,8 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
+   cosem_start/index.rst
+   cosem_start_config/index.rst
    start/index.rst
    start_config/index.rst
 
@@ -24,6 +26,8 @@ Classes
 
    dacapo.experiments.starts.Start
    dacapo.experiments.starts.StartConfig
+   dacapo.experiments.starts.CosemStart
+   dacapo.experiments.starts.CosemStartConfig
 
 
 
@@ -52,7 +56,6 @@ Classes
 
       Retrieves the weights from the dacapo store and load them into
       the model.
-
       :param model: The model to which the weights are to be loaded.
       :type model: obj
 
@@ -79,12 +82,66 @@ Classes
 
       :type: str
 
+   .. py:attribute:: start_type
+
+      
+
    .. py:attribute:: run
       :type: str
 
       
 
    .. py:attribute:: criterion
+      :type: str
+
+      
+
+
+.. py:class:: CosemStart(start_config)
+
+
+
+
+   This class interfaces with the dacapo store to retrieve and load the
+   weights of the starter model used for finetuning.
+
+   .. attribute:: run
+
+      The specified run to retrieve weights for the model.
+
+      :type: str
+
+   .. attribute:: criterion
+
+      The policy that was used to decide when to store the weights.
+
+      :type: str
+
+   .. py:method:: initialize_weights(model)
+
+      Retrieves the weights from the dacapo store and load them into
+      the model.
+      :param model: The model to which the weights are to be loaded.
+      :type model: obj
+
+      :raises RuntimeError: If weights of a non-existing or mismatched layer are being
+          loaded, a RuntimeError exception is thrown which is logged
+          and handled by loading only the common layers from weights.
+
+
+
+.. py:class:: CosemStartConfig
+
+
+   Starter for COSEM pretained models. This is a subclass of `StartConfig` and
+   should be used to initialize the model with pretrained weights from a previous
+   run.
+
+   .. py:attribute:: start_type
+
+      
+
+   .. py:attribute:: name
       :type: str
 
       

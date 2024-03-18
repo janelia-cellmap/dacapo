@@ -1,7 +1,7 @@
-:py:mod:`dacapo.experiments.starts.start`
-=========================================
+:py:mod:`dacapo.experiments.starts.cosem_start`
+===============================================
 
-.. py:module:: dacapo.experiments.starts.start
+.. py:module:: dacapo.experiments.starts.cosem_start
 
 
 Module Contents
@@ -12,8 +12,16 @@ Classes
 
 .. autoapisummary::
 
-   dacapo.experiments.starts.start.Start
+   dacapo.experiments.starts.cosem_start.CosemStart
 
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.starts.cosem_start.format_name
 
 
 
@@ -22,14 +30,17 @@ Attributes
 
 .. autoapisummary::
 
-   dacapo.experiments.starts.start.logger
+   dacapo.experiments.starts.cosem_start.logger
 
 
 .. py:data:: logger
 
    
 
-.. py:class:: Start(start_config)
+.. py:function:: format_name(name)
+
+
+.. py:class:: CosemStart(start_config)
 
 
 

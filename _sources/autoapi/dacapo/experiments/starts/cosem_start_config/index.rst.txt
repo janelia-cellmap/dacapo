@@ -1,0 +1,36 @@
+:py:mod:`dacapo.experiments.starts.cosem_start_config`
+======================================================
+
+.. py:module:: dacapo.experiments.starts.cosem_start_config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.starts.cosem_start_config.CosemStartConfig
+
+
+
+
+.. py:class:: CosemStartConfig
+
+
+   Starter for COSEM pretained models. This is a subclass of `StartConfig` and
+   should be used to initialize the model with pretrained weights from a previous
+   run.
+
+   .. py:attribute:: start_type
+
+      
+
+   .. py:attribute:: name
+      :type: str
+
+      
+
+

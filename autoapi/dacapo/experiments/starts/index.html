@@ -23,7 +23,7 @@
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="next" title="dacapo.experiments.starts.start" href="start/index.html" />
+    <link rel="next" title="dacapo.experiments.starts.cosem_start" href="cosem_start/index.html" />
     <link rel="prev" title="dacapo.experiments.datasplits.train_validate_datasplit_config" href="../datasplits/train_validate_datasplit_config/index.html" /> 
 </head>
 
@@ -102,6 +102,8 @@
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="cosem_start/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.starts.cosem_start</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="cosem_start_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.starts.cosem_start_config</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="start/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.starts.start</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="start_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments.starts.start_config</span></code></a></li>
 </ul>
@@ -118,6 +120,12 @@
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.starts.StartConfig" title="dacapo.experiments.starts.StartConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StartConfig</span></code></a></p></td>
 <td><p>A class to represent the configuration for running tasks.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.starts.CosemStart" title="dacapo.experiments.starts.CosemStart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CosemStart</span></code></a></p></td>
+<td><p>This class interfaces with the dacapo store to retrieve and load the</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.starts.CosemStartConfig" title="dacapo.experiments.starts.CosemStartConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CosemStartConfig</span></code></a></p></td>
+<td><p>Starter for COSEM pretained models. This is a subclass of <cite>StartConfig</cite> and</p></td>
 </tr>
 </tbody>
 </table>
@@ -152,13 +160,12 @@ weights of the starter model used for finetuning.</p>
 <dt class="sig sig-object py" id="dacapo.experiments.starts.Start.initialize_weights">
 <span class="sig-name descname"><span class="pre">initialize_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.starts.Start.initialize_weights" title="Link to this definition"></a></dt>
 <dd><p>Retrieves the weights from the dacapo store and load them into
-the model.</p>
+the model.
+:param model: The model to which the weights are to be loaded.
+:type model: obj</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>model</strong> (<em>obj</em>) – The model to which the weights are to be loaded.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>RuntimeError</strong> – If weights of a non-existing or mismatched layer are being
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If weights of a non-existing or mismatched layer are being
 loaded, a RuntimeError exception is thrown which is logged
 and handled by loading only the common layers from weights.</p>
 </dd>
@@ -194,6 +201,11 @@ and handled by loading only the common layers from weights.</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.StartConfig.start_type">
+<span class="sig-name descname"><span class="pre">start_type</span></span><a class="headerlink" href="#dacapo.experiments.starts.StartConfig.start_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="id0">
 <span class="sig-name descname"><span class="pre">run</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -201,6 +213,69 @@ and handled by loading only the common layers from weights.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id1">
 <span class="sig-name descname"><span class="pre">criterion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.CosemStart">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.starts.</span></span><span class="sig-name descname"><span class="pre">CosemStart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.starts.CosemStart" title="Link to this definition"></a></dt>
+<dd><p>This class interfaces with the dacapo store to retrieve and load the
+weights of the starter model used for finetuning.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.CosemStart.run">
+<span class="sig-name descname"><span class="pre">run</span></span><a class="headerlink" href="#dacapo.experiments.starts.CosemStart.run" title="Link to this definition"></a></dt>
+<dd><p>The specified run to retrieve weights for the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.CosemStart.criterion">
+<span class="sig-name descname"><span class="pre">criterion</span></span><a class="headerlink" href="#dacapo.experiments.starts.CosemStart.criterion" title="Link to this definition"></a></dt>
+<dd><p>The policy that was used to decide when to store the weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.CosemStart.initialize_weights">
+<span class="sig-name descname"><span class="pre">initialize_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.starts.CosemStart.initialize_weights" title="Link to this definition"></a></dt>
+<dd><p>Retrieves the weights from the dacapo store and load them into
+the model.
+:param model: The model to which the weights are to be loaded.
+:type model: obj</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If weights of a non-existing or mismatched layer are being
+loaded, a RuntimeError exception is thrown which is logged
+and handled by loading only the common layers from weights.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.CosemStartConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.starts.</span></span><span class="sig-name descname"><span class="pre">CosemStartConfig</span></span><a class="headerlink" href="#dacapo.experiments.starts.CosemStartConfig" title="Link to this definition"></a></dt>
+<dd><p>Starter for COSEM pretained models. This is a subclass of <cite>StartConfig</cite> and
+should be used to initialize the model with pretrained weights from a previous
+run.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.CosemStartConfig.start_type">
+<span class="sig-name descname"><span class="pre">start_type</span></span><a class="headerlink" href="#dacapo.experiments.starts.CosemStartConfig.start_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.CosemStartConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.starts.CosemStartConfig.name" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -214,7 +289,7 @@ and handled by loading only the common layers from weights.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../datasplits/train_validate_datasplit_config/index.html" class="btn btn-neutral float-left" title="dacapo.experiments.datasplits.train_validate_datasplit_config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="start/index.html" class="btn btn-neutral float-right" title="dacapo.experiments.starts.start" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="cosem_start/index.html" class="btn btn-neutral float-right" title="dacapo.experiments.starts.cosem_start" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
