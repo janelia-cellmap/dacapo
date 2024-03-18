@@ -44,6 +44,116 @@
 # To define where the data goes, create a dacapo.yaml configuration file either in `~/.config/dacapo/dacapo.yaml` or in `./dacapo.yaml`. Here is a template:
 #
 # ```yaml
+# mongodbhost: mongodb://dbuser:dbpass@dburl:dbport/
+# mongodbname: dacapo
+# runs_base_dir: /path/to/my/data/storage
+# ```
+# The runs_base_dir defines where your on-disk data will be stored. The mongodbhost and mongodbname define the mongodb host and database that will store your cloud data. If you want to store everything on disk, replace mongodbhost and mongodbname with a single type `files` and everything will be saved to disk:
+#
+# ```yaml
+# type: files
+# runs_base_dir: /path/to/my/data/storage
+# ```
+#
+
+
+# %%
+
+# for training:
+
+# pipeline, request = random_source_pipeline(input_shape=(512, 512, 512))
+# def batch_generator():
+#     with gp.build(pipeline):
+#         while True:
+#             yield pipeline.request_batch(request)
+# batch_gen = batch_generator()
+# training_batch = next(batch_gen)
+
+
+# for validation:
+# pipeline, request = random_source_pipeline(input_shape=(108, 108, 108))
+
+
+# def batch_generator():
+#     with gp.build(pipeline):
+#         while True:
+#             yield pipeline.request_batch(request)
+
+
+# batch_gen = batch_generator()
+# validation_batch = next(batch_gen)
+
+
+# def view_batch(batch):
+#     raw_array = batch.arrays[gp.ArrayKey("RAW")]
+#     labels_array = batch.arrays[gp.ArrayKey("LABELS")]
+
+#     labels_data = labels_array.data
+#     labels_spec = labels_array.spec
+
+#     raw_data = raw_array.data
+#     raw_spec = raw_array.spec
+
+#     neuroglancer.set_server_bind_address("0.0.0.0")
+#     viewer = neuroglancer.Viewer()
+#     with viewer.txn() as state:
+#         state.showSlices = False
+#         state.layers["segs"] = neuroglancer.SegmentationLayer(
+#             # segments=[str(i) for i in np.unique(data[data > 0])], # this line will cause all objects to be selected and thus all meshes to be generated...will be slow if lots of high res meshes
+#             source=neuroglancer.LocalVolume(
+#                 data=labels_data,
+#                 dimensions=neuroglancer.CoordinateSpace(
+#                     names=["z", "y", "x"],
+#                     units=["nm", "nm", "nm"],
+#                     scales=labels_spec.voxel_size,
+#                 ),
+#                 # voxel_offset=ds.roi.begin / ds.voxel_size,
+#             ),
+#             segments=np.unique(labels_data[labels_data > 0]),
+#         )
+
+#         state.layers["raw"] = neuroglancer.ImageLayer(
+#             source=neuroglancer.LocalVolume(
+#                 data=raw_data,
+#                 dimensions=neuroglancer.CoordinateSpace(
+#                     names=["z", "y", "x"],
+#                     units=["nm", "nm", "nm"],
+#                     scales=raw_spec.voxel_size,
+#                 ),
+#             ),
+#         )
+#     return IFrame(src=viewer, width=1500, height=600)
+
+
+# training_batch
+
+# # %%
+# view_batch(training_batch)
+# view_batch(validation_batch)
+# %%
+# write out files
+# from funlib.persistence import prepare_ds
+# from pathlib import Path
+
+# # Create a temporary directory
+
+
+# # with tempfile.TemporaryDirectory() as temp_dir:
+# def write_data(datasplit_type, arrays):
+#     for array_key, array in arrays.items():
+#         ds = prepare_ds(
+#             filename=f"./tmp/{datasplit_type}.zarr",
+#             ds_name=array_key.identifier,
+#             total_roi=array.spec.roi,
+#             voxel_size=array.spec.voxel_size,
+#             dtype=array.spec.dtype,
+#             delete=True
+#         )
+#         ds.data[:] = array.data
+
+
+# # write_data("training", training_batch)
+# write_data("validation", validation_batch)
 # type: files
 # runs_base_dir: /path/to/my/data/storage
 # ```
@@ -91,6 +201,9 @@ get_viewer(raw_array, labels_array)
 
 # %%
 # Then for validation data
+from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
+from dacapo.store.array_store import LocalArrayIdentifier
+
 validate_data_path = Path(runs_base_dir, "example_validate.zarr")
 try:
     assert not force
@@ -118,12 +231,16 @@ get_viewer(raw_array, labels_array)
 # %%
 from dacapo.experiments.datasplits.datasets.arrays import (
     BinarizeArrayConfig,
-    IntensitiesArrayConfig,
     ZarrArrayConfig,
+    IntensitiesArrayConfig
 )
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
 from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
+from pathlib import Path
+from dacapo import Options
 
+options = Options.instance()
+runs_base_dir = options.runs_base_dir
 
 datasplit_config = TrainValidateDataSplitConfig(
     name="synthetic_datasplit_config",
@@ -206,8 +323,6 @@ config_store.store_task_config(task_config)
 # The setup of the network you will train. Biomedical image to image translation often utilizes a UNet, but even after choosing a UNet you still need to provide some additional parameters. How much do you want to downsample? How many convolutional layers do you want?
 
 # %%
-# TODO: replace with cellmap-models COSEM model
-
 from dacapo.experiments.architectures import CNNectomeUNetConfig
 
 architecture_config = CNNectomeUNetConfig(
@@ -217,7 +332,7 @@ architecture_config = CNNectomeUNetConfig(
     fmaps_in=1,
     num_fmaps=12,
     fmap_inc_factor=2,
-    downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],
+    downsample_factors=[(2, 2, 2), (3, 3, 3), (3, 3, 3)],
     eval_shape_increase=(72, 72, 72),
 )
 config_store.store_architecture_config(architecture_config)
@@ -253,8 +368,9 @@ trainer_config = GunpowderTrainerConfig(
         GammaAugmentConfig(gamma_range=(0.5, 2.0)),
         IntensityScaleShiftAugmentConfig(scale=2.0, shift=-1.0),
     ],
-    # snapshot_interval=1000,
-    # min_masked=0.05,
+    snapshot_interval=10000,
+    min_masked=0.05,
+    clip_raw=True,
 )
 config_store.store_trainer_config(trainer_config)
 
@@ -263,7 +379,6 @@ config_store.store_trainer_config(trainer_config)
 # Now that we have our components configured, we just need to combine them into a run and start training. We can have multiple repetitions of a single set of configs in order to increase our chances of finding an optimum.
 
 # %%
-from dacapo.experiments.starts import StartConfig
 from dacapo.experiments import RunConfig
 from dacapo.experiments.run import Run
 
@@ -313,8 +428,12 @@ for i in range(repetitions):
 # NOTE: The run stats are stored in the `runs_base_dir/stats` directory. You can delete this directory to remove all stored stats if you want to re-run training. Otherwise, the stats will be appended to the existing files, and the run won't start from scratch. This may cause errors
 # %%
 from dacapo.train import train_run
+from dacapo.experiments.run import Run
+from dacapo.store.create_store import create_config_store
 
-run = Run(config_store.retrieve_run_config(run_config.name))
+config_store = create_config_store()
+
+run = Run(config_store.retrieve_run_config("example_synthetic_distance_run"))
 train_run(run)
 
 # %% [markdown]
@@ -370,5 +489,7 @@ predict(
     output_dtype="float32",
     output_roi=raw_array.roi,
 )
-
 # %%
+from dacapo.validate import validate_run
+
+validate_run(run.name, 50, num_workers=32)
