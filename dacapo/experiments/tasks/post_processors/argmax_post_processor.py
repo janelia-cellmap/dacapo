@@ -33,7 +33,11 @@ class ArgmaxPostProcessor(PostProcessor):
         block_size: Coordinate = Coordinate((256, 256, 256)),
     ):
         if self.prediction_array._daisy_array.chunk_shape is not None:
-            block_size = self.prediction_array._daisy_array.chunk_shape
+            block_size = Coordinate(
+                self.prediction_array._daisy_array.chunk_shape[
+                    -self.prediction_array.dims :
+                ]
+            )
 
         output_array = ZarrArray.create_from_array_identifier(
             output_array_identifier,
