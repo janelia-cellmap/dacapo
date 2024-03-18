@@ -32,27 +32,7 @@ class Start(ABC):
         self.run = start_config.run
         self.criterion = start_config.criterion
 
-    def initialize_weights(self, model):
-        """
-        Retrieves the weights from the dacapo store and load them into
-        the model.
-
-        Parameters
-        ----------
-        model : obj
-            The model to which the weights are to be loaded.
-
-        Raises
-        ------
-        RuntimeError
-            If weights of a non-existing or mismatched layer are being
-            loaded, a RuntimeError exception is thrown which is logged
-            and handled by loading only the common layers from weights.
-        """
-        from dacapo.store.create_store import create_weights_store
-
-        weights_store = create_weights_store()
-        weights = weights_store._retrieve_weights(self.run, self.criterion)
+    def _set_weights(self, model, weights):
         print(f"loading weights from run {self.run}, criterion: {self.criterion}")
         # load the model weights (taken from torch load_state_dict source)
         try:
@@ -72,3 +52,24 @@ class Start(ABC):
             )  # update only the existing and matching layers
             model.load_state_dict(model_dict)
             logger.warning(f"loaded only common layers from weights")
+
+    def initialize_weights(self, model):
+        """
+        Retrieves the weights from the dacapo store and load them into
+        the model.
+        Parameters
+        ----------
+        model : obj
+            The model to which the weights are to be loaded.
+        Raises
+        ------
+        RuntimeError
+            If weights of a non-existing or mismatched layer are being
+            loaded, a RuntimeError exception is thrown which is logged
+            and handled by loading only the common layers from weights.
+        """
+        from dacapo.store.create_store import create_weights_store
+
+        weights_store = create_weights_store()
+        weights = weights_store._retrieve_weights(self.run, self.criterion)
+        self._set_weights(model, weights)
