@@ -1,5 +1,5 @@
 import sys
-from pathlib import Path
+from upath import UPath as Path
 
 import torch
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray

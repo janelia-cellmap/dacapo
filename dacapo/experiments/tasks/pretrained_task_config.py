@@ -3,7 +3,7 @@ import attr
 from .pretrained_task import PretrainedTask
 from .task_config import TaskConfig
 
-from pathlib import Path
+from upath import UPath as Path
 
 
 @attr.s

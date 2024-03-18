@@ -10,7 +10,7 @@ from .store.create_store import (
     create_weights_store,
 )
 
-from pathlib import Path
+from upath import UPath as Path
 import logging
 
 logger = logging.getLogger(__name__)

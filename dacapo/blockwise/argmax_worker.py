@@ -1,4 +1,4 @@
-from pathlib import Path
+from upath import UPath as Path
 import sys
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from dacapo.store.array_store import LocalArrayIdentifier
