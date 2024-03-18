@@ -271,7 +271,7 @@ class GunpowderTrainer(Trainer):
                         data = v[v.roi][0]
                     else:
                         data = v[v.roi][0].astype(np.float32)
-                    if v.num_channels is None:
+                    if v.num_channels is None or v.num_channels == 1:
                         # remove channel dimension
                         assert data.shape[0] == 1, (
                             f"Data for array {k} should not have channels but has shape: "
