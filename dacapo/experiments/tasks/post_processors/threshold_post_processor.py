@@ -47,6 +47,18 @@ class ThresholdPostProcessor(PostProcessor):
         if self.prediction_array._daisy_array.chunk_shape is not None:
             block_size = self.prediction_array._daisy_array.chunk_shape
 
+        write_size = [
+            b * v
+            for b, v in zip(
+                block_size[-self.prediction_array.dims :],
+                self.prediction_array.voxel_size,
+            )
+        ]
+        if (
+            self.prediction_array.num_channels is not None
+            and self.prediction_array.num_channels > 1
+        ):
+            write_size = [self.prediction_array.num_channels] + write_size
         output_array = ZarrArray.create_from_array_identifier(
             output_array_identifier,
             self.prediction_array.axes,
@@ -54,10 +66,10 @@ class ThresholdPostProcessor(PostProcessor):
             self.prediction_array.num_channels,
             self.prediction_array.voxel_size,
             np.uint8,
-            block_size * self.prediction_array.voxel_size,
+            write_size,
         )
 
-        read_roi = Roi((0, 0, 0), self.prediction_array.voxel_size * block_size)
+        read_roi = Roi((0, 0, 0), write_size[-self.prediction_array.dims :])
         # run blockwise post-processing
         run_blockwise(
             worker_file=str(

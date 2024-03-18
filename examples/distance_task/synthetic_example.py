@@ -345,7 +345,7 @@ try:
     raw_array = open_ds(str(test_data_path), "raw")
     labels_array = open_ds(str(test_data_path), "labels")
 except:
-    test_shape = Coordinate((152, 152, 152)) * 3
+    test_shape = Coordinate((152, 152, 152)) * 5
     generate_synthetic_dataset(
         test_data_path,
         shape=test_shape,
