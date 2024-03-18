@@ -13,7 +13,7 @@ def format_name(name):
         return run, criterion
     else:
         raise ValueError(
-            f"Invalid starter name format {name}. Must be in the format run/criterion"`
+            f"Invalid starter name format {name}. Must be in the format run/criterion"
         )
 
 
