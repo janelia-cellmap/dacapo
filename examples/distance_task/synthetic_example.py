@@ -275,8 +275,8 @@ start_config = None
 #     "best",
 # )
 
-iterations = 200
-validation_interval = iterations + 1  # // 2
+iterations = 2000
+validation_interval = iterations // 2
 repetitions = 1
 for i in range(repetitions):
     run_config = RunConfig(
