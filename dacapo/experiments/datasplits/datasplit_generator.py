@@ -360,13 +360,17 @@ class DataSplitGenerator:
         csv_path: Path,
         input_resolution: Coordinate,
         output_resolution: Coordinate,
+        name: str = None,
         **kwargs,
     ):
         if isinstance(csv_path, str):
             csv_path = Path(csv_path)
 
+        if name is None:
+            name = csv_path.stem
+
         return DataSplitGenerator(
-            csv_path.stem,
+            name,
             generate_dataspec_from_csv(csv_path),
             input_resolution,
             output_resolution,
@@ -380,6 +384,6 @@ def format_class_name(class_name):
             raise ValueError(f"Invalid class name {class_name} missing ']'")
         classes = class_name.split("[")[1].split("]")[0].split(__SEPARATOR_CARACTER)
         base_class_name = class_name.split("[")[0]
-        return [f"{base_class_name}/{c}" for c in classes], classes
+        return [f"{base_class_name}{c}" for c in classes], classes
     else:
         raise ValueError(f"Invalid class name {class_name} missing '[' and ']'")

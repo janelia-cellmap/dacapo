@@ -95,26 +95,3 @@ class Dataset(ABC):
         ):
             layers[self.mask._source_name()] = self.mask._neuroglancer_layer()
         return layers
-    
-
-    def _neuroglancer_sources(self, prefix="", exclude_layers=None):
-        layers = {}
-        exclude_layers = exclude_layers if exclude_layers is not None else set()
-        if (
-            self.raw._can_neuroglance()
-            and self.raw._source_name() not in exclude_layers
-        ):
-            layers[self.raw._source_name()] = self.raw._neuroglancer_source()
-        if (
-            self.gt is not None
-            and self.gt._can_neuroglance()
-            and self.gt._source_name() not in exclude_layers
-        ):
-            layers[self.gt._source_name()] = self.gt._neuroglancer_source()
-        if (
-            self.mask is not None
-            and self.mask._can_neuroglance()
-            and self.mask._source_name() not in exclude_layers
-        ):
-            layers[self.mask._source_name()] = self.mask._neuroglancer_source()
-        return layers

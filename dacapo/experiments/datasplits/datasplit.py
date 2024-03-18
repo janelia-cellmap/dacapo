@@ -1,7 +1,5 @@
 from .datasets import Dataset
-
 import neuroglancer
-from funlib.show.neuroglancer import add_layer
 from abc import ABC
 from typing import List, Optional
 import json
@@ -19,7 +17,7 @@ class DataSplit(ABC):
             train_layers = {}
             for i, dataset in enumerate(self.train):
                 train_layers.update(
-                    dataset._neuroglancer_sources(
+                    dataset._neuroglancer_layers(
                         # exclude_layers=set(train_layers.keys())
                     )
                 )
@@ -28,23 +26,15 @@ class DataSplit(ABC):
             if self.validate is not None:
                 for i, dataset in enumerate(self.validate):
                     validate_layers.update(
-                        dataset._neuroglancer_sources(
+                        dataset._neuroglancer_layers(
                             # exclude_layers=set(validate_layers.keys())
                         )
                     )
 
-            for k,elms in itertools.chain(
+            for k,layer in itertools.chain(
                 train_layers.items(), validate_layers.items()
             ):
-                if type(elms) is list:
-                    elms = elms[0]
-                layer, layer_name = elms
-                add_layer(
-                    context=s,
-                    array = layer,
-                    name=k,
-                )
-
+                s.layers[k]= layer
 
             s.layout = neuroglancer.row_layout(
                 [
