@@ -54,6 +54,20 @@ class Start(ABC):
             logger.warning(f"loaded only common layers from weights")
 
     def initialize_weights(self, model):
+        """
+        Retrieves the weights from the dacapo store and load them into
+        the model.
+        Parameters
+        ----------
+        model : obj
+            The model to which the weights are to be loaded.
+        Raises
+        ------
+        RuntimeError
+            If weights of a non-existing or mismatched layer are being
+            loaded, a RuntimeError exception is thrown which is logged
+            and handled by loading only the common layers from weights.
+        """
         from dacapo.store.create_store import create_weights_store
 
         weights_store = create_weights_store()
