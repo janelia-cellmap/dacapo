@@ -165,9 +165,12 @@ def start_worker(
 
             # convert to uint8 if necessary:
             if output_array.dtype == np.uint8:
-                output -= output.min()
-                output /= output.max()
+                if "sigmoid" not in str(model.eval_activation).lower():
+                    # assume output is in [-1, 1]
+                    output += 1
+                    output /= 2
                 output *= 255
+                output = output.clip(0, 255)
                 output = output.astype(np.uint8)
             output_array[block.write_roi] = output
 

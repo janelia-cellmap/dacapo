@@ -67,11 +67,6 @@ def validate_run(
     load the weights of that iteration, it is assumed that the model is already
     loaded correctly. Returns the best parameters and scores for this
     iteration."""
-    # set benchmark flag to True for performance
-    compute_context = create_compute_context()
-    torch.backends.cudnn.benchmark = True
-    run.model.to(compute_context.device)
-    run.model.eval()
 
     if (
         run.datasplit.validate is None

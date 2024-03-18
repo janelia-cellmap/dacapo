@@ -450,7 +450,8 @@ train_run(run)
 # %%
 from dacapo.validate import validate
 
-validate(run.name, iterations, num_workers=32)
+# validate(run_config.name, iterations, num_workers=32)
+validate("example_synthetic_distance_run", 200, num_workers=32)
 
 # %% [markdown]
 # ## Predict
@@ -469,6 +470,7 @@ except:
         test_data_path,
         shape=test_shape,
         overwrite=True,
+        write_shape=Coordinate((152, 152, 152)),
         num_workers=num_workers,
     )
 
@@ -478,13 +480,14 @@ get_viewer(raw_array, labels_array)
 from dacapo.predict import predict
 
 predict(
-    run.name,
+    run_config.name,
     iterations,
     test_data_path,
     "raw",
-    Path(runs_base_dir, "example_test.zarr"),
+    test_data_path,
     num_workers=32,
     overwrite=True,
+    output_dtype="float32",
 )
 # %%
 from dacapo.validate import validate_run
