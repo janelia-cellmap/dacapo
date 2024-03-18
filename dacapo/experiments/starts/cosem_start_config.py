@@ -1,5 +1,5 @@
 import attr
-from .cosem_starter import CosemStarter
+from .cosem_start import CosemStart
 
 
 @attr.s
@@ -9,6 +9,6 @@ class CosemStartConfig:
     run.
     """
 
-    start_type = CosemStarter
+    start_type = CosemStart
 
     name: str = attr.ib(metadata={"help_text": "The COSEM checkpoint name to use."})

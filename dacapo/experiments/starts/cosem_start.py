@@ -13,11 +13,11 @@ def format_name(name):
         return run, criterion
     else:
         raise ValueError(
-            f"Invalid starter name format {name}. Must be in the format run/criterion"
+            f"Invalid starter name format {name}. Must be in the format run/criterion"`
         )
 
 
-class CosemStarter(Start):
+class CosemStart(Start):
     def __init__(self, start_config):
         run, criterion = format_name(start_config.name)
         self.name = start_config.name
