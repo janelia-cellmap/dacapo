@@ -79,7 +79,7 @@ def generate_synthetic_dataset(
     labels_output_dataset: str = "labels",
     shape: str | Coordinate = Coordinate((512, 512, 512)),
     voxel_size: str | Coordinate = Coordinate((8, 8, 8)),
-    write_shape: str | Coordinate = Coordinate((128, 128, 128)),
+    write_shape: str | Coordinate = Coordinate((256, 256, 256)),
     num_workers: int = 16,
     overwrite: bool = False,
 ):

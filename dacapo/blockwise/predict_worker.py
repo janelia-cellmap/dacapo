@@ -122,6 +122,7 @@ def start_worker(
     pipeline += gp.Normalize(raw)
 
     # predict
+    model.eval()
     pipeline += gp_torch.Predict(
         model=model,
         inputs={"x": raw},

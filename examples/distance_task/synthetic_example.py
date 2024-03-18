@@ -326,8 +326,8 @@ config_store.store_task_config(task_config)
 from dacapo.experiments.architectures import CNNectomeUNetConfig
 
 architecture_config = CNNectomeUNetConfig(
-    name="example_synthetic_unet",
-    input_shape=(216, 216, 216),
+    name="example-unet",
+    input_shape=(172, 172, 172),
     fmaps_out=24,
     fmaps_in=1,
     num_fmaps=12,
@@ -390,8 +390,8 @@ start_config = None
 #     "best",
 # )
 
-iterations = 50
-validation_interval = 50
+iterations = 2000
+validation_interval = iterations // 2
 repetitions = 1
 for i in range(repetitions):
     run_config = RunConfig(
@@ -450,8 +450,7 @@ train_run(run)
 # %%
 from dacapo.validate import validate
 
-# validate(run_config.name, iterations, num_workers=32)
-validate("example_synthetic_distance_run", 200, num_workers=32)
+validate(run_config.name, iterations, num_workers=16, overwrite=True)
 
 # %% [markdown]
 # ## Predict
@@ -488,6 +487,7 @@ predict(
     num_workers=32,
     overwrite=True,
     output_dtype="float32",
+    output_roi=raw_array.roi,
 )
 # %%
 from dacapo.validate import validate_run
