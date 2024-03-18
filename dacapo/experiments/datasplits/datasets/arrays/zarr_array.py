@@ -141,7 +141,7 @@ class ZarrArray(Array):
             axes = [axis for axis in axes if "c" not in axis]
             num_channels = None
         else:
-            axes = ["c^"] + [axis for axis in axes if "c" not in axis]
+            axes = ["c"] + [axis for axis in axes if "c" not in axis]
         try:
             funlib.persistence.prepare_ds(
                 f"{array_identifier.container}",
@@ -177,8 +177,8 @@ class ZarrArray(Array):
                 zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = [
                     a if a != "c" else "c^" for a in axes
                 ]
-            if "c^" in axes:
-                if axes.index("c^") == 0:
+            if "c" in axes:
+                if axes.index("c") == 0:
                     zarr_dataset.attrs["dimension_units"] = [
                         str(num_channels)
                     ] + zarr_dataset.attrs["dimension_units"]

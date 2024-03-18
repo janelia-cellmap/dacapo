@@ -253,14 +253,9 @@ def run_blockwise(
         Path(output_container), output_dataset
     )
 
-    if channels_out is None or channels_out == 1:
-        axes = [axis for axis in input_array.axes if "c" not in axis]
-        channels_out = None
-    else:
-        axes = ["c^"] + [axis for axis in input_array.axes if "c" not in axis]
     ZarrArray.create_from_array_identifier(
         output_array_identifier,
-        axes,
+        input_array.axes,
         _total_roi,
         channels_out,
         input_array.voxel_size,
@@ -376,15 +371,9 @@ def segment_blockwise(
         Path(output_container), output_dataset
     )
 
-    if channels_out is None or channels_out == 1:
-        axes = [axis for axis in input_array.axes if "c" not in axis "c"]
-        channels_out = None
-    else:
-        axes = ["c^"] + [axis for axis in input_array.axes if "c" not in axis]
-
     ZarrArray.create_from_array_identifier(
         output_array_identifier,
-        axes,
+        input_array.axes,
         _total_roi,
         channels_out,
         input_array.voxel_size,

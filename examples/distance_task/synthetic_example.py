@@ -275,8 +275,8 @@ start_config = None
 #     "best",
 # )
 
-iterations = 200
-validation_interval = 200
+iterations = 100
+validation_interval = iterations
 repetitions = 1
 for i in range(repetitions):
     run_config = RunConfig(
@@ -331,7 +331,7 @@ train_run(run)
 # %%
 from dacapo.validate import validate
 
-# validate(run_config.name, 200, num_workers=32)
+# validate(run_config.name, iterations, num_workers=32)
 validate("example_synthetic_distance_run", 200, num_workers=32)
 
 # %% [markdown]

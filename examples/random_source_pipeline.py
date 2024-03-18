@@ -42,7 +42,8 @@ class MakeRaw(gp.BatchFilter):
         self,
         raw,
         labels,
-        gaussian_noise_args: Iterable = (0, 0.2),
+        gaussian_noise_args: Iterable = (0.5, 0.1),
+        gaussian_noise_lim: float = 0.3,
         gaussian_blur_args: Iterable = (0.5, 1.5),
         membrane_like=True,
         membrane_size=3,
@@ -51,6 +52,7 @@ class MakeRaw(gp.BatchFilter):
         self.raw = raw
         self.labels = labels
         self.gaussian_noise_args = gaussian_noise_args
+        self.gaussian_noise_lim = gaussian_noise_lim
         self.gaussian_blur_args = gaussian_blur_args
         self.membrane_like = membrane_like
         self.membrane_size = membrane_size
@@ -78,10 +80,13 @@ class MakeRaw(gp.BatchFilter):
 
         # now add noise
         noise = np.random.normal(*self.gaussian_noise_args, raw.shape)  # type: ignore
+        # normalize to [0, gaussian_noise_lim]
         noise -= noise.min()
-        noise.clip(0, 1, out=noise)
+        noise /= noise.max()
+        noise *= self.gaussian_noise_lim
 
-        raw -= noise
+        raw += noise
+        raw /= 1 + self.gaussian_noise_lim
         raw = 1 - raw  # invert
         raw.clip(0, 1, out=raw)
 
