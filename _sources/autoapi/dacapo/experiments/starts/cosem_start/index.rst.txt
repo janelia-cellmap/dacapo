@@ -16,14 +16,6 @@ Classes
 
 
 
-Functions
-~~~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.experiments.starts.cosem_start.format_name
-
-
 
 Attributes
 ~~~~~~~~~~
@@ -36,9 +28,6 @@ Attributes
 .. py:data:: logger
 
    
-
-.. py:function:: format_name(name)
-
 
 .. py:class:: CosemStart(start_config)
 

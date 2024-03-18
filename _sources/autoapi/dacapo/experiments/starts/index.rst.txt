@@ -133,16 +133,13 @@ Classes
 .. py:class:: CosemStartConfig
 
 
+
+
    Starter for COSEM pretained models. This is a subclass of `StartConfig` and
    should be used to initialize the model with pretrained weights from a previous
    run.
 
    .. py:attribute:: start_type
-
-      
-
-   .. py:attribute:: name
-      :type: str
 
       
 
