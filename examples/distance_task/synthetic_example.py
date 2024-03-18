@@ -198,6 +198,9 @@ get_viewer(raw_array, labels_array)
 
 # %%
 # Then for validation data
+from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
+from dacapo.store.array_store import LocalArrayIdentifier
+
 validate_data_path = Path(runs_base_dir, "example_validate.zarr")
 force = False
 try:
@@ -209,7 +212,7 @@ try:
         LocalArrayIdentifier(validate_data_path, "labels")
     )
 except:
-    validate_shape = Coordinate((256, 256, 256))
+    validate_shape = Coordinate((108, 108, 108))
     generate_synthetic_dataset(validate_data_path, shape=validate_shape, overwrite=True)
 
 get_viewer(raw_array, labels_array)
