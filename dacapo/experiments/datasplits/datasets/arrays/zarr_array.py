@@ -218,7 +218,7 @@ class ZarrArray(Array):
         return True
 
     def _neuroglancer_source(self):
-        d =  open_ds(str(self.file_name), self.dataset)
+        d = open_ds(str(self.file_name), self.dataset)
         return neuroglancer.LocalVolume(
             data=d.data,
             dimensions=neuroglancer.CoordinateSpace(
@@ -228,7 +228,6 @@ class ZarrArray(Array):
             ),
             voxel_offset=self.roi.get_begin() / self.voxel_size,
         )
-
 
     def _neuroglancer_layer(self) -> Tuple[neuroglancer.ImageLayer, Dict[str, Any]]:
         layer = neuroglancer.ImageLayer(source=self._neuroglancer_source())
@@ -280,4 +279,3 @@ class ZarrArray(Array):
         dataset = zarr.open(self.file_name, mode="a")[self.dataset]
         for k, v in metadata.items():
             dataset.attrs[k] = v
-

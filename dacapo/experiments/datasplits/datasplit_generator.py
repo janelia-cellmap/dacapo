@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List
 from enum import Enum, EnumMeta
 from funlib.geometry import Coordinate
-from typing import Union
+from typing import Union, Optional
 
 import zarr
 from dacapo.experiments.datasplits.datasets.arrays import (
@@ -21,6 +21,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 __SEPARATOR_CARACTER = "&"
+
 
 def is_zarr_group(file_name: str, dataset: str):
     zarr_file = zarr.open(str(file_name))
@@ -92,9 +93,6 @@ class CustomEnumMeta(EnumMeta):
 class CustomEnum(Enum, metaclass=CustomEnumMeta):
     def __str__(self) -> str:
         return self.name
-
-    def __str__(self) -> str:
-        return super().name
 
 
 class DatasetType(CustomEnum):
@@ -175,7 +173,7 @@ class DataSplitGenerator:
         datasets: List[DatasetSpec],
         input_resolution: Coordinate,
         output_resolution: Coordinate,
-        targets: List[str] = None,
+        targets: Optional[List[str]] = None,
         segmentation_type: Union[str, SegmentationType] = "semantic",
         max_gt_downsample=32,
         max_gt_upsample=4,
@@ -214,15 +212,15 @@ class DataSplitGenerator:
     @property
     def class_name(self):
         return self._class_name
-    
+
     # Goal is to force class_name to be set only once, so we have the same classes for all datasets
     @class_name.setter
     def class_name(self, class_name):
         if self._class_name is not None:
-            raise ValueError(f"Class name already set. Current class name is {self.class_name} and new class name is {class_name}")
+            raise ValueError(
+                f"Class name already set. Current class name is {self.class_name} and new class name is {class_name}"
+            )
         self._class_name = class_name
-
-
 
     def check_class_name(self, class_name):
         datasets, classes = format_class_name(class_name)
@@ -312,7 +310,9 @@ class DataSplitGenerator:
         classes_datasets, classes = self.check_class_name(gt_dataset)
         for current_class_dataset, current_class_name in zip(classes_datasets, classes):
             if not (gt_path / current_class_dataset).exists():
-                raise FileNotFoundError(f"GT path {gt_path/current_class_dataset} does not exist.")
+                raise FileNotFoundError(
+                    f"GT path {gt_path/current_class_dataset} does not exist."
+                )
             if is_zarr_group(str(gt_path), current_class_dataset):
                 gt_config = get_right_resolution_array_config(
                     gt_path, current_class_dataset, self.output_resolution, "gt"
@@ -335,12 +335,14 @@ class DataSplitGenerator:
             organelle_arrays[current_class_name] = gt_config
         if self.targets is None:
             targets_str = "_".join(classes)
+            current_targets = classes
         else:
+            current_targets = self.targets
             targets_str = "_".join(self.targets)
         if len(organelle_arrays) > 1:
             gt_config = ConcatArrayConfig(
                 name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_gt",
-                channels=[organelle for organelle in self.targets],
+                channels=[organelle for organelle in current_targets],
                 source_array_configs={k: gt for k, gt in organelle_arrays.items()},
             )
 
@@ -360,7 +362,7 @@ class DataSplitGenerator:
         csv_path: Path,
         input_resolution: Coordinate,
         output_resolution: Coordinate,
-        name: str = None,
+        name: Optional[str] = None,
         **kwargs,
     ):
         if isinstance(csv_path, str):
