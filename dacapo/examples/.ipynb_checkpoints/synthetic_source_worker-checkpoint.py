@@ -38,7 +38,6 @@ def cli(log_level):
 
 fit = "valid"
 
-
 def generate_synthetic_dataset(
     output_container: Path | str,
     raw_output_dataset: str = "raw",
