@@ -60,7 +60,6 @@ def cli(log_level):
     "-oc", "--output_container", required=True, type=click.Path(file_okay=False)
 )
 @click.option("-od", "--output_dataset", required=True, type=str)
-@click.option("-d", "--device", type=str, default="cuda")
 def start_worker(
     run_name: str,
     iteration: int,
@@ -68,8 +67,10 @@ def start_worker(
     input_dataset: str,
     output_container: Path | str,
     output_dataset: str,
-    device: str | torch.device = "cuda",
 ):
+    compute_context = create_compute_context()
+    device = compute_context.device
+
     # retrieving run
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(run_name)
@@ -101,7 +102,7 @@ def start_worker(
     input_size = input_voxel_size * input_shape
     output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
 
-    print("Predicting with input size %s, output size %s", input_size, output_size)
+    print(f"Predicting with input size {input_size}, output size {output_size}")
 
     # create gunpowder keys
 
@@ -121,6 +122,7 @@ def start_worker(
     pipeline += gp.Normalize(raw)
 
     # predict
+    model.eval()
     pipeline += gp_torch.Predict(
         model=model,
         inputs={"x": raw},
@@ -132,29 +134,7 @@ def start_worker(
             )
         },
         spawn_subprocess=False,
-        device=device,  # type: ignore
-    )
-    # raw: (1, c, d, h, w)
-    # prediction: (1, [c,] d, h, w)
-
-    # prepare writing
-    pipeline += gp.Squeeze([raw, prediction])
-    # raw: (c, d, h, w)
-    # prediction: (c, d, h, w)
-
-    # convert to uint8 if necessary:
-    if output_array.dtype == np.uint8:
-        pipeline += gp.IntensityScaleShift(
-            prediction, scale=255.0, shift=0.0
-        )  # assumes float32 is [0,1]
-        pipeline += gp.AsType(prediction, output_array.dtype)
-
-    # write to output array
-    pipeline += gp.ZarrWrite(
-        {
-            prediction: output_array_identifier.dataset,
-        },
-        store=str(output_array_identifier.container),
+        device=str(device),
     )
 
     # make reference batch request
@@ -173,14 +153,27 @@ def start_worker(
             if block is None:
                 return
 
-            print("Processing block %s", block)
+            print(f"Processing block {block}")
 
             chunk_request = request.copy()
             chunk_request[raw].roi = block.read_roi
             chunk_request[prediction].roi = block.write_roi
 
             with gp.build(pipeline):
-                _ = pipeline.request_batch(chunk_request)
+                batch = pipeline.request_batch(chunk_request)
+            # prediction: (1, [c,] d, h, w)
+            output = batch.arrays[prediction].data.squeeze()
+
+            # convert to uint8 if necessary:
+            if output_array.dtype == np.uint8:
+                if "sigmoid" not in str(model.eval_activation).lower():
+                    # assume output is in [-1, 1]
+                    output += 1
+                    output /= 2
+                output *= 255
+                output = output.clip(0, 255)
+                output = output.astype(np.uint8)
+            output_array[block.write_roi] = output
 
 
 def spawn_worker(
@@ -217,12 +210,13 @@ def spawn_worker(
         output_array_identifier.container,
         "--output_dataset",
         output_array_identifier.dataset,
-        "--device",
-        str(compute_context.device),
     ]
+
+    print("Defining worker with command: ", compute_context.wrap_command(command))
 
     def run_worker():
         # Run the worker in the given compute context
+        print("Running worker with command: ", command)
         compute_context.execute(command)
 
     return run_worker

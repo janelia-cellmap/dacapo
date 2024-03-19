@@ -114,7 +114,6 @@ class DatasetSpec:
         gt_container: Union[str, Path],
         gt_dataset: str,
     ):
-
         if isinstance(dataset_type, str):
             dataset_type = DatasetType[dataset_type.lower()]
 
@@ -140,9 +139,13 @@ def generate_dataspec_from_csv(csv_path: Path):
         raise FileNotFoundError(f"CSV file {csv_path} does not exist.")
     with open(csv_path, "r") as f:
         for line in f:
-            dataset_type, raw_container, raw_dataset, gt_container, gt_dataset = (
-                line.strip().split(",")
-            )
+            (
+                dataset_type,
+                raw_container,
+                raw_dataset,
+                gt_container,
+                gt_dataset,
+            ) = line.strip().split(",")
             datasets.append(
                 DatasetSpec(
                     dataset_type=DatasetType[dataset_type.lower()],

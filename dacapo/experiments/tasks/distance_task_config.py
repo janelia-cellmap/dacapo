@@ -39,7 +39,7 @@ class DistanceTaskConfig(TaskConfig):
         },
     )
     mask_distances: bool = attr.ib(
-        default=False,
+        default=True,
         metadata={
             "help_text": "Whether or not to mask out regions where the true distance to "
             "object boundary cannot be known. This is anywhere that the distance to crop boundary "
