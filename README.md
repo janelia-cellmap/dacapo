@@ -29,6 +29,7 @@ plans to support [`tensorflow`](https://www.tensorflow.org/).
 Currently, python>=3.10 is supported. We recommend creating a new conda environment for dacapo with python 3.10.
 ```
 conda create -n dacapo python=3.10
+conda activate dacapo
 ```
 
 Then install DaCapo using pip with the following command:
