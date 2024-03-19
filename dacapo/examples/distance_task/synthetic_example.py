@@ -64,8 +64,8 @@ config_store = create_config_store()
 # Then let's make sure we have data to train on
 from pathlib import Path
 from dacapo import Options
-from examples.utils import get_viewer
-from examples.synthetic_source_worker import generate_synthetic_dataset
+from dacapo.examples.utils import get_viewer
+from dacapo.examples.synthetic_source_worker import generate_synthetic_dataset
 from funlib.geometry import Coordinate
 from funlib.persistence import open_ds
 
@@ -381,3 +381,5 @@ predict(
 from dacapo.validate import validate_run
 
 validate_run(run.name, 50, num_workers=32)
+
+# %%
