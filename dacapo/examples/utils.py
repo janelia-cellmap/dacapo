@@ -17,6 +17,7 @@ import time
 import copy
 import json
 
+
 def get_viewer(
     raw_array: gp.Array | Array | ZarrArray,
     labels_array: gp.Array | Array | ZarrArray,
@@ -213,7 +214,8 @@ class NeuroglancerRunViewer:
                             self.most_recent_iteration,
                             validation_dataset.name,
                         )
-                        
+
+
 def add_seg_layer(state, name, data, voxel_size):
     state.layers[name] = neuroglancer.SegmentationLayer(
         # segments=[str(i) for i in np.unique(data[data > 0])], # this line will cause all objects to be selected and thus all meshes to be generated...will be slow if lots of high res meshes
