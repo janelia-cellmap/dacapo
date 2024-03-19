@@ -137,7 +137,7 @@ datasplit_config = DataSplitGenerator.generate_from_csv(
 
 datasplit = datasplit_config.datasplit_type(datasplit_config)
 viewer = datasplit._neuroglancer()
-config_store.store_datasplit_config(datasplit_config)
+# config_store.store_datasplit_config(datasplit_config)
 
 # %% [markdown]
 # The above datasplit_generator automates a lot of the heavy lifting for configuring data to set up a run. The following shows everything that it is doing, and an equivalent way to set up the datasplit.
@@ -232,7 +232,7 @@ task_config = DistanceTaskConfig(
     tol_distance=80.0,
     scale_factor=160.0,
 )
-config_store.store_task_config(task_config)
+# config_store.store_task_config(task_config)
 
 # %% [markdown]
 # ## Architecture
@@ -252,11 +252,11 @@ architecture_config = CNNectomeUNetConfig(
     downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],
     eval_shape_increase=(72, 72, 72),
 )
-try:
-    config_store.store_architecture_config(architecture_config)
-except:
-    config_store.delete_architecture_config(architecture_config.name)
-    config_store.store_architecture_config(architecture_config)
+# try:
+#     config_store.store_architecture_config(architecture_config)
+# except:
+#     config_store.delete_architecture_config(architecture_config.name)
+#     config_store.store_architecture_config(architecture_config)
 
 # %% [markdown]
 # ## Trainer
@@ -293,7 +293,7 @@ trainer_config = GunpowderTrainerConfig(
     min_masked=0.05,
     clip_raw=True,
 )
-config_store.store_trainer_config(trainer_config)
+# config_store.store_trainer_config(trainer_config)
 
 # %% [markdown]
 # ## Run
@@ -311,7 +311,7 @@ start_config = None
 #     "best",
 # )
 
-iterations = 2000
+iterations = 200
 validation_interval = iterations // 2
 repetitions = 1
 for i in range(repetitions):
@@ -376,7 +376,7 @@ train_run(run)
 # %%
 from dacapo.validate import validate
 
-validate(run_config.name, iterations, num_workers=16, overwrite=True)
+validate(run_config.name, iterations, num_workers=1, overwrite=True)
 
 # %% [markdown]
 # ## Predict
