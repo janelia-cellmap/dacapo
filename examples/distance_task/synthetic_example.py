@@ -44,122 +44,13 @@
 # To define where the data goes, create a dacapo.yaml configuration file either in `~/.config/dacapo/dacapo.yaml` or in `./dacapo.yaml`. Here is a template:
 #
 # ```yaml
-# mongodbhost: mongodb://dbuser:dbpass@dburl:dbport/
-# mongodbname: dacapo
-# runs_base_dir: /path/to/my/data/storage
-# ```
-# The runs_base_dir defines where your on-disk data will be stored. The mongodbhost and mongodbname define the mongodb host and database that will store your cloud data. If you want to store everything on disk, replace mongodbhost and mongodbname with a single type `files` and everything will be saved to disk:
-#
-# ```yaml
-# type: files
-# runs_base_dir: /path/to/my/data/storage
-# ```
-#
-
-
-# %%
-
-# for training:
-
-# pipeline, request = random_source_pipeline(input_shape=(512, 512, 512))
-# def batch_generator():
-#     with gp.build(pipeline):
-#         while True:
-#             yield pipeline.request_batch(request)
-# batch_gen = batch_generator()
-# training_batch = next(batch_gen)
-
-
-# for validation:
-# pipeline, request = random_source_pipeline(input_shape=(108, 108, 108))
-
-
-# def batch_generator():
-#     with gp.build(pipeline):
-#         while True:
-#             yield pipeline.request_batch(request)
-
-
-# batch_gen = batch_generator()
-# validation_batch = next(batch_gen)
-
-
-# def view_batch(batch):
-#     raw_array = batch.arrays[gp.ArrayKey("RAW")]
-#     labels_array = batch.arrays[gp.ArrayKey("LABELS")]
-
-#     labels_data = labels_array.data
-#     labels_spec = labels_array.spec
-
-#     raw_data = raw_array.data
-#     raw_spec = raw_array.spec
-
-#     neuroglancer.set_server_bind_address("0.0.0.0")
-#     viewer = neuroglancer.Viewer()
-#     with viewer.txn() as state:
-#         state.showSlices = False
-#         state.layers["segs"] = neuroglancer.SegmentationLayer(
-#             # segments=[str(i) for i in np.unique(data[data > 0])], # this line will cause all objects to be selected and thus all meshes to be generated...will be slow if lots of high res meshes
-#             source=neuroglancer.LocalVolume(
-#                 data=labels_data,
-#                 dimensions=neuroglancer.CoordinateSpace(
-#                     names=["z", "y", "x"],
-#                     units=["nm", "nm", "nm"],
-#                     scales=labels_spec.voxel_size,
-#                 ),
-#                 # voxel_offset=ds.roi.begin / ds.voxel_size,
-#             ),
-#             segments=np.unique(labels_data[labels_data > 0]),
-#         )
-
-#         state.layers["raw"] = neuroglancer.ImageLayer(
-#             source=neuroglancer.LocalVolume(
-#                 data=raw_data,
-#                 dimensions=neuroglancer.CoordinateSpace(
-#                     names=["z", "y", "x"],
-#                     units=["nm", "nm", "nm"],
-#                     scales=raw_spec.voxel_size,
-#                 ),
-#             ),
-#         )
-#     return IFrame(src=viewer, width=1500, height=600)
-
-
-# training_batch
-
-# # %%
-# view_batch(training_batch)
-# view_batch(validation_batch)
-# %%
-# write out files
-# from funlib.persistence import prepare_ds
-# from pathlib import Path
-
-# # Create a temporary directory
-
-
-# # with tempfile.TemporaryDirectory() as temp_dir:
-# def write_data(datasplit_type, arrays):
-#     for array_key, array in arrays.items():
-#         ds = prepare_ds(
-#             filename=f"./tmp/{datasplit_type}.zarr",
-#             ds_name=array_key.identifier,
-#             total_roi=array.spec.roi,
-#             voxel_size=array.spec.voxel_size,
-#             dtype=array.spec.dtype,
-#             delete=True
-#         )
-#         ds.data[:] = array.data
-
-
-# # write_data("training", training_batch)
-# write_data("validation", validation_batch)
 # type: files
 # runs_base_dir: /path/to/my/data/storage
 # ```
 # The `runs_base_dir` defines where your on-disk data will be stored. The `type` setting determines the database backend. The default is `files`, which stores the data in a file tree on disk. Alternatively, you can use `mongodb` to store the data in a MongoDB database. To use MongoDB, you will need to provide a `mongodbhost` and `mongodbname` in the configuration file:
 #
 # ```yaml
+# ...
 # mongodbhost: mongodb://dbuser:dbpass@dburl:dbport/
 # mongodbname: dacapo
 
@@ -201,9 +92,6 @@ get_viewer(raw_array, labels_array)
 
 # %%
 # Then for validation data
-from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
-from dacapo.store.array_store import LocalArrayIdentifier
-
 validate_data_path = Path(runs_base_dir, "example_validate.zarr")
 try:
     assert not force
@@ -232,7 +120,7 @@ get_viewer(raw_array, labels_array)
 from dacapo.experiments.datasplits.datasets.arrays import (
     BinarizeArrayConfig,
     ZarrArrayConfig,
-    IntensitiesArrayConfig
+    IntensitiesArrayConfig,
 )
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
 from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig

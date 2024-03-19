@@ -44,17 +44,16 @@
 # To define where the data goes, create a dacapo.yaml configuration file either in `~/.config/dacapo/dacapo.yaml` or in `./dacapo.yaml`. Here is a template:
 #
 # ```yaml
-# mongodbhost: mongodb://dbuser:dbpass@dburl:dbport/
-# mongodbname: dacapo
-# runs_base_dir: /path/to/my/data/storage
-# ```
-# The runs_base_dir defines where your on-disk data will be stored. The mongodbhost and mongodbname define the mongodb host and database that will store your cloud data. If you want to store everything on disk, replace mongodbhost and mongodbname with a single type `files` and everything will be saved to disk:
-#
-# ```yaml
 # type: files
 # runs_base_dir: /path/to/my/data/storage
 # ```
+# The `runs_base_dir` defines where your on-disk data will be stored. The `type` setting determines the database backend. The default is `files`, which stores the data in a file tree on disk. Alternatively, you can use `mongodb` to store the data in a MongoDB database. To use MongoDB, you will need to provide a `mongodbhost` and `mongodbname` in the configuration file:
 #
+# ```yaml
+# ...
+# mongodbhost: mongodb://dbuser:dbpass@dburl:dbport/
+# mongodbname: dacapo
+
 # %%
 # First we need to create a config store to store our configurations
 from dacapo.store.create_store import create_config_store
