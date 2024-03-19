@@ -9,8 +9,8 @@ logger = logging.getLogger(__file__)
 
 class CosemStart(Start):
     def __init__(self, start_config):
-        self.name = f"{self.run}/{self.criterion}"
         super().__init__(start_config)
+        self.name = f"{self.run}/{self.criterion}"
 
     def check(self):
         from dacapo.store.create_store import create_weights_store

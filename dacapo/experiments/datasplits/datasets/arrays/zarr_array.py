@@ -137,6 +137,11 @@ class ZarrArray(Array):
             write_size = Coordinate((axis_length,) * voxel_size.dims) * voxel_size
         write_size = Coordinate((min(a, b) for a, b in zip(write_size, roi.shape)))
         zarr_container = zarr.open(array_identifier.container, "a")
+        if num_channels is None or num_channels == 1:
+            axes = [axis for axis in axes if "c" not in axis]
+            num_channels = None
+        else:
+            axes = ["c"] + [axis for axis in axes if "c" not in axis]
         try:
             funlib.persistence.prepare_ds(
                 f"{array_identifier.container}",
@@ -158,7 +163,9 @@ class ZarrArray(Array):
                 zarr_dataset.attrs["dimension_units"] = [
                     f"{size} nm" for size in voxel_size[::-1]
                 ]
-                zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = axes[::-1]
+                zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = [
+                    a if a != "c" else "c^" for a in axes[::-1]
+                ]
             else:
                 zarr_dataset.attrs["offset"] = roi.offset
                 zarr_dataset.attrs["resolution"] = voxel_size
@@ -167,16 +174,18 @@ class ZarrArray(Array):
                 zarr_dataset.attrs["dimension_units"] = [
                     f"{size} nm" for size in voxel_size
                 ]
-                zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = axes
-            if num_channels is not None:
+                zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = [
+                    a if a != "c" else "c^" for a in axes
+                ]
+            if "c" in axes:
                 if axes.index("c") == 0:
                     zarr_dataset.attrs["dimension_units"] = [
-                        num_channels
+                        str(num_channels)
                     ] + zarr_dataset.attrs["dimension_units"]
                 else:
                     zarr_dataset.attrs["dimension_units"] = zarr_dataset.attrs[
                         "dimension_units"
-                    ] + [num_channels]
+                    ] + [str(num_channels)]
         except zarr.errors.ContainsArrayError:
             zarr_dataset = zarr_container[array_identifier.dataset]
             assert (
