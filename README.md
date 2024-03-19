@@ -50,3 +50,20 @@ Tasks we support and approaches for those tasks:
  - Semantic segmentation
     - Signed distances
     - One-hot encoding of different types of objects
+  
+## Helpful Resources & Tools
+ - Chunked data, zarr, and n5
+    - OME-Zarr: a cloud-optimized bioimaging file format with international community support (doi: [10.1101/2023.02.17.528834](https://pubmed.ncbi.nlm.nih.gov/36865282/))
+    - Videos about N5 and Fiji can be found in [this playlist](https://www.youtube.com/playlist?list=PLmZHHIZ9Gz-IJA7HtW8quZcuLViz9Em6e). For other questions, join the discussion on the [Image.sc forum](https://forum.image.sc/tag/n5).
+    - [N5 plugins for Fiji](https://openorganelle.janelia.org/news/2023-02-06-n5-plugins-for-fiji)
+    - Script for converting [tif to zarr](https://github.com/yuriyzubov/tif-to-zarr) 
+ - CellMap Models
+    - [GitHub Repo](https://github.com/janelia-cellmap/cellmap-models) of published models
+ - [OpenOrganelle.org](https://openorganelle.janelia.org)
+    - ![](https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/mito_pred-seg.gif)
+    - Example of [unprocessed distance predictions](https://tinyurl.com/3kw2tuab)
+    - Example of [refined segmentations](https://tinyurl.com/k59pba98) that have undergone post-processing (e.g., thresholding, masking, smoothing)
+    - Example of [groundtruth data](https://tinyurl.com/pu8mespz)
+ - Visualization
+    - [Neuroglancer GitHub Repo](https://github.com/google/neuroglancer)
+   
