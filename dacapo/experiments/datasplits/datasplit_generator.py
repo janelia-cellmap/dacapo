@@ -20,7 +20,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__SEPARATOR_CARACTER = "&"
+__SEPARATOR_CHARACTER = "&"
 
 
 def is_zarr_group(file_name: str, dataset: str):
@@ -387,7 +387,7 @@ def format_class_name(class_name):
     if "[" in class_name:
         if "]" not in class_name:
             raise ValueError(f"Invalid class name {class_name} missing ']'")
-        classes = class_name.split("[")[1].split("]")[0].split(__SEPARATOR_CARACTER)
+        classes = class_name.split("[")[1].split("]")[0].split(__SEPARATOR_CHARACTER)
         base_class_name = class_name.split("[")[0]
         return [f"{base_class_name}{c}" for c in classes], classes
     else:
