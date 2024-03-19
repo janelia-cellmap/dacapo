@@ -41,4 +41,9 @@ Classes
       A property method that returns the torch device object. It automatically detects and uses "cuda" (GPU) if
       available, else it falls back on using "cpu".
 
+   .. py:attribute:: oom_limit
+      :type: Optional[float | int]
+
+      
+
 

@@ -1,0 +1,81 @@
+:py:mod:`dacapo.examples`
+=========================
+
+.. py:module:: dacapo.examples
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   distance_task/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   random_source_pipeline/index.rst
+   synthetic_source_worker/index.rst
+   utils/index.rst
+
+
+Package Contents
+----------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.examples.random_source_pipeline
+   dacapo.examples.generate_synthetic_dataset
+   dacapo.examples.get_viewer
+
+
+
+.. py:function:: random_source_pipeline(voxel_size=(8, 8, 8), input_shape=(148, 148, 148), dtype=np.uint8, expand_labels=False, relabel_connectivity=1, random_dilate=True, num_points=(20, 150), gaussian_noise_args=(0, 0.1), gaussian_blur_args=(0.5, 1.5), membrane_like=True, membrane_size=3, inside_value=0.5)
+
+   Create a random source pipeline and batch request for example training.
+
+   :param voxel_size: The size of a voxel in world units.
+   :type voxel_size: tuple of int
+   :param input_shape: The shape of the input arrays.
+   :type input_shape: tuple of int
+   :param dtype: The dtype of the label arrays.
+   :type dtype: numpy.dtype
+   :param expand_labels: Whether to expand the labels into the background.
+   :type expand_labels: bool
+   :param relabel_connectivity: The connectivity used for for relabeling.
+   :type relabel_connectivity: int
+   :param random_dilate: Whether to randomly dilate the individual labels.
+   :type random_dilate: bool
+   :param num_points: The range of the number of points to add to the labels.
+   :type num_points: tuple of int
+   :param gaussian_noise_args: The mean and standard deviation of the Gaussian noise to add to the raw array.
+   :type gaussian_noise_args: tuple of float
+   :param gaussian_blur_args: The mean and standard deviation of the Gaussian blur to apply to the raw array.
+   :type gaussian_blur_args: tuple of float
+   :param membrane_like: Whether to generate a membrane-like structure in the raw array.
+   :type membrane_like: bool
+   :param membrane_size: The width of the membrane-like structure on the outside of the objects.
+   :type membrane_size: int
+   :param inside_value: The value to set inside the membranes of objects.
+   :type inside_value: float
+
+   :returns: The batch generating Gunpowder pipeline.
+             gunpowder.BatchRequest: The batch request for the pipeline.
+   :rtype: gunpowder.Pipeline
+
+
+.. py:function:: generate_synthetic_dataset(output_container: pathlib.Path | str, raw_output_dataset: str = 'raw', labels_output_dataset: str = 'labels', shape: str | funlib.geometry.Coordinate = Coordinate((512, 512, 512)), voxel_size: str | funlib.geometry.Coordinate = Coordinate((8, 8, 8)), write_shape: str | funlib.geometry.Coordinate = Coordinate((256, 256, 256)), num_workers: int = 16, overwrite: bool = False)
+
+
+.. py:function:: get_viewer(raw_array: gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray, labels_array: gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray, pred_array: Optional[gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray] = None, pred_labels_array: Optional[gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray] = None, width: int = 1500, height: int = 600) -> IPython.display.IFrame
+
+

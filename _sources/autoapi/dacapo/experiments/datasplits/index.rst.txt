@@ -22,6 +22,7 @@ Submodules
 
    datasplit/index.rst
    datasplit_config/index.rst
+   datasplit_generator/index.rst
    dummy_datasplit/index.rst
    dummy_datasplit_config/index.rst
    train_validate_datasplit/index.rst
@@ -42,6 +43,7 @@ Classes
    dacapo.experiments.datasplits.DummyDataSplitConfig
    dacapo.experiments.datasplits.TrainValidateDataSplit
    dacapo.experiments.datasplits.TrainValidateDataSplitConfig
+   dacapo.experiments.datasplits.DataSplitGenerator
 
 
 
@@ -212,5 +214,31 @@ Classes
       :type: List[dacapo.experiments.datasplits.datasets.DatasetConfig]
 
       
+
+
+.. py:class:: DataSplitGenerator(name: str, datasets: List[DatasetSpec], input_resolution: funlib.geometry.Coordinate, output_resolution: funlib.geometry.Coordinate, targets: Optional[List[str]] = None, segmentation_type: Union[str, SegmentationType] = 'semantic', max_gt_downsample=32, max_gt_upsample=4, max_raw_training_downsample=16, max_raw_training_upsample=2, max_raw_validation_downsample=8, max_raw_validation_upsample=2, min_training_volume_size=8000, raw_min=0, raw_max=255)
+
+
+   Generates DataSplitConfig for a given task config and datasets.
+   class names in gt_dataset shoulb be within [] e.g. [mito&peroxisome&er] for mutiple classes or [mito] for one class
+   Currently only supports:
+    - semantic segmentation.
+    Supports:
+       - 2D and 3D datasets.
+       - Zarr, N5 and OME-Zarr datasets.
+       - Multi class targets.
+
+   .. py:property:: class_name
+
+
+   .. py:method:: check_class_name(class_name)
+
+
+   .. py:method:: compute()
+
+
+   .. py:method:: generate_from_csv(csv_path: pathlib.Path, input_resolution: funlib.geometry.Coordinate, output_resolution: funlib.geometry.Coordinate, name: Optional[str] = None, **kwargs)
+      :staticmethod:
+
 
 

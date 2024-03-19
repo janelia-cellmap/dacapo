@@ -12,6 +12,7 @@ Subpackages
 
    blockwise/index.rst
    compute_context/index.rst
+   examples/index.rst
    experiments/index.rst
    ext/index.rst
    gp/index.rst

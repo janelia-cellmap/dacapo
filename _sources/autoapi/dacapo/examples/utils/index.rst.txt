@@ -1,0 +1,75 @@
+:py:mod:`dacapo.examples.utils`
+===============================
+
+.. py:module:: dacapo.examples.utils
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.examples.utils.NeuroglancerRunViewer
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.examples.utils.get_viewer
+   dacapo.examples.utils.add_seg_layer
+   dacapo.examples.utils.add_scalar_layer
+
+
+
+.. py:function:: get_viewer(raw_array: gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray, labels_array: gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray, pred_array: Optional[gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray] = None, pred_labels_array: Optional[gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray] = None, width: int = 1500, height: int = 600) -> IPython.display.IFrame
+
+
+.. py:class:: NeuroglancerRunViewer(run: dacapo.experiments.run.Run)
+
+
+   .. py:method:: updated_neuroglancer_layer(layer_name, ds)
+
+
+   .. py:method:: deprecated_start_neuroglancer()
+
+
+   .. py:method:: start_neuroglancer()
+
+
+   .. py:method:: start()
+
+
+   .. py:method:: open_from_array_identitifier(array_identifier)
+
+
+   .. py:method:: get_datasets()
+
+
+   .. py:method:: update_best_info(iteration, validation_dataset_name)
+
+
+   .. py:method:: update_neuroglancer(iteration)
+
+
+   .. py:method:: update_best(iteration, validation_dataset_name)
+
+
+   .. py:method:: new_validation_checker()
+
+
+   .. py:method:: update_with_new_validation_if_possible()
+
+
+
+.. py:function:: add_seg_layer(state, name, data, voxel_size)
+
+
+.. py:function:: add_scalar_layer(state, name, data, voxel_size)
+
+

@@ -57,7 +57,7 @@ Functions
 
 
 
-.. py:function:: create_compute_context()
+.. py:function:: create_compute_context() -> ComputeContext
 
    Create a compute context based on the global DaCapo options.
 
@@ -85,6 +85,11 @@ Functions
 
       A property method that returns the torch device object. It automatically detects and uses "cuda" (GPU) if
       available, else it falls back on using "cpu".
+
+   .. py:attribute:: oom_limit
+      :type: Optional[float | int]
+
+      
 
 
 .. py:class:: Bsub

@@ -44,7 +44,7 @@ Functions
 
 
 
-.. py:function:: create_compute_context()
+.. py:function:: create_compute_context() -> ComputeContext
 
    Create a compute context based on the global DaCapo options.
 

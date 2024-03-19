@@ -1,0 +1,151 @@
+:py:mod:`dacapo.experiments.datasplits.datasplit_generator`
+===========================================================
+
+.. py:module:: dacapo.experiments.datasplits.datasplit_generator
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasplit_generator.CustomEnumMeta
+   dacapo.experiments.datasplits.datasplit_generator.CustomEnum
+   dacapo.experiments.datasplits.datasplit_generator.DatasetType
+   dacapo.experiments.datasplits.datasplit_generator.SegmentationType
+   dacapo.experiments.datasplits.datasplit_generator.DatasetSpec
+   dacapo.experiments.datasplits.datasplit_generator.DataSplitGenerator
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasplit_generator.is_zarr_group
+   dacapo.experiments.datasplits.datasplit_generator.resize_if_needed
+   dacapo.experiments.datasplits.datasplit_generator.get_right_resolution_array_config
+   dacapo.experiments.datasplits.datasplit_generator.generate_dataspec_from_csv
+   dacapo.experiments.datasplits.datasplit_generator.format_class_name
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasplit_generator.logger
+
+
+.. py:data:: logger
+
+   
+
+.. py:function:: is_zarr_group(file_name: str, dataset: str)
+
+
+.. py:function:: resize_if_needed(array_config: dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig, target_resolution: funlib.geometry.Coordinate, extra_str='')
+
+
+.. py:function:: get_right_resolution_array_config(container: pathlib.Path, dataset, target_resolution, extra_str='')
+
+
+.. py:class:: CustomEnumMeta
+
+
+
+
+   Metaclass for Enum
+
+
+.. py:class:: CustomEnum
+
+
+
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+
+.. py:class:: DatasetType
+
+
+
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: val
+      :value: 1
+
+      
+
+   .. py:attribute:: train
+      :value: 2
+
+      
+
+
+.. py:class:: SegmentationType
+
+
+
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: semantic
+      :value: 1
+
+      
+
+   .. py:attribute:: instance
+      :value: 2
+
+      
+
+
+.. py:class:: DatasetSpec(dataset_type: Union[str, DatasetType], raw_container: Union[str, pathlib.Path], raw_dataset: str, gt_container: Union[str, pathlib.Path], gt_dataset: str)
+
+
+
+.. py:function:: generate_dataspec_from_csv(csv_path: pathlib.Path)
+
+
+.. py:class:: DataSplitGenerator(name: str, datasets: List[DatasetSpec], input_resolution: funlib.geometry.Coordinate, output_resolution: funlib.geometry.Coordinate, targets: Optional[List[str]] = None, segmentation_type: Union[str, SegmentationType] = 'semantic', max_gt_downsample=32, max_gt_upsample=4, max_raw_training_downsample=16, max_raw_training_upsample=2, max_raw_validation_downsample=8, max_raw_validation_upsample=2, min_training_volume_size=8000, raw_min=0, raw_max=255)
+
+
+   Generates DataSplitConfig for a given task config and datasets.
+   class names in gt_dataset shoulb be within [] e.g. [mito&peroxisome&er] for mutiple classes or [mito] for one class
+   Currently only supports:
+    - semantic segmentation.
+    Supports:
+       - 2D and 3D datasets.
+       - Zarr, N5 and OME-Zarr datasets.
+       - Multi class targets.
+
+   .. py:property:: class_name
+
+
+   .. py:method:: check_class_name(class_name)
+
+
+   .. py:method:: compute()
+
+
+   .. py:method:: generate_from_csv(csv_path: pathlib.Path, input_resolution: funlib.geometry.Coordinate, output_resolution: funlib.geometry.Coordinate, name: Optional[str] = None, **kwargs)
+      :staticmethod:
+
+
+
+.. py:function:: format_class_name(class_name)
+
+

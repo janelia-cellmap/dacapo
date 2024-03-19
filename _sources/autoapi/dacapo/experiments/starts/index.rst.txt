@@ -117,6 +117,9 @@ Classes
 
       :type: str
 
+   .. py:method:: check()
+
+
    .. py:method:: initialize_weights(model)
 
       Retrieves the weights from the dacapo store and load them into

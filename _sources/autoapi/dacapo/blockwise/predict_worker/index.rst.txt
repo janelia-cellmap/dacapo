@@ -53,7 +53,7 @@ Attributes
 .. py:function:: cli(log_level)
 
 
-.. py:function:: start_worker(run_name: str, iteration: int, input_container: pathlib.Path | str, input_dataset: str, output_container: pathlib.Path | str, output_dataset: str, device: str | torch.device = 'cuda')
+.. py:function:: start_worker(run_name: str, iteration: int, input_container: pathlib.Path | str, input_dataset: str, output_container: pathlib.Path | str, output_dataset: str)
 
 
 .. py:function:: spawn_worker(run_name: str, iteration: int, input_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier)

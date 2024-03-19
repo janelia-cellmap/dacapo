@@ -48,6 +48,7 @@ Classes
 
 .. autoapisummary::
 
+   dacapo.experiments.tasks.Task
    dacapo.experiments.tasks.TaskConfig
    dacapo.experiments.tasks.DummyTaskConfig
    dacapo.experiments.tasks.DummyTask
@@ -64,6 +65,46 @@ Classes
    dacapo.experiments.tasks.HotDistanceTaskConfig
    dacapo.experiments.tasks.HotDistanceTask
 
+
+
+
+.. py:class:: Task
+
+
+
+
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
+
+   .. py:property:: parameters
+      :type: Iterable[dacapo.experiments.tasks.post_processors.PostProcessorParameters]
+
+
+   .. py:property:: evaluation_scores
+      :type: dacapo.experiments.tasks.evaluators.EvaluationScores
+
+
+   .. py:attribute:: predictor
+      :type: dacapo.experiments.tasks.predictors.Predictor
+
+      
+
+   .. py:attribute:: loss
+      :type: dacapo.experiments.tasks.losses.Loss
+
+      
+
+   .. py:attribute:: evaluator
+      :type: dacapo.experiments.tasks.evaluators.Evaluator
+
+      
+
+   .. py:attribute:: post_processor
+      :type: dacapo.experiments.tasks.post_processors.PostProcessor
+
+      
+
+   .. py:method:: create_model(architecture)
 
 
 

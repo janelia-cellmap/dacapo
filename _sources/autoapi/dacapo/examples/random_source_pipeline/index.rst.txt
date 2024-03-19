@@ -1,0 +1,402 @@
+:py:mod:`dacapo.examples.random_source_pipeline`
+================================================
+
+.. py:module:: dacapo.examples.random_source_pipeline
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.examples.random_source_pipeline.CreatePoints
+   dacapo.examples.random_source_pipeline.MakeRaw
+   dacapo.examples.random_source_pipeline.DilatePoints
+   dacapo.examples.random_source_pipeline.RandomDilateLabels
+   dacapo.examples.random_source_pipeline.Relabel
+   dacapo.examples.random_source_pipeline.ExpandLabels
+   dacapo.examples.random_source_pipeline.ZerosSource
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.examples.random_source_pipeline.random_source_pipeline
+
+
+
+.. py:class:: CreatePoints(labels, num_points=(20, 150))
+
+
+
+
+   Convenience wrapper for :class:`BatchProviders<BatchProvider>` with
+   exactly one input provider.
+
+   By default, a node of this class will expose the same :class:`ProviderSpec`
+   as the upstream provider. You can modify the provider spec by calling
+   :func:`provides` and :func:`updates` in :func:`setup`.
+
+   Subclasses need to implement at least :func:`process` to modify a passed
+   batch (downstream). Optionally, the following methods can be implemented:
+
+       :func:`setup`
+
+           Initialize this filter. Called after setup of the DAG. All upstream
+           providers will be set up already.
+
+       :func:`teardown`
+
+           Destruct this filter, free resources, stop worker processes.
+
+       :func:`prepare`
+
+           Prepare for a batch request. Always called before each
+           :func:`process`. Used to communicate dependencies.
+
+   .. py:method:: process(batch, request)
+
+      To be implemented in subclasses.
+
+      Filter a batch, will be called after :func:`prepare`. Should return a
+      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
+      batch will replace the associated data in the original batch. If None is
+      returned it is assumed that the batch has been modified in place. ``request``
+      is the same as passed to :func:`prepare`, provided for convenience.
+
+      :param batch: The batch received from upstream to be modified by this node.
+      :type batch: :class:`Batch`
+      :param request: The request this node received. The updated batch should meet
+                      this request.
+      :type request: :class:`BatchRequest`
+
+
+
+.. py:class:: MakeRaw(raw, labels, gaussian_noise_args: Iterable = (0.5, 0.1), gaussian_noise_lim: float = 0.3, gaussian_blur_args: Iterable = (0.5, 1.5), membrane_like=True, membrane_size=3, inside_value=0.5)
+
+
+
+
+   Convenience wrapper for :class:`BatchProviders<BatchProvider>` with
+   exactly one input provider.
+
+   By default, a node of this class will expose the same :class:`ProviderSpec`
+   as the upstream provider. You can modify the provider spec by calling
+   :func:`provides` and :func:`updates` in :func:`setup`.
+
+   Subclasses need to implement at least :func:`process` to modify a passed
+   batch (downstream). Optionally, the following methods can be implemented:
+
+       :func:`setup`
+
+           Initialize this filter. Called after setup of the DAG. All upstream
+           providers will be set up already.
+
+       :func:`teardown`
+
+           Destruct this filter, free resources, stop worker processes.
+
+       :func:`prepare`
+
+           Prepare for a batch request. Always called before each
+           :func:`process`. Used to communicate dependencies.
+
+   .. py:method:: setup()
+
+      To be implemented in subclasses.
+
+      Called during initialization of the DAG. Callees can assume that all
+      upstream providers are set up already.
+
+      In setup, call :func:`provides` or :func:`updates` to announce the
+      arrays and points provided or changed by this node.
+
+
+   .. py:method:: process(batch, request)
+
+      To be implemented in subclasses.
+
+      Filter a batch, will be called after :func:`prepare`. Should return a
+      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
+      batch will replace the associated data in the original batch. If None is
+      returned it is assumed that the batch has been modified in place. ``request``
+      is the same as passed to :func:`prepare`, provided for convenience.
+
+      :param batch: The batch received from upstream to be modified by this node.
+      :type batch: :class:`Batch`
+      :param request: The request this node received. The updated batch should meet
+                      this request.
+      :type request: :class:`BatchRequest`
+
+
+
+.. py:class:: DilatePoints(labels, dilations=[2, 8])
+
+
+
+
+   Convenience wrapper for :class:`BatchProviders<BatchProvider>` with
+   exactly one input provider.
+
+   By default, a node of this class will expose the same :class:`ProviderSpec`
+   as the upstream provider. You can modify the provider spec by calling
+   :func:`provides` and :func:`updates` in :func:`setup`.
+
+   Subclasses need to implement at least :func:`process` to modify a passed
+   batch (downstream). Optionally, the following methods can be implemented:
+
+       :func:`setup`
+
+           Initialize this filter. Called after setup of the DAG. All upstream
+           providers will be set up already.
+
+       :func:`teardown`
+
+           Destruct this filter, free resources, stop worker processes.
+
+       :func:`prepare`
+
+           Prepare for a batch request. Always called before each
+           :func:`process`. Used to communicate dependencies.
+
+   .. py:method:: process(batch, request)
+
+      To be implemented in subclasses.
+
+      Filter a batch, will be called after :func:`prepare`. Should return a
+      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
+      batch will replace the associated data in the original batch. If None is
+      returned it is assumed that the batch has been modified in place. ``request``
+      is the same as passed to :func:`prepare`, provided for convenience.
+
+      :param batch: The batch received from upstream to be modified by this node.
+      :type batch: :class:`Batch`
+      :param request: The request this node received. The updated batch should meet
+                      this request.
+      :type request: :class:`BatchRequest`
+
+
+
+.. py:class:: RandomDilateLabels(labels, dilations=[2, 8])
+
+
+
+
+   Convenience wrapper for :class:`BatchProviders<BatchProvider>` with
+   exactly one input provider.
+
+   By default, a node of this class will expose the same :class:`ProviderSpec`
+   as the upstream provider. You can modify the provider spec by calling
+   :func:`provides` and :func:`updates` in :func:`setup`.
+
+   Subclasses need to implement at least :func:`process` to modify a passed
+   batch (downstream). Optionally, the following methods can be implemented:
+
+       :func:`setup`
+
+           Initialize this filter. Called after setup of the DAG. All upstream
+           providers will be set up already.
+
+       :func:`teardown`
+
+           Destruct this filter, free resources, stop worker processes.
+
+       :func:`prepare`
+
+           Prepare for a batch request. Always called before each
+           :func:`process`. Used to communicate dependencies.
+
+   .. py:method:: process(batch, request)
+
+      To be implemented in subclasses.
+
+      Filter a batch, will be called after :func:`prepare`. Should return a
+      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
+      batch will replace the associated data in the original batch. If None is
+      returned it is assumed that the batch has been modified in place. ``request``
+      is the same as passed to :func:`prepare`, provided for convenience.
+
+      :param batch: The batch received from upstream to be modified by this node.
+      :type batch: :class:`Batch`
+      :param request: The request this node received. The updated batch should meet
+                      this request.
+      :type request: :class:`BatchRequest`
+
+
+
+.. py:class:: Relabel(labels, connectivity=1)
+
+
+
+
+   Convenience wrapper for :class:`BatchProviders<BatchProvider>` with
+   exactly one input provider.
+
+   By default, a node of this class will expose the same :class:`ProviderSpec`
+   as the upstream provider. You can modify the provider spec by calling
+   :func:`provides` and :func:`updates` in :func:`setup`.
+
+   Subclasses need to implement at least :func:`process` to modify a passed
+   batch (downstream). Optionally, the following methods can be implemented:
+
+       :func:`setup`
+
+           Initialize this filter. Called after setup of the DAG. All upstream
+           providers will be set up already.
+
+       :func:`teardown`
+
+           Destruct this filter, free resources, stop worker processes.
+
+       :func:`prepare`
+
+           Prepare for a batch request. Always called before each
+           :func:`process`. Used to communicate dependencies.
+
+   .. py:method:: process(batch, request)
+
+      To be implemented in subclasses.
+
+      Filter a batch, will be called after :func:`prepare`. Should return a
+      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
+      batch will replace the associated data in the original batch. If None is
+      returned it is assumed that the batch has been modified in place. ``request``
+      is the same as passed to :func:`prepare`, provided for convenience.
+
+      :param batch: The batch received from upstream to be modified by this node.
+      :type batch: :class:`Batch`
+      :param request: The request this node received. The updated batch should meet
+                      this request.
+      :type request: :class:`BatchRequest`
+
+
+
+.. py:class:: ExpandLabels(labels, background=0)
+
+
+
+
+   Convenience wrapper for :class:`BatchProviders<BatchProvider>` with
+   exactly one input provider.
+
+   By default, a node of this class will expose the same :class:`ProviderSpec`
+   as the upstream provider. You can modify the provider spec by calling
+   :func:`provides` and :func:`updates` in :func:`setup`.
+
+   Subclasses need to implement at least :func:`process` to modify a passed
+   batch (downstream). Optionally, the following methods can be implemented:
+
+       :func:`setup`
+
+           Initialize this filter. Called after setup of the DAG. All upstream
+           providers will be set up already.
+
+       :func:`teardown`
+
+           Destruct this filter, free resources, stop worker processes.
+
+       :func:`prepare`
+
+           Prepare for a batch request. Always called before each
+           :func:`process`. Used to communicate dependencies.
+
+   .. py:method:: process(batch, request)
+
+      To be implemented in subclasses.
+
+      Filter a batch, will be called after :func:`prepare`. Should return a
+      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
+      batch will replace the associated data in the original batch. If None is
+      returned it is assumed that the batch has been modified in place. ``request``
+      is the same as passed to :func:`prepare`, provided for convenience.
+
+      :param batch: The batch received from upstream to be modified by this node.
+      :type batch: :class:`Batch`
+      :param request: The request this node received. The updated batch should meet
+                      this request.
+      :type request: :class:`BatchRequest`
+
+
+
+.. py:class:: ZerosSource(key, spec)
+
+
+
+
+   Superclass for all nodes in a `gunpowder` graph.
+
+   A :class:`BatchProvider` provides :class:`Batches<Batch>` containing
+   :class:`Arrays<Array>` and/or :class:`Graph`. The available data is
+   specified in a :class:`ProviderSpec` instance, accessible via :attr:`spec`.
+
+   To create a new node, subclass this class and implement (at least)
+   :func:`setup` and :func:`provide`.
+
+   A :class:`BatchProvider` can be linked to any number of other
+   :class:`BatchProviders<BatchProvider>` upstream. If your node accepts
+   exactly one upstream provider, consider subclassing :class:`BatchFilter`
+   instead.
+
+   .. py:method:: setup()
+
+      To be implemented in subclasses.
+
+      Called during initialization of the DAG. Callees can assume that all
+      upstream providers are set up already.
+
+      In setup, call :func:`provides` to announce the arrays and points
+      provided by this node.
+
+
+   .. py:method:: provide(request)
+
+      To be implemented in subclasses.
+
+      This function takes a :class:`BatchRequest` and should return the
+      corresponding :class:`Batch`.
+
+      :param request: The request to process.
+      :type request: :class:`BatchRequest`
+
+
+
+.. py:function:: random_source_pipeline(voxel_size=(8, 8, 8), input_shape=(148, 148, 148), dtype=np.uint8, expand_labels=False, relabel_connectivity=1, random_dilate=True, num_points=(20, 150), gaussian_noise_args=(0, 0.1), gaussian_blur_args=(0.5, 1.5), membrane_like=True, membrane_size=3, inside_value=0.5)
+
+   Create a random source pipeline and batch request for example training.
+
+   :param voxel_size: The size of a voxel in world units.
+   :type voxel_size: tuple of int
+   :param input_shape: The shape of the input arrays.
+   :type input_shape: tuple of int
+   :param dtype: The dtype of the label arrays.
+   :type dtype: numpy.dtype
+   :param expand_labels: Whether to expand the labels into the background.
+   :type expand_labels: bool
+   :param relabel_connectivity: The connectivity used for for relabeling.
+   :type relabel_connectivity: int
+   :param random_dilate: Whether to randomly dilate the individual labels.
+   :type random_dilate: bool
+   :param num_points: The range of the number of points to add to the labels.
+   :type num_points: tuple of int
+   :param gaussian_noise_args: The mean and standard deviation of the Gaussian noise to add to the raw array.
+   :type gaussian_noise_args: tuple of float
+   :param gaussian_blur_args: The mean and standard deviation of the Gaussian blur to apply to the raw array.
+   :type gaussian_blur_args: tuple of float
+   :param membrane_like: Whether to generate a membrane-like structure in the raw array.
+   :type membrane_like: bool
+   :param membrane_size: The width of the membrane-like structure on the outside of the objects.
+   :type membrane_size: int
+   :param inside_value: The value to set inside the membranes of objects.
+   :type inside_value: float
+
+   :returns: The batch generating Gunpowder pipeline.
+             gunpowder.BatchRequest: The batch request for the pipeline.
+   :rtype: gunpowder.Pipeline
+
+
