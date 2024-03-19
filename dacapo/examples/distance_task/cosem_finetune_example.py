@@ -77,7 +77,9 @@ from funlib.geometry import Coordinate
 input_resolution = Coordinate(8, 8, 8)
 output_resolution = Coordinate(4, 4, 4)
 datasplit_config = DataSplitGenerator.generate_from_csv(
-    "cosem_example.csv", input_resolution, output_resolution
+    "/misc/public/dacapo_learnathon/datasplit_csvs/cosem_example.csv",
+    input_resolution,
+    output_resolution,
 ).compute()
 
 datasplit = datasplit_config.datasplit_type(datasplit_config)
@@ -96,7 +98,7 @@ from dacapo.experiments.tasks import DistanceTaskConfig
 
 task_config = DistanceTaskConfig(
     name="cosem_distance_task_4nm",
-    channels=["labels"],
+    channels=["mito"],
     clip_distance=40.0,
     tol_distance=40.0,
     scale_factor=80.0,
@@ -170,31 +172,19 @@ config_store.store_trainer_config(trainer_config)
 from dacapo.experiments import RunConfig
 from dacapo.experiments.run import Run
 
-start_config = None
-
-# Uncomment to start from a pretrained model
 from dacapo.experiments.starts import CosemStartConfig
+
+# We will now download a pretrained cosem model and finetune from that model. It will only have to download the first time it is used.
 
 start_config = CosemStartConfig("setup04", "1820500")
 start_config.start_type(start_config).check()
+
 iterations = 2000
-validation_interval = 50
+validation_interval = iterations // 2
 repetitions = 1
 for i in range(repetitions):
     run_config = RunConfig(
         name="cosem_distance_run_4nm_finetune",
-        # # NOTE: This is a template for the name of the run. You can customize it as you see fit.
-        # name=("_").join(
-        #     [
-        #         "example",
-        #         "scratch" if start_config is None else "finetuned",
-        #         datasplit_config.name,
-        #         task_config.name,
-        #         architecture_config.name,
-        #         trainer_config.name,
-        #     ]
-        # )
-        # + f"__{i}",
         datasplit_config=datasplit_config,
         task_config=task_config,
         architecture_config=architecture_config,
@@ -225,10 +215,3 @@ train_run(run)
 
 # %% [markdown]
 # If you want to start your run on some compute cluster, you might want to use the command line interface: dacapo train -r {run_config.name}. This makes it particularly convenient to run on compute nodes where you can specify specific compute requirements.
-
-# # %%
-# from dacapo.validate import validate
-
-# # validate(run_config.name, iterations, num_workers=32)
-# validate("cosem_distance_run", 1500, num_workers=10)
-# # %%
