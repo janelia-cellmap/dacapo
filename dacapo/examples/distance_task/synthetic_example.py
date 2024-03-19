@@ -40,20 +40,20 @@
 # Be sure to select this environment in your Jupyter notebook or JupyterLab.
 
 # %% [markdown]
-# ## Config Store
-# To define where the data goes, create a dacapo.yaml configuration file either in `~/.config/dacapo/dacapo.yaml` or in `./dacapo.yaml`. Here is a template:
-#
-# ```yaml
-# type: files
-# runs_base_dir: /path/to/my/data/storage
-# ```
-# The `runs_base_dir` defines where your on-disk data will be stored. The `type` setting determines the database backend. The default is `files`, which stores the data in a file tree on disk. Alternatively, you can use `mongodb` to store the data in a MongoDB database. To use MongoDB, you will need to provide a `mongodbhost` and `mongodbname` in the configuration file:
-#
-# ```yaml
-# ...
-# mongodbhost: mongodb://dbuser:dbpass@dburl:dbport/
-# mongodbname: dacapo
+"""
+## Config Store
+To define where the data goes, create a dacapo.yaml configuration file either in `~/.config/dacapo/dacapo.yaml` or in `./dacapo.yaml`. Here is a template:
+```yaml
+type: files
+runs_base_dir: /path/to/my/data/storage
+```
+The `runs_base_dir` defines where your on-disk data will be stored. The `type` setting determines the database backend. The default is `files`, which stores the data in a file tree on disk. Alternatively, you can use `mongodb` to store the data in a MongoDB database. To use MongoDB, you will need to provide a `mongodbhost` and `mongodbname` in the configuration file:
 
+```yaml
+...
+mongodbhost: mongodb://dbuser:dbpass@dburl:dbport/
+mongodbname: dacapo
+"""
 # %%
 # First we need to create a config store to store our configurations
 from dacapo.store.create_store import create_config_store
