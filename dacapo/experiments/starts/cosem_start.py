@@ -2,7 +2,7 @@ from abc import ABC
 import logging
 from cellmap_models import cosem
 from pathlib import Path
-from .start import Start
+from .start import Start, _set_weights
 
 logger = logging.getLogger(__file__)
 
@@ -28,7 +28,8 @@ def get_model_setup(run):
     
 class CosemStart(Start):
     def __init__(self, start_config):
-        super().__init__(start_config)
+        self.run = start_config.run
+        self.criterion = start_config.criterion
         self.name = f"{self.run}/{self.criterion}"
         channels, voxel_size_input, voxel_size_output = get_model_setup(self.run)
         if voxel_size_input is not None:
@@ -60,4 +61,6 @@ class CosemStart(Start):
             path = weights_dir / self.criterion
             cosem.download_checkpoint(self.name, path)
         weights = weights_store._retrieve_weights(self.run, self.criterion)
-        super._set_weights(model, weights, new_head=new_head)
+        _set_weights(model, weights, self.run, self.criterion, self.channels, new_head)
+
+
