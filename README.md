@@ -60,6 +60,7 @@ Tasks we support and approaches for those tasks:
  - CellMap Models
     - [GitHub Repo](https://github.com/janelia-cellmap/cellmap-models) of published models
  - [OpenOrganelle.org](https://openorganelle.janelia.org)
+    - ![](https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/mito_pred-seg.gif)
     - Example of [unprocessed distance predictions](https://tinyurl.com/3kw2tuab)
     - Example of [refined segmentations](https://tinyurl.com/k59pba98) that have undergone post-processing (e.g., thresholding, masking, smoothing)
     - Example of [groundtruth data](https://tinyurl.com/pu8mespz)
