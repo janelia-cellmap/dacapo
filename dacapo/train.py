@@ -22,12 +22,12 @@ def train(run_name: str):
 
     # check config store to see if run is already being trained TODO
     # if ...:
-    #     logger.error("Run %s is already being trained", run_name)
+    #     logger.error(f"Run {run_name} is already being trained")
     #     # if compute context runs train in some other process
     #     # we are done here.
     #     return
 
-    print("Training run %s", run_name)
+    print(f"Training run {run_name}")
 
     # create run
 
@@ -39,7 +39,7 @@ def train(run_name: str):
 
 
 def train_run(run: Run):
-    print("Starting/resuming training for run %s...", run)
+    print(f"Starting/resuming training for run {run}...")
 
     # create run
 
@@ -58,7 +58,7 @@ def train_run(run: Run):
         )
         run.validation_scores.delete_after(trained_until)
 
-    print("Current state: trained until %d/%d", trained_until, run.train_until)
+    print(f"Current state: trained until {trained_until}/{run.train_until}")
 
     # read weights of the latest iteration
 
@@ -68,10 +68,8 @@ def train_run(run: Run):
     if trained_until > 0:
         if latest_weights_iteration is None:
             logger.warning(
-                "Run %s was previously trained until %d, but no weights are "
-                "stored. Will restart training from scratch.",
-                run.name,
-                trained_until,
+                f"Run {run.name} was previously trained until {trained_until}, but no weights are "
+                "stored. Will restart training from scratch."
             )
 
             trained_until = 0
@@ -80,13 +78,9 @@ def train_run(run: Run):
 
         elif latest_weights_iteration < trained_until:
             logger.warning(
-                "Run %s was previously trained until %d, but the latest "
-                "weights are stored for iteration %d. Will resume training "
-                "from %d.",
-                run.name,
-                trained_until,
-                latest_weights_iteration,
-                latest_weights_iteration,
+                f"Run {run.name} was previously trained until {trained_until}, but the latest "
+                f"weights are stored for iteration {latest_weights_iteration}. Will resume training "
+                f"from {latest_weights_iteration}."
             )
 
             trained_until = latest_weights_iteration
@@ -95,7 +89,7 @@ def train_run(run: Run):
             weights_store.retrieve_weights(run, iteration=trained_until)
 
         elif latest_weights_iteration == trained_until:
-            print("Resuming training from iteration %d", trained_until)
+            print(f"Resuming training from iteration {trained_until}")
 
             weights_store.retrieve_weights(run, iteration=trained_until)
 
@@ -196,4 +190,4 @@ def train_run(run: Run):
                     exc_info=e,
                 )
 
-    print("Trained until %d, finished.", trained_until)
+    print(f"Trained until {trained_until}. Finished.")

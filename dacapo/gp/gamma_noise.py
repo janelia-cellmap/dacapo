@@ -96,5 +96,5 @@ class GammaAugment(BatchFilter):
             noisy_a = a * (a_max - a_min) + a_min
             return noisy_a
         else:
-            logger.warning("Skipping gamma noise since denominator would be too small")
+            logger.info("Skipping gamma noise since denominator would be too small")
             return a
