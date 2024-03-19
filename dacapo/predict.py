@@ -106,15 +106,14 @@ def predict(
     if isinstance(output_dtype, str):
         output_dtype = np.dtype(output_dtype)
 
-    print("Predicting with input size %s, output size %s", input_size, output_size)
+    print(f"Predicting with input size {input_size}, output size {output_size}")
 
-    print("Total input ROI: %s, output ROI: %s", _input_roi, output_roi)
+    print(f"Total input ROI: {_input_roi}, output ROI: {output_roi}")
 
     # prepare prediction dataset
-    axes = ["c"] + [axis for axis in raw_array.axes if axis != "c"]
     ZarrArray.create_from_array_identifier(
         output_array_identifier,
-        axes,
+        raw_array.axes,
         output_roi,
         model.num_out_channels,
         output_voxel_size,
@@ -140,9 +139,4 @@ def predict(
         input_array_identifier=input_array_identifier,
         output_array_identifier=output_array_identifier,
     )
-
-    container = zarr.open(str(output_array_identifier.container))
-    dataset = container[output_array_identifier.dataset]
-    dataset.attrs["axes"] = (  # type: ignore
-        raw_array.axes if "c" in raw_array.axes else ["c"] + raw_array.axes
-    )
+    print("Done predicting.")

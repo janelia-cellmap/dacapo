@@ -20,7 +20,7 @@ class FileConfigStore(ConfigStore):
     """
 
     def __init__(self, path):
-        print("Creating FileConfigStore:\n\tpath: %s" % path)
+        print(f"Creating FileConfigStore:\n\tpath: {path}")
 
         self.path = Path(path)
 
