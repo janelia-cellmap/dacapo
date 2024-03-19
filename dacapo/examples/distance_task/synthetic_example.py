@@ -83,7 +83,11 @@ try:
 except:
     train_shape = Coordinate((512, 512, 512))
     generate_synthetic_dataset(
-        train_data_path, shape=train_shape, overwrite=True, num_workers=num_workers
+        train_data_path,
+        shape=train_shape,
+        overwrite=True,
+        num_workers=num_workers,
+        write_shape=Coordinate((128, 128, 128)),
     )
     raw_array = open_ds(str(train_data_path), "raw")
     labels_array = open_ds(str(train_data_path), "labels")
@@ -185,6 +189,8 @@ datasplit_config = TrainValidateDataSplitConfig(
 )
 
 config_store.store_datasplit_config(datasplit_config)
+datasplit = datasplit_config.datasplit_type(datasplit_config)
+viewer = datasplit._neuroglancer()
 
 # %% [markdown]
 # ## Task
@@ -214,16 +220,20 @@ config_store.store_task_config(task_config)
 from dacapo.experiments.architectures import CNNectomeUNetConfig
 
 architecture_config = CNNectomeUNetConfig(
-    name="example-unet",
+    name="example-mini_unet",
     input_shape=(172, 172, 172),
     fmaps_out=24,
     fmaps_in=1,
     num_fmaps=12,
     fmap_inc_factor=2,
-    downsample_factors=[(2, 2, 2), (3, 3, 3), (3, 3, 3)],
+    downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],
     eval_shape_increase=(72, 72, 72),
 )
-config_store.store_architecture_config(architecture_config)
+try:
+    config_store.store_architecture_config(architecture_config)
+except:
+    config_store.delete_architecture_config(architecture_config.name)
+    config_store.store_architecture_config(architecture_config)
 
 # %% [markdown]
 # ## Trainer
@@ -240,7 +250,7 @@ from dacapo.experiments.trainers.gp_augments import (
 )
 
 trainer_config = GunpowderTrainerConfig(
-    name="default",
+    name="synthetic_distance_trainer",
     batch_size=1,
     learning_rate=0.0001,
     num_data_fetchers=20,
@@ -307,7 +317,12 @@ for i in range(repetitions):
     )
 
     print(run_config.name)
-    config_store.store_run_config(run_config)
+    try:
+        config_store.store_run_config(run_config)
+    except:
+        config_store.delete_run_config(run_config.name)
+        config_store.store_run_config(run_config)
+
 
 # %% [markdown]
 # ## Train
@@ -321,7 +336,7 @@ from dacapo.store.create_store import create_config_store
 
 config_store = create_config_store()
 
-run = Run(config_store.retrieve_run_config("example_synthetic_distance_run"))
+run = Run(config_store.retrieve_run_config(run_config.name))
 train_run(run)
 
 # %% [markdown]
