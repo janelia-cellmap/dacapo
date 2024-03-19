@@ -193,6 +193,7 @@ module = [
     "empanada_napari.*",
     "napari.*",
     "empanada.*",
+    "IPython.*",
 ]
 ignore_missing_imports = true
 
