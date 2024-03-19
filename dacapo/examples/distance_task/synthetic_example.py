@@ -387,14 +387,9 @@ predict(
     test_data_path,
     "raw",
     test_data_path,
-    num_workers=32,
+    # num_workers=32,
+    num_workers=1,
     overwrite=True,
     output_dtype="float32",
     output_roi=raw_array.roi,
 )
-# %%
-from dacapo.validate import validate_run
-
-validate_run(run.name, 50, num_workers=32)
-
-# %%
