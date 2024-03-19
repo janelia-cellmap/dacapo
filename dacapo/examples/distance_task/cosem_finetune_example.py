@@ -1,59 +1,3 @@
-# %% [markdown]
-# # Dacapo
-#
-# DaCapo is a framework that allows for easy configuration and execution of established machine learning techniques on arbitrarily large volumes of multi-dimensional images.
-#
-# DaCapo has 4 major configurable components:
-# 1. **dacapo.datasplits.DataSplit**
-#
-# 2. **dacapo.tasks.Task**
-#
-# 3. **dacapo.architectures.Architecture**
-#
-# 4. **dacapo.trainers.Trainer**
-#
-# These are then combined in a single **dacapo.experiments.Run** that includes your starting point (whether you want to start training from scratch or continue off of a previously trained model) and stopping criterion (the number of iterations you want to train).
-
-# %% [markdown]
-# ## Environment setup
-# If you have not already done so, you will need to install DaCapo. You can do this by first creating a new environment and then installing DaCapo using pip.
-#
-# ```bash
-# conda create -n dacapo python=3.10
-# conda activate dacapo
-# ```
-#
-# Then, you can install DaCapo using pip, via GitHub:
-#
-# ```bash
-# pip install git+https://github.com/janelia-cellmap/dacapo.git
-# ```
-#
-# Or you can clone the repository and install it locally:
-#
-# ```bash
-# git clone https://github.com/janelia-cellmap/dacapo.git
-# cd dacapo
-# pip install -e .
-# ```
-#
-# Be sure to select this environment in your Jupyter notebook or JupyterLab.
-
-# %% [markdown]
-# ## Config Store
-# To define where the data goes, create a dacapo.yaml configuration file either in `~/.config/dacapo/dacapo.yaml` or in `./dacapo.yaml`. Here is a template:
-#
-# ```yaml
-# type: files
-# runs_base_dir: /path/to/my/data/storage
-# ```
-# The `runs_base_dir` defines where your on-disk data will be stored. The `type` setting determines the database backend. The default is `files`, which stores the data in a file tree on disk. Alternatively, you can use `mongodb` to store the data in a MongoDB database. To use MongoDB, you will need to provide a `mongodbhost` and `mongodbname` in the configuration file:
-#
-# ```yaml
-# ...
-# mongodbhost: mongodb://dbuser:dbpass@dburl:dbport/
-# mongodbname: dacapo
-
 # %%
 # First we need to create a config store to store our configurations
 from dacapo.store.create_store import create_config_store
@@ -75,7 +19,9 @@ from funlib.geometry import Coordinate
 input_resolution = Coordinate(8, 8, 8)
 output_resolution = Coordinate(4, 4, 4)
 datasplit_config = DataSplitGenerator.generate_from_csv(
-    "cosem_example.csv", input_resolution, output_resolution
+    "/misc/public/dacapo_learnathon/datasplit_csvs/cosem_example.csv",
+    input_resolution,
+    output_resolution,
 ).compute()
 
 datasplit = datasplit_config.datasplit_type(datasplit_config)
@@ -94,7 +40,7 @@ from dacapo.experiments.tasks import DistanceTaskConfig
 
 task_config = DistanceTaskConfig(
     name="cosem_distance_task_4nm",
-    channels=["labels"],
+    channels=["mito"],
     clip_distance=40.0,
     tol_distance=40.0,
     scale_factor=80.0,
@@ -168,31 +114,19 @@ config_store.store_trainer_config(trainer_config)
 from dacapo.experiments import RunConfig
 from dacapo.experiments.run import Run
 
-start_config = None
-
-# Uncomment to start from a pretrained model
 from dacapo.experiments.starts import CosemStartConfig
+
+# We will now download a pretrained cosem model and finetune from that model. It will only have to download the first time it is used.
 
 start_config = CosemStartConfig("setup04", "1820500")
 start_config.start_type(start_config).check()
+
 iterations = 2000
-validation_interval = 50
+validation_interval = iterations // 2
 repetitions = 1
 for i in range(repetitions):
     run_config = RunConfig(
         name="cosem_distance_run_4nm_finetune",
-        # # NOTE: This is a template for the name of the run. You can customize it as you see fit.
-        # name=("_").join(
-        #     [
-        #         "example",
-        #         "scratch" if start_config is None else "finetuned",
-        #         datasplit_config.name,
-        #         task_config.name,
-        #         architecture_config.name,
-        #         trainer_config.name,
-        #     ]
-        # )
-        # + f"__{i}",
         datasplit_config=datasplit_config,
         task_config=task_config,
         architecture_config=architecture_config,
@@ -223,10 +157,3 @@ train_run(run)
 
 # %% [markdown]
 # If you want to start your run on some compute cluster, you might want to use the command line interface: dacapo train -r {run_config.name}. This makes it particularly convenient to run on compute nodes where you can specify specific compute requirements.
-
-# # %%
-# from dacapo.validate import validate
-
-# # validate(run_config.name, iterations, num_workers=32)
-# validate("cosem_distance_run", 1500, num_workers=10)
-# # %%

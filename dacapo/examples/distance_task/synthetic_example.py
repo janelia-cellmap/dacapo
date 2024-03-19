@@ -60,8 +60,10 @@ from dacapo.store.create_store import create_config_store
 
 config_store = create_config_store()
 
+
 # %%
-# Then let's make sure we have data to train on
+# Then let's make sure we have data to train on. If this is already provided, you can skip to the Datasplit section.
+# %%
 from pathlib import Path
 from dacapo import Options
 from dacapo.examples.utils import get_viewer
@@ -71,13 +73,13 @@ from funlib.persistence import open_ds
 
 options = Options.instance()
 runs_base_dir = options.runs_base_dir
-force = False
+force_example_creation = False
 num_workers = 32
 
 # First for training data
 train_data_path = Path(runs_base_dir, "example_train.zarr")
 try:
-    assert not force
+    assert not force_example_creation
     raw_array = open_ds(str(train_data_path), "raw")
     labels_array = open_ds(str(train_data_path), "labels")
 except:
@@ -98,7 +100,7 @@ get_viewer(raw_array, labels_array)
 # Then for validation data
 validate_data_path = Path(runs_base_dir, "example_validate.zarr")
 try:
-    assert not force
+    assert not force_example_creation
     raw_array = open_ds(str(validate_data_path), "raw")
     labels_array = open_ds(str(validate_data_path), "labels")
 except:
@@ -121,76 +123,97 @@ get_viewer(raw_array, labels_array)
 # NOTE: You may need to delete old config stores if you are re-running this cell with modifications to the configs. The config names are unique and will throw an error if you try to store a config with the same name as an existing config. For the `files` backend, you can delete the `runs_base_dir/configs` directory to remove all stored configs.
 
 # %%
-from dacapo.experiments.datasplits.datasets.arrays import (
-    BinarizeArrayConfig,
-    ZarrArrayConfig,
-    IntensitiesArrayConfig,
-)
-from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
-from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
 from pathlib import Path
-from dacapo import Options
+from dacapo.experiments.datasplits import DataSplitGenerator
+from funlib.geometry import Coordinate
 
-options = Options.instance()
-runs_base_dir = options.runs_base_dir
+input_resolution = Coordinate(8, 8, 8)
+output_resolution = Coordinate(8, 8, 8)
+datasplit_config = DataSplitGenerator.generate_from_csv(
+    "/misc/public/dacapo_learnathon/datasplit_csvs/synthetic_example.csv",
+    input_resolution,
+    output_resolution,
+).compute()
 
-datasplit_config = TrainValidateDataSplitConfig(
-    name="synthetic_datasplit_config",
-    train_configs=[
-        RawGTDatasetConfig(
-            name="train_data",
-            weight=1,
-            raw_config=IntensitiesArrayConfig(
-                name="raw_train_data",
-                source_array_config=ZarrArrayConfig(
-                    name="raw_train_data_uint8",
-                    file_name=Path(runs_base_dir, "example_train.zarr"),
-                    dataset="raw",
-                ),
-                min=0.0,
-                max=255.0,
-            ),
-            gt_config=BinarizeArrayConfig(
-                name="gt_train_data",
-                source_array_config=ZarrArrayConfig(
-                    name="gt_train_data_zarr",
-                    file_name=Path(runs_base_dir, "example_train.zarr"),
-                    dataset="labels",
-                ),
-                groupings=[("labels", [])],
-            ),
-        )
-    ],
-    validate_configs=[
-        RawGTDatasetConfig(
-            name="validate_data",
-            weight=1,
-            raw_config=IntensitiesArrayConfig(
-                name="raw_validate_data",
-                source_array_config=ZarrArrayConfig(
-                    name="raw_validate_data_uint8",
-                    file_name=Path(runs_base_dir, "example_validate.zarr"),
-                    dataset="raw",
-                ),
-                min=0.0,
-                max=255.0,
-            ),
-            gt_config=BinarizeArrayConfig(
-                name="gt_validate_data",
-                source_array_config=ZarrArrayConfig(
-                    name="gt_validate_data_zarr",
-                    file_name=Path(runs_base_dir, "example_validate.zarr"),
-                    dataset="labels",
-                ),
-                groupings=[("labels", [])],
-            ),
-        ),
-    ],
-)
-
-config_store.store_datasplit_config(datasplit_config)
 datasplit = datasplit_config.datasplit_type(datasplit_config)
 viewer = datasplit._neuroglancer()
+config_store.store_datasplit_config(datasplit_config)
+
+# %% [markdown]
+# The above datasplit_generator automates a lot of the heavy lifting for configuring data to set up a run. The following shows everything that it is doing, and an equivalent way to set up the datasplit.
+# ```python
+# datasplit_config = TrainValidateDataSplitConfig(
+#     name="synthetic_example_semantic_['labels']_8nm",
+#     train_configs=[
+#         RawGTDatasetConfig(
+#             name="example_train_[labels]_['labels']_8nm",
+#             weight=1,
+#             raw_config=IntensitiesArrayConfig(
+#                 name="raw_example_train_uint8",
+#                 source_array_config=ZarrArrayConfig(
+#                     name="raw_example_train_uint8",
+#                     file_name=Path(
+#                         "/misc/public/dacapo_learnathon/synthetic/example_train.zarr"
+#                     ),
+#                     dataset="raw",
+#                 ),
+#                 min=0,
+#                 max=255,
+#             ),
+#             gt_config=BinarizeArrayConfig(
+#                 name="example_train_[labels]_labels_8nm_binarized",
+#                 source_array_config=ZarrArrayConfig(
+#                     name="gt_example_train_labels_uint8",
+#                     file_name=Path(
+#                         "/misc/public/dacapo_learnathon/synthetic/example_train.zarr"
+#                     ),
+#                     dataset="labels",
+#                 ),
+#                 groupings=[("labels", [])],
+#                 background=0,
+#             ),
+#             mask_config=None,
+#             sample_points=None,
+#         )
+#     ],
+#     validate_configs=[
+#         RawGTDatasetConfig(
+#             name="example_validate_[labels]_['labels']_8nm",
+#             weight=1,
+#             raw_config=IntensitiesArrayConfig(
+#                 name="raw_example_validate_uint8",
+#                 source_array_config=ZarrArrayConfig(
+#                     name="raw_example_validate_uint8",
+#                     file_name=Path(
+#                         "/misc/public/dacapo_learnathon/synthetic/example_validate.zarr"
+#                     ),
+#                     dataset="raw",
+#                 ),
+#                 min=0,
+#                 max=255,
+#             ),
+#             gt_config=BinarizeArrayConfig(
+#                 name="example_validate_[labels]_labels_8nm_binarized",
+#                 source_array_config=ZarrArrayConfig(
+#                     name="gt_example_validate_labels_uint8",
+#                     file_name=Path(
+#                         "/misc/public/dacapo_learnathon/synthetic/example_validate.zarr"
+#                     ),
+#                     dataset="labels",
+#                 ),
+#                 groupings=[("labels", [])],
+#                 background=0,
+#             ),
+#             mask_config=None,
+#             sample_points=None,
+#         )
+#     ],
+# )
+# config_store.store_datasplit_config(datasplit_config)
+# datasplit = datasplit_config.datasplit_type(datasplit_config)
+# viewer = datasplit._neuroglancer()
+# ```
+
 
 # %% [markdown]
 # ## Task
@@ -363,7 +386,7 @@ validate(run_config.name, iterations, num_workers=16, overwrite=True)
 # First let's make some test data
 test_data_path = Path(runs_base_dir, "example_test.zarr")
 try:
-    assert not force
+    assert not force_example_creation
     raw_array = open_ds(str(test_data_path), "raw")
     labels_array = open_ds(str(test_data_path), "labels")
 except:
@@ -392,9 +415,3 @@ predict(
     output_dtype="float32",
     output_roi=raw_array.roi,
 )
-# %%
-from dacapo.validate import validate_run
-
-validate_run(run.name, 50, num_workers=32)
-
-# %%
