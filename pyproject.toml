@@ -158,6 +158,7 @@ show_error_codes = true
 pretty = true
 exclude = [
     "scratch/*",
+    "examples/*",
 ]
 
 

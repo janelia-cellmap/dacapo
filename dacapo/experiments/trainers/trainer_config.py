@@ -29,11 +29,11 @@ class TrainerConfig:
         metadata={
             "help_text": "The batch size to be used during training. Larger batch "
             "sizes will consume more memory per training iteration."
-        }
+        },
     )
 
     learning_rate: float = attr.ib(
-        metadata={"help_text": "The learning rate of the optimizer."}
+        metadata={"help_text": "The learning rate of the optimizer."},
     )
 
     def verify(self) -> Tuple[bool, str]:
