@@ -167,7 +167,7 @@ def segment_blockwise(
         " in temp directory: ",
         tmpdir,
     )
-    print(f"Using compute context: {compute_context}")
+    print(f"Using compute context: {create_compute_context()}")
     # write parameters to tmpdir
     if "parameters" in kwargs:
         with open(Path(tmpdir, "parameters.yaml"), "w") as f:

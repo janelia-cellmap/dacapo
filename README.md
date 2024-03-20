@@ -29,6 +29,7 @@ plans to support [`tensorflow`](https://www.tensorflow.org/).
 Currently, python>=3.10 is supported. We recommend creating a new conda environment for dacapo with python 3.10.
 ```
 conda create -n dacapo python=3.10
+conda activate dacapo
 ```
 
 Then install DaCapo using pip with the following command:
@@ -50,3 +51,24 @@ Tasks we support and approaches for those tasks:
  - Semantic segmentation
     - Signed distances
     - One-hot encoding of different types of objects
+  
+## Helpful Resources & Tools
+ - Chunked data, zarr, and n5
+    - OME-Zarr: a cloud-optimized bioimaging file format with international community support (doi: [10.1101/2023.02.17.528834](https://pubmed.ncbi.nlm.nih.gov/36865282/))
+    - Videos about N5 and Fiji can be found in [this playlist](https://www.youtube.com/playlist?list=PLmZHHIZ9Gz-IJA7HtW8quZcuLViz9Em6e). For other questions, join the discussion on the [Image.sc forum](https://forum.image.sc/tag/n5).
+    - Read about chunked storage plugins in Fiji in this blog: [N5 plugins for Fiji](https://openorganelle.janelia.org/news/2023-02-06-n5-plugins-for-fiji)
+    - Script for converting tif to zarr can be found [here](https://github.com/yuriyzubov/tif-to-zarr) 
+ - Segmentations
+    - A description of local shape descriptors used for affinities task. Read the blog [here](https://localshapedescriptors.github.io/). Example image from the blog showing the difference between segmentations:
+    - ![](https://localshapedescriptors.github.io/assets/img/detection_vs_segmentation_neurons.jpeg)
+ - CellMap Models
+    - [GitHub Repo](https://github.com/janelia-cellmap/cellmap-models) of published models
+    - For example, the COSEM trained pytorch networks are located [here](https://github.com/janelia-cellmap/cellmap-models/tree/main/src/cellmap_models/pytorch/cosem).
+ - [OpenOrganelle.org](https://openorganelle.janelia.org)
+    - ![](https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/mito_pred-seg.gif)
+    - Example of [unprocessed distance predictions](https://tinyurl.com/3kw2tuab)
+    - Example of [refined segmentations](https://tinyurl.com/k59pba98) that have undergone post-processing (e.g., thresholding, masking, smoothing)
+    - Example of [groundtruth data](https://tinyurl.com/pu8mespz)
+ - Visualization
+    - [Neuroglancer GitHub Repo](https://github.com/google/neuroglancer)
+   

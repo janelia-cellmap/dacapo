@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def validate(
     run_name: str,
     iteration: int,
-    num_workers: int = 30,
+    num_workers: int = 4,
     output_dtype: str = "uint8",
     overwrite: bool = True,
 ):
@@ -39,10 +39,6 @@ def validate(
     run.validation_scores.scores = stats_store.retrieve_validation_iteration_scores(
         run_name
     )
-
-    # create weights store and read weights
-    weights_store = create_weights_store()
-    weights_store.retrieve_weights(run.name, iteration)
 
     return validate_run(
         run,
@@ -75,7 +71,6 @@ def validate_run(
         return None, None
 
     # get array and weight store
-    weights_store = create_weights_store()
     array_store = create_array_store()
     iteration_scores = []
 
@@ -158,7 +153,7 @@ def validate_run(
             run.name, iteration, validation_dataset.name
         )
         predict(
-            run.name,
+            run,
             iteration,
             input_container=input_raw_array_identifier.container,
             input_dataset=input_raw_array_identifier.dataset,
