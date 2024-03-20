@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 
 
 def predict(
-    run_name: str,
-    iteration: int,
+    run_name: str | Run,
+    iteration: int | None,
     input_container: Path | str,
     input_dataset: str,
     output_path: LocalArrayIdentifier | Path | str,
@@ -32,8 +32,8 @@ def predict(
     """Predict with a trained model.
 
     Args:
-        run_name (str): The name of the run to predict with.
-        iteration (int): The training iteration of the model to use for prediction.
+        run_name (str or Run): The name of the run to predict with or the Run object.
+        iteration (int or None): The training iteration of the model to use for prediction.
         input_container (Path | str): The container of the input array.
         input_dataset (str): The dataset name of the input array.
         output_path (LocalArrayIdentifier | str): The path where the prediction array will be stored, or a LocalArryIdentifier for the prediction array.
@@ -43,9 +43,13 @@ def predict(
         overwrite (bool, optional): If True, the output array will be overwritten if it already exists. Defaults to True.
     """
     # retrieving run
-    config_store = create_config_store()
-    run_config = config_store.retrieve_run_config(run_name)
-    run = Run(run_config)
+    if isinstance(run_name, Run):
+        run = run_name
+        run_name = run.name
+    else:
+        config_store = create_config_store()
+        run_config = config_store.retrieve_run_config(run_name)
+        run = Run(run_config)
 
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
@@ -76,6 +80,8 @@ def predict(
     input_shape = Coordinate(model.eval_input_shape)
     input_size = input_voxel_size * input_shape
     output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
+    num_out_channels = model.num_out_channels
+    del model
 
     # calculate input and output rois
 
@@ -111,7 +117,7 @@ def predict(
         output_array_identifier,
         raw_array.axes,
         output_roi,
-        model.num_out_channels,
+        num_out_channels,
         output_voxel_size,
         output_dtype,
         overwrite=overwrite,

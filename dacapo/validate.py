@@ -40,10 +40,6 @@ def validate(
         run_name
     )
 
-    # create weights store and read weights
-    weights_store = create_weights_store()
-    weights_store.retrieve_weights(run.name, iteration)
-
     return validate_run(
         run,
         iteration,
@@ -75,7 +71,6 @@ def validate_run(
         return None, None
 
     # get array and weight store
-    weights_store = create_weights_store()
     array_store = create_array_store()
     iteration_scores = []
 
@@ -158,7 +153,7 @@ def validate_run(
             run.name, iteration, validation_dataset.name
         )
         predict(
-            run.name,
+            run,
             iteration,
             input_container=input_raw_array_identifier.container,
             input_dataset=input_raw_array_identifier.dataset,
