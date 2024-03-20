@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def validate(
     run_name: str,
     iteration: int,
-    num_workers: int = 30,
+    num_workers: int = 4,
     output_dtype: str = "uint8",
     overwrite: bool = True,
 ):
