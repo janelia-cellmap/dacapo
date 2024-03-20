@@ -3,9 +3,15 @@ import logging
 
 logger = logging.getLogger(__file__)
 
-head_keys = ["prediction_head.weight","prediction_head.bias","chain.1.weight","chain.1.bias"]
+head_keys = [
+    "prediction_head.weight",
+    "prediction_head.bias",
+    "chain.1.weight",
+    "chain.1.bias",
+]
 
-def match_heads(model, head_weights, old_head, new_head ):
+
+def match_heads(model, head_weights, old_head, new_head):
     for label in new_head:
         if label in old_head:
             logger.warning(f"matching head for {label}.")
@@ -17,8 +23,11 @@ def match_heads(model, head_weights, old_head, new_head ):
                     model.state_dict()[key][new_index] = new_value
             logger.warning(f"matched head for {label}.")
 
+
 def _set_weights(model, weights, run, criterion, old_head=None, new_head=None):
-    logger.warning(f"loading weights from run {run}, criterion: {criterion}, old_head {old_head}, new_head: {new_head}")
+    logger.warning(
+        f"loading weights from run {run}, criterion: {criterion}, old_head {old_head}, new_head: {new_head}"
+    )
     try:
         if old_head and new_head:
             try:
@@ -33,7 +42,9 @@ def _set_weights(model, weights, run, criterion, old_head=None, new_head=None):
                 try:
                     model.load_state_dict(weights.model, strict=True)
                 except:
-                    logger.warning("Unable to load model in strict mode. Loading flexibly.")
+                    logger.warning(
+                        "Unable to load model in strict mode. Loading flexibly."
+                    )
                     model.load_state_dict(weights.model, strict=False)
                 model = match_heads(model, head_weights, old_head, new_head)
             except RuntimeError as e:
@@ -42,7 +53,9 @@ def _set_weights(model, weights, run, criterion, old_head=None, new_head=None):
                 for key in head_keys:
                     weights.model.pop(key, None)
                 model.load_state_dict(weights.model, strict=False)
-                logger.warning(f"loaded weights in non strict mode from run {run}, criterion: {criterion}")
+                logger.warning(
+                    f"loaded weights in non strict mode from run {run}, criterion: {criterion}"
+                )
         else:
             try:
                 model.load_state_dict(weights.model)
@@ -54,13 +67,12 @@ def _set_weights(model, weights, run, criterion, old_head=None, new_head=None):
                     for k, v in weights.model.items()
                     if k in model_dict and v.size() == model_dict[k].size()
                 }
-                model_dict.update(
-                    pretrained_dict
-                ) 
+                model_dict.update(pretrained_dict)
                 model.load_state_dict(model_dict)
                 logger.warning(f"loaded only common layers from weights")
     except RuntimeError as e:
         logger.warning(f"ERROR starter: {e}")
+
 
 class Start(ABC):
     """
@@ -90,12 +102,12 @@ class Start(ABC):
         self.run = start_config.run
         self.criterion = start_config.criterion
 
-        if hasattr(start_config.task_config,"channels"):
+        if hasattr(start_config.task_config, "channels"):
             self.channels = start_config.task_config.channels
         else:
-            self.channels = None        
+            self.channels = None
 
-    def initialize_weights(self, model,new_head=None):
+    def initialize_weights(self, model, new_head=None):
         """
         Retrieves the weights from the dacapo store and load them into
         the model.
@@ -115,4 +127,3 @@ class Start(ABC):
         weights_store = create_weights_store()
         weights = weights_store._retrieve_weights(self.run, self.criterion)
         _set_weights(model, weights, self.run, self.criterion, self.channels, new_head)
-

@@ -6,11 +6,12 @@ from .start import Start, _set_weights
 
 logger = logging.getLogger(__file__)
 
+
 def get_model_setup(run):
     try:
         model = cosem.load_model(run)
         if hasattr(model, "classes_channels"):
-            classes_channels =  model.classes_channels
+            classes_channels = model.classes_channels
         else:
             classes_channels = None
         if hasattr(model, "voxel_size_input"):
@@ -23,9 +24,12 @@ def get_model_setup(run):
             voxel_size_output = None
         return classes_channels, voxel_size_input, voxel_size_output
     except Exception as e:
-        logger.error(f"could not load model setup: {e} - Not a big deal, model will train wiithout head matching")
+        logger.error(
+            f"could not load model setup: {e} - Not a big deal, model will train wiithout head matching"
+        )
         return None, None, None
-    
+
+
 class CosemStart(Start):
     def __init__(self, start_config):
         self.run = start_config.run
@@ -33,7 +37,9 @@ class CosemStart(Start):
         self.name = f"{self.run}/{self.criterion}"
         channels, voxel_size_input, voxel_size_output = get_model_setup(self.run)
         if voxel_size_input is not None:
-            logger.warning(f"Starter model resolution: input {voxel_size_input} output {voxel_size_output}, Make sure to set the correct resolution for the input data.")
+            logger.warning(
+                f"Starter model resolution: input {voxel_size_input} output {voxel_size_output}, Make sure to set the correct resolution for the input data."
+            )
         self.channels = channels
 
     def check(self):
@@ -62,5 +68,3 @@ class CosemStart(Start):
             cosem.download_checkpoint(self.name, path)
         weights = weights_store._retrieve_weights(self.run, self.criterion)
         _set_weights(model, weights, self.run, self.criterion, self.channels, new_head)
-
-
