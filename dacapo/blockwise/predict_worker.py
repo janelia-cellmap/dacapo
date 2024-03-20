@@ -46,7 +46,7 @@ def cli(log_level):
 @click.option(
     "-i",
     "--iteration",
-    type=Optional[int],
+    type=int,
     help="The training iteration of the model to use for prediction.",
     default=None,
 )
