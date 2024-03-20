@@ -38,7 +38,7 @@ def get_viewer(
         state.showSlices = False
         for name, array_data in arrays.items():
             meshes = "meshes" in array_data and array_data["meshes"]
-            is_seg = "is_seg" in array_data and array_data["is_seg"]
+            is_seg = meshes or ("is_seg" in array_data and array_data["is_seg"])
             if is_seg:
                 add_seg_layer(
                     state, name, array_data["array"], array_data["voxel_sizes"], meshes
