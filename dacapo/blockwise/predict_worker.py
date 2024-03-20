@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+from typing import Optional
 
 import torch
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
@@ -45,9 +46,9 @@ def cli(log_level):
 @click.option(
     "-i",
     "--iteration",
-    required=True,
     type=int,
     help="The training iteration of the model to use for prediction.",
+    default=None,
 )
 @click.option(
     "-ic",
@@ -62,7 +63,7 @@ def cli(log_level):
 @click.option("-od", "--output_dataset", required=True, type=str)
 def start_worker(
     run_name: str,
-    iteration: int,
+    iteration: int | None,
     input_container: Path | str,
     input_dataset: str,
     output_container: Path | str,
@@ -76,11 +77,12 @@ def start_worker(
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
 
-    # create weights store
-    weights_store = create_weights_store()
+    if iteration is not None:
+        # create weights store
+        weights_store = create_weights_store()
 
-    # load weights
-    weights_store.retrieve_weights(run_name, iteration)
+        # load weights
+        weights_store.retrieve_weights(run_name, iteration)
 
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
@@ -178,7 +180,7 @@ def start_worker(
 
 def spawn_worker(
     run_name: str,
-    iteration: int,
+    iteration: int | None,
     input_array_identifier: "LocalArrayIdentifier",
     output_array_identifier: "LocalArrayIdentifier",
 ):
@@ -186,7 +188,7 @@ def spawn_worker(
 
     Args:
         run_name (str): The name of the run to apply.
-        iteration (int): The training iteration of the model to use for prediction.
+        iteration (int or None): The training iteration of the model to use for prediction.
         input_array_identifier (LocalArrayIdentifier): The raw data to predict on.
         output_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
     """
@@ -200,8 +202,6 @@ def spawn_worker(
         "start-worker",
         "--run-name",
         run_name,
-        "--iteration",
-        iteration,
         "--input_container",
         input_array_identifier.container,
         "--input_dataset",
@@ -211,6 +211,8 @@ def spawn_worker(
         "--output_dataset",
         output_array_identifier.dataset,
     ]
+    if iteration is not None:
+        command.extend(["--iteration", str(iteration)])
 
     print("Defining worker with command: ", compute_context.wrap_command(command))
 

@@ -324,7 +324,10 @@ class GunpowderTrainer(Trainer):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self._iter.send(True)
+        try:
+            self._iter.send(True)
+        except TypeError:
+            self._iter.send(None)
         pass
 
     def can_train(self, datasets) -> bool:
