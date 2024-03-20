@@ -26,8 +26,7 @@ datasplit_config = ...
 # Create the datasplit, produce the neuroglancer link and store the datasplit
 datasplit = ...
 viewer = ...
-config_store...
-
+config_store
 # %% [markdown]
 # ## Task
 # What do you want to learn? An instance segmentation? If so, how? Affinities,
@@ -40,9 +39,8 @@ from dacapo.experiments.tasks import DistanceTaskConfig
 
 # Create a distance task config where the clip_distance=tol_distance=10x the output resolution,
 # and scale_factor = 20x the output resolution
-task_config = 
-config_store....
-
+task_config = ...
+config_store
 # %% [markdown]
 # ## Architecture
 #
@@ -97,14 +95,14 @@ trainer_config = GunpowderTrainerConfig(
         # Create a gamma augment config with range .5 to 2
         ...,
         # Create an intensity scale shift agument config to rescale data from the range 0->1 to -1->1
-       ...,
+        ...,
     ],
     snapshot_interval=10000,
     min_masked=0.05,
     clip_raw=True,
 )
 # Store the trainer
-config_store....
+config_store
 
 # %% [markdown]
 # ## Run
@@ -128,7 +126,7 @@ validation_interval = iterations // 2
 run_config = ...
 
 print(run_config.name)
-config_store...
+config_store
 
 # %% [markdown]
 # ## Train
@@ -138,6 +136,7 @@ config_store...
 # %%
 from dacapo.train import train_run
 from dacapo.experiments.run import Run
+
 # load the run and train it
-run = Run(config_store...)
+run = Run(config_store)
 train_run(run)

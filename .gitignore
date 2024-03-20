@@ -2,6 +2,7 @@
 *.hdf
 *.h5
 # *.ipynb
+.ipynb_checkpoints/
 *.pyc
 *.egg-info
 *.dat
