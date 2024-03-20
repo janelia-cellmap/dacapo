@@ -30,7 +30,11 @@ def _set_weights(model, weights, run, criterion, old_head=None, new_head=None):
                     head_weights[key] = weights.model[key]
                 for key in head_keys:
                     weights.model.pop(key, None)
-                model.load_state_dict(weights.model, strict=False)
+                try:
+                    model.load_state_dict(weights.model, strict=True)
+                except:
+                    logger.warning("Unable to load model in strict mode. Loading flexibly.")
+                    model.load_state_dict(weights.model, strict=False)
                 model = match_heads(model, head_weights, old_head, new_head)
             except RuntimeError as e:
                 logger.error(f"ERROR starter matching head: {e}")
