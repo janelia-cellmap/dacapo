@@ -3,9 +3,10 @@ from pathlib import Path
 from dacapo.blockwise import run_blockwise
 import dacapo.blockwise
 from dacapo.experiments import Run
-from dacapo.store.create_store import create_config_store, create_weights_store
+from dacapo.store.create_store import create_config_store
 from dacapo.store.local_array_store import LocalArrayIdentifier
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+from dacapo.compute_context import create_compute_context, LocalTorch
 
 from funlib.geometry import Coordinate, Roi
 import numpy as np
@@ -37,7 +38,7 @@ def predict(
         input_dataset (str): The dataset name of the input array.
         output_path (LocalArrayIdentifier | str): The path where the prediction array will be stored, or a LocalArryIdentifier for the prediction array.
         output_roi (Optional[Roi | str], optional): The ROI of the output array. If None, the ROI of the input array will be used. Defaults to None.
-        num_workers (int, optional): The number of workers to use for blockwise prediction. Defaults to 30.
+        num_workers (int, optional): The number of workers to use for blockwise prediction. Defaults to 1 for local processing, otherwise 12.
         output_dtype (np.dtype | str, optional): The dtype of the output array. Defaults to np.uint8.
         overwrite (bool, optional): If True, the output array will be overwritten if it already exists. Defaults to True.
     """
@@ -45,15 +46,6 @@ def predict(
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
-
-    # check to see if we can load the weights
-    weights_store = create_weights_store()
-    try:
-        weights_store.retrieve_weights(run_name, iteration)
-    except FileNotFoundError:
-        raise ValueError(
-            f"No weights found for run {run_name} at iteration {iteration}."
-        )
 
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
@@ -73,6 +65,10 @@ def predict(
         )
 
     # get the model's input and output size
+    compute_context = create_compute_context()
+    if isinstance(compute_context, LocalTorch):
+        num_workers = 1
+
     model = run.model.eval()
 
     input_voxel_size = Coordinate(raw_array.voxel_size)
