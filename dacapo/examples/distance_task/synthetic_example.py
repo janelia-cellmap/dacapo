@@ -93,8 +93,11 @@ except:
     )
     raw_array = open_ds(str(train_data_path), "raw")
     labels_array = open_ds(str(train_data_path), "labels")
-
-get_viewer(raw_array, labels_array)
+arrays = {
+    "raw": {"array": raw_array},
+    "labels": {"array": labels_array, "meshes": True},
+}
+get_viewer(arrays, headless=False)
 
 # %%
 # Then for validation data
@@ -104,7 +107,7 @@ try:
     raw_array = open_ds(str(validate_data_path), "raw")
     labels_array = open_ds(str(validate_data_path), "labels")
 except:
-    validate_shape = Coordinate((152, 152, 152)) * 3
+    validate_shape = Coordinate((152, 152, 152)) * 1
     generate_synthetic_dataset(
         validate_data_path,
         shape=validate_shape,
@@ -113,7 +116,34 @@ except:
         num_workers=num_workers,
     )
 
-get_viewer(raw_array, labels_array)
+arrays = {
+    "raw": {"array": raw_array},
+    "labels": {"array": labels_array, "meshes": True},
+}
+get_viewer(arrays, headless=False)
+
+# %%
+# Then let's make some test data
+test_data_path = Path(runs_base_dir, "example_test.zarr")
+try:
+    assert not force_example_creation
+    raw_array = open_ds(str(test_data_path), "raw")
+    labels_array = open_ds(str(test_data_path), "labels")
+except:
+    test_shape = Coordinate((152, 152, 152)) * 3
+    generate_synthetic_dataset(
+        test_data_path,
+        shape=test_shape,
+        overwrite=True,
+        write_shape=Coordinate((152, 152, 152)),
+        num_workers=num_workers,
+    )
+
+arrays = {
+    "raw": {"array": raw_array},
+    "labels": {"array": labels_array, "meshes": True},
+}
+get_viewer(arrays, headless=False)
 
 # %% [markdown]
 # ## Datasplit
@@ -356,10 +386,15 @@ for i in range(repetitions):
 from dacapo.train import train_run
 from dacapo.experiments.run import Run
 from dacapo.store.create_store import create_config_store
+from dacapo.examples.utils import NeuroglancerRunViewer
 
 config_store = create_config_store()
-
 run = Run(config_store.retrieve_run_config(run_config.name))
+
+# Visualize as we go
+run_viewer = NeuroglancerRunViewer(run)
+run_viewer.start()
+# %%
 train_run(run)
 
 # %% [markdown]
@@ -383,25 +418,6 @@ validate(run_config.name, iterations, num_workers=1, overwrite=True)
 # Once you have trained and validated your model, you can use it to predict on new data. You can use the `dacapo.predict` function to do this. You can also use the command line interface to predict on a run: dacapo predict -r {run_config.name} -i {iteration} -ic {input_container} -id {input_dataset} -op {output_path}
 
 # %%
-# First let's make some test data
-test_data_path = Path(runs_base_dir, "example_test.zarr")
-try:
-    assert not force_example_creation
-    raw_array = open_ds(str(test_data_path), "raw")
-    labels_array = open_ds(str(test_data_path), "labels")
-except:
-    test_shape = Coordinate((152, 152, 152)) * 5
-    generate_synthetic_dataset(
-        test_data_path,
-        shape=test_shape,
-        overwrite=True,
-        write_shape=Coordinate((152, 152, 152)),
-        num_workers=num_workers,
-    )
-
-get_viewer(raw_array, labels_array)
-
-# %%
 from dacapo.predict import predict
 
 predict(
@@ -416,3 +432,14 @@ predict(
     output_dtype="float32",
     output_roi=raw_array.roi,
 )
+
+raw_array = open_ds(str(test_data_path), "raw")
+pred_array = open_ds(str(test_data_path), "predictions")
+gt_array = open_ds(str(test_data_path), "labels")
+
+arrays = {
+    "raw": {"array": raw_array},
+    "labels": {"array": gt_array, "meshes": True},
+    "predictions": {"array": pred_array},
+}
+get_viewer(arrays, headless=False)
