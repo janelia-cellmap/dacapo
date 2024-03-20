@@ -20,8 +20,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__SEPARATOR_CHARACTER = "&"
-
 
 def is_zarr_group(file_name: str, dataset: str):
     zarr_file = zarr.open(str(file_name))
@@ -187,6 +185,7 @@ class DataSplitGenerator:
         min_training_volume_size=8_000,  # 20**3
         raw_min=0,
         raw_max=255,
+        classes_separator_caracter = "&",
     ):
         self.name = name
         self.datasets = datasets
@@ -208,6 +207,7 @@ class DataSplitGenerator:
         self.min_training_volume_size = min_training_volume_size
         self.raw_min = raw_min
         self.raw_max = raw_max
+        self.classes_separator_caracter = classes_separator_caracter
 
     def __str__(self) -> str:
         return f"DataSplitGenerator:{self.name}_{self.segmentation_type}_{self.class_name}_{self.output_resolution[0]}nm"
@@ -226,7 +226,7 @@ class DataSplitGenerator:
         self._class_name = class_name
 
     def check_class_name(self, class_name):
-        datasets, classes = format_class_name(class_name)
+        datasets, classes = format_class_name(class_name,self.classes_separator_caracter)
         if self.class_name is None:
             self.class_name = classes
             if self.targets is None:
@@ -268,8 +268,12 @@ class DataSplitGenerator:
                         gt_config=gt_config,
                     )
                 )
+        if type(self.class_name) == list:
+            classes = self.classes_separator_caracter.join(self.class_name)
+        else:
+            classes = self.class_name
         return TrainValidateDataSplitConfig(
-            name=f"{self.name}_{self.segmentation_type}_{self.class_name}_{self.output_resolution[0]}nm",
+            name=f"{self.name}_{self.segmentation_type}_{classes}_{self.output_resolution[0]}nm",
             train_configs=train_dataset_configs,
             validate_configs=validation_dataset_configs,
         )
@@ -383,11 +387,11 @@ class DataSplitGenerator:
         )
 
 
-def format_class_name(class_name):
+def format_class_name(class_name, separator_character="&"):
     if "[" in class_name:
         if "]" not in class_name:
             raise ValueError(f"Invalid class name {class_name} missing ']'")
-        classes = class_name.split("[")[1].split("]")[0].split(__SEPARATOR_CHARACTER)
+        classes = class_name.split("[")[1].split("]")[0].split(separator_character)
         base_class_name = class_name.split("[")[0]
         return [f"{base_class_name}{c}" for c in classes], classes
     else:
