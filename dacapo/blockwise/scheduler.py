@@ -11,6 +11,8 @@ from dacapo.blockwise import DaCapoBlockwiseTask
 from dacapo import Options
 import logging
 
+from dacapo.compute_context import create_compute_context
+
 logger = logging.getLogger(__name__)
 
 
@@ -82,8 +84,8 @@ def run_blockwise(
         *args,
         **kwargs,
     )
-
     print("Running blockwise with worker_file: ", worker_file)
+    print(f"Using compute context: {create_compute_context()}")
     success = daisy.run_blockwise([task])
     return success
 
@@ -165,6 +167,7 @@ def segment_blockwise(
         " in temp directory: ",
         tmpdir,
     )
+    print(f"Using compute context: {create_compute_context()}")
     # write parameters to tmpdir
     if "parameters" in kwargs:
         with open(Path(tmpdir, "parameters.yaml"), "w") as f:

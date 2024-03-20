@@ -39,10 +39,13 @@ class Bsub(ComputeContext):
             return "cpu"
 
     def _wrap_command(self, command):
-        client = daisy.Client()
-        basename = str(
-            Path("./daisy_logs", client.task_id, f"worker_{client.worker_id}")
-        )
+        try:
+            client = daisy.Client()
+            basename = str(
+                Path("./daisy_logs", client.task_id, f"worker_{client.worker_id}")
+            )
+        except:
+            basename = "./daisy_logs/dacapo"
         return (
             [
                 "bsub",

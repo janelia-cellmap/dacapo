@@ -21,6 +21,7 @@ def register_hierarchy_hooks(converter):
     """Central place to register type hierarchies for conversion."""
 
     converter.register_hierarchy(TaskConfig, cls_fun)
+    converter.register_hierarchy(StartConfig, cls_fun)
     converter.register_hierarchy(ArchitectureConfig, cls_fun)
     converter.register_hierarchy(TrainerConfig, cls_fun)
     converter.register_hierarchy(AugmentConfig, cls_fun)

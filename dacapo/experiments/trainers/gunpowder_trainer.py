@@ -260,7 +260,7 @@ class GunpowderTrainer(Trainer):
                             v.num_channels,
                             v.voxel_size,
                             v.dtype if not v.dtype == bool else np.float32,
-                            model.output_shape,
+                            model.output_shape * v.voxel_size,
                         )
                         dataset = snapshot_zarr[k]
                     else:
@@ -271,7 +271,7 @@ class GunpowderTrainer(Trainer):
                         data = v[v.roi][0]
                     else:
                         data = v[v.roi][0].astype(np.float32)
-                    if v.num_channels is None:
+                    if v.num_channels is None or v.num_channels == 1:
                         # remove channel dimension
                         assert data.shape[0] == 1, (
                             f"Data for array {k} should not have channels but has shape: "
@@ -324,7 +324,10 @@ class GunpowderTrainer(Trainer):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self._iter.send(True)
+        try:
+            self._iter.send(True)
+        except TypeError:
+            self._iter.send(None)
         pass
 
     def can_train(self, datasets) -> bool:

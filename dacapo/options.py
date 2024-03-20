@@ -22,7 +22,7 @@ class DaCapoConfig:
         },
     )
     runs_base_dir: Path = attr.ib(
-        default=Path(expanduser("~/.dacapo")),
+        default=Path(expanduser("~/dacapo")),
         metadata={
             "help_text": "The path at DaCapo will use for reading and writing any necessary data. This should be an absolute path."
         },
@@ -72,8 +72,9 @@ class Options:
         # options files in order of precedence (highest first)
         options_files += [
             Path("./dacapo.yaml"),
-            Path(Path(__file__).parent.parent, "dacapo.yaml"),
+            Path("~/dacapo.yaml"),
             Path(expanduser("~/.config/dacapo/dacapo.yaml")),
+            Path(Path(__file__).parent.parent, "dacapo.yaml"),
         ]
         for path in options_files:
             if path.exists():

@@ -37,8 +37,15 @@ class WatershedPostProcessor(PostProcessor):
         parameters: WatershedPostProcessorParameters,  # type: ignore[override]
         output_array_identifier: "LocalArrayIdentifier",
         num_workers: int = 16,
-        block_size: Coordinate = Coordinate((64, 64, 64)),
+        block_size: Coordinate = Coordinate((256, 256, 256)),
     ):
+        if self.prediction_array._daisy_array.chunk_shape is not None:
+            block_size = Coordinate(
+                self.prediction_array._daisy_array.chunk_shape[
+                    -self.prediction_array.dims :
+                ]
+            )
+
         output_array = ZarrArray.create_from_array_identifier(
             output_array_identifier,
             [axis for axis in self.prediction_array.axes if axis != "c"],
@@ -46,7 +53,7 @@ class WatershedPostProcessor(PostProcessor):
             None,
             self.prediction_array.voxel_size,
             np.uint64,
-            block_size,
+            block_size * self.prediction_array.voxel_size,
         )
 
         read_roi = Roi((0, 0, 0), self.prediction_array.voxel_size * block_size)

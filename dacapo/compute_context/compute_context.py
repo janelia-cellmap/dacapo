@@ -24,11 +24,13 @@ class ComputeContext(ABC):
         # A helper method to run a command in the context specific way.
 
         # add pythonpath to the environment
-        os.environ["PYTHONPATH"] = sys.executable
+        print("Spawning worker...")
+        print("Spawning worker with command: ", self.wrap_command(command))
+        # os.environ["PYTHONPATH"] = sys.executable
         subprocess.run(self.wrap_command(command))
 
 
-def create_compute_context():
+def create_compute_context() -> ComputeContext:
     """Create a compute context based on the global DaCapo options."""
 
     options = Options.instance()

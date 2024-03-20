@@ -55,12 +55,18 @@ class Run:
 
         # preloaded weights from previous run
         self.start = (
-            Start(run_config.start_config)
+            run_config.start_config.start_type(run_config.start_config)
             if run_config.start_config is not None
             else None
         )
-        if self.start is not None:
-            self.start.initialize_weights(self.model)
+        if self.start is None:
+            return
+        else:
+            if hasattr(run_config.task_config,"channels"):
+                new_head = run_config.task_config.channels
+            else:
+                new_head = None
+            self.start.initialize_weights(self.model,new_head=new_head)
 
     @staticmethod
     def get_validation_scores(run_config) -> ValidationScores:

@@ -90,30 +90,25 @@ class LocalArrayStore(ArrayStore):
         dataset = array_identifier.dataset
 
         assert container.suffix == ".zarr", (
-            "The container path does not end with '.zarr'. Stopping here to "
-            "prevent data loss."
+            f"The container path does not end with '.zarr'. Stopping here to "
+            f"prevent data loss."
         )
 
         path = Path(container, dataset)
 
         if not path.exists():
             logger.warning(
-                "Asked to remove dataset %s in container %s, but it doesn't exist.",
-                dataset,
-                container,
+                f"Asked to remove dataset {dataset} in container {container}, but it doesn't exist."
             )
             return
 
         if not path.is_dir():
             logger.warning(
-                "Asked to remove dataset %s in container %s, but it is not "
-                "a directory. Will not delete.",
-                dataset,
-                container,
+                f"Asked to remove dataset {dataset} in container {container}, but it is not a directory. Will not delete."
             )
             return
 
-        print("Removing dataset %s in container %s", dataset, container)
+        print(f"Removing dataset {dataset} in container {container}")
         shutil.rmtree(path)
 
     def __get_run_dir(self, run_name: str) -> Path:
