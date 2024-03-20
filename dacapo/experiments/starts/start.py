@@ -13,8 +13,8 @@ def match_heads(model, head_weights, old_head, new_head ):
             new_index = new_head.index(label)
             for key in head_keys:
                 if key in model.state_dict().keys():
-                    n_val = head_weights[key][old_index]
-                    model.state_dict()[key][new_index] = n_val
+                    new_value = head_weights[key][old_index]
+                    model.state_dict()[key][new_index] = new_value
             logger.warning(f"matched head for {label}.")
 
 def _set_weights(model, weights, run, criterion, old_head=None, new_head=None):
