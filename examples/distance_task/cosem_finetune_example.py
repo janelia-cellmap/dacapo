@@ -201,7 +201,6 @@ for i in range(repetitions):
 # %% [markdown]
 # ## Train
 
-# To train one of the runs, you can either do it by first creating a **Run** directly from the run config
 # NOTE: The run stats are stored in the `runs_base_dir/stats` directory. You can delete this directory to remove all stored stats if you want to re-run training. Otherwise, the stats will be appended to the existing files, and the run won't start from scratch. This may cause errors
 # %%
 from dacapo.train import train_run
