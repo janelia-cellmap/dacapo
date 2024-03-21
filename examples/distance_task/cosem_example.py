@@ -185,7 +185,7 @@ validation_interval = iterations // 2
 repetitions = 1
 for i in range(repetitions):
     run_config = RunConfig(
-        name="cosem_distance_run_4nm",
+        name="scratch_cosem_distance_run_4nm",
         # # NOTE: This is a template for the name of the run. You can customize it as you see fit.
         # name=("_").join(
         #     [

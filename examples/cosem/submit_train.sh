@@ -1,0 +1,1 @@
+bsub -P cellmap -J train_cosem -q gpu_tesla -gpu "num=1" -n16 -We 120 python train_hela.py 
