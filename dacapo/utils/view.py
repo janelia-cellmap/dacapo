@@ -7,7 +7,7 @@ import neuroglancer
 from neuroglancer.viewer_state import ViewerState
 import os
 from dacapo.experiments.run import Run
-from dacapo.store.create_store import create_array_store
+from dacapo.store.create_store import create_array_store, create_stats_store
 from IPython.display import IFrame
 import time
 import copy
@@ -103,7 +103,6 @@ class BestScore:
                 str(iteration), validation_dataset.name, "output", str(self.parameter)
             )
         )
-        print(container, dataset)
         self.ds = open_ds(container, dataset)
 
     def does_new_best_exist(self):
@@ -132,9 +131,11 @@ class BestScore:
 
 
 class NeuroglancerRunViewer:
-    def __init__(self, run: Run):
+
+    def __init__(self, run: Run, embedded=False):
         self.run: Run = run
         self.best_score = BestScore(run)
+        self.embedded = embedded
 
     def updated_neuroglancer_layer(self, layer_name, ds):
         source = neuroglancer.LocalVolume(
@@ -148,7 +149,7 @@ class NeuroglancerRunViewer:
         )
         new_state = copy.deepcopy(self.viewer.state)
         if len(new_state.layers) == 1:
-            new_state.layers[layer_name] = neuroglancer.ImageLayer(source=source)
+            new_state.layers[layer_name] = neuroglancer.SegmentationLayer(source=source)
         else:
             # replace name everywhere to preserve state, like what is selected
             new_state_str = json.dumps(new_state.to_json())
@@ -157,7 +158,6 @@ class NeuroglancerRunViewer:
             new_state.layers[layer_name].source = source
 
         self.viewer.set_state(new_state)
-        print(self.viewer.state)
 
     def deprecated_start_neuroglancer(self):
         neuroglancer.set_server_bind_address("0.0.0.0")
@@ -181,7 +181,8 @@ class NeuroglancerRunViewer:
                     voxel_offset=self.raw.roi.offset,
                 ),
             )
-        return IFrame(src=self.viewer, width=1800, height=900)
+        if self.embedded:
+            return IFrame(src=self.viewer, width=1800, height=900)
 
     def start(self):
         self.run_thread = True
@@ -233,6 +234,9 @@ class NeuroglancerRunViewer:
             time.sleep(10)
             new_best_exists = self.best_score.does_new_best_exist()
             if new_best_exists:
+                print(
+                    f"New best f1 score of {self.best_score.score} at iteration {self.best_score.iteration} and parameter {self.best_score.parameter}"
+                )
                 self.update_best_layer()
 
     def stop(self):
