@@ -66,8 +66,8 @@ config_store = create_config_store()
 # %%
 from pathlib import Path
 from dacapo import Options
-from dacapo.examples.utils import get_viewer
-from dacapo.examples.synthetic_source_worker import generate_synthetic_dataset
+from dacapo.utils.view import get_viewer
+from examples.synthetic_source_worker import generate_synthetic_dataset
 from funlib.geometry import Coordinate
 from funlib.persistence import open_ds
 
@@ -341,8 +341,8 @@ start_config = None
 #     "best",
 # )
 
-iterations = 200
-validation_interval = iterations // 2
+iterations = 2000
+validation_interval = 200
 repetitions = 1
 for i in range(repetitions):
     run_config = RunConfig(
@@ -380,13 +380,12 @@ for i in range(repetitions):
 # %% [markdown]
 # ## Train
 
-# To train one of the runs, you can either do it by first creating a **Run** directly from the run config
 # NOTE: The run stats are stored in the `runs_base_dir/stats` directory. You can delete this directory to remove all stored stats if you want to re-run training. Otherwise, the stats will be appended to the existing files, and the run won't start from scratch. This may cause errors
 # %%
 from dacapo.train import train_run
 from dacapo.experiments.run import Run
 from dacapo.store.create_store import create_config_store
-from dacapo.examples.utils import NeuroglancerRunViewer
+from dacapo.utils.view import NeuroglancerRunViewer
 
 config_store = create_config_store()
 run = Run(config_store.retrieve_run_config(run_config.name))
@@ -396,7 +395,8 @@ run_viewer = NeuroglancerRunViewer(run)
 run_viewer.start()
 # %%
 train_run(run)
-
+# %%
+run_viewer.stop()
 # %% [markdown]
 # If you want to start your run on some compute cluster, you might want to use the command line interface: dacapo train -r {run_config.name}. This makes it particularly convenient to run on compute nodes where you can specify specific compute requirements.
 
