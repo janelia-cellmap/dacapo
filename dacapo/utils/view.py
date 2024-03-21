@@ -1,12 +1,8 @@
-from typing import Optional
 import neuroglancer
 from IPython.display import IFrame
 import numpy as np
-import gunpowder as gp
-from funlib.persistence import Array
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from funlib.persistence import open_ds
-from threading import Thread
+import threading
 import neuroglancer
 from neuroglancer.viewer_state import ViewerState
 import os
@@ -86,21 +82,69 @@ def add_scalar_layer(state, name, data, voxel_size):
     )
 
 
+class BestScore:
+    def __init__(self, run: Run):
+        self.run: Run = run
+        self.score: float = -1
+        self.iteration: int = 0
+        self.parameter: str = None
+        self.validation_parameters = run.validation_scores.parameters
+
+        self.array_store = create_array_store()
+        self.stats_store = create_stats_store()
+
+    def get_ds(self, iteration, validation_dataset):
+        prediction_array_identifier = self.array_store.validation_prediction_array(
+            self.run.name, iteration, validation_dataset.name
+        )
+        container = str(prediction_array_identifier.container)
+        dataset = str(
+            os.path.join(
+                str(iteration), validation_dataset.name, "output", str(self.parameter)
+            )
+        )
+        print(container, dataset)
+        self.ds = open_ds(container, dataset)
+
+    def does_new_best_exist(self):
+        new_best_exists = False
+        self.validation_scores = self.stats_store.retrieve_validation_iteration_scores(
+            self.run.name
+        )
+
+        for validation_idx, validation_dataset in enumerate(
+            self.run.datasplit.validate
+        ):
+            for iteration_scores in self.validation_scores:
+                iteration = iteration_scores.iteration
+                for parameter_idx, parameter in enumerate(self.validation_parameters):
+                    # hardcoded for f1_score
+                    current_score = iteration_scores.scores[validation_idx][
+                        parameter_idx
+                    ][20]
+                    if current_score > self.score:
+                        self.iteration = iteration
+                        self.score = current_score
+                        self.parameter = parameter
+                        self.get_ds(iteration, validation_dataset)
+                        new_best_exists = True
+        return new_best_exists
+
+
 class NeuroglancerRunViewer:
     def __init__(self, run: Run):
         self.run: Run = run
-        self.most_recent_iteration = 0
-        self.prediction = None
+        self.best_score = BestScore(run)
 
     def updated_neuroglancer_layer(self, layer_name, ds):
         source = neuroglancer.LocalVolume(
             data=ds.data,
             dimensions=neuroglancer.CoordinateSpace(
-                names=["c", "z", "y", "x"],
-                units=["", "nm", "nm", "nm"],
-                scales=[1] + list(ds.voxel_size),
+                names=["z", "y", "x"],
+                units=["nm", "nm", "nm"],
+                scales=list(ds.voxel_size),
             ),
-            voxel_offset=[0] + list(ds.roi.offset),
+            voxel_offset=list(ds.roi.offset),
         )
         new_state = copy.deepcopy(self.viewer.state)
         if len(new_state.layers) == 1:
@@ -122,6 +166,7 @@ class NeuroglancerRunViewer:
     def start_neuroglancer(self):
         neuroglancer.set_server_bind_address("0.0.0.0")
         self.viewer = neuroglancer.Viewer()
+        print(self.viewer)
         with self.viewer.txn() as state:
             state.showSlices = False
 
@@ -139,6 +184,7 @@ class NeuroglancerRunViewer:
         return IFrame(src=self.viewer, width=1800, height=900)
 
     def start(self):
+        self.run_thread = True
         self.array_store = create_array_store()
         self.get_datasets()
         self.new_validation_checker()
@@ -152,85 +198,42 @@ class NeuroglancerRunViewer:
 
     def get_datasets(self):
         for validation_dataset in self.run.datasplit.validate:
-            (
-                input_raw_array_identifier,
-                input_gt_array_identifier,
-            ) = self.array_store.validation_input_arrays(
-                self.run.name, validation_dataset.name
-            )
+            raw = validation_dataset.raw._source_array
+            gt = validation_dataset.gt._source_array
+            self.raw = open_ds(str(raw.file_name), raw.dataset)
+            self.gt = open_ds(str(gt.file_name), gt.dataset)
 
-            self.raw = self.open_from_array_identitifier(input_raw_array_identifier)
-            self.gt = self.open_from_array_identitifier(input_gt_array_identifier)
-        print(self.raw)
+    def update_best_info(self):
+        self.segmentation = self.best_score.ds
+        self.most_recent_iteration = self.best_score.iteration
 
-    def update_best_info(self, iteration, validation_dataset_name):
-        prediction_array_identifier = self.array_store.validation_prediction_array(
-            self.run.name,
-            iteration,
-            validation_dataset_name,
-        )
-        self.prediction = self.open_from_array_identitifier(prediction_array_identifier)
-        self.most_recent_iteration = iteration
-
-    def update_neuroglancer(self, iteration):
+    def update_neuroglancer(self):
         self.updated_neuroglancer_layer(
-            f"prediction at iteration {iteration}", self.prediction
+            f"prediction at iteration {self.best_score.iteration}, f1 score {self.best_score.score}",
+            self.segmentation,
         )
         return None
 
-    def update_best(self, iteration, validation_dataset_name):
-        self.update_best_info(iteration, validation_dataset_name)
-        self.update_neuroglancer(iteration)
+    def update_best_layer(self):
+        self.update_best_info()
+        self.update_neuroglancer()
 
     def new_validation_checker(self):
-        self.process = Thread(target=self.update_with_new_validation_if_possible)
-        self.process.daemon = True
-        self.process.start()
+        self.thread = threading.Thread(
+            target=self.update_with_new_validation_if_possible, daemon=True
+        )
+        self.thread.run_thread = True
+        self.thread.start()
 
     def update_with_new_validation_if_possible(self):
+        thread = threading.currentThread()
         # Here we are assuming that we are checking the directory .../valdiation_config/prediction
         # Ideally we will only have to check for the current best validation
-        while True:
-            time.sleep(3)
-            for validation_dataset in self.run.datasplit.validate:
-                most_recent_iteration_previous = self.most_recent_iteration
-                prediction_array_identifier = (
-                    self.array_store.validation_prediction_array(
-                        self.run.name,
-                        self.most_recent_iteration,
-                        validation_dataset.name,
-                    )
-                )
+        while getattr(thread, "run_thread", True):
+            time.sleep(10)
+            new_best_exists = self.best_score.does_new_best_exist()
+            if new_best_exists:
+                self.update_best_layer()
 
-                container = prediction_array_identifier.container
-                if os.path.exists(container):
-                    iteration_dirs = [
-                        name
-                        for name in os.listdir(container)
-                        if os.path.isdir(os.path.join(container, name))
-                        and name.isnumeric()
-                    ]
-
-                    for iteration_dir in iteration_dirs:
-                        if int(iteration_dir) > self.most_recent_iteration:
-                            inference_dir = os.path.join(
-                                container,
-                                iteration_dir,
-                                "validation_config",
-                                "prediction",
-                            )
-                            if os.path.exists(inference_dir):
-                                # Ignore basic zarr and n5 files
-                                inference_dir_contents = [
-                                    f
-                                    for f in os.listdir(inference_dir)
-                                    if not f.startswith(".") and not f.endswith(".json")
-                                ]
-                                if inference_dir_contents:
-                                    # then it should have at least a chunk writtent out, assume it has all of it written out
-                                    self.most_recent_iteration = int(iteration_dir)
-                    if most_recent_iteration_previous != self.most_recent_iteration:
-                        self.update_best(
-                            self.most_recent_iteration,
-                            validation_dataset.name,
-                        )
+    def stop(self):
+        self.thread.run_thread = False
