@@ -62,11 +62,11 @@ class Run:
         if self.start is None:
             return
         else:
-            if hasattr(run_config.task_config,"channels"):
+            if hasattr(run_config.task_config, "channels"):
                 new_head = run_config.task_config.channels
             else:
                 new_head = None
-            self.start.initialize_weights(self.model,new_head=new_head)
+            self.start.initialize_weights(self.model, new_head=new_head)
 
     @staticmethod
     def get_validation_scores(run_config) -> ValidationScores:
