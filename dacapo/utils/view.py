@@ -166,7 +166,7 @@ class NeuroglancerRunViewer:
     def start_neuroglancer(self):
         neuroglancer.set_server_bind_address("0.0.0.0")
         self.viewer = neuroglancer.Viewer()
-        print(self.viewer)
+        print(f"Neuroglancer viewer: {self.viewer}")
         with self.viewer.txn() as state:
             state.showSlices = False
 
