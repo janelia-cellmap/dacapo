@@ -1,7 +1,7 @@
-:py:mod:`dacapo.examples.random_source_pipeline`
-================================================
+:py:mod:`dacapo.utils.pipeline`
+===============================
 
-.. py:module:: dacapo.examples.random_source_pipeline
+.. py:module:: dacapo.utils.pipeline
 
 
 Module Contents
@@ -12,13 +12,13 @@ Classes
 
 .. autoapisummary::
 
-   dacapo.examples.random_source_pipeline.CreatePoints
-   dacapo.examples.random_source_pipeline.MakeRaw
-   dacapo.examples.random_source_pipeline.DilatePoints
-   dacapo.examples.random_source_pipeline.RandomDilateLabels
-   dacapo.examples.random_source_pipeline.Relabel
-   dacapo.examples.random_source_pipeline.ExpandLabels
-   dacapo.examples.random_source_pipeline.ZerosSource
+   dacapo.utils.pipeline.CreatePoints
+   dacapo.utils.pipeline.MakeRaw
+   dacapo.utils.pipeline.DilatePoints
+   dacapo.utils.pipeline.RandomDilateLabels
+   dacapo.utils.pipeline.Relabel
+   dacapo.utils.pipeline.ExpandLabels
+   dacapo.utils.pipeline.ZerosSource
 
 
 
@@ -27,7 +27,7 @@ Functions
 
 .. autoapisummary::
 
-   dacapo.examples.random_source_pipeline.random_source_pipeline
+   dacapo.utils.pipeline.random_source_pipeline
 
 
 

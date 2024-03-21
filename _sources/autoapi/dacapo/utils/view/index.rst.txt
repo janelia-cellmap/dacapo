@@ -1,7 +1,7 @@
-:py:mod:`dacapo.examples.utils`
-===============================
+:py:mod:`dacapo.utils.view`
+===========================
 
-.. py:module:: dacapo.examples.utils
+.. py:module:: dacapo.utils.view
 
 
 Module Contents
@@ -12,7 +12,7 @@ Classes
 
 .. autoapisummary::
 
-   dacapo.examples.utils.NeuroglancerRunViewer
+   dacapo.utils.view.NeuroglancerRunViewer
 
 
 
@@ -21,9 +21,9 @@ Functions
 
 .. autoapisummary::
 
-   dacapo.examples.utils.get_viewer
-   dacapo.examples.utils.add_seg_layer
-   dacapo.examples.utils.add_scalar_layer
+   dacapo.utils.view.get_viewer
+   dacapo.utils.view.add_seg_layer
+   dacapo.utils.view.add_scalar_layer
 
 
 

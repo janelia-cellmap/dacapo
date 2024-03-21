@@ -12,6 +12,8 @@ Submodules
 
    affinities/index.rst
    balance_weights/index.rst
+   pipeline/index.rst
+   view/index.rst
    voi/index.rst
 
 
