@@ -1,7 +1,7 @@
 from importlib.machinery import SourceFileLoader
 import logging
 import os
-from pathlib import Path
+from upath import UPath as Path
 import sys
 import click
 import daisy

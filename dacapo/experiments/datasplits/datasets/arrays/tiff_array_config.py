@@ -5,7 +5,7 @@ from .tiff_array import TiffArray
 
 from funlib.geometry import Coordinate
 
-from pathlib import Path
+from upath import UPath as Path
 from typing import List
 
 

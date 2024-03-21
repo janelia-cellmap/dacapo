@@ -1,6 +1,6 @@
 from datetime import datetime
 from importlib.machinery import SourceFileLoader
-from pathlib import Path
+from upath import UPath as Path
 from daisy import Task, Roi
 
 

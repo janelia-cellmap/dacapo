@@ -14,7 +14,7 @@ from dacapo.experiments.starts import *
 
 from funlib.geometry import Coordinate, Roi
 
-from pathlib import Path
+from upath import UPath as Path
 
 
 def register_hierarchy_hooks(converter):

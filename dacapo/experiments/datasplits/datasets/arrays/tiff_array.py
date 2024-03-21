@@ -6,7 +6,7 @@ import lazy_property
 import tifffile
 
 import logging
-from pathlib import Path
+from upath import UPath as Path
 from typing import List, Optional
 
 logger = logging.getLogger(__name__)

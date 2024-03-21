@@ -1,4 +1,4 @@
-from pathlib import Path
+from upath import UPath as Path
 import dacapo.blockwise
 from dacapo.blockwise.scheduler import segment_blockwise
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray

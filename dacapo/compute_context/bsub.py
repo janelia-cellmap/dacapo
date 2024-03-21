@@ -1,5 +1,5 @@
 import os
-from pathlib import Path
+from upath import UPath as Path
 from .compute_context import ComputeContext
 import daisy
 

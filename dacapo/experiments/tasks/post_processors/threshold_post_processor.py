@@ -1,4 +1,4 @@
-from pathlib import Path
+from upath import UPath as Path
 from dacapo.blockwise.scheduler import run_blockwise
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from .threshold_post_processor_parameters import ThresholdPostProcessorParameters
