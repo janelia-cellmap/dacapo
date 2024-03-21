@@ -1,5 +1,6 @@
 # %%
 import dacapo
+
 # %%
 from dacapo.store.create_store import create_config_store
 
@@ -54,6 +55,7 @@ from dacapo.experiments.trainers.gp_augments import (
     IntensityScaleShiftAugmentConfig,
 )
 from dacapo.experiments.trainers import GunpowderTrainerConfig
+
 trainer_config = GunpowderTrainerConfig(
     name="cosem_finetune2",
     batch_size=1,
