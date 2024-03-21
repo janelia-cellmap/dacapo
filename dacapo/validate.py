@@ -53,7 +53,7 @@ def validate(
 def validate_run(
     run: Run,
     iteration: int,
-    num_workers: int = 30,
+    num_workers: int = 1,
     output_dtype: str = "uint8",
     overwrite: bool = True,
 ):
