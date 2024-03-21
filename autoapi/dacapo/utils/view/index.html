@@ -104,7 +104,10 @@
 <h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.utils.view.NeuroglancerRunViewer" title="dacapo.utils.view.NeuroglancerRunViewer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NeuroglancerRunViewer</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.utils.view.BestScore" title="dacapo.utils.view.BestScore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BestScore</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.utils.view.NeuroglancerRunViewer" title="dacapo.utils.view.NeuroglancerRunViewer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NeuroglancerRunViewer</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -141,8 +144,23 @@
 <dd></dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="dacapo.utils.view.BestScore">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.utils.view.</span></span><span class="sig-name descname"><span class="pre">BestScore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run"><span class="pre">dacapo.experiments.run.Run</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.BestScore" title="Link to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="dacapo.utils.view.BestScore.get_ds">
+<span class="sig-name descname"><span class="pre">get_ds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.BestScore.get_ds" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.utils.view.BestScore.does_new_best_exist">
+<span class="sig-name descname"><span class="pre">does_new_best_exist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.BestScore.does_new_best_exist" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.utils.view.</span></span><span class="sig-name descname"><span class="pre">NeuroglancerRunViewer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run"><span class="pre">dacapo.experiments.run.Run</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.utils.view.</span></span><span class="sig-name descname"><span class="pre">NeuroglancerRunViewer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run"><span class="pre">dacapo.experiments.run.Run</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer" title="Link to this definition"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.updated_neuroglancer_layer">
 <span class="sig-name descname"><span class="pre">updated_neuroglancer_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.updated_neuroglancer_layer" title="Link to this definition"></a></dt>
@@ -175,17 +193,17 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.update_best_info">
-<span class="sig-name descname"><span class="pre">update_best_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_dataset_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.update_best_info" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">update_best_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.update_best_info" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.update_neuroglancer">
-<span class="sig-name descname"><span class="pre">update_neuroglancer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.update_neuroglancer" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">update_neuroglancer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.update_neuroglancer" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.update_best">
-<span class="sig-name descname"><span class="pre">update_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_dataset_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.update_best" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.update_best_layer">
+<span class="sig-name descname"><span class="pre">update_best_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.update_best_layer" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -196,6 +214,11 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.update_with_new_validation_if_possible">
 <span class="sig-name descname"><span class="pre">update_with_new_validation_if_possible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.update_with_new_validation_if_possible" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.stop" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

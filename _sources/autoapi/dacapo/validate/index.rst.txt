@@ -38,7 +38,7 @@ Attributes
    iteration.
 
 
-.. py:function:: validate_run(run: dacapo.experiments.Run, iteration: int, num_workers: int = 30, output_dtype: str = 'uint8', overwrite: bool = True)
+.. py:function:: validate_run(run: dacapo.experiments.Run, iteration: int, num_workers: int = 1, output_dtype: str = 'uint8', overwrite: bool = True)
 
    Validate an already loaded run at the given iteration. This does not
    load the weights of that iteration, it is assumed that the model is already

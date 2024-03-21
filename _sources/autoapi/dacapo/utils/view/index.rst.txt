@@ -12,6 +12,7 @@ Classes
 
 .. autoapisummary::
 
+   dacapo.utils.view.BestScore
    dacapo.utils.view.NeuroglancerRunViewer
 
 
@@ -36,7 +37,17 @@ Functions
 .. py:function:: add_scalar_layer(state, name, data, voxel_size)
 
 
-.. py:class:: NeuroglancerRunViewer(run: dacapo.experiments.run.Run)
+.. py:class:: BestScore(run: dacapo.experiments.run.Run)
+
+
+   .. py:method:: get_ds(iteration, validation_dataset)
+
+
+   .. py:method:: does_new_best_exist()
+
+
+
+.. py:class:: NeuroglancerRunViewer(run: dacapo.experiments.run.Run, embedded=False)
 
 
    .. py:method:: updated_neuroglancer_layer(layer_name, ds)
@@ -57,19 +68,22 @@ Functions
    .. py:method:: get_datasets()
 
 
-   .. py:method:: update_best_info(iteration, validation_dataset_name)
+   .. py:method:: update_best_info()
 
 
-   .. py:method:: update_neuroglancer(iteration)
+   .. py:method:: update_neuroglancer()
 
 
-   .. py:method:: update_best(iteration, validation_dataset_name)
+   .. py:method:: update_best_layer()
 
 
    .. py:method:: new_validation_checker()
 
 
    .. py:method:: update_with_new_validation_if_possible()
+
+
+   .. py:method:: stop()
 
 
 
