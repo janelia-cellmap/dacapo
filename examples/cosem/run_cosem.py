@@ -55,9 +55,9 @@ from dacapo.experiments.trainers.gp_augments import (
 )
 from dacapo.experiments.trainers import GunpowderTrainerConfig
 trainer_config = GunpowderTrainerConfig(
-    name="cosem_finetune",
+    name="cosem_finetune2",
     batch_size=1,
-    learning_rate=0.0001,
+    learning_rate=0.001,
     num_data_fetchers=20,
     augments=[
         ElasticAugmentConfig(
@@ -72,8 +72,8 @@ trainer_config = GunpowderTrainerConfig(
         IntensityScaleShiftAugmentConfig(scale=2.0, shift=-1.0),
     ],
     snapshot_interval=10000,
-    min_masked=0.05,
-    clip_raw=True,
+    # min_masked=0.05,
+    clip_raw=False,
 )
 config_store.store_trainer_config(trainer_config)
 # %%
@@ -91,7 +91,7 @@ validation_interval = iterations // 2
 repetitions = 1
 for i in range(repetitions):
     run_config = RunConfig(
-        name="cosem_distance_run_4nm_finetune",
+        name="cosem_distance_run_4nm_finetune2",
         datasplit_config=datasplit_config,
         task_config=task_config,
         architecture_config=architecture_config,
@@ -112,6 +112,7 @@ from dacapo.store.create_store import create_config_store
 config_store = create_config_store()
 
 run = Run(config_store.retrieve_run_config("cosem_distance_run_4nm_finetune"))
+# we already trained it, so we will just load the weights
 # train_run(run)
 # %%
 
