@@ -1,0 +1,74 @@
+:py:mod:`dacapo.examples.distance_task.cosem_example_fill_in_the_blank`
+=======================================================================
+
+.. py:module:: dacapo.examples.distance_task.cosem_example_fill_in_the_blank
+
+
+Module Contents
+---------------
+
+.. py:data:: config_store
+   :value: Ellipsis
+
+   
+
+.. py:data:: input_resolution
+   :value: Ellipsis
+
+   
+
+.. py:data:: output_resolution
+   :value: Ellipsis
+
+   
+
+.. py:data:: datasplit_config
+   :value: Ellipsis
+
+   
+
+.. py:data:: datasplit
+   :value: Ellipsis
+
+   
+
+.. py:data:: viewer
+   :value: Ellipsis
+
+   
+
+.. py:data:: task_config
+   :value: Ellipsis
+
+   
+
+.. py:data:: architecture_config
+
+   
+
+.. py:data:: trainer_config
+
+   
+
+.. py:data:: start_config
+
+   
+
+.. py:data:: iterations
+   :value: 2000
+
+   
+
+.. py:data:: validation_interval
+
+   
+
+.. py:data:: run_config
+   :value: Ellipsis
+
+   
+
+.. py:data:: run
+
+   
+

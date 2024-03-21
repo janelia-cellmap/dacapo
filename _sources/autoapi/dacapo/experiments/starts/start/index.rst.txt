@@ -16,6 +16,14 @@ Classes
 
 
 
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.starts.start.match_heads
+
+
 
 Attributes
 ~~~~~~~~~~
@@ -23,11 +31,20 @@ Attributes
 .. autoapisummary::
 
    dacapo.experiments.starts.start.logger
+   dacapo.experiments.starts.start.head_keys
 
 
 .. py:data:: logger
 
    
+
+.. py:data:: head_keys
+   :value: ['prediction_head.weight', 'prediction_head.bias', 'chain.1.weight', 'chain.1.bias']
+
+   
+
+.. py:function:: match_heads(model, head_weights, old_head, new_head)
+
 
 .. py:class:: Start(start_config)
 
@@ -49,7 +66,7 @@ Attributes
 
       :type: str
 
-   .. py:method:: initialize_weights(model)
+   .. py:method:: initialize_weights(model, new_head=None)
 
       Retrieves the weights from the dacapo store and load them into
       the model.

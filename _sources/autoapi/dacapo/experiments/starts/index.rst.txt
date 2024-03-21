@@ -52,7 +52,7 @@ Classes
 
       :type: str
 
-   .. py:method:: initialize_weights(model)
+   .. py:method:: initialize_weights(model, new_head=None)
 
       Retrieves the weights from the dacapo store and load them into
       the model.
@@ -120,7 +120,7 @@ Classes
    .. py:method:: check()
 
 
-   .. py:method:: initialize_weights(model)
+   .. py:method:: initialize_weights(model, new_head=None)
 
       Retrieves the weights from the dacapo store and load them into
       the model.

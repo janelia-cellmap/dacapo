@@ -35,7 +35,7 @@ Module Contents
 
    
 
-.. py:data:: force
+.. py:data:: force_example_creation
    :value: False
 
    
@@ -53,6 +53,10 @@ Module Contents
 
    
 
+.. py:data:: arrays
+
+   
+
 .. py:data:: validate_data_path
 
    
@@ -61,11 +65,27 @@ Module Contents
 
    
 
-.. py:data:: options
+.. py:data:: arrays
 
    
 
-.. py:data:: runs_base_dir
+.. py:data:: test_data_path
+
+   
+
+.. py:data:: raw_array
+
+   
+
+.. py:data:: arrays
+
+   
+
+.. py:data:: input_resolution
+
+   
+
+.. py:data:: output_resolution
 
    
 
@@ -98,7 +118,7 @@ Module Contents
    
 
 .. py:data:: iterations
-   :value: 2000
+   :value: 200
 
    
 
@@ -123,11 +143,23 @@ Module Contents
 
    
 
-.. py:data:: test_data_path
+.. py:data:: run_viewer
 
    
 
 .. py:data:: raw_array
+
+   
+
+.. py:data:: pred_array
+
+   
+
+.. py:data:: gt_array
+
+   
+
+.. py:data:: arrays
 
    
 

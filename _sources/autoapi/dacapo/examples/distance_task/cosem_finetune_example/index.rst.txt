@@ -64,17 +64,12 @@ Module Contents
 
    
 
-.. py:data:: start_config
-
-   
-
 .. py:data:: iterations
    :value: 2000
 
    
 
 .. py:data:: validation_interval
-   :value: 50
 
    
 

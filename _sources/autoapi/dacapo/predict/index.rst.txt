@@ -29,14 +29,14 @@ Attributes
 
    
 
-.. py:function:: predict(run_name: str, iteration: int, input_container: pathlib.Path | str, input_dataset: str, output_path: dacapo.store.local_array_store.LocalArrayIdentifier | pathlib.Path | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True)
+.. py:function:: predict(run_name: str | dacapo.experiments.Run, iteration: int | None, input_container: pathlib.Path | str, input_dataset: str, output_path: dacapo.store.local_array_store.LocalArrayIdentifier | pathlib.Path | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True)
 
    Predict with a trained model.
 
-   :param run_name: The name of the run to predict with.
-   :type run_name: str
+   :param run_name: The name of the run to predict with or the Run object.
+   :type run_name: str or Run
    :param iteration: The training iteration of the model to use for prediction.
-   :type iteration: int
+   :type iteration: int or None
    :param input_container: The container of the input array.
    :type input_container: Path | str
    :param input_dataset: The dataset name of the input array.
@@ -45,7 +45,7 @@ Attributes
    :type output_path: LocalArrayIdentifier | str
    :param output_roi: The ROI of the output array. If None, the ROI of the input array will be used. Defaults to None.
    :type output_roi: Optional[Roi | str], optional
-   :param num_workers: The number of workers to use for blockwise prediction. Defaults to 30.
+   :param num_workers: The number of workers to use for blockwise prediction. Defaults to 1 for local processing, otherwise 12.
    :type num_workers: int, optional
    :param output_dtype: The dtype of the output array. Defaults to np.uint8.
    :type output_dtype: np.dtype | str, optional

@@ -27,7 +27,13 @@ Functions
 
 
 
-.. py:function:: get_viewer(raw_array: gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray, labels_array: gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray, pred_array: Optional[gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray] = None, pred_labels_array: Optional[gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray] = None, width: int = 1500, height: int = 600) -> IPython.display.IFrame
+.. py:function:: get_viewer(arrays: dict, width: int = 1500, height: int = 600, headless: bool = True) -> neuroglancer.Viewer | IPython.display.IFrame
+
+
+.. py:function:: add_seg_layer(state, name, data, voxel_size, meshes=False)
+
+
+.. py:function:: add_scalar_layer(state, name, data, voxel_size)
 
 
 .. py:class:: NeuroglancerRunViewer(run: dacapo.experiments.run.Run)
@@ -65,11 +71,5 @@ Functions
 
    .. py:method:: update_with_new_validation_if_possible()
 
-
-
-.. py:function:: add_seg_layer(state, name, data, voxel_size)
-
-
-.. py:function:: add_scalar_layer(state, name, data, voxel_size)
 
 

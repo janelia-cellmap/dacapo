@@ -76,6 +76,6 @@ Functions
 .. py:function:: generate_synthetic_dataset(output_container: pathlib.Path | str, raw_output_dataset: str = 'raw', labels_output_dataset: str = 'labels', shape: str | funlib.geometry.Coordinate = Coordinate((512, 512, 512)), voxel_size: str | funlib.geometry.Coordinate = Coordinate((8, 8, 8)), write_shape: str | funlib.geometry.Coordinate = Coordinate((256, 256, 256)), num_workers: int = 16, overwrite: bool = False)
 
 
-.. py:function:: get_viewer(raw_array: gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray, labels_array: gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray, pred_array: Optional[gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray] = None, pred_labels_array: Optional[gunpowder.Array | funlib.persistence.Array | dacapo.experiments.datasplits.datasets.arrays.ZarrArray] = None, width: int = 1500, height: int = 600) -> IPython.display.IFrame
+.. py:function:: get_viewer(arrays: dict, width: int = 1500, height: int = 600, headless: bool = True) -> neuroglancer.Viewer | IPython.display.IFrame
 
 

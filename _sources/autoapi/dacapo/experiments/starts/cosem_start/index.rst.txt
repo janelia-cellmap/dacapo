@@ -16,6 +16,14 @@ Classes
 
 
 
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.starts.cosem_start.get_model_setup
+
+
 
 Attributes
 ~~~~~~~~~~
@@ -28,6 +36,9 @@ Attributes
 .. py:data:: logger
 
    
+
+.. py:function:: get_model_setup(run)
+
 
 .. py:class:: CosemStart(start_config)
 
@@ -52,7 +63,7 @@ Attributes
    .. py:method:: check()
 
 
-   .. py:method:: initialize_weights(model)
+   .. py:method:: initialize_weights(model, new_head=None)
 
       Retrieves the weights from the dacapo store and load them into
       the model.

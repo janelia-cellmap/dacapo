@@ -70,7 +70,6 @@ Module Contents
    
 
 .. py:data:: validation_interval
-   :value: 50
 
    
 
