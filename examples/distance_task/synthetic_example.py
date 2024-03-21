@@ -394,8 +394,10 @@ run = Run(config_store.retrieve_run_config(run_config.name))
 run_viewer = NeuroglancerRunViewer(run)
 run_viewer.start()
 # %%
+# Train the run
 train_run(run)
 # %%
+# Stop the viewer
 run_viewer.stop()
 # %% [markdown]
 # If you want to start your run on some compute cluster, you might want to use the command line interface: dacapo train -r {run_config.name}. This makes it particularly convenient to run on compute nodes where you can specify specific compute requirements.
