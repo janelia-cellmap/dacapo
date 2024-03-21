@@ -185,7 +185,7 @@ class DataSplitGenerator:
         min_training_volume_size=8_000,  # 20**3
         raw_min=0,
         raw_max=255,
-        classes_separator_caracter = "&",
+        classes_separator_caracter="&",
     ):
         self.name = name
         self.datasets = datasets
@@ -226,7 +226,9 @@ class DataSplitGenerator:
         self._class_name = class_name
 
     def check_class_name(self, class_name):
-        datasets, classes = format_class_name(class_name,self.classes_separator_caracter)
+        datasets, classes = format_class_name(
+            class_name, self.classes_separator_caracter
+        )
         if self.class_name is None:
             self.class_name = classes
             if self.targets is None:
