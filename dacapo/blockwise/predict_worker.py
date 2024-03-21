@@ -82,7 +82,9 @@ def start_worker(
         weights_store = create_weights_store()
 
         # load weights
-        weights_store.retrieve_weights(run_name, iteration)
+        run.model.load_state_dict(
+            weights_store.retrieve_weights(run_name, iteration).model
+        )
 
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
@@ -124,7 +126,7 @@ def start_worker(
     pipeline += gp.Normalize(raw)
 
     # predict
-    model.eval()
+    # model.eval()
     pipeline += gp_torch.Predict(
         model=model,
         inputs={"x": raw},
