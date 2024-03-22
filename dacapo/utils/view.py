@@ -131,7 +131,6 @@ class BestScore:
 
 
 class NeuroglancerRunViewer:
-
     def __init__(self, run: Run, embedded=False):
         self.run: Run = run
         self.best_score = BestScore(run)
