@@ -12,6 +12,7 @@ from IPython.display import IFrame
 import time
 import copy
 import json
+from typing import Optional
 
 
 def get_viewer(
@@ -87,7 +88,7 @@ class BestScore:
         self.run: Run = run
         self.score: float = -1
         self.iteration: int = 0
-        self.parameter: str = None
+        self.parameter: Optional[str] = None
         self.validation_parameters = run.validation_scores.parameters
 
         self.array_store = create_array_store()
