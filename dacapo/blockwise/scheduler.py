@@ -22,7 +22,7 @@ def run_blockwise(
     read_roi: Roi,
     write_roi: Roi,
     num_workers: int = 16,
-    max_retries: int = 2,
+    max_retries: int = 1,
     timeout=None,
     upstream_tasks=None,
     *args,
