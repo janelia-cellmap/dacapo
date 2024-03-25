@@ -65,13 +65,11 @@ dependencies = [
 test = ["pytest==7.4.4", "pytest-cov", "pytest-lazy-fixture"]
 dev = [
     "black",
-    "ipython",
     "mypy",
     "pdbpp",
     "rich",
     "ruff",
     "pre-commit",
-    "jupyter",
 ]
 docs = [
     "sphinx-autodoc-typehints",
