@@ -3,14 +3,13 @@ from pathlib import Path
 from dacapo.blockwise import run_blockwise
 import dacapo.blockwise
 from dacapo.experiments import Run
-from dacapo.store.create_store import create_config_store
+from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.store.local_array_store import LocalArrayIdentifier
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from dacapo.compute_context import create_compute_context, LocalTorch
 
 from funlib.geometry import Coordinate, Roi
 import numpy as np
-import zarr
 
 from typing import Optional
 import logging
@@ -74,6 +73,15 @@ def predict(
         num_workers = 1
 
     model = run.model.eval()
+
+    if iteration is not None:
+        # create weights store
+        weights_store = create_weights_store()
+
+        # load weights
+        run.model.load_state_dict(
+            weights_store.retrieve_weights(run_name, iteration).model
+        )
 
     input_voxel_size = Coordinate(raw_array.voxel_size)
     output_voxel_size = model.scale(input_voxel_size)
