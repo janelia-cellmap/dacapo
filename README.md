@@ -34,7 +34,7 @@ conda activate dacapo
 
 Then install DaCapo using pip with the following command:
 ```
-pip install git+https://github.com/janelia-cellmap/dacapo
+pip install dacapo-ml
 ```
 This will install the minimum required dependencies. 
 
