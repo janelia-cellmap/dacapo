@@ -1,2 +1,3 @@
 sphinx-autodoc-typehints
 sphinx-material
+autoapi
