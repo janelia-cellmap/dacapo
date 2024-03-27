@@ -1,3 +1,5 @@
+__version__ = 0.3.0
+
 from .options import Options  # noqa
 from . import experiments, utils  # noqa
 from .apply import apply  # noqa
