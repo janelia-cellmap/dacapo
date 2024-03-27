@@ -3,11 +3,14 @@ from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 
 from .evaluator import Evaluator
 from .instance_evaluation_scores import InstanceEvaluationScores
-
-from funlib.evaluate import rand_voi, detection_scores
+from dacapo.utils.voi import voi as _voi
 
 import numpy as np
 import numpy_indexed as npi
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def relabel(array, return_backwards_map=False, inplace=False):
@@ -68,34 +71,24 @@ def relabel(array, return_backwards_map=False, inplace=False):
 
 
 class InstanceEvaluator(Evaluator):
-    criteria: List[str] = ["voi_merge", "voi_split", "voi", "avg_iou"]
+    criteria: List[str] = ["voi_merge", "voi_split", "voi"]
 
     def evaluate(self, output_array_identifier, evaluation_array):
         output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
         evaluation_data = evaluation_array[evaluation_array.roi].astype(np.uint64)
         output_data = output_array[output_array.roi].astype(np.uint64)
-        results = rand_voi(evaluation_data, output_data)
-        try:
-            output_data, _ = relabel(output_data)
-            results.update(
-                detection_scores(
-                    evaluation_data,
-                    output_data,
-                    matching_score="iou",
-                )
-            )
-        except Exception:
-            results["avg_iou"] = 0
-            logger.warning(
-                "Could not compute IoU because of an unknown error. Sorry about that."
-            )
+        results = voi(evaluation_data, output_data)
 
         return InstanceEvaluationScores(
             voi_merge=results["voi_merge"],
             voi_split=results["voi_split"],
-            avg_iou=results["avg_iou"],
         )
 
     @property
     def score(self) -> InstanceEvaluationScores:
         return InstanceEvaluationScores()
+
+
+def voi(truth, test):
+    voi_split, voi_merge = _voi(test + 1, truth + 1, ignore_groundtruth=[])
+    return {"voi_split": voi_split, "voi_merge": voi_merge}
