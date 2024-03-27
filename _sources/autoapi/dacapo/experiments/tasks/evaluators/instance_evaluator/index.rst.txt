@@ -22,8 +22,21 @@ Functions
 .. autoapisummary::
 
    dacapo.experiments.tasks.evaluators.instance_evaluator.relabel
+   dacapo.experiments.tasks.evaluators.instance_evaluator.voi
 
 
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.evaluators.instance_evaluator.logger
+
+
+.. py:data:: logger
+
+   
 
 .. py:function:: relabel(array, return_backwards_map=False, inplace=False)
 
@@ -60,7 +73,7 @@ Functions
 
    .. py:attribute:: criteria
       :type: List[str]
-      :value: ['voi_merge', 'voi_split', 'voi', 'avg_iou']
+      :value: ['voi_merge', 'voi_split', 'voi']
 
       
 
@@ -76,5 +89,8 @@ Functions
       :returns: The detailed evaluation scores after the comparison.
       :rtype: EvaluationScores
 
+
+
+.. py:function:: voi(truth, test)
 
 

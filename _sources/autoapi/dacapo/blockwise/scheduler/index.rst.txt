@@ -30,7 +30,7 @@ Attributes
 
    
 
-.. py:function:: run_blockwise(worker_file: str | pathlib.Path, total_roi: funlib.geometry.Roi, read_roi: funlib.geometry.Roi, write_roi: funlib.geometry.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, *args, **kwargs)
+.. py:function:: run_blockwise(worker_file: str | pathlib.Path, total_roi: funlib.geometry.Roi, read_roi: funlib.geometry.Roi, write_roi: funlib.geometry.Roi, num_workers: int = 16, max_retries: int = 1, timeout=None, upstream_tasks=None, *args, **kwargs)
 
    Run a function in parallel over a large volume.
 

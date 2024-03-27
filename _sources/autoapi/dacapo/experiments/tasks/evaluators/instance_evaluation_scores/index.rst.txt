@@ -28,7 +28,7 @@ Classes
 
 
    .. py:attribute:: criteria
-      :value: ['voi_split', 'voi_merge', 'voi', 'avg_iou']
+      :value: ['voi_split', 'voi_merge', 'voi']
 
       
 
@@ -38,11 +38,6 @@ Classes
       
 
    .. py:attribute:: voi_merge
-      :type: float
-
-      
-
-   .. py:attribute:: avg_iou
       :type: float
 
       

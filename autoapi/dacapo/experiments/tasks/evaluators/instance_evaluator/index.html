@@ -122,8 +122,26 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.relabel" title="dacapo.experiments.tasks.evaluators.instance_evaluator.relabel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relabel</span></code></a>(array[, return_backwards_map, inplace])</p></td>
 <td><p>Relabel array, such that IDs are consecutive. Excludes 0.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.voi" title="dacapo.experiments.tasks.evaluators.instance_evaluator.voi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">voi</span></code></a>(truth, test)</p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.logger" title="dacapo.experiments.tasks.evaluators.instance_evaluator.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluator.logger">
+<span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.instance_evaluator.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluator.relabel">
 <span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.instance_evaluator.</span></span><span class="sig-name descname"><span class="pre">relabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_backwards_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.relabel" title="Link to this definition"></a></dt>
@@ -160,7 +178,7 @@ ground-truth.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator.criteria">
-<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['voi_merge',</span> <span class="pre">'voi_split',</span> <span class="pre">'voi',</span> <span class="pre">'avg_iou']</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator.criteria" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['voi_merge',</span> <span class="pre">'voi_split',</span> <span class="pre">'voi']</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator.criteria" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -184,6 +202,11 @@ ground-truth.</p>
 </dd></dl>
 
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluator.voi">
+<span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.instance_evaluator.</span></span><span class="sig-name descname"><span class="pre">voi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.voi" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 </section>
 </section>
