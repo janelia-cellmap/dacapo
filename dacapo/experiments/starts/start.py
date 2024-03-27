@@ -102,10 +102,11 @@ class Start(ABC):
         self.run = start_config.run
         self.criterion = start_config.criterion
 
-        if hasattr(start_config.task_config, "channels"):
-            self.channels = start_config.task_config.channels
-        else:
-            self.channels = None
+        self.channels = None
+
+        if hasattr(start_config, "task_config"):
+            if hasattr(start_config.task_config, "channels"):
+                self.channels = start_config.task_config.channels
 
     def initialize_weights(self, model, new_head=None):
         """

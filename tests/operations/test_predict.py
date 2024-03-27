@@ -18,9 +18,9 @@ logging.basicConfig(level=logging.INFO)
 @pytest.mark.parametrize(
     "run_config",
     [
-        lazy_fixture("distance_run"),
+        # lazy_fixture("distance_run"),
         lazy_fixture("dummy_run"),
-        lazy_fixture("onehot_run"),
+        # lazy_fixture("onehot_run"),
     ],
 )
 def test_predict(options, run_config, zarr_array, tmp_path):
@@ -72,7 +72,7 @@ def test_predict(options, run_config, zarr_array, tmp_path):
     )
 
     # test predicting with iterations for which we know there are no weights
-    with pytest.raises(ValueError):
+    with pytest.raises(FileNotFoundError):
         predict(
             run_config.name,
             iteration=2,

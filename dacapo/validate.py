@@ -67,8 +67,7 @@ def validate_run(
         or len(run.datasplit.validate) == 0
         or run.datasplit.validate[0].gt is None
     ):
-        print(f"Cannot validate run {run.name}. Continuing training!")
-        return None, None
+        raise ValueError(f"Cannot validate run {run.name} at iteration {iteration}.")
 
     # get array and weight store
     array_store = create_array_store()
