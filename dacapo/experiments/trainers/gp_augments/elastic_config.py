@@ -22,6 +22,10 @@ class ElasticAugmentConfig(AugmentConfig):
                          on a grid. Default is 1.
         uniform_3d_rotation (bool): Should 3D rotations be performed uniformly. The 'rotation_interval'
                                     will be ignored. Default is False.
+    Methods:
+        node(_raw_key=None, _gt_key=None, _mask_key=None): Returns the object of ElasticAugment with the given
+                                                          configuration details.
+    
     """
 
     control_point_spacing: List[int] = attr.ib(
@@ -67,11 +71,15 @@ class ElasticAugmentConfig(AugmentConfig):
             _raw_key: Unused variable, kept for future use.
             _gt_key: Unused variable, kept for future use.
             _mask_key: Unused variable, kept for future use.
-
         Returns:
             ElasticAugment: A ElasticAugment object configured with `control_point_spacing`,
                             `control_point_displacement_sigma`, `rotation_interval`, `subsample` and
                             `uniform_3d_rotation`.
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> node = elastic_augment_config.node()
+            
         """
         return ElasticAugment(
             control_point_spacing=self.control_point_spacing,
