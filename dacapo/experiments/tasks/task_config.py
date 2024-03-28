@@ -31,7 +31,7 @@ class TaskConfig:
     def verify(self) -> Tuple[bool, str]:
         """
         Check whether this is a valid Task
-        
+
         Returns:
             Tuple[bool, str]: A tuple containing a boolean value indicating whether the TaskConfig object is valid
                 and a string containing the reason why the object is invalid.

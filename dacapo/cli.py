@@ -28,7 +28,6 @@ from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
     ),
     default="INFO",
 )
-
 def cli(log_level):
     """
     Command-line interface for the DACAPO application.
@@ -110,8 +109,12 @@ def validate(run_name, iteration):
     help="The path to the input container.",
 )
 @click.option(
-    "-id", "--input_dataset", required=True, type=str, help="The name of the input dataset."
-) 
+    "-id",
+    "--input_dataset",
+    required=True,
+    type=str,
+    help="The name of the input dataset.",
+)
 @click.option(
     "-op",
     "--output_path",
@@ -245,8 +248,20 @@ def apply(
     type=click.Path(exists=True, file_okay=False),
     help="The path to the input container.",
 )
-@click.option("-id", "--input_dataset", required=True, type=str, help="The name of the input dataset.")
-@click.option("-op", "--output_path", required=True, type=click.Path(file_okay=False), help="The path to the output directory.")
+@click.option(
+    "-id",
+    "--input_dataset",
+    required=True,
+    type=str,
+    help="The name of the input dataset.",
+)
+@click.option(
+    "-op",
+    "--output_path",
+    required=True,
+    type=click.Path(file_okay=False),
+    help="The path to the output directory.",
+)
 @click.option(
     "-roi",
     "--output_roi",
@@ -254,9 +269,22 @@ def apply(
     required=False,
     help="The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]",
 )
-@click.option("-w", "--num_workers", type=int, default=30, help="The number of workers to use for prediction.")
-@click.option("-dt", "--output_dtype", type=str, default="uint8", help="The output data type.")
-@click.option("-ow", "--overwrite", is_flag=True, help="Whether to overwrite existing output files.")
+@click.option(
+    "-w",
+    "--num_workers",
+    type=int,
+    default=30,
+    help="The number of workers to use for prediction.",
+)
+@click.option(
+    "-dt", "--output_dtype", type=str, default="uint8", help="The output data type."
+)
+@click.option(
+    "-ow",
+    "--overwrite",
+    is_flag=True,
+    help="Whether to overwrite existing output files.",
+)
 def predict(
     run_name: str,
     iteration: int,
@@ -313,14 +341,29 @@ def predict(
     "--input_container",
     required=True,
     type=click.Path(exists=True, file_okay=False),
-    help="The path to the input container."
+    help="The path to the input container.",
 )
-@click.option("-id", "--input_dataset", required=True, type=str, help="The name of the input dataset.")
 @click.option(
-    "-oc", "--output_container", required=True, type=click.Path(file_okay=False),
-    help="The path to the output container."
+    "-id",
+    "--input_dataset",
+    required=True,
+    type=str,
+    help="The name of the input dataset.",
 )
-@click.option("-od", "--output_dataset", required=True, type=str, help="The name of the output dataset.")
+@click.option(
+    "-oc",
+    "--output_container",
+    required=True,
+    type=click.Path(file_okay=False),
+    help="The path to the output container.",
+)
+@click.option(
+    "-od",
+    "--output_dataset",
+    required=True,
+    type=str,
+    help="The name of the output dataset.",
+)
 @click.option(
     "-w", "--worker_file", required=True, type=str, help="The path to the worker file."
 )
@@ -329,28 +372,46 @@ def predict(
     "--total_roi",
     required=True,
     type=str,
-    help="The total roi to be processed. Format is [start:end, start:end, ... ] in voxels. Defaults to the roi of the input dataset. Do not use spaces in CLI argument."
+    help="The total roi to be processed. Format is [start:end, start:end, ... ] in voxels. Defaults to the roi of the input dataset. Do not use spaces in CLI argument.",
 )
 @click.option(
     "-rr",
     "--read_roi_size",
     required=True,
     type=str,
-    help="The size of the roi to be read for each block, in the format of [z,y,x] in voxels."
+    help="The size of the roi to be read for each block, in the format of [z,y,x] in voxels.",
 )
 @click.option(
     "-wr",
     "--write_roi_size",
     required=True,
     type=str,
-    help="The size of the roi to be written for each block, in the format of [z,y,x] in voxels."
+    help="The size of the roi to be written for each block, in the format of [z,y,x] in voxels.",
 )
-@click.option("-nw", "--num_workers", type=int, default=16, help="The number of workers to use.")
-@click.option("-mr", "--max_retries", type=int, default=2, help="The maximum number of retries.")
+@click.option(
+    "-nw", "--num_workers", type=int, default=16, help="The number of workers to use."
+)
+@click.option(
+    "-mr", "--max_retries", type=int, default=2, help="The maximum number of retries."
+)
 @click.option("-t", "--timeout", type=int, default=None, help="The timeout in seconds.")
-@click.option("-ow", "--overwrite", is_flag=True, default=True, help="Whether to overwrite existing output files.")
-@click.option("-co", "-channels_out", type=int, default=None, help="The number of output channels.")
-@click.option("-dt", "--output_dtype", type=str, default="uint8", help="The output data type.")
+@click.option(
+    "-ow",
+    "--overwrite",
+    is_flag=True,
+    default=True,
+    help="Whether to overwrite existing output files.",
+)
+@click.option(
+    "-co",
+    "-channels_out",
+    type=int,
+    default=None,
+    help="The number of output channels.",
+)
+@click.option(
+    "-dt", "--output_dtype", type=str, default="uint8", help="The output data type."
+)
 @click.pass_context
 def run_blockwise(
     ctx,
@@ -450,17 +511,35 @@ def run_blockwise(
     "--input_container",
     required=True,
     type=click.Path(exists=True, file_okay=False),
-    help="The path to the input container."
+    help="The path to the input container.",
 )
-@click.option("-id", "--input_dataset", required=True, type=str, help="The name of the input dataset.")
 @click.option(
-    "-oc", "--output_container", required=True, type=click.Path(file_okay=False),
-    help="The path to the output container."
+    "-id",
+    "--input_dataset",
+    required=True,
+    type=str,
+    help="The name of the input dataset.",
 )
-@click.option("-od", "--output_dataset", required=True, type=str, help="The name of the output dataset.")
 @click.option(
-    "-sf", "--segment_function_file", required=True, type=click.Path(),
-    help="The path to the segment function file."
+    "-oc",
+    "--output_container",
+    required=True,
+    type=click.Path(file_okay=False),
+    help="The path to the output container.",
+)
+@click.option(
+    "-od",
+    "--output_dataset",
+    required=True,
+    type=str,
+    help="The name of the output dataset.",
+)
+@click.option(
+    "-sf",
+    "--segment_function_file",
+    required=True,
+    type=click.Path(),
+    help="The path to the segment function file.",
 )
 @click.option(
     "-tr",
@@ -490,11 +569,27 @@ def run_blockwise(
     help="The context to be used, in the format of [z,y,x] in voxels. Defaults to the difference between the read and write rois.",
     default=None,
 )
-@click.option("-nw", "--num_workers", type=int, default=16, help="The number of workers to use.")
-@click.option("-mr", "--max_retries", type=int, default=2, help="The maximum number of retries.")
+@click.option(
+    "-nw", "--num_workers", type=int, default=16, help="The number of workers to use."
+)
+@click.option(
+    "-mr", "--max_retries", type=int, default=2, help="The maximum number of retries."
+)
 @click.option("-t", "--timeout", type=int, default=None, help="The timeout in seconds.")
-@click.option("-ow", "--overwrite", is_flag=True, default=True, help="Whether to overwrite existing output files.")
-@click.option("-co", "--channels_out", type=int, default=None, help="The number of output channels.")
+@click.option(
+    "-ow",
+    "--overwrite",
+    is_flag=True,
+    default=True,
+    help="Whether to overwrite existing output files.",
+)
+@click.option(
+    "-co",
+    "--channels_out",
+    type=int,
+    default=None,
+    help="The number of output channels.",
+)
 @click.pass_context
 def segment_blockwise(
     ctx,

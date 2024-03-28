@@ -19,7 +19,7 @@ class GammaAugment(BatchFilter):
         setup(): Method to configure the internal state of the class
         process(): Method to apply gamma noise to the desired arrays
         __augment(): Private method to perform the actual augmentation
-    
+
     """
 
     def __init__(self, arrays, gamma_min, gamma_max):

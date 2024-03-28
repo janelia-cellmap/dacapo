@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 class StatsStore(ABC):
     """
     Base class for statistics stores.
-    
+
     Methods:
         store_training_stats(run_name, training_stats): Store the training stats of a given run.
         retrieve_training_stats(run_name): Retrieve the training stats for a given run.
@@ -26,7 +26,7 @@ class StatsStore(ABC):
     def store_training_stats(self, run_name: str, training_stats: "TrainingStats"):
         """
         Store training stats of a given run.
-        
+
         Args:
             run_name (str): The name of the run.
             training_stats (TrainingStats): The training stats to store.
@@ -84,7 +84,7 @@ class StatsStore(ABC):
     ) -> List["ValidationIterationScores"]:
         """
         Retrieve the validation iteration scores for a given run.
-        
+
         Args:
             run_name (str): The name of the run.
         Returns:
@@ -106,7 +106,7 @@ class StatsStore(ABC):
         Args:
             run_name (str): The name of the run.
         Raises:
-            ValueError: If the training stats are not available.    
+            ValueError: If the training stats are not available.
         Example:
             >>> store = StatsStore()
             >>> run_name = 'run_0'

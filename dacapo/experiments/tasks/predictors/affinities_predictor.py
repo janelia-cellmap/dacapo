@@ -47,7 +47,7 @@ class AffinitiesPredictor(Predictor):
     Methods:
         __init__(
             self,
-            neighborhood: List[Coordinate], 
+            neighborhood: List[Coordinate],
             lsds: bool = True,
             num_voxels: int = 20,
             downsample_lsds: int = 1,

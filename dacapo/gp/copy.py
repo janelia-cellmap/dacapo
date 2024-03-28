@@ -46,7 +46,7 @@ class CopyMask(gp.BatchFilter):
 
         Raises:
             RuntimeError: If the key is already provided.
-        Examples:   
+        Examples:
             >>> copy_mask.setup()
 
         """

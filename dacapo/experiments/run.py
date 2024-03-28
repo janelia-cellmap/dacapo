@@ -180,7 +180,7 @@ class Run:
             >>> run.move_optimizer(device)
             >>> run.optimizer
             Optimizer object
-            
+
         """
         for state in self.optimizer.state.values():
             for k, v in state.items():

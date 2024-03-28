@@ -20,7 +20,7 @@ from pathlib import Path
 def register_hierarchy_hooks(converter):
     """
     Central place to register type hierarchies for conversion.
-    
+
     Args:
         converter (Converter): The converter to register the hooks with.
     Raises:
@@ -31,7 +31,7 @@ def register_hierarchy_hooks(converter):
         called, the dictionary ``y = converter.unstructure(x)`` will
         contain a ``__type__`` field that is ``'A'`` if ``x = A()`` and
         ``B`` if ``x = B()``.
-        
+
         This ``__type__`` field is then used by ``x =
         converter.structure(y, A)`` to recreate the concrete type of ``x``.
     Note:
@@ -42,7 +42,7 @@ def register_hierarchy_hooks(converter):
             ``__type__`` string will be the concrete class of the object, and
             will be used to structure the dictionary back into an object of the
             correct class.
-    
+
             For this to work, this function needs to know how to convert a
             ``__type__`` string back into a class, for which it used the
             provided ``cls_fn``.
@@ -65,7 +65,7 @@ def register_hooks(converter):
     """
     Central place to register all conversion hooks with the given
     converter.
-    
+
     Args:
         converter (Converter): The converter to register the hooks with.
     Raises:
@@ -76,7 +76,7 @@ def register_hooks(converter):
         called, the dictionary ``y = converter.unstructure(x)`` will
         contain a ``__type__`` field that is ``'A'`` if ``x = A()`` and
         ``B`` if ``x = B()``.
-        
+
         This ``__type__`` field is then used by ``x =
         converter.structure(y, A)`` to recreate the concrete type of ``x``.
     Note:
@@ -87,7 +87,7 @@ def register_hooks(converter):
             ``__type__`` string will be the concrete class of the object, and
             will be used to structure the dictionary back into an object of the
             correct class.
-    
+
             For this to work, this function needs to know how to convert a
             ``__type__`` string back into a class, for which it used the
             provided ``cls_fn``.
@@ -139,7 +139,7 @@ def cls_fun(typ):
     """
     Convert a type string into the corresponding class. The class must be
     visible to this module (hence the star imports at the top).
-    
+
     Args:
         typ (str): The type string to convert.
     Returns:

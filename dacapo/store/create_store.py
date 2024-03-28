@@ -12,7 +12,7 @@ from pathlib import Path
 def create_config_store():
     """
     Create a config store based on the global DaCapo options.
-    
+
     Returns:
         ConfigStore: The created config store.
     Raises:
@@ -40,7 +40,7 @@ def create_config_store():
 def create_stats_store():
     """
     Create a statistics store based on the global DaCapo options.
-    
+
     Args:
         options (Options): The global DaCapo options.
     Returns:
@@ -93,7 +93,7 @@ def create_weights_store():
 def create_array_store():
     """
     Create an array store based on the global DaCapo options.
-    
+
     Args:
         options (Options): The global DaCapo options.
     Returns:

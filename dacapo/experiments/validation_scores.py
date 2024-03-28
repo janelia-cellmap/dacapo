@@ -60,7 +60,7 @@ class ValidationScores:
     ) -> "ValidationScores":
         """
         Create a new ValidationScores object with a subset of the iteration scores.
-        
+
         Args:
             iteration_scores: The iteration scores to include in the new ValidationScores object.
         Returns:
@@ -88,7 +88,7 @@ class ValidationScores:
     ) -> None:
         """
         Add iteration scores to the list of scores.
-        
+
         Args:
             iteration_scores: The iteration scores to add.
         Raises:
@@ -105,7 +105,7 @@ class ValidationScores:
     def delete_after(self, iteration: int) -> None:
         """
         Delete scores after a specified iteration.
-        
+
         Args:
             iteration: The iteration after which to delete the scores.
         Raises:
@@ -122,7 +122,7 @@ class ValidationScores:
     def validated_until(self) -> int:
         """
         Get the number of iterations validated for (the maximum iteration plus one).
-        
+
         Returns:
             The number of iterations validated for.
         Raises:
@@ -147,7 +147,7 @@ class ValidationScores:
         existing ones, delete the existing ones and replace with local.
         If local iteration > existing iteration, just update existing scores with the last
         overhanging local scores.
-        
+
         Args:
             existing_iteration_scores: The existing iteration scores to compare with.
         Returns:
@@ -178,11 +178,11 @@ class ValidationScores:
     def criteria(self) -> List[str]:
         """
         Get the list of evaluation criteria.
-        
+
         Returns:
             The list of evaluation criteria.
         Raises:
-            ValueError: If there are no scores. 
+            ValueError: If there are no scores.
         Examples:
             >>> validation_scores.criteria
         Note:
@@ -195,7 +195,7 @@ class ValidationScores:
     def parameter_names(self) -> List[str]:
         """
         Get the list of parameter names.
-        
+
         Returns:
             The list of parameter names.
         Raises:
@@ -211,7 +211,7 @@ class ValidationScores:
     def to_xarray(self) -> xr.DataArray:
         """
         Convert the validation scores to an xarray DataArray.
-        
+
         Returns:
             An xarray DataArray representing the validation scores.
         Raises:
@@ -247,7 +247,7 @@ class ValidationScores:
         Compute the Best scores along dimension "dim" per criterion.
         Returns both the index associated with the best value, and the
         best value in two separate arrays.
-        
+
         Args:
             data: The data array to compute the best scores from.
             dim: The dimension along which to compute the best scores.

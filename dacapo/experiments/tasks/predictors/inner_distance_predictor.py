@@ -107,7 +107,7 @@ class InnerDistancePredictor(Predictor):
 
         Args:
             gt: The ground-truth array.
-        Returns:    
+        Returns:
             The DistanceArray.
         Raises:
             NotImplementedError: This method is not implemented.
@@ -127,7 +127,7 @@ class InnerDistancePredictor(Predictor):
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
         """
-        Create the weight array for training, given a ground-truth and  
+        Create the weight array for training, given a ground-truth and
         associated target array.
 
         Args:
@@ -141,7 +141,7 @@ class InnerDistancePredictor(Predictor):
             NotImplementedError: This method is not implemented.
         Examples:
             >>> predictor.create_weight(gt, target, mask, moving_class_counts)
-        
+
         """
         # balance weights independently for each channel
 
@@ -238,7 +238,7 @@ class InnerDistancePredictor(Predictor):
 
     def __find_boundaries(self, labels):
         """
-        Find boundaries in a labels array. 
+        Find boundaries in a labels array.
 
         Args:
             labels: The labels array.
@@ -248,7 +248,7 @@ class InnerDistancePredictor(Predictor):
             NotImplementedError: This method is not implemented.
         Examples:
             >>> predictor.__find_boundaries(labels)
-        
+
         """
         # labels: 1 1 1 1 0 0 2 2 2 2 3 3       n
         # shift :   1 1 1 1 0 0 2 2 2 2 3       n - 1
@@ -297,7 +297,7 @@ class InnerDistancePredictor(Predictor):
             normalize_args: The normalization arguments.
         Returns:
             The normalized distances.
-        Raises: 
+        Raises:
             ValueError: If the normalization method is not supported.
         Examples:
             >>> predictor.__normalize(distances, norm, normalize_args)

@@ -40,7 +40,7 @@ class Weights:
 class WeightsStore(ABC):
     """
     Base class for network weight stores.
-    
+
     Methods:
         load_weights(run, iteration): Load the weights of the given iteration into the given run.
         load_best(run, dataset, criterion): Load the best weights for the given run, dataset, and criterion into the given run.
@@ -95,7 +95,7 @@ class WeightsStore(ABC):
         """
         Return the latest iteration for which weights are available for the
         given run.
-        
+
         Args:
             run (str): The name of the run.
         Returns:
@@ -113,7 +113,7 @@ class WeightsStore(ABC):
     def store_weights(self, run: Run, iteration: int) -> None:
         """
         Store the network weights of the given run.
-        
+
         Args:
             run (Run): The run to store the weights of.
             iteration (int): The iteration to store the weights for.
@@ -139,7 +139,7 @@ class WeightsStore(ABC):
             Weights: The weights of the given run and iteration.
         Raises:
             ValueError: If the weights are not available.
-        Examples:  
+        Examples:
             >>> store = WeightsStore()
             >>> run = 'run_0'
             >>> iteration = 0
@@ -157,7 +157,7 @@ class WeightsStore(ABC):
             iteration (int): The iteration to delete the weights for.
         Raises:
             ValueError: If the weights are not available.
-        Examples:   
+        Examples:
             >>> store = WeightsStore()
             >>> run = 'run_0'
             >>> iteration = 0
