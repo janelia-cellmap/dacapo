@@ -16,6 +16,10 @@ class HotDistanceTask(Task):
         loss: HotDistanceLoss object.
         post_processor: ThresholdPostProcessor object.
         evaluator: BinarySegmentationEvaluator object.
+    Methods:
+        __init__(self, task_config): Constructs all the necessary attributes for the HotDistanceTask object.
+    Notes:
+        This is a subclass of Task.
     """
 
     def __init__(self, task_config):
@@ -24,6 +28,10 @@ class HotDistanceTask(Task):
 
         Args:
             task_config : The task configuration parameters.
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> task = HotDistanceTask(task_config)
 
         """
         self.predictor = HotDistancePredictor(
