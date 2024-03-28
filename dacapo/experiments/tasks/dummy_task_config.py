@@ -18,6 +18,10 @@ class DummyTaskConfig(TaskConfig):
         task_type (cls): The type of task. Here, set to DummyTask.
         embedding_dims (int): A dummy attribute represented as an integer.
         detection_threshold (float): Another dummy attribute represented as a float.
+    Methods:
+        verify(self) -> Tuple[bool, str]: This method verifies the DummyTaskConfig object.
+    Note:
+        This is a subclass of TaskConfig.
 
     """
 
@@ -35,5 +39,9 @@ class DummyTaskConfig(TaskConfig):
 
         Returns:
             tuple: A tuple containing a boolean status and a string message.
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> valid, reason = task_config.verify()
         """
         return False, "This is a DummyTaskConfig and is never valid"
