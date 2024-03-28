@@ -11,6 +11,11 @@ class ValidationIterationScores:
         iteration (int): The iteration associated with these validation scores.
         scores (List[List[List[float]]]): A list of scores per dataset, post processor
         parameters, and evaluation criterion.
+    Note:
+        The scores list is structured as follows:
+        - The outer list contains the scores for each dataset.
+        - The middle list contains the scores for each post processor parameter.
+        - The inner list contains the scores for each evaluation criterion.
 
     """
 
