@@ -54,11 +54,6 @@ class ThresholdPostProcessor(PostProcessor):
                 self.prediction_array.voxel_size,
             )
         ]
-        if (
-            self.prediction_array.num_channels is not None
-            and self.prediction_array.num_channels > 1
-        ):
-            write_size = [self.prediction_array.num_channels] + write_size
         output_array = ZarrArray.create_from_array_identifier(
             output_array_identifier,
             self.prediction_array.axes,
