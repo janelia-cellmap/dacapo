@@ -14,9 +14,65 @@ import torch
 import itertools
 
 from typing import List
+from .predictor import Predictor
+from dacapo.experiments import Model
+from dacapo.experiments.arraytypes import EmbeddingArray
+from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+from dacapo.utils.affinities import seg_to_affgraph, padding as aff_padding
+from dacapo.utils.balance_weights import balance_weights
+from funlib.geometry import Coordinate
+from lsd.train import LsdExtractor
+from scipy import ndimage
+import numpy as np
+import torch
+import itertools
+from typing import List
 
 
 class AffinitiesPredictor(Predictor):
+    """
+    A predictor for generating affinity predictions from input data.
+
+    Attributes:
+        neighborhood (List[Coordinate]): The neighborhood.
+        lsds (bool): Whether to compute local shape descriptors.
+        num_voxels (int): The number of voxels.
+        downsample_lsds (int): The downsample rate for LSDs.
+        grow_boundary_iterations (int): The number of iterations to grow the boundary.
+        affs_weight_clipmin (float): The minimum weight for affinities.
+        affs_weight_clipmax (float): The maximum weight for affinities.
+        lsd_weight_clipmin (float): The minimum weight for LSDs.
+        lsd_weight_clipmax (float): The maximum weight for LSDs.
+        background_as_object (bool): Whether to treat the background as an object.
+    Methods:
+        __init__(
+            self,
+            neighborhood: List[Coordinate], 
+            lsds: bool = True,
+            num_voxels: int = 20,
+            downsample_lsds: int = 1,
+            grow_boundary_iterations: int = 0,
+            affs_weight_clipmin: float = 0.05,
+            affs_weight_clipmax: float = 0.95,
+            lsd_weight_clipmin: float = 0.05,
+            lsd_weight_clipmax: float = 0.95,
+            background_as_object: bool = False
+        ): Initializes the AffinitiesPredictor.
+        extractor(self, voxel_size): Get the LSD extractor.
+        dims: Get the number of dimensions.
+        sigma(self, voxel_size): Compute the sigma value for LSD computation.
+        lsd_pad(self, voxel_size): Compute the padding for LSD computation.
+        num_channels: Get the number of channels.
+        create_model(self, architecture): Create the model.
+        create_target(self, gt): Create the target data.
+        _grow_boundaries(self, mask, slab): Grow the boundaries of the mask.
+        create_weight(self, gt, target, mask, moving_class_counts=None): Create the weight data.
+        gt_region_for_roi(self, target_spec): Get the ground truth region for the target region of interest (ROI).
+        output_array_type: Get the output array type.
+    Notes:
+        This is a subclass of Predictor.
+    """
+
     def __init__(
         self,
         neighborhood: List[Coordinate],
@@ -30,6 +86,16 @@ class AffinitiesPredictor(Predictor):
         lsd_weight_clipmax: float = 0.95,
         background_as_object: bool = False,
     ):
+        """
+        Initializes the AffinitiesPredictor.
+
+        Args:
+            neighborhood (List[Coordinate]): The neighborhood.
+        Raises:
+            ValueError: If the number of dimensions is not 2 or 3.
+        Examples:
+            >>> neighborhood = [Coordinate((0, 1)), Coordinate((1, 0))]
+        """
         self.neighborhood = neighborhood
         self.lsds = lsds
         self.num_voxels = num_voxels
@@ -55,6 +121,18 @@ class AffinitiesPredictor(Predictor):
         self.background_as_object = background_as_object
 
     def extractor(self, voxel_size):
+        """
+        Get the LSD extractor.
+
+        Args:
+            voxel_size (Coordinate): The voxel size.
+        Returns:
+            LsdExtractor: The LSD extractor.
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> extractor = predictor.extractor(voxel_size)
+        """
         if self._extractor is None:
             self._extractor = LsdExtractor(
                 self.sigma(voxel_size), downsample=self.downsample_lsds
@@ -64,23 +142,80 @@ class AffinitiesPredictor(Predictor):
 
     @property
     def dims(self):
+        """
+        Get the number of dimensions.
+
+        Returns:
+            int: The number of dimensions.
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> predictor.dims
+
+        """
         return self.neighborhood[0].dims
 
     def sigma(self, voxel_size):
+        """
+        Compute the sigma value for LSD computation.
+
+        Args:
+            voxel_size (Coordinate): The voxel size.
+        Returns:
+            Coordinate: The sigma value.
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> predictor.sigma(voxel_size)
+        """
         voxel_dist = max(voxel_size)  # arbitrarily chosen
         sigma = voxel_dist * self.num_voxels  # arbitrarily chosen
         return Coordinate((sigma,) * self.dims)
 
     def lsd_pad(self, voxel_size):
+        """
+        Compute the padding for LSD computation.
+
+        Args:
+            voxel_size (Coordinate): The voxel size.
+        Returns:
+            Coordinate: The padding value.
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> predictor.lsd_pad(voxel_size)
+        """
         multiplier = 3  # from AddLocalShapeDescriptor Node in funlib.lsd
         padding = Coordinate(self.sigma(voxel_size) * multiplier)
         return padding
 
     @property
     def num_channels(self):
+        """
+        Get the number of channels.
+
+        Returns:
+            int: The number of channels.
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> predictor.num_channels
+        """
         return len(self.neighborhood) + self.num_lsds
 
     def create_model(self, architecture):
+        """
+        Create the model.
+
+        Args:
+            architecture: The architecture for the model.
+        Returns:
+            Model: The created model.
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> model = predictor.create_model(architecture)
+        """
         if self.dims == 2:
             head = torch.nn.Conv2d(
                 architecture.num_out_channels, self.num_channels, kernel_size=1
@@ -97,6 +232,19 @@ class AffinitiesPredictor(Predictor):
         return Model(architecture, head, eval_activation=torch.nn.Sigmoid())
 
     def create_target(self, gt):
+        """
+        Create the target data.
+
+        Args:
+            gt: The ground truth data.
+        Returns:
+            NumpyArray: The created target data.
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> predictor.create_target(gt)
+
+        """
         # zeros
         assert gt.num_channels is None or gt.num_channels == 1, (
             "Cannot create affinities from ground truth with multiple channels.\n"
@@ -130,6 +278,19 @@ class AffinitiesPredictor(Predictor):
         )
 
     def _grow_boundaries(self, mask, slab):
+        """
+        Grow the boundaries of the mask.
+
+        Args:
+            mask: The mask data.
+            slab: The slab definition.
+        Returns:
+            np.ndarray: The mask with grown boundaries.
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> predictor._grow_boundaries(mask, slab)
+        """
         # get all foreground voxels by erosion of each component
         foreground = np.zeros(shape=mask.shape, dtype=bool)
 
@@ -153,6 +314,21 @@ class AffinitiesPredictor(Predictor):
         return mask
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
+        """
+        Create the weight data.
+
+        Args:
+            gt: The ground truth data.
+            target: The target data.
+            mask: The mask data.
+            moving_class_counts: The moving class counts.
+        Returns:
+            Tuple[NumpyArray, Tuple]: The created weight data and moving class counts.
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> predictor.create_weight(gt, target, mask, moving_class_counts)
+        """
         (moving_class_counts, moving_lsd_class_counts) = (
             moving_class_counts if moving_class_counts is not None else (None, None)
         )
@@ -198,6 +374,17 @@ class AffinitiesPredictor(Predictor):
         ), (moving_class_counts, moving_lsd_class_counts)
 
     def gt_region_for_roi(self, target_spec):
+        """
+        Get the ground truth region for the target region of interest (ROI).
+
+        Args:
+            target_spec: The target region of interest (ROI) specification.
+        Returns:
+            The ground truth region specification.
+        Raises:
+            NotImplementedError: This method is not implemented.
+
+        """
         gt_spec = target_spec.copy()
         pad_neg, pad_pos = aff_padding(self.neighborhood, target_spec.voxel_size)
         if self.lsds:
@@ -221,4 +408,14 @@ class AffinitiesPredictor(Predictor):
 
     @property
     def output_array_type(self):
+        """
+        Get the output array type.
+
+        Returns:
+            EmbeddingArray: The output array type.
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> predictor.output_array_type
+        """
         return EmbeddingArray(self.dims)

@@ -37,6 +37,11 @@ def voi(reconstruction, groundtruth, ignore_reconstruction=[], ignore_groundtrut
     (split, merge) : float
         The variation of information split and merge error, i.e., H(X|Y) and H(Y|X)
 
+    Raises
+    ------
+    ValueError
+        If `reconstruction` and `groundtruth` have different shapes.
+        
     References
     ----------
     [1] Meila, M. (2007). Comparing clusterings - an information based
@@ -108,6 +113,11 @@ def vi_tables(x, y=None, ignore_x=[0], ignore_y=[0]):
         The proportions of each label in `x` and `y` (`px`, `py`), the
         per-segment conditional entropies of `x` given `y` and vice-versa, the
         per-segment conditional probability p log p.
+    
+    Raises
+    ------
+    ValueError
+        If `x` and `y` have different shapes.
     """
     if y is not None:
         pxy = contingency_table(x, y, ignore_x, ignore_y)
@@ -164,6 +174,12 @@ def contingency_table(seg, gt, ignore_seg=[0], ignore_gt=[0], norm=True):
         A contingency table. `cont[i, j]` will equal the number of voxels
         labeled `i` in `seg` and `j` in `gt`. (Or the proportion of such voxels
         if `norm=True`.)
+    
+    Raises
+    ------
+    ValueError
+        If `seg` and `gt` have different shapes.
+
     """
     segr = seg.ravel()
     gtr = gt.ravel()
@@ -198,6 +214,11 @@ def divide_columns(matrix, row, in_place=False):
     -------
     out : same type as `matrix`
         The result of the row-wise division.
+    
+    Raises
+    ------
+    ValueError
+        If `row` contains zeros.
     """
     if in_place:
         out = matrix
@@ -237,6 +258,11 @@ def divide_rows(matrix, column, in_place=False):
     -------
     out : same type as `matrix`
         The result of the row-wise division.
+    
+    Raises
+    ------
+    ValueError
+        If `column` contains zeros.
     """
     if in_place:
         out = matrix
@@ -276,6 +302,11 @@ def xlogx(x, out=None, in_place=False):
     -------
     y : same type as x
         Result of x * log_2(x).
+    
+    Raises
+    ------
+    ValueError
+        If x contains negative values.
     """
     if in_place:
         y = x

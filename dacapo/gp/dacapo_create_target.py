@@ -7,44 +7,86 @@ from typing import Optional
 
 
 class DaCapoTargetFilter(gp.BatchFilter):
-    """A Gunpowder node for generating the target from the ground truth
+    """
+    A Gunpowder node for generating the target from the ground truth
 
-    Args:
-
+    Attributes:
         Predictor (Predictor):
-
             The DaCapo Predictor to use to transform gt into target
-
         gt (``Array``):
-
             The dataset to use for generating the target.
-
         target_key (``gp.ArrayKey``):
-
             The key with which to provide the target.
+        weights_key (``gp.ArrayKey``):
+            The key with which to provide the weights.
+        mask_key (``gp.ArrayKey``):
+            The key with which to provide the mask.
+    Methods:
+        setup(): Set up the provider.
+        prepare(request): Prepare the request.
+        process(batch, request): Process the batch.
+    Note:
+        This class is a subclass of gunpowder.BatchFilter and is used to
+        generate the target from the ground truth.
     """
 
     def __init__(
-        self,
-        predictor: Predictor,
-        gt_key: gp.ArrayKey,
-        target_key: Optional[gp.ArrayKey] = None,
-        weights_key: Optional[gp.ArrayKey] = None,
-        mask_key: Optional[gp.ArrayKey] = None,
-    ):
-        self.predictor = predictor
-        self.gt_key = gt_key
-        self.target_key = target_key
-        self.weights_key = weights_key
-        self.mask_key = mask_key
+            self,
+            predictor: Predictor,
+            gt_key: gp.ArrayKey,
+            target_key: Optional[gp.ArrayKey] = None,
+            weights_key: Optional[gp.ArrayKey] = None,
+            mask_key: Optional[gp.ArrayKey] = None,
+        ):
+            """
+            Initialize the DacapoCreateTarget object.
 
-        self.moving_counts = None
+            Args:
+                predictor (Predictor): The predictor object used for prediction.
+                gt_key (gp.ArrayKey): The ground truth key.
+                target_key (Optional[gp.ArrayKey]): The target key. Defaults to None.
+                weights_key (Optional[gp.ArrayKey]): The weights key. Defaults to None.
+                mask_key (Optional[gp.ArrayKey]): The mask key. Defaults to None.
+            Raises:
+                AssertionError: If neither target_key nor weights_key is provided.
+            Examples:
+                >>> from dacapo.experiments.tasks.predictors import Predictor
+                >>> from gunpowder import ArrayKey
+                >>> from gunpowder import ArrayKey
+                >>> from gunpowder import ArrayKey
+                >>> predictor = Predictor()
+                >>> gt_key = ArrayKey("GT")
+                >>> target_key = ArrayKey("TARGET")
+                >>> weights_key = ArrayKey("WEIGHTS")
+                >>> mask_key = ArrayKey("MASK")
+                >>> target_filter = DaCapoTargetFilter(predictor, gt_key, target_key, weights_key, mask_key)
+            Note:
+                The target filter is used to generate the target from the ground truth. 
 
-        assert (
-            target_key is not None or weights_key is not None
-        ), "Must provide either target or weights"
+            """
+            self.predictor = predictor
+            self.gt_key = gt_key
+            self.target_key = target_key
+            self.weights_key = weights_key
+            self.mask_key = mask_key
+
+            self.moving_counts = None
+
+            assert (
+                target_key is not None or weights_key is not None
+            ), "Must provide either target or weights"
 
     def setup(self):
+        """
+        Set up the provider. This function sets the provider to provide the
+        target with the given key.
+        
+        Raises:
+            RuntimeError: If the key is already provided.
+        Examples:
+            >>> target_filter.setup()
+
+        """
         provided_spec = gp.ArraySpec(
             roi=self.spec[self.gt_key].roi,
             voxel_size=self.spec[self.gt_key].voxel_size,
@@ -62,6 +104,21 @@ class DaCapoTargetFilter(gp.BatchFilter):
             self.provides(self.weights_key, provided_spec)
 
     def prepare(self, request):
+        """
+        Prepare the request.
+
+        Args:
+            request (gp.BatchRequest): The request to prepare.
+        Returns:
+            deps (gp.BatchRequest): The dependencies.
+        Raises:
+            NotImplementedError: If the target_key is not provided.
+        Examples:
+            >>> request = gp.BatchRequest()
+            >>> request[gp.ArrayKey("GT")] = gp.ArraySpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
+            >>> target_filter.prepare(request)
+
+        """
         deps = gp.BatchRequest()
         # TODO: Does the gt depend on weights too?
         request_spec = None
@@ -80,6 +137,19 @@ class DaCapoTargetFilter(gp.BatchFilter):
         return deps
 
     def process(self, batch, request):
+        """
+        Process the batch.
+
+        Args:
+            batch (gp.Batch): The batch to process.
+            request (gp.BatchRequest): The request to process.
+        Returns:
+            output (gp.Batch): The output batch.
+        Examples:
+            >>> request = gp.BatchRequest()
+            >>> request[gp.ArrayKey("GT")] = gp.ArraySpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
+            >>> target_filter.process(batch, request)
+        """
         output = gp.Batch()
 
         gt_array = NumpyArray.from_gp_array(batch[self.gt_key])
