@@ -14,6 +14,7 @@ class NoSuchModule:
         __getattr__(item): Raises the exception.
 
     """
+
     def __init__(self, name):
         """
         Initializes the NoSuchModule object.
@@ -39,6 +40,6 @@ class NoSuchModule:
             Exception: The exception raised.
         Examples:
             >>> module.function()
-            
+
         """
         raise self.__exception

@@ -7,7 +7,7 @@ class TypedConverter(Converter):
     """A converter that stores and retrieves type information for selected
     class hierarchies. Used to reconstruct a concrete class from unstructured
     data.
-    
+
     Attributes:
         hooks (Dict[Type, List[Hook]]): A dictionary mapping classes to lists of
             hooks that should be applied to them.
@@ -39,7 +39,7 @@ class TypedConverter(Converter):
         For this to work, this function needs to know how to convert a
         ``__type__`` string back into a class, for which it used the provided
         ``cls_fn``.
-        
+
         Args:
             cls (class):
 
@@ -69,7 +69,7 @@ class TypedConverter(Converter):
                 ``__type__`` string will be the concrete class of the object, and
                 will be used to structure the dictionary back into an object of the
                 correct class.
-    
+
                 For this to work, this function needs to know how to convert a
                 ``__type__`` string back into a class, for which it used the
                 provided ``cls_fn``.
@@ -83,7 +83,7 @@ class TypedConverter(Converter):
 
     def __typed_unstructure(self, obj):
         """
-        Unstructure an object, adding a '__type__' field with the class name.  
+        Unstructure an object, adding a '__type__' field with the class name.
 
         Args:
             obj (object): The object to unstructure.
@@ -117,7 +117,7 @@ class TypedConverter(Converter):
             to determine the class. This is useful for reconstructing a concrete
             class from unstructured data.
         """
-            
+
         cls = cls_fn(obj_data["__type__"])
         structure_fn = make_dict_structure_fn(cls, self)
         return structure_fn(obj_data, cls)

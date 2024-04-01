@@ -88,58 +88,58 @@ class MongoConfigStore(ConfigStore):
         self.__init_db()
 
     def delete_config(self, database, config_name: str) -> None:
-            """
-            Deletes a configuration from the database.
+        """
+        Deletes a configuration from the database.
 
-            Args:
-                database: The database object.
-                config_name: The name of the configuration to delete.
-            Raises:
-                ValueError: If the configuration is not available.
-            Examples:
-                >>> store = MongoConfigStore('localhost', 'dacapo')
-                >>> config_name = 'config_0'
-                >>> store.delete_config(store.tasks, config_name)
-            """
-            database.delete_one({"name": config_name})
+        Args:
+            database: The database object.
+            config_name: The name of the configuration to delete.
+        Raises:
+            ValueError: If the configuration is not available.
+        Examples:
+            >>> store = MongoConfigStore('localhost', 'dacapo')
+            >>> config_name = 'config_0'
+            >>> store.delete_config(store.tasks, config_name)
+        """
+        database.delete_one({"name": config_name})
 
     def store_run_config(self, run_config, ignore=None):
-            """
-            Stores the run configuration in the MongoDB runs collection.
+        """
+        Stores the run configuration in the MongoDB runs collection.
 
-            Args:
-                run_config (dict): The run configuration to be stored.
-                ignore (list, optional): A list of fields to ignore during the storage process.
-            Raises:
-                DuplicateNameError: If the run configuration is already stored.
-            Examples:
-                >>> store = MongoConfigStore('localhost', 'dacapo')
-                >>> run_config = {'name': 'run_0'}
-                >>> store.store_run_config(run_config)
-            """
-            run_doc = converter.unstructure(run_config)
-            self.__save_insert(self.runs, run_doc, ignore)
+        Args:
+            run_config (dict): The run configuration to be stored.
+            ignore (list, optional): A list of fields to ignore during the storage process.
+        Raises:
+            DuplicateNameError: If the run configuration is already stored.
+        Examples:
+            >>> store = MongoConfigStore('localhost', 'dacapo')
+            >>> run_config = {'name': 'run_0'}
+            >>> store.store_run_config(run_config)
+        """
+        run_doc = converter.unstructure(run_config)
+        self.__save_insert(self.runs, run_doc, ignore)
 
     def retrieve_run_config(self, run_name):
-            """
-            Retrieve the run configuration for a given run name.
+        """
+        Retrieve the run configuration for a given run name.
 
-            Args:
-                run_name (str): The name of the run.
-            Returns:
-                RunConfig: The run configuration for the given run name.
-            Raises:
-                ValueError: If the run configuration is not available.
-            Examples:
-                >>> store = MongoConfigStore('localhost', 'dacapo')
-                >>> run_name = 'run_0'
-                >>> store.retrieve_run_config(run_name)
-            """
-            run_doc = self.runs.find_one({"name": run_name}, projection={"_id": False})
-            try:
-                return converter.structure(run_doc, RunConfig)
-            except TypeError as e:
-                raise TypeError(f"Could not structure run: {run_name} as RunConfig!") from e
+        Args:
+            run_name (str): The name of the run.
+        Returns:
+            RunConfig: The run configuration for the given run name.
+        Raises:
+            ValueError: If the run configuration is not available.
+        Examples:
+            >>> store = MongoConfigStore('localhost', 'dacapo')
+            >>> run_name = 'run_0'
+            >>> store.retrieve_run_config(run_name)
+        """
+        run_doc = self.runs.find_one({"name": run_name}, projection={"_id": False})
+        try:
+            return converter.structure(run_doc, RunConfig)
+        except TypeError as e:
+            raise TypeError(f"Could not structure run: {run_name} as RunConfig!") from e
 
     def delete_run_config(self, run_name):
         """
@@ -213,37 +213,37 @@ class MongoConfigStore(ConfigStore):
         self.__save_insert(self.tasks, task_doc, ignore)
 
     def retrieve_task_config(self, task_name):
-            """
-            Retrieve the task configuration for a given task name.
+        """
+        Retrieve the task configuration for a given task name.
 
-            Args:
-                task_name (str): The name of the task.
-            Returns:
-                TaskConfig: The task configuration object.
-            Examples:
-                >>> store = MongoConfigStore('localhost', 'dacapo')
-                >>> task_name = 'task_0'
-                >>> store.retrieve_task_config(task_name)
+        Args:
+            task_name (str): The name of the task.
+        Returns:
+            TaskConfig: The task configuration object.
+        Examples:
+            >>> store = MongoConfigStore('localhost', 'dacapo')
+            >>> task_name = 'task_0'
+            >>> store.retrieve_task_config(task_name)
 
-            """
-            task_doc = self.tasks.find_one({"name": task_name}, projection={"_id": False})
-            return converter.structure(task_doc, TaskConfig)
+        """
+        task_doc = self.tasks.find_one({"name": task_name}, projection={"_id": False})
+        return converter.structure(task_doc, TaskConfig)
 
     def retrieve_task_config_names(self):
-            """
-            Retrieve the names of all task configurations.
+        """
+        Retrieve the names of all task configurations.
 
-            Returns:
-                A list of task configuration names.
-            Raises:
-                ValueError: If the task configurations are not available.
-            Examples:
-                >>> store = MongoConfigStore('localhost', 'dacapo')
-                >>> store.retrieve_task_config_names()
+        Returns:
+            A list of task configuration names.
+        Raises:
+            ValueError: If the task configurations are not available.
+        Examples:
+            >>> store = MongoConfigStore('localhost', 'dacapo')
+            >>> store.retrieve_task_config_names()
 
-            """
-            tasks = self.tasks.find({}, projection={"_id": False, "name": True})
-            return list([task["name"] for task in tasks])
+        """
+        tasks = self.tasks.find({}, projection={"_id": False, "name": True})
+        return list([task["name"] for task in tasks])
 
     def store_architecture_config(self, architecture_config, ignore=None):
         """
@@ -294,7 +294,7 @@ class MongoConfigStore(ConfigStore):
         Examples:
             >>> store = MongoConfigStore('localhost', 'dacapo')
             >>> store.retrieve_architecture_config_names()
-        
+
         """
         architectures = self.architectures.find(
             {}, projection={"_id": False, "name": True}
@@ -323,7 +323,7 @@ class MongoConfigStore(ConfigStore):
     def retrieve_trainer_config(self, trainer_name):
         """
         Retrieve the trainer configuration for the given trainer name.
-        
+
         Args:
             trainer_name (str): The name of the trainer.
         Returns:
@@ -427,7 +427,7 @@ class MongoConfigStore(ConfigStore):
             >>> store = MongoConfigStore('localhost', 'dacapo')
             >>> dataset_config = DatasetConfig(name='dataset_0')
             >>> store.store_dataset_config(dataset_config)
-    
+
         """
         dataset_doc = converter.unstructure(dataset_config)
         self.__save_insert(self.datasets, dataset_doc, ignore)
@@ -490,14 +490,14 @@ class MongoConfigStore(ConfigStore):
     def retrieve_array_config(self, array_name):
         """
         Retrieve the array configuration for the given array name.
-        
+
         Args:
             array_name (str): The name of the array.
         Returns:
             ArrayConfig: The array configuration object.
         Raises:
             ValueError: If the array configuration is not available.
-        Examples:    
+        Examples:
             >>> store = MongoConfigStore('localhost', 'dacapo')
             >>> array_name = 'array_0'
             >>> store.retrieve_array_config(array_name)
@@ -511,7 +511,7 @@ class MongoConfigStore(ConfigStore):
     def retrieve_array_config_names(self):
         """
         Retrieve the names of all array configurations.
-        
+
         Returns:
             A list of array configuration names.
         Raises:
@@ -557,7 +557,7 @@ class MongoConfigStore(ConfigStore):
     def __same_doc(self, a, b, ignore=None):
         """
         Check if two documents are the same.
-        
+
         Args:
             a (dict): The first document.
             b (dict): The second document.
@@ -571,7 +571,7 @@ class MongoConfigStore(ConfigStore):
             >>> a = {'name': 'run_0'}
             >>> b = {'name': 'run_0'}
             >>> store.__same_doc(a, b)
-       
+
         """
         if ignore:
             a = dict(a)
@@ -596,7 +596,7 @@ class MongoConfigStore(ConfigStore):
         Examples:
             >>> store = MongoConfigStore('localhost', 'dacapo')
             >>> store.__init_db()
-        """    
+        """
         self.users.create_index([("username", ASCENDING)], name="username", unique=True)
 
         self.runs.create_index(

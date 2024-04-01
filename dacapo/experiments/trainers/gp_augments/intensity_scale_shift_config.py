@@ -18,6 +18,7 @@ class IntensityScaleShiftAugmentConfig(AugmentConfig):
     Note:
         This class is a subclass of AugmentConfig.
     """
+
     scale: float = attr.ib(
         metadata={"help_text": "A constant to scale your intensities."}
     )

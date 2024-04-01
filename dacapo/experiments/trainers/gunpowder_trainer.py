@@ -63,9 +63,10 @@ class GunpowderTrainer(Trainer):
         can_train(datasets: List[Dataset]) -> bool:
             Checks if the trainer can train with a specific set of datasets.
     Note:
-        The GunpowderTrainer class is a subclass of the Trainer class. It is used to train a model using gunpowder.           
-    
+        The GunpowderTrainer class is a subclass of the Trainer class. It is used to train a model using gunpowder.
+
     """
+
     iteration = 0
 
     def __init__(self, trainer_config):
@@ -130,7 +131,7 @@ class GunpowderTrainer(Trainer):
             NotImplementedError: If the method is not implemented by the subclass.
         Examples:
             >>> trainer.build_batch_provider(datasets, model, task, snapshot_container)
-        
+
         """
         input_shape = Coordinate(model.input_shape)
         output_shape = Coordinate(model.output_shape)
@@ -285,7 +286,7 @@ class GunpowderTrainer(Trainer):
         Examples:
             >>> for iteration_stats in trainer.iterate(num_iterations, model, optimizer, device):
             >>>     print(iteration_stats)
-        
+
         """
         t_start_fetch = time.time()
 
@@ -410,7 +411,7 @@ class GunpowderTrainer(Trainer):
 
     def next(self):
         """
-        Fetches the next batch of data. 
+        Fetches the next batch of data.
 
         Returns:
             Tuple[NumpyArray, NumpyArray, NumpyArray, NumpyArray, NumpyArray]: A tuple containing the raw data, ground truth data, target data, weight data, and mask data.
@@ -461,7 +462,7 @@ class GunpowderTrainer(Trainer):
             NotImplementedError: If the method is not implemented by the subclass.
         Examples:
             >>> with trainer:
-            >>>     pass    
+            >>>     pass
         """
         try:
             self._iter.send(True)
@@ -481,6 +482,6 @@ class GunpowderTrainer(Trainer):
             NotImplementedError: If the method is not implemented by the subclass.
         Examples:
             >>> can_train = trainer.can_train(datasets)
-            
+
         """
         return all([dataset.gt is not None for dataset in datasets])

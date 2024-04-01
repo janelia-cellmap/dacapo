@@ -18,7 +18,7 @@ class FileConfigStore(ConfigStore):
     """
     A Local File based store for configurations. Used to store and retrieve
     configurations for runs, tasks, architectures, trainers, and datasplits.
-    
+
     Attributes:
         path (Path): The path to the file.
     Methods:
@@ -100,14 +100,14 @@ class FileConfigStore(ConfigStore):
     def retrieve_run_config_names(self):
         """
         Retrieve the names of the run configurations.
-        
+
         Returns:
             A list of run configuration names.
         Raises:
             KeyError: If no run configurations are stored.
         Examples:
             >>> run_names = store.retrieve_run_config_names()
-            
+
         """
         return [f.name[:-5] for f in self.runs.iterdir()]
 
@@ -122,7 +122,7 @@ class FileConfigStore(ConfigStore):
             DuplicateNameError: If a configuration with the same name already exists.
         Examples:
             >>> store.store_task_config(task_config)
-        
+
         """
         task_doc = converter.unstructure(task_config)
         self.__save_insert(self.tasks, task_doc, ignore)
@@ -130,7 +130,7 @@ class FileConfigStore(ConfigStore):
     def retrieve_task_config(self, task_name):
         """
         Retrieve the task configuration for a given task name.
-        
+
         Args:
             task_name (str): The name of the task configuration to retrieve.
         Returns:
@@ -147,7 +147,7 @@ class FileConfigStore(ConfigStore):
     def retrieve_task_config_names(self):
         """
         Retrieve the names of the task configurations.
-        
+
         Returns:
             A list of task configuration names.
         Raises:
@@ -160,7 +160,7 @@ class FileConfigStore(ConfigStore):
     def store_architecture_config(self, architecture_config, ignore=None):
         """
         Stores the architecture configuration in the file config store.
-        
+
         Args:
             architecture_config (ArchitectureConfig): The architecture configuration to store.
             ignore (list, optional): A list of keys to ignore when comparing the stored configuration with the new configuration. Defaults to None.
@@ -174,7 +174,7 @@ class FileConfigStore(ConfigStore):
 
     def retrieve_architecture_config(self, architecture_name):
         """
-        Retrieve the architecture configuration for a given architecture name. 
+        Retrieve the architecture configuration for a given architecture name.
 
         Args:
             architecture_name (str): The name of the architecture configuration to retrieve.
@@ -219,7 +219,7 @@ class FileConfigStore(ConfigStore):
     def retrieve_trainer_config(self, trainer_name):
         """
         Retrieve the trainer configuration for a given trainer name.
-        
+
         Args:
             trainer_name (str): The name of the trainer configuration to retrieve.
         Returns:
@@ -228,7 +228,7 @@ class FileConfigStore(ConfigStore):
             KeyError: If the trainer name does not exist in the store.
         Examples:
             >>> trainer_config = store.retrieve_trainer_config("trainer1")
-        
+
         """
         trainer_doc = self.__load(self.trainers, trainer_name)
         return converter.structure(trainer_doc, TrainerConfig)
@@ -236,7 +236,7 @@ class FileConfigStore(ConfigStore):
     def retrieve_trainer_config_names(self):
         """
         Retrieve the names of the trainer configurations.
-        
+
         Args:
             trainer_name (str): The name of the trainer configuration to retrieve.
         Returns:
@@ -288,7 +288,7 @@ class FileConfigStore(ConfigStore):
             datasplit_name (str): The name of the datasplit configuration to retrieve.
         Returns:
             DataSplitConfig: The datasplit configuration object.
-        Raises: 
+        Raises:
             KeyError: If the datasplit name does not exist in the store.
         Examples:
             >>> datasplit_config = store.retrieve_datasplit_config("datasplit1")
@@ -314,7 +314,7 @@ class FileConfigStore(ConfigStore):
 
     def retrieve_array_config(self, array_name):
         """
-        Retrieve the array configuration for a given array name.    
+        Retrieve the array configuration for a given array name.
 
         Args:
             array_name (str): The name of the array configuration to retrieve.
@@ -375,7 +375,7 @@ class FileConfigStore(ConfigStore):
 
     def __load(self, collection, name):
         """
-        Loads the data from the collection. 
+        Loads the data from the collection.
 
         Args:
             collection (Path): The path to the collection.
@@ -429,7 +429,7 @@ class FileConfigStore(ConfigStore):
             FileNotFoundError: If the collections do not exist.
         Examples:
             >>> store.__init_db()
-        
+
         """
         # no indexing for filesystem
         # please only use this config store for debugging
@@ -456,7 +456,7 @@ class FileConfigStore(ConfigStore):
     def users(self) -> Path:
         """
         Returns the path to the users directory.
-        
+
         Returns:
             Path: The path to the users directory.
         Raises:
@@ -561,7 +561,7 @@ class FileConfigStore(ConfigStore):
     def datasets(self) -> Path:
         """
         Returns the path to the datasets directory.
-    
+
         Returns:
             Path: The path to the datasets directory.
         Raises:
@@ -572,6 +572,7 @@ class FileConfigStore(ConfigStore):
 
         """
         return self.path / "datasets"
+
     def delete_config(self, database: Path, config_name: str) -> None:
         """
         Deletes a configuration file from the specified database.
@@ -583,6 +584,6 @@ class FileConfigStore(ConfigStore):
             FileNotFoundError: If the configuration file does not exist.
         Examples:
             >>> store.delete_config(Path("path/to/configs"), "run1")
-    
+
         """
         (database / f"{config_name}.yaml").unlink()

@@ -12,7 +12,7 @@ import numpy as np
 class DaCapoArraySource(gp.BatchProvider):
     """
     A DaCapo Array source node
-    
+
     Attributes:
         array (Array): The array to be served.
         key (gp.ArrayKey): The key of the array to be served.
@@ -49,7 +49,7 @@ class DaCapoArraySource(gp.BatchProvider):
     def setup(self):
         """
         Adds the key and the array spec to the provider.
-        
+
         Raises:
             RuntimeError: If the key is already provided.
         Examples:
@@ -70,7 +70,7 @@ class DaCapoArraySource(gp.BatchProvider):
             ValueError: If the input data contains NaN values
         Examples:
             >>> array_source.provide(request)
-            
+
         """
         output = gp.Batch()
 

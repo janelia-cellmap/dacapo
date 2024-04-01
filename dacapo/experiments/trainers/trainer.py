@@ -33,7 +33,7 @@ class Trainer(ABC):
         build_batch_provider(datasets: List[Dataset], model: Model, task: Task, snapshot_container: LocalContainerIdentifier) -> None:
             Initializes the training pipeline using various components.
     Note:
-        The Trainer class is an abstract class that cannot be instantiated directly. It is meant to be subclassed. 
+        The Trainer class is an abstract class that cannot be instantiated directly. It is meant to be subclassed.
     """
 
     iteration: int
@@ -137,7 +137,7 @@ class Trainer(ABC):
     def __enter__(self):
         """
         Defines the functionality of the '__enter__' method for use in a 'with' statement.
-        
+
         Returns:
             Trainer: The trainer object.
         Raises:
@@ -153,7 +153,7 @@ class Trainer(ABC):
     def __exit__(self, exc_type, exc_val, exc_tb):
         """
         Defines the functionality of the '__exit__' method for use in a 'with' statement.
-        
+
         Args:
             exc_type: The type of exception raised.
             exc_val: The exception value.

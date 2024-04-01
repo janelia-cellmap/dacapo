@@ -31,7 +31,7 @@ RunInfo = namedtuple(
 def smooth_values(a, n, stride=1):
     """
     Smooth values with a moving average.
-    
+
     Args:
         a: values to smooth
         n: number of values to average
@@ -136,9 +136,9 @@ def plot_runs(
         return_json: Whether to return JSON
     Returns:
         JSON or HTML plot
-    Raises: 
+    Raises:
         ValueError: If run_name is not found in config store
-    Examples:   
+    Examples:
         >>> plot_runs(["run_name"], 100, None, None, [True])
 
     """

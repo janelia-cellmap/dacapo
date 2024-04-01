@@ -179,7 +179,7 @@ def _create_uniform_3d_transformation(shape, rotation, subsample=1, voxel_size=N
         AssertionError: If the subsample is not an integer.
     Examples:
         >>> _create_uniform_3d_transformation((10, 10, 10), Rotation.from_euler('xyz', [0.5, 0.5, 0.5]))
-    Notes:  
+    Notes:
         The rotation is performed around the center of the volume.
     """
     dims = len(shape)
@@ -408,7 +408,7 @@ class ElasticAugment(BatchFilter):
             # Todo we could probably remove snap_to_grid, we already check spec.roi % voxel_size == 0
 
             target_roi = spec.roi.snap_to_grid(voxel_size)
-            
+
             self.target_rois[key] = target_roi
             target_roi_voxels = target_roi // voxel_size
 
@@ -550,7 +550,7 @@ class ElasticAugment(BatchFilter):
             AssertionError: If the subsample is not an integer.
         Examples:
             >>> _create_transformation((10, 10, 10), (0, 0, 0))
-            
+
         """
         logger.debug(
             f"creating displacement for shape {target_shape}, subsample {self.subsample}",
@@ -657,7 +657,7 @@ class ElasticAugment(BatchFilter):
             ndarray: The transformed array.
         Raises:
             AssertionError: If the scale is not a scalar or 1-D array.
-        Examples:   
+        Examples:
             >>> _affine(array, scale, offset, target_roi)
         References:
             taken from the scipy 0.18.1 doc:

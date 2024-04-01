@@ -19,15 +19,16 @@ class DuplicateNameError(Exception):
         message (str): The error message.
     Methods:
         __str__: Return the error message.
-    
+
     """
+
     pass
 
 
 class ConfigStore(ABC):
     """
     Base class for configuration stores.
-    
+
     Attributes:
         runs (Any): The runs store.
         datasplits (Any): The datasplits store.
@@ -91,7 +92,7 @@ class ConfigStore(ABC):
             KeyError: If the config does not exist.
         Examples:
             >>> store.delete_config(store.runs, "run1")
-        
+
         """
         pass
 
@@ -101,7 +102,7 @@ class ConfigStore(ABC):
         Store a run config. This should also store the configs that are part
         of the run config (i.e., task, architecture, trainer, and dataset
         config).
-        
+
         Args:
             run_config (RunConfig): The run config to store.
         Raises:
@@ -117,7 +118,7 @@ class ConfigStore(ABC):
     def retrieve_run_config(self, run_name: str) -> "RunConfig":
         """
         Retrieve a run config from a run name.
-        
+
         Args:
             run_name (str): The name of the run config to retrieve.
         Returns:
@@ -126,7 +127,7 @@ class ConfigStore(ABC):
             KeyError: If the run config does not exist.
         Examples:
             >>> run_config = store.retrieve_run_config("run1")
-        
+
         """
         pass
 
@@ -134,7 +135,7 @@ class ConfigStore(ABC):
     def retrieve_run_config_names(self) -> List[str]:
         """
         Retrieve all run config names.
-        
+
         Returns:
             List[str]: The names of all run configs.
         Raises:
@@ -162,7 +163,7 @@ class ConfigStore(ABC):
     def store_task_config(self, task_config: "TaskConfig") -> None:
         """
         Store a task config.
-        
+
         Args:
             task_config (TaskConfig): The task config to store.
         Raises:
@@ -187,7 +188,7 @@ class ConfigStore(ABC):
             KeyError: If the task config does not exist.
         Examples:
             >>> task_config = store.retrieve_task_config("task1")
-        
+
         """
         pass
 
@@ -195,7 +196,7 @@ class ConfigStore(ABC):
     def retrieve_task_config_names(self) -> List[str]:
         """
         Retrieve all task config names.
-        
+
         Args:
             List[str]: The names of all task configs.
         Returns:
@@ -228,7 +229,7 @@ class ConfigStore(ABC):
     ) -> None:
         """
         Store a architecture config.
-        
+
         Args:
             architecture_config (ArchitectureConfig): The architecture config
                 to store.
@@ -246,7 +247,7 @@ class ConfigStore(ABC):
     ) -> "ArchitectureConfig":
         """
         Retrieve a architecture config from a architecture name.
-        
+
         Args:
             architecture_name (str): The name of the architecture config to
                 retrieve.
@@ -263,7 +264,7 @@ class ConfigStore(ABC):
     def retrieve_architecture_config_names(self) -> List[str]:
         """
         Retrieve all architecture config names.
-        
+
         Args:
             List[str]: The names of all architecture configs.
         Returns:
@@ -278,7 +279,7 @@ class ConfigStore(ABC):
     def delete_architecture_config(self, architecture_name: str) -> None:
         """
         Delete a architecture config from the store.
-        
+
         Args:
             architecture_name (str): The name of the architecture config to
                 delete.
@@ -293,7 +294,7 @@ class ConfigStore(ABC):
     def store_trainer_config(self, trainer_config: "TrainerConfig") -> None:
         """
         Store a trainer config.
-        
+
         Args:
             trainer_config (TrainerConfig): The trainer config to store.
         Raises:
@@ -310,7 +311,7 @@ class ConfigStore(ABC):
         Retrieve a trainer config from a trainer name.
 
         Args:
-            trainer_name (str): The name of the trainer config to retrieve. 
+            trainer_name (str): The name of the trainer config to retrieve.
         Returns:
             TrainerConfig: The trainer config with the given name.
         Raises:
@@ -331,7 +332,7 @@ class ConfigStore(ABC):
             List[str]: The names of all trainer configs.
         Raises:
             KeyError: If no trainer configs exist.
-        Examples:   
+        Examples:
             >>> trainer_names = store.retrieve_trainer_config_names()
 
         """
@@ -345,7 +346,7 @@ class ConfigStore(ABC):
             trainer_name (str): The name of the trainer config to delete.
         Raises:
             KeyError: If the trainer config does not exist.
-        Examples:   
+        Examples:
             >>> store.delete_trainer_config("trainer1")
 
         """
@@ -355,7 +356,7 @@ class ConfigStore(ABC):
     def store_datasplit_config(self, datasplit_config: "DataSplitConfig") -> None:
         """
         Store a datasplit config.
-        
+
         Args:
             datasplit_config (DataSplitConfig): The datasplit config to store.
         Raises:
@@ -370,7 +371,7 @@ class ConfigStore(ABC):
     def retrieve_datasplit_config(self, datasplit_name: str) -> "DataSplitConfig":
         """
         Retrieve a datasplit config from a datasplit name.
-        
+
         Args:
             datasplit_name (str): The name of the datasplit config to retrieve.
         Returns:
@@ -386,7 +387,7 @@ class ConfigStore(ABC):
     def retrieve_datasplit_config_names(self) -> List[str]:
         """
         Retrieve all datasplit names.
-        
+
         Args:
             List[str]: The names of all datasplit configs.
         Returns:
@@ -406,7 +407,7 @@ class ConfigStore(ABC):
     def store_array_config(self, array_config: "ArrayConfig") -> None:
         """
         Store a array config.
-        
+
         Args:
             array_config (ArrayConfig): The array config to store.
         Raises:
@@ -421,7 +422,7 @@ class ConfigStore(ABC):
     def retrieve_array_config(self, array_name: str) -> "ArrayConfig":
         """
         Retrieve a array config from a array name.
-        
+
         Args:
             array_name (str): The name of the array config to retrieve.
         Returns:
@@ -437,7 +438,7 @@ class ConfigStore(ABC):
     def retrieve_array_config_names(self) -> List[str]:
         """
         Retrieve all array names.
-        
+
         Args:
             List[str]: The names of all array configs.
         Returns:
