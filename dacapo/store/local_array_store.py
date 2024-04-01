@@ -21,8 +21,8 @@ class LocalArrayStore(ArrayStore):
         validation_input_arrays: Get the array identifiers for the validation input raw/gt.
         snapshot_container: Get a container identifier for storage of a snapshot.
         validation_container: Get a container identifier for storage of a validation.
-        remove: Remove a dataset from a container. 
-    
+        remove: Remove a dataset from a container.
+
     """
 
     def __init__(self, basedir):
@@ -140,7 +140,6 @@ class LocalArrayStore(ArrayStore):
             LocalArrayIdentifier(container, f"{dataset_prefix}/raw"),
             LocalArrayIdentifier(container, f"{dataset_prefix}/gt"),
         )
-
 
     def snapshot_container(self, run_name: str) -> LocalContainerIdentifier:
         """

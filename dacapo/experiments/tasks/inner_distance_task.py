@@ -32,7 +32,7 @@ class InnerDistanceTask(Task):
             NotImplementedError: This method is not implemented.
         Examples:
             >>> task = InnerDistanceTask(task_config)
-            
+
         """
 
         self.predictor = InnerDistancePredictor(

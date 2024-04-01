@@ -25,7 +25,7 @@ class ElasticAugmentConfig(AugmentConfig):
     Methods:
         node(_raw_key=None, _gt_key=None, _mask_key=None): Returns the object of ElasticAugment with the given
                                                           configuration details.
-    
+
     """
 
     control_point_spacing: List[int] = attr.ib(
@@ -79,7 +79,7 @@ class ElasticAugmentConfig(AugmentConfig):
             NotImplementedError: This method is not implemented.
         Examples:
             >>> node = elastic_augment_config.node()
-            
+
         """
         return ElasticAugment(
             control_point_spacing=self.control_point_spacing,

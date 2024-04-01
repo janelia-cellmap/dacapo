@@ -18,8 +18,9 @@ class IntensityAugmentConfig(AugmentConfig):
         clip (bool): Set to False if modified values should not be clipped to [0, 1]
     Methods:
         node(raw_key, _gt_key=None, _mask_key=None): Get a gp.IntensityAugment node.
-    
+
     """
+
     scale: Tuple[float, float] = attr.ib(
         metadata={"help_text": "A range within which to choose a random scale factor."}
     )

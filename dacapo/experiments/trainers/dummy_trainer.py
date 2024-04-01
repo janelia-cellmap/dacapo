@@ -28,6 +28,7 @@ class DummyTrainer(Trainer):
     Note:
         The iterate method yields TrainingIterationStats.
     """
+
     iteration = 0
 
     def __init__(self, trainer_config):

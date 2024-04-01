@@ -66,7 +66,7 @@ class ArrayStore(ABC):
     Creates identifiers for the caller to create and write arrays. Provides
     only rudimentary support for IO itself (currently only to remove
     arrays).
-    
+
     Attributes:
         container (Path): The path to the container.
         dataset (str): The dataset name.
@@ -81,7 +81,7 @@ class ArrayStore(ABC):
     ) -> LocalArrayIdentifier:
         """
         Get the array identifier for a particular validation prediction.
-        
+
         Args:
             run_name: The name of the run.
             iteration: The iteration number.
@@ -89,7 +89,7 @@ class ArrayStore(ABC):
         Returns:
             LocalArrayIdentifier: The array identifier.
         Raises:
-            NotImplementedError: If the method is not implemented.  
+            NotImplementedError: If the method is not implemented.
         Examples:
             >>> validation_prediction_array('run_name', 1, 'dataset')
             LocalArrayIdentifier(container=Path('path/to/container'), dataset='dataset')
@@ -102,7 +102,7 @@ class ArrayStore(ABC):
     ) -> LocalArrayIdentifier:
         """
         Get the array identifier for a particular validation output.
-        
+
         Args:
             run_name: The name of the run.
             iteration: The iteration number.
@@ -149,7 +149,7 @@ class ArrayStore(ABC):
     def remove(self, array_identifier: "LocalArrayIdentifier") -> None:
         """
         Remove an array by its identifier.
-        
+
         Args:
             array_identifier: The array identifier.
         Raises:
@@ -207,7 +207,7 @@ class ArrayStore(ABC):
         Examples:
             >>> _visualize_training(run)
             'http://neuroglancer-demo.appspot.com/#!{}'
-        
+
         """
         # returns a neuroglancer link to visualize snapshots and validations
         snapshot_container = self.snapshot_container(run.name)
@@ -231,8 +231,9 @@ class ArrayStore(ABC):
             Examples:
                 >>> generate_groups(container)
                 function
-            
+
             """
+
             def add_element(name, obj):
                 """
                 Add elements to the container.
@@ -244,8 +245,8 @@ class ArrayStore(ABC):
                     NotImplementedError: If the method is not implemented.
                 Examples:
                     >>> add_element('name', 'obj')
-                    None    
-                                    
+                    None
+
                 """
                 if isinstance(obj, zarr.hierarchy.Array):
                     container.append(name)

@@ -25,7 +25,7 @@ class DaCapoConfig:
         mongo_db_name (Optional[str]): The name of the MongoDB database to use for storing configurations and statistics.
     Methods:
         serialize: Serialize the DaCapoConfig object.
-    
+
     """
 
     type: str = attr.ib(
@@ -92,7 +92,7 @@ class Options:
     def __init__(self):
         """
         Initializes the Options class.
-        
+
         Raises:
             RuntimeError: If the constructor is called directly instead of using Options.instance().
         Examples:

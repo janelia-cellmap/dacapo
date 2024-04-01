@@ -16,9 +16,9 @@ logger = logging.getLogger(__name__)
 class LocalWeightsStore(WeightsStore):
     """
     A local store for network weights.
-    
+
     All weights are stored in a directory structure like this:
-        
+
         ```
         basedir
         ├── run1
@@ -34,7 +34,7 @@ class LocalWeightsStore(WeightsStore):
         ├── run2
         │   ├── ...
         ```
-    
+
     Attributes:
         basedir: The base directory where the weights are stored.
     Methods:
@@ -71,7 +71,7 @@ class LocalWeightsStore(WeightsStore):
         """
         Return the latest iteration for which weights are available for the
         given run.
-        
+
         Args:
             run: The name of the run.
         Returns:
@@ -124,7 +124,7 @@ class LocalWeightsStore(WeightsStore):
     def retrieve_weights(self, run: str, iteration: int) -> Weights:
         """
         Retrieve the network weights of the given run.
-        
+
         Args:
             run: The name of the run.
             iteration: The iteration number.
@@ -208,7 +208,7 @@ class LocalWeightsStore(WeightsStore):
             FileNotFoundError: If the weights file does not exist.
         Examples:
             >>> store.store_best("run1", 0, "dataset1", "criterion1")
-        Note:   
+        Note:
             The best weights are stored in a json file that contains the iteration number.
         """
 
@@ -251,7 +251,9 @@ class LocalWeightsStore(WeightsStore):
         """
         print(f"Retrieving weights for run {run}, criterion {criterion}")
 
-        with (self.__get_weights_dir(run) / criterion / f"{dataset}.json").open("r") as fd:
+        with (self.__get_weights_dir(run) / criterion / f"{dataset}.json").open(
+            "r"
+        ) as fd:
             weights_info = json.load(fd)
 
         return weights_info["iteration"]
@@ -282,7 +284,7 @@ class LocalWeightsStore(WeightsStore):
         """
         Get the directory path for storing weights checkpoints.
 
-        Args:  
+        Args:
             run: The name of the run or the run object.
         Returns:
             Path: The directory path for storing weights checkpoints.

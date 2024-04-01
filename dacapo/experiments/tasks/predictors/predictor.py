@@ -26,6 +26,7 @@ class Predictor(ABC):
     Notes:
         This is a subclass of ABC.
     """
+
     @abstractmethod
     def create_model(self, architecture: "Architecture") -> "Model":
         """
@@ -40,9 +41,9 @@ class Predictor(ABC):
             The model.
         Raises:
             NotImplementedError: This method is not implemented.
-        Examples:   
+        Examples:
             >>> predictor.create_model(architecture)
-            
+
         """
         pass
 

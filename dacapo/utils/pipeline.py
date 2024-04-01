@@ -148,7 +148,7 @@ class MakeRaw(gp.BatchFilter):
             gp.Batch: The output batch.
         Raises:
             ValueError: If the data type is not float32.
-        Examples:  
+        Examples:
             >>> MakeRaw.process(batch, request)
         """
         labels = batch[self.labels].data
@@ -368,7 +368,7 @@ class ExpandLabels(gp.BatchFilter):
             request (gp.BatchRequest): The batch request.
         Raises:
             ValueError: If the background is not an integer.
-        Examples:  
+        Examples:
             >>> ExpandLabels.process(batch, request)
 
         """

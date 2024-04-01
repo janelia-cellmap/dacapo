@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 def train(run_name: str):
     """
     Train a run
-    
+
     Args:
         run_name: Name of the run to train
     Raises:
@@ -49,7 +49,7 @@ def train(run_name: str):
 
 def train_run(run: Run):
     """
-    Train a run 
+    Train a run
 
     Args:
         run: Run object to train
