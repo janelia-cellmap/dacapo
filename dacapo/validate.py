@@ -10,12 +10,36 @@ from .store.create_store import (
 
 from pathlib import Path
 import logging
+from warnings import warn
 
 logger = logging.getLogger(__name__)
 
 
+def validate_run(
+    run: Run,
+    iteration: int,
+    num_workers: int = 1,
+    output_dtype: str = "uint8",
+    overwrite: bool = True,
+):
+    """
+    validate_run is deprecated and will be removed in a future version. Please use validate instead.
+    """
+    warn(
+        "validate_run is deprecated and will be removed in a future version. Please use validate instead.",
+        DeprecationWarning,
+    )
+    return validate(
+        run_name=run,
+        iteration=iteration,
+        num_workers=num_workers,
+        output_dtype=output_dtype,
+        overwrite=overwrite,
+    )
+
+
 def validate(
-    run_name: str,
+    run_name: str | Run,
     iteration: int,
     num_workers: int = 1,
     output_dtype: str = "uint8",
@@ -27,11 +51,13 @@ def validate(
 
     print(f"Validating run {run_name} at iteration {iteration}...")
 
-    # create run
-
-    config_store = create_config_store()
-    run_config = config_store.retrieve_run_config(run_name)
-    run = Run(run_config)
+    if isinstance(run_name, Run):
+        run = run_name
+        run_name = run.name
+    else:
+        config_store = create_config_store()
+        run_config = config_store.retrieve_run_config(run_name)
+        run = Run(run_config)
 
     # read in previous training/validation stats
     stats_store = create_stats_store()
@@ -39,28 +65,6 @@ def validate(
     run.validation_scores.scores = stats_store.retrieve_validation_iteration_scores(
         run_name
     )
-
-    return validate_run(
-        run,
-        iteration,
-        num_workers=num_workers,
-        output_dtype=output_dtype,
-        overwrite=overwrite,
-    )
-
-
-# @reloading  # allows us to fix validation bugs without interrupting training
-def validate_run(
-    run: Run,
-    iteration: int,
-    num_workers: int = 1,
-    output_dtype: str = "uint8",
-    overwrite: bool = True,
-):
-    """Validate an already loaded run at the given iteration. This does not
-    load the weights of that iteration, it is assumed that the model is already
-    loaded correctly. Returns the best parameters and scores for this
-    iteration."""
 
     if (
         run.datasplit.validate is None
