@@ -2,6 +2,7 @@
 
 # DaCapo ![DaCapo](https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/icon_dacapo.png) ![GitHub Org's stars](https://img.shields.io/github/stars/Janelia-cellmap/dacapo)
 
+![PyPI - Downloads](https://img.shields.io/pypi/dm/dacapo-ml)
 [![Documentation Status](https://readthedocs.org/projects/dacapo/badge/?version=stable)](https://dacapo.readthedocs.io/en/stable/?badge=stable)
 ![Github Created At](https://img.shields.io/github/created-at/funkelab/dacapo)
 ![GitHub License](https://img.shields.io/github/license/janelia-cellmap/dacapo)
