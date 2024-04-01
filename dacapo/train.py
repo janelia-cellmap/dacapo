@@ -18,7 +18,16 @@ logger = logging.getLogger(__name__)
 
 
 def train(run_name: str):
-    """Train a run"""
+    """
+    Train a run
+
+    Args:
+        run_name: Name of the run to train
+    Raises:
+        ValueError: If run_name is not found in config store
+    Examples:
+        >>> train("run_name")
+    """
 
     # check config store to see if run is already being trained TODO
     # if ...:
@@ -39,6 +48,15 @@ def train(run_name: str):
 
 
 def train_run(run: Run):
+    """
+    Train a run
+
+    Args:
+        run: Run object to train
+    Raises:
+        ValueError: If run_name is not found in config store
+
+    """
     print(f"Starting/resuming training for run {run}...")
 
     # create run

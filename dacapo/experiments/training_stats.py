@@ -10,12 +10,14 @@ import attr
 @attr.s
 class TrainingStats:
     """
-    A class used to represent Training Statistics.
+    A class used to represent Training Statistics. It contains a list of training
+    iteration statistics. It also provides methods to add new iteration stats,
+    delete stats after a specified iteration, get the number of iterations trained
+    for, and convert the stats to a xarray data array.
 
     Attributes:
         iteration_stats: List[TrainingIterationStats]
             an ordered list of training stats.
-
     Methods:
         add_iteration_stats(iteration_stats: TrainingIterationStats) -> None:
             Add a new set of iterations stats to the existing list of iteration
@@ -26,6 +28,10 @@ class TrainingStats:
             Gets the number of iterations that the model has been trained for.
         to_xarray() -> xr.DataArray:
             Converts the iteration statistics to a xarray data array.
+    Note:
+        The iteration stats list is structured as follows:
+        - The outer list contains the stats for each iteration.
+        - The inner list contains the stats for each training iteration.
     """
 
     iteration_stats: List[TrainingIterationStats] = attr.ib(
@@ -39,9 +45,21 @@ class TrainingStats:
 
         Args:
             iteration_stats (TrainingIterationStats): a new iteration stats object.
-
         Raises:
             assert: if the new iteration stats do not follow the order of existing iteration stats.
+        Examples:
+            >>> training_stats = TrainingStats()
+            >>> training_stats.add_iteration_stats(TrainingIterationStats(0, 0.1))
+            >>> training_stats.add_iteration_stats(TrainingIterationStats(1, 0.2))
+            >>> training_stats.add_iteration_stats(TrainingIterationStats(2, 0.3))
+            >>> training_stats.iteration_stats
+            [TrainingIterationStats(iteration=0, loss=0.1),
+             TrainingIterationStats(iteration=1, loss=0.2),
+             TrainingIterationStats(iteration=2, loss=0.3)]
+        Note:
+            The iteration stats list is structured as follows:
+            - The outer list contains the stats for each iteration.
+            - The inner list contains the stats for each training iteration.
         """
         if len(self.iteration_stats) > 0:
             assert (
@@ -56,6 +74,20 @@ class TrainingStats:
 
         Args:
             iteration (int): the iteration after which the stats are to be deleted.
+        Raises:
+            assert: if the iteration number is less than the maximum iteration number.
+        Examples:
+            >>> training_stats = TrainingStats()
+            >>> training_stats.add_iteration_stats(TrainingIterationStats(0, 0.1))
+            >>> training_stats.add_iteration_stats(TrainingIterationStats(1, 0.2))
+            >>> training_stats.add_iteration_stats(TrainingIterationStats(2, 0.3))
+            >>> training_stats.delete_after(1)
+            >>> training_stats.iteration_stats
+            [TrainingIterationStats(iteration=0, loss=0.1)]
+        Note:
+            The iteration stats list is structured as follows:
+            - The outer list contains the stats for each iteration.
+            - The inner list contains the stats for each training iteration.
         """
         self.iteration_stats = [
             stats for stats in self.iteration_stats if stats.iteration < iteration
@@ -68,6 +100,19 @@ class TrainingStats:
 
         Returns:
             int: number of iterations that the model has been trained for.
+        Raises:
+            assert: if the iteration stats list is empty.
+        Examples:
+            >>> training_stats = TrainingStats()
+            >>> training_stats.add_iteration_stats(TrainingIterationStats(0, 0.1))
+            >>> training_stats.add_iteration_stats(TrainingIterationStats(1, 0.2))
+            >>> training_stats.add_iteration_stats(TrainingIterationStats(2, 0.3))
+            >>> training_stats.trained_until()
+            3
+        Note:
+            The iteration stats list is structured as follows:
+            - The outer list contains the stats for each iteration.
+            - The inner list contains the stats for each training iteration.
         """
         if not self.iteration_stats:
             return 0
@@ -79,6 +124,22 @@ class TrainingStats:
 
         Returns:
             xr.DataArray: xarray DataArray of iteration losses.
+        Raises:
+            assert: if the iteration stats list is empty.
+        Examples:
+            >>> training_stats = TrainingStats()
+            >>> training_stats.add_iteration_stats(TrainingIterationStats(0, 0.1))
+            >>> training_stats.add_iteration_stats(TrainingIterationStats(1, 0.2))
+            >>> training_stats.add_iteration_stats(TrainingIterationStats(2, 0.3))
+            >>> training_stats.to_xarray()
+            <xarray.DataArray (iterations: 3)>
+            array([0.1, 0.2, 0.3])
+            Coordinates:
+              * iterations  (iterations) int64 0 1 2
+        Note:
+            The iteration stats list is structured as follows:
+            - The outer list contains the stats for each iteration.
+            - The inner list contains the stats for each training iteration.
         """
         return xr.DataArray(
             np.array(

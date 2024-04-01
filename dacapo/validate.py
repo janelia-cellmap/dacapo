@@ -45,9 +45,24 @@ def validate(
     output_dtype: str = "uint8",
     overwrite: bool = True,
 ):
-    """Validate a run at a given iteration. Loads the weights from a previously
+    """
+    Validate a run at a given iteration. Loads the weights from a previously
     stored checkpoint. Returns the best parameters and scores for this
-    iteration."""
+    iteration.
+
+    Args:
+        run_name: The name of the run to validate.
+        iteration: The iteration to validate.
+        num_workers: The number of workers to use for validation.
+        output_dtype: The dtype to use for the output arrays.
+        overwrite: Whether to overwrite existing output arrays
+    Returns:
+        The best parameters and scores for this iteration
+    Raises:
+        ValueError: If the run does not have a validation dataset or the dataset does not have ground truth.
+    Example:
+        validate("my_run", 1000)
+    """
 
     print(f"Validating run {run_name} at iteration {iteration}...")
 

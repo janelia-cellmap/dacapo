@@ -19,6 +19,7 @@ class GammaAugment(BatchFilter):
         setup(): Method to configure the internal state of the class
         process(): Method to apply gamma noise to the desired arrays
         __augment(): Private method to perform the actual augmentation
+
     """
 
     def __init__(self, arrays, gamma_min, gamma_max):
@@ -29,6 +30,11 @@ class GammaAugment(BatchFilter):
             arrays : An iterable collection of np arrays to augment
             gamma_min : A float representing  the lower limit of gamma perturbation
             gamma_max : A float representing the upper limit of gamma perturbation
+        Raises:
+            AssertionError: If gamma_max is less than gamma_min
+        Examples:
+            >>> GammaAugment(arrays, gamma_min, gamma_max)
+            GammaAugment(arrays, gamma_min, gamma_max)
         """
         if not isinstance(arrays, Iterable):
             arrays = [
@@ -42,6 +48,12 @@ class GammaAugment(BatchFilter):
     def setup(self):
         """
         Configuring the internal state by iterating over arrays.
+
+        Raises:
+            AssertionError: If the array data type is not float32 or float64
+        Examples:
+            >>> setup()
+            setup()
         """
         for array in self.arrays:
             self.updates(array, self.spec[array])
@@ -53,6 +65,13 @@ class GammaAugment(BatchFilter):
         Args:
             batch : The input batch to be processed.
             request : An object which holds the requested output location.
+        Returns:
+            The batch with the gamma noise applied.
+        Raises:
+            AssertionError: If the array data type is not float32 or float64
+        Examples:
+            >>> process(batch, request)
+            process(batch, request)
         """
         sample_gamma_min = (max(self.gamma_min, 1.0 / self.gamma_min) - 1) * (-1) ** (
             self.gamma_min < 1
@@ -84,6 +103,13 @@ class GammaAugment(BatchFilter):
         Args:
             a: raw array to be augmented
             gamma: gamma index to be applied
+        Returns:
+            The augmented array.
+        Raises:
+            AssertionError: If the array data type is not float32 or float64
+        Examples:
+            >>> __augment(a, gamma)
+            __augment(a, gamma)
         """
         # normalize a
         a_min = a.min()

@@ -19,6 +19,10 @@ class DistanceTask(Task):
         loss: MSELoss object
         post_processor: ThresholdPostProcessor object
         evaluator: BinarySegmentationEvaluator object
+    Methods:
+        __init__(self, task_config): Initializes attributes of DistanceTask
+    Notes:
+        This is a subclass of Task.
     """
 
     def __init__(self, task_config):
@@ -29,6 +33,10 @@ class DistanceTask(Task):
 
         Args:
             task_config: Object of task configuration
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> task = DistanceTask(task_config)
         """
 
         self.predictor = DistancePredictor(

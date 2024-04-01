@@ -28,9 +28,59 @@ logger = logging.getLogger(__name__)
 
 
 class GunpowderTrainer(Trainer):
+    """
+    GunpowderTrainer class for training a model using gunpowder. This class is a subclass of the Trainer class. It
+    implements the abstract methods defined in the Trainer class. The GunpowderTrainer class is used to train a model
+    using gunpowder, a data loading and augmentation library. It is used to train a model on a dataset using a specific
+    task.
+
+    Attributes:
+        learning_rate (float): The learning rate for the optimizer.
+        batch_size (int): The size of the training batch.
+        num_data_fetchers (int): The number of data fetchers.
+        print_profiling (int): The number of iterations after which to print profiling stats.
+        snapshot_iteration (int): The number of iterations after which to save a snapshot.
+        min_masked (float): The minimum value of the mask.
+        augments (List[Augment]): The list of augmentations to apply to the data.
+        mask_integral_downsample_factor (int): The downsample factor for the mask integral.
+        clip_raw (bool): Whether to clip the raw data.
+        scheduler (torch.optim.lr_scheduler.LinearLR): The learning rate scheduler.
+    Methods:
+        create_optimizer(model: Model) -> torch.optim.Optimizer:
+            Creates an optimizer for the model.
+        build_batch_provider(datasets: List[Dataset], model: Model, task: Task, snapshot_container: LocalContainerIdentifier) -> None:
+            Initializes the training pipeline using various components.
+        iterate(num_iterations: int, model: Model, optimizer: torch.optim.Optimizer, device: torch.device) -> Iterator[TrainingIterationStats]:
+            Performs a number of training iterations.
+        __iter__() -> Iterator[None]:
+            Initializes the training pipeline.
+        next() -> Tuple[NumpyArray, NumpyArray, NumpyArray, NumpyArray, NumpyArray]:
+            Fetches the next batch of data.
+        __enter__() -> GunpowderTrainer:
+            Enters the context manager.
+        __exit__(exc_type, exc_val, exc_tb) -> None:
+            Exits the context manager.
+        can_train(datasets: List[Dataset]) -> bool:
+            Checks if the trainer can train with a specific set of datasets.
+    Note:
+        The GunpowderTrainer class is a subclass of the Trainer class. It is used to train a model using gunpowder.
+
+    """
+
     iteration = 0
 
     def __init__(self, trainer_config):
+        """
+        Initializes the GunpowderTrainer object.
+
+        Args:
+            trainer_config (TrainerConfig): The trainer configuration.
+        Raises:
+            NotImplementedError: If the method is not implemented by the subclass.
+        Examples:
+            >>> trainer = GunpowderTrainer(trainer_config)
+
+        """
         self.learning_rate = trainer_config.learning_rate
         self.batch_size = trainer_config.batch_size
         self.num_data_fetchers = trainer_config.num_data_fetchers
@@ -45,6 +95,19 @@ class GunpowderTrainer(Trainer):
         self.scheduler = None
 
     def create_optimizer(self, model):
+        """
+        Creates an optimizer for the model.
+
+        Args:
+            model (Model): The model for which the optimizer will be created.
+        Returns:
+            torch.optim.Optimizer: The optimizer created for the model.
+        Raises:
+            NotImplementedError: If the method is not implemented by the subclass.
+        Examples:
+            >>> optimizer = trainer.create_optimizer(model)
+
+        """
         optimizer = torch.optim.RAdam(lr=self.learning_rate, params=model.parameters())
         self.scheduler = torch.optim.lr_scheduler.LinearLR(
             optimizer,
@@ -56,6 +119,20 @@ class GunpowderTrainer(Trainer):
         return optimizer
 
     def build_batch_provider(self, datasets, model, task, snapshot_container=None):
+        """
+        Initializes the training pipeline using various components.
+
+        Args:
+            datasets (List[Dataset]): The list of datasets.
+            model (Model): The model to be trained.
+            task (Task): The task to be performed.
+            snapshot_container (LocalContainerIdentifier): The snapshot container.
+        Raises:
+            NotImplementedError: If the method is not implemented by the subclass.
+        Examples:
+            >>> trainer.build_batch_provider(datasets, model, task, snapshot_container)
+
+        """
         input_shape = Coordinate(model.input_shape)
         output_shape = Coordinate(model.output_shape)
 
@@ -194,6 +271,23 @@ class GunpowderTrainer(Trainer):
         self.snapshot_container = snapshot_container
 
     def iterate(self, num_iterations, model, optimizer, device):
+        """
+        Performs a number of training iterations.
+
+        Args:
+            num_iterations (int): The number of training iterations.
+            model (Model): The model to be trained.
+            optimizer (torch.optim.Optimizer): The optimizer for the model.
+            device (torch.device): The device (GPU/CPU) where the model will be trained.
+        Returns:
+            Iterator[TrainingIterationStats]: An iterator of the training statistics.
+        Raises:
+            NotImplementedError: If the method is not implemented by the subclass.
+        Examples:
+            >>> for iteration_stats in trainer.iterate(num_iterations, model, optimizer, device):
+            >>>     print(iteration_stats)
+
+        """
         t_start_fetch = time.time()
 
         print("Starting iteration!")
@@ -296,6 +390,17 @@ class GunpowderTrainer(Trainer):
             t_start_fetch = time.time()
 
     def __iter__(self):
+        """
+        Initializes the training pipeline.
+
+        Returns:
+            Iterator[None]: An iterator of None.
+        Raises:
+            NotImplementedError: If the method is not implemented by the subclass.
+        Examples:
+            >>> for _ in trainer:
+            >>>     pass
+        """
         with gp.build(self._pipeline):
             teardown = False
             while not teardown:
@@ -305,6 +410,17 @@ class GunpowderTrainer(Trainer):
         yield None
 
     def next(self):
+        """
+        Fetches the next batch of data.
+
+        Returns:
+            Tuple[NumpyArray, NumpyArray, NumpyArray, NumpyArray, NumpyArray]: A tuple containing the raw data, ground truth data, target data, weight data, and mask data.
+        Raises:
+            NotImplementedError: If the method is not implemented by the subclass.
+        Examples:
+            >>> raw, gt, target, weight, mask = trainer.next()
+
+        """
         batch = next(self._iter)
         self._iter.send(False)
         return (
@@ -320,10 +436,34 @@ class GunpowderTrainer(Trainer):
         )
 
     def __enter__(self):
+        """
+        Enters the context manager.
+
+        Returns:
+            GunpowderTrainer: The GunpowderTrainer object.
+        Raises:
+            NotImplementedError: If the method is not implemented by the subclass.
+        Examples:
+            >>> with trainer:
+            >>>     pass
+        """
         self._iter = iter(self)
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """
+        Exits the context manager.
+
+        Args:
+            exc_type: The exception type.
+            exc_val: The exception value.
+            exc_tb: The exception traceback.
+        Raises:
+            NotImplementedError: If the method is not implemented by the subclass.
+        Examples:
+            >>> with trainer:
+            >>>     pass
+        """
         try:
             self._iter.send(True)
         except TypeError:
@@ -331,4 +471,17 @@ class GunpowderTrainer(Trainer):
         pass
 
     def can_train(self, datasets) -> bool:
+        """
+        Checks if the trainer can train with a specific set of datasets.
+
+        Args:
+            datasets (List[Dataset]): The list of datasets.
+        Returns:
+            bool: True if the trainer can train with the datasets, False otherwise.
+        Raises:
+            NotImplementedError: If the method is not implemented by the subclass.
+        Examples:
+            >>> can_train = trainer.can_train(datasets)
+
+        """
         return all([dataset.gt is not None for dataset in datasets])
