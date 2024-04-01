@@ -26,7 +26,7 @@ class AugmentConfig(ABC):
     ) -> gp.BatchFilter:
         """
         Get a gunpowder augment node.
-        
+
         Args:
             raw_key (gp.ArrayKey): Key for raw data.
             gt_key (gp.ArrayKey): Key for ground truth data.
@@ -37,6 +37,6 @@ class AugmentConfig(ABC):
             NotImplementedError: This method is not implemented.
         Examples:
             >>> node = augment_config.node(raw_key, gt_key, mask_key)
-            
+
         """
         pass

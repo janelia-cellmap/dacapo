@@ -35,7 +35,7 @@ class DistanceTask(Task):
             task_config: Object of task configuration
         Raises:
             NotImplementedError: This method is not implemented.
-        Examples:   
+        Examples:
             >>> task = DistanceTask(task_config)
         """
 

@@ -11,7 +11,7 @@ class PretrainedTaskConfig(TaskConfig):
     """
     Configuration for a task that uses a pretrained model. The model is loaded from a file
     and the weights are loaded from a file.
-    
+
     Attributes:
         sub_task_config (TaskConfig): The task to run starting with the provided pretrained weights.
         weights (Path): A checkpoint containing pretrained model weights.

@@ -18,6 +18,7 @@ class OneHotTask(Task):
     Notes:
         This is a base class for all tasks that use one-hot predictors.
     """
+
     def __init__(self, task_config):
         """
         Initialize the OneHotTask object.
@@ -26,7 +27,7 @@ class OneHotTask(Task):
             task_config (TaskConfig): The configuration of the task.
         Raises:
             NotImplementedError: This method is not implemented.
-        Examples:   
+        Examples:
             >>> task = OneHotTask(task_config)
         """
         self.predictor = OneHotPredictor(classes=task_config.classes)

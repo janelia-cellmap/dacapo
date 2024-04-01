@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 class FileStatsStore(StatsStore):
     """A File based store for run statistics. Used to store and retrieve training statistics and validation scores.
-    
+
     The store is organized as follows:
     - A directory for training statistics, with a subdirectory for each run. Each run directory contains a pickled list of TrainingIterationStats objects.
     - A directory for validation scores, with a subdirectory for each run. Each run directory contains a pickled list of ValidationIterationScores objects.
@@ -36,23 +36,23 @@ class FileStatsStore(StatsStore):
     """
 
     def __init__(self, path):
-            """
-            Initializes a new instance of the FileStatsStore class.
+        """
+        Initializes a new instance of the FileStatsStore class.
 
-            Args:
-                path (str): The path to the file.
-            Raises:
-                ValueError: If the path is invalid.
-            Examples:
-                >>> store = FileStatsStore("store")
-            
-            """
-            print(f"Creating FileStatsStore:\n\tpath    : {path}")
+        Args:
+            path (str): The path to the file.
+        Raises:
+            ValueError: If the path is invalid.
+        Examples:
+            >>> store = FileStatsStore("store")
 
-            self.path = Path(path)
+        """
+        print(f"Creating FileStatsStore:\n\tpath    : {path}")
 
-            self.__open_collections()
-            self.__init_db()
+        self.path = Path(path)
+
+        self.__open_collections()
+        self.__init_db()
 
     def store_training_stats(self, run_name, stats):
         """
@@ -149,7 +149,7 @@ class FileStatsStore(StatsStore):
         Retrieve the validation iteration scores for a given run.
 
         Args:
-            run_name (str): The name of the run for which to retrieve the validation iteration scores.    
+            run_name (str): The name of the run for which to retrieve the validation iteration scores.
         Returns:
             list: A list of validation iteration scores.
         Raises:
@@ -221,19 +221,19 @@ class FileStatsStore(StatsStore):
         return stats
 
     def __delete_training_stats(self, run_name):
-            """
-            Deletes the training stats file for a given run.
+        """
+        Deletes the training stats file for a given run.
 
-            Args:
-                run_name (str): The name of the run for which to delete the training stats.
-            Raises:
-                ValueError: If the run name is invalid.
-            Examples:  
-                >>> store.__delete_training_stats("run1")   
-            """
-            file_store = self.training_stats / run_name
-            if file_store.exists():
-                file_store.unlink()
+        Args:
+            run_name (str): The name of the run for which to delete the training stats.
+        Raises:
+            ValueError: If the run name is invalid.
+        Examples:
+            >>> store.__delete_training_stats("run1")
+        """
+        file_store = self.training_stats / run_name
+        if file_store.exists():
+            file_store.unlink()
 
     def __store_validation_iteration_scores(
         self, validation_scores: ValidationScores, begin: int, end: int, run_name: str
@@ -292,7 +292,7 @@ class FileStatsStore(StatsStore):
         Delete the validation iteration scores for a given run.
 
         Args:
-            run_name (str): The name of the run for which to delete the validation iteration scores.    
+            run_name (str): The name of the run for which to delete the validation iteration scores.
         Raises:
             ValueError: If the run name is invalid.
         Examples:
@@ -314,7 +314,7 @@ class FileStatsStore(StatsStore):
         Examples:
             >>> store.__init_db()
         """
-        
+
         pass
 
     def __open_collections(self):
@@ -322,7 +322,7 @@ class FileStatsStore(StatsStore):
         Open the collections for the file stats store.
 
         This method initializes the directories for storing training statistics and validation scores.
-        
+
         Raises:
             ValueError: If the path is invalid.
         Examples:

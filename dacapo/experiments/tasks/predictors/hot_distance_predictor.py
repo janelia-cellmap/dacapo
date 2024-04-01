@@ -84,7 +84,7 @@ class HotDistancePredictor(Predictor):
             int: The number of embedding dimensions.
         Raises:
             NotImplementedError: This method is not implemented.
-        Examples:   
+        Examples:
             >>> embedding_dims = predictor.embedding_dims
         """
         return len(self.channels)
@@ -250,7 +250,7 @@ class HotDistancePredictor(Predictor):
             voxel_size: The voxel size.
             normalize: The normalization function to use.
             normalize_args: The normalization arguments.
-        Returns:    
+        Returns:
             np.ndarray: The distance mask.
         Raises:
             NotImplementedError: This method is not implemented.
@@ -430,7 +430,7 @@ class HotDistancePredictor(Predictor):
             normalize_args: The normalization arguments.
         Returns:
             The normalized distances.
-        Raises: 
+        Raises:
             ValueError: Only tanh is supported for normalization.
         Examples:
             >>> normalized_distances = self.__normalize(distances, norm, normalize_args)

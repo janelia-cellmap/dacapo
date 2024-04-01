@@ -40,7 +40,7 @@ def apply(
 ):
     """
     Load weights and apply a trained model to a dataset. If iteration is None, the best iteration based on the criterion is used. If roi is None, the whole input dataset is used.
-    
+
     Args:
         run_name (str): Name of the run to apply.
         input_container (Path | str): Path to the input container.

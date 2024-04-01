@@ -31,56 +31,56 @@ class DaCapoTargetFilter(gp.BatchFilter):
     """
 
     def __init__(
-            self,
-            predictor: Predictor,
-            gt_key: gp.ArrayKey,
-            target_key: Optional[gp.ArrayKey] = None,
-            weights_key: Optional[gp.ArrayKey] = None,
-            mask_key: Optional[gp.ArrayKey] = None,
-        ):
-            """
-            Initialize the DacapoCreateTarget object.
+        self,
+        predictor: Predictor,
+        gt_key: gp.ArrayKey,
+        target_key: Optional[gp.ArrayKey] = None,
+        weights_key: Optional[gp.ArrayKey] = None,
+        mask_key: Optional[gp.ArrayKey] = None,
+    ):
+        """
+        Initialize the DacapoCreateTarget object.
 
-            Args:
-                predictor (Predictor): The predictor object used for prediction.
-                gt_key (gp.ArrayKey): The ground truth key.
-                target_key (Optional[gp.ArrayKey]): The target key. Defaults to None.
-                weights_key (Optional[gp.ArrayKey]): The weights key. Defaults to None.
-                mask_key (Optional[gp.ArrayKey]): The mask key. Defaults to None.
-            Raises:
-                AssertionError: If neither target_key nor weights_key is provided.
-            Examples:
-                >>> from dacapo.experiments.tasks.predictors import Predictor
-                >>> from gunpowder import ArrayKey
-                >>> from gunpowder import ArrayKey
-                >>> from gunpowder import ArrayKey
-                >>> predictor = Predictor()
-                >>> gt_key = ArrayKey("GT")
-                >>> target_key = ArrayKey("TARGET")
-                >>> weights_key = ArrayKey("WEIGHTS")
-                >>> mask_key = ArrayKey("MASK")
-                >>> target_filter = DaCapoTargetFilter(predictor, gt_key, target_key, weights_key, mask_key)
-            Note:
-                The target filter is used to generate the target from the ground truth. 
+        Args:
+            predictor (Predictor): The predictor object used for prediction.
+            gt_key (gp.ArrayKey): The ground truth key.
+            target_key (Optional[gp.ArrayKey]): The target key. Defaults to None.
+            weights_key (Optional[gp.ArrayKey]): The weights key. Defaults to None.
+            mask_key (Optional[gp.ArrayKey]): The mask key. Defaults to None.
+        Raises:
+            AssertionError: If neither target_key nor weights_key is provided.
+        Examples:
+            >>> from dacapo.experiments.tasks.predictors import Predictor
+            >>> from gunpowder import ArrayKey
+            >>> from gunpowder import ArrayKey
+            >>> from gunpowder import ArrayKey
+            >>> predictor = Predictor()
+            >>> gt_key = ArrayKey("GT")
+            >>> target_key = ArrayKey("TARGET")
+            >>> weights_key = ArrayKey("WEIGHTS")
+            >>> mask_key = ArrayKey("MASK")
+            >>> target_filter = DaCapoTargetFilter(predictor, gt_key, target_key, weights_key, mask_key)
+        Note:
+            The target filter is used to generate the target from the ground truth.
 
-            """
-            self.predictor = predictor
-            self.gt_key = gt_key
-            self.target_key = target_key
-            self.weights_key = weights_key
-            self.mask_key = mask_key
+        """
+        self.predictor = predictor
+        self.gt_key = gt_key
+        self.target_key = target_key
+        self.weights_key = weights_key
+        self.mask_key = mask_key
 
-            self.moving_counts = None
+        self.moving_counts = None
 
-            assert (
-                target_key is not None or weights_key is not None
-            ), "Must provide either target or weights"
+        assert (
+            target_key is not None or weights_key is not None
+        ), "Must provide either target or weights"
 
     def setup(self):
         """
         Set up the provider. This function sets the provider to provide the
         target with the given key.
-        
+
         Raises:
             RuntimeError: If the key is already provided.
         Examples:

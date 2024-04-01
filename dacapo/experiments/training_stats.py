@@ -11,9 +11,9 @@ import attr
 class TrainingStats:
     """
     A class used to represent Training Statistics. It contains a list of training
-    iteration statistics. It also provides methods to add new iteration stats, 
+    iteration statistics. It also provides methods to add new iteration stats,
     delete stats after a specified iteration, get the number of iterations trained
-    for, and convert the stats to a xarray data array. 
+    for, and convert the stats to a xarray data array.
 
     Attributes:
         iteration_stats: List[TrainingIterationStats]
