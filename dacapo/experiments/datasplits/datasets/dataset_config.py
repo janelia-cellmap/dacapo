@@ -5,7 +5,8 @@ from typing import Tuple
 
 @attr.s
 class DatasetConfig:
-    """A class used to define configuration for datasets. This provides the
+    """
+    A class used to define configuration for datasets. This provides the
     framework to create a Dataset instance.
 
     Attributes:
@@ -18,11 +19,12 @@ class DatasetConfig:
             A numeric value that indicates how frequently this dataset should be
             sampled in comparison to others. Higher the weight, more frequently it
             gets sampled.
-
     Methods:
         verify:
             Checks and validates the dataset configuration. The specific rules for
             validation need to be defined by the user.
+    Notes:
+        This class is used to create a configuration object for datasets.
     """
 
     name: str = attr.ib(
@@ -51,5 +53,13 @@ class DatasetConfig:
         Returns:
             tuple: A tuple of boolean value indicating the check (True or False) and
             message specifying result of validation.
+        Raises:
+            NotImplementedError: If the method is not implemented in the derived class.
+        Examples:
+            >>> dataset_config = DatasetConfig(name="sample_dataset")
+            >>> dataset_config.verify()
+            (True, "No validation for this DataSet")
+        Notes:
+            This method is used to validate the configuration of the dataset.
         """
         return True, "No validation for this DataSet"
