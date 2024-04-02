@@ -48,8 +48,6 @@ dependencies = [
         "cellmap-models",
         "funlib.persistence>=0.3.0",
         "gunpowder>=1.3",
-        # "lsds>=0.1.3",
-        # "lsds @ git+https://github.com/funkelab/lsd",
         "lsds",
         "xarray",
         "cattrs",

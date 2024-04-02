@@ -1,12 +1,19 @@
 from abc import ABC, abstractmethod
-import os
+from typing import Optional
+import attr
 import subprocess
-import sys
 
 from dacapo import Options, compute_context
 
 
 class ComputeContext(ABC):
+    distribute_workers: Optional[bool] = attr.ib(
+        default=False,
+        metadata={
+            "help_text": "Whether to distribute the workers across multiple nodes or processes."
+        },
+    )
+
     @property
     @abstractmethod
     def device(self):
