@@ -99,8 +99,13 @@ class Start(ABC):
             An object containing configuration details for the model
             initialization.
         """
-        self.run = start_config.run
-        self.criterion = start_config.criterion
+        # Old version return a dict, new version return an object, this line is to support both
+        if isinstance(start_config, dict):
+            self.run = start_config["run"]
+            self.criterion = start_config["criterion"]
+        else:
+            self.run = start_config.run
+            self.criterion = start_config.criterion
 
         self.channels = None
 
