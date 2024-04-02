@@ -12,6 +12,8 @@ class DummyDataset(Dataset):
     Methods:
         __init__(dataset_config):
             Initializes the array type 'raw' and name for the DummyDataset instance.
+    Notes:
+        This class is used to create a dataset with raw data.
     """
 
     raw: Array
