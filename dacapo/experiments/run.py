@@ -56,7 +56,7 @@ class Run:
     training_stats: TrainingStats
     validation_scores: ValidationScores
 
-    def __init__(self, run_config, load_starter_model: bool =True):
+    def __init__(self, run_config, load_starter_model: bool = True):
         """
         Initializes a Run object.
 
