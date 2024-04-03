@@ -283,20 +283,7 @@ class MissingAnnotationsMask(Array):
             )
             for i, (_, ids) in enumerate(self._groupings):
                 if any([id in present_not_annotated for id in ids]):
-                    # specially handle id 37
-                    # TODO: find more general solution
-                    if 37 in ids and 37 not in present_not_annotated:
-                        # 37 marks any kind of nucleus voxel. There many be nucleus sub
-                        # organelles marked as "present not annotated", but we can safely
-                        # train any channel that includes those organelles as long as
-                        # 37 is annotated.
-                        pass
-                    else:
-                        # mask out this whole channel
-                        grouped[i] = 0
-
-                        # for id in ids:
-                        #     grouped[i][labels == id] = 0
+                    grouped[i] = 0
 
         except KeyError:
             pass
