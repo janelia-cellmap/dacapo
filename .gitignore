@@ -2,6 +2,7 @@
 *.hdf
 *.h5
 # *.ipynb
+.ipynb_checkpoints/
 *.pyc
 *.egg-info
 *.dat
@@ -18,5 +19,14 @@ scratch/
 # vscode stuff
 .vscode
 .mypy_cache
+.pytest_cache
+daisy_logs/
+tmp/
+
+*.zarr/
+*.n5/
+
+# daisy logs
 daisy_logs/
 
+*.csv

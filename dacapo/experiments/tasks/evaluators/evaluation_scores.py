@@ -1,7 +1,7 @@
 import attr
 
 from abc import abstractmethod
-from typing import Tuple, List
+from typing import Tuple, List, Union
 
 
 @attr.s
@@ -23,7 +23,9 @@ class EvaluationScores:
 
     @staticmethod
     @abstractmethod
-    def bounds(criterion: str) -> Tuple[float, float]:
+    def bounds(
+        criterion: str,
+    ) -> Tuple[Union[int, float, None], Union[int, float, None]]:
         """
         The bounds for this criterion
         """

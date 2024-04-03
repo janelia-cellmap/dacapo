@@ -10,7 +10,7 @@ For the latest version:
 
 .. code-block:: bash
 
-   pip install git+https://github.com/funkelab/dacapo
+   pip install git+https://github.com/janelia-cellmap/dacapo
 
 Optional(Web GUI):
 

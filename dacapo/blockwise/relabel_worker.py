@@ -1,5 +1,7 @@
 from glob import glob
 import os
+import sys
+from time import sleep
 import daisy
 from dacapo.compute_context import create_compute_context
 from dacapo.store.array_store import LocalArrayIdentifier
@@ -53,7 +55,14 @@ def start_worker(
             if block is None:
                 break
 
-            relabel_in_block(array_out, nodes, components, block)
+            try:
+                relabel_in_block(array_out, nodes, components, block)
+            except OSError as e:
+                logging.error(
+                    f"Failed to relabel block {block.write_roi}: {e}. Trying again."
+                )
+                sleep(1)
+                relabel_in_block(array_out, nodes, components, block)
 
 
 def relabel_in_block(array_out, old_values, new_values, block):
@@ -101,7 +110,8 @@ def spawn_worker(
 
     # Make the command for the worker to run
     command = [
-        "python",
+        # "python",
+        sys.executable,
         path,
         "start-worker",
         "--output_container",

@@ -7,6 +7,9 @@
    :hidden:
    :caption: DaCapo API:
 
+   overview
+   install
+   tutorial
    autoapi/index
    cli
 
