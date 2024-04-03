@@ -1,6 +1,6 @@
 from .array import Array
 from dacapo import Options
-
+from funlib.persistence import open_ds
 from funlib.geometry import Coordinate, Roi
 import funlib.persistence
 
@@ -52,9 +52,9 @@ class ZarrArray(Array):
             logger.debug(
                 "DaCapo expects Zarr datasets to have an 'axes' attribute!\n"
                 f"Zarr {self.file_name} and dataset {self.dataset} has attributes: {list(self._attributes.items())}\n"
-                f"Using default {['c', 'z', 'y', 'x'][-self.dims::]}",
+                f"Using default {['s', 'c', 'z', 'y', 'x'][-self.dims::]}",
             )
-            return ["c", "z", "y", "x"][-self.dims : :]
+            return ["s", "c", "z", "y", "x"][-self.dims : :]
 
     @property
     def dims(self) -> int:
@@ -137,6 +137,11 @@ class ZarrArray(Array):
             write_size = Coordinate((axis_length,) * voxel_size.dims) * voxel_size
         write_size = Coordinate((min(a, b) for a, b in zip(write_size, roi.shape)))
         zarr_container = zarr.open(array_identifier.container, "a")
+        if num_channels is None or num_channels == 1:
+            axes = [axis for axis in axes if "c" not in axis]
+            num_channels = None
+        else:
+            axes = ["c"] + [axis for axis in axes if "c" not in axis]
         try:
             funlib.persistence.prepare_ds(
                 f"{array_identifier.container}",
@@ -147,21 +152,40 @@ class ZarrArray(Array):
                 num_channels=num_channels,
                 write_size=write_size,
                 delete=overwrite,
+                force_exact_write_size=True,
             )
             zarr_dataset = zarr_container[array_identifier.dataset]
-            zarr_dataset.attrs["offset"] = (
-                roi.offset[::-1]
-                if array_identifier.container.name.endswith("n5")
-                else roi.offset
-            )
-            zarr_dataset.attrs["resolution"] = (
-                voxel_size[::-1]
-                if array_identifier.container.name.endswith("n5")
-                else voxel_size
-            )
-            zarr_dataset.attrs["axes"] = (
-                axes[::-1] if array_identifier.container.name.endswith("n5") else axes
-            )
+            if array_identifier.container.name.endswith("n5"):
+                zarr_dataset.attrs["offset"] = roi.offset[::-1]
+                zarr_dataset.attrs["resolution"] = voxel_size[::-1]
+                zarr_dataset.attrs["axes"] = axes[::-1]
+                # to make display right in neuroglancer: TODO ADD CHANNELS
+                zarr_dataset.attrs["dimension_units"] = [
+                    f"{size} nm" for size in voxel_size[::-1]
+                ]
+                zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = [
+                    a if a != "c" else "c^" for a in axes[::-1]
+                ]
+            else:
+                zarr_dataset.attrs["offset"] = roi.offset
+                zarr_dataset.attrs["resolution"] = voxel_size
+                zarr_dataset.attrs["axes"] = axes
+                # to make display right in neuroglancer: TODO ADD CHANNELS
+                zarr_dataset.attrs["dimension_units"] = [
+                    f"{size} nm" for size in voxel_size
+                ]
+                zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = [
+                    a if a != "c" else "c^" for a in axes
+                ]
+            if "c" in axes:
+                if axes.index("c") == 0:
+                    zarr_dataset.attrs["dimension_units"] = [
+                        str(num_channels)
+                    ] + zarr_dataset.attrs["dimension_units"]
+                else:
+                    zarr_dataset.attrs["dimension_units"] = zarr_dataset.attrs[
+                        "dimension_units"
+                    ] + [str(num_channels)]
         except zarr.errors.ContainsArrayError:
             zarr_dataset = zarr_container[array_identifier.dataset]
             assert (
@@ -203,63 +227,20 @@ class ZarrArray(Array):
         return True
 
     def _neuroglancer_source(self):
-        source_type = "n5" if self.file_name.name.endswith(".n5") else "zarr"
-        options = Options.instance()
-        base_dir = Path(options.runs_base_dir).expanduser()
-        try:
-            relpath = self.file_name.relative_to(base_dir)
-        except ValueError:
-            relpath = str(self.file_name.absolute())
-        symlink_path = f"data_symlinks/{relpath}"
-
-        # Check if data is symlinked to a servable location
-        if not (base_dir / symlink_path).exists():
-            if not (base_dir / symlink_path).parent.exists():
-                (base_dir / symlink_path).parent.mkdir(parents=True)
-            (base_dir / symlink_path).symlink_to(Path(self.file_name))
-
-        dataset = self.dataset
-        parent_attributes_path = (
-            base_dir / symlink_path / self.dataset
-        ).parent / "attributes.json"
-        if parent_attributes_path.exists():
-            dataset_parent_attributes = json.loads(
-                open(
-                    (base_dir / symlink_path / self.dataset).parent / "attributes.json",
-                    "r",
-                ).read()
-            )
-            if "scales" in dataset_parent_attributes:
-                dataset = "/".join(self.dataset.split("/")[:-1])
-
-        file_server = options.file_server
-        try:
-            file_server = file_server.format(
-                username=options.file_server_user, password=options.file_server_pass
-            )
-        except RuntimeError:
-            # if options doesn't have a file_server user or password simply continue
-            # without authentications
-            pass
-        source = {
-            "url": f"{source_type}://{file_server}/{symlink_path}/{dataset}",
-            "transform": {
-                "matrix": self._transform_matrix(),
-                "outputDimensions": self._output_dimensions(),
-            },
-        }
-        logger.warning(source)
-        return source
+        d = open_ds(str(self.file_name), self.dataset)
+        return neuroglancer.LocalVolume(
+            data=d.data,
+            dimensions=neuroglancer.CoordinateSpace(
+                names=["z", "y", "x"],
+                units=["nm", "nm", "nm"],
+                scales=self.voxel_size,
+            ),
+            voxel_offset=self.roi.get_begin() / self.voxel_size,
+        )
 
     def _neuroglancer_layer(self) -> Tuple[neuroglancer.ImageLayer, Dict[str, Any]]:
-        # Generates an Image layer. May not be correct if this crop contains a segmentation
-
         layer = neuroglancer.ImageLayer(source=self._neuroglancer_source())
-        kwargs = {
-            "visible": False,
-            "blend": "additive",
-        }
-        return layer, kwargs
+        return layer
 
     def _transform_matrix(self):
         is_zarr = self.file_name.name.endswith(".zarr")

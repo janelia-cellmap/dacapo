@@ -93,5 +93,8 @@ class ResampledArray(Array):
     def _neuroglancer_layer(self):
         return self._source_array._neuroglancer_layer()
 
+    def _neuroglancer_source(self):
+        return self._source_array._neuroglancer_source()
+
     def _source_name(self):
         return self._source_array._source_name()

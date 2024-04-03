@@ -1,6 +1,7 @@
 import numpy as np
+import logging
 
-import os
+logger = logging.getLogger(__name__)
 
 try:
     from empanada_napari.inference import Engine3d

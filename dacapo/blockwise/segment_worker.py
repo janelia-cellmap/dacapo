@@ -2,6 +2,7 @@ from importlib.machinery import SourceFileLoader
 import logging
 import os
 from pathlib import Path
+import sys
 import click
 import daisy
 from funlib.persistence import Array
@@ -12,6 +13,8 @@ from dacapo.compute_context import create_compute_context
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 
 from dacapo.store.array_store import LocalArrayIdentifier
+
+logger = logging.getLogger(__name__)
 
 
 @click.group()
@@ -46,17 +49,32 @@ def start_worker(
     tmpdir: str,
     function_path: str,
 ):
+    """Start a worker to run a segment function on a given dataset.
+
+    Args:
+        input_container (str): The input container.
+        input_dataset (str): The input dataset.
+        output_container (str): The output container.
+        output_dataset (str): The output dataset.
+        tmpdir (str): The temporary directory.
+        function_path (str): The path to the segment function.
+    """
+
+    print("Starting worker")
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
+    print(f"Opening input array {input_array_identifier}")
     input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
 
     output_array_identifier = LocalArrayIdentifier(
         Path(output_container), output_dataset
     )
+    print(f"Opening output array {output_array_identifier}")
     output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
 
     # Load segment function
     function_name = Path(function_path).stem
+    print(f"Loading segment function from {str(function_path)}")
     function = SourceFileLoader(function_name, str(function_path)).load_module()
     segment_function = function.segment_function
 
@@ -68,6 +86,7 @@ def start_worker(
 
     # load parameters saved in tmpdir
     if os.path.exists(os.path.join(tmpdir, "parameters.yaml")):
+        print(f"Loading parameters from {os.path.join(tmpdir, 'parameters.yaml')}")
         with open(os.path.join(tmpdir, "parameters.yaml"), "r") as f:
             parameters.update(yaml.safe_load(f))
 
@@ -148,11 +167,15 @@ def start_worker(
             edges = unique_pairs[non_zero_filter]
             nodes = np.unique(edges)
 
-            np.savez_compressed(
-                os.path.join(tmpdir, "block_%d.npz" % block.block_id[1]),
-                nodes=nodes,
-                edges=edges,
-            )
+            assert os.path.exists(tmpdir)
+            path = os.path.join(tmpdir, f"block_{block.block_id[1]}.npz")
+            print(f"Writing ids to {path}")
+            with open(path, "wb") as f:
+                np.savez_compressed(
+                    f,
+                    nodes=nodes,
+                    edges=edges,
+                )
 
 
 def spawn_worker(
@@ -172,7 +195,8 @@ def spawn_worker(
 
     # Make the command for the worker to run
     command = [
-        "python",
+        # "python",
+        sys.executable,
         path,
         "start-worker",
         "--input_container",

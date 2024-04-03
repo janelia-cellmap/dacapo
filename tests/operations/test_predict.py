@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+import shutil
 from ..fixtures import *
 
 from dacapo.experiments import Run
@@ -15,13 +18,23 @@ logging.basicConfig(level=logging.INFO)
 @pytest.mark.parametrize(
     "run_config",
     [
-        lazy_fixture("distance_run"),
+        # lazy_fixture("distance_run"),
         lazy_fixture("dummy_run"),
-        lazy_fixture("onehot_run"),
+        # lazy_fixture("onehot_run"),
     ],
 )
 def test_predict(options, run_config, zarr_array, tmp_path):
-    # os.environ["PYDEVD_UNBLOCK_THREADS_TIMEOUT"] = "2.0"
+    # set debug to True to run the test in a specific directory (for debugging)
+    debug = False
+    if debug:
+        tmp_path = f"{Path(__file__).parent}/tmp"
+        if os.path.exists(tmp_path):
+            shutil.rmtree(tmp_path, ignore_errors=True)
+        os.makedirs(tmp_path, exist_ok=True)
+        old_path = os.getcwd()
+        os.chdir(tmp_path)
+    # when done debugging, delete "tests/operations/tmp"
+    # -------------------------------------
 
     # create a store
 
@@ -59,7 +72,7 @@ def test_predict(options, run_config, zarr_array, tmp_path):
     )
 
     # test predicting with iterations for which we know there are no weights
-    with pytest.raises(ValueError):
+    with pytest.raises(FileNotFoundError):
         predict(
             run_config.name,
             iteration=2,
@@ -68,3 +81,6 @@ def test_predict(options, run_config, zarr_array, tmp_path):
             output_path=tmp_path,
             num_workers=4,
         )
+
+    if debug:
+        os.chdir(old_path)

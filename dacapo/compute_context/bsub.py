@@ -1,4 +1,7 @@
+import os
+from pathlib import Path
 from .compute_context import ComputeContext
+import daisy
 
 import attr
 
@@ -36,6 +39,13 @@ class Bsub(ComputeContext):
             return "cpu"
 
     def _wrap_command(self, command):
+        try:
+            client = daisy.Client()
+            basename = str(
+                Path("./daisy_logs", client.task_id, f"worker_{client.worker_id}")
+            )
+        except:
+            basename = "./daisy_logs/dacapo"
         return (
             [
                 "bsub",
@@ -47,10 +57,10 @@ class Bsub(ComputeContext):
                 f"num={self.num_gpus}",
                 "-J",
                 "dacapo",
-                # "-o",
-                # f"{run_name}_train.out",
-                # "-e",
-                # f"{run_name}_train.err",
+                "-o",
+                f"{basename}.out",
+                "-e",
+                f"{basename}.err",
             ]
             + (
                 [

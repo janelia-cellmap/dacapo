@@ -39,15 +39,15 @@ class BinarySegmentationEvaluator(Evaluator):
 
     def evaluate(self, output_array_identifier, evaluation_array):
         output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
-        evaluation_data = evaluation_array[evaluation_array.roi]
-        output_data = output_array[output_array.roi]
-        logger.info(
+        evaluation_data = evaluation_array[evaluation_array.roi].squeeze()
+        output_data = output_array[output_array.roi].squeeze()
+        print(
             f"Evaluating binary segmentations on evaluation_data of shape: {evaluation_data.shape}"
         )
         assert (
             evaluation_data.shape == output_data.shape
         ), f"{evaluation_data.shape} vs {output_data.shape}"
-        if "c" in evaluation_array.axes:
+        if "c" in evaluation_array.axes and "c" in output_array.axes:
             score_dict = []
             for indx, channel in enumerate(evaluation_array.channels):
                 evaluation_channel_data = evaluation_data.take(
@@ -98,7 +98,7 @@ class BinarySegmentationEvaluator(Evaluator):
             return MultiChannelBinarySegmentationEvaluationScores(score_dict)
 
         else:
-            evaluator = Evaluator(
+            evaluator = ArrayEvaluator(
                 evaluation_data,
                 output_data,
                 not evaluation_data.any(),
@@ -141,7 +141,7 @@ class BinarySegmentationEvaluator(Evaluator):
         return MultiChannelBinarySegmentationEvaluationScores(channel_scores)
 
     def _evaluate(self, output_data, evaluation_data, voxel_size):
-        evaluator = Evaluator(
+        evaluator = ArrayEvaluator(
             evaluation_data,
             output_data,
             not evaluation_data.any(),

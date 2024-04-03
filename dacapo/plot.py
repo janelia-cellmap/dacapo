@@ -29,6 +29,21 @@ RunInfo = namedtuple(
 
 
 def smooth_values(a, n, stride=1):
+    """
+    Smooth values with a moving average.
+
+    Args:
+        a: values to smooth
+        n: number of values to average
+        stride: stride of the smoothing
+    Returns:
+        m: smoothed values
+        s: standard deviation of the smoothed values
+    Raises:
+        ValueError: If run_name is not found in config store
+    Examples:
+        >>> smooth_values([1,2,3,4,5], 3)
+    """
     a = np.array(a)
 
     # mean
@@ -59,6 +74,20 @@ def get_runs_info(
     config_store = create_config_store()
     stats_store = create_stats_store()
     runs = []
+    """
+    Get information about runs for plotting.
+
+    Args:
+        run_config_names: Names of run configs to plot
+        validation_score_names: Names of validation scores to plot
+        plot_losses: Whether to plot losses
+    Returns:
+        runs: List of RunInfo objects  
+    Raises:
+        ValueError: If run_name is not found in config store
+    Examples:
+        >>> get_runs_info(["run_name"], ["validation_score_name"], [True])
+    """
 
     for run_config_name, validation_score_name, plot_loss in zip(
         run_config_names, validation_score_names, plot_losses
@@ -74,9 +103,11 @@ def get_runs_info(
             run_config.architecture_config.name,
             run_config.trainer_config.name,
             run_config.datasplit_config.name,
-            stats_store.retrieve_training_stats(run_config_name, subsample=True)
-            if plot_loss
-            else None,
+            (
+                stats_store.retrieve_training_stats(run_config_name, subsample=True)
+                if plot_loss
+                else None
+            ),
             validation_scores,
             validation_score_name,
             plot_loss,
@@ -94,6 +125,23 @@ def plot_runs(
     plot_losses=None,
     return_json=False,
 ):
+    """
+    Plot runs.
+    Args:
+        run_config_base_names: Names of run configs to plot
+        smooth: Smoothing factor
+        validation_scores: Validation scores to plot
+        higher_is_betters: Whether higher is better
+        plot_losses: Whether to plot losses
+        return_json: Whether to return JSON
+    Returns:
+        JSON or HTML plot
+    Raises:
+        ValueError: If run_name is not found in config store
+    Examples:
+        >>> plot_runs(["run_name"], 100, None, None, [True])
+
+    """
     print("PLOTTING RUNS")
     runs = get_runs_info(run_config_base_names, validation_scores, plot_losses)
     print("GOT RUNS INFO")
