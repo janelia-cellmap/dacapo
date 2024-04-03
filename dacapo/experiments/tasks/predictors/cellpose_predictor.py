@@ -16,6 +16,7 @@ from cellpose.dynamics import masks_to_flows_gpu_3d
 
 logger = logging.getLogger(__name__)
 
+
 # TODO currently CPnet have nout which is the head of the network, check how to change it in the predictor
 class CellposePredictor(Predictor):
     """
@@ -54,7 +55,6 @@ class CellposePredictor(Predictor):
     def create_model(self, architecture):
         if isinstance(architecture, CellposeUnet):
             head = torch.nn.Identity()
-        
 
         return Model(architecture, torch.nn.Identity())
 
@@ -72,7 +72,6 @@ class CellposePredictor(Predictor):
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
         # balance weights independently for each channel
-       
 
         weights, moving_class_counts = balance_weights(
             gt[target.roi],
@@ -96,8 +95,6 @@ class CellposePredictor(Predictor):
     @property
     def output_array_type(self):
         return DistanceArray(self.embedding_dims)
-
-   
 
     def process(
         self,
@@ -141,8 +138,6 @@ class CellposePredictor(Predictor):
             all_distances[ii] = distances
 
         return all_distances
-
-   
 
     def __normalize(self, distances, norm, normalize_args):
         if norm == "tanh":
