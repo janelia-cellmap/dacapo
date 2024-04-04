@@ -56,6 +56,7 @@ def onehot_run(
         num_iterations=100,
     )
 
+
 @pytest.fixture()
 def cellpose_run(
     dummy_datasplit,
