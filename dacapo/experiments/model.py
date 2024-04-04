@@ -16,7 +16,7 @@ class Model(torch.nn.Module):
     is in eval mode. This is particularly useful if you want to train with something
     like BCELossWithLogits, since you want to avoid applying softmax while training,
     but apply it during evaluation.
-    
+
     Attributes:
         architecture (Architecture): The architecture of the model.
         prediction_head (torch.nn.Module): The prediction head of the model.
@@ -35,7 +35,7 @@ class Model(torch.nn.Module):
         scale(voxel_size: Coordinate) -> Coordinate:
             Scale the model by the given voxel size.
     Note:
-        The output shape is the spatial shape of the model, i.e., not accounting for channels and batch dimensions. 
+        The output shape is the spatial shape of the model, i.e., not accounting for channels and batch dimensions.
     """
 
     num_out_channels: int
@@ -106,7 +106,7 @@ class Model(torch.nn.Module):
 
     def forward(self, x):
         """
-        Forward pass of the model. 
+        Forward pass of the model.
 
         Args:
             x (torch.Tensor): The input tensor.
@@ -118,7 +118,7 @@ class Model(torch.nn.Module):
             torch.Tensor
         Note:
             The eval_activation is only applied during evaluation. This is particularly useful if you want to train with something like BCELossWithLogits, since you want to avoid applying softmax while training, but apply it during evaluation.
-        
+
         """
         result = self.chain(x)
         if not self.training and self.eval_activation is not None:
@@ -130,7 +130,7 @@ class Model(torch.nn.Module):
         Compute the spatial shape (i.e., not accounting for channels and
         batch dimensions) of this model, when fed a tensor of the given spatial
         shape as input.
-        
+
         Args:
             input_shape (Coordinate): The shape of the input tensor.
         Returns:
@@ -168,7 +168,7 @@ class Model(torch.nn.Module):
             (1, Coordinate(1, 1, 1))
         Note:
             The output shape is the spatial shape of the model, i.e., not accounting for channels and batch dimensions.
-        
+
         """
         device = torch.device("cpu")
         for parameter in self.parameters():
@@ -182,7 +182,7 @@ class Model(torch.nn.Module):
 
     def scale(self, voxel_size: Coordinate) -> Coordinate:
         """
-        Scale the model by the given voxel size. 
+        Scale the model by the given voxel size.
 
         Args:
             voxel_size (Coordinate): The voxel size to scale the model by.

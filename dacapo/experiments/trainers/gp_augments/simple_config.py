@@ -34,6 +34,6 @@ class SimpleAugmentConfig(AugmentConfig):
             NotImplementedError: This method is not implemented.
         Examples:
             >>> node = simple_augment_config.node()
-            
+
         """
         return gp.SimpleAugment()

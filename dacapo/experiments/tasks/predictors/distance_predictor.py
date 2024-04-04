@@ -221,7 +221,7 @@ class DistancePredictor(Predictor):
     ):
         """
         Create a distance mask.
-        
+
         Args:
             distances (np.ndarray): The distances array.
             mask (np.ndarray): The mask array.
@@ -359,7 +359,7 @@ class DistancePredictor(Predictor):
             NotImplementedError: This method is not implemented.
         Examples:
             >>> predictor.__find_boundaries(labels)
-        
+
         """
         # labels: 1 1 1 1 0 0 2 2 2 2 3 3       n
         # shift :   1 1 1 1 0 0 2 2 2 2 3       n - 1
@@ -408,7 +408,7 @@ class DistancePredictor(Predictor):
             normalize_args: The normalization arguments.
         Returns:
             The normalized distances.
-        Raises: 
+        Raises:
             ValueError: If the normalization method is not supported.
         Examples:
             >>> predictor.__normalize(distances, norm, normalize_args)
@@ -431,7 +431,7 @@ class DistancePredictor(Predictor):
             The ROI for which the ground-truth is requested.
         Raises:
             NotImplementedError: This method is not implemented.
-        Examples:   
+        Examples:
             >>> predictor.gt_region_for_roi(target_spec)
 
         """

@@ -25,9 +25,9 @@ def validate(
     Validate a run at a given iteration. Loads the weights from a previously
     stored checkpoint. Returns the best parameters and scores for this
     iteration.
-    
+
     Args:
-        run_name: The name of the run to validate. 
+        run_name: The name of the run to validate.
         iteration: The iteration to validate.
         num_workers: The number of workers to use for validation.
         output_dtype: The dtype to use for the output arrays.
@@ -77,7 +77,7 @@ def validate_run(
     load the weights of that iteration, it is assumed that the model is already
     loaded correctly. Returns the best parameters and scores for this
     iteration.
-    
+
     Args:
         run: The run to validate.
         iteration: The iteration to validate.

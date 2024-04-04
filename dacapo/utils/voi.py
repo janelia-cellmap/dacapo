@@ -41,7 +41,7 @@ def voi(reconstruction, groundtruth, ignore_reconstruction=[], ignore_groundtrut
     ------
     ValueError
         If `reconstruction` and `groundtruth` have different shapes.
-        
+
     References
     ----------
     [1] Meila, M. (2007). Comparing clusterings - an information based
@@ -113,7 +113,7 @@ def vi_tables(x, y=None, ignore_x=[0], ignore_y=[0]):
         The proportions of each label in `x` and `y` (`px`, `py`), the
         per-segment conditional entropies of `x` given `y` and vice-versa, the
         per-segment conditional probability p log p.
-    
+
     Raises
     ------
     ValueError
@@ -174,7 +174,7 @@ def contingency_table(seg, gt, ignore_seg=[0], ignore_gt=[0], norm=True):
         A contingency table. `cont[i, j]` will equal the number of voxels
         labeled `i` in `seg` and `j` in `gt`. (Or the proportion of such voxels
         if `norm=True`.)
-    
+
     Raises
     ------
     ValueError
@@ -214,7 +214,7 @@ def divide_columns(matrix, row, in_place=False):
     -------
     out : same type as `matrix`
         The result of the row-wise division.
-    
+
     Raises
     ------
     ValueError
@@ -258,7 +258,7 @@ def divide_rows(matrix, column, in_place=False):
     -------
     out : same type as `matrix`
         The result of the row-wise division.
-    
+
     Raises
     ------
     ValueError
@@ -302,7 +302,7 @@ def xlogx(x, out=None, in_place=False):
     -------
     y : same type as x
         Result of x * log_2(x).
-    
+
     Raises
     ------
     ValueError

@@ -46,7 +46,7 @@ def get_viewer(
         >>> viewer = get_viewer(arrays)
         >>> viewer
     """
-    
+
     for name, array_data in arrays.items():
         array = array_data["array"]
         if hasattr(array, "to_ndarray"):
@@ -493,9 +493,9 @@ class NeuroglancerRunViewer:
 
         Args:
             run (Run): The run object.
-        Raises: 
+        Raises:
             FileNotFoundError: If the dataset object does not exist.
-        Examples:   
+        Examples:
             >>> from dacapo.experiments.run import Run
             >>> from dacapo.utils.view import NeuroglancerRunViewer
             >>> run = Run()
@@ -518,7 +518,7 @@ class NeuroglancerRunViewer:
             IFrame: The embedded viewer.
         Raises:
             FileNotFoundError: If the dataset object does not exist.
-        Examples:  
+        Examples:
             >>> from dacapo.experiments.run import Run
             >>> from dacapo.utils.view import NeuroglancerRunViewer
             >>> run = Run()

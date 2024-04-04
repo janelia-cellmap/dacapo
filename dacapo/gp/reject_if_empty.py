@@ -18,7 +18,7 @@ class RejectIfEmpty(BatchFilter):
     Method:
         setup: Set up the provider.
         provide: Provide a batch.
-    
+
     """
 
     def __init__(self, gt=None, p=0.5, background=0):

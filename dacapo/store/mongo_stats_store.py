@@ -43,7 +43,7 @@ class MongoStatsStore(StatsStore):
             >>> store = MongoStatsStore('localhost', 'dacapo')
         Notes:
             The MongoStatsStore will connect to the MongoDB database at the given host.
-        
+
         """
         print(
             f"Creating MongoStatsStore:\n\thost    : {db_host}\n\tdatabase: {db_name}"
@@ -100,26 +100,26 @@ class MongoStatsStore(StatsStore):
         )
 
     def retrieve_training_stats(
-            self, run_name: str, subsample: bool = False
-        ) -> TrainingStats:
-            """
-            Retrieve the training statistics for a given run.
+        self, run_name: str, subsample: bool = False
+    ) -> TrainingStats:
+        """
+        Retrieve the training statistics for a given run.
 
-            Args:
-                run_name (str): The name of the run.
-                subsample (bool, optional): Whether to subsample the training statistics. Defaults to False.
-            Returns:
-                TrainingStats: The training statistics for the specified run.
-            Raises:
-                ValueError: If the training statistics are not available.
-            Examples:
-                >>> store = MongoStatsStore('localhost', 'dacapo')
-                >>> run_name = 'run_0'
-                >>> store.retrieve_training_stats(run_name)
-            Notes:
-                The training statistics are retrieved from the 'training_stats' collection.
-            """
-            return self.__read_training_stats(run_name, subsample=subsample)
+        Args:
+            run_name (str): The name of the run.
+            subsample (bool, optional): Whether to subsample the training statistics. Defaults to False.
+        Returns:
+            TrainingStats: The training statistics for the specified run.
+        Raises:
+            ValueError: If the training statistics are not available.
+        Examples:
+            >>> store = MongoStatsStore('localhost', 'dacapo')
+            >>> run_name = 'run_0'
+            >>> store.retrieve_training_stats(run_name)
+        Notes:
+            The training statistics are retrieved from the 'training_stats' collection.
+        """
+        return self.__read_training_stats(run_name, subsample=subsample)
 
     def store_validation_iteration_scores(
         self, run_name: str, scores: ValidationScores
@@ -207,7 +207,7 @@ class MongoStatsStore(StatsStore):
             >>> store.__store_training_stats(stats, begin, end, run_name)
         Notes:
             The training statistics are stored in the 'training_stats' collection.
-        
+
         """
         docs = converter.unstructure(stats.iteration_stats[begin:end])
         for doc in docs:
@@ -371,7 +371,7 @@ class MongoStatsStore(StatsStore):
             run_name (str): The name of the run for which validation scores should be deleted.
         Raises:
             ValueError: If the validation scores are not available.
-        Examples:  
+        Examples:
             >>> store = MongoStatsStore('localhost', 'dacapo')
             >>> run_name = 'run_0'
             >>> store.delete_validation_scores(run_name)
@@ -422,7 +422,7 @@ class MongoStatsStore(StatsStore):
         This method creates indexes on specific fields to improve query performance.
 
         Indexes created:
-        - For training_stats collection: 
+        - For training_stats collection:
             - run_name and iteration (unique index)
             - iteration
         - For validation_scores collection:
@@ -450,19 +450,19 @@ class MongoStatsStore(StatsStore):
         self.validation_scores.create_index([("iteration", ASCENDING)], name="it")
 
     def __open_collections(self):
-            """
-            Opens the collections in the MongoDB database.
+        """
+        Opens the collections in the MongoDB database.
 
-            This method initializes the `training_stats` and `validation_scores` collections
-            in the MongoDB database.
+        This method initializes the `training_stats` and `validation_scores` collections
+        in the MongoDB database.
 
-            Raises:
-                ValueError: If the collections are not available.
-            Examples:
-                >>> store = MongoStatsStore('localhost', 'dacapo')
-                >>> store.__open_collections()
-            Notes:
-                The collections are used to store training statistics and validation scores.
-            """
-            self.training_stats = self.database["training_stats"]
-            self.validation_scores = self.database["validation_scores"]
+        Raises:
+            ValueError: If the collections are not available.
+        Examples:
+            >>> store = MongoStatsStore('localhost', 'dacapo')
+            >>> store.__open_collections()
+        Notes:
+            The collections are used to store training statistics and validation scores.
+        """
+        self.training_stats = self.database["training_stats"]
+        self.validation_scores = self.database["validation_scores"]

@@ -56,7 +56,7 @@ class Run:
     training_stats: TrainingStats
     validation_scores: ValidationScores
 
-    def __init__(self, run_config):
+    def __init__(self, run_config, load_starter_model: bool = True):
         """
         Initializes a Run object.
 
@@ -117,6 +117,10 @@ class Run:
         self.validation_scores = ValidationScores(
             self.task.parameters, self.datasplit.validate, self.task.evaluation_scores
         )
+
+        if not load_starter_model:
+            self.start = None
+            return
 
         # preloaded weights from previous run
         self.start = (
@@ -180,7 +184,7 @@ class Run:
             >>> run.move_optimizer(device)
             >>> run.optimizer
             Optimizer object
-            
+
         """
         for state in self.optimizer.state.values():
             for k, v in state.items():
