@@ -39,5 +39,3 @@ class CellposUNetConfig(ArchitectureConfig):
     diam_mean: Optional[float] = attr.ib(
         default=30.0, metadata={"help_text": "Mean diameter of the cells."}
     )
-
-
