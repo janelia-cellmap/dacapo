@@ -3,14 +3,14 @@ from ..fixtures import *
 from dacapo.store.create_store import create_config_store
 
 import pytest
-from pytest_lazyfixture import lazy_fixture
+from pytest_lazy_fixtures import lf
 
 
 @pytest.mark.parametrize(
     "trainer_config",
     [
-        lazy_fixture("dummy_trainer"),
-        lazy_fixture("gunpowder_trainer"),
+        lf("dummy_trainer"),
+        lf("gunpowder_trainer"),
     ],
 )
 def test_trainer(
