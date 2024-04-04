@@ -55,3 +55,20 @@ def onehot_run(
         repetition=0,
         num_iterations=100,
     )
+
+@pytest.fixture()
+def cellpose_run(
+    dummy_datasplit,
+    cellpose_architecture,
+    dummy_task,
+    dummy_trainer,
+):
+    yield RunConfig(
+        name="cellpose_run",
+        task_config=dummy_task,
+        architecture_config=cellpose_architecture,
+        trainer_config=dummy_trainer,
+        datasplit_config=dummy_datasplit,
+        repetition=0,
+        num_iterations=100,
+    )
