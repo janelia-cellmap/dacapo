@@ -63,7 +63,7 @@ dependencies = [
 # extras
 # https://peps.python.org/pep-0621/#dependencies-optional-dependencies
 [project.optional-dependencies]
-test = ["pytest==7.4.4", "pytest-cov", "pytest-lazy-fixtures"]
+test = ["pytest", "pytest-cov", "pytest-lazy-fixtures"]
 dev = [
     "black",
     "mypy",
