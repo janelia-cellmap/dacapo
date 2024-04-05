@@ -15,6 +15,12 @@ class LocalTorch(ComputeContext):
     Attributes:
         _device (Optional[str]): This stores the type of device on which torch computations are to be done. It can
         take "cuda" for GPU or "cpu" for CPU. None value results in automatic detection of device type.
+        oom_limit (Optional[float | int]): The out of GPU memory to leave free in GB. If the free memory is below
+        this limit, we will fall back on CPU.
+    Methods:
+        device(): Returns the torch device object.
+    Note:
+        The class is a subclass of the ComputeContext class.
     """
 
     _device: Optional[str] = attr.ib(
@@ -37,6 +43,14 @@ class LocalTorch(ComputeContext):
         """
         A property method that returns the torch device object. It automatically detects and uses "cuda" (GPU) if
         available, else it falls back on using "cpu".
+
+        Returns:
+            torch.device: The torch device object.
+        Examples:
+            >>> context = LocalTorch()
+            >>> device = context.device
+        Note:
+            The method is implemented in the class.
         """
         if self._device is None:
             if torch.cuda.is_available():
