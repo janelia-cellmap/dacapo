@@ -15,6 +15,20 @@ class Dataset(ABC):
         mask (Array, optional): The mask for the data.
         weight (int, optional): The weight of the dataset.
         sample_points (list[Coordinate], optional): The list of sample points in the dataset.
+    Methods:
+        __eq__(other):
+            Overloaded equality operator for dataset objects.
+        __hash__():
+            Calculates a hash for the dataset.
+        __repr__():
+            Returns the official string representation of the dataset object.
+        __str__():
+            Returns the string representation of the dataset object.
+        _neuroglancer_layers(prefix="", exclude_layers=None):
+            Generates neuroglancer layers for raw, gt and mask if they can be viewed by neuroglance, excluding those in
+            the exclude_layers.
+    Notes:
+        This class is a base class and should not be instantiated.
     """
 
     name: str
@@ -30,9 +44,17 @@ class Dataset(ABC):
 
         Args:
             other (Any): The object to compare with the dataset.
-
         Returns:
             bool: True if the object is also a dataset and they have the same name, False otherwise.
+        Raises:
+            NotImplementedError: If the method is not implemented in the derived class.
+        Examples:
+            >>> dataset1 = Dataset("dataset1")
+            >>> dataset2 = Dataset("dataset2")
+            >>> dataset1 == dataset2
+            False
+        Notes:
+            This method is used to compare two dataset objects.
         """
         return isinstance(other, type(self)) and self.name == other.name
 
@@ -42,6 +64,14 @@ class Dataset(ABC):
 
         Returns:
             int: The hash of the dataset name.
+        Raises:
+            NotImplementedError: If the method is not implemented in the derived class.
+        Examples:
+            >>> dataset = Dataset("dataset")
+            >>> hash(dataset)
+            123456
+        Notes:
+            This method is used to calculate a hash for the dataset.
         """
         return hash(self.name)
 
@@ -51,6 +81,14 @@ class Dataset(ABC):
 
         Returns:
             str: String representation of the dataset.
+        Raises:
+            NotImplementedError: If the method is not implemented in the derived class.
+        Examples:
+            >>> dataset = Dataset("dataset")
+            >>> dataset
+            Dataset(dataset)
+        Notes:
+            This method is used to return the official string representation of the dataset object.
         """
         return f"Dataset({self.name})"
 
@@ -58,8 +96,18 @@ class Dataset(ABC):
         """
         Returns the string representation of the dataset object.
 
+        Args:
+            self (Dataset): The dataset object.
         Returns:
             str: String representation of the dataset.
+        Raises:
+            NotImplementedError: If the method is not implemented in the derived class.
+        Examples:
+            >>> dataset = Dataset("dataset")
+            >>> print(dataset)
+            Dataset(dataset)
+        Notes:
+            This method is used to return the string representation of the dataset object.
         """
         return f"Dataset({self.name})"
 
@@ -71,9 +119,16 @@ class Dataset(ABC):
         Args:
             prefix (str, optional): A prefix to be added to the layer names.
             exclude_layers (set, optional): A set of layer names to exclude.
-
         Returns:
             dict: A dictionary containing layer names as keys and corresponding neuroglancer layer as values.
+        Raises:
+            NotImplementedError: If the method is not implemented in the derived class.
+        Examples:
+            >>> dataset = Dataset("dataset")
+            >>> dataset._neuroglancer_layers()
+            {"raw": neuroglancer_layer}
+        Notes:
+            This method is used to generate neuroglancer layers for raw, gt and mask if they can be viewed by neuroglance.
         """
         layers = {}
         exclude_layers = exclude_layers if exclude_layers is not None else set()
