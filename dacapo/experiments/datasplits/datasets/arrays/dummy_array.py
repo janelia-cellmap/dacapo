@@ -17,7 +17,7 @@ class DummyArray(Array):
         The array_config must be an ArrayConfig object.
         The min and max values are used to normalize the intensities.
         All intensities are converted to float32.
-    
+
     """
 
     def __init__(self, array_config):
@@ -72,7 +72,7 @@ class DummyArray(Array):
     @property
     def dims(self):
         """
-        Returns the number of dimensions of the source array    
+        Returns the number of dimensions of the source array
 
         Returns:
             int: The number of dimensions of the source array

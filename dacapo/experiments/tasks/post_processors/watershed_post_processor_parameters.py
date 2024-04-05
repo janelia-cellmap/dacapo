@@ -20,5 +20,6 @@ class WatershedPostProcessorParameters(PostProcessorParameters):
     Note:
         This class is used by the ``WatershedPostProcessor`` to define the parameters for the watershed transformation. The offsets are used to define the neighborhood for the watershed transformation.
     """
+
     bias: float = attr.ib(default=0.5)
     context: Coordinate = attr.ib(default=Coordinate((32, 32, 32)))

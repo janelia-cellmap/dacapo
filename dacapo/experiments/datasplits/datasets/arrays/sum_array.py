@@ -11,7 +11,7 @@ import numpy as np
 class SumArray(Array):
     """
     This class provides a sum array. This array is a virtual array that is created by summing
-    multiple source arrays. The source arrays must have the same shape and ROI. 
+    multiple source arrays. The source arrays must have the same shape and ROI.
 
     Attributes:
         name: str
@@ -57,7 +57,7 @@ class SumArray(Array):
             >>> sum_array = SumArray(SumArrayConfig(name="sum", source_array_configs=[TiffArrayConfig(file_name=Path("data.tiff"), offset=Coordinate([0, 0, 0]), voxel_size=Coordinate([1, 1, 1]), axes=["x", "y", "z"])]))
         Note:
             This class is a subclass of Array.
-    
+
         """
         self.name = array_config.name
         self._source_arrays = [
@@ -266,7 +266,7 @@ class SumArray(Array):
         Examples:
             >>> sum_array[roi]
             np.array([[[0, 0], [0, 0]], [[0, 0], [0, 0]]])
-        Note:  
+        Note:
             This class is a subclass of Array.
         """
         return np.sum(

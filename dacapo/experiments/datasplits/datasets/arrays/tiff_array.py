@@ -30,7 +30,7 @@ class TiffArray(Array):
             Return the attributes of the tiff.
     Note:
         This class is a subclass of Array.
-    
+
     """
 
     _offset: Coordinate
@@ -88,7 +88,7 @@ class TiffArray(Array):
     def axes(self) -> List[str]:
         """
         Return the axes of the array.
-        
+
         Returns:
             List[str]: The axes of the array.
         Raises:
@@ -145,7 +145,7 @@ class TiffArray(Array):
     @lazy_property.LazyProperty
     def voxel_size(self) -> Coordinate:
         """
-        Return the voxel size of the array. 
+        Return the voxel size of the array.
 
         Returns:
             Coordinate: The voxel size of the array.
@@ -199,11 +199,11 @@ class TiffArray(Array):
     @property
     def dtype(self):
         """
-        Return the data type of the array.  
+        Return the data type of the array.
 
         Returns:
             np.dtype: The data type of the array.
-        Raises: 
+        Raises:
             NotImplementedError:
                 Tiffs have tons of different locations for metadata.
         Examples:
@@ -268,7 +268,7 @@ class TiffArray(Array):
         Examples:
             >>> tiff_array.data
             np.ndarray
-        Note:   
+        Note:
             Tiffs have tons of different locations for metadata.
         """
         return tifffile.TiffFile(self._file_name).values

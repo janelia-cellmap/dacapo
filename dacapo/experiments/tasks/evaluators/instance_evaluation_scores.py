@@ -26,6 +26,7 @@ class InstanceEvaluationScores(EvaluationScores):
     Note:
         The InstanceEvaluationScores class is used to store the evaluation scores for the instance segmentation task.
     """
+
     criteria = ["voi_split", "voi_merge", "voi"]
 
     voi_split: float = attr.ib(default=float("nan"))
@@ -34,8 +35,8 @@ class InstanceEvaluationScores(EvaluationScores):
     @property
     def voi(self):
         """
-        Return the average of the VOI split and VOI merge.  
-        
+        Return the average of the VOI split and VOI merge.
+
         Returns:
             float
                 the average of the VOI split and VOI merge

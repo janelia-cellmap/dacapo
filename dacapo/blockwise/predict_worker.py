@@ -37,9 +37,9 @@ path = __file__
 )
 def cli(log_level):
     """
-    CLI for running the predict worker. 
+    CLI for running the predict worker.
 
-    The predict worker is used to apply a trained model to a dataset. 
+    The predict worker is used to apply a trained model to a dataset.
 
     Args:
         log_level (str): The log level to use for logging.
@@ -260,7 +260,7 @@ def spawn_worker(
     def run_worker():
         """
         Run the worker in the given compute context.
-        
+
         Raises:
             NotImplementedError: If the method is not implemented in the derived class.
         Examples:

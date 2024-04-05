@@ -27,6 +27,7 @@ class RawGTDataset(Dataset):
     Notes:
         This class is a base class and should not be instantiated.
     """
+
     raw: Array
     gt: Array
     mask: Optional[Array]

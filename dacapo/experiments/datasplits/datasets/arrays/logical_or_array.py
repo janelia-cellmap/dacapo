@@ -11,7 +11,7 @@ import numpy as np
 class LogicalOrArray(Array):
     """
     Array that computes the logical OR of the instances in a list of source arrays.
-    
+
     Attributes:
         name: str
             The name of the array
@@ -32,7 +32,7 @@ class LogicalOrArray(Array):
             Get the data type of the array
         num_channels: () -> int
             Get the number of channels in the array
-        data: () -> np.ndarray  
+        data: () -> np.ndarray
             Get the data of the array
         attrs: () -> dict
             Get the attributes of the array
@@ -40,7 +40,7 @@ class LogicalOrArray(Array):
             Get the data of the array in the region of interest
         _can_neuroglance: () -> bool
             Get whether the array can be visualized in neuroglance
-        _neuroglancer_source: () -> dict    
+        _neuroglancer_source: () -> dict
             Get the neuroglancer source of the array
         _neuroglancer_layer: () -> Tuple[neuroglancer.Layer, dict]
             Get the neuroglancer layer of the array
@@ -306,7 +306,7 @@ class LogicalOrArray(Array):
     def dtype(self):
         """
         Get the data type of the array
-        
+
         Returns:
             type: The data type of the array
         Raises:
@@ -404,7 +404,7 @@ class LogicalOrArray(Array):
             ...             ),
             ...         ),
             ...         ArrayConfig(
-            ...             name="mask2",   
+            ...             name="mask2",
             ...             array_type=MaskArray,
             ...             source_array_config=MaskArrayConfig(
             ...                 name="mask2",
@@ -454,7 +454,7 @@ class LogicalOrArray(Array):
             ...             ),
             ...         ),
             ...         ArrayConfig(
-            ...             name="mask2",   
+            ...             name="mask2",
             ...             array_type=MaskArray,
             ...             source_array_config=MaskArrayConfig(
             ...                 name="mask2",

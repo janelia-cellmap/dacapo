@@ -17,7 +17,7 @@ class PostProcessorParameters:
     Note:
         This class is immutable. Once created, the values of its attributes
         cannot be changed.
-    
+
     """
 
     id: int = attr.ib()

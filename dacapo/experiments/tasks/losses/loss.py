@@ -16,6 +16,7 @@ class Loss(ABC):
         This class is abstract. Subclasses must implement the abstract methods. Once created, the values of its attributes
         cannot be changed.
     """
+
     @abstractmethod
     def compute(
         self,
@@ -30,7 +31,7 @@ class Loss(ABC):
         All arguments are ``torch`` tensors. The return type should be a
         ``torch`` scalar that can be used with an optimizer, just as usual when
         training with ``torch``.
-        
+
         Args:
             prediction: The predicted tensor.
             target: The target tensor.

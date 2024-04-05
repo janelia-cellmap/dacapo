@@ -119,9 +119,9 @@ class CropArray(Array):
             ... )
             >>> crop_array = CropArray(array_config)
             >>> crop_array.axes
-            'zyx'   
+            'zyx'
         Note:
-            The axes are 'zyx' because the source array is not modified.    
+            The axes are 'zyx' because the source array is not modified.
         """
         return self._source_array.axes
 
@@ -158,7 +158,7 @@ class CropArray(Array):
     def voxel_size(self) -> Coordinate:
         """
         Returns the voxel size of the source array.
-        
+
         Returns:
             The voxel size of the source array.
         Raises:
@@ -216,7 +216,7 @@ class CropArray(Array):
     def writable(self) -> bool:
         """
         Returns whether the array is writable.
-        
+
         Returns:
             False
         Raises:

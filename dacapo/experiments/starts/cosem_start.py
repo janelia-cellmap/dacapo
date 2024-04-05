@@ -85,6 +85,7 @@ class CosemStart(Start):
         This class is used to represent the starting point for tasks. The weights
         of the starter model used for finetuning are loaded from the dacapo store.
     """
+
     def __init__(self, start_config):
         """
         Initializes the CosemStart class with specified config to run the

@@ -18,4 +18,5 @@ class DummyPostProcessorParameters(PostProcessorParameters):
         This class is immutable. Once created, the values of its attributes
         cannot be changed.
     """
+
     min_size: int = attr.ib()

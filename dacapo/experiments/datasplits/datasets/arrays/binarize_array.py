@@ -13,9 +13,9 @@ class BinarizeArray(Array):
     Because we often want to predict classes that are a combination
     of a set of labels we wrap a ZarrArray with the BinarizeArray
     and provide something like `groupings=[("mito", [3,4,5])]`
-    where 4 corresponds to mito_mem (mitochondria membrane), 5 is mito_ribo 
-    (mitochondria ribosomes), and 3 is everything else that is part of a 
-    mitochondria. The BinarizeArray will simply combine labels 3,4,5 into 
+    where 4 corresponds to mito_mem (mitochondria membrane), 5 is mito_ribo
+    (mitochondria ribosomes), and 3 is everything else that is part of a
+    mitochondria. The BinarizeArray will simply combine labels 3,4,5 into
     a single binary channel for the class of "mito".
 
     We use a single channel per class because some classes may overlap.
@@ -46,7 +46,7 @@ class BinarizeArray(Array):
 
     def __init__(self, array_config):
         """
-        This method initializes the BinarizeArray object. 
+        This method initializes the BinarizeArray object.
 
         Args:
             array_config (ArrayConfig): The array configuration.
@@ -121,7 +121,7 @@ class BinarizeArray(Array):
     def voxel_size(self) -> Coordinate:
         """
         This method returns the voxel size of the source array.
-        
+
         Returns:
             Coordinate: The voxel size of the source array.
         Raises:
@@ -194,7 +194,7 @@ class BinarizeArray(Array):
             >>> binarize_array.num_channels
         Note:
             This method is used to return the number of channels in the source array.
-        
+
         """
         return len(self._groupings)
 

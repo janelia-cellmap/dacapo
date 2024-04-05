@@ -18,7 +18,7 @@ class DVIDArrayConfig(ArrayConfig):
         to_array: Returns the DVIDArray object
     Notes:
         The source must be a tuple of strings.
-    
+
     """
 
     array_type = DVIDArray

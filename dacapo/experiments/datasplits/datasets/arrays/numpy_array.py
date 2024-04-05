@@ -91,7 +91,7 @@ class NumpyArray(Array):
             >>> array.data
             array([[[0., 0., 0., 0.],
                     [0., 0., 0., 0.],
-                    [0., 0., 0., 0.]],  
+                    [0., 0., 0., 0.]],
             <BLANKLINE>
                         [[0., 0., 0., 0.],
                         [0., 0., 0., 0.],
@@ -157,7 +157,7 @@ class NumpyArray(Array):
         """
         Returns the axes of the array.
 
-        Returns:    
+        Returns:
             List[str]: The axes of the array.
         Raises:
             ValueError: If the array does not have axes.

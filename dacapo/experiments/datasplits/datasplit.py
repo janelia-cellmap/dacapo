@@ -23,6 +23,7 @@ class DataSplit(ABC):
     Notes:
         This class is used to split the data into training and validation datasets.
     """
+
     train: List[Dataset]
     validate: Optional[List[Dataset]]
 

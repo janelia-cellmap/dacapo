@@ -19,7 +19,7 @@ class WatershedPostProcessor(PostProcessor):
     """
     A post-processor that applies a watershed transformation to the
     prediction.
-    
+
     Attributes:
         offsets: List of offsets for the watershed transformation.
     Methods:
@@ -49,7 +49,7 @@ class WatershedPostProcessor(PostProcessor):
         """
         Enumerate all possible parameters of this post-processor. Should
         return instances of ``PostProcessorParameters``.
-        
+
         Returns:
             Generator[WatershedPostProcessorParameters]: A generator of parameters.
         Raises:
@@ -99,7 +99,7 @@ class WatershedPostProcessor(PostProcessor):
             num_workers (int): The number of workers to use for processing.
             block_size (Coordinate): The block size to use for processing.
         Returns:
-            LocalArrayIdentifier: The output array identifier.  
+            LocalArrayIdentifier: The output array identifier.
         Raises:
             NotImplementedError: If the method is not implemented.
         Examples:

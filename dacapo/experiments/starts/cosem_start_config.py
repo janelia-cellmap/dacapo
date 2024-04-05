@@ -9,7 +9,7 @@ class CosemStartConfig(StartConfig):
     Starter for COSEM pretained models. This is a subclass of `StartConfig` and
     should be used to initialize the model with pretrained weights from a previous
     run.
-    
+
     The weights are loaded from the dacapo store for the specified run. The
     configuration is used to initialize the weights for the model associated with
     a specific criterion.
@@ -28,7 +28,7 @@ class CosemStartConfig(StartConfig):
         >>> start_config = CosemStartConfig(run="run_1", criterion="best")
     Notes:
         This class is used to represent the configuration for running tasks.
-    
+
     """
 
     start_type = CosemStart

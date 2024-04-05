@@ -30,7 +30,7 @@ def match_heads(model, head_weights, old_head, new_head):
     Returns:
         model : obj
             The model with the weights of the old head copied to the new
-            head.   
+            head.
     Raises:
         RuntimeError
             If the old head is not found in the new head, a RuntimeError
@@ -203,7 +203,7 @@ class Start(ABC):
         """
         Retrieves the weights from the dacapo store and load them into
         the model.
-        
+
         Args:
             model : obj
                 The model to which the weights are to be loaded.
@@ -212,7 +212,7 @@ class Start(ABC):
         Returns:
             model : obj
                 The model with the weights loaded from the dacapo store.
-        Raises: 
+        Raises:
             RuntimeError
                 If weights of a non-existing or mismatched layer are being
                 loaded, a RuntimeError exception is thrown which is logged

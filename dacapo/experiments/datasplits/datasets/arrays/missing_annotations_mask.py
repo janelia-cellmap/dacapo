@@ -108,7 +108,7 @@ class MissingAnnotationsMask(Array):
             Coordinate(x=4, y=4, z=40)
         Notes:
             This is a helper function for the BinarizeArray class
-            
+
         """
         return self._source_array.voxel_size
 
@@ -145,7 +145,7 @@ class MissingAnnotationsMask(Array):
             False
         Notes:
             This is a helper function for the BinarizeArray class
-            
+
         """
         return False
 
@@ -224,7 +224,7 @@ class MissingAnnotationsMask(Array):
             >>> source_array.attrs
             {'name': 'source_array', 'resolution': [4, 4, 40]}
         Notes:
-            This is a helper function for the BinarizeArray class        
+            This is a helper function for the BinarizeArray class
         """
         return self._source_array.attrs
 
@@ -327,7 +327,7 @@ class MissingAnnotationsMask(Array):
     def _neuroglancer_layer(self):
         """
         Returns a neuroglancer Segmentation layer for the array
-        
+
         Returns:
             neuroglancer.SegmentationLayer: Segmentation layer for the array
             dict: Keyword arguments for the layer

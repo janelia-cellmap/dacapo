@@ -25,6 +25,7 @@ class ArgmaxPostProcessor(PostProcessor):
         This class is abstract. Subclasses must implement the abstract methods. Once
         created, the values of its attributes cannot be changed.
     """
+
     def __init__(self):
         """
         Initialize the post-processor.
@@ -45,7 +46,7 @@ class ArgmaxPostProcessor(PostProcessor):
         """
         Enumerate all possible parameters of this post-processor. Should
         return instances of ``PostProcessorParameters``.
-        
+
         Returns:
             An iterable of `PostProcessorParameters` instances.
         Raises:
@@ -98,7 +99,7 @@ class ArgmaxPostProcessor(PostProcessor):
             output_array_identifier: The identifier of the output array.
             num_workers: The number of workers to use.
             block_size: The size of the blocks to process.
-        Returns:    
+        Returns:
             The output array.
         Raises:
             NotImplementedError: If the method is not implemented in the subclass.

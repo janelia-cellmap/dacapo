@@ -10,7 +10,7 @@ class IntensitiesArrayConfig(ArrayConfig):
     This config class provides the necessary configuration for turning an Annotated dataset into a
     multi class binary classification problem. It takes a source array and normalizes the intensities
     between 0 and 1. The source array is expected to contain a volume with uint64 voxels and no channel dimension.
-        
+
     Attributes:
         source_array_config (ArrayConfig): The Array from which to pull annotated data
         min (float): The minimum intensity in your data

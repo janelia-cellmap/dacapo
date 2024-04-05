@@ -90,7 +90,8 @@ class CNNectomeUNet(Architecture):
             This class is a wrapper around the ``CNNectomeUNetModule`` class.
             The ``CNNectomeUNetModule`` class is the actual implementation of the
             U-Net architecture.
-        """
+    """
+
     def __init__(self, architecture_config):
         """
         Initialize the U-Net architecture.
@@ -378,9 +379,9 @@ class CNNectomeUNet(Architecture):
 class CNNectomeUNetModule(torch.nn.Module):
     """
     A U-Net module for 3D or 4D data. The U-Net expects 3D or 4D tensors shaped
-    like::  
-    
-            ``(batch=1, channels, [length,] depth, height, width)``.    
+    like::
+
+            ``(batch=1, channels, [length,] depth, height, width)``.
 
     This U-Net performs only "valid" convolutions, i.e., sizes of the feature maps
     decrease after each convolution. It will perfrom 4D convolutions as long as
@@ -437,6 +438,7 @@ class CNNectomeUNetModule(torch.nn.Module):
     Note:
         The input tensor should be given as a 5D tensor.
     """
+
     def __init__(
         self,
         in_channels,
@@ -823,6 +825,7 @@ class ConvPass(torch.nn.Module):
     Note:
         The input tensor should be given as a 5D tensor.
     """
+
     def __init__(
         self, in_channels, out_channels, kernel_sizes, activation, padding="valid"
     ):
@@ -915,8 +918,9 @@ class Downsample(torch.nn.Module):
             Downsample the input tensor.
     Note:
         The input tensor should be given as a 5D tensor.
-    
+
     """
+
     def __init__(self, downsample_factor):
         """
         Downsample module. This module performs downsampling of the input tensor
@@ -991,7 +995,7 @@ class Upsample(torch.nn.Module):
     Methods:
         crop_to_factor(x, factor, kernel_sizes):
             Crop feature maps to ensure translation equivariance with stride of
-            upsampling factor.  
+            upsampling factor.
         crop(x, shape):
             Center-crop x to match spatial dimensions given by shape.
         forward(g_out, f_left=None):
@@ -1000,6 +1004,7 @@ class Upsample(torch.nn.Module):
         The input tensor should be given as a 5D tensor.
 
     """
+
     def __init__(
         self,
         scale_factor,
@@ -1119,7 +1124,7 @@ class Upsample(torch.nn.Module):
         Examples:
             >>> upsample = Upsample(scale_factor=(2, 2, 2), in_channels=1, out_channels=1)
             >>> x = torch.randn(1, 1, 64, 64, 64)
-            >>> upsample.crop_to_factor(x, (2, 2, 2), [(3, 3, 3), (3, 3, 3)])   
+            >>> upsample.crop_to_factor(x, (2, 2, 2), [(3, 3, 3), (3, 3, 3)])
         Note:
             The input tensor should be given as a 5D tensor.
         """
@@ -1182,7 +1187,7 @@ class Upsample(torch.nn.Module):
             >>> x = torch.randn(1, 1, 64, 64, 64)
             >>> upsample.crop(x, (32, 32, 32))
         Note:
-            The input tensor should be given as a 5D tensor.        
+            The input tensor should be given as a 5D tensor.
         """
 
         x_target_size = x.size()[: -self.dims] + shape
@@ -1231,52 +1236,53 @@ class Upsample(torch.nn.Module):
 
 class AttentionBlockModule(nn.Module):
     """
-     Attention Block Module:
-        
-        The AttentionBlock uses two separate pathways to process 'g' and 'x', 
-        combines them, and applies a sigmoid activation to generate an attention map. 
-        This map is then used to scale the input features 'x', resulting in an output 
-        that focuses on important features as dictated by the gating signal 'g'.
+    Attention Block Module:
 
-        The attention block takes two inputs: 'g' (gating signal) and 'x' (input features).
+       The AttentionBlock uses two separate pathways to process 'g' and 'x',
+       combines them, and applies a sigmoid activation to generate an attention map.
+       This map is then used to scale the input features 'x', resulting in an output
+       that focuses on important features as dictated by the gating signal 'g'.
 
-                [g] --> W_g --\                 /--> psi --> * --> [output]
-                                \               /
-                [x] --> W_x --> [+] --> relu --
+       The attention block takes two inputs: 'g' (gating signal) and 'x' (input features).
 
-        Where:
-            - W_g and W_x are 1x1 Convolution followed by Batch Normalization
-            - [+] indicates element-wise addition
-            - relu is the Rectified Linear Unit activation function
-            - psi is a sequence of 1x1 Convolution, Batch Normalization, and Sigmoid activation
-            - * indicates element-wise multiplication between the output of psi and input feature 'x'
-            - [output] has the same dimensions as input 'x', selectively emphasized by attention weights
+               [g] --> W_g --\                 /--> psi --> * --> [output]
+                               \               /
+               [x] --> W_x --> [+] --> relu --
 
-        Attributes:
-            dims:
-                The number of dimensions of the input tensors.
-            kernel_sizes:
-                The kernel sizes for the convolutional layers.
-            upsample_factor:
-                The factor by which to upsample the attention map.
-            W_g:
-                The 1x1 Convolutional layer for the gating signal.
-            W_x:
-                The 1x1 Convolutional layer for the input features.
-            psi:
-                The 1x1 Convolutional layer followed by Sigmoid activation.
-            up:
-                The upsampling layer to match the dimensions of the input features.
-            relu:
-                The Rectified Linear Unit activation function.
-        Methods:
-            calculate_and_apply_padding(smaller_tensor, larger_tensor):
-                Calculate and apply symmetric padding to the smaller tensor to match the dimensions of the larger tensor.
-            forward(g, x):
-                Forward pass of the Attention Block.
-        Note:
-            The AttentionBlockModule is an instance of the ``torch.nn.Module`` class.
+       Where:
+           - W_g and W_x are 1x1 Convolution followed by Batch Normalization
+           - [+] indicates element-wise addition
+           - relu is the Rectified Linear Unit activation function
+           - psi is a sequence of 1x1 Convolution, Batch Normalization, and Sigmoid activation
+           - * indicates element-wise multiplication between the output of psi and input feature 'x'
+           - [output] has the same dimensions as input 'x', selectively emphasized by attention weights
+
+       Attributes:
+           dims:
+               The number of dimensions of the input tensors.
+           kernel_sizes:
+               The kernel sizes for the convolutional layers.
+           upsample_factor:
+               The factor by which to upsample the attention map.
+           W_g:
+               The 1x1 Convolutional layer for the gating signal.
+           W_x:
+               The 1x1 Convolutional layer for the input features.
+           psi:
+               The 1x1 Convolutional layer followed by Sigmoid activation.
+           up:
+               The upsampling layer to match the dimensions of the input features.
+           relu:
+               The Rectified Linear Unit activation function.
+       Methods:
+           calculate_and_apply_padding(smaller_tensor, larger_tensor):
+               Calculate and apply symmetric padding to the smaller tensor to match the dimensions of the larger tensor.
+           forward(g, x):
+               Forward pass of the Attention Block.
+       Note:
+           The AttentionBlockModule is an instance of the ``torch.nn.Module`` class.
     """
+
     def __init__(self, F_g, F_l, F_int, dims, upsample_factor=None):
         """
         Initialize the Attention Block Module.
@@ -1371,7 +1377,7 @@ class AttentionBlockModule(nn.Module):
         Forward pass of the Attention Block.
 
         Args:
-            g (Tensor): The gating signal tensor.   
+            g (Tensor): The gating signal tensor.
             x (Tensor): The input feature tensor.
         Returns:
             Tensor: The output tensor with the same dimensions as the input feature tensor.
@@ -1392,4 +1398,3 @@ class AttentionBlockModule(nn.Module):
         psi = self.psi(psi)
         psi = self.up(psi)
         return x * psi
-

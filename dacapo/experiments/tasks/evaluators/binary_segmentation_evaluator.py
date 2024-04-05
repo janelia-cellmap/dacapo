@@ -30,7 +30,7 @@ class BinarySegmentationEvaluator(Evaluator):
     - False negative rate: |A - B| / |A| ; where A and B are the binary segmentations
     - False positive rate: |B - A| / |B| ; where A and B are the binary segmentations
     - False discovery rate: |B - A| / |A| ; where A and B are the binary segmentations
-    - VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality 
+    - VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality
     - Mean false distance: 0.5 * (mean false positive distance + mean false negative distance)
     - Mean false negative distance: mean distance of false negatives
     - Mean false positive distance: mean distance of false positives
@@ -60,9 +60,9 @@ class BinarySegmentationEvaluator(Evaluator):
             Return the evaluation scores.
     Note:
         The BinarySegmentationEvaluator class is used to evaluate the performance of a binary segmentation task.
-        The class provides methods to evaluate the output array against the evaluation array and return the evaluation scores. 
+        The class provides methods to evaluate the output array against the evaluation array and return the evaluation scores.
         All evaluation scores should inherit from this class.
-        
+
         Clip distance is the maximum distance between the ground truth and the predicted segmentation for a pixel to be considered a false positive.
         Tolerance distance is the maximum distance between the ground truth and the predicted segmentation for a pixel to be considered a true positive.
         Channels are the channels of the binary segmentation.
@@ -245,12 +245,12 @@ class BinarySegmentationEvaluator(Evaluator):
 
     def _evaluate(self, output_data, evaluation_data, voxel_size):
         """
-        Evaluate the output array against the evaluation array. 
+        Evaluate the output array against the evaluation array.
 
         Args:
             output_data : np.ndarray
                 the output data
-            evaluation_data : np.ndarray    
+            evaluation_data : np.ndarray
                 the evaluation data
             voxel_size : Tuple[float, float, float]
                 the voxel size
@@ -325,7 +325,7 @@ class ArrayEvaluator:
     - Precision: TP / (TP + FP) ; where TP and FP are the true and false positives
     - Recall: TP / (TP + FN) ; where TP and FN are the true and false positives
     - F1 score: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives
-    
+
     Attributes:
         truth : np.ndarray
             the truth binary segmentation
@@ -350,7 +350,7 @@ class ArrayEvaluator:
             Return the false negative rate.
         false_positive_rate
             Return the false positive rate.
-        false_discovery_rate    
+        false_discovery_rate
             Return the false discovery rate.
         precision
             Return the precision.
@@ -387,6 +387,7 @@ class ArrayEvaluator:
         The class provides methods to evaluate the truth binary segmentation against the test binary segmentation.
         All evaluation scores should inherit from this class.
     """
+
     def __init__(
         self,
         truth_binary,
@@ -402,7 +403,7 @@ class ArrayEvaluator:
         Args:
             truth_binary : np.ndarray
                 the truth binary segmentation
-            test_binary : np.ndarray    
+            test_binary : np.ndarray
                 the test binary segmentation
             truth_empty : bool
                 whether the truth binary segmentation is empty
@@ -417,7 +418,7 @@ class ArrayEvaluator:
                 the array evaluator
         Raises:
             ValueError: if the truth binary segmentation is not valid
-        Examples:   
+        Examples:
             >>> truth_binary = np.array([[[0, 1], [1, 0]], [[0, 1], [1, 0]]])
             >>> test_binary = np.array([[[0, 1], [1, 0]], [[0, 1], [1, 0]]])
             >>> truth_empty = False
@@ -554,7 +555,7 @@ class ArrayEvaluator:
             ValueError: if the truth binary segmentation or the test binary segmentation is not valid
         Examples:
             >>> array_evaluator = ArrayEvaluator(truth_binary, test_binary, truth_empty, test_empty, metric_params, resolution)
-            >>> array_evaluator.jaccard()   
+            >>> array_evaluator.jaccard()
             0.0
         Note:
             This function is used to return the Jaccard coefficient.
@@ -622,7 +623,7 @@ class ArrayEvaluator:
         Args:
             truth_itk : sitk.Image
                 the truth binary segmentation as a SimpleITK image
-            test_itk : sitk.Image   
+            test_itk : sitk.Image
                 the test binary segmentation as a SimpleITK image
         Returns:
             float
@@ -682,7 +683,7 @@ class ArrayEvaluator:
             It is calculated as the ratio of true positives to the total number of positive predictions.
             If either the ground truth or the predicted values are empty, the precision value will be NaN.
         """
-            
+
         if self.truth_empty or self.test_empty:
             return np.nan
         else:
@@ -748,7 +749,7 @@ class ArrayEvaluator:
         Args:
             truth : np.ndarray
                 the truth binary segmentation
-            test : np.ndarray   
+            test : np.ndarray
                 the test binary segmentation
         Returns:
             float: The VOI value.
@@ -996,6 +997,7 @@ class ArrayEvaluator:
             return np.nan
         else:
             return self.cremieval.precision_with_tolerance
+
     def recall_with_tolerance(self):
         """
         Calculate the recall with tolerance for the binary segmentation evaluator.
@@ -1044,7 +1046,7 @@ class ArrayEvaluator:
 
 class CremiEvaluator:
     """
-    Evaluate the performance of a binary segmentation task using the CREMI score. 
+    Evaluate the performance of a binary segmentation task using the CREMI score.
     The CREMI score is a measure of the similarity between two binary segmentations.
 
     Attributes:
@@ -1099,6 +1101,7 @@ class CremiEvaluator:
         - Clip distance is used to clip the distance values to avoid extreme values.
         - All evaluation scores should inherit from this class.
     """
+
     def __init__(
         self, truth, test, sampling=(1, 1, 1), clip_distance=200, tol_distance=40
     ):
@@ -1121,7 +1124,7 @@ class CremiEvaluator:
                 the Cremi evaluator
         Raises:
             ValueError: if the truth binary segmentation is not valid
-        Examples:   
+        Examples:
             >>> truth = np.array([[[0, 1], [1, 0]], [[0, 1], [1, 0]]])
             >>> test = np.array([[[0, 1], [1, 0]], [[0, 1], [1, 0]]])
             >>> sampling = (1, 1, 1)
@@ -1346,7 +1349,7 @@ class CremiEvaluator:
 
         This method calculates the false negative rate by dividing the number of false negatives
         with tolerance by the number of condition positives.
-        
+
         Args:
             self.false_negatives_with_tolerance (int): The number of false negatives with tolerance.
             self.false_negative_distances (ndarray): The distances of false negative pixels from the ground truth segmentation.

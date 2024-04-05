@@ -22,7 +22,7 @@ BestScore = Optional[Tuple[Iteration, Score]]
 
 class Evaluator(ABC):
     """
-    Base class of all evaluators: An abstract class representing an evaluator that compares and evaluates the output array against the evaluation array. 
+    Base class of all evaluators: An abstract class representing an evaluator that compares and evaluates the output array against the evaluation array.
 
     An evaluator takes a post-processor's output and compares it against
     ground-truth. It then returns a set of scores that can be used to
@@ -51,8 +51,8 @@ class Evaluator(ABC):
         store_best(criterion)
             Return whether to store the best score for the given criterion.
     Note:
-        The Evaluator class is used to compare and evaluate the output array against the evaluation array. 
-    
+        The Evaluator class is used to compare and evaluate the output array against the evaluation array.
+
     """
 
     @abstractmethod
@@ -75,7 +75,7 @@ class Evaluator(ABC):
         Examples:
             >>> evaluator = Evaluator()
             >>> output_array_identifier = LocalArrayIdentifier("output_array")
-            >>> evaluation_array = Array()  
+            >>> evaluation_array = Array()
             >>> evaluator.evaluate(output_array_identifier, evaluation_array)
             EvaluationScores()
         Note:
@@ -114,7 +114,7 @@ class Evaluator(ABC):
         score: "EvaluationScores",
     ) -> bool:
         """
-        Check if the provided score is the best for this dataset/parameter/criterion combo. 
+        Check if the provided score is the best for this dataset/parameter/criterion combo.
 
         Args:
             dataset : Dataset
@@ -354,7 +354,7 @@ class Evaluator(ABC):
             >>> evaluator.criteria
             []
         Note:
-            This function is used to return the evaluation criteria. 
+            This function is used to return the evaluation criteria.
         """
         pass
 
@@ -400,7 +400,7 @@ class Evaluator(ABC):
             >>> evaluator.bounds(criterion)
             (0, 1)
         Note:
-            This function is used to return the bounds for the given criterion. 
+            This function is used to return the bounds for the given criterion.
         """
         return self.score.bounds(criterion)
 

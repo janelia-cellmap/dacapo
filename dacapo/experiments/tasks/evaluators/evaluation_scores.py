@@ -8,7 +8,7 @@ from typing import Tuple, List, Union
 class EvaluationScores:
     """
     Base class for evaluation scores. This class is used to store the evaluation scores for a task.
-    The scores include the evaluation criteria. The class also provides methods to determine whether higher is better for a given criterion, 
+    The scores include the evaluation criteria. The class also provides methods to determine whether higher is better for a given criterion,
     the bounds for a given criterion, and whether to store the best score for a given criterion.
 
     Attributes:
@@ -61,13 +61,13 @@ class EvaluationScores:
         Raises:
             NotImplementedError: if the function is not implemented
         Examples:
-            >>> evaluation_scores = EvaluationScores()  
+            >>> evaluation_scores = EvaluationScores()
             >>> criterion = "criterion1"
             >>> evaluation_scores.higher_is_better(criterion)
             True
         Note:
             This function is used to determine whether higher is better for a given criterion.
-           
+
         """
         pass
 

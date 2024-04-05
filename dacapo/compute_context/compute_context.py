@@ -22,6 +22,7 @@ class ComputeContext(ABC):
     Note:
         The class is abstract and requires to implement the abstract methods.
     """
+
     @property
     @abstractmethod
     def device(self):
@@ -109,7 +110,7 @@ class ComputeContext(ABC):
 def create_compute_context() -> ComputeContext:
     """
     Create a compute context based on the global DaCapo options.
-    
+
     Returns:
         ComputeContext: The compute context object.
     Raises:

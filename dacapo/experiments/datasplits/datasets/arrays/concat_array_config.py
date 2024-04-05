@@ -10,7 +10,7 @@ from typing import List, Dict, Optional
 class ConcatArrayConfig(ArrayConfig):
     """
     This array read data from the source array and then return a np.ones_like() version of the data.
-    
+
     Attributes:
         channels (List[str]): An ordering for the source_arrays.
         source_array_configs (Dict[str, ArrayConfig]): A mapping from channels to array_configs. If a channel has no ArrayConfig it will be filled with zeros

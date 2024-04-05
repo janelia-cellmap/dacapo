@@ -205,7 +205,7 @@ class ZarrArray(Array):
             >>> dims()
         Notes:
             This method is used to return the dimensions of the array.
-        
+
         """
         return self.voxel_size.dims
 
@@ -224,7 +224,7 @@ class ZarrArray(Array):
             >>> _daisy_array()
         Notes:
             This method is used to return the daisy array.
-        
+
         """
         return funlib.persistence.open_ds(f"{self.file_name}", self.dataset)
 
@@ -243,14 +243,14 @@ class ZarrArray(Array):
             >>> voxel_size()
         Notes:
             This method is used to return the voxel size of the array.
-        
+
         """
         return self._daisy_array.voxel_size
 
     @lazy_property.LazyProperty
     def roi(self) -> Roi:
         """
-        Returns the region of interest of the array.    
+        Returns the region of interest of the array.
 
         Args:
             roi (Roi): The region of interest.
@@ -326,7 +326,7 @@ class ZarrArray(Array):
     @property
     def spatial_axes(self) -> List[str]:
         """
-        Returns the spatial axes of the array.  
+        Returns the spatial axes of the array.
 
         Args:
             spatial_axes (List[str]): The spatial axes of the array.
@@ -708,7 +708,7 @@ class ZarrArray(Array):
             >>> add_metadata(metadata)
         Notes:
             This method is used to add metadata to the array.
-        
+
         """
         dataset = zarr.open(self.file_name, mode="a")[self.dataset]
         for k, v in metadata.items():

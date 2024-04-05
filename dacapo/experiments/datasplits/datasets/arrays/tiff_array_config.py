@@ -13,7 +13,7 @@ from typing import List
 class ZarrArrayConfig(ArrayConfig):
     """
     This config class provides the necessary configuration for a tiff array
-    
+
     Attributes:
         file_name: Path
             The file name of the tiff.

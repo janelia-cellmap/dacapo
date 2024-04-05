@@ -52,6 +52,7 @@ class Array(ABC):
         layer for the array. These methods are implemented by subclasses that support visualization
         in Neuroglancer.
     """
+
     @property
     @abstractmethod
     def attrs(self) -> Dict[str, Any]:
@@ -81,7 +82,7 @@ class Array(ABC):
             * ``zyx`` for spatial dimensions
             * ``c`` for channels
             * ``s`` for samples
-        
+
         Returns:
             List[str]: The axes of this dataset as a string of characters, as they are indexed.
         Raises:
@@ -100,7 +101,7 @@ class Array(ABC):
     def dims(self) -> int:
         """
         Returns the number of spatial dimensions.
-        
+
         Returns:
             int: The number of spatial dimensions.
         Raises:
@@ -157,7 +158,7 @@ class Array(ABC):
     def dtype(self) -> Any:
         """
         The dtype of this array, in numpy dtypes
-        
+
         Returns:
             Any: The dtype of this array, in numpy dtypes.
         Raises:

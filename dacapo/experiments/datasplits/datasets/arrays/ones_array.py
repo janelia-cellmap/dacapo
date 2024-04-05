@@ -9,10 +9,10 @@ class OnesArray(Array):
     """
     This is a wrapper around another `source_array` that simply provides ones
     with the same metadata as the `source_array`.
-    
+
     This is useful for creating a mask array that is the same size as the
     original array, but with all values set to 1.
-    
+
     Attributes:
         source_array: The source array that this array is based on.
     Methods:
@@ -243,9 +243,9 @@ class OnesArray(Array):
         Get the region of interest of the array.
 
         Returns:
-            The region of interest of the array.    
+            The region of interest of the array.
         Raises:
-            RuntimeError: If the region of interest is not specified.   
+            RuntimeError: If the region of interest is not specified.
         Examples:
             >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
             >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
@@ -259,7 +259,7 @@ class OnesArray(Array):
             This method is used to get the region of interest of the array. The
             region of interest is the region of the array that contains the data.
             This method returns the region of interest of the array that was specified
-            when the OnesArray was created.        
+            when the OnesArray was created.
         """
         return self.source_array.roi
 
@@ -324,7 +324,7 @@ class OnesArray(Array):
     def dtype(self):
         """
         Get the data type of the array.
-        
+
         Returns:
             The data type of the array.
         Raises:

@@ -18,6 +18,7 @@ class AffinitiesLoss(Loss):
         The AffinitiesLoss class is used to calculate the loss between affinities and local shape descriptors (LSDs).
 
     """
+
     def __init__(self, num_affinities: int, lsds_to_affs_weight_ratio: float):
         """
         Initialize the AffinitiesLoss class with the number of affinities and the ratio of the weight of the loss between affinities and LSDs.

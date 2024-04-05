@@ -14,7 +14,7 @@ class DummyLoss(Loss):
         compute(prediction, target, weight=None)
             Calculate the total loss between prediction and target.
     Note:
-        The dummy loss is used to test the training loop and the loss calculation. It is not a real loss function. 
+        The dummy loss is used to test the training loop and the loss calculation. It is not a real loss function.
         It is used to test the training loop and the loss calculation.
 
     """
