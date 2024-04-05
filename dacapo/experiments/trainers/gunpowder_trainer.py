@@ -108,7 +108,11 @@ class GunpowderTrainer(Trainer):
             >>> optimizer = trainer.create_optimizer(model)
 
         """
-        optimizer = torch.optim.RAdam(lr=self.learning_rate, params=model.parameters())
+        optimizer = torch.optim.RAdam(
+            lr=self.learning_rate,
+            params=model.parameters(),
+            decoupled_weight_decay=True,
+        )
         self.scheduler = torch.optim.lr_scheduler.LinearLR(
             optimizer,
             start_factor=0.01,

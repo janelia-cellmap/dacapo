@@ -5,6 +5,29 @@ from scipy.ndimage import measurements
 
 
 def segment_function(input_array, block, offsets, bias):
+    """
+    Segment the input array using the multicut watershed algorithm.
+
+    Args:
+        input_array (np.ndarray): The input array.
+        block (daisy.Block): The block to be processed.
+        offsets (List[Tuple[int]]): The offsets.
+        bias (float): The bias.
+    Returns:
+        np.ndarray: The segmented array.
+    Raises:
+        NotImplementedError: If the method is not implemented in the derived class.
+    Examples:
+        >>> input_array = np.random.rand(128, 128, 128)
+        >>> block = daisy.Block((0, 0, 0), (128, 128, 128))
+        >>> offsets = [(0, 1, 0), (1, 0, 0), (0, 0, 1)]
+        >>> bias = 0.1
+        >>> segmentation = segment_function(input_array, block, offsets, bias)
+    Note:
+        The method is implemented in the class.
+        If a previous segmentation is provided, it must have a "grid graph" in its metadata.
+        DGA: had to add in flatten and reshape since remap (in particular indices) didn't seem to work with ndarrays for the input
+    """
     # if a previous segmentation is provided, it must have a "grid graph"
     # in its metadata.
     pred_data = input_array[block.read_roi]
