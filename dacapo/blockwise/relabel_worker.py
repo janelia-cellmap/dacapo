@@ -144,13 +144,13 @@ def read_cross_block_merges(tmpdir):
     Args:
         tmpdir (str): The temporary directory
     Returns:
-        Tuple[np.ndarray, np.ndarray]: The nodes and edges  
+        Tuple[np.ndarray, np.ndarray]: The nodes and edges
     Raises:
-        NotImplementedError: If the method is not implemented in the derived class. 
+        NotImplementedError: If the method is not implemented in the derived class.
     Examples:
-        >>> read_cross_block_merges(tmpdir) 
+        >>> read_cross_block_merges(tmpdir)
     Note:
-        The method is implemented in the class.     
+        The method is implemented in the class.
     """
     block_files = glob(os.path.join(tmpdir, "block_*.npz"))
 

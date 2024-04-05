@@ -54,7 +54,7 @@ class PostProcessor(ABC):
         Note:
             This method must be implemented in the subclass. It should return an
             iterable of `PostProcessorParameters` instances.
-        
+
         """
         pass
 
@@ -89,7 +89,7 @@ class PostProcessor(ABC):
     ) -> "Array":
         """
         Convert predictions into the final output.
-        
+
         Args:
             parameters: The parameters of the post-processor.
             output_array_identifier: The identifier of the array to store the

@@ -11,9 +11,9 @@ from typing import Optional
 @attr.s
 class Bsub(ComputeContext):
     """
-    The Bsub class is a subclass of the ComputeContext class. It is used to specify the 
-    context in which computations are to be done. Bsub is used to specify that 
-    computations are to be done on a cluster using LSF. 
+    The Bsub class is a subclass of the ComputeContext class. It is used to specify the
+    context in which computations are to be done. Bsub is used to specify that
+    computations are to be done on a cluster using LSF.
 
     Attributes:
         queue (str): The queue to run on.
@@ -27,6 +27,7 @@ class Bsub(ComputeContext):
         The class is a subclass of the ComputeContext class.
 
     """
+
     queue: str = attr.ib(default="local", metadata={"help_text": "The queue to run on"})
     num_gpus: int = attr.ib(
         default=1,
@@ -120,4 +121,3 @@ class Bsub(ComputeContext):
             )
             + command
         )
-

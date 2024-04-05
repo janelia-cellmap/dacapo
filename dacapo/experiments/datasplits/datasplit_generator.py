@@ -141,8 +141,8 @@ def get_right_resolution_array_config(
 
 class CustomEnumMeta(EnumMeta):
     """
-    Custom Enum Meta class to raise KeyError when an invalid option is passed. 
-    
+    Custom Enum Meta class to raise KeyError when an invalid option is passed.
+
     Attributes:
         _member_names_ : list
             The list of member names.
@@ -152,6 +152,7 @@ class CustomEnumMeta(EnumMeta):
     Notes:
         This class is used to raise KeyError when an invalid option is passed.
     """
+
     def __getitem__(self, item):
         """
         Get the item.
@@ -189,6 +190,7 @@ class CustomEnum(Enum, metaclass=CustomEnumMeta):
     Notes:
         This class is used to raise KeyError when an invalid option is passed.
     """
+
     def __str__(self) -> str:
         """
         Get the string representation of the class.
@@ -224,6 +226,7 @@ class DatasetType(CustomEnum):
     Notes:
         This class is used to represent the dataset type.
     """
+
     val = 1
     train = 2
 
@@ -243,14 +246,15 @@ class SegmentationType(CustomEnum):
     Notes:
         This class is used to represent the segmentation type.
     """
+
     semantic = 1
     instance = 2
 
 
 class DatasetSpec:
     """
-    A class for dataset specification. It is used to specify the dataset.   
-    
+    A class for dataset specification. It is used to specify the dataset.
+
     Attributes:
         dataset_type : obj
             The dataset type.
@@ -270,6 +274,7 @@ class DatasetSpec:
     Notes:
         This class is used to specify the dataset.
     """
+
     def __init__(
         self,
         dataset_type: Union[str, DatasetType],
@@ -379,9 +384,9 @@ def generate_dataspec_from_csv(csv_path: Path):
 
 class DataSplitGenerator:
     """
-    Generates DataSplitConfig for a given task config and datasets. A csv file can be generated 
-    from the DataSplitConfig and used to generate the DataSplitConfig again. 
-    
+    Generates DataSplitConfig for a given task config and datasets. A csv file can be generated
+    from the DataSplitConfig and used to generate the DataSplitConfig again.
+
     Currently only supports semantic segmentation.
     Supports:
         - 2D and 3D datasets.
@@ -389,15 +394,15 @@ class DataSplitGenerator:
         - Multi class targets.
         - Different resolutions for raw and ground truth datasets.
         - Different resolutions for training and validation datasets.
-    
+
     Attributes:
         name : str
             The name of the data split generator.
         datasets : list
             The list of dataset specifications.
-        input_resolution : obj  
+        input_resolution : obj
             The input resolution.
-        output_resolution : obj 
+        output_resolution : obj
             The output resolution.
         targets : list
             The list of targets.
@@ -409,19 +414,19 @@ class DataSplitGenerator:
             The maximum ground truth upsample.
         max_raw_training_downsample : int
             The maximum raw training downsample.
-        max_raw_training_upsample : int 
+        max_raw_training_upsample : int
             The maximum raw training upsample.
         max_raw_validation_downsample : int
             The maximum raw validation downsample.
-        max_raw_validation_upsample : int   
+        max_raw_validation_upsample : int
             The maximum raw validation upsample.
-        min_training_volume_size : int  
+        min_training_volume_size : int
             The minimum training volume size.
-        raw_min : int   
+        raw_min : int
             The minimum raw value.
-        raw_max : int   
+        raw_max : int
             The maximum raw value.
-        classes_separator_caracter : str    
+        classes_separator_caracter : str
             The classes separator character.
     Methods:
         __init__(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_caracter)
@@ -490,9 +495,9 @@ class DataSplitGenerator:
                 The name of the data split generator.
             datasets : list
                 The list of dataset specifications.
-            input_resolution : obj  
+            input_resolution : obj
                 The input resolution.
-            output_resolution : obj 
+            output_resolution : obj
                 The output resolution.
             targets : list
                 The list of targets.
@@ -504,19 +509,19 @@ class DataSplitGenerator:
                 The maximum ground truth upsample.
             max_raw_training_downsample : int
                 The maximum raw training downsample.
-            max_raw_training_upsample : int 
+            max_raw_training_upsample : int
                 The maximum raw training upsample.
             max_raw_validation_downsample : int
                 The maximum raw validation downsample.
-            max_raw_validation_upsample : int   
+            max_raw_validation_upsample : int
                 The maximum raw validation upsample.
-            min_training_volume_size : int  
+            min_training_volume_size : int
                 The minimum training volume size.
-            raw_min : int   
+            raw_min : int
                 The minimum raw value.
-            raw_max : int   
+            raw_max : int
                 The maximum raw value.
-            classes_separator_caracter : str    
+            classes_separator_caracter : str
                 The classes separator character.
         Returns:
             obj : The DataSplitGenerator class.
@@ -741,7 +746,7 @@ class DataSplitGenerator:
         Examples:
             >>> __generate_semantic_seg_dataset_crop(dataset)
         Notes:
-            This function is used to generate the semantic segmentation dataset crop. 
+            This function is used to generate the semantic segmentation dataset crop.
         """
         raw_container = dataset.raw_container
         raw_dataset = dataset.raw_dataset
@@ -849,7 +854,7 @@ class DataSplitGenerator:
             name : str
                 The name.
             **kwargs : dict
-                The keyword arguments. 
+                The keyword arguments.
         Returns:
             obj : The data split.
         Raises:

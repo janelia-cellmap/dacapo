@@ -13,13 +13,13 @@ from typing import Optional, List, Tuple
 @attr.s
 class ZarrArrayConfig(ArrayConfig):
     """
-    This config class provides the necessary configuration for a zarr array. 
-    
+    This config class provides the necessary configuration for a zarr array.
+
     A zarr array is a container for large, multi-dimensional arrays. It is similar to HDF5, but is designed to work
     with large arrays that do not fit into memory. Zarr arrays can be stored on disk or in the cloud
     and can be accessed concurrently by multiple processes. Zarr arrays can be compressed and
     support chunked, N-dimensional arrays.
-    
+
     Attributes:
         file_name: Path
             The file name of the zarr container.

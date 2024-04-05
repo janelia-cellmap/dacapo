@@ -21,11 +21,12 @@ class HotDistanceLoss(Loss):
             Function to compute the Hot Distance Loss for the provided prediction and target, with respect to the weight.
         split(x) -> Tuple[torch.Tensor, torch.Tensor]
             Function to split the input tensor into two tensors.
-    Note:   
-        This class is abstract. Subclasses must implement the abstract methods. Once created, the values of its attributes 
+    Note:
+        This class is abstract. Subclasses must implement the abstract methods. Once created, the values of its attributes
         cannot be changed.
-    
+
     """
+
     def compute(self, prediction, target, weight):
         """
         Function to compute the Hot Distance Loss for the provided prediction and target, with respect to the weight.

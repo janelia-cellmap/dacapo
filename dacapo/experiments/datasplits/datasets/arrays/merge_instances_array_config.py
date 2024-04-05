@@ -12,7 +12,7 @@ class MergeInstancesArrayConfig(ArrayConfig):
     Configuration for an array that merges instances from multiple arrays
     into a single array. The instances are merged by taking the union of the
     instances in the source arrays.
-    
+
     Attributes:
         source_array_configs: List[ArrayConfig]
             The Array of masks from which to take the union
@@ -22,6 +22,7 @@ class MergeInstancesArrayConfig(ArrayConfig):
     Notes:
         The MergeInstancesArrayConfig class is used to create a MergeInstancesArray
     """
+
     array_type = MergeInstancesArray
 
     source_array_configs: List[ArrayConfig] = attr.ib(

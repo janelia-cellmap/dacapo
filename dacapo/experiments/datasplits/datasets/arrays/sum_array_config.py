@@ -18,6 +18,7 @@ class SumArrayConfig(ArrayConfig):
     Note:
         This class is a subclass of ArrayConfig.
     """
+
     array_type = SumArray
 
     source_array_configs: List[ArrayConfig] = attr.ib(

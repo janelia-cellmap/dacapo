@@ -18,7 +18,7 @@ class CNNectomeUNetConfig(ArchitectureConfig):
 
     Attributes:
         input_shape: Coordinate
-            The shape of the data passed into the network during training.  
+            The shape of the data passed into the network during training.
         fmaps_out: int
             The number of channels produced by your architecture.
         fmaps_in: int
@@ -34,12 +34,12 @@ class CNNectomeUNetConfig(ArchitectureConfig):
         kernel_size_up: Optional[List[Coordinate]]
             The size of the convolutional kernels used before upsampling in each layer.
         _eval_shape_increase: Optional[Coordinate]
-            The amount by which to increase the input size when just prediction rather than training. 
-            It is generally possible to significantly increase the input size since we don't have the memory 
+            The amount by which to increase the input size when just prediction rather than training.
+            It is generally possible to significantly increase the input size since we don't have the memory
             constraints of the gradients, the optimizer and the batch size.
         upsample_factors: Optional[List[Coordinate]]
             The amount by which to upsample the output of the UNet.
-        constant_upsample: bool 
+        constant_upsample: bool
             Whether to use a transpose convolution or simply copy voxels to upsample.
         padding: str
             The padding to use in convolution operations.
@@ -52,7 +52,7 @@ class CNNectomeUNetConfig(ArchitectureConfig):
         The architecture_type attribute is set to CNNectomeUNet.
     References:
         Saalfeld, S., Fetter, R., Cardona, A., & Tomancak, P. (2012).
-    
+
     """
 
     architecture_type = CNNectomeUNet

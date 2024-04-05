@@ -9,7 +9,7 @@ from funlib.geometry import Coordinate
 @attr.s
 class ResampledArrayConfig(ArrayConfig):
     """
-    A configuration for a ResampledArray. This array will up or down sample an array into the desired voxel size. 
+    A configuration for a ResampledArray. This array will up or down sample an array into the desired voxel size.
 
     Attributes:
         source_array_config (ArrayConfig): The Array that you want to upsample or downsample.
@@ -20,7 +20,7 @@ class ResampledArrayConfig(ArrayConfig):
         create_array: Creates a ResampledArray from the configuration.
     Note:
         This class is meant to be used with the ArrayDataset class.
-    
+
     """
 
     array_type = ResampledArray

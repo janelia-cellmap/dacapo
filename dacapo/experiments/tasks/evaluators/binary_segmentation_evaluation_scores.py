@@ -16,7 +16,7 @@ class BinarySegmentationEvaluationScores(EvaluationScores):
     - False negative rate: |A - B| / |A| ; where A and B are the binary segmentations
     - False positive rate: |B - A| / |B| ; where A and B are the binary segmentations
     - False discovery rate: |B - A| / |A| ; where A and B are the binary segmentations
-    - VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality 
+    - VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality
     - Mean false distance: 0.5 * (mean false positive distance + mean false negative distance)
     - Mean false negative distance: mean distance of false negatives
     - Mean false positive distance: mean distance of false positives
@@ -124,7 +124,7 @@ class BinarySegmentationEvaluationScores(EvaluationScores):
             True
         Notes:
             The method returns True if the criterion is recognized and False otherwise. Whether or not to store the best weights/validation blocks for a given criterion is determined by the mapping dictionary.
-    
+
         """
         # Whether or not to store the best weights/validation blocks for this
         # criterion.
@@ -348,7 +348,7 @@ class MultiChannelBinarySegmentationEvaluationScores(EvaluationScores):
         criterion: str,
     ) -> Tuple[Union[int, float, None], Union[int, float, None]]:
         """
-        Determines the bounds for a given criterion. The bounds are used to determine the best value for a given criterion. 
+        Determines the bounds for a given criterion. The bounds are used to determine the best value for a given criterion.
 
         Args:
             criterion (str): The evaluation criterion.

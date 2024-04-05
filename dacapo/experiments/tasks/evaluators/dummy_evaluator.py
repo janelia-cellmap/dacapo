@@ -19,6 +19,7 @@ class DummyEvaluator(Evaluator):
     Note:
         The DummyEvaluator class is used to evaluate the performance of a dummy task.
     """
+
     criteria = ["frizz_level", "blipp_score"]
 
     def evaluate(self, output_array_identifier, evaluation_dataset):

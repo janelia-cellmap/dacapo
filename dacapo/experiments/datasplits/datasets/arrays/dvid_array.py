@@ -87,7 +87,7 @@ class DVIDArray(Array):
         Examples:
             >>> repr(dvid_array)
             DVIDArray(('server', 'UUID', 'data_name'))
-        Notes:  
+        Notes:
             The string representation is the source of the array
         """
         return f"DVIDArray({self.source})"
@@ -230,7 +230,7 @@ class DVIDArray(Array):
         Examples:
             >>> dvid_array.dtype
             numpy.uint64
-        Notes:  
+        Notes:
             The data type is the same as the source array
         """
         return np.dtype(self.attrs["Extended"]["Values"][0]["DataType"])

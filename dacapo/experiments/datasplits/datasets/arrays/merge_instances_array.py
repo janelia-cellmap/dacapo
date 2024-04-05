@@ -21,13 +21,13 @@ class MergeInstancesArray(Array):
     Methods:
         __getitem__(roi: Roi) -> np.ndarray
             Returns a numpy array with the requested region of interest
-        _can_neuroglance() -> bool  
+        _can_neuroglance() -> bool
             Returns True if the array can be visualized in neuroglancer
         _neuroglancer_source() -> str
             Returns the source name for the array in neuroglancer
-        _neuroglancer_layer() -> Tuple[neuroglancer.SegmentationLayer, Dict[str, Any]]  
+        _neuroglancer_layer() -> Tuple[neuroglancer.SegmentationLayer, Dict[str, Any]]
             Returns a neuroglancer layer and its configuration
-        _source_name() -> str   
+        _source_name() -> str
             Returns the source name for the array
     Note:
         This array is not writable
@@ -64,10 +64,10 @@ class MergeInstancesArray(Array):
                         array_type=ArrayType.INSTANCE_SEGMENTATION,
                         path="path/to/array2.h5",
                     ),
-                ],  
+                ],
             )
             array = MergeInstancesArray(array_config)
-            ```               
+            ```
         Note:
             This example shows how to create a MergeInstancesArray object
         """
@@ -135,7 +135,7 @@ class MergeInstancesArray(Array):
             from dacapo.experiments.datasplits.datasets.arrays import ArrayType
             from funlib.geometry import Coordinate, Roi
             array_config = MergeInstancesArrayConfig(
-                name="array",  
+                name="array",
                 source_array_configs=[
                     ArrayConfig(
                         name="array1",
@@ -147,7 +147,7 @@ class MergeInstancesArray(Array):
                         array_type=ArrayType.INSTANCE_SEGMENTATION,
                         path="path/to/array2.h5",
                     ),
-                ],  
+                ],
             )
             array = MergeInstancesArray(array_config)
             dims = array.dims
@@ -155,7 +155,7 @@ class MergeInstancesArray(Array):
         Note:
             This example shows how to get the number of dimensions of the array
 
-            
+
         """
         return self._source_array.dims
 
@@ -163,14 +163,14 @@ class MergeInstancesArray(Array):
     def voxel_size(self) -> Coordinate:
         """
         Returns the voxel size of the array
-        
+
         Returns:
-            Coordinate: The voxel size of the array 
+            Coordinate: The voxel size of the array
         Raises:
-            ValueError: If the source arrays have different shapes  
+            ValueError: If the source arrays have different shapes
         Example:
             ```python
-            from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArray   
+            from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArray
             from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArrayConfig
             from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
             from dacapo.experiments.datasplits.datasets.arrays import ArrayType
@@ -188,13 +188,13 @@ class MergeInstancesArray(Array):
                         array_type=ArrayType.INSTANCE_SEGMENTATION,
                         path="path/to/array2.h5",
                     ),
-                ],  
+                ],
             )
             array = MergeInstancesArray(array_config)
             voxel_size = array.voxel_size
             ```
         Note:
-            This example shows how to get the voxel size of the array    
+            This example shows how to get the voxel size of the array
         """
         return self._source_array.voxel_size
 
@@ -227,7 +227,7 @@ class MergeInstancesArray(Array):
                         array_type=ArrayType.INSTANCE_SEGMENTATION,
                         path="path/to/array2.h5",
                     ),
-                ],  
+                ],
             )
             array = MergeInstancesArray(array_config)
             roi = array.roi
@@ -266,7 +266,7 @@ class MergeInstancesArray(Array):
                         array_type=ArrayType.INSTANCE_SEGMENTATION,
                         path="path/to/array2.h5",
                     ),
-                ],  
+                ],
             )
             array = MergeInstancesArray(array_config)
             writable = array.writable
@@ -305,7 +305,7 @@ class MergeInstancesArray(Array):
                         array_type=ArrayType.INSTANCE_SEGMENTATION,
                         path="path/to/array2.h5",
                     ),
-                ],  
+                ],
             )
             array = MergeInstancesArray(array_config)
             dtype = array.dtype
@@ -383,7 +383,7 @@ class MergeInstancesArray(Array):
                         array_type=ArrayType.INSTANCE_SEGMENTATION,
                         path="path/to/array2.h5",
                     ),
-                ],  
+                ],
             )
             array = MergeInstancesArray(array_config)
             data = array.data

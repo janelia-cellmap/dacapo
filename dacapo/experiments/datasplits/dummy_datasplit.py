@@ -7,7 +7,7 @@ from typing import List
 class DummyDataSplit(DataSplit):
     """
     A class for creating a simple train dataset and no validation dataset. It is derived from `DataSplit` class.
-    It is used to split the data into training and validation datasets. The training and validation datasets are 
+    It is used to split the data into training and validation datasets. The training and validation datasets are
     used to train and validate the model respectively.
 
     Attributes:
@@ -32,7 +32,7 @@ class DummyDataSplit(DataSplit):
         Args:
             datasplit_config : obj
                 The configuration to initialize the DummyDataSplit class.
-        Raises: 
+        Raises:
             Exception
                 If the model setup cannot be loaded, an Exception is thrown which is logged and handled by training the model without head matching.
         Examples:

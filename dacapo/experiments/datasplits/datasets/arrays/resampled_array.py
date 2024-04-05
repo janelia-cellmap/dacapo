@@ -11,7 +11,7 @@ class ResampledArray(Array):
     """
     This is a zarr array that is a resampled version of another array.
 
-    Resampling is done by rescaling the source array with the given 
+    Resampling is done by rescaling the source array with the given
     upsample and downsample factors. The voxel size of the resampled array
     is the voxel size of the source array divided by the downsample factor
     and multiplied by the upsample factor.
@@ -21,7 +21,7 @@ class ResampledArray(Array):
             The name of the array
         source_array: Array
             The source array
-        upsample: Coordinate    
+        upsample: Coordinate
             The upsample factor for each dimension
         downsample: Coordinate
             The downsample factor for each dimension
@@ -60,7 +60,7 @@ class ResampledArray(Array):
             Returns the name of the source array
     Note:
         This class is a subclass of Array.
-        
+
 
     """
 
@@ -133,7 +133,7 @@ class ResampledArray(Array):
             int: The number of dimensions of the source array
         Raises:
             ValueError: If the resampled array is not writable
-        Examples:   
+        Examples:
             >>> resampled_array.dims
         Note:
             This method returns the number of dimensions of the source array.
@@ -144,7 +144,7 @@ class ResampledArray(Array):
     def voxel_size(self) -> Coordinate:
         """
         Returns the voxel size of the resampled array.
-        
+
         Returns:
             Coordinate: The voxel size of the resampled array
         Raises:
@@ -210,7 +210,7 @@ class ResampledArray(Array):
     def num_channels(self) -> int:
         """
         Returns the number of channels of the resampled array.
-        
+
         Returns:
             int: The number of channels of the resampled array
         Raises:

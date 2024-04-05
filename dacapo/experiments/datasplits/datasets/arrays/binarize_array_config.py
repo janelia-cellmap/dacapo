@@ -21,7 +21,7 @@ class BinarizeArrayConfig(ArrayConfig):
     Note:
         This class is used to create a BinarizeArray object which is used to turn an Annotated dataset into a multi class binary classification problem.
         Each class will be binarized into a separate channel.
-    
+
     """
 
     array_type = BinarizeArray

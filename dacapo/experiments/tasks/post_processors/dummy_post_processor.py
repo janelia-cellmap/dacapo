@@ -24,6 +24,7 @@ class DummyPostProcessor(PostProcessor):
         This class is abstract. Subclasses must implement the abstract methods. Once
         created, the values of its attributes cannot be changed.
     """
+
     def __init__(self, detection_threshold: float):
         """
         Initialize the post-processor.
@@ -44,7 +45,7 @@ class DummyPostProcessor(PostProcessor):
         """
         Enumerate all possible parameters of this post-processor. Should
         return instances of ``PostProcessorParameters``.
-        
+
         Returns:
             An iterable of `PostProcessorParameters` instances.
         Raises:

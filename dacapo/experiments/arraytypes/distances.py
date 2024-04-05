@@ -31,7 +31,7 @@ class DistanceArray(ArrayType):
     @property
     def interpolatable(self) -> bool:
         """
-        Checks if the array is interpolatable. Returns True for this class. 
+        Checks if the array is interpolatable. Returns True for this class.
 
         Returns:
             bool: True indicating that the data can be interpolated.

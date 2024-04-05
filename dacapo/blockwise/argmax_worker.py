@@ -111,7 +111,7 @@ def spawn_worker(
         model (Model): The model to use for prediction.
         raw_array (Array): The raw data to predict on.
         prediction_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
-    Returns:    
+    Returns:
         The worker to run.
     Raises:
         NotImplementedError: If the method is not implemented in the derived class.

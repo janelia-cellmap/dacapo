@@ -17,4 +17,5 @@ class ThresholdPostProcessorParameters(PostProcessorParameters):
         This class is immutable. Once created, the values of its attributes
         cannot be changed.
     """
+
     threshold: float = attr.ib(default=0.0)

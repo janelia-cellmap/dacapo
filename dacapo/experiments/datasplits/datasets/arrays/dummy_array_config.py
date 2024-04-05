@@ -17,7 +17,7 @@ class DummyArrayConfig(ArrayConfig):
         to_array: Returns the DummyArray object
         verify: Returns whether the DummyArrayConfig is valid
     Notes:
-        The source_array_config must be an ArrayConfig object.   
+        The source_array_config must be an ArrayConfig object.
 
     """
 

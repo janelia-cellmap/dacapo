@@ -24,6 +24,7 @@ class DummyEvaluationScores(EvaluationScores):
     Note:
         The DummyEvaluationScores class is used to store the evaluation scores for the dummy task. The class also provides methods to determine whether higher is better for a given criterion, the bounds for a given criterion, and whether to store the best score for a given criterion.
     """
+
     criteria = ["frizz_level", "blipp_score"]
 
     frizz_level: float = attr.ib(default=float("nan"))

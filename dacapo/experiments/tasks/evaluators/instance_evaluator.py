@@ -41,7 +41,7 @@ def relabel(array, return_backwards_map=False, inplace=False):
         (array([[1, 2, 0], [0, 2, 1]]), 2, [0, 1, 2])
     Note:
         This function is used to relabel an array, such that IDs are consecutive. Excludes 0.
-    
+
     """
 
     if array.size == 0:
@@ -76,7 +76,7 @@ def relabel(array, return_backwards_map=False, inplace=False):
 
 class InstanceEvaluator(Evaluator):
     """
-    A class representing an evaluator for instance segmentation tasks. 
+    A class representing an evaluator for instance segmentation tasks.
 
     Attributes:
         criteria : List[str]
@@ -90,6 +90,7 @@ class InstanceEvaluator(Evaluator):
         The InstanceEvaluator class is used to evaluate the performance of an instance segmentation task.
 
     """
+
     criteria: List[str] = ["voi_merge", "voi_split", "voi"]
 
     def evaluate(self, output_array_identifier, evaluation_array):
@@ -149,7 +150,7 @@ class InstanceEvaluator(Evaluator):
 
 def voi(truth, test):
     """
-    Calculate the variation of information (VOI) between two segmentations. 
+    Calculate the variation of information (VOI) between two segmentations.
 
     Args:
         truth : ndarray

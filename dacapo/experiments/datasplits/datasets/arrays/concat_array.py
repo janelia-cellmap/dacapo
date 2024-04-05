@@ -32,7 +32,7 @@ class ConcatArray(Array):
     Note:
         This class is a subclass of Array and inherits all its attributes
         and methods. The only difference is that the array_type is ConcatArray.
-    
+
     """
 
     def __init__(self, array_config):
@@ -198,7 +198,7 @@ class ConcatArray(Array):
     def axes(self):
         """
         Return the axes of the ConcatArray.
-        
+
         Returns:
             str: The axes of the ConcatArray.
         Raises:

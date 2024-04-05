@@ -237,7 +237,7 @@ class IntensitiesArray(Array):
             True
         Notes:
             The array can be visualized with Neuroglancer if the source array can be visualized with Neuroglancer
-            
+
         """
         return self._source_array._can_neuroglance()
 

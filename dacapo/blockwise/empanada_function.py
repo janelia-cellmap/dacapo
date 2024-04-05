@@ -328,7 +328,7 @@ def empanada_segmenter(
             ...     print(vol.shape, class_name, tracker)
         Note:
             The `args` parameter should be a tuple of arguments.
-        
+
         """
         trackers_dict = args[0][2]
         for vol, class_name, tracker in stack_postprocessing(
@@ -406,7 +406,7 @@ def stack_postprocessing(
     """
     Relabels and filters each class defined in trackers. Yields a numpy
     or zarr volume along with the name of the class that is segmented.
-    
+
     Args:
         trackers (dict): The trackers dictionary.
         model_config (str): The model configuration to use.
@@ -474,7 +474,7 @@ def tracker_consensus(
     """
     Calculate the orthoplane consensus from trackers. Yields a numpy
     or zarr volume along with the name of the class that is segmented.
-    
+
     Args:
         trackers (dict): The trackers dictionary.
         model_config (str): The model configuration to use.

@@ -241,7 +241,7 @@ def spawn_worker(
 
     def run_worker():
         """
-        Run the worker in the given compute context.    
+        Run the worker in the given compute context.
 
         Raises:
             NotImplementedError: If the method is not implemented in the derived class.

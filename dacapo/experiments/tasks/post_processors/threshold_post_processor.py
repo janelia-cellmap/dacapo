@@ -25,6 +25,7 @@ class ThresholdPostProcessor(PostProcessor):
     Note:
         This post-processor applies a threshold to the prediction. The threshold is used to define the segmentation. The prediction array is set using the `set_prediction` method.
     """
+
     def __init__(self):
         pass
 
@@ -71,7 +72,7 @@ class ThresholdPostProcessor(PostProcessor):
         block_size: Coordinate = Coordinate((256, 256, 256)),
     ) -> ZarrArray:
         """
-        Process the prediction with the given parameters.   
+        Process the prediction with the given parameters.
 
         Args:
             parameters (ThresholdPostProcessorParameters): The parameters to use for processing.
@@ -82,7 +83,7 @@ class ThresholdPostProcessor(PostProcessor):
             ZarrArray: The output array.
         Raises:
             NotImplementedError: If the method is not implemented.
-        Examples:   
+        Examples:
             >>> post_processor.process(parameters, output_array_identifier)
         Note:
             This method should process the prediction with the given parameters and return the output array. The method uses the `run_blockwise` function from the `dacapo.blockwise.scheduler` module to run the blockwise post-processing.

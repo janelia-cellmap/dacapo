@@ -28,6 +28,7 @@ class DaCapoBlockwiseTask(Task):
     Note:
         The method is implemented in the class.
     """
+
     def __init__(
         self,
         worker_file: str | Path,
