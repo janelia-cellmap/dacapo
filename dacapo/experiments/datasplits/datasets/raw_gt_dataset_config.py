@@ -27,6 +27,10 @@ class RawGTDatasetConfig(DatasetConfig):
                                              equal to zero on voxels where the mask is 1.
         sample_points (Optional[List[Coordinate]]): An optional list of points around which
                                                     training samples will be extracted.
+    Methods:
+        verify: A method to verify the validity of the configuration.
+    Notes:
+        This class is used to create a configuration object for the standard dataset with both raw and GT Array.
     """
 
     dataset_type = RawGTDataset
