@@ -185,8 +185,13 @@ class Start(ABC):
             Start class with specified config to run the initialization of
             weights for a model associated with a specific criterion.
         """
-        self.run = start_config.run
-        self.criterion = start_config.criterion
+        # Old version return a dict, new version return an object, this line is to support both
+        if isinstance(start_config, dict):
+            self.run = start_config["run"]
+            self.criterion = start_config["criterion"]
+        else:
+            self.run = start_config.run
+            self.criterion = start_config.criterion
 
         self.channels = None
 
