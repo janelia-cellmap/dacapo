@@ -59,6 +59,7 @@ def start_worker(
     input_dataset: str,
     output_container: Path | str,
     output_dataset: str,
+    return_io_loop: bool = False,
 ):
     """
     Start the threshold worker.
@@ -84,20 +85,26 @@ def start_worker(
     )
     output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
 
-    # wait for blocks to run pipeline
-    client = daisy.Client()
+    def io_loop():
+        # wait for blocks to run pipeline
+        client = daisy.Client()
 
-    while True:
-        print("getting block")
-        with client.acquire_block() as block:
-            if block is None:
-                break
+        while True:
+            print("getting block")
+            with client.acquire_block() as block:
+                if block is None:
+                    break
 
-            # write to output array
-            output_array[block.write_roi] = np.argmax(
-                input_array[block.write_roi],
-                axis=input_array.axes.index("c"),
-            )
+                # write to output array
+                output_array[block.write_roi] = np.argmax(
+                    input_array[block.write_roi],
+                    axis=input_array.axes.index("c"),
+                )
+
+    if return_io_loop:
+        return io_loop
+    else:
+        io_loop()
 
 
 def spawn_worker(
@@ -121,6 +128,14 @@ def spawn_worker(
         The method is implemented in the class.
     """
     compute_context = create_compute_context()
+    if not compute_context.distribute_workers:
+        return start_worker(
+            input_array_identifier.container,
+            input_array_identifier.dataset,
+            output_array_identifier.container,
+            output_array_identifier.dataset,
+            return_io_loop=True,
+        )
 
     # Make the command for the worker to run
     command = [

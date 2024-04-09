@@ -60,6 +60,7 @@ def start_worker(
     output_dataset: str,
     tmpdir: str,
     function_path: str,
+    return_io_loop: bool = False,
 ):
     """
     Start a worker to run a segment function on a given dataset.
@@ -71,6 +72,7 @@ def start_worker(
         output_dataset (str): The output dataset.
         tmpdir (str): The temporary directory.
         function_path (str): The path to the segment function.
+        return_io_loop (bool): Whether to return the io loop or run it.
     Raises:
         NotImplementedError: If the method is not implemented in the derived class.
     Examples:
@@ -110,91 +112,97 @@ def start_worker(
             parameters.update(yaml.safe_load(f))
 
     # wait for blocks to run pipeline
-    client = daisy.Client()
-    num_voxels_in_block = None
+    def io_loop():
+        client = daisy.Client()
+        num_voxels_in_block = None
 
-    while True:
-        with client.acquire_block() as block:
-            if block is None:
-                break
-            if num_voxels_in_block is None:
-                num_voxels_in_block = np.prod(block.write_roi.size)
+        while True:
+            with client.acquire_block() as block:
+                if block is None:
+                    break
+                if num_voxels_in_block is None:
+                    num_voxels_in_block = np.prod(block.write_roi.size)
 
-            segmentation = segment_function(input_array, block, **parameters)
+                segmentation = segment_function(input_array, block, **parameters)
 
-            assert (
-                segmentation.dtype == np.uint64
-            ), "Instance segmentations returned by segment_function is expected to be uint64"
+                assert (
+                    segmentation.dtype == np.uint64
+                ), "Instance segmentations returned by segment_function is expected to be uint64"
 
-            id_bump = block.block_id[1] * num_voxels_in_block
-            segmentation += id_bump
-            segmentation[segmentation == id_bump] = 0
+                id_bump = block.block_id[1] * num_voxels_in_block
+                segmentation += id_bump
+                segmentation[segmentation == id_bump] = 0
 
-            # wrap segmentation into daisy array
-            segmentation = Array(
-                segmentation, roi=block.read_roi, voxel_size=input_array.voxel_size
-            )
-
-            # store segmentation in out array
-            output_array[block.write_roi] = segmentation[block.write_roi]
-
-            neighbor_roi = block.write_roi.grow(
-                input_array.voxel_size, input_array.voxel_size
-            )
-
-            # clip segmentation to 1-voxel context
-            segmentation = segmentation.to_ndarray(roi=neighbor_roi, fill_value=0)
-            neighbors = output_array._daisy_array.to_ndarray(
-                roi=neighbor_roi, fill_value=0
-            )
-
-            unique_pairs = []
-
-            for d in range(3):
-                slices_neg = tuple(
-                    slice(None) if dd != d else slice(0, 1) for dd in range(3)
-                )
-                slices_pos = tuple(
-                    slice(None) if dd != d else slice(-1, None) for dd in range(3)
+                # wrap segmentation into daisy array
+                segmentation = Array(
+                    segmentation, roi=block.read_roi, voxel_size=input_array.voxel_size
                 )
 
-                pairs_neg = np.array(
-                    [
-                        segmentation[slices_neg].flatten(),
-                        neighbors[slices_neg].flatten(),
-                    ]
-                )
-                pairs_neg = pairs_neg.transpose()
+                # store segmentation in out array
+                output_array[block.write_roi] = segmentation[block.write_roi]
 
-                pairs_pos = np.array(
-                    [
-                        segmentation[slices_pos].flatten(),
-                        neighbors[slices_pos].flatten(),
-                    ]
-                )
-                pairs_pos = pairs_pos.transpose()
-
-                unique_pairs.append(
-                    np.unique(np.concatenate([pairs_neg, pairs_pos]), axis=0)
+                neighbor_roi = block.write_roi.grow(
+                    input_array.voxel_size, input_array.voxel_size
                 )
 
-            unique_pairs = np.concatenate(unique_pairs)
-            zero_u = unique_pairs[:, 0] == 0  # type: ignore
-            zero_v = unique_pairs[:, 1] == 0  # type: ignore
-            non_zero_filter = np.logical_not(np.logical_or(zero_u, zero_v))
-
-            edges = unique_pairs[non_zero_filter]
-            nodes = np.unique(edges)
-
-            assert os.path.exists(tmpdir)
-            path = os.path.join(tmpdir, f"block_{block.block_id[1]}.npz")
-            print(f"Writing ids to {path}")
-            with open(path, "wb") as f:
-                np.savez_compressed(
-                    f,
-                    nodes=nodes,
-                    edges=edges,
+                # clip segmentation to 1-voxel context
+                segmentation = segmentation.to_ndarray(roi=neighbor_roi, fill_value=0)
+                neighbors = output_array._daisy_array.to_ndarray(
+                    roi=neighbor_roi, fill_value=0
                 )
+
+                unique_pairs = []
+
+                for d in range(3):
+                    slices_neg = tuple(
+                        slice(None) if dd != d else slice(0, 1) for dd in range(3)
+                    )
+                    slices_pos = tuple(
+                        slice(None) if dd != d else slice(-1, None) for dd in range(3)
+                    )
+
+                    pairs_neg = np.array(
+                        [
+                            segmentation[slices_neg].flatten(),
+                            neighbors[slices_neg].flatten(),
+                        ]
+                    )
+                    pairs_neg = pairs_neg.transpose()
+
+                    pairs_pos = np.array(
+                        [
+                            segmentation[slices_pos].flatten(),
+                            neighbors[slices_pos].flatten(),
+                        ]
+                    )
+                    pairs_pos = pairs_pos.transpose()
+
+                    unique_pairs.append(
+                        np.unique(np.concatenate([pairs_neg, pairs_pos]), axis=0)
+                    )
+
+                unique_pairs = np.concatenate(unique_pairs)
+                zero_u = unique_pairs[:, 0] == 0  # type: ignore
+                zero_v = unique_pairs[:, 1] == 0  # type: ignore
+                non_zero_filter = np.logical_not(np.logical_or(zero_u, zero_v))
+
+                edges = unique_pairs[non_zero_filter]
+                nodes = np.unique(edges)
+
+                assert os.path.exists(tmpdir)
+                path = os.path.join(tmpdir, f"block_{block.block_id[1]}.npz")
+                print(f"Writing ids to {path}")
+                with open(path, "wb") as f:
+                    np.savez_compressed(
+                        f,
+                        nodes=nodes,
+                        edges=edges,
+                    )
+
+    if return_io_loop:
+        return io_loop
+    else:
+        io_loop()
 
 
 def spawn_worker(
@@ -218,6 +226,16 @@ def spawn_worker(
         The method is implemented in the class.
     """
     compute_context = create_compute_context()
+    if not compute_context.distribute_workers:
+        return start_worker(
+            input_array_identifier.container,
+            input_array_identifier.dataset,
+            output_array_identifier.container,
+            output_array_identifier.dataset,
+            tmpdir,
+            function_path,
+            return_io_loop=True,
+        )
 
     # Make the command for the worker to run
     command = [

@@ -10,6 +10,12 @@ from typing import Optional
 
 @attr.s
 class Bsub(ComputeContext):
+    distribute_workers: Optional[bool] = attr.ib(
+        default=True,
+        metadata={
+            "help_text": "Whether to distribute the workers across multiple nodes or processes."
+        },
+    )
     """
     The Bsub class is a subclass of the ComputeContext class. It is used to specify the
     context in which computations are to be done. Bsub is used to specify that
@@ -27,7 +33,6 @@ class Bsub(ComputeContext):
         The class is a subclass of the ComputeContext class.
 
     """
-
     queue: str = attr.ib(default="local", metadata={"help_text": "The queue to run on"})
     num_gpus: int = attr.ib(
         default=1,

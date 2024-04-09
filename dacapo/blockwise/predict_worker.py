@@ -82,6 +82,7 @@ def start_worker(
     input_dataset: str,
     output_container: Path | str,
     output_dataset: str,
+    return_io_loop: Optional[bool] = False,
 ):
     """
     Start a worker to apply a trained model to a dataset.
@@ -182,34 +183,40 @@ def start_worker(
         voxel_size=output_voxel_size,
     )
 
-    daisy_client = daisy.Client()
+    def io_loop():
+        daisy_client = daisy.Client()
 
-    while True:
-        with daisy_client.acquire_block() as block:
-            if block is None:
-                return
+        while True:
+            with daisy_client.acquire_block() as block:
+                if block is None:
+                    return
 
-            print(f"Processing block {block}")
+                print(f"Processing block {block}")
 
-            chunk_request = request.copy()
-            chunk_request[raw].roi = block.read_roi
-            chunk_request[prediction].roi = block.write_roi
+                chunk_request = request.copy()
+                chunk_request[raw].roi = block.read_roi
+                chunk_request[prediction].roi = block.write_roi
 
-            with gp.build(pipeline):
-                batch = pipeline.request_batch(chunk_request)
-            # prediction: (1, [c,] d, h, w)
-            output = batch.arrays[prediction].data.squeeze()
+                with gp.build(pipeline):
+                    batch = pipeline.request_batch(chunk_request)
+                # prediction: (1, [c,] d, h, w)
+                output = batch.arrays[prediction].data.squeeze()
 
-            # convert to uint8 if necessary:
-            if output_array.dtype == np.uint8:
-                if "sigmoid" not in str(model.eval_activation).lower():
-                    # assume output is in [-1, 1]
-                    output += 1
-                    output /= 2
-                output *= 255
-                output = output.clip(0, 255)
-                output = output.astype(np.uint8)
-            output_array[block.write_roi] = output
+                # convert to uint8 if necessary:
+                if output_array.dtype == np.uint8:
+                    if "sigmoid" not in str(model.eval_activation).lower():
+                        # assume output is in [-1, 1]
+                        output += 1
+                        output /= 2
+                    output *= 255
+                    output = output.clip(0, 255)
+                    output = output.astype(np.uint8)
+                output_array[block.write_roi] = output
+
+    if return_io_loop:
+        return io_loop
+    else:
+        io_loop()
 
 
 def spawn_worker(
@@ -234,6 +241,16 @@ def spawn_worker(
         The method is implemented in the class.
     """
     compute_context = create_compute_context()
+    if not compute_context.distribute_workers:
+        return start_worker(
+            run_name,
+            iteration,
+            input_array_identifier.container,
+            input_array_identifier.dataset,
+            output_array_identifier.container,
+            output_array_identifier.dataset,
+            return_io_loop=True,
+        )
 
     # Make the command for the worker to run
     command = [

@@ -52,6 +52,7 @@ def start_worker(
     output_container,
     output_dataset,
     tmpdir,
+    return_io_loop=False,
     *args,
     **kwargs,
 ):
@@ -76,19 +77,26 @@ def start_worker(
 
     components = find_components(nodes, edges)
 
-    while True:
-        with client.acquire_block() as block:
-            if block is None:
-                break
+    def io_loop():
+        client = daisy.Client()
+        while True:
+            with client.acquire_block() as block:
+                if block is None:
+                    break
 
-            try:
-                relabel_in_block(array_out, nodes, components, block)
-            except OSError as e:
-                logging.error(
-                    f"Failed to relabel block {block.write_roi}: {e}. Trying again."
-                )
-                sleep(1)
-                relabel_in_block(array_out, nodes, components, block)
+                try:
+                    relabel_in_block(array_out, nodes, components, block)
+                except OSError as e:
+                    logging.error(
+                        f"Failed to relabel block {block.write_roi}: {e}. Trying again."
+                    )
+                    sleep(1)
+                    relabel_in_block(array_out, nodes, components, block)
+
+    if return_io_loop:
+        return io_loop
+    else:
+        io_loop()
 
 
 def relabel_in_block(array_out, old_values, new_values, block):
@@ -186,6 +194,14 @@ def spawn_worker(
         The method is implemented in the class.
     """
     compute_context = create_compute_context()
+
+    if not compute_context.distribute_workers:
+        return start_worker(
+            output_array_identifier.container,
+            output_array_identifier.dataset,
+            tmpdir,
+            return_io_loop=True,
+        )
 
     # Make the command for the worker to run
     command = [
