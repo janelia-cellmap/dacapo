@@ -22,6 +22,24 @@ logger = logging.getLogger(__name__)
 
 
 def is_zarr_group(file_name: str, dataset: str):
+    """
+    Check if the dataset is a Zarr group. If the dataset is a Zarr group, it will return True, otherwise False.
+
+    Args:
+        file_name : str
+            The name of the file.
+        dataset : str
+            The name of the dataset.
+    Returns:
+        bool : True if the dataset is a Zarr group, otherwise False.
+    Raises:
+        FileNotFoundError
+            If the file does not exist, a FileNotFoundError is raised.
+    Examples:
+        >>> is_zarr_group(file_name, dataset)
+    Notes:
+        This function is used to check if the dataset is a Zarr group.
+    """
     zarr_file = zarr.open(str(file_name))
     return isinstance(zarr_file[dataset], zarr.hierarchy.Group)
 
@@ -29,6 +47,26 @@ def is_zarr_group(file_name: str, dataset: str):
 def resize_if_needed(
     array_config: ZarrArrayConfig, target_resolution: Coordinate, extra_str=""
 ):
+    """
+    Resize the array if needed. If the array needs to be resized, it will return the resized array, otherwise it will return the original array.
+
+    Args:
+        array_config : obj
+            The configuration of the array.
+        target_resolution : obj
+            The target resolution.
+        extra_str : str
+            An extra string.
+    Returns:
+        obj : The resized array if needed, otherwise the original array.
+    Raises:
+        FileNotFoundError
+            If the file does not exist, a FileNotFoundError is raised.
+    Examples:
+        >>> resize_if_needed(array_config, target_resolution, extra_str)
+    Notes:
+        This function is used to resize the array if needed.
+    """
     zarr_array = ZarrArray(array_config)
     raw_voxel_size = zarr_array.voxel_size
 
@@ -49,6 +87,28 @@ def resize_if_needed(
 def get_right_resolution_array_config(
     container: Path, dataset, target_resolution, extra_str=""
 ):
+    """
+    Get the right resolution array configuration. It will return the right resolution array configuration.
+
+    Args:
+        container : obj
+            The container.
+        dataset : str
+            The dataset.
+        target_resolution : obj
+            The target resolution.
+        extra_str : str
+            An extra string.
+    Returns:
+        obj : The right resolution array configuration.
+    Raises:
+        FileNotFoundError
+            If the file does not exist, a FileNotFoundError is raised.
+    Examples:
+        >>> get_right_resolution_array_config(container, dataset, target_resolution, extra_str)
+    Notes:
+        This function is used to get the right resolution array configuration.
+    """
     level = 0
     current_dataset_path = Path(dataset, f"s{level}")
     if not (container / current_dataset_path).exists():
@@ -80,7 +140,36 @@ def get_right_resolution_array_config(
 
 
 class CustomEnumMeta(EnumMeta):
+    """
+    Custom Enum Meta class to raise KeyError when an invalid option is passed.
+
+    Attributes:
+        _member_names_ : list
+            The list of member names.
+    Methods:
+        __getitem__(self, item)
+            A method to get the item.
+    Notes:
+        This class is used to raise KeyError when an invalid option is passed.
+    """
+
     def __getitem__(self, item):
+        """
+        Get the item.
+
+        Args:
+            item : obj
+                The item.
+        Returns:
+            obj : The item.
+        Raises:
+            KeyError
+            If the item is not a valid option, a KeyError is raised.
+        Examples:
+            >>> __getitem__(item)
+        Notes:
+            This function is used to get the item.
+        """
         if item not in self._member_names_:
             raise KeyError(
                 f"{item} is not a valid option of {self.__name__}, the valid options are {self._member_names_}"
@@ -89,21 +178,103 @@ class CustomEnumMeta(EnumMeta):
 
 
 class CustomEnum(Enum, metaclass=CustomEnumMeta):
+    """
+    A custom Enum class to raise KeyError when an invalid option is passed.
+
+    Attributes:
+        __str__ : str
+            The string representation of the class.
+    Methods:
+        __str__(self)
+            A method to get the string representation of the class.
+    Notes:
+        This class is used to raise KeyError when an invalid option is passed.
+    """
+
     def __str__(self) -> str:
+        """
+        Get the string representation of the class.
+
+        Args:
+            self : obj
+                The object.
+        Returns:
+            str : The string representation of the class.
+        Raises:
+            KeyError
+            If the item is not a valid option, a KeyError is raised.
+        Examples:
+            >>> __str__()
+        Notes:
+            This function is used to get the string representation of the class.
+        """
         return self.name
 
 
 class DatasetType(CustomEnum):
+    """
+    An Enum class to represent the dataset type. It is derived from `CustomEnum` class.
+
+    Attributes:
+        val : int
+            The value of the dataset type.
+        train : int
+            The training dataset type.
+    Methods:
+        __str__(self)
+            A method to get the string representation of the class.
+    Notes:
+        This class is used to represent the dataset type.
+    """
+
     val = 1
     train = 2
 
 
 class SegmentationType(CustomEnum):
+    """
+    An Enum class to represent the segmentation type. It is derived from `CustomEnum` class.
+
+    Attributes:
+        semantic : int
+            The semantic segmentation type.
+        instance : int
+            The instance segmentation type.
+    Methods:
+        __str__(self)
+            A method to get the string representation of the class.
+    Notes:
+        This class is used to represent the segmentation type.
+    """
+
     semantic = 1
     instance = 2
 
 
 class DatasetSpec:
+    """
+    A class for dataset specification. It is used to specify the dataset.
+
+    Attributes:
+        dataset_type : obj
+            The dataset type.
+        raw_container : obj
+            The raw container.
+        raw_dataset : str
+            The raw dataset.
+        gt_container : obj
+            The ground truth container.
+        gt_dataset : str
+            The ground truth dataset.
+    Methods:
+        __init__(dataset_type, raw_container, raw_dataset, gt_container, gt_dataset)
+            Initializes the DatasetSpec class with the specified dataset type, raw container, raw dataset, ground truth container, and ground truth dataset.
+        __str__(self)
+            A method to get the string representation of the class.
+    Notes:
+        This class is used to specify the dataset.
+    """
+
     def __init__(
         self,
         dataset_type: Union[str, DatasetType],
@@ -112,6 +283,28 @@ class DatasetSpec:
         gt_container: Union[str, Path],
         gt_dataset: str,
     ):
+        """
+        Initializes the DatasetSpec class with the specified dataset type, raw container, raw dataset, ground truth container, and ground truth dataset.
+
+        Args:
+            dataset_type : obj
+                The dataset type.
+            raw_container : obj
+                The raw container.
+            raw_dataset : str
+                The raw dataset.
+            gt_container : obj
+                The ground truth container.
+            gt_dataset : str
+                The ground truth dataset.
+        Raises:
+            KeyError
+            If the item is not a valid option, a KeyError is raised.
+        Methods:
+            __init__(dataset_type, raw_container, raw_dataset, gt_container, gt_dataset)
+        Notes:
+            This function is used to initialize the DatasetSpec class with the specified dataset type, raw container, raw dataset, ground truth container, and ground truth dataset.
+        """
         if isinstance(dataset_type, str):
             dataset_type = DatasetType[dataset_type.lower()]
 
@@ -128,10 +321,42 @@ class DatasetSpec:
         self.gt_dataset = gt_dataset
 
     def __str__(self) -> str:
+        """
+        Get the string representation of the class.
+
+        Args:
+            self : obj
+                The object.
+        Returns:
+            str : The string representation of the class.
+        Raises:
+            KeyError
+            If the item is not a valid option, a KeyError is raised.
+        Examples:
+            >>> __str__()
+        Notes:
+            This function is used to get the string representation of the class.
+        """
         return f"{self.raw_container.stem}_{self.gt_dataset}"
 
 
 def generate_dataspec_from_csv(csv_path: Path):
+    """
+    Generate the dataset specification from the CSV file. It will return the dataset specification.
+
+    Args:
+        csv_path : obj
+            The CSV file path.
+    Returns:
+        list : The dataset specification.
+    Raises:
+        FileNotFoundError
+            If the file does not exist, a FileNotFoundError is raised.
+    Examples:
+        >>> generate_dataspec_from_csv(csv_path)
+    Notes:
+        This function is used to generate the dataset specification from the CSV file.
+    """
     datasets = []
     if not csv_path.exists():
         raise FileNotFoundError(f"CSV file {csv_path} does not exist.")
@@ -158,14 +383,73 @@ def generate_dataspec_from_csv(csv_path: Path):
 
 
 class DataSplitGenerator:
-    """Generates DataSplitConfig for a given task config and datasets.
-    class names in gt_dataset shoulb be within [] e.g. [mito&peroxisome&er] for mutiple classes or [mito] for one class
-    Currently only supports:
-     - semantic segmentation.
-     Supports:
+    """
+    Generates DataSplitConfig for a given task config and datasets. A csv file can be generated
+    from the DataSplitConfig and used to generate the DataSplitConfig again.
+
+    Currently only supports semantic segmentation.
+    Supports:
         - 2D and 3D datasets.
         - Zarr, N5 and OME-Zarr datasets.
         - Multi class targets.
+        - Different resolutions for raw and ground truth datasets.
+        - Different resolutions for training and validation datasets.
+
+    Attributes:
+        name : str
+            The name of the data split generator.
+        datasets : list
+            The list of dataset specifications.
+        input_resolution : obj
+            The input resolution.
+        output_resolution : obj
+            The output resolution.
+        targets : list
+            The list of targets.
+        segmentation_type : obj
+            The segmentation type.
+        max_gt_downsample : int
+            The maximum ground truth downsample.
+        max_gt_upsample : int
+            The maximum ground truth upsample.
+        max_raw_training_downsample : int
+            The maximum raw training downsample.
+        max_raw_training_upsample : int
+            The maximum raw training upsample.
+        max_raw_validation_downsample : int
+            The maximum raw validation downsample.
+        max_raw_validation_upsample : int
+            The maximum raw validation upsample.
+        min_training_volume_size : int
+            The minimum training volume size.
+        raw_min : int
+            The minimum raw value.
+        raw_max : int
+            The maximum raw value.
+        classes_separator_caracter : str
+            The classes separator character.
+    Methods:
+        __init__(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_caracter)
+            Initializes the DataSplitGenerator class with the specified name, datasets, input resolution, output resolution, targets, segmentation type, maximum ground truth downsample, maximum ground truth upsample, maximum raw training downsample, maximum raw training upsample, maximum raw validation downsample, maximum raw validation upsample, minimum training volume size, minimum raw value, maximum raw value, and classes separator character.
+        __str__(self)
+            A method to get the string representation of the class.
+        class_name(self)
+            A method to get the class name.
+        check_class_name(self, class_name)
+            A method to check the class name.
+        compute(self)
+            A method to compute the data split.
+        __generate_semantic_seg_datasplit(self)
+            A method to generate the semantic segmentation data split.
+        __generate_semantic_seg_dataset_crop(self, dataset)
+            A method to generate the semantic segmentation dataset crop.
+        generate_csv(datasets, csv_path)
+            A method to generate the CSV file.
+        generate_from_csv(csv_path, input_resolution, output_resolution, name, **kwargs)
+            A method to generate the data split from the CSV file.
+    Notes:
+        - This class is used to generate the DataSplitConfig for a given task config and datasets.
+        - Class names in gt_dataset shoulb be within [] e.g. [mito&peroxisome&er] for mutiple classes or [mito] for one class
     """
 
     def __init__(
@@ -187,6 +471,69 @@ class DataSplitGenerator:
         raw_max=255,
         classes_separator_caracter="&",
     ):
+        """
+        Initializes the DataSplitGenerator class with the specified:
+        - name
+        - datasets
+        - input resolution
+        - output resolution
+        - targets
+        - segmentation type
+        - maximum ground truth downsample
+        - maximum ground truth upsample
+        - maximum raw training downsample
+        - maximum raw training upsample
+        - maximum raw validation downsample
+        - maximum raw validation upsample
+        - minimum training volume size
+        - minimum raw value
+        - maximum raw value
+        - classes separator character
+
+        Args:
+            name : str
+                The name of the data split generator.
+            datasets : list
+                The list of dataset specifications.
+            input_resolution : obj
+                The input resolution.
+            output_resolution : obj
+                The output resolution.
+            targets : list
+                The list of targets.
+            segmentation_type : obj
+                The segmentation type.
+            max_gt_downsample : int
+                The maximum ground truth downsample.
+            max_gt_upsample : int
+                The maximum ground truth upsample.
+            max_raw_training_downsample : int
+                The maximum raw training downsample.
+            max_raw_training_upsample : int
+                The maximum raw training upsample.
+            max_raw_validation_downsample : int
+                The maximum raw validation downsample.
+            max_raw_validation_upsample : int
+                The maximum raw validation upsample.
+            min_training_volume_size : int
+                The minimum training volume size.
+            raw_min : int
+                The minimum raw value.
+            raw_max : int
+                The maximum raw value.
+            classes_separator_caracter : str
+                The classes separator character.
+        Returns:
+            obj : The DataSplitGenerator class.
+        Raises:
+            ValueError
+            If the class name is already set, a ValueError is raised.
+        Examples:
+            >>> DataSplitGenerator(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_caracter)
+        Notes:
+            This function is used to initialize the DataSplitGenerator class with the specified name, datasets, input resolution, output resolution, targets, segmentation type, maximum ground truth downsample, maximum ground truth upsample, maximum raw training downsample, maximum raw training upsample, maximum raw validation downsample, maximum raw validation upsample, minimum training volume size, minimum raw value, maximum raw value, and classes separator character.
+
+        """
         self.name = name
         self.datasets = datasets
         self.input_resolution = input_resolution
@@ -210,15 +557,65 @@ class DataSplitGenerator:
         self.classes_separator_caracter = classes_separator_caracter
 
     def __str__(self) -> str:
+        """
+        Get the string representation of the class.
+
+        Args:
+            self : obj
+                The object.
+        Returns:
+            str : The string representation of the class.
+        Raises:
+            ValueError
+            If the class name is already set, a ValueError is raised.
+        Examples:
+            >>> __str__()
+        Notes:
+            This function is used to get the string representation of the class.
+        """
         return f"DataSplitGenerator:{self.name}_{self.segmentation_type}_{self.class_name}_{self.output_resolution[0]}nm"
 
     @property
     def class_name(self):
+        """
+        Get the class name.
+
+        Args:
+            self : obj
+                The object.
+        Returns:
+            obj : The class name.
+        Raises:
+            ValueError
+            If the class name is already set, a ValueError is raised.
+        Examples:
+            >>> class_name
+        Notes:
+            This function is used to get the class name.
+        """
         return self._class_name
 
     # Goal is to force class_name to be set only once, so we have the same classes for all datasets
     @class_name.setter
     def class_name(self, class_name):
+        """
+        Set the class name.
+
+        Args:
+            self : obj
+                The object.
+            class_name : obj
+                The class name.
+        Returns:
+            obj : The class name.
+        Raises:
+            ValueError
+            If the class name is already set, a ValueError is raised.
+        Examples:
+            >>> class_name
+        Notes:
+            This function is used to set the class name.
+        """
         if self._class_name is not None:
             raise ValueError(
                 f"Class name already set. Current class name is {self.class_name} and new class name is {class_name}"
@@ -226,6 +623,25 @@ class DataSplitGenerator:
         self._class_name = class_name
 
     def check_class_name(self, class_name):
+        """
+        Check the class name.
+
+        Args:
+            self : obj
+                The object.
+            class_name : obj
+                The class name.
+        Returns:
+            obj : The class name.
+        Raises:
+            ValueError
+            If the class name is already set, a ValueError is raised.
+        Examples:
+            >>> check_class_name(class_name)
+        Notes:
+            This function is used to check the class name.
+
+        """
         datasets, classes = format_class_name(
             class_name, self.classes_separator_caracter
         )
@@ -242,6 +658,22 @@ class DataSplitGenerator:
         return datasets, classes
 
     def compute(self):
+        """
+        Compute the data split.
+
+        Args:
+            self : obj
+                The object.
+        Returns:
+            obj : The data split.
+        Raises:
+            NotImplementedError
+            If the segmentation type is not implemented, a NotImplementedError is raised.
+        Examples:
+            >>> compute()
+        Notes:
+            This function is used to compute the data split.
+        """
         if self.segmentation_type == SegmentationType.semantic:
             return self.__generate_semantic_seg_datasplit()
         else:
@@ -250,6 +682,23 @@ class DataSplitGenerator:
             )
 
     def __generate_semantic_seg_datasplit(self):
+        """
+        Generate the semantic segmentation data split.
+
+        Args:
+            self : obj
+                The object.
+        Returns:
+            obj : The data split.
+        Raises:
+            FileNotFoundError
+            If the file does not exist, a FileNotFoundError is raised.
+        Examples:
+            >>> __generate_semantic_seg_datasplit()
+        Notes:
+            This function is used to generate the semantic segmentation data split.
+
+        """
         train_dataset_configs = []
         validation_dataset_configs = []
         for dataset in self.datasets:
@@ -281,6 +730,24 @@ class DataSplitGenerator:
         )
 
     def __generate_semantic_seg_dataset_crop(self, dataset: DatasetSpec):
+        """
+        Generate the semantic segmentation dataset crop.
+
+        Args:
+            self : obj
+                The object.
+            dataset : obj
+                The dataset.
+        Returns:
+            obj : The dataset crop.
+        Raises:
+            FileNotFoundError
+            If the file does not exist, a FileNotFoundError is raised.
+        Examples:
+            >>> __generate_semantic_seg_dataset_crop(dataset)
+        Notes:
+            This function is used to generate the semantic segmentation dataset crop.
+        """
         raw_container = dataset.raw_container
         raw_dataset = dataset.raw_dataset
         gt_path = dataset.gt_container
@@ -374,6 +841,31 @@ class DataSplitGenerator:
         name: Optional[str] = None,
         **kwargs,
     ):
+        """
+        Generate the data split from the CSV file.
+
+        Args:
+            csv_path : obj
+                The CSV file path.
+            input_resolution : obj
+                The input resolution.
+            output_resolution : obj
+                The output resolution.
+            name : str
+                The name.
+            **kwargs : dict
+                The keyword arguments.
+        Returns:
+            obj : The data split.
+        Raises:
+            FileNotFoundError
+            If the file does not exist, a FileNotFoundError is raised.
+        Examples:
+            >>> generate_from_csv(csv_path, input_resolution, output_resolution, name, **kwargs)
+        Notes:
+            This function is used to generate the data split from the CSV file.
+
+        """
         if isinstance(csv_path, str):
             csv_path = Path(csv_path)
 
@@ -390,6 +882,24 @@ class DataSplitGenerator:
 
 
 def format_class_name(class_name, separator_character="&"):
+    """
+    Format the class name.
+
+    Args:
+        class_name : obj
+            The class name.
+        separator_character : str
+            The separator character.
+    Returns:
+        obj : The class name.
+    Raises:
+        ValueError
+            If the class name is invalid, a ValueError is raised.
+    Examples:
+        >>> format_class_name(class_name, separator_character)
+    Notes:
+        This function is used to format the class name.
+    """
     if "[" in class_name:
         if "]" not in class_name:
             raise ValueError(f"Invalid class name {class_name} missing ']'")
