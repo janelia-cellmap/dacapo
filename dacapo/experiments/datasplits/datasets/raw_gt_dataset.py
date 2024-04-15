@@ -49,12 +49,15 @@ class RawGTDataset(Dataset):
             This method is used to initialize the dataset.
         """
         self.name = dataset_config.name
-        self.raw = dataset_config.raw_config.array_type(dataset_config.raw_config)
-        self.gt = dataset_config.gt_config.array_type(dataset_config.gt_config)
-        self.mask = (
-            dataset_config.mask_config.array_type(dataset_config.mask_config)
-            if dataset_config.mask_config is not None
-            else None
-        )
+        try:
+            self.raw = dataset_config.raw_config.array_type(dataset_config.raw_config)
+            self.gt = dataset_config.gt_config.array_type(dataset_config.gt_config)
+            self.mask = (
+                dataset_config.mask_config.array_type(dataset_config.mask_config)
+                if dataset_config.mask_config is not None
+                else None
+            )
+        except Exception as e:
+           raise Exception(f"Error loading arrays for dataset {self.name}: {e} \n {dataset_config}")
         self.sample_points = dataset_config.sample_points
         self.weight = dataset_config.weight

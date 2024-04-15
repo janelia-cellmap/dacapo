@@ -9,10 +9,11 @@ import neuroglancer
 import lazy_property
 import numpy as np
 import zarr
+from zarr.n5 import N5FSStore
 
 from collections import OrderedDict
 import logging
-from pathlib import Path
+from upath import UPath as Path
 import json
 from typing import Dict, Tuple, Any, Optional, List
 
@@ -358,7 +359,12 @@ class ZarrArray(Array):
         Notes:
             This method is used to return the data of the array.
         """
-        zarr_container = zarr.open(str(self.file_name))
+        file_name = str(self.file_name)
+        # Zarr library does not detect the store for N5 datasets
+        if file_name.endswith(".n5"):
+            zarr_container = zarr.open(N5FSStore(str(file_name)), mode="r")
+        else:
+            zarr_container = zarr.open(str(file_name), mode="r")
         return zarr_container[self.dataset]
 
     def __getitem__(self, roi: Roi) -> np.ndarray:

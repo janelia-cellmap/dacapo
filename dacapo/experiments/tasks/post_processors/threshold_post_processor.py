@@ -43,7 +43,7 @@ class ThresholdPostProcessor(PostProcessor):
         Note:
             This method should return a generator of instances of ``ThresholdPostProcessorParameters``.
         """
-        for i, threshold in enumerate([100, 127, 150]):
+        for i, threshold in enumerate([127]):
             yield ThresholdPostProcessorParameters(id=i, threshold=threshold)
 
     def set_prediction(self, prediction_array_identifier):

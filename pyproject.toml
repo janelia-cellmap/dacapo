@@ -55,6 +55,7 @@ dependencies = [
         "click",
         "pyyaml",
         "scipy",
+        "universal_pathlib",
         ]
 
 # extras

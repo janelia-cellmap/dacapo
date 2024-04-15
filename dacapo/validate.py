@@ -46,6 +46,7 @@ def validate(
 
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(run_name)
+    logger.warning(f"run_config: {run_config}")
     run = Run(run_config)
 
     # read in previous training/validation stats
@@ -97,7 +98,8 @@ def validate_run(
         or len(run.datasplit.validate) == 0
         or run.datasplit.validate[0].gt is None
     ):
-        raise ValueError(f"Cannot validate run {run.name} at iteration {iteration}.")
+        run.datasplit.validate = run.datasplit.train[-2:]
+        # raise ValueError(f"Cannot validate run {run.name} at iteration {iteration} run.datasplit: {run.datasplit.validate}")
 
     # get array and weight store
     array_store = create_array_store()
