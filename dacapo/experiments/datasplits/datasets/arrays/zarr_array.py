@@ -12,7 +12,7 @@ import zarr
 
 from collections import OrderedDict
 import logging
-from pathlib import Path
+from upath import UPath as Path
 import json
 from typing import Dict, Tuple, Any, Optional, List
 

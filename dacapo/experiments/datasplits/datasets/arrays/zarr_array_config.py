@@ -5,7 +5,7 @@ from .zarr_array import ZarrArray
 
 from funlib.geometry import Coordinate
 
-from pathlib import Path
+from upath import UPath as Path
 
 from typing import Optional, List, Tuple
 

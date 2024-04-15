@@ -1,5 +1,5 @@
 import sys
-from pathlib import Path
+from upath import UPath as Path
 from typing import Optional
 
 import torch

@@ -1,4 +1,4 @@
-from pathlib import Path
+from upath import UPath as Path
 import shutil
 import tempfile
 import time
