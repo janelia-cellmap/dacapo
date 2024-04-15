@@ -58,6 +58,8 @@ class RawGTDataset(Dataset):
                 else None
             )
         except Exception as e:
-           raise Exception(f"Error loading arrays for dataset {self.name}: {e} \n {dataset_config}")
+            raise Exception(
+                f"Error loading arrays for dataset {self.name}: {e} \n {dataset_config}"
+            )
         self.sample_points = dataset_config.sample_points
         self.weight = dataset_config.weight
