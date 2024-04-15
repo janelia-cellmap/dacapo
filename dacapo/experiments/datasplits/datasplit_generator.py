@@ -71,7 +71,7 @@ def resize_if_needed(
     Notes:
         This function is used to resize the array if needed.
     """
-    zarr_array = ZarrArray(array_config)
+    zarr_array = ZarrArray(array_config,mode="r")
     raw_voxel_size = zarr_array.voxel_size
 
     raw_upsample = raw_voxel_size / target_resolution
@@ -126,7 +126,7 @@ def get_right_resolution_array_config(
         dataset=str(current_dataset_path),
         snap_to_grid=target_resolution,
     )
-    zarr_array = ZarrArray(zarr_config)
+    zarr_array = ZarrArray(zarr_config,mode="r")
     while (
         all([z < t for (z, t) in zip(zarr_array.voxel_size, target_resolution)])
         and Path(container, Path(dataset, f"s{level+1}")).exists()
@@ -139,7 +139,7 @@ def get_right_resolution_array_config(
             snap_to_grid=target_resolution,
         )
 
-        zarr_array = ZarrArray(zarr_config)
+        zarr_array = ZarrArray(zarr_config,mode = "r")
     return resize_if_needed(zarr_config, target_resolution, extra_str)
 
 

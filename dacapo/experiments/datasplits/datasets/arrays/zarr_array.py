@@ -85,7 +85,7 @@ class ZarrArray(Array):
         This class is used to create a zarr array.
     """
 
-    def __init__(self, array_config):
+    def __init__(self, array_config, mode="w"):
         """
         Initializes the array type 'raw' and name for the DummyDataset instance.
 
@@ -105,9 +105,11 @@ class ZarrArray(Array):
         self.file_name = array_config.file_name
         self.dataset = array_config.dataset
 
+        self._mode = mode
         self._attributes = self.data.attrs
         self._axes = array_config._axes
         self.snap_to_grid = array_config.snap_to_grid
+        
 
     def __str__(self):
         """
@@ -362,9 +364,9 @@ class ZarrArray(Array):
         file_name = str(self.file_name)
         # Zarr library does not detect the store for N5 datasets
         if file_name.endswith(".n5"):
-            zarr_container = zarr.open(N5FSStore(str(file_name)), mode="r")
+            zarr_container = zarr.open(N5FSStore(str(file_name)), mode=self._mode)
         else:
-            zarr_container = zarr.open(str(file_name), mode="r")
+            zarr_container = zarr.open(str(file_name), mode=self._mode)
         return zarr_container[self.dataset]
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
