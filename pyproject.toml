@@ -1,0 +1,217 @@
+# https://peps.python.org/pep-0517/
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+# https://peps.python.org/pep-0621/
+[project]
+name = "dacapo-ml"
+description = "Framework for deployment of volumetric machine learning models, and easy composition of training jobs."
+readme = "README.md"
+requires-python = ">=3.10"
+# license = { text = "BSD 3-Clause License" }
+authors = [
+    { email = "pattonw@janelia.hhmi.org", name = "Will Patton" },
+    { email = "rhoadesj@hhmi.org", name = "Jeff Rhoades" },
+    { email = "zouinkhim@hhmi.org", name = "Marwan Zouinkhi" },
+    { email = "funkej@janelia.hhmi.org", name = "Jan Funke" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Typing :: Typed",
+]
+dynamic = ["version"]
+dependencies = [
+        "universal-pathlib>=0.2.2,<1.0.0",
+        "numpy>=1.22.4",
+        "pyyaml",
+        "zarr",
+        "cattrs",
+        "pymongo",
+        "tqdm",
+        "simpleitk",
+        "lazy-property",
+        "neuroglancer",
+        "torch",
+        "fibsem_tools",
+        "attrs",
+        "bokeh",
+        "numpy-indexed>=0.3.7",
+        "daisy",
+        "funlib.math>=0.1",
+        "funlib.geometry>=0.2",
+        "mwatershed>=0.1",
+        "cellmap-models",
+        "funlib.persistence>=0.3.0",
+        "gunpowder>=1.3",
+        "lsds",
+        "xarray",
+        "cattrs",
+        "numpy-indexed",
+        "click",
+        "pyyaml",
+        "scipy",
+        ]
+
+# extras
+# https://peps.python.org/pep-0621/#dependencies-optional-dependencies
+[project.optional-dependencies]
+test = ["pytest==7.4.4", "pytest-cov", "pytest-lazy-fixture"]
+dev = [
+    "black",
+    "mypy",
+    "pdbpp",
+    "rich",
+    "ruff",
+    "pre-commit",
+]
+docs = [
+    "sphinx-autodoc-typehints",
+    "sphinx-autoapi",
+    "sphinx-click",
+    "sphinx-rtd-theme",
+    "myst-parser",
+]
+examples = [
+    "ipython",
+    "ipykernel",
+    "jupyter",
+]
+pretrained = [
+    "pyqt5",
+    "empanada-napari",
+    "cellmap-models",
+    ]
+all = ["dacapo-ml[test,dev,docs,examples,pretrained]"]
+
+[project.urls]
+homepage = "https://github.io/janelia-cellmap/dacapo"
+repository = "https://github.com/janelia-cellmap/dacapo"
+
+# https://hatch.pypa.io/latest/config/metadata/
+[tool.hatch.version]
+source = "vcs"
+
+# https://hatch.pypa.io/latest/config/build/#file-selection
+# [tool.hatch.build.targets.sdist]
+# include = ["/src", "/tests"]
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["dacapo"]
+
+[project.scripts]
+dacapo = "dacapo.cli:cli"
+
+# https://github.com/charliermarsh/ruff
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+src = ["dacapo"]
+
+[tool.ruff.lint]
+# https://beta.ruff.rs/docs/rules/
+# We may want to enable some of these options later
+select = [
+    "E",    # style errors
+#    "W",    # style warnings
+    "F",    # flakes
+#    "D",    # pydocstyle
+#    "I",    # isort
+#    "UP",   # pyupgrade
+#    "C4",   # flake8-comprehensions
+#    "B",    # flake8-bugbear
+#    "A001", # flake8-builtins
+#    "RUF",  # ruff-specific rules
+]
+extend-ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = ["D", "S"]
+"__init__.py" = ["F401"]
+
+# https://docs.pytest.org/en/6.2.x/customize.html
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning",
+    ]
+    
+# https://mypy.readthedocs.io/en/stable/config_file.html
+[tool.mypy]
+files = "dacapo/**/"
+strict = false
+disallow_any_generics = false
+disallow_subclassing_any = false
+show_error_codes = true
+pretty = true
+exclude = [
+    "scratch/*",
+    "examples/*",
+]
+
+
+# # module specific overrides
+[[tool.mypy.overrides]]
+module = [
+    "cellmap_models.*",
+    "funlib.*",
+    "toml.*", 
+    "gunpowder.*",
+    "scipy.*",
+    "augment.*",
+    "tifffile.*",
+    "daisy.*",
+    "lazy_property.*",
+    "skimage.*",
+    "fibsem_tools.*",
+    "neuroglancer.*",
+    "tqdm.*",
+    "zarr.*",
+    "pymongo.*",
+    "bson.*",
+    "affogato.*",
+    "SimpleITK.*",
+    "bokeh.*",
+    "lsd.*",
+    "yaml.*",
+    "pytest_lazyfixture.*",
+    "neuclease.dvid.*",
+    "mwatershed.*",
+    "numpy_indexed.*",
+    "empanada_napari.*",
+    "napari.*",
+    "empanada.*",
+    "IPython.*",
+]
+ignore_missing_imports = true
+
+# https://coverage.readthedocs.io/en/6.4/config.html
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "@overload",
+    "except ImportError",
+    "\\.\\.\\.",
+    "raise NotImplementedError()",
+]
+[tool.coverage.run]
+source = ["dacapo"]
+
+# https://github.com/mgedmin/check-manifest#configuration
+[tool.check-manifest]
+ignore = [
+    ".github_changelog_generator",
+    ".pre-commit-config.yaml",
+    ".ruff_cache/**/*",
+    "tests/**/*",
+]
