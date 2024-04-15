@@ -27,7 +27,6 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = [
-        "universal-pathlib>=0.2.2,<1.0.0",
         "numpy>=1.22.4",
         "pyyaml",
         "zarr",
@@ -56,6 +55,7 @@ dependencies = [
         "click",
         "pyyaml",
         "scipy",
+        "universal_pathlib",
         ]
 
 # extras
