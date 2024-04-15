@@ -6,7 +6,7 @@ from dacapo.store.create_store import (
     create_weights_store,
 )
 from dacapo.experiments import Run
-from dacapo.validate import validate_run
+from dacapo.validate import validate
 
 import torch
 from tqdm import tqdm
@@ -18,7 +18,16 @@ logger = logging.getLogger(__name__)
 
 
 def train(run_name: str):
-    """Train a run"""
+    """
+    Train a run
+
+    Args:
+        run_name: Name of the run to train
+    Raises:
+        ValueError: If run_name is not found in config store
+    Examples:
+        >>> train("run_name")
+    """
 
     # check config store to see if run is already being trained TODO
     # if ...:
@@ -39,6 +48,15 @@ def train(run_name: str):
 
 
 def train_run(run: Run):
+    """
+    Train a run
+
+    Args:
+        run: Run object to train
+    Raises:
+        ValueError: If run_name is not found in config store
+
+    """
     print(f"Starting/resuming training for run {run}...")
 
     # create run
@@ -169,13 +187,13 @@ def train_run(run: Run):
             try:
                 # launch validation in a separate thread to avoid blocking training
                 validate_thread = threading.Thread(
-                    target=validate_run,
+                    target=validate,
                     args=(run, iteration_stats.iteration + 1),
                     name=f"validate_{run.name}_{iteration_stats.iteration + 1}",
                     daemon=True,
                 )
                 validate_thread.start()
-                # validate_run(
+                # validate(
                 #     run,
                 #     iteration_stats.iteration + 1,
                 # )

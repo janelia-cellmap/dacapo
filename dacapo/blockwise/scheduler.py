@@ -22,52 +22,44 @@ def run_blockwise(
     read_roi: Roi,
     write_roi: Roi,
     num_workers: int = 16,
-    max_retries: int = 2,
+    max_retries: int = 1,
     timeout=None,
     upstream_tasks=None,
     *args,
     **kwargs,
 ):
-    """Run a function in parallel over a large volume.
+    """
+    Run a function in parallel over a large volume.
 
     Args:
-
         worker_file (``str`` or ``Path``):
-
             The path to the file containing the necessary worker functions:
             ``spawn_worker`` and ``start_worker``.
             Optionally, the file can also contain a ``check_function`` and an ``init_callback_fn``.
-
         total_roi (``Roi``):
             The ROI to process.
-
         read_roi (``Roi``):
             The ROI to read from for a block.
-
         write_roi (``Roi``):
             The ROI to write to for a block.
-
         num_workers (``int``):
-
-                The number of workers to use.
-
+            The number of workers to use.
         max_retries (``int``):
-
-                    The maximum number of times a task will be retried if failed
-                    (either due to failed post check or application crashes or network
-                    failure)
-
+            The maximum number of times a task will be retried if failed
+            (either due to failed post check or application crashes or network
+            failure)
         *args:
-
             Additional positional arguments to pass to ``worker_function``.
-
         **kwargs:
-
             Additional keyword arguments to pass to ``worker_function``.
-
     Returns:
-
-            ``Bool``.
+        ``Bool``.
+    Raises:
+        NotImplementedError: If the method is not implemented in the derived class.
+    Examples:
+        >>> run_blockwise(worker_file, total_roi, read_roi, write_roi, num_workers, max_retries, timeout, upstream_tasks)
+    Note:
+        The method is implemented in the class.
 
     """
 
@@ -103,58 +95,44 @@ def segment_blockwise(
     *args,
     **kwargs,
 ):
-    """Run a segmentation function in parallel over a large volume.
+    """
+    Run a segmentation function in parallel over a large volume.
 
     Args:
-
-            segment_function_file (``str`` or ``Path``):
-
-                The path to the file containing the necessary worker functions:
-                ``spawn_worker`` and ``start_worker``.
-                Optionally, the file can also contain a ``check_function`` and an ``init_callback_fn``.
-
-            context (``Coordinate``):
-
-                The context to add to the read and write ROI.
-
-            total_roi (``Roi``):
-                The ROI to process.
-
-            read_roi (``Roi``):
-                The ROI to read from for a block.
-
-            write_roi (``Roi``):
-                The ROI to write to for a block.
-
-            num_workers (``int``):
-
-                    The number of workers to use.
-
-            max_retries (``int``):
-
-                        The maximum number of times a task will be retried if failed
-                        (either due to failed post check or application crashes or network
-                        failure)
-
-            timeout (``int``):
-
-                    The maximum time in seconds to wait for a worker to complete a task.
-
-            upstream_tasks (``List``):
-
-                        List of upstream tasks.
-
-            *args:
-
-                Additional positional arguments to pass to ``worker_function``.
-
-            **kwargs:
-
-                Additional keyword arguments to pass to ``worker_function``.
-
+        segment_function_file (``str`` or ``Path``):
+            The path to the file containing the necessary worker functions:
+            ``spawn_worker`` and ``start_worker``.
+            Optionally, the file can also contain a ``check_function`` and an ``init_callback_fn``.
+        context (``Coordinate``):
+            The context to add to the read and write ROI.
+        total_roi (``Roi``):
+            The ROI to process.
+        read_roi (``Roi``):
+            The ROI to read from for a block.
+        write_roi (``Roi``):
+            The ROI to write to for a block.
+        num_workers (``int``):
+            The number of workers to use.
+        max_retries (``int``):
+            The maximum number of times a task will be retried if failed
+            (either due to failed post check or application crashes or network
+            failure)
+        timeout (``int``):
+            The maximum time in seconds to wait for a worker to complete a task.
+        upstream_tasks (``List``):
+            List of upstream tasks.
+        *args:
+            Additional positional arguments to pass to ``worker_function``.
+        **kwargs:
+            Additional keyword arguments to pass to ``worker_function``.
     Returns:
-
             ``Bool``.
+    Raises:
+        NotImplementedError: If the method is not implemented in the derived class.
+    Examples:
+        >>> segment_blockwise(segment_function_file, context, total_roi, read_roi, write_roi, num_workers, max_retries, timeout, upstream_tasks)
+    Note:
+        The method is implemented in the class.
     """
     options = Options.instance()
     if not options.runs_base_dir.exists():

@@ -1,4 +1,4 @@
-from dacapo.examples.random_source_pipeline import random_source_pipeline
+from dacapo.utils.pipeline import random_source_pipeline
 import gunpowder as gp
 
 

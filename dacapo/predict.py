@@ -3,14 +3,13 @@ from upath import UPath as Path
 from dacapo.blockwise import run_blockwise
 import dacapo.blockwise
 from dacapo.experiments import Run
-from dacapo.store.create_store import create_config_store
+from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.store.local_array_store import LocalArrayIdentifier
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from dacapo.compute_context import create_compute_context, LocalTorch
 
 from funlib.geometry import Coordinate, Roi
 import numpy as np
-import zarr
 
 from typing import Optional
 import logging
@@ -41,6 +40,11 @@ def predict(
         num_workers (int, optional): The number of workers to use for blockwise prediction. Defaults to 1 for local processing, otherwise 12.
         output_dtype (np.dtype | str, optional): The dtype of the output array. Defaults to np.uint8.
         overwrite (bool, optional): If True, the output array will be overwritten if it already exists. Defaults to True.
+    Raises:
+        ValueError: If run_name is not found in config store
+    Examples:
+        >>> predict("run_name", 100, "input.zarr", "raw", "output.zarr", output_roi="[0:100,0:100,0:100]")
+
     """
     # retrieving run
     if isinstance(run_name, Run):
@@ -74,6 +78,15 @@ def predict(
         num_workers = 1
 
     model = run.model.eval()
+
+    if iteration is not None:
+        # create weights store
+        weights_store = create_weights_store()
+
+        # load weights
+        run.model.load_state_dict(
+            weights_store.retrieve_weights(run_name, iteration).model
+        )
 
     input_voxel_size = Coordinate(raw_array.voxel_size)
     output_voxel_size = model.scale(input_voxel_size)

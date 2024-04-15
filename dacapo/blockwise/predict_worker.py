@@ -36,6 +36,20 @@ path = __file__
     default="INFO",
 )
 def cli(log_level):
+    """
+    CLI for running the predict worker.
+
+    The predict worker is used to apply a trained model to a dataset.
+
+    Args:
+        log_level (str): The log level to use for logging.
+    Raises:
+        NotImplementedError: If the method is not implemented in the derived class.
+    Examples:
+        >>> cli(log_level="INFO")
+    Note:
+        The method is implemented in the class.
+    """
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
@@ -46,8 +60,7 @@ def cli(log_level):
 @click.option(
     "-i",
     "--iteration",
-    required=True,
-    type=Optional[int],
+    type=int,
     help="The training iteration of the model to use for prediction.",
     default=None,
 )
@@ -69,7 +82,26 @@ def start_worker(
     input_dataset: str,
     output_container: Path | str,
     output_dataset: str,
+    return_io_loop: Optional[bool] = False,
 ):
+    """
+    Start a worker to apply a trained model to a dataset.
+
+    Args:
+        run_name (str): The name of the run to apply.
+        iteration (int or None): The training iteration of the model to use for prediction.
+        input_container (Path | str): The input container.
+        input_dataset (str): The input dataset.
+        output_container (Path | str): The output container.
+        output_dataset (str): The output dataset.
+    Raises:
+        NotImplementedError: If the method is not implemented in the derived class.
+    Examples:
+        >>> start_worker(run_name="run", iteration=0, input_container="input", input_dataset="input", output_container="output", output_dataset="output")
+    Note:
+        The method is implemented in the class.
+
+    """
     compute_context = create_compute_context()
     device = compute_context.device
 
@@ -83,7 +115,9 @@ def start_worker(
         weights_store = create_weights_store()
 
         # load weights
-        weights_store.retrieve_weights(run_name, iteration)
+        run.model.load_state_dict(
+            weights_store.retrieve_weights(run_name, iteration).model
+        )
 
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
@@ -125,7 +159,7 @@ def start_worker(
     pipeline += gp.Normalize(raw)
 
     # predict
-    model.eval()
+    # model.eval()
     pipeline += gp_torch.Predict(
         model=model,
         inputs={"x": raw},
@@ -149,34 +183,40 @@ def start_worker(
         voxel_size=output_voxel_size,
     )
 
-    daisy_client = daisy.Client()
+    def io_loop():
+        daisy_client = daisy.Client()
 
-    while True:
-        with daisy_client.acquire_block() as block:
-            if block is None:
-                return
+        while True:
+            with daisy_client.acquire_block() as block:
+                if block is None:
+                    return
 
-            print(f"Processing block {block}")
+                print(f"Processing block {block}")
 
-            chunk_request = request.copy()
-            chunk_request[raw].roi = block.read_roi
-            chunk_request[prediction].roi = block.write_roi
+                chunk_request = request.copy()
+                chunk_request[raw].roi = block.read_roi
+                chunk_request[prediction].roi = block.write_roi
 
-            with gp.build(pipeline):
-                batch = pipeline.request_batch(chunk_request)
-            # prediction: (1, [c,] d, h, w)
-            output = batch.arrays[prediction].data.squeeze()
+                with gp.build(pipeline):
+                    batch = pipeline.request_batch(chunk_request)
+                # prediction: (1, [c,] d, h, w)
+                output = batch.arrays[prediction].data.squeeze()
 
-            # convert to uint8 if necessary:
-            if output_array.dtype == np.uint8:
-                if "sigmoid" not in str(model.eval_activation).lower():
-                    # assume output is in [-1, 1]
-                    output += 1
-                    output /= 2
-                output *= 255
-                output = output.clip(0, 255)
-                output = output.astype(np.uint8)
-            output_array[block.write_roi] = output
+                # convert to uint8 if necessary:
+                if output_array.dtype == np.uint8:
+                    if "sigmoid" not in str(model.eval_activation).lower():
+                        # assume output is in [-1, 1]
+                        output += 1
+                        output /= 2
+                    output *= 255
+                    output = output.clip(0, 255)
+                    output = output.astype(np.uint8)
+                output_array[block.write_roi] = output
+
+    if return_io_loop:
+        return io_loop
+    else:
+        io_loop()
 
 
 def spawn_worker(
@@ -185,15 +225,32 @@ def spawn_worker(
     input_array_identifier: "LocalArrayIdentifier",
     output_array_identifier: "LocalArrayIdentifier",
 ):
-    """Spawn a worker to predict on a given dataset.
+    """
+    Spawn a worker to predict on a given dataset.
 
     Args:
         run_name (str): The name of the run to apply.
         iteration (int or None): The training iteration of the model to use for prediction.
         input_array_identifier (LocalArrayIdentifier): The raw data to predict on.
         output_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
+    Raises:
+        NotImplementedError: If the method is not implemented in the derived class.
+    Examples:
+        >>> spawn_worker(run_name="run", iteration=0, input_array_identifier=LocalArrayIdentifier(Path("input"), "input"), output_array_identifier=LocalArrayIdentifier(Path("output"), "output"))
+    Note:
+        The method is implemented in the class.
     """
     compute_context = create_compute_context()
+    if not compute_context.distribute_workers:
+        return start_worker(
+            run_name,
+            iteration,
+            input_array_identifier.container,
+            input_array_identifier.dataset,
+            output_array_identifier.container,
+            output_array_identifier.dataset,
+            return_io_loop=True,
+        )
 
     # Make the command for the worker to run
     command = [
@@ -218,6 +275,16 @@ def spawn_worker(
     print("Defining worker with command: ", compute_context.wrap_command(command))
 
     def run_worker():
+        """
+        Run the worker in the given compute context.
+
+        Raises:
+            NotImplementedError: If the method is not implemented in the derived class.
+        Examples:
+            >>> run_worker()
+        Note:
+            The method is implemented in the class.
+        """
         # Run the worker in the given compute context
         print("Running worker with command: ", command)
         compute_context.execute(command)
