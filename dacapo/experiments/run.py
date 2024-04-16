@@ -93,6 +93,7 @@ class Run:
 
         """
         self.name = run_config.name
+        self._config = run_config
         self.train_until = run_config.num_iterations
         self.validation_interval = run_config.validation_interval
 
@@ -106,7 +107,10 @@ class Run:
         self.task = task_type(run_config.task_config)
         self.architecture = architecture_type(run_config.architecture_config)
         self.trainer = trainer_type(run_config.trainer_config)
-        self.datasplit = datasplit_type(run_config.datasplit_config)
+
+        # lazy load datasplit
+        self._datasplit = None
+        
 
         # combined pieces
         self.model = self.task.create_model(self.architecture)
@@ -114,9 +118,7 @@ class Run:
 
         # tracking
         self.training_stats = TrainingStats()
-        self.validation_scores = ValidationScores(
-            self.task.parameters, self.datasplit.validate, self.task.evaluation_scores
-        )
+        self._validation_scores = None
 
         if not load_starter_model:
             self.start = None
@@ -141,6 +143,22 @@ class Run:
                 new_head = run_config.task_config.channels
 
         self.start.initialize_weights(self.model, new_head=new_head)
+
+    @property
+    def datasplit(self):
+        if self._datasplit is None:
+            self._datasplit = self._config.datasplit_config.datasplit_type(
+                self._config.datasplit_config
+            )
+        return self._datasplit
+
+    @property
+    def validation_scores(self):
+        if self._validation_scores is None:
+            self._validation_scores = ValidationScores(
+                self.task.parameters, self.datasplit.validate, self.task.evaluation_scores
+            )
+        return self._validation_scores
 
     @staticmethod
     def get_validation_scores(run_config) -> ValidationScores:
