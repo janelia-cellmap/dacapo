@@ -104,7 +104,7 @@ class ZarrArray(Array):
         self.name = array_config.name
         self.file_name = array_config.file_name
         self.dataset = array_config.dataset
-        self.mode = array_config.mode
+        self._mode = array_config.mode
         self._attributes = self.data.attrs
         self._axes = array_config._axes
         self.snap_to_grid = array_config.snap_to_grid
@@ -144,6 +144,14 @@ class ZarrArray(Array):
 
         """
         return f"ZarrArray({self.file_name}, {self.dataset})"
+    
+    @property
+    def mode(self):
+        if not hasattr(self, "_mode"):
+            self._mode = "a"
+        if self._mode not in ["r", "w", "a"]:
+            raise ValueError(f"Mode {self._mode} not in ['r', 'w', 'a']")
+        return self._mode
 
     @property
     def attrs(self):
@@ -413,6 +421,7 @@ class ZarrArray(Array):
         num_channels,
         voxel_size,
         dtype,
+        mode = "a",
         write_size=None,
         name=None,
         overwrite=False,
