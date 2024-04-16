@@ -85,7 +85,7 @@ class ZarrArray(Array):
         This class is used to create a zarr array.
     """
 
-    def __init__(self, array_config, mode="a"):
+    def __init__(self, array_config):
         """
         Initializes the array type 'raw' and name for the DummyDataset instance.
 
@@ -104,8 +104,7 @@ class ZarrArray(Array):
         self.name = array_config.name
         self.file_name = array_config.file_name
         self.dataset = array_config.dataset
-
-        self._mode = mode
+        self._mode = array_config.mode
         self._attributes = self.data.attrs
         self._axes = array_config._axes
         self.snap_to_grid = array_config.snap_to_grid

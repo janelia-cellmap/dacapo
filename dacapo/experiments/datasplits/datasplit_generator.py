@@ -71,7 +71,7 @@ def resize_if_needed(
     Notes:
         This function is used to resize the array if needed.
     """
-    zarr_array = ZarrArray(array_config,mode="r")
+    zarr_array = ZarrArray(array_config)
     raw_voxel_size = zarr_array.voxel_size
 
     raw_upsample = raw_voxel_size / target_resolution
@@ -125,8 +125,9 @@ def get_right_resolution_array_config(
         file_name=container,
         dataset=str(current_dataset_path),
         snap_to_grid=target_resolution,
+        mode = "r"
     )
-    zarr_array = ZarrArray(zarr_config,mode="r")
+    zarr_array = ZarrArray(zarr_config)
     while (
         all([z < t for (z, t) in zip(zarr_array.voxel_size, target_resolution)])
         and Path(container, Path(dataset, f"s{level+1}")).exists()
@@ -137,9 +138,10 @@ def get_right_resolution_array_config(
             file_name=container,
             dataset=str(Path(dataset, f"s{level}")),
             snap_to_grid=target_resolution,
+            mode = "r"
         )
 
-        zarr_array = ZarrArray(zarr_config,mode = "r")
+        zarr_array = ZarrArray(zarr_config)
     return resize_if_needed(zarr_config, target_resolution, extra_str)
 
 
@@ -776,6 +778,7 @@ class DataSplitGenerator:
                     name=f"raw_{raw_container.stem}_uint8",
                     file_name=raw_container,
                     dataset=raw_dataset,
+                    mode="r",
                 ),
                 self.input_resolution,
                 "raw",
@@ -803,6 +806,7 @@ class DataSplitGenerator:
                         name=f"gt_{gt_path.stem}_{current_class_dataset}_uint8",
                         file_name=gt_path,
                         dataset=current_class_dataset,
+                        mode="r",
                     ),
                     self.output_resolution,
                     "gt",
