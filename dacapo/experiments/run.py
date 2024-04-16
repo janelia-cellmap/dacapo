@@ -110,7 +110,6 @@ class Run:
 
         # lazy load datasplit
         self._datasplit = None
-        
 
         # combined pieces
         self.model = self.task.create_model(self.architecture)
@@ -156,7 +155,9 @@ class Run:
     def validation_scores(self):
         if self._validation_scores is None:
             self._validation_scores = ValidationScores(
-                self.task.parameters, self.datasplit.validate, self.task.evaluation_scores
+                self.task.parameters,
+                self.datasplit.validate,
+                self.task.evaluation_scores,
             )
         return self._validation_scores
 

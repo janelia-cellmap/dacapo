@@ -125,7 +125,7 @@ def get_right_resolution_array_config(
         file_name=container,
         dataset=str(current_dataset_path),
         snap_to_grid=target_resolution,
-        mode = "r"
+        mode="r",
     )
     zarr_array = ZarrArray(zarr_config)
     while (
@@ -138,7 +138,7 @@ def get_right_resolution_array_config(
             file_name=container,
             dataset=str(Path(dataset, f"s{level}")),
             snap_to_grid=target_resolution,
-            mode = "r"
+            mode="r",
         )
 
         zarr_array = ZarrArray(zarr_config)
