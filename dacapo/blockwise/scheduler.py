@@ -197,5 +197,10 @@ def segment_blockwise(
 
     success = success and daisy.run_blockwise([task])
 
-    shutil.rmtree(tmpdir, ignore_errors=True)
+    if success:
+        shutil.rmtree(tmpdir, ignore_errors=True)
+    else:
+        raise RuntimeError(
+            f"Blockwise segmentation failed. Can rerun with merge files stored at:\n\t{tmpdir}"
+        )
     return success
