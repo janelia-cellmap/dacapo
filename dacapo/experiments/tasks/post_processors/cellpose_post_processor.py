@@ -1,6 +1,6 @@
 from .cellpose_post_processor_parameters import CellposePostProcessorParameters
 from .post_processor import PostProcessor
-from dacapo.store import LocalArrayIdentifier, ZarrArray
+from dacapo.store.array_store import LocalArrayIdentifier, ZarrArray
 import numpy as np
 import zarr
 

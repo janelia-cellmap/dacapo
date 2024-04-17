@@ -3,6 +3,7 @@ from dacapo.experiments import Model
 from dacapo.experiments.arraytypes import DistanceArray
 from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
 from dacapo.utils.balance_weights import balance_weights
+from dacapo.experiments.architectures import CellposeUnet
 
 from funlib.geometry import Coordinate
 
@@ -55,10 +56,20 @@ class CellposePredictor(Predictor):
     def create_model(self, architecture):
         if isinstance(architecture, CellposeUnet):
             head = torch.nn.Identity()
+        else:
+            if architecture.dims == 2:
+                head = torch.nn.Conv2d(
+                    architecture.num_out_channels, self.embedding_dims, kernel_size=1
+                )
+            elif architecture.dims == 3:
+                head = torch.nn.Conv3d(
+                    architecture.num_out_channels, self.embedding_dims, kernel_size=1
+                )
 
-        return Model(architecture, torch.nn.Identity())
+        return Model(architecture, head)
 
     def create_target(self, gt):
+        # TODO: add 2D support
         flows, _ = masks_to_flows_gpu_3d(gt)
         # difussion = self.process(
         #     gt.data, gt.voxel_size, self.norm, self.dt_scale_factor

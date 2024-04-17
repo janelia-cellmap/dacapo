@@ -1,6 +1,6 @@
-from .evaluators import BinarySegmentationEvaluator
+from .evaluators import InstanceEvaluator
 from .losses import CellposeLoss
-from .post_processors import ThresholdPostProcessor
+from .post_processors import CellposePostProcessor
 from .predictors import CellposePredictor
 from .task import Task
 
@@ -17,8 +17,4 @@ class CellposeTask(Task):
         )
         self.loss = CellposeLoss()
         self.post_processor = ThresholdPostProcessor()
-        self.evaluator = BinarySegmentationEvaluator(
-            clip_distance=task_config.clip_distance,
-            tol_distance=task_config.tol_distance,
-            channels=task_config.channels,
-        )
+        self.evaluator = InstanceEvaluator()
