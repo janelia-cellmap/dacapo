@@ -1,5 +1,6 @@
 from .local_array_store import LocalArrayStore
 from .local_weights_store import LocalWeightsStore
+from .s3_weights_store import S3WeightsStore
 from .mongo_config_store import MongoConfigStore
 from .file_config_store import FileConfigStore
 from .mongo_stats_store import MongoStatsStore
@@ -85,9 +86,14 @@ def create_weights_store():
 
     options = Options.instance()
 
-    # currently, only the LocalWeightsStore is supported
-    base_dir = Path(options.runs_base_dir).expanduser()
-    return LocalWeightsStore(base_dir)
+    if options.store == "s3":
+        s3_bucket = options.s3_bucket
+        return S3WeightsStore(s3_bucket)
+    elif options.store == "local":
+        base_dir = Path(options.runs_base_dir).expanduser()
+        return LocalWeightsStore(base_dir)
+    else:
+        raise ValueError(f"Unknown weights store type {options.type}")
 
 
 def create_array_store():
