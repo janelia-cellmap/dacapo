@@ -99,8 +99,6 @@ class Bsub(ComputeContext):
                 f"{self.queue}",
                 "-n",
                 f"{self.num_cpus}",
-                "-gpu",
-                f"num={self.num_gpus}",
                 "-J",
                 "dacapo",
                 "-o",
@@ -108,6 +106,14 @@ class Bsub(ComputeContext):
                 "-e",
                 f"{basename}.err",
             ]
+            + (
+                [
+                    "-gpu",
+                    f"num={self.num_gpus}",
+                ]
+                if self.num_gpus > 0
+                else []
+            )
             + (
                 [
                     "-P",

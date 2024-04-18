@@ -1,13 +1,9 @@
 from typing import Any, Optional
-from upath import UPath as Path
 import sys
-from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
-from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.compute_context import create_compute_context
 
 import daisy
 
-import numpy as np
 import click
 
 import logging
@@ -17,6 +13,8 @@ logger = logging.getLogger(__file__)
 read_write_conflict: bool = False
 fit: str = "valid"
 path = __file__
+
+# OPTIONALLY DEFINE GLOBALS HERE
 
 
 @click.group()
@@ -45,8 +43,10 @@ def cli(log_level):
     type=any,
     default=None,
 )
+# ADD MORE CLICK OPTION ARGUMENTS HERE
 def start_worker(
     arg: Any,
+    # ADD MORE ARGUMENTS HERE
     return_io_loop: Optional[bool] = False,
 ):
     """
@@ -71,6 +71,7 @@ def start_worker(
 
                 # Do the blockwise process
                 print(f"processing block: {block.roi}, using arg: {arg}")
+                # DO SOMETHING WITH THE BLOCK
 
     if return_io_loop:
         return io_loop
@@ -80,6 +81,7 @@ def start_worker(
 
 def spawn_worker(
     arg: Any,
+    # ADD MORE ARGUMENTS HERE
 ):
     """
     Spawn a worker.
@@ -93,6 +95,7 @@ def spawn_worker(
     if not compute_context.distribute_workers:
         return start_worker(
             arg=arg,
+            # ADD MORE ARGUMENTS HERE
             return_io_loop=True,
         )
 
@@ -103,6 +106,7 @@ def spawn_worker(
         "start-worker",
         "--arg",
         str(arg),
+        # ADD MORE ARGUMENTS HERE, THEY MUST BE STRINGS
     ]
 
     def run_worker():
