@@ -33,6 +33,15 @@ Classes
 
 
 
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   dacapo.blockwise.run_blockwise
+   dacapo.blockwise.segment_blockwise
+
+
 
 .. py:class:: DaCapoBlockwiseTask(worker_file: str | pathlib.Path, total_roi: daisy.Roi, read_roi: daisy.Roi, write_roi: daisy.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, *args, **kwargs)
 
@@ -139,5 +148,63 @@ Classes
                    The worker is killed (and the block retried) if this time is
                    exceeded.
    :type timeout: int, optional
+
+
+.. py:function:: run_blockwise(worker_file: str | pathlib.Path, total_roi: funlib.geometry.Roi, read_roi: funlib.geometry.Roi, write_roi: funlib.geometry.Roi, num_workers: int = 16, max_retries: int = 1, timeout=None, upstream_tasks=None, *args, **kwargs)
+
+   Run a function in parallel over a large volume.
+
+   :param worker_file: The path to the file containing the necessary worker functions:
+                       ``spawn_worker`` and ``start_worker``.
+                       Optionally, the file can also contain a ``check_function`` and an ``init_callback_fn``.
+   :type worker_file: ``str`` or ``Path``
+   :param total_roi: The ROI to process.
+   :type total_roi: ``Roi``
+   :param read_roi: The ROI to read from for a block.
+   :type read_roi: ``Roi``
+   :param write_roi: The ROI to write to for a block.
+   :type write_roi: ``Roi``
+   :param num_workers: The number of workers to use.
+   :type num_workers: ``int``
+   :param max_retries: The maximum number of times a task will be retried if failed
+                       (either due to failed post check or application crashes or network
+                       failure)
+   :type max_retries: ``int``
+   :param \*args: Additional positional arguments to pass to ``worker_function``.
+   :param \*\*kwargs: Additional keyword arguments to pass to ``worker_function``.
+
+   :returns: ``Bool``.
+
+
+.. py:function:: segment_blockwise(segment_function_file: str | pathlib.Path, context: funlib.geometry.Coordinate, total_roi: funlib.geometry.Roi, read_roi: funlib.geometry.Roi, write_roi: funlib.geometry.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, *args, **kwargs)
+
+   Run a segmentation function in parallel over a large volume.
+
+   :param segment_function_file: The path to the file containing the necessary worker functions:
+                                 ``spawn_worker`` and ``start_worker``.
+                                 Optionally, the file can also contain a ``check_function`` and an ``init_callback_fn``.
+   :type segment_function_file: ``str`` or ``Path``
+   :param context: The context to add to the read and write ROI.
+   :type context: ``Coordinate``
+   :param total_roi: The ROI to process.
+   :type total_roi: ``Roi``
+   :param read_roi: The ROI to read from for a block.
+   :type read_roi: ``Roi``
+   :param write_roi: The ROI to write to for a block.
+   :type write_roi: ``Roi``
+   :param num_workers: The number of workers to use.
+   :type num_workers: ``int``
+   :param max_retries: The maximum number of times a task will be retried if failed
+                       (either due to failed post check or application crashes or network
+                       failure)
+   :type max_retries: ``int``
+   :param timeout: The maximum time in seconds to wait for a worker to complete a task.
+   :type timeout: ``int``
+   :param upstream_tasks: List of upstream tasks.
+   :type upstream_tasks: ``List``
+   :param \*args: Additional positional arguments to pass to ``worker_function``.
+   :param \*\*kwargs: Additional keyword arguments to pass to ``worker_function``.
+
+   :returns: ``Bool``.
 
 
