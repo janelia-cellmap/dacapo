@@ -31,12 +31,6 @@ def cli(log_level):
 
     Args:
         log_level (str): The log level to use.
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> cli(log_level="INFO")
-    Note:
-        The method is implemented in the class.
     """
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
@@ -73,12 +67,6 @@ def start_worker(
         tmpdir (str): The temporary directory.
         function_path (str): The path to the segment function.
         return_io_loop (bool): Whether to return the io loop or run it.
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> start_worker(input_container="input_container", input_dataset="input_dataset", output_container="output_container", output_dataset="output_dataset", tmpdir="tmpdir", function_path="function_path")
-    Note:
-        The method is implemented in the class.
     """
 
     print("Starting worker")
@@ -218,12 +206,8 @@ def spawn_worker(
         model (Model): The model to use for prediction.
         raw_array (Array): The raw data to predict on.
         prediction_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> spawn_worker(input_array_identifier="input_array_identifier", output_array_identifier="output_array_identifier", tmpdir="tmpdir", function_path="function_path")
-    Note:
-        The method is implemented in the class.
+    Returns:
+        Callable: The function to run the worker.
     """
     compute_context = create_compute_context()
     if not compute_context.distribute_workers:
@@ -260,15 +244,7 @@ def spawn_worker(
     def run_worker():
         """
         Run the worker in the given compute context.
-
-        Raises:
-            NotImplementedError: If the method is not implemented in the derived class.
-        Examples:
-            >>> run_worker()
-        Note:
-            The method is implemented in the class.
         """
-        # Run the worker in the given compute context
         compute_context.execute(command)
 
     return run_worker

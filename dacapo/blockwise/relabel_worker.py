@@ -29,12 +29,6 @@ def cli(log_level):
 
     Args:
         log_level (str): The log level to use.
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> cli(log_level="INFO")
-    Note:
-        The method is implemented in the class.
     """
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
@@ -63,12 +57,6 @@ def start_worker(
         output_container (str): The output container
         output_dataset (str): The output dataset
         tmpdir (str): The temporary directory
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> start_worker(output_container="output_container", output_dataset="output_dataset", tmpdir="tmpdir")
-    Note:
-        The method is implemented in the class.
     """
     client = daisy.Client()
     array_out = open_ds(output_container, output_dataset, mode="a")
@@ -108,12 +96,6 @@ def relabel_in_block(array_out, old_values, new_values, block):
         old_values (np.ndarray): The old values
         new_values (np.ndarray): The new values
         block (daisy.Block): The block
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> relabel_in_block(array_out, old_values, new_values, block)
-    Note:
-        The method is implemented in the class.
     """
     a = array_out.to_ndarray(block.write_roi)
     # DGA: had to add in flatten and reshape since remap (in particular indices) didn't seem to work with ndarrays for the input
@@ -131,12 +113,6 @@ def find_components(nodes, edges):
         edges (np.ndarray): The edges
     Returns:
         List[int]: The components
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> find_components(nodes, edges)
-    Note:
-        The method is implemented in the class.
     """
     # scipy
     disjoint_set = DisjointSet(nodes)
@@ -153,12 +129,6 @@ def read_cross_block_merges(tmpdir):
         tmpdir (str): The temporary directory
     Returns:
         Tuple[np.ndarray, np.ndarray]: The nodes and edges
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> read_cross_block_merges(tmpdir)
-    Note:
-        The method is implemented in the class.
     """
     block_files = glob(os.path.join(tmpdir, "block_*.npz"))
 
@@ -186,12 +156,6 @@ def spawn_worker(
         tmpdir (str): The temporary directory
     Returns:
         Callable: The function to run the worker
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> spawn_worker(output_array_identifier, tmpdir)
-    Note:
-        The method is implemented in the class.
     """
     compute_context = create_compute_context()
 
@@ -220,15 +184,7 @@ def spawn_worker(
     def run_worker():
         """
         Run the worker in the given compute context.
-
-        Raises:
-            NotImplementedError: If the method is not implemented in the derived class.
-        Examples:
-            >>> run_worker()
-        Note:
-            The method is implemented in the class.
         """
-        # Run the worker in the given compute context
         compute_context.execute(command)
 
     return run_worker

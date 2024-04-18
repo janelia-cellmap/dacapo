@@ -54,12 +54,8 @@ def run_blockwise(
             Additional keyword arguments to pass to ``worker_function``.
     Returns:
         ``Bool``.
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
     Examples:
         >>> run_blockwise(worker_file, total_roi, read_roi, write_roi, num_workers, max_retries, timeout, upstream_tasks)
-    Note:
-        The method is implemented in the class.
 
     """
 
@@ -127,12 +123,8 @@ def segment_blockwise(
             Additional keyword arguments to pass to ``worker_function``.
     Returns:
             ``Bool``.
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
     Examples:
         >>> segment_blockwise(segment_function_file, context, total_roi, read_roi, write_roi, num_workers, max_retries, timeout, upstream_tasks)
-    Note:
-        The method is implemented in the class.
     """
     options = Options.instance()
     if not options.runs_base_dir.exists():

@@ -63,13 +63,9 @@ class Bsub(ComputeContext):
 
         Returns:
             str: The device on which computations are to be done.
-        Raises:
-            NotImplementedError: If the method is not implemented in the derived class.
         Examples:
             >>> context = Bsub()
             >>> device = context.device
-        Note:
-            The method is implemented in the class.
         """
         if self.num_gpus > 0:
             return "cuda"
@@ -84,14 +80,10 @@ class Bsub(ComputeContext):
             command (List[str]): The command to be wrapped.
         Returns:
             List[str]: The wrapped command.
-        Raises:
-            NotImplementedError: If the method is not implemented in the derived class.
         Examples:
             >>> context = Bsub()
             >>> command = ["python", "script.py"]
             >>> wrapped_command = context._wrap_command(command)
-        Note:
-            The method is implemented in the class.
         """
         try:
             client = daisy.Client()

@@ -43,12 +43,6 @@ def cli(log_level):
 
     Args:
         log_level (str): The log level to use for logging.
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> cli(log_level="INFO")
-    Note:
-        The method is implemented in the class.
     """
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
@@ -94,13 +88,6 @@ def start_worker(
         input_dataset (str): The input dataset.
         output_container (Path | str): The output container.
         output_dataset (str): The output dataset.
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> start_worker(run_name="run", iteration=0, input_container="input", input_dataset="input", output_container="output", output_dataset="output")
-    Note:
-        The method is implemented in the class.
-
     """
     compute_context = create_compute_context()
     device = compute_context.device
@@ -233,12 +220,8 @@ def spawn_worker(
         iteration (int or None): The training iteration of the model to use for prediction.
         input_array_identifier (LocalArrayIdentifier): The raw data to predict on.
         output_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> spawn_worker(run_name="run", iteration=0, input_array_identifier=LocalArrayIdentifier(Path("input"), "input"), output_array_identifier=LocalArrayIdentifier(Path("output"), "output"))
-    Note:
-        The method is implemented in the class.
+    Returns:
+        Callable: The function to run the worker.
     """
     compute_context = create_compute_context()
     if not compute_context.distribute_workers:
@@ -277,15 +260,7 @@ def spawn_worker(
     def run_worker():
         """
         Run the worker in the given compute context.
-
-        Raises:
-            NotImplementedError: If the method is not implemented in the derived class.
-        Examples:
-            >>> run_worker()
-        Note:
-            The method is implemented in the class.
         """
-        # Run the worker in the given compute context
         print("Running worker with command: ", command)
         compute_context.execute(command)
 

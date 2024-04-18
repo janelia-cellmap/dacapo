@@ -27,18 +27,6 @@ path = __file__
     default="INFO",
 )
 def cli(log_level):
-    """
-    CLI for running the threshold worker.
-
-    Args:
-        log_level (str): The log level to use.
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> cli(log_level="INFO")
-    Note:
-        The method is implemented in the class.
-    """
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
@@ -72,12 +60,6 @@ def start_worker(
         output_container (Path | str): The output container.
         output_dataset (str): The output dataset.
         threshold (float): The threshold.
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> start_worker(input_container="input", input_dataset="input", output_container="output", output_dataset="output", threshold=0.0)
-    Note:
-        The method is implemented in the class.
 
     """
     # get arrays
@@ -119,19 +101,11 @@ def spawn_worker(
     Spawn a worker to predict on a given dataset.
 
     Args:
-        model (Model): The model to use for prediction.
-        raw_array (Array): The raw data to predict on.
-        prediction_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
-        block_shape (Tuple[int]): The shape of the blocks.
-        halo (Tuple[int]): The halo to use.
+        input_array_identifier (LocalArrayIdentifier): The raw data to predict on.
+        output_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
+        threshold (float): The threshold.
     Returns:
         Callable: The function to run the worker.
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
-    Examples:
-        >>> spawn_worker(model, raw_array, prediction_array_identifier, block_shape, halo)
-    Note:
-        The method is implemented in the class.
     """
     compute_context = create_compute_context()
     if not compute_context.distribute_workers:
@@ -145,7 +119,6 @@ def spawn_worker(
 
     # Make the command for the worker to run
     command = [
-        # "python",
         sys.executable,
         path,
         "start-worker",
@@ -164,15 +137,7 @@ def spawn_worker(
     def run_worker():
         """
         Run the worker in the given compute context.
-
-        Raises:
-            NotImplementedError: If the method is not implemented in the derived class.
-        Examples:
-            >>> run_worker()
-        Note:
-            The method is implemented in the class.
         """
-        # Run the worker in the given compute context
         compute_context.execute(command)
 
     return run_worker
