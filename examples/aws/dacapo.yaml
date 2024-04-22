@@ -1,0 +1,6 @@
+
+store: "s3"
+s3_bucket: "s3//dacapo-tests"
+
+type: "files"
+
