@@ -88,6 +88,7 @@ def segment_blockwise(
     max_retries: int = 2,
     timeout=None,
     upstream_tasks=None,
+    keep_tmpdir=False,
     *args,
     **kwargs,
 ):
@@ -117,6 +118,8 @@ def segment_blockwise(
             The maximum time in seconds to wait for a worker to complete a task.
         upstream_tasks (``List``):
             List of upstream tasks.
+        keep_tmpdir (``bool``):
+            Whether to keep the temporary directory.
         *args:
             Additional positional arguments to pass to ``worker_function``.
         **kwargs:
@@ -189,7 +192,7 @@ def segment_blockwise(
 
     success = success and daisy.run_blockwise([task])
 
-    if success:
+    if success and not keep_tmpdir:
         shutil.rmtree(tmpdir, ignore_errors=True)
     else:
         # Write a relabel script to tmpdir
