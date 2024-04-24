@@ -9,7 +9,7 @@ datasplit_config = DataSplitGenerator.generate_from_csv(
     input_resolution,
     output_resolution,
 ).compute()
-# # %%
+# %%
 datasplit = datasplit_config.datasplit_type(data)
 # %%
 viewer = datasplit._neuroglancer()

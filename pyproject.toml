@@ -56,6 +56,8 @@ dependencies = [
         "click",
         "pyyaml",
         "scipy",
+        "upath",
+        "boto3",
         ]
 
 # extras
