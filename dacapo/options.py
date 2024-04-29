@@ -35,21 +35,6 @@ class DaCapoConfig:
             "Currently, only 'files' and 'mongo' are supported with files being the default."
         },
     )
-
-    store: Optional[str] = attr.ib(
-        default="local",
-        metadata={
-            "help_text": "The type of store to use for storing configurations and statistics. "
-            "Currently, only 'local' and 's3' are supported with local being the default."
-        },
-    )
-    s3_bucket: Optional[str] = attr.ib(
-        default=None,
-        metadata={
-            "help_text": "The S3 bucket to use for storing configurations and statistics."
-        },
-    )
-
     runs_base_dir: Path = attr.ib(
         default=Path(expanduser("~/dacapo")),
         metadata={
