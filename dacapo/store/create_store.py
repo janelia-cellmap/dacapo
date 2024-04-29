@@ -1,6 +1,5 @@
 from .local_array_store import LocalArrayStore
 from .local_weights_store import LocalWeightsStore
-from .s3_weights_store import S3WeightsStore
 from .mongo_config_store import MongoConfigStore
 from .file_config_store import FileConfigStore
 from .mongo_stats_store import MongoStatsStore
@@ -32,7 +31,7 @@ def create_config_store():
         db_name = options.mongo_db_name
         return MongoConfigStore(db_host, db_name)
     elif options.type == "files":
-        store_path = Path(options.runs_base_dir).expanduser()
+        store_path = Path(options.runs_base_dir)
         return FileConfigStore(store_path / "configs")
     else:
         raise ValueError(f"Unknown store type {options.type}")
@@ -63,7 +62,7 @@ def create_stats_store():
         db_name = options.mongo_db_name
         return MongoStatsStore(db_host, db_name)
     elif options.type == "files":
-        store_path = Path(options.runs_base_dir).expanduser()
+        store_path = Path(options.runs_base_dir)
         return FileStatsStore(store_path / "stats")
     else:
         raise ValueError(f"Unknown store type {options.type}")
@@ -86,14 +85,8 @@ def create_weights_store():
 
     options = Options.instance()
 
-    if options.store == "s3":
-        s3_bucket = options.s3_bucket
-        return S3WeightsStore(s3_bucket)
-    elif options.store == "local":
-        base_dir = Path(options.runs_base_dir).expanduser()
-        return LocalWeightsStore(base_dir)
-    else:
-        raise ValueError(f"Unknown weights store type {options.type}")
+    base_dir = Path(options.runs_base_dir)
+    return LocalWeightsStore(base_dir)
 
 
 def create_array_store():

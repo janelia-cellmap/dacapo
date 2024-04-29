@@ -1,6 +1,3 @@
 
-store: "s3"
-s3_bucket: "s3//dacapo-tests"
-
+runs_base_dir: "s3://dacapotest"
 type: "files"
-
