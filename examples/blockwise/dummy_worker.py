@@ -70,7 +70,9 @@ def start_worker(
                     break
 
                 # Do the blockwise process
-                print(f"processing block: {block.id}, with read_roi: {block.read_roi}, using arg: {arg}")
+                print(
+                    f"processing block: {block.id}, with read_roi: {block.read_roi}, using arg: {arg}"
+                )
                 # DO SOMETHING WITH THE BLOCK
 
     if return_io_loop:
