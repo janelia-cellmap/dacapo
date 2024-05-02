@@ -211,6 +211,8 @@ class GunpowderTrainer(Trainer):
                 + gp.Pad(gt_key, None)
                 + gp.Pad(mask_key, None)
                 + gp.RandomLocation(
+                    min_masked=self.min_masked,  # This may run into OOM issues as RandomLocation tries to make an integral array over the entire upstream provider ROI
+                    mask=mask_placeholder if self.min_masked > 0 else None,
                     ensure_nonempty=(
                         sample_points_key if points_source is not None else None
                     ),
@@ -220,7 +222,11 @@ class GunpowderTrainer(Trainer):
                 )
             )
 
-            dataset_source += gp.Reject(mask_placeholder, 1e-6)
+            # TODO: This is a hack to avoid the OOM issue with RandomLocation, but will be really inefficient as it will draw examples until they satisfy its constraints
+            # if self.min_masked > 0:
+            #     dataset_source += gp.Reject(
+            #         mask_placeholder, min_masked=self.min_masked
+            #     )
 
             for augment in self.augments:
                 dataset_source += augment.node(raw_key, gt_key, mask_key)
