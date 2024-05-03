@@ -45,13 +45,13 @@ class CNNectomeUNetConfig(ArchitectureConfig):
             "help_text": "The factors to downsample the feature maps along each axis per layer."
         }
     )
-    kernel_size_down: Optional[List[Coordinate]] = attr.ib(
+    kernel_size_down: Optional[List[List[Coordinate]]] = attr.ib(
         default=None,
         metadata={
             "help_text": "The size of the convolutional kernels used before downsampling in each layer."
         },
     )
-    kernel_size_up: Optional[List[Coordinate]] = attr.ib(
+    kernel_size_up: Optional[List[List[Coordinate]]] = attr.ib(
         default=None,
         metadata={
             "help_text": "The size of the convolutional kernels used before upsampling in each layer."
