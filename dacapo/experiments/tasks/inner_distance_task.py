@@ -15,6 +15,10 @@ class InnerDistanceTask(Task):
         loss: Used for calculating the mean square error loss.
         post_processor: Used for applying threshold post-processing.
         evaluator: Used for evaluating the results using binary segmentation.
+    Methods:
+        __init__(self, task_config): Initializes an instance of InnerDistanceTask.
+    Notes:
+        This is a subclass of Task.
     """
 
     def __init__(self, task_config):
@@ -24,6 +28,11 @@ class InnerDistanceTask(Task):
         Args:
             task_config: The configuration for the task including channel and scale factor for prediction,
                          and clip distance, tolerance distance, and channels for evaluation.
+        Raises:
+            NotImplementedError: This method is not implemented.
+        Examples:
+            >>> task = InnerDistanceTask(task_config)
+
         """
 
         self.predictor = InnerDistancePredictor(
