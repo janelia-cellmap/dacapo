@@ -1,0 +1,3 @@
+train,s3://janelia-cosem-datasets/jrc_hela-2/jrc_hela-2.zarr,recon-1/em/fibsem-uint8,s3://janelia-cosem-datasets/jrc_hela-2/jrc_hela-2.zarr,recon-1/labels/groundtruth/crop155/[nuc]
+train,s3://janelia-cosem-datasets/jrc_hela-2/jrc_hela-2.zarr,recon-1/em/fibsem-uint8,s3://janelia-cosem-datasets/jrc_hela-2/jrc_hela-2.zarr,recon-1/labels/groundtruth/crop7/[nuc]
+val,s3://janelia-cosem-datasets/jrc_hela-2/jrc_hela-2.zarr,recon-1/em/fibsem-uint8,s3://janelia-cosem-datasets/jrc_hela-2/jrc_hela-2.zarr,recon-1/labels/groundtruth/crop6/[nuc]

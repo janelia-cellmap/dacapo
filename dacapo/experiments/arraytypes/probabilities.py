@@ -14,6 +14,9 @@ class ProbabilityArray(ArrayType):
 
     Attributes:
         classes (List[str]): A mapping from channel to class on which distances were calculated.
+    Note:
+        This class is used to create a ProbabilityArray object which is used to represent an array containing probability distributions for each voxel pointed by its coordinate.
+        The class of each voxel can be determined by simply taking the argmax.
     """
 
     classes: List[str] = attr.ib(
@@ -29,5 +32,13 @@ class ProbabilityArray(ArrayType):
 
         Returns:
             bool: True indicating that the data can be interpolated.
+        Raises:
+            NotImplementedError: This method is not implemented in this class
+        Examples:
+            >>> probability_array = ProbabilityArray(classes=["class1", "class2"])
+            >>> probability_array.interpolatable
+            True
+        Note:
+            This method is used to check if the array is interpolatable.
         """
         return True
