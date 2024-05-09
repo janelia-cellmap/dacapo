@@ -1,4 +1,4 @@
-from pathlib import Path
+from upath import UPath as Path
 
 from dacapo.blockwise import run_blockwise
 import dacapo.blockwise
@@ -40,6 +40,11 @@ def predict(
         num_workers (int, optional): The number of workers to use for blockwise prediction. Defaults to 1 for local processing, otherwise 12.
         output_dtype (np.dtype | str, optional): The dtype of the output array. Defaults to np.uint8.
         overwrite (bool, optional): If True, the output array will be overwritten if it already exists. Defaults to True.
+    Raises:
+        ValueError: If run_name is not found in config store
+    Examples:
+        >>> predict("run_name", 100, "input.zarr", "raw", "output.zarr", output_roi="[0:100,0:100,0:100]")
+
     """
     # retrieving run
     if isinstance(run_name, Run):

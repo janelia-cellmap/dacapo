@@ -5,14 +5,36 @@ from .zarr_array import ZarrArray
 
 from funlib.geometry import Coordinate
 
-from pathlib import Path
+from upath import UPath as Path
 
 from typing import Optional, List, Tuple
 
 
 @attr.s
 class ZarrArrayConfig(ArrayConfig):
-    """This config class provides the necessary configuration for a zarr array"""
+    """
+    This config class provides the necessary configuration for a zarr array.
+
+    A zarr array is a container for large, multi-dimensional arrays. It is similar to HDF5, but is designed to work
+    with large arrays that do not fit into memory. Zarr arrays can be stored on disk or in the cloud
+    and can be accessed concurrently by multiple processes. Zarr arrays can be compressed and
+    support chunked, N-dimensional arrays.
+
+    Attributes:
+        file_name: Path
+            The file name of the zarr container.
+        dataset: str
+            The name of your dataset. May include '/' characters for nested heirarchies
+        snap_to_grid: Optional[Coordinate]
+            If you need to make sure your ROI's align with a specific voxel_size
+        _axes: Optional[List[str]]
+            The axes of your data!
+    Methods:
+        verify() -> Tuple[bool, str]
+            Check whether this is a valid Array
+    Note:
+        This class is a subclass of ArrayConfig.
+    """
 
     array_type = ZarrArray
 
@@ -33,10 +55,30 @@ class ZarrArrayConfig(ArrayConfig):
     _axes: Optional[List[str]] = attr.ib(
         default=None, metadata={"help_text": "The axes of your data!"}
     )
+    mode: Optional[str] = attr.ib(
+        default="a", metadata={"help_text": "The access mode!"}
+    )
 
     def verify(self) -> Tuple[bool, str]:
         """
         Check whether this is a valid Array
+
+        Returns:
+            Tuple[bool, str]: A tuple of a boolean and a string. The boolean indicates whether the Array is valid or not.
+            The string provides a reason why the Array is not valid.
+        Raises:
+            NotImplementedError: This method is not implemented for this Array
+        Examples:
+            >>> zarr_array_config = ZarrArrayConfig(
+            ...     file_name=Path("data.zarr"),
+            ...     dataset="data",
+            ...     snap_to_grid=Coordinate(1, 1, 1),
+            ...     _axes=["x", "y", "z"]
+            ... )
+            >>> zarr_array_config.verify()
+            (True, 'No validation for this Array')
+        Note:
+            This method is not implemented for this Array
         """
         if not self.file_name.exists():
             return False, f"{self.file_name} does not exist!"

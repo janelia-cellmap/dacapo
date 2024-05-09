@@ -1,4 +1,4 @@
-from pathlib import Path
+from upath import UPath as Path
 from typing import Optional
 
 import numpy as np
@@ -7,7 +7,6 @@ import dacapo
 import click
 import logging
 from funlib.geometry import Roi, Coordinate
-from funlib.persistence import open_ds
 from dacapo.experiments.datasplits.datasets.dataset import Dataset
 from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
     PostProcessorParameters,
@@ -29,6 +28,42 @@ from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
     default="INFO",
 )
 def cli(log_level):
+    """
+    Command-line interface for the DACAPO application.
+
+    Args:
+        log_level (str): The desired log level for the application.
+    Examples:
+        To train a model, run:
+        ```
+        dacapo train --run-name my_run
+        ```
+
+        To validate a model, run:
+        ```
+        dacapo validate --run-name my_run --iteration 100
+        ```
+
+        To apply a model, run:
+        ```
+        dacapo apply --run-name my_run --input-container /path/to/input --input-dataset my_dataset --output-path /path/to/output
+        ```
+
+        To predict with a model, run:
+        ```
+        dacapo predict --run-name my_run --iteration 100 --input-container /path/to/input --input-dataset my_dataset --output-path /path/to/output
+        ```
+
+        To run a blockwise operation, run:
+        ```
+        dacapo run-blockwise --input-container /path/to/input --input-dataset my_dataset --output-container /path/to/output --output-dataset my_output --worker-file /path/to/worker.py --total-roi [0:100,0:100,0:100] --read-roi-size [10,10,10] --write-roi-size [10,10,10] --num-workers 16
+        ```
+
+        To segment blockwise, run:
+        ```
+        dacapo segment-blockwise --input-container /path/to/input --input-dataset my_dataset --output-container /path/to/output --output-dataset my_output --segment-function-file /path/to/segment_function.py --total-roi [0:100,0:100,0:100] --read-roi-size [10,10,10] --write-roi-size [10,10,10] --num-workers 16
+        ```
+    """
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
@@ -70,13 +105,49 @@ def validate(run_name, iteration):
     "--input_container",
     required=True,
     type=click.Path(exists=True, file_okay=False),
+    help="The path to the input container.",
 )
-@click.option("-id", "--input_dataset", required=True, type=str)
-@click.option("-op", "--output_path", required=True, type=click.Path(file_okay=False))
-@click.option("-vd", "--validation_dataset", type=str, default=None)
-@click.option("-c", "--criterion", default="voi")
-@click.option("-i", "--iteration", type=int, default=None)
-@click.option("-p", "--parameters", type=str, default=None)
+@click.option(
+    "-id",
+    "--input_dataset",
+    required=True,
+    type=str,
+    help="The name of the input dataset.",
+)
+@click.option(
+    "-op",
+    "--output_path",
+    required=True,
+    type=click.Path(file_okay=False),
+    help="The path to the output directory.",
+)
+@click.option(
+    "-vd",
+    "--validation_dataset",
+    type=str,
+    default=None,
+    help="The name of the validation dataset.",
+)
+@click.option(
+    "-c",
+    "--criterion",
+    default="voi",
+    help="The criterion to use for applying the run.",
+)
+@click.option(
+    "-i",
+    "--iteration",
+    type=int,
+    default=None,
+    help="The iteration of the model to use for prediction.",
+)
+@click.option(
+    "-p",
+    "--parameters",
+    type=str,
+    default=None,
+    help="The parameters for the post-processor.",
+)
 @click.option(
     "-roi",
     "--roi",
@@ -84,9 +155,26 @@ def validate(run_name, iteration):
     required=False,
     help="The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]",
 )
-@click.option("-w", "--num_workers", type=int, default=30)
-@click.option("-dt", "--output_dtype", type=str, default="uint8")
-@click.option("-ow", "--overwrite", is_flag=True)
+@click.option(
+    "-w",
+    "--num_workers",
+    type=int,
+    default=30,
+    help="The number of workers to use for prediction.",
+)
+@click.option(
+    "-dt",
+    "--output_dtype",
+    type=str,
+    default="uint8",
+    help="The output data type.",
+)
+@click.option(
+    "-ow",
+    "--overwrite",
+    is_flag=True,
+    help="Whether to overwrite existing output files.",
+)
 def apply(
     run_name: str,
     input_container: Path | str,
@@ -101,6 +189,30 @@ def apply(
     output_dtype: np.dtype | str = "uint8",
     overwrite: bool = True,
 ):
+    """
+    Apply a trained run to an input dataset.
+
+    Args:
+        run_name (str): The name of the run to apply.
+        input_container (Path | str): The path to the input container.
+        input_dataset (str): The name of the input dataset.
+        output_path (Path | str): The path to the output directory.
+        validation_dataset (Dataset | str, optional): The name of the validation dataset. Defaults to None.
+        criterion (str, optional): The criterion to use for applying the run. Defaults to "voi".
+        iteration (int, optional): The iteration of the model to use for prediction. Defaults to None.
+        parameters (PostProcessorParameters | str, optional): The parameters for the post-processor. Defaults to None.
+        roi (Roi | str, optional): The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]. Defaults to None.
+        num_workers (int, optional): The number of workers to use for prediction. Defaults to 30.
+        output_dtype (np.dtype | str, optional): The output data type. Defaults to "uint8".
+        overwrite (bool, optional): Whether to overwrite existing output files. Defaults to True.
+    Raises:
+        ValueError: If the run_name is not valid.
+    Examples:
+        To apply a trained run to an input dataset, run:
+        ```
+        dacapo apply --run-name my_run --input-container /path/to/input --input-dataset my_dataset --output-path /path/to/output
+        ```
+    """
     dacapo.apply(
         run_name,
         input_container,
@@ -133,9 +245,22 @@ def apply(
     "--input_container",
     required=True,
     type=click.Path(exists=True, file_okay=False),
+    help="The path to the input container.",
 )
-@click.option("-id", "--input_dataset", required=True, type=str)
-@click.option("-op", "--output_path", required=True, type=click.Path(file_okay=False))
+@click.option(
+    "-id",
+    "--input_dataset",
+    required=True,
+    type=str,
+    help="The name of the input dataset.",
+)
+@click.option(
+    "-op",
+    "--output_path",
+    required=True,
+    type=click.Path(file_okay=False),
+    help="The path to the output directory.",
+)
 @click.option(
     "-roi",
     "--output_roi",
@@ -143,9 +268,22 @@ def apply(
     required=False,
     help="The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]",
 )
-@click.option("-w", "--num_workers", type=int, default=30)
-@click.option("-dt", "--output_dtype", type=str, default="uint8")
-@click.option("-ow", "--overwrite", is_flag=True)
+@click.option(
+    "-w",
+    "--num_workers",
+    type=int,
+    default=30,
+    help="The number of workers to use for prediction.",
+)
+@click.option(
+    "-dt", "--output_dtype", type=str, default="uint8", help="The output data type."
+)
+@click.option(
+    "-ow",
+    "--overwrite",
+    is_flag=True,
+    help="Whether to overwrite existing output files.",
+)
 def predict(
     run_name: str,
     iteration: int,
@@ -157,6 +295,27 @@ def predict(
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):
+    """
+    Apply a trained model to predict on a dataset.
+
+    Args:
+        run_name (str): The name of the run to apply.
+        iteration (int): The training iteration of the model to use for prediction.
+        input_container (Path | str): The path to the input container.
+        input_dataset (str): The name of the input dataset.
+        output_path (Path | str): The path to the output directory.
+        output_roi (Optional[str | Roi], optional): The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]. Defaults to None.
+        num_workers (int, optional): The number of workers to use for prediction. Defaults to 30.
+        output_dtype (np.dtype | str, optional): The output data type. Defaults to np.uint8.
+        overwrite (bool, optional): Whether to overwrite existing output files. Defaults to True.
+    Raises:
+        ValueError: If the run_name is not valid.
+    Examples:
+        To predict with a model, run:
+        ```
+        dacapo predict --run-name my_run --iteration 100 --input-container /path/to/input --input-dataset my_dataset --output-path /path/to/output
+        ```
+    """
     dacapo.predict(
         run_name,
         iteration,
@@ -181,12 +340,29 @@ def predict(
     "--input_container",
     required=True,
     type=click.Path(exists=True, file_okay=False),
+    help="The path to the input container.",
 )
-@click.option("-id", "--input_dataset", required=True, type=str)
 @click.option(
-    "-oc", "--output_container", required=True, type=click.Path(file_okay=False)
+    "-id",
+    "--input_dataset",
+    required=True,
+    type=str,
+    help="The name of the input dataset.",
 )
-@click.option("-od", "--output_dataset", required=True, type=str)
+@click.option(
+    "-oc",
+    "--output_container",
+    required=True,
+    type=click.Path(file_okay=False),
+    help="The path to the output container.",
+)
+@click.option(
+    "-od",
+    "--output_dataset",
+    required=True,
+    type=str,
+    help="The name of the output dataset.",
+)
 @click.option(
     "-w", "--worker_file", required=True, type=str, help="The path to the worker file."
 )
@@ -196,7 +372,6 @@ def predict(
     required=True,
     type=str,
     help="The total roi to be processed. Format is [start:end, start:end, ... ] in voxels. Defaults to the roi of the input dataset. Do not use spaces in CLI argument.",
-    default=None,
 )
 @click.option(
     "-rr",
@@ -212,12 +387,30 @@ def predict(
     type=str,
     help="The size of the roi to be written for each block, in the format of [z,y,x] in voxels.",
 )
-@click.option("-nw", "--num_workers", type=int, default=16)
-@click.option("-mr", "--max_retries", type=int, default=2)
-@click.option("-t", "--timeout", type=int, default=None)
-@click.option("-ow", "--overwrite", is_flag=True, default=True)
-@click.option("-co", "-channels_out", type=int, default=None)
-@click.option("-dt", "--output_dtype", type=str, default="uint8")
+@click.option(
+    "-nw", "--num_workers", type=int, default=16, help="The number of workers to use."
+)
+@click.option(
+    "-mr", "--max_retries", type=int, default=2, help="The maximum number of retries."
+)
+@click.option("-t", "--timeout", type=int, default=None, help="The timeout in seconds.")
+@click.option(
+    "-ow",
+    "--overwrite",
+    is_flag=True,
+    default=True,
+    help="Whether to overwrite existing output files.",
+)
+@click.option(
+    "-co",
+    "-channels_out",
+    type=int,
+    default=None,
+    help="The number of output channels.",
+)
+@click.option(
+    "-dt", "--output_dtype", type=str, default="uint8", help="The output data type."
+)
 @click.pass_context
 def run_blockwise(
     ctx,
@@ -238,6 +431,32 @@ def run_blockwise(
     *args,
     **kwargs,
 ):
+    """
+    Run blockwise processing on a dataset.
+
+    Args:
+        input_container: The path to the input container.
+        input_dataset: The name of the input dataset.
+        output_container: The path to the output container.
+        output_dataset: The name of the output dataset.
+        worker_file: The path to the worker file.
+        total_roi: The total roi to be processed. Format is [start:end, start:end, ... ] in voxels. Defaults to the roi of the input dataset. Do not use spaces in CLI argument.
+        read_roi_size: The size of the roi to be read for each block, in the format of [z,y,x] in voxels.
+        write_roi_size: The size of the roi to be written for each block, in the format of [z,y,x] in voxels.
+        num_workers: The number of workers to use.
+        max_retries: The maximum number of retries.
+        timeout: The timeout in seconds.
+        overwrite: Whether to overwrite existing output files.
+        channels_out: The number of output channels.
+        output_dtype: The output data type.
+    Raises:
+        ValueError: If the run_name is not valid.
+    Examples:
+        To run a blockwise operation, run:
+        ```
+        dacapo run-blockwise --input-container /path/to/input --input-dataset my_dataset --output-container /path/to/output --output-dataset my_output --worker-file /path/to/worker.py --total-roi [0:100,0:100,0:100] --read-roi-size [10,10,10] --write-roi-size [10,10,10] --num-workers 16
+        ```
+    """
     # get arbitrary args and kwargs
     parameters = unpack_ctx(ctx)
 
@@ -291,13 +510,36 @@ def run_blockwise(
     "--input_container",
     required=True,
     type=click.Path(exists=True, file_okay=False),
+    help="The path to the input container.",
 )
-@click.option("-id", "--input_dataset", required=True, type=str)
 @click.option(
-    "-oc", "--output_container", required=True, type=click.Path(file_okay=False)
+    "-id",
+    "--input_dataset",
+    required=True,
+    type=str,
+    help="The name of the input dataset.",
 )
-@click.option("-od", "--output_dataset", required=True, type=str)
-@click.option("-sf", "--segment_function_file", required=True, type=click.Path())
+@click.option(
+    "-oc",
+    "--output_container",
+    required=True,
+    type=click.Path(file_okay=False),
+    help="The path to the output container.",
+)
+@click.option(
+    "-od",
+    "--output_dataset",
+    required=True,
+    type=str,
+    help="The name of the output dataset.",
+)
+@click.option(
+    "-sf",
+    "--segment_function_file",
+    required=True,
+    type=click.Path(),
+    help="The path to the segment function file.",
+)
 @click.option(
     "-tr",
     "--total_roi",
@@ -326,11 +568,27 @@ def run_blockwise(
     help="The context to be used, in the format of [z,y,x] in voxels. Defaults to the difference between the read and write rois.",
     default=None,
 )
-@click.option("-nw", "--num_workers", type=int, default=16)
-@click.option("-mr", "--max_retries", type=int, default=2)
-@click.option("-t", "--timeout", type=int, default=None)
-@click.option("-ow", "--overwrite", is_flag=True, default=True)
-@click.option("-co", "--channels_out", type=int, default=None)
+@click.option(
+    "-nw", "--num_workers", type=int, default=16, help="The number of workers to use."
+)
+@click.option(
+    "-mr", "--max_retries", type=int, default=2, help="The maximum number of retries."
+)
+@click.option("-t", "--timeout", type=int, default=None, help="The timeout in seconds.")
+@click.option(
+    "-ow",
+    "--overwrite",
+    is_flag=True,
+    default=True,
+    help="Whether to overwrite existing output files.",
+)
+@click.option(
+    "-co",
+    "--channels_out",
+    type=int,
+    default=None,
+    help="The number of output channels.",
+)
 @click.pass_context
 def segment_blockwise(
     ctx,
@@ -351,6 +609,32 @@ def segment_blockwise(
     *args,
     **kwargs,
 ):
+    """
+    Segment the input dataset blockwise using a segment function file.
+
+    Args:
+        input_container (str): The path to the input container.
+        input_dataset (str): The name of the input dataset.
+        output_container (str): The path to the output container.
+        output_dataset (str): The name of the output dataset.
+        segment_function_file (str): The path to the segment function file.
+        total_roi (str): The total roi to be processed. Format is [start:end,start:end,...] in voxels. Defaults to the roi of the input dataset. Do not use spaces in CLI argument.
+        read_roi_size (str): The size of the roi to be read for each block, in the format of [z,y,x] in voxels.
+        write_roi_size (str): The size of the roi to be written for each block, in the format of [z,y,x] in voxels.
+        context (str, optional): The context to be used, in the format of [z,y,x] in voxels. Defaults to the difference between the read and write rois.
+        num_workers (int, optional): The number of workers to use. Defaults to 16.
+        max_retries (int, optional): The maximum number of retries. Defaults to 2.
+        timeout (int, optional): The timeout in seconds. Defaults to None.
+        overwrite (bool, optional): Whether to overwrite existing output files. Defaults to True.
+        channels_out (int, optional): The number of output channels. Defaults to None.
+    Raises:
+        ValueError: If the run_name is not valid.
+    Examples:
+        To segment blockwise, run:
+        ```
+        dacapo segment-blockwise --input-container /path/to/input --input-dataset my_dataset --output-container /path/to/output --output-dataset my_output --segment-function-file /path/to/segment_function.py --total-roi [0:100,0:100,0:100] --read-roi-size [10,10,10] --write-roi-size [10,10,10] --num-workers 16
+        ```
+    """
     # get arbitrary args and kwargs
     parameters = unpack_ctx(ctx)
 
@@ -403,7 +687,21 @@ def segment_blockwise(
 
 
 def unpack_ctx(ctx):
-    # print(ctx.args)
+    """
+    Unpacks the context object and returns a dictionary of keyword arguments.
+
+    Args:
+        ctx (object): The context object containing the arguments.
+    Returns:
+        dict: A dictionary of keyword arguments.
+    Raises:
+        ValueError: If the run_name is not valid.
+    Example:
+        >>> ctx = ...
+        >>> kwargs = unpack_ctx(ctx)
+        >>> print(kwargs)
+        {'arg1': value1, 'arg2': value2, ...}
+    """
     kwargs = {
         ctx.args[i].lstrip("-"): ctx.args[i + 1] for i in range(0, len(ctx.args), 2)
     }
@@ -413,11 +711,25 @@ def unpack_ctx(ctx):
         elif v.replace(".", "").isnumeric():
             kwargs[k] = float(v)
         print(f"{k}: {kwargs[k]}")
-        # print(f"{type(k)}: {k} --> {type(kwargs[k])} {kwargs[k]}")
     return kwargs
 
 
 def get_rois(total_roi, read_roi_size, write_roi_size, input_array):
+    """
+    Get the ROIs for processing.
+
+    Args:
+        total_roi (str): The total ROI to be processed.
+        read_roi_size (str): The size of the ROI to be read for each block.
+        write_roi_size (str): The size of the ROI to be written for each block.
+        input_array (ZarrArray): The input array.
+    Returns:
+        tuple: A tuple containing the total ROI, read ROI, write ROI, and context.
+    Raises:
+        ValueError: If the run_name is not valid.
+    Example:
+        >>> total_roi, read_roi, write_roi, context = get_rois(total_roi, read_roi_size, write_roi_size, input_array)
+    """
     if total_roi is not None:
         # parse the string into a Roi
         start, end = zip(

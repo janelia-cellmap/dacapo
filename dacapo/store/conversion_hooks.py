@@ -14,11 +14,39 @@ from dacapo.experiments.starts import *
 
 from funlib.geometry import Coordinate, Roi
 
-from pathlib import Path
+from upath import UPath as Path
 
 
 def register_hierarchy_hooks(converter):
-    """Central place to register type hierarchies for conversion."""
+    """
+    Central place to register type hierarchies for conversion.
+
+    Args:
+        converter (Converter): The converter to register the hooks with.
+    Raises:
+        TypeError: If ``cls`` is not a class.
+    Example:
+        If class ``A`` is the base of class ``B``, and
+        ``converter.register_hierarchy(A, lambda typ: eval(typ))`` has been
+        called, the dictionary ``y = converter.unstructure(x)`` will
+        contain a ``__type__`` field that is ``'A'`` if ``x = A()`` and
+        ``B`` if ``x = B()``.
+
+        This ``__type__`` field is then used by ``x =
+        converter.structure(y, A)`` to recreate the concrete type of ``x``.
+    Note:
+            This method is used to register a class hierarchy for typed
+            structure/unstructure conversion. For each class in the hierarchy
+            under (including) ``cls``, this will store an additional
+            ``__type__`` attribute (a string) in the object dictionary. This
+            ``__type__`` string will be the concrete class of the object, and
+            will be used to structure the dictionary back into an object of the
+            correct class.
+
+            For this to work, this function needs to know how to convert a
+            ``__type__`` string back into a class, for which it used the
+            provided ``cls_fn``.
+    """
 
     converter.register_hierarchy(TaskConfig, cls_fun)
     converter.register_hierarchy(StartConfig, cls_fun)
@@ -34,8 +62,36 @@ def register_hierarchy_hooks(converter):
 
 
 def register_hooks(converter):
-    """Central place to register all conversion hooks with the given
-    converter."""
+    """
+    Central place to register all conversion hooks with the given
+    converter.
+
+    Args:
+        converter (Converter): The converter to register the hooks with.
+    Raises:
+        TypeError: If ``cls`` is not a class.
+    Example:
+        If class ``A`` is the base of class ``B``, and
+        ``converter.register_hierarchy(A, lambda typ: eval(typ))`` has been
+        called, the dictionary ``y = converter.unstructure(x)`` will
+        contain a ``__type__`` field that is ``'A'`` if ``x = A()`` and
+        ``B`` if ``x = B()``.
+
+        This ``__type__`` field is then used by ``x =
+        converter.structure(y, A)`` to recreate the concrete type of ``x``.
+    Note:
+            This method is used to register a class hierarchy for typed
+            structure/unstructure conversion. For each class in the hierarchy
+            under (including) ``cls``, this will store an additional
+            ``__type__`` attribute (a string) in the object dictionary. This
+            ``__type__`` string will be the concrete class of the object, and
+            will be used to structure the dictionary back into an object of the
+            correct class.
+
+            For this to work, this function needs to know how to convert a
+            ``__type__`` string back into a class, for which it used the
+            provided ``cls_fn``.
+    """
 
     #########################
     # DaCapo specific hooks #
@@ -80,6 +136,21 @@ def register_hooks(converter):
 
 
 def cls_fun(typ):
-    """Convert a type string into the corresponding class. The class must be
-    visible to this module (hence the star imports at the top)."""
+    """
+    Convert a type string into the corresponding class. The class must be
+    visible to this module (hence the star imports at the top).
+
+    Args:
+        typ (str): The type string to convert.
+    Returns:
+        class: The class corresponding to the type string.
+    Raises:
+        NameError: If the class is not visible to this module.
+    Example:
+        ``cls_fun('TaskConfig')`` will return the class ``TaskConfig``.
+    Note:
+        This function is used to convert a type string back into a class. It is
+        used in conjunction with the ``register_hierarchy`` function to
+        register a class hierarchy for typed structure/unstructure conversion.
+    """
     return eval(typ)

@@ -4,12 +4,16 @@ import attr
 @attr.s
 class TrainingIterationStats:
     """
-    A class to represent the training iteration statistics.
+    A class to represent the training iteration statistics. It contains the loss and time taken for each iteration.
 
     Attributes:
         iteration (int): The iteration that produced these stats.
         loss (float): The loss value of this iteration.
         time (float): The time it took to process this iteration.
+    Note:
+        The iteration stats list is structured as follows:
+        - The outer list contains the stats for each iteration.
+        - The inner list contains the stats for each training iteration.
 
     """
 
