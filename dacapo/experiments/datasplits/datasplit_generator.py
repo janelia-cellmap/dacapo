@@ -389,10 +389,10 @@ def generate_dataspec_from_csv(csv_path: Path):
 
 class DataSplitGenerator:
     """Generates DataSplitConfig for a given task config and datasets.
-    
+
     Class names in gt_dataset should be within [] e.g. [mito&peroxisome&er] for
     multiple classes or [mito] for one class.
-    
+
     Currently only supports:
      - semantic segmentation.
      Supports:
