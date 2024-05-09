@@ -34,30 +34,116 @@ Attributes
 
 
 
-   A File based store for run statistics. Used to store and retrieve training
-   statistics and validation scores.
+   A File based store for run statistics. Used to store and retrieve training statistics and validation scores.
+
+   The store is organized as follows:
+   - A directory for training statistics, with a subdirectory for each run. Each run directory contains a pickled list of TrainingIterationStats objects.
+   - A directory for validation scores, with a subdirectory for each run. Each run directory contains a pickled list of ValidationIterationScores objects.
+
+   Attributes:
+   - path: The root directory for the store.
+   - training_stats: The directory for training statistics.
+   - validation_scores: The directory for validation scores.
+
+   Methods:
+   - store_training_stats(run_name, stats): Store the training statistics for a run.
+   - retrieve_training_stats(run_name): Retrieve the training statistics for a run.
+   - store_validation_iteration_scores(run_name, scores): Store the validation scores for a run.
+   - retrieve_validation_iteration_scores(run_name): Retrieve the validation scores for a run.
+   - delete_training_stats(run_name): Delete the training statistics for a run.
+
+   Note: The store does not support concurrent access. It is intended for use in single-threaded applications.
+
+
 
    .. py:method:: store_training_stats(run_name, stats)
 
-      Store training stats of a given run.
+      Stores the training statistics for a specific run.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param stats: The training statistics to be stored.
+      :type stats: Stats
+
+      :raises ValueError: If the run name is invalid.
+
+      .. rubric:: Examples
+
+      >>> store.store_training_stats("run1", stats)
+
+      .. rubric:: Notes
+
+      - If the training statistics for the given run already exist in the database, the method will compare the
+        existing statistics with the new statistics and update or overwrite them accordingly.
+      - If the new statistics go further than the existing statistics, the method will update the statistics from
+        the last stored iteration.
+      - If the new statistics are behind the existing statistics, the method will overwrite the existing statistics.
 
 
    .. py:method:: retrieve_training_stats(run_name)
 
-      Retrieve the training stats for a given run.
+      Retrieve the training statistics for a specific run.
+
+      :param run_name: The name of the run for which to retrieve the training statistics.
+      :type run_name: str
+
+      :returns: A dictionary containing the training statistics for the specified run.
+      :rtype: dict
 
 
    .. py:method:: store_validation_iteration_scores(run_name, scores)
 
-      Store the validation iteration scores of a given run.
+      Stores the validation scores for a specific run.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param scores: The validation scores to be stored.
+      :type scores: Scores
+
+      :raises ValueError: If the run name is invalid.
+
+      .. rubric:: Examples
+
+      >>> store.store_validation_iteration_scores("run1", scores)
+
+      .. rubric:: Notes
+
+      - If the validation scores for the given run already exist in the database, the method will compare the
+        existing scores with the new scores and update or overwrite them accordingly.
+      - If the new scores go further than the existing scores, the method will update the scores from
+        the last stored iteration.
+      - If the new scores are behind the existing scores, the method will overwrite the existing scores.
 
 
    .. py:method:: retrieve_validation_iteration_scores(run_name)
 
       Retrieve the validation iteration scores for a given run.
 
+      :param run_name: The name of the run for which to retrieve the validation iteration scores.
+      :type run_name: str
+
+      :returns: A list of validation iteration scores.
+      :rtype: list
+
+      :raises ValueError: If the run name is invalid.
+
+      .. rubric:: Examples
+
+      >>> store.retrieve_validation_iteration_scores("run1")
+
 
    .. py:method:: delete_training_stats(run_name: str) -> None
+
+      Deletes the training stats for a specific run.
+
+      :param run_name: The name of the run for which to delete the training stats.
+      :type run_name: str
+
+      :raises ValueError: If the run name is invalid.
+
+      .. rubric:: Examples
+
+      >>> store.delete_training_stats("run1")
 
 
 

@@ -46,4 +46,12 @@ Classes
 
       BinarySegmentationEvaluator object
 
+   .. method:: __init__(self, task_config)
+
+      Initializes attributes of DistanceTask
+
+   .. rubric:: Notes
+
+   This is a subclass of Task.
+
 

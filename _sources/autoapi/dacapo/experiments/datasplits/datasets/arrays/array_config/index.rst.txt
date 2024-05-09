@@ -22,7 +22,26 @@ Classes
 
    Base class for array configurations. Each subclass of an
    `Array` should have a corresponding config class derived from
-   `ArrayConfig`.
+   `ArrayConfig`. This class should be used to store the configuration
+   of the array.
+
+   .. attribute:: name
+
+      A unique name for this array. This will be saved so you
+      and others can find and reuse this array. Keep it short
+      and avoid special characters.
+
+      :type: str
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method is used to check whether this is a valid Array.
+
+   .. note::
+
+      This class is used to create a base class for array configurations. Each subclass of an
+      `Array` should have a corresponding config class derived from `ArrayConfig`.
+      This class should be used to store the configuration of the array.
 
    .. py:attribute:: name
       :type: str
@@ -32,6 +51,21 @@ Classes
    .. py:method:: verify() -> Tuple[bool, str]
 
       Check whether this is a valid Array
+
+      :returns: A tuple with the first element being a boolean
+                indicating whether the array is valid and the second element being
+                a string with a message explaining why the array is invalid
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: This method is not implemented in this class
+
+      .. rubric:: Examples
+
+      >>> array_config = ArrayConfig(name="array_config")
+      >>> array_config.verify()
+      (True, "No validation for this Array")
+
+      .. note:: This method is used to check whether this is a valid Array.
 
 
 

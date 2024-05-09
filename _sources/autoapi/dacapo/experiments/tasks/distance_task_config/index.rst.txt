@@ -31,6 +31,44 @@ Classes
    pixel in an affinity prediction could merge 2 otherwise very
    distinct objects, this cannot happen with distances.
 
+   .. attribute:: channels
+
+      A list of channel names.
+
+   .. attribute:: clip_distance
+
+      Maximum distance to consider for false positive/negatives.
+
+   .. attribute:: tol_distance
+
+      Tolerance distance for counting false positives/negatives
+
+   .. attribute:: scale_factor
+
+      The amount by which to scale distances before applying a tanh normalization.
+
+   .. attribute:: mask_distances
+
+      Whether or not to mask out regions where the true distance to
+      object boundary cannot be known. This is anywhere that the distance to crop boundary
+      is less than the distance to object boundary.
+
+   .. attribute:: clipmin
+
+      The minimum value for distance weights.
+
+   .. attribute:: clipmax
+
+      The maximum value for distance weights.
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method verifies the DistanceTaskConfig object.
+
+   .. rubric:: Notes
+
+   This is a subclass of TaskConfig.
+
    .. py:attribute:: task_type
 
       

@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -118,14 +119,24 @@
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset.DummyDataset">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.dummy_dataset.</span></span><span class="sig-name descname"><span class="pre">DummyDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset.DummyDataset" title="Link to this definition"></a></dt>
 <dd><p>DummyDataset is a child class of the Dataset. This class has property ‘raw’ of Array type and a name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>dataset_config</strong> (<em>object</em>) – an instance of a configuration class.</p>
-</dd>
-</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset.DummyDataset.raw">
-<span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset.DummyDataset.raw" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">raw</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset.DummyDataset.raw" title="Link to this definition"></a></dt>
+<dd><p>Array
+The raw data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset.DummyDataset.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset.DummyDataset.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes the array type ‘raw’ and name for the DummyDataset instance.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This class is used to create a dataset with raw data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

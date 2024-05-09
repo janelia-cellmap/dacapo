@@ -60,6 +60,36 @@ Classes
 
       :type: list[Coordinate], optional
 
+   .. method:: __eq__(other)
+
+      
+      Overloaded equality operator for dataset objects.
+
+   .. method:: __hash__()
+
+      
+      Calculates a hash for the dataset.
+
+   .. method:: __repr__()
+
+      
+      Returns the official string representation of the dataset object.
+
+   .. method:: __str__()
+
+      
+      Returns the string representation of the dataset object.
+
+   .. method:: _neuroglancer_layers(prefix="", exclude_layers=None)
+
+      
+      Generates neuroglancer layers for raw, gt and mask if they can be viewed by neuroglance, excluding those in
+      the exclude_layers.
+
+   .. rubric:: Notes
+
+   This class is a base class and should not be instantiated.
+
    .. py:attribute:: name
       :type: str
 

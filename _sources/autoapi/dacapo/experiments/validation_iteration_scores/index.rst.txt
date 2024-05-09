@@ -38,6 +38,13 @@ Classes
 
       
 
+   .. note::
+
+      The scores list is structured as follows:
+      - The outer list contains the scores for each dataset.
+      - The middle list contains the scores for each post processor parameter.
+      - The inner list contains the scores for each evaluation criterion.
+
    .. py:attribute:: iteration
       :type: int
 

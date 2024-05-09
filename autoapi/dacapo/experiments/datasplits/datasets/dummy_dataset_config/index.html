@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -136,6 +137,8 @@
 <dd><p>A dummy verification method for testing purposes, always returns False and a message.</p>
 </dd></dl>
 
+<p class="rubric">Notes</p>
+<p>This class is used to create a configuration object for the dummy dataset.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id0">
 <span class="sig-name descname"><span class="pre">dataset_type</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
@@ -154,7 +157,18 @@
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A tuple of False and a message indicating the invalidity.</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the derived class.</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dataset_config</span> <span class="o">=</span> <span class="n">DummyDatasetConfig</span><span class="p">(</span><span class="n">raw_config</span><span class="o">=</span><span class="n">DummyArrayConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;dummy_array&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset_config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
+<span class="go">(False, &quot;This is a DummyDatasetConfig and is never valid&quot;)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to validate the configuration of the dataset.</p>
 </dd></dl>
 
 </dd></dl>

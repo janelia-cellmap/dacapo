@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -110,14 +111,26 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.ArgmaxPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.ArgmaxPostProcessorParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArgmaxPostProcessorParameters</span></code></a></p></td>
-<td><p>Base class for post-processor parameters.</p></td>
+<td><p>Parameters for the argmax post-processor. The argmax post-processor will set</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.ArgmaxPostProcessorParameters">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.</span></span><span class="sig-name descname"><span class="pre">ArgmaxPostProcessorParameters</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.ArgmaxPostProcessorParameters" title="Link to this definition"></a></dt>
-<dd><p>Base class for post-processor parameters.</p>
+<dd><p>Parameters for the argmax post-processor. The argmax post-processor will set
+the output to the index of the maximum value in the input array.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.ArgmaxPostProcessorParameters.parameter_names">
+<span class="sig-name descname"><span class="pre">parameter_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.ArgmaxPostProcessorParameters.parameter_names" title="Link to this definition"></a></dt>
+<dd><p>Get the names of the parameters.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is immutable. Once created, the values of its attributes
+cannot be changed.</p>
+</div>
 </dd></dl>
 
 </section>

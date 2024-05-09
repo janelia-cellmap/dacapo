@@ -28,26 +28,31 @@ Classes
 
    .. attribute:: predictor
 
+      Object
       Instance of DummyPredictor class.
-
-      :type: Object
 
    .. attribute:: loss
 
+      Object
       Instance of DummyLoss class.
-
-      :type: Object
 
    .. attribute:: post_processor
 
+      Object
       Instance of DummyPostProcessor class.
-
-      :type: Object
 
    .. attribute:: evaluator
 
+      Object
       Instance of DummyEvaluator class.
 
-      :type: Object
+   .. method:: __init__(self, task_config)
+
+      
+      Initializes all components for the dummy task.
+
+   .. rubric:: Notes
+
+   This is a subclass of Task.
 
 

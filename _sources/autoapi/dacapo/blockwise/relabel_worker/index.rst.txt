@@ -34,6 +34,11 @@ Attributes
 
 .. py:function:: cli(log_level)
 
+   CLI for running the relabel worker.
+
+   :param log_level: The log level to use.
+   :type log_level: str
+
 
 .. py:data:: fit
    :value: 'shrink'
@@ -49,16 +54,54 @@ Attributes
 
    
 
-.. py:function:: start_worker(output_container, output_dataset, tmpdir, *args, **kwargs)
+.. py:function:: start_worker(output_container, output_dataset, tmpdir, return_io_loop=False, *args, **kwargs)
+
+   Start the relabel worker.
+
+   :param output_container: The output container
+   :type output_container: str
+   :param output_dataset: The output dataset
+   :type output_dataset: str
+   :param tmpdir: The temporary directory
+   :type tmpdir: str
 
 
 .. py:function:: relabel_in_block(array_out, old_values, new_values, block)
 
+   Relabel the array in the given block.
+
+   :param array_out: The output array
+   :type array_out: np.ndarray
+   :param old_values: The old values
+   :type old_values: np.ndarray
+   :param new_values: The new values
+   :type new_values: np.ndarray
+   :param block: The block
+   :type block: daisy.Block
+
 
 .. py:function:: find_components(nodes, edges)
 
+   Find the components.
+
+   :param nodes: The nodes
+   :type nodes: np.ndarray
+   :param edges: The edges
+   :type edges: np.ndarray
+
+   :returns: The components
+   :rtype: List[int]
+
 
 .. py:function:: read_cross_block_merges(tmpdir)
+
+   Read the cross block merges.
+
+   :param tmpdir: The temporary directory
+   :type tmpdir: str
+
+   :returns: The nodes and edges
+   :rtype: Tuple[np.ndarray, np.ndarray]
 
 
 .. py:function:: spawn_worker(output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, tmpdir: str, *args, **kwargs)
@@ -69,5 +112,8 @@ Attributes
    :type output_array_identifier: LocalArrayIdentifier
    :param tmpdir: The temporary directory
    :type tmpdir: str
+
+   :returns: The function to run the worker
+   :rtype: Callable
 
 

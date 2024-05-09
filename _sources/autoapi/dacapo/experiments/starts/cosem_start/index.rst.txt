@@ -39,40 +39,134 @@ Attributes
 
 .. py:function:: get_model_setup(run)
 
+   Loads the model setup from the dacapo store for the specified run. The
+   model setup includes the classes_channels, voxel_size_input and
+   voxel_size_output.
+
+   :param run: str
+               The run for which the model setup is to be loaded.
+
+   :returns:
+
+             list
+                 The classes_channels of the model.
+             voxel_size_input : list
+                 The voxel_size_input of the model.
+             voxel_size_output : list
+                 The voxel_size_output of the model.
+   :rtype: classes_channels
+
+   :raises Exception: If the model setup cannot be loaded, an Exception is thrown which
+       is logged and handled by training the model without head matching.
+
+   .. rubric:: Examples
+
+   >>> classes_channels, voxel_size_input, voxel_size_output = get_model_setup(run)
+
+   .. rubric:: Notes
+
+   This function is called by the CosemStart class to load the model setup
+   from the dacapo store for the specified run.
+
 
 .. py:class:: CosemStart(start_config)
 
 
 
 
-   This class interfaces with the dacapo store to retrieve and load the
-   weights of the starter model used for finetuning.
+   A class to represent the starting point for tasks. This class inherits
+   from the Start class and is used to load the weights of the starter model
+   used for finetuning. The weights are loaded from the dacapo store for the
+   specified run and criterion.
 
    .. attribute:: run
 
-      The specified run to retrieve weights for the model.
-
-      :type: str
+      str
+      The run to be used as a starting point for tasks.
 
    .. attribute:: criterion
 
-      The policy that was used to decide when to store the weights.
+      str
+      The criterion to be used for choosing weights from run.
 
-      :type: str
+   .. attribute:: name
+
+      str
+      The name of the run and criterion.
+
+   .. attribute:: channels
+
+      list
+      The classes_channels of the model.
+
+   .. method:: __init__(start_config)
+
+      
+      Initializes the CosemStart class with specified config to run the
+      initialization of weights for a model associated with a specific
+      criterion.
+
+   .. method:: check()
+
+      
+      Checks if the checkpoint for the specified run and criterion exists.
+
+   .. method:: initialize_weights(model, new_head=None)
+
+      
+      Retrieves the weights from the dacapo store and load them into
+      the model.
+
+   .. rubric:: Notes
+
+   This class is used to represent the starting point for tasks. The weights
+   of the starter model used for finetuning are loaded from the dacapo store.
 
    .. py:method:: check()
+
+      Checks if the checkpoint for the specified run and criterion exists.
+
+      :raises Exception: If the checkpoint does not exist, an Exception is thrown which
+          is logged and handled by training the model without head matching.
+
+      .. rubric:: Examples
+
+      >>> check()
+
+      .. rubric:: Notes
+
+      This function is called by the CosemStart class to check if the
+      checkpoint for the specified run and criterion exists.
 
 
    .. py:method:: initialize_weights(model, new_head=None)
 
       Retrieves the weights from the dacapo store and load them into
       the model.
-      :param model: The model to which the weights are to be loaded.
-      :type model: obj
+
+      :param model: obj
+                    The model to which the weights are to be loaded.
+      :param new_head: list
+                       The labels of the new head.
+
+      :returns:
+
+                obj
+                    The model with the weights loaded from the dacapo store.
+      :rtype: model
 
       :raises RuntimeError: If weights of a non-existing or mismatched layer are being
           loaded, a RuntimeError exception is thrown which is logged
           and handled by loading only the common layers from weights.
+
+      .. rubric:: Examples
+
+      >>> model = initialize_weights(model, new_head)
+
+      .. rubric:: Notes
+
+      This function is called by the CosemStart class to retrieve the weights
+      from the dacapo store and load them into the model.
 
 
 

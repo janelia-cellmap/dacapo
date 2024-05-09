@@ -22,10 +22,38 @@ Classes
 
 
 
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+   A task that uses a pretrained model. The model is loaded from a file
+   and the weights are loaded from a file.
+
+   .. attribute:: weights
+
+      The path to the weights file.
+
+      :type: Path
+
+   .. method:: create_model(self, architecture) -> Model
+
+      This method creates a model using the given architecture.
+
+   .. rubric:: Notes
+
+   This is a base class for all tasks that use pretrained models.
 
    .. py:method:: create_model(architecture)
+
+      Create a model using the given architecture.
+
+      :param architecture: The architecture of the model.
+      :type architecture: str
+
+      :returns: The model created using the given architecture.
+      :rtype: Model
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> model = task.create_model(architecture)
 
 
 

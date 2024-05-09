@@ -23,7 +23,21 @@ Classes
 
 
    This is just a dummy trainer config used for testing. None of the
-   attributes have any particular meaning.
+   attributes have any particular meaning. This is just to test the trainer
+   and the trainer config.
+
+   .. attribute:: mirror_augment
+
+      A boolean value indicating whether to use mirror
+      augmentation or not.
+
+      :type: bool
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method verifies the DummyTrainerConfig object.
+      
+      
 
    .. py:attribute:: trainer_type
 
@@ -36,11 +50,17 @@ Classes
 
    .. py:method:: verify() -> Tuple[bool, str]
 
-      Verify whether this TrainerConfig is valid or not.
+      Verify the DummyTrainerConfig object.
 
-      :returns: A tuple containing a boolean indicating whether the
-                TrainerConfig is valid and a message explaining why.
-      :rtype: tuple
+      :returns:
+
+                A tuple containing a boolean value indicating whether the DummyTrainerConfig object is valid
+                    and a string containing the reason why the object is invalid.
+      :rtype: Tuple[bool, str]
+
+      .. rubric:: Examples
+
+      >>> valid, reason = trainer_config.verify()
 
 
 

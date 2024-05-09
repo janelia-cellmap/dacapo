@@ -24,48 +24,101 @@ Classes
 
    A Gunpowder node for generating the target from the ground truth
 
-   :param Predictor: The DaCapo Predictor to use to transform gt into target
-   :type Predictor: Predictor
-   :param gt: The dataset to use for generating the target.
-   :type gt: ``Array``
-   :param target_key: The key with which to provide the target.
-   :type target_key: ``gp.ArrayKey``
+   .. attribute:: Predictor
+
+      The DaCapo Predictor to use to transform gt into target
+
+      :type: Predictor
+
+   .. attribute:: gt
+
+      The dataset to use for generating the target.
+
+      :type: ``Array``
+
+   .. attribute:: target_key
+
+      The key with which to provide the target.
+
+      :type: ``gp.ArrayKey``
+
+   .. attribute:: weights_key
+
+      The key with which to provide the weights.
+
+      :type: ``gp.ArrayKey``
+
+   .. attribute:: mask_key
+
+      The key with which to provide the mask.
+
+      :type: ``gp.ArrayKey``
+
+   .. method:: setup()
+
+      Set up the provider.
+
+   .. method:: prepare(request)
+
+      Prepare the request.
+
+   .. method:: process(batch, request)
+
+      Process the batch.
+
+   .. note::
+
+      This class is a subclass of gunpowder.BatchFilter and is used to
+      generate the target from the ground truth.
 
    .. py:method:: setup()
 
-      To be implemented in subclasses.
+      Set up the provider. This function sets the provider to provide the
+      target with the given key.
 
-      Called during initialization of the DAG. Callees can assume that all
-      upstream providers are set up already.
+      :raises RuntimeError: If the key is already provided.
 
-      In setup, call :func:`provides` or :func:`updates` to announce the
-      arrays and points provided or changed by this node.
+      .. rubric:: Examples
+
+      >>> target_filter.setup()
 
 
    .. py:method:: prepare(request)
 
-      To be implemented in subclasses.
+      Prepare the request.
 
-      Prepare for a batch request. Should return a :class:`BatchRequest` of
-      needed dependencies. If None is returned, it will be assumed that all
-      of request is needed.
+      :param request: The request to prepare.
+      :type request: gp.BatchRequest
+
+      :returns: The dependencies.
+      :rtype: deps (gp.BatchRequest)
+
+      :raises NotImplementedError: If the target_key is not provided.
+
+      .. rubric:: Examples
+
+      >>> request = gp.BatchRequest()
+      >>> request[gp.ArrayKey("GT")] = gp.ArraySpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
+      >>> target_filter.prepare(request)
 
 
    .. py:method:: process(batch, request)
 
-      To be implemented in subclasses.
+      Process the batch.
 
-      Filter a batch, will be called after :func:`prepare`. Should return a
-      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
-      batch will replace the associated data in the original batch. If None is
-      returned it is assumed that the batch has been modified in place. ``request``
-      is the same as passed to :func:`prepare`, provided for convenience.
+      :param batch: The batch to process.
+      :type batch: gp.Batch
+      :param request: The request to process.
+      :type request: gp.BatchRequest
 
-      :param batch: The batch received from upstream to be modified by this node.
-      :type batch: :class:`Batch`
-      :param request: The request this node received. The updated batch should meet
-                      this request.
-      :type request: :class:`BatchRequest`
+      :returns: The output batch.
+      :rtype: output (gp.Batch)
+
+      .. rubric:: Examples
+
+      >>> request = gp.BatchRequest()
+      >>> request[gp.ArrayKey("GT")] = gp.ArraySpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
+      >>> target_filter.process(batch, request)
 
 
 

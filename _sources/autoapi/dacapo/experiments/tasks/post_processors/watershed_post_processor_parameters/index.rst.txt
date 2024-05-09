@@ -22,7 +22,37 @@ Classes
 
 
 
-   Base class for post-processor parameters.
+   Parameters for the watershed post-processor.
+
+   .. attribute:: offsets
+
+      List of offsets for the watershed transformation.
+
+   .. attribute:: threshold
+
+      Threshold for the watershed transformation.
+
+   .. attribute:: sigma
+
+      Sigma for the watershed transformation.
+
+   .. attribute:: min_size
+
+      Minimum size of the segments.
+
+   .. attribute:: bias
+
+      Bias for the watershed transformation.
+
+   .. attribute:: context
+
+      Context for the watershed transformation.
+
+   .. rubric:: Examples
+
+   >>> WatershedPostProcessorParameters(offsets=[(0, 0, 1), (0, 1, 0), (1, 0, 0)], threshold=0.5, sigma=1.0, min_size=100, bias=0.5, context=(32, 32, 32))
+
+   .. note:: This class is used by the ``WatershedPostProcessor`` to define the parameters for the watershed transformation. The offsets are used to define the neighborhood for the watershed transformation.
 
    .. py:attribute:: bias
       :type: float

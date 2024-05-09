@@ -30,60 +30,524 @@ Functions
 
 .. py:function:: get_viewer(arrays: dict, width: int = 1500, height: int = 600, headless: bool = True) -> neuroglancer.Viewer | IPython.display.IFrame
 
+   Creates a neuroglancer viewer to visualize arrays.
+
+   :param arrays: A dictionary containing arrays to be visualized.
+   :type arrays: dict
+   :param width: The width of the viewer window in pixels. Defaults to 1500.
+   :type width: int, optional
+   :param height: The height of the viewer window in pixels. Defaults to 600.
+   :type height: int, optional
+   :param headless: If True, returns the viewer object. If False, returns an IFrame object embedding the viewer. Defaults to True.
+   :type headless: bool, optional
+
+   :returns: The neuroglancer viewer object or an IFrame object embedding the viewer.
+   :rtype: neuroglancer.Viewer | IFrame
+
+   :raises ValueError: If the array is not a numpy array or a neuroglancer.LocalVolume object.
+
+   .. rubric:: Examples
+
+   >>> import numpy as np
+   >>> import neuroglancer
+   >>> from dacapo.utils.view import get_viewer
+   >>> arrays = {
+   ...     "raw": {
+   ...         "array": np.random.rand(100, 100, 100)
+   ...     },
+   ...     "seg": {
+   ...         "array": np.random.randint(0, 10, (100, 100, 100)),
+   ...         "is_seg": True
+   ...     }
+   ... }
+   >>> viewer = get_viewer(arrays)
+   >>> viewer
+
 
 .. py:function:: add_seg_layer(state, name, data, voxel_size, meshes=False)
 
+   Add a segmentation layer to the Neuroglancer state.
+
+   :param state: The Neuroglancer viewer state.
+   :type state: neuroglancer.ViewerState
+   :param name: The name of the segmentation layer.
+   :type name: str
+   :param data: The segmentation data.
+   :type data: ndarray
+   :param voxel_size: The voxel size in nm.
+   :type voxel_size: list
+   :param meshes: Whether to generate meshes for the segments. Defaults to False.
+   :type meshes: bool, optional
+
+   :raises ValueError: If the data is not a numpy array.
+
+   .. rubric:: Examples
+
+   >>> import numpy as np
+   >>> import neuroglancer
+   >>> from dacapo.utils.view import add_seg_layer
+   >>> state = neuroglancer.ViewerState()
+   >>> data = np.random.randint(0, 10, (100, 100, 100))
+   >>> voxel_size = [1, 1, 1]
+   >>> add_seg_layer(state, "seg", data, voxel_size)
+
 
 .. py:function:: add_scalar_layer(state, name, data, voxel_size)
+
+   Add a scalar layer to the state.
+
+   :param state: The viewer state to add the layer to.
+   :type state: neuroglancer.ViewerState
+   :param name: The name of the layer.
+   :type name: str
+   :param data: The scalar data to be displayed.
+   :type data: ndarray
+   :param voxel_size: The voxel size in nm.
+   :type voxel_size: list
+
+   :raises ValueError: If the data is not a numpy array.
+
+   .. rubric:: Examples
+
+   >>> import numpy as np
+   >>> import neuroglancer
+   >>> from dacapo.utils.view import add_scalar_layer
+   >>> state = neuroglancer.ViewerState()
+   >>> data = np.random.rand(100, 100, 100)
+   >>> voxel_size = [1, 1, 1]
+   >>> add_scalar_layer(state, "raw", data, voxel_size)
 
 
 .. py:class:: BestScore(run: dacapo.experiments.run.Run)
 
 
+   Represents the best score achieved during a run.
+
+   .. attribute:: run
+
+      The run object associated with the best score.
+
+      :type: Run
+
+   .. attribute:: score
+
+      The best score achieved.
+
+      :type: float
+
+   .. attribute:: iteration
+
+      The iteration number at which the best score was achieved.
+
+      :type: int
+
+   .. attribute:: parameter
+
+      The parameter associated with the best score.
+
+      :type: Optional[str]
+
+   .. attribute:: validation_parameters
+
+      The validation parameters used during the run.
+
+   .. attribute:: array_store
+
+      The array store object used to store prediction arrays.
+
+   .. attribute:: stats_store
+
+      The stats store object used to store iteration scores.
+
+   .. attribute:: ds
+
+      The dataset object associated with the best score.
+
+   .. method:: get_ds(iteration, validation_dataset)
+
+      Retrieves the dataset object associated with the best score.
+
+   .. method:: does_new_best_exist()
+
+      Checks if a new best score exists.
+      
+
    .. py:method:: get_ds(iteration, validation_dataset)
+
+      Retrieves the dataset object associated with the best score.
+
+      :param iteration: The iteration number.
+      :type iteration: int
+      :param validation_dataset: The validation dataset object.
+
+      :raises FileNotFoundError: If the dataset object does not exist.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.run import Run
+      >>> from dacapo.utils.view import BestScore
+      >>> run = Run()
+      >>> best_score = BestScore(run)
+      >>> iteration = 0
+      >>> validation_dataset = run.datasplit.validate[0]
+      >>> best_score.get_ds(iteration, validation_dataset)
 
 
    .. py:method:: does_new_best_exist()
+
+      Checks if a new best score exists.
+
+      :returns: True if a new best score exists, False otherwise.
+      :rtype: bool
+
+      :raises FileNotFoundError: If the dataset object does not exist.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.run import Run
+      >>> from dacapo.utils.view import BestScore
+      >>> run = Run()
+      >>> best_score = BestScore(run)
+      >>> new_best_exists = best_score.does_new_best_exist()
 
 
 
 .. py:class:: NeuroglancerRunViewer(run: dacapo.experiments.run.Run, embedded=False)
 
 
+   A class for viewing neuroglancer runs.
+
+   .. attribute:: run
+
+      The run object.
+
+      :type: Run
+
+   .. attribute:: best_score
+
+      The best score object.
+
+      :type: BestScore
+
+   .. attribute:: embedded
+
+      Whether the viewer is embedded.
+
+      :type: bool
+
+   .. attribute:: viewer
+
+      The neuroglancer viewer.
+
+   .. attribute:: raw
+
+      The raw dataset.
+
+   .. attribute:: gt
+
+      The ground truth dataset.
+
+   .. attribute:: segmentation
+
+      The segmentation dataset.
+
+   .. attribute:: most_recent_iteration
+
+      The most recent iteration.
+
+   .. attribute:: run_thread
+
+      The run thread.
+
+   .. attribute:: array_store
+
+      The array store object.
+
+   .. method:: updated_neuroglancer_layer(layer_name, ds)
+
+      Update the neuroglancer layer with the given name and data source.
+
+   .. method:: deprecated_start_neuroglancer()
+
+      Deprecated method to start the neuroglancer viewer.
+
+   .. method:: start_neuroglancer()
+
+      Start the neuroglancer viewer.
+
+   .. method:: start()
+
+      Start the viewer.
+
+   .. method:: open_from_array_identitifier(array_identifier)
+
+      Open the array from the given identifier.
+
+   .. method:: get_datasets()
+
+      Get the datasets for validation.
+
+   .. method:: update_best_info()
+
+      Update the best info.
+
+   .. method:: update_neuroglancer()
+
+      Update the neuroglancer viewer.
+
+   .. method:: update_best_layer()
+
+      Update the best layer.
+
+   .. method:: new_validation_checker()
+
+      Start a new validation checker thread.
+
+   .. method:: update_with_new_validation_if_possible()
+
+      Update with new validation if possible.
+
+   .. method:: stop()
+
+      Stop the viewer.
+      
+
    .. py:method:: updated_neuroglancer_layer(layer_name, ds)
+
+      Update the neuroglancer layer with the given name and data source.
+
+      :param layer_name: The name of the layer.
+      :type layer_name: str
+      :param ds: The data source.
+
+      :raises FileNotFoundError: If the dataset object does not exist.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.run import Run
+      >>> from dacapo.utils.view import NeuroglancerRunViewer
+      >>> run = Run()
+      >>> viewer = NeuroglancerRunViewer(run)
+      >>> layer_name = "prediction"
+      >>> ds = viewer.run.datasplit.validate[0].raw._source_array
+      >>> viewer.updated_neuroglancer_layer(layer_name, ds)
 
 
    .. py:method:: deprecated_start_neuroglancer()
 
+      Deprecated method to start the neuroglancer viewer.
+
+      :returns: The embedded viewer.
+      :rtype: IFrame
+
+      :raises FileNotFoundError: If the dataset object does not exist.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.run import Run
+      >>> from dacapo.utils.view import NeuroglancerRunViewer
+      >>> run = Run()
+      >>> viewer = NeuroglancerRunViewer(run)
+      >>> viewer.deprecated_start_neuroglancer()
+
 
    .. py:method:: start_neuroglancer()
+
+      Start the neuroglancer viewer.
+
+      :returns: The embedded viewer.
+      :rtype: IFrame
+
+      :raises FileNotFoundError: If the dataset object does not exist.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.run import Run
+      >>> from dacapo.utils.view import NeuroglancerRunViewer
+      >>> run = Run()
+      >>> viewer = NeuroglancerRunViewer(run)
+      >>> viewer.start_neuroglancer()
 
 
    .. py:method:: start()
 
+      Start the viewer.
+
+      :returns: The embedded viewer.
+      :rtype: IFrame
+
+      :raises FileNotFoundError: If the dataset object does not exist.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.run import Run
+      >>> from dacapo.utils.view import NeuroglancerRunViewer
+      >>> run = Run()
+      >>> viewer = NeuroglancerRunViewer(run)
+      >>> viewer.start()
+
 
    .. py:method:: open_from_array_identitifier(array_identifier)
+
+      Open the array from the given identifier.
+
+      :param array_identifier: The array identifier.
+
+      :returns: The opened dataset or None if it doesn't exist.
+
+      :raises FileNotFoundError: If the dataset object does not exist.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.run import Run
+      >>> from dacapo.utils.view import NeuroglancerRunViewer
+      >>> run = Run()
+      >>> viewer = NeuroglancerRunViewer(run)
+      >>> array_identifier = viewer.run.datasplit.validate[0].raw._source_array
+      >>> ds = viewer.open_from_array_identitifier(array_identifier)
 
 
    .. py:method:: get_datasets()
 
+      Get the datasets for validation.
+
+      :param run: The run object.
+      :type run: Run
+
+      :returns: The raw and ground truth datasets for validation.
+
+      :raises FileNotFoundError: If the dataset object does not exist.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.run import Run
+      >>> from dacapo.utils.view import NeuroglancerRunViewer
+      >>> run = Run()
+      >>> viewer = NeuroglancerRunViewer(run)
+      >>> viewer.get_datasets()
+
 
    .. py:method:: update_best_info()
+
+      Update the best info.
+
+      :param run: The run object.
+      :type run: Run
+
+      :returns: The embedded viewer.
+      :rtype: IFrame
+
+      :raises FileNotFoundError: If the dataset object does not exist.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.run import Run
+      >>> from dacapo.utils.view import NeuroglancerRunViewer
+      >>> run = Run()
+      >>> viewer = NeuroglancerRunViewer(run)
+      >>> viewer.update_best_info()
 
 
    .. py:method:: update_neuroglancer()
 
+      Update the neuroglancer viewer.
+
+      :param run: The run object.
+      :type run: Run
+
+      :raises FileNotFoundError: If the dataset object does not exist.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.run import Run
+      >>> from dacapo.utils.view import NeuroglancerRunViewer
+      >>> run = Run()
+      >>> viewer = NeuroglancerRunViewer(run)
+      >>> viewer.update_neuroglancer()
+
 
    .. py:method:: update_best_layer()
+
+      Update the best layer.
+
+      :param run: The run object.
+      :type run: Run
+
+      :returns: The embedded viewer.
+      :rtype: IFrame
+
+      :raises FileNotFoundError: If the dataset object does not exist.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.run import Run
+      >>> from dacapo.utils.view import NeuroglancerRunViewer
+      >>> run = Run()
+      >>> viewer = NeuroglancerRunViewer(run)
+      >>> viewer.update_best_layer()
 
 
    .. py:method:: new_validation_checker()
 
+      Start a new validation checker thread.
+
+      :param run: The run object.
+      :type run: Run
+
+      :returns: The embedded viewer.
+      :rtype: IFrame
+
+      :raises FileNotFoundError: If the dataset object does not exist.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.run import Run
+      >>> from dacapo.utils.view import NeuroglancerRunViewer
+      >>> run = Run()
+      >>> viewer = NeuroglancerRunViewer(run)
+      >>> viewer.new_validation_checker()
+
 
    .. py:method:: update_with_new_validation_if_possible()
 
+      Update with new validation if possible.
+
+      :param run: The run object.
+      :type run: Run
+
+      :returns: The embedded viewer.
+      :rtype: IFrame
+
+      :raises FileNotFoundError: If the dataset object does not exist.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.run import Run
+      >>> from dacapo.utils.view import NeuroglancerRunViewer
+      >>> run = Run()
+      >>> viewer = NeuroglancerRunViewer(run)
+      >>> viewer.update_with_new_validation_if_possible()
+
 
    .. py:method:: stop()
+
+      Stop the viewer.
+
+      :param run: The run object.
+      :type run: Run
+
+      :raises FileNotFoundError: If the dataset object does not exist.
+
+      :returns: The embedded viewer.
+      :rtype: IFrame
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.run import Run
+      >>> from dacapo.utils.view import NeuroglancerRunViewer
+      >>> run = Run()
+      >>> viewer = NeuroglancerRunViewer(run)
+      >>> viewer.stop()
 
 
 

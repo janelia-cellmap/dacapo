@@ -43,7 +43,16 @@ Classes
    .. method:: forward(x)
 
       Performs the forward pass of the network.
-      
+
+   .. method:: num_in_channels()
+
+      Returns the number of input channels for this architecture.
+
+   .. method:: num_out_channels()
+
+      Returns the number of output channels for this architecture.
+
+   .. note:: This class is used to represent a dummy architecture layer for a 3D CNN.
 
    .. py:property:: input_shape
 
@@ -52,6 +61,15 @@ Classes
       :returns: Input shape of the architecture.
       :rtype: Coordinate
 
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> dummy_architecture.input_shape
+      Coordinate(x=40, y=20, z=20)
+
+      .. note:: This method is used to return the input shape for this architecture.
+
    .. py:property:: num_in_channels
 
       Returns the number of input channels for this architecture.
@@ -59,12 +77,30 @@ Classes
       :returns: Number of input channels.
       :rtype: int
 
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> dummy_architecture.num_in_channels
+      1
+
+      .. note:: This method is used to return the number of input channels for this architecture.
+
    .. py:property:: num_out_channels
 
       Returns the number of output channels for this architecture.
 
       :returns: Number of output channels.
       :rtype: int
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> dummy_architecture.num_out_channels
+      1
+
+      .. note:: This method is used to return the number of output channels for this architecture.
 
    .. py:method:: forward(x)
 
@@ -74,6 +110,16 @@ Classes
 
       :returns: Output tensor after the forward pass.
       :rtype: Tensor
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> dummy_architecture = DummyArchitecture(architecture_config)
+      >>> x = torch.randn(1, 1, 40, 20, 20)
+      >>> dummy_architecture.forward(x)
+
+      .. note:: This method is used to perform the forward pass of the network.
 
 
 

@@ -29,7 +29,7 @@ Attributes
 
    
 
-.. py:function:: predict(run_name: str | dacapo.experiments.Run, iteration: int | None, input_container: pathlib.Path | str, input_dataset: str, output_path: dacapo.store.local_array_store.LocalArrayIdentifier | pathlib.Path | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True)
+.. py:function:: predict(run_name: str | dacapo.experiments.Run, iteration: int | None, input_container: upath.UPath | str, input_dataset: str, output_path: dacapo.store.local_array_store.LocalArrayIdentifier | upath.UPath | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True)
 
    Predict with a trained model.
 
@@ -51,5 +51,11 @@ Attributes
    :type output_dtype: np.dtype | str, optional
    :param overwrite: If True, the output array will be overwritten if it already exists. Defaults to True.
    :type overwrite: bool, optional
+
+   :raises ValueError: If run_name is not found in config store
+
+   .. rubric:: Examples
+
+   >>> predict("run_name", 100, "input.zarr", "raw", "output.zarr", output_roi="[0:100,0:100,0:100]")
 
 

@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a></li>
@@ -106,13 +107,13 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.plot.smooth_values" title="dacapo.plot.smooth_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">smooth_values</span></code></a>(a, n[, stride])</p></td>
-<td><p></p></td>
+<td><p>Smooth values with a moving average.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.plot.get_runs_info" title="dacapo.plot.get_runs_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_runs_info</span></code></a>(→ List[RunInfo])</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.plot.plot_runs" title="dacapo.plot.plot_runs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_runs</span></code></a>(run_config_base_names[, smooth, ...])</p></td>
-<td><p></p></td>
+<td><p>Plot runs.</p></td>
 </tr>
 </tbody>
 </table>
@@ -134,7 +135,31 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.plot.smooth_values">
 <span class="sig-prename descclassname"><span class="pre">dacapo.plot.</span></span><span class="sig-name descname"><span class="pre">smooth_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.plot.smooth_values" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Smooth values with a moving average.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – values to smooth</p></li>
+<li><p><strong>n</strong> – number of values to average</p></li>
+<li><p><strong>stride</strong> – stride of the smoothing</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>smoothed values
+s: standard deviation of the smoothed values</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>m</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If run_name is not found in config store</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">smooth_values</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.plot.get_runs_info">
@@ -144,7 +169,26 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.plot.plot_runs">
 <span class="sig-prename descclassname"><span class="pre">dacapo.plot.</span></span><span class="sig-name descname"><span class="pre">plot_runs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config_base_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_scores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_is_betters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_losses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_json</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.plot.plot_runs" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Plot runs.
+:param run_config_base_names: Names of run configs to plot
+:param smooth: Smoothing factor
+:param validation_scores: Validation scores to plot
+:param higher_is_betters: Whether higher is better
+:param plot_losses: Whether to plot losses
+:param return_json: Whether to return JSON</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON or HTML plot</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If run_name is not found in config store</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot_runs</span><span class="p">([</span><span class="s2">&quot;run_name&quot;</span><span class="p">],</span> <span class="mi">100</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">[</span><span class="kc">True</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
 
 </section>
 </section>

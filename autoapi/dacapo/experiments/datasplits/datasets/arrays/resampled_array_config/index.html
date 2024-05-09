@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -111,37 +112,91 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResampledArrayConfig</span></code></a></p></td>
-<td><p>This array will up or down sample an array into the desired voxel size.</p></td>
+<td><p>A configuration for a ResampledArray. This array will up or down sample an array into the desired voxel size.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.</span></span><span class="sig-name descname"><span class="pre">ResampledArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig" title="Link to this definition"></a></dt>
-<dd><p>This array will up or down sample an array into the desired voxel size.</p>
+<dd><p>A configuration for a ResampledArray. This array will up or down sample an array into the desired voxel size.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.source_array_config">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.source_array_config" title="Link to this definition"></a></dt>
+<dd><p>The Array that you want to upsample or downsample.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig">ArrayConfig</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.upsample">
+<span class="sig-name descname"><span class="pre">upsample</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.upsample" title="Link to this definition"></a></dt>
+<dd><p>The amount by which to upsample!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Coordinate</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.downsample">
+<span class="sig-name descname"><span class="pre">downsample</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.downsample" title="Link to this definition"></a></dt>
+<dd><p>The amount by which to downsample!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Coordinate</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.interp_order">
+<span class="sig-name descname"><span class="pre">interp_order</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.interp_order" title="Link to this definition"></a></dt>
+<dd><p>The order of the interpolation!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.create_array">
+<span class="sig-name descname"><span class="pre">create_array</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.create_array" title="Link to this definition"></a></dt>
+<dd><p>Creates a ResampledArray from the configuration.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is meant to be used with the ArrayDataset class.</p>
+</div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.array_type">
 <span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.array_type" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.source_array_config">
-<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.source_array_config" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.upsample">
-<span class="sig-name descname"><span class="pre">upsample</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.upsample" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">upsample</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.downsample">
-<span class="sig-name descname"><span class="pre">downsample</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.downsample" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">downsample</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.interp_order">
-<span class="sig-name descname"><span class="pre">interp_order</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig.interp_order" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">interp_order</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

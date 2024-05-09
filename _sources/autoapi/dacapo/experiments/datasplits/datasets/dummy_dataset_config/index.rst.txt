@@ -35,7 +35,10 @@ Classes
    .. method:: verify
 
       A dummy verification method for testing purposes, always returns False and a message.
-      
+
+   .. rubric:: Notes
+
+   This class is used to create a configuration object for the dummy dataset.
 
    .. py:attribute:: dataset_type
 
@@ -51,6 +54,18 @@ Classes
       A dummy method that always indicates the dataset config is not valid.
 
       :returns: A tuple of False and a message indicating the invalidity.
+
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> dataset_config = DummyDatasetConfig(raw_config=DummyArrayConfig(name="dummy_array"))
+      >>> dataset_config.verify()
+      (False, "This is a DummyDatasetConfig and is never valid")
+
+      .. rubric:: Notes
+
+      This method is used to validate the configuration of the dataset.
 
 
 

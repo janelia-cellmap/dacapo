@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -147,13 +148,13 @@
 <td><p>This is just a dummy trainer config used for testing. None of the</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.DummyTrainer" title="dacapo.experiments.trainers.DummyTrainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyTrainer</span></code></a></p></td>
-<td><p>Trainer Abstract Base Class</p></td>
+<td><p>This class is used to train a model using dummy data and is used for testing purposes. It contains attributes</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.GunpowderTrainerConfig" title="dacapo.experiments.trainers.GunpowderTrainerConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GunpowderTrainerConfig</span></code></a></p></td>
 <td><p>This class is used to configure a Gunpowder Trainer. It contains attributes related to trainer type,</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.GunpowderTrainer" title="dacapo.experiments.trainers.GunpowderTrainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GunpowderTrainer</span></code></a></p></td>
-<td><p>Trainer Abstract Base Class</p></td>
+<td><p>GunpowderTrainer class for training a model using gunpowder. This class is a subclass of the Trainer class. It</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.AugmentConfig" title="dacapo.experiments.trainers.AugmentConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AugmentConfig</span></code></a></p></td>
 <td><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite></p></td>
@@ -169,17 +170,82 @@ It defines essential methods that every subclass must implement for effective
 training of a neural network model.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.Trainer.iteration">
-<span class="sig-name descname"><span class="pre">iteration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.trainers.Trainer.iteration" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">iteration</span></span><a class="headerlink" href="#dacapo.experiments.trainers.Trainer.iteration" title="Link to this definition"></a></dt>
+<dd><p>The number of training iterations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.Trainer.batch_size">
-<span class="sig-name descname"><span class="pre">batch_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.trainers.Trainer.batch_size" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">batch_size</span></span><a class="headerlink" href="#dacapo.experiments.trainers.Trainer.batch_size" title="Link to this definition"></a></dt>
+<dd><p>The size of the training batch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.Trainer.learning_rate">
-<span class="sig-name descname"><span class="pre">learning_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.trainers.Trainer.learning_rate" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">learning_rate</span></span><a class="headerlink" href="#dacapo.experiments.trainers.Trainer.learning_rate" title="Link to this definition"></a></dt>
+<dd><p>The learning rate for the optimizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_optimizer(model</span></span></dt>
+<dd><p>Model) -&gt; torch.optim.Optimizer:
+Creates an optimizer for the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">iterate(num_iterations</span></span></dt>
+<dd><p>int, model: Model, optimizer: torch.optim.Optimizer, device: torch.device) -&gt; Iterator[TrainingIterationStats]:
+Performs a number of training iterations.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">can_train(datasets</span></span></dt>
+<dd><p>List[Dataset]) -&gt; bool:
+Checks if the trainer can train with a specific set of datasets.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">build_batch_provider(datasets</span></span></dt>
+<dd><p>List[Dataset], model: Model, task: Task, snapshot_container: LocalContainerIdentifier) -&gt; None:
+Initializes the training pipeline using various components.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Trainer class is an abstract class that cannot be instantiated directly. It is meant to be subclassed.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">iteration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">batch_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">learning_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -196,7 +262,18 @@ training of a neural network model.</p>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>torch.optim.Optimizer</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented by the subclass.</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">create_optimizer</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented by the subclass.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -218,7 +295,19 @@ training of a neural network model.</p>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Iterator[<a class="reference internal" href="../index.html#dacapo.experiments.TrainingIterationStats" title="dacapo.experiments.TrainingIterationStats">TrainingIterationStats</a>]</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented by the subclass.</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">iteration_stats</span> <span class="ow">in</span> <span class="n">trainer</span><span class="o">.</span><span class="n">iterate</span><span class="p">(</span><span class="n">num_iterations</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">iteration_stats</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented by the subclass.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -236,7 +325,18 @@ training of a neural network model.</p>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented by the subclass.</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">can_train</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">can_train</span><span class="p">(</span><span class="n">datasets</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented by the subclass.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -254,7 +354,18 @@ training pipeline.</p>
 <li><p><strong>snapshot_container</strong> (<a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalContainerIdentifier" title="dacapo.store.array_store.LocalContainerIdentifier"><em>LocalContainerIdentifier</em></a>) – Defines where snapshots will be saved.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented by the subclass.</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">trainer</span><span class="o">.</span><span class="n">build_batch_provider</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">snapshot_container</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented by the subclass.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -298,25 +409,36 @@ should have a specific config class derived from <cite>TrainerConfig</cite>.</p>
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">batch_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">learning_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.TrainerConfig.verify">
 <span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.trainers.TrainerConfig.verify" title="Link to this definition"></a></dt>
 <dd><p>Verify whether this TrainerConfig is valid or not.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The TrainerConfig class is an abstract class that cannot be instantiated directly. It is meant to be subclassed.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">batch_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">learning_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd><p>Verify whether this TrainerConfig is valid or not.
+A TrainerConfig is considered valid if it has a valid batch size and learning rate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A tuple containing a boolean indicating whether the
@@ -325,7 +447,22 @@ TrainerConfig is valid and a message explaining why.</p>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>tuple</p>
 </dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the method is not implemented by the subclass.</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">valid</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="n">trainer_config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">valid</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">message</span>
+<span class="go">&quot;No validation for this Trainer&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented by the subclass.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -334,30 +471,56 @@ TrainerConfig is valid and a message explaining why.</p>
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainerConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.trainers.</span></span><span class="sig-name descname"><span class="pre">DummyTrainerConfig</span></span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainerConfig" title="Link to this definition"></a></dt>
 <dd><p>This is just a dummy trainer config used for testing. None of the
-attributes have any particular meaning.</p>
+attributes have any particular meaning. This is just to test the trainer
+and the trainer config.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainerConfig.mirror_augment">
+<span class="sig-name descname"><span class="pre">mirror_augment</span></span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainerConfig.mirror_augment" title="Link to this definition"></a></dt>
+<dd><p>A boolean value indicating whether to use mirror
+augmentation or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainerConfig.verify">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainerConfig.verify" title="Link to this definition"></a></dt>
+<dd><p>This method verifies the DummyTrainerConfig object.</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainerConfig.trainer_type">
 <span class="sig-name descname"><span class="pre">trainer_type</span></span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainerConfig.trainer_type" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainerConfig.mirror_augment">
-<span class="sig-name descname"><span class="pre">mirror_augment</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainerConfig.mirror_augment" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">mirror_augment</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainerConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainerConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>Verify whether this TrainerConfig is valid or not.</p>
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd><p>Verify the DummyTrainerConfig object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A tuple containing a boolean indicating whether the
-TrainerConfig is valid and a message explaining why.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple</p>
+<dd class="field-odd"><p><dl class="simple">
+<dt>A tuple containing a boolean value indicating whether the DummyTrainerConfig object is valid</dt><dd><p>and a string containing the reason why the object is invalid.</p>
 </dd>
 </dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[bool, str]</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">valid</span><span class="p">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="n">trainer_config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -365,88 +528,193 @@ TrainerConfig is valid and a message explaining why.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.trainers.</span></span><span class="sig-name descname"><span class="pre">DummyTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer" title="Link to this definition"></a></dt>
-<dd><p>Trainer Abstract Base Class</p>
-<p>This serves as the blueprint for any trainer classes in the dacapo library.
-It defines essential methods that every subclass must implement for effective
-training of a neural network model.</p>
+<dd><p>This class is used to train a model using dummy data and is used for testing purposes. It contains attributes
+related to learning rate, batch size, and mirror augment. It also contains methods to create an optimizer, iterate
+over the training data, build a batch provider, and check if the trainer can train on the given data split. This class
+contains methods to enter and exit the context manager. The iterate method yields training iteration statistics.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer.learning_rate">
+<span class="sig-name descname"><span class="pre">learning_rate</span></span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer.learning_rate" title="Link to this definition"></a></dt>
+<dd><p>The learning rate to use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer.batch_size">
+<span class="sig-name descname"><span class="pre">batch_size</span></span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer.batch_size" title="Link to this definition"></a></dt>
+<dd><p>The batch size to use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer.mirror_augment">
+<span class="sig-name descname"><span class="pre">mirror_augment</span></span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer.mirror_augment" title="Link to this definition"></a></dt>
+<dd><p>A boolean value indicating whether to use mirror augmentation or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainer_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer.__init__" title="Link to this definition"></a></dt>
+<dd><p>This method initializes the DummyTrainer object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer.create_optimizer">
+<span class="sig-name descname"><span class="pre">create_optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer.create_optimizer" title="Link to this definition"></a></dt>
+<dd><p>This method creates an optimizer for the given model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">iterate(self,</span> <span class="pre">num_iterations</span></span></dt>
+<dd><p>int, model, optimizer, device): This method iterates over the training data for the specified number of iterations.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer.build_batch_provider">
+<span class="sig-name descname"><span class="pre">build_batch_provider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasplit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">architecture</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snapshot_container</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer.build_batch_provider" title="Link to this definition"></a></dt>
+<dd><p>This method builds a batch provider for the given data split, architecture, task, and snapshot container.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer.can_train">
+<span class="sig-name descname"><span class="pre">can_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasplit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer.can_train" title="Link to this definition"></a></dt>
+<dd><p>This method checks if the trainer can train on the given data split.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer.__enter__" title="Link to this definition"></a></dt>
+<dd><p>This method enters the context manager.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_tb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer.__exit__" title="Link to this definition"></a></dt>
+<dd><p>This method exits the context manager.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The iterate method yields TrainingIterationStats.</p>
+</div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer.iteration">
 <span class="sig-name descname"><span class="pre">iteration</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer.iteration" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer.create_optimizer">
-<span class="sig-name descname"><span class="pre">create_optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer.create_optimizer" title="Link to this definition"></a></dt>
-<dd><p>Creates an optimizer for the model.</p>
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">create_optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dd><p>Create an optimizer for the given model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>model</strong> (<a class="reference internal" href="../index.html#dacapo.experiments.Model" title="dacapo.experiments.Model"><em>Model</em></a>) – The model for which the optimizer will be created.</p>
+<dd class="field-odd"><p><strong>model</strong> (<a class="reference internal" href="../index.html#dacapo.experiments.Model" title="dacapo.experiments.Model"><em>Model</em></a>) – The model to optimize.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The optimizer created for the model.</p>
+<dd class="field-even"><p>The optimizer object.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>torch.optim.Optimizer</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">create_optimizer</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer.iterate">
 <span class="sig-name descname"><span class="pre">iterate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../model/index.html#dacapo.experiments.model.Model" title="dacapo.experiments.model.Model"><span class="pre">dacapo.experiments.model.Model</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer.iterate" title="Link to this definition"></a></dt>
-<dd><p>Performs a number of training iterations.</p>
+<dd><p>Iterate over the training data for the specified number of iterations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_iterations</strong> (<em>int</em>) – Number of training iterations.</p></li>
-<li><p><strong>model</strong> (<a class="reference internal" href="../index.html#dacapo.experiments.Model" title="dacapo.experiments.Model"><em>Model</em></a>) – The model to be trained.</p></li>
-<li><p><strong>optimizer</strong> (<em>torch.optim.Optimizer</em>) – The optimizer for the model.</p></li>
-<li><p><strong>device</strong> (<em>torch.device</em>) – The device (GPU/CPU) where the model will be trained.</p></li>
+<li><p><strong>num_iterations</strong> (<em>int</em>) – The number of iterations to perform.</p></li>
+<li><p><strong>model</strong> (<a class="reference internal" href="../index.html#dacapo.experiments.Model" title="dacapo.experiments.Model"><em>Model</em></a>) – The model to train.</p></li>
+<li><p><strong>optimizer</strong> (<em>torch.optim.Optimizer</em>) – The optimizer to use.</p></li>
+<li><p><strong>device</strong> (<em>torch.device</em>) – The device to perform the computations on.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>TrainingIterationStats</em> – The training iteration statistics.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the number of iterations is less than or equal to zero.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">stats</span> <span class="ow">in</span> <span class="n">iterate</span><span class="p">(</span><span class="n">num_iterations</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">build_batch_provider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">architecture</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snapshot_container</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<dd><p>Build a batch provider for the given data split, architecture, task, and snapshot container.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datasplit</strong> (<a class="reference internal" href="../datasplits/datasplit/index.html#dacapo.experiments.datasplits.datasplit.DataSplit" title="dacapo.experiments.datasplits.datasplit.DataSplit"><em>DataSplit</em></a>) – The data split to use.</p></li>
+<li><p><strong>architecture</strong> (<a class="reference internal" href="../architectures/architecture/index.html#dacapo.experiments.architectures.architecture.Architecture" title="dacapo.experiments.architectures.architecture.Architecture"><em>Architecture</em></a>) – The architecture to use.</p></li>
+<li><p><strong>task</strong> (<a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.Task" title="dacapo.experiments.tasks.Task"><em>Task</em></a>) – The task to perform.</p></li>
+<li><p><strong>snapshot_container</strong> (<em>SnapshotContainer</em>) – The snapshot container to use.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>An iterator of the training statistics.</p>
+<dd class="field-even"><p>The batch provider object.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Iterator[<a class="reference internal" href="../index.html#dacapo.experiments.TrainingIterationStats" title="dacapo.experiments.TrainingIterationStats">TrainingIterationStats</a>]</p>
+<dd class="field-odd"><p>BatchProvider</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the task loss is not set.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">batch_provider</span> <span class="o">=</span> <span class="n">build_batch_provider</span><span class="p">(</span><span class="n">datasplit</span><span class="p">,</span> <span class="n">architecture</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">snapshot_container</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer.build_batch_provider">
-<span class="sig-name descname"><span class="pre">build_batch_provider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">architecture</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snapshot_container</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer.build_batch_provider" title="Link to this definition"></a></dt>
-<dd><p>Initializes the training pipeline using various components.</p>
-<p>This method uses the datasets, model, task, and snapshot_container to set up the
-training pipeline.</p>
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">can_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
+<dd><p>Check if the trainer can train on the given data split.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="../datasplits/datasets/dataset/index.html#dacapo.experiments.datasplits.datasets.dataset.Dataset" title="dacapo.experiments.datasplits.datasets.dataset.Dataset"><em>Dataset</em></a><em>]</em>) – The datasets to pull data from.</p></li>
-<li><p><strong>model</strong> (<a class="reference internal" href="../index.html#dacapo.experiments.Model" title="dacapo.experiments.Model"><em>Model</em></a>) – The model to inform the pipeline of required input/output sizes.</p></li>
-<li><p><strong>task</strong> (<a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.Task" title="dacapo.experiments.tasks.Task"><em>Task</em></a>) – The task to transform ground truth into target.</p></li>
-<li><p><strong>snapshot_container</strong> (<a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalContainerIdentifier" title="dacapo.store.array_store.LocalContainerIdentifier"><em>LocalContainerIdentifier</em></a>) – Defines where snapshots will be saved.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.DummyTrainer.can_train">
-<span class="sig-name descname"><span class="pre">can_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.DummyTrainer.can_train" title="Link to this definition"></a></dt>
-<dd><p>Checks if the trainer can train with a specific set of datasets.</p>
-<p>Some trainers may have specific requirements for their training datasets.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="../datasplits/datasets/dataset/index.html#dacapo.experiments.datasplits.datasets.dataset.Dataset" title="dacapo.experiments.datasplits.datasets.dataset.Dataset"><em>Dataset</em></a><em>]</em>) – The training datasets.</p>
+<dd class="field-odd"><p><strong>datasplit</strong> (<a class="reference internal" href="../datasplits/datasplit/index.html#dacapo.experiments.datasplits.datasplit.DataSplit" title="dacapo.experiments.datasplits.datasplit.DataSplit"><em>DataSplit</em></a>) – The data split to check.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>True if the trainer can train on the given datasets, False otherwise.</p>
+<dd class="field-even"><p>True if the trainer can train on the data split, False otherwise.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented.</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">can_train</span><span class="p">(</span><span class="n">datasplit</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -524,33 +792,33 @@ value indicating whether to clip raw or not.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">trainer_type</span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">trainer_type</span></span><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">num_data_fetchers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">num_data_fetchers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">augments</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gp_augments/index.html#dacapo.experiments.trainers.gp_augments.AugmentConfig" title="dacapo.experiments.trainers.gp_augments.AugmentConfig"><span class="pre">dacapo.experiments.trainers.gp_augments.AugmentConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">augments</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gp_augments/index.html#dacapo.experiments.trainers.gp_augments.AugmentConfig" title="dacapo.experiments.trainers.gp_augments.AugmentConfig"><span class="pre">dacapo.experiments.trainers.gp_augments.AugmentConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id14" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id6">
-<span class="sig-name descname"><span class="pre">snapshot_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">snapshot_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id7">
-<span class="sig-name descname"><span class="pre">min_masked</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">min_masked</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id8">
-<span class="sig-name descname"><span class="pre">clip_raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">clip_raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -558,10 +826,176 @@ value indicating whether to clip raw or not.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.trainers.</span></span><span class="sig-name descname"><span class="pre">GunpowderTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer" title="Link to this definition"></a></dt>
-<dd><p>Trainer Abstract Base Class</p>
-<p>This serves as the blueprint for any trainer classes in the dacapo library.
-It defines essential methods that every subclass must implement for effective
-training of a neural network model.</p>
+<dd><p>GunpowderTrainer class for training a model using gunpowder. This class is a subclass of the Trainer class. It
+implements the abstract methods defined in the Trainer class. The GunpowderTrainer class is used to train a model
+using gunpowder, a data loading and augmentation library. It is used to train a model on a dataset using a specific
+task.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.learning_rate">
+<span class="sig-name descname"><span class="pre">learning_rate</span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.learning_rate" title="Link to this definition"></a></dt>
+<dd><p>The learning rate for the optimizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.batch_size">
+<span class="sig-name descname"><span class="pre">batch_size</span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.batch_size" title="Link to this definition"></a></dt>
+<dd><p>The size of the training batch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.num_data_fetchers">
+<span class="sig-name descname"><span class="pre">num_data_fetchers</span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.num_data_fetchers" title="Link to this definition"></a></dt>
+<dd><p>The number of data fetchers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.print_profiling">
+<span class="sig-name descname"><span class="pre">print_profiling</span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.print_profiling" title="Link to this definition"></a></dt>
+<dd><p>The number of iterations after which to print profiling stats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.snapshot_iteration">
+<span class="sig-name descname"><span class="pre">snapshot_iteration</span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.snapshot_iteration" title="Link to this definition"></a></dt>
+<dd><p>The number of iterations after which to save a snapshot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.min_masked">
+<span class="sig-name descname"><span class="pre">min_masked</span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.min_masked" title="Link to this definition"></a></dt>
+<dd><p>The minimum value of the mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.augments">
+<span class="sig-name descname"><span class="pre">augments</span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.augments" title="Link to this definition"></a></dt>
+<dd><p>The list of augmentations to apply to the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Augment]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.mask_integral_downsample_factor">
+<span class="sig-name descname"><span class="pre">mask_integral_downsample_factor</span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.mask_integral_downsample_factor" title="Link to this definition"></a></dt>
+<dd><p>The downsample factor for the mask integral.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.clip_raw">
+<span class="sig-name descname"><span class="pre">clip_raw</span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.clip_raw" title="Link to this definition"></a></dt>
+<dd><p>Whether to clip the raw data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.scheduler">
+<span class="sig-name descname"><span class="pre">scheduler</span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.scheduler" title="Link to this definition"></a></dt>
+<dd><p>The learning rate scheduler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.optim.lr_scheduler.LinearLR</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_optimizer(model</span></span></dt>
+<dd><p>Model) -&gt; torch.optim.Optimizer:
+Creates an optimizer for the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">build_batch_provider(datasets</span></span></dt>
+<dd><p>List[Dataset], model: Model, task: Task, snapshot_container: LocalContainerIdentifier) -&gt; None:
+Initializes the training pipeline using various components.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">iterate(num_iterations</span></span></dt>
+<dd><p>int, model: Model, optimizer: torch.optim.Optimizer, device: torch.device) -&gt; Iterator[TrainingIterationStats]:
+Performs a number of training iterations.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.__iter__">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.__iter__" title="Link to this definition"></a></dt>
+<dd><p>Initializes the training pipeline.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.next">
+<span class="sig-name descname"><span class="pre">next</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray"><span class="pre">NumpyArray</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray"><span class="pre">NumpyArray</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray"><span class="pre">NumpyArray</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray"><span class="pre">NumpyArray</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray"><span class="pre">NumpyArray</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.next" title="Link to this definition"></a></dt>
+<dd><p>Fetches the next batch of data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dacapo.experiments.trainers.GunpowderTrainer" title="dacapo.experiments.trainers.GunpowderTrainer"><span class="pre">GunpowderTrainer</span></a></span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.__enter__" title="Link to this definition"></a></dt>
+<dd><p>Enters the context manager.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_tb</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.__exit__" title="Link to this definition"></a></dt>
+<dd><p>Exits the context manager.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">can_train(datasets</span></span></dt>
+<dd><p>List[Dataset]) -&gt; bool:
+Checks if the trainer can train with a specific set of datasets.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The GunpowderTrainer class is a subclass of the Trainer class. It is used to train a model using gunpowder.</p>
+</div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.iteration">
 <span class="sig-name descname"><span class="pre">iteration</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.iteration" title="Link to this definition"></a></dt>
@@ -581,25 +1015,37 @@ training of a neural network model.</p>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>torch.optim.Optimizer</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented by the subclass.</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">create_optimizer</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.build_batch_provider">
 <span class="sig-name descname"><span class="pre">build_batch_provider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snapshot_container</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.build_batch_provider" title="Link to this definition"></a></dt>
 <dd><p>Initializes the training pipeline using various components.</p>
-<p>This method uses the datasets, model, task, and snapshot_container to set up the
-training pipeline.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="../datasplits/datasets/dataset/index.html#dacapo.experiments.datasplits.datasets.dataset.Dataset" title="dacapo.experiments.datasplits.datasets.dataset.Dataset"><em>Dataset</em></a><em>]</em>) – The datasets to pull data from.</p></li>
-<li><p><strong>model</strong> (<a class="reference internal" href="../index.html#dacapo.experiments.Model" title="dacapo.experiments.Model"><em>Model</em></a>) – The model to inform the pipeline of required input/output sizes.</p></li>
-<li><p><strong>task</strong> (<a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.Task" title="dacapo.experiments.tasks.Task"><em>Task</em></a>) – The task to transform ground truth into target.</p></li>
-<li><p><strong>snapshot_container</strong> (<a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalContainerIdentifier" title="dacapo.store.array_store.LocalContainerIdentifier"><em>LocalContainerIdentifier</em></a>) – Defines where snapshots will be saved.</p></li>
+<li><p><strong>datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="../datasplits/datasets/dataset/index.html#dacapo.experiments.datasplits.datasets.dataset.Dataset" title="dacapo.experiments.datasplits.datasets.dataset.Dataset"><em>Dataset</em></a><em>]</em>) – The list of datasets.</p></li>
+<li><p><strong>model</strong> (<a class="reference internal" href="../index.html#dacapo.experiments.Model" title="dacapo.experiments.Model"><em>Model</em></a>) – The model to be trained.</p></li>
+<li><p><strong>task</strong> (<a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.Task" title="dacapo.experiments.tasks.Task"><em>Task</em></a>) – The task to be performed.</p></li>
+<li><p><strong>snapshot_container</strong> (<a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalContainerIdentifier" title="dacapo.store.array_store.LocalContainerIdentifier"><em>LocalContainerIdentifier</em></a>) – The snapshot container.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented by the subclass.</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">trainer</span><span class="o">.</span><span class="n">build_batch_provider</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">snapshot_container</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -609,7 +1055,7 @@ training pipeline.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_iterations</strong> (<em>int</em>) – Number of training iterations.</p></li>
+<li><p><strong>num_iterations</strong> (<em>int</em>) – The number of training iterations.</p></li>
 <li><p><strong>model</strong> (<a class="reference internal" href="../index.html#dacapo.experiments.Model" title="dacapo.experiments.Model"><em>Model</em></a>) – The model to be trained.</p></li>
 <li><p><strong>optimizer</strong> (<em>torch.optim.Optimizer</em>) – The optimizer for the model.</p></li>
 <li><p><strong>device</strong> (<em>torch.device</em>) – The device (GPU/CPU) where the model will be trained.</p></li>
@@ -621,30 +1067,60 @@ training pipeline.</p>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Iterator[<a class="reference internal" href="../index.html#dacapo.experiments.TrainingIterationStats" title="dacapo.experiments.TrainingIterationStats">TrainingIterationStats</a>]</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented by the subclass.</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">iteration_stats</span> <span class="ow">in</span> <span class="n">trainer</span><span class="o">.</span><span class="n">iterate</span><span class="p">(</span><span class="n">num_iterations</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">iteration_stats</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.next">
-<span class="sig-name descname"><span class="pre">next</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.next" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">next</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
+<dd><p>Fetches the next batch of data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple containing the raw data, ground truth data, target data, weight data, and mask data.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[<a class="reference internal" href="../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray">NumpyArray</a>, <a class="reference internal" href="../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray">NumpyArray</a>, <a class="reference internal" href="../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray">NumpyArray</a>, <a class="reference internal" href="../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray">NumpyArray</a>, <a class="reference internal" href="../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray">NumpyArray</a>]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the method is not implemented by the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">raw</span><span class="p">,</span> <span class="n">gt</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.GunpowderTrainer.can_train">
 <span class="sig-name descname"><span class="pre">can_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.trainers.GunpowderTrainer.can_train" title="Link to this definition"></a></dt>
 <dd><p>Checks if the trainer can train with a specific set of datasets.</p>
-<p>Some trainers may have specific requirements for their training datasets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="../datasplits/datasets/dataset/index.html#dacapo.experiments.datasplits.datasets.dataset.Dataset" title="dacapo.experiments.datasplits.datasets.dataset.Dataset"><em>Dataset</em></a><em>]</em>) – The training datasets.</p>
+<dd class="field-odd"><p><strong>datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="../datasplits/datasets/dataset/index.html#dacapo.experiments.datasplits.datasets.dataset.Dataset" title="dacapo.experiments.datasplits.datasets.dataset.Dataset"><em>Dataset</em></a><em>]</em>) – The list of datasets.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>True if the trainer can train on the given datasets, False otherwise.</p>
+<dd class="field-even"><p>True if the trainer can train with the datasets, False otherwise.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented by the subclass.</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">can_train</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">can_train</span><span class="p">(</span><span class="n">datasets</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -654,10 +1130,56 @@ training pipeline.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.trainers.</span></span><span class="sig-name descname"><span class="pre">AugmentConfig</span></span><a class="headerlink" href="#dacapo.experiments.trainers.AugmentConfig" title="Link to this definition"></a></dt>
 <dd><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite>
 should have a corresponding config class derived from <cite>AugmentConfig</cite>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.AugmentConfig._raw_key">
+<span class="sig-name descname"><span class="pre">_raw_key</span></span><a class="headerlink" href="#dacapo.experiments.trainers.AugmentConfig._raw_key" title="Link to this definition"></a></dt>
+<dd><p>Key for raw data. Not used in this implementation. Defaults to None.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.AugmentConfig._gt_key">
+<span class="sig-name descname"><span class="pre">_gt_key</span></span><a class="headerlink" href="#dacapo.experiments.trainers.AugmentConfig._gt_key" title="Link to this definition"></a></dt>
+<dd><p>Key for ground truth data. Not used in this implementation. Defaults to None.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.trainers.AugmentConfig._mask_key">
+<span class="sig-name descname"><span class="pre">_mask_key</span></span><a class="headerlink" href="#dacapo.experiments.trainers.AugmentConfig._mask_key" title="Link to this definition"></a></dt>
+<dd><p>Key for mask data. Not used in this implementation. Defaults to None.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.AugmentConfig.node">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gt_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">gunpowder.BatchFilter</span></span></span><a class="headerlink" href="#dacapo.experiments.trainers.AugmentConfig.node" title="Link to this definition"></a></dt>
-<dd><p>return a gunpowder node that performs this augmentation</p>
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_raw_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_gt_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mask_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.AugmentConfig.node" title="Link to this definition"></a></dt>
+<dd><p>Get a gp.Augment node.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id19">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gt_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">gunpowder.BatchFilter</span></span></span><a class="headerlink" href="#id19" title="Link to this definition"></a></dt>
+<dd><p>Get a gunpowder augment node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw_key</strong> (<em>gp.ArrayKey</em>) – Key for raw data.</p></li>
+<li><p><strong>gt_key</strong> (<em>gp.ArrayKey</em>) – Key for ground truth data.</p></li>
+<li><p><strong>mask_key</strong> (<em>gp.ArrayKey</em>) – Key for mask data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Augmentation node which can be incorporated in the pipeline.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gunpowder.BatchFilter</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – This method is not implemented.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">node</span> <span class="o">=</span> <span class="n">augment_config</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">raw_key</span><span class="p">,</span> <span class="n">gt_key</span><span class="p">,</span> <span class="n">mask_key</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>

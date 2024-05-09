@@ -46,6 +46,12 @@ Classes
 
       :type: float
 
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method verifies the DummyTaskConfig object.
+
+   .. note:: This is a subclass of TaskConfig.
+
    .. py:attribute:: task_type
 
       
@@ -69,6 +75,12 @@ Classes
 
       :returns: A tuple containing a boolean status and a string message.
       :rtype: tuple
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> valid, reason = task_config.verify()
 
 
 

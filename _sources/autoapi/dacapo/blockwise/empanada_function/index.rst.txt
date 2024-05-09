@@ -42,6 +42,41 @@ Attributes
 
 .. py:function:: segment_function(input_array, block, **parameters)
 
+   Segment a 3D block using the empanada-napari library.
+
+   :param input_array: The 3D array to segment.
+   :type input_array: np.ndarray
+   :param block: The block object.
+   :type block: dask.array.core.Block
+   :param \*\*parameters: Parameters for the empanada-napari segmenter.
+
+   :returns: The segmented 3D array.
+   :rtype: np.ndarray
+
+   :raises ImportError: If empanada-napari is not installed.
+
+   .. rubric:: Examples
+
+   >>> import numpy as np
+   >>> from dask import array as da
+   >>> from dacapo.blockwise.empanada_function import segment_function
+   >>> input_array = np.random.rand(64, 64, 64)
+   >>> block = da.from_array(input_array, chunks=(32, 32, 32))
+   >>> segmented_array = segment_function(block, model_config="MitoNet_v1")
+
+   .. note::
+
+      The `model_config` parameter should be one of the following:
+      - MitoNet_v1
+      - MitoNet_v2
+      - MitoNet_v3
+      - MitoNet_v4
+      - MitoNet_v5
+      - MitoNet_v6
+
+   Reference:
+       - doi: 10.1016/j.cels.2022.12.006
+
 
 .. py:data:: model_configs
 
@@ -49,11 +84,185 @@ Attributes
 
 .. py:function:: stack_inference(engine, volume, axis_name)
 
+   Perform inference on a single axis of a 3D volume.
+
+   :param engine: The engine object.
+   :type engine: Engine3d
+   :param volume: The 3D volume to segment.
+   :type volume: np.ndarray
+   :param axis_name: The axis name to segment.
+   :type axis_name: str
+
+   :returns: The stack, axis name, and trackers dictionary.
+   :rtype: tuple
+
+   :raises ImportError: If empanada-napari is not installed.
+
+   .. rubric:: Examples
+
+   >>> import numpy as np
+   >>> from empanada_napari.inference import Engine3d
+   >>> from dacapo.blockwise.empanada_function import stack_inference
+   >>> model_config = "MitoNet_v1"
+   >>> use_gpu = True
+   >>> use_quantized = False
+   >>> engine = Engine3d(model_config, use_gpu=use_gpu, use_quantized=use_quantized)
+   >>> volume = np.random.rand(64, 64, 64)
+   >>> axis_name = "xy"
+   >>> stack, axis_name, trackers_dict = stack_inference(engine, volume, axis_name)
+
+   .. note:: The `axis_name` parameter should be one of the following:
+
 
 .. py:function:: orthoplane_inference(engine, volume)
 
+   Perform inference on the orthogonal planes of a 3D volume.
+
+   :param engine: The engine object.
+   :type engine: Engine3d
+   :param volume: The 3D volume to segment.
+   :type volume: np.ndarray
+
+   :returns: The trackers dictionary.
+   :rtype: dict
+
+   :raises ImportError: If empanada-napari is not installed.
+
+   .. rubric:: Examples
+
+   >>> import numpy as np
+   >>> from empanada_napari.inference import Engine3d
+   >>> from dacapo.blockwise.empanada_function import orthoplane_inference
+   >>> model_config = "MitoNet_v1"
+   >>> use_gpu = True
+   >>> use_quantized = False
+   >>> engine = Engine3d(model_config, use_gpu=use_gpu, use_quantized=use_quantized)
+   >>> volume = np.random.rand(64, 64, 64)
+   >>> trackers_dict = orthoplane_inference(engine, volume)
+
+   .. note::
+
+      The `model_config` parameter should be one of the following:
+      - MitoNet_v1
+      - MitoNet_v2
+      - MitoNet_v3
+      - MitoNet_v4
+      - MitoNet_v5
+      - MitoNet_v6
+
 
 .. py:function:: empanada_segmenter(image, model_config='MitoNet_v1', use_gpu=True, use_quantized=False, multigpu=False, downsampling=1, confidence_thr=0.5, center_confidence_thr=0.1, min_distance_object_centers=21, fine_boundaries=True, semantic_only=False, median_slices=11, min_size=10000, min_extent=50, maximum_objects_per_class=1000000, inference_plane='xy', orthoplane=True, return_panoptic=False, pixel_vote_thr=1, allow_one_view=False)
+
+   Segment a 3D volume using the empanada-napari library.
+
+   :param image: The 3D volume to segment.
+   :type image: np.ndarray
+   :param model_config: The model configuration to use.
+   :type model_config: str
+   :param use_gpu: Whether to use the GPU.
+   :type use_gpu: bool
+   :param use_quantized: Whether to use quantized inference.
+   :type use_quantized: bool
+   :param multigpu: Whether to use multiple GPUs.
+   :type multigpu: bool
+   :param downsampling: The downsampling factor.
+   :type downsampling: int
+   :param confidence_thr: The confidence threshold.
+   :type confidence_thr: float
+   :param center_confidence_thr: The center confidence threshold.
+   :type center_confidence_thr: float
+   :param min_distance_object_centers: The minimum distance between object centers.
+   :type min_distance_object_centers: int
+   :param fine_boundaries: Whether to use fine boundaries.
+   :type fine_boundaries: bool
+   :param semantic_only: Whether to use semantic segmentation only.
+   :type semantic_only: bool
+   :param median_slices: The number of median slices.
+   :type median_slices: int
+   :param min_size: The minimum size of objects.
+   :type min_size: int
+   :param min_extent: The minimum extent.
+   :type min_extent: int
+   :param maximum_objects_per_class: The maximum number of objects per class.
+   :type maximum_objects_per_class: int
+   :param inference_plane: The inference plane.
+   :type inference_plane: str
+   :param orthoplane: Whether to use orthoplane inference.
+   :type orthoplane: bool
+   :param return_panoptic: Whether to return the panoptic segmentation.
+   :type return_panoptic: bool
+   :param pixel_vote_thr: The pixel vote threshold.
+   :type pixel_vote_thr: int
+   :param allow_one_view: Whether to allow one view.
+   :type allow_one_view: bool
+
+   :returns: The volume, class name, and tracker.
+   :rtype: tuple
+
+   :raises ImportError: If empanada-napari is not installed.
+
+   .. rubric:: Examples
+
+   >>> import numpy as np
+   >>> from empanada_napari.inference import Engine3d
+   >>> from dacapo.blockwise.empanada_function import empanada_segmenter
+   >>> image = np.random.rand(64, 64, 64)
+   >>> model_config = "MitoNet_v1"
+   >>> use_gpu = True
+   >>> use_quantized = False
+   >>> multigpu = False
+   >>> downsampling = 1
+   >>> confidence_thr = 0.5
+   >>> center_confidence_thr = 0.1
+   >>> min_distance_object_centers = 21
+   >>> fine_boundaries = True
+   >>> semantic_only = False
+   >>> median_slices = 11
+   >>> min_size = 10000
+   >>> min_extent = 50
+   >>> maximum_objects_per_class = 1000000
+   >>> inference_plane = "xy"
+   >>> orthoplane = True
+   >>> return_panoptic = False
+   >>> pixel_vote_thr = 1
+   >>> allow_one_view = False
+   >>> for vol, class_name, tracker in empanada_segmenter(
+   ...     image,
+   ...     model_config=model_config,
+   ...     use_gpu=use_gpu,
+   ...     use_quantized=use_quantized,
+   ...     multigpu=multigpu,
+   ...     downsampling=downsampling,
+   ...     confidence_thr=confidence_thr,
+   ...     center_confidence_thr=center_confidence_thr,
+   ...     min_distance_object_centers=min_distance_object_centers,
+   ...     fine_boundaries=fine_boundaries,
+   ...     semantic_only=semantic_only,
+   ...     median_slices=median_slices,
+   ...     min_size=min_size,
+   ...     min_extent=min_extent,
+   ...     maximum_objects_per_class=maximum_objects_per_class,
+   ...     inference_plane=inference_plane,
+   ...     orthoplane=orthoplane,
+   ...     return_panoptic=return_panoptic,
+   ...     pixel_vote_thr=pixel_vote_thr,
+   ...     allow_one_view=allow_one_view
+   ... ):
+   ...     print(vol.shape, class_name, tracker)
+
+   .. note::
+
+      The `model_config` parameter should be one of the following:
+      - MitoNet_v1
+      - MitoNet_v2
+      - MitoNet_v3
+      - MitoNet_v4
+      - MitoNet_v5
+      - MitoNet_v6
+
+   Reference:
+       - doi: 10.1016/j.cels.2022.12.006
+
 
 
 .. py:function:: stack_postprocessing(trackers, model_config, label_divisor=1000, min_size=200, min_extent=4, dtype=np.uint32)
@@ -61,10 +270,86 @@ Attributes
    Relabels and filters each class defined in trackers. Yields a numpy
    or zarr volume along with the name of the class that is segmented.
 
+   :param trackers: The trackers dictionary.
+   :type trackers: dict
+   :param model_config: The model configuration to use.
+   :type model_config: str
+   :param label_divisor: The label divisor.
+   :type label_divisor: int
+   :param min_size: The minimum size of objects.
+   :type min_size: int
+   :param min_extent: The minimum extent of objects.
+   :type min_extent: int
+   :param dtype: The data type.
+   :type dtype: type
+
+   :returns: The generator object.
+   :rtype: generator
+
+   :raises ImportError: If empanada-napari is not installed.
+
+   .. rubric:: Examples
+
+   >>> for vol, class_name, tracker in stack_postprocessing(trackers, model_config):
+   ...     print(vol.shape, class_name, tracker)
+
+   .. note::
+
+      The `model_config` parameter should be one of the following:
+      - MitoNet_v1
+      - MitoNet_v2
+      - MitoNet_v3
+      - MitoNet_v4
+      - MitoNet_v5
+      - MitoNet_v6
+
+   Reference:
+       - doi: 10.1016/j.cels.2022.12.006
+
 
 .. py:function:: tracker_consensus(trackers, model_config, pixel_vote_thr=2, cluster_iou_thr=0.75, allow_one_view=False, min_size=200, min_extent=4, dtype=np.uint32)
 
    Calculate the orthoplane consensus from trackers. Yields a numpy
    or zarr volume along with the name of the class that is segmented.
+
+   :param trackers: The trackers dictionary.
+   :type trackers: dict
+   :param model_config: The model configuration to use.
+   :type model_config: str
+   :param pixel_vote_thr: The pixel vote threshold.
+   :type pixel_vote_thr: int
+   :param cluster_iou_thr: The cluster IoU threshold.
+   :type cluster_iou_thr: float
+   :param allow_one_view: Whether to allow one view.
+   :type allow_one_view: bool
+   :param min_size: The minimum size of objects.
+   :type min_size: int
+   :param min_extent: The minimum extent of objects.
+   :type min_extent: int
+   :param dtype: The data type.
+   :type dtype: type
+
+   :returns: The generator object.
+   :rtype: generator
+
+   :raises ImportError: If empanada-napari is not installed.
+
+   .. rubric:: Examples
+
+   >>> for vol, class_name, tracker in tracker_consensus(trackers, model_config):
+   ...     print(vol.shape, class_name, tracker)
+
+   .. note::
+
+      The `model_config` parameter should be one of the following:
+      - MitoNet_v1
+      - MitoNet_v2
+      - MitoNet_v3
+      - MitoNet_v4
+      - MitoNet_v5
+      - MitoNet_v6
+
+   Reference:
+       - doi: 10.1016/j.cels.2022.12.006
 
 

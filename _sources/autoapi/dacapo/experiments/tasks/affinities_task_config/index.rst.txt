@@ -25,6 +25,46 @@ Classes
    This is a Affinities task config used for generating and
    evaluating voxel affinities for instance segmentations.
 
+   .. attribute:: neighborhood
+
+      A list of Coordinate objects.
+
+   .. attribute:: lsds
+
+      Whether or not to train lsds along with your affinities.
+
+   .. attribute:: lsds_to_affs_weight_ratio
+
+      If training with lsds, set how much they should be weighted compared to affs.
+
+   .. attribute:: affs_weight_clipmin
+
+      The minimum value for affinities weights.
+
+   .. attribute:: affs_weight_clipmax
+
+      The maximum value for affinities weights.
+
+   .. attribute:: lsd_weight_clipmin
+
+      The minimum value for lsds weights.
+
+   .. attribute:: lsd_weight_clipmax
+
+      The maximum value for lsds weights.
+
+   .. attribute:: background_as_object
+
+      Whether to treat the background as a separate object.
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method verifies the AffinitiesTaskConfig
+
+   .. rubric:: Notes
+
+   This is a subclass of TaskConfig.
+
    .. py:attribute:: task_type
 
       

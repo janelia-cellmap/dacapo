@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -117,7 +118,7 @@
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.binary.BinaryArray">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.arraytypes.binary.</span></span><span class="sig-name descname"><span class="pre">BinaryArray</span></span><a class="headerlink" href="#dacapo.experiments.arraytypes.binary.BinaryArray" title="Link to this definition"></a></dt>
 <dd><p>A subclass of ArrayType representing BinaryArray. The BinaryArray object is created with two attributes; channels.
-Each voxel in this array is either 1 or 0.</p>
+Each voxel in this array is either 1 or 0. The class of each voxel can be determined by simply taking the argmax.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.binary.BinaryArray.channels">
 <span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#dacapo.experiments.arraytypes.binary.BinaryArray.channels" title="Link to this definition"></a></dt>
@@ -129,17 +130,16 @@ Each voxel in this array is either 1 or 0.</p>
 </dl>
 </dd></dl>
 
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channels</strong> (<em>Dict</em><em>[</em><em>int</em><em>, </em><em>str</em><em>]</em>) – A dictionary input where keys are channel numbers and values are their corresponding class for binary classification.</p>
-</dd>
-</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.binary.BinaryArray.interpolatable">
 <span class="sig-name descname"><span class="pre">interpolatable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.arraytypes.binary.BinaryArray.interpolatable" title="Link to this definition"></a></dt>
 <dd><p>Returns False as binary array type is not interpolatable.</p>
 </dd></dl>
 
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is used to represent a BinaryArray object in the system.</p>
+</div>
 <dl class="py property">
 <dt class="sig sig-object py" id="id0">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpolatable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
@@ -151,7 +151,20 @@ Each voxel in this array is either 1 or 0.</p>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>bool</p>
 </dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method is not implemented in this class.</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binary_array</span> <span class="o">=</span> <span class="n">BinaryArray</span><span class="p">(</span><span class="n">channels</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;class1&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">binary_array</span><span class="o">.</span><span class="n">interpolatable</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to check if the array is interpolatable.</p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">

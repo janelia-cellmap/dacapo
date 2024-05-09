@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -127,73 +128,274 @@ training volumes.
 See package fibsem_tools for appropriate metadata format for indicating
 presence of labels in your ground truth.
 “<a class="reference external" href="https://github.com/janelia-cosem/fibsem-tools">https://github.com/janelia-cosem/fibsem-tools</a>”</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.array_config">
+<span class="sig-name descname"><span class="pre">array_config</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.array_config" title="Link to this definition"></a></dt>
+<dd><p>A BinarizeArrayConfig object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__getitem__(roi</span></span></dt>
+<dd><p>Roi) -&gt; np.ndarray: Returns a binary mask of the
+annotations that are present but not annotated.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is not meant to be used directly. It is used by the
+BinarizeArray class to mask out annotations that are present but
+not annotated.</p>
+</div>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.axes">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.axes" title="Link to this definition"></a></dt>
-<dd><p>Returns the axes of this dataset as a string of charactes, as they
-are indexed. Permitted characters are:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
-</ul>
-</div></blockquote>
+<dd><p>Returns the axes of the source array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Axes of the source array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array does not have a name</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="p">(</span><span class="n">ZarrArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span><span class="o">.</span><span class="n">axes</span>
+<span class="go">[&#39;x&#39;, &#39;y&#39;, &#39;z&#39;]</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This is a helper function for the BinarizeArray class</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.dims">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.dims" title="Link to this definition"></a></dt>
-<dd><p>Returns the number of spatial dimensions.</p>
+<dd><p>Returns the number of dimensions of the source array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Number of dimensions of the source array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array does not have a name</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="p">(</span><span class="n">ZarrArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span><span class="o">.</span><span class="n">dims</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This is a helper function for the BinarizeArray class</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.voxel_size">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.voxel_size" title="Link to this definition"></a></dt>
-<dd><p>The size of a voxel in physical units.</p>
+<dd><p>Returns the voxel size of the source array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Voxel size of the source array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Coordinate</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array does not have a name</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="p">(</span><span class="n">ZarrArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span><span class="o">.</span><span class="n">voxel_size</span>
+<span class="go">Coordinate(x=4, y=4, z=40)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This is a helper function for the BinarizeArray class</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.roi">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.roi" title="Link to this definition"></a></dt>
-<dd><p>The total ROI of this array, in world units.</p>
+<dd><p>Returns the region of interest of the source array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Region of interest of the source array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Roi</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array does not have a name</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="p">(</span><span class="n">ZarrArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span><span class="o">.</span><span class="n">roi</span>
+<span class="go">Roi(offset=(0, 0, 0), shape=(100, 100, 100))</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This is a helper function for the BinarizeArray class</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.writable">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.writable" title="Link to this definition"></a></dt>
-<dd><p>Can we write to this Array?</p>
+<dd><p>Returns whether the source array is writable</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether the source array is writable</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array does not have a name</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="p">(</span><span class="n">ZarrArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span><span class="o">.</span><span class="n">writable</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This is a helper function for the BinarizeArray class</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.dtype">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.dtype" title="Link to this definition"></a></dt>
-<dd><p>The dtype of this array, in numpy dtypes</p>
+<dd><p>Returns the data type of the source array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Data type of the source array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.dtype</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array does not have a name</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="p">(</span><span class="n">ZarrArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span><span class="o">.</span><span class="n">dtype</span>
+<span class="go">np.uint8</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This is a helper function for the BinarizeArray class</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.num_channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.num_channels" title="Link to this definition"></a></dt>
-<dd><p>The number of channels provided by this dataset.
-Should return None if the channel dimension doesn’t exist.</p>
+<dd><p>Returns the number of channels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Number of channels</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array does not have a name</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="p">(</span><span class="n">ZarrArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span><span class="o">.</span><span class="n">num_channels</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This is a helper function for the BinarizeArray class</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.data">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.data" title="Link to this definition"></a></dt>
-<dd><p>Get a numpy like readable and writable view into this array.</p>
+<dd><p>Returns the data of the source array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Data of the source array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array does not have a name</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="p">(</span><span class="n">ZarrArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span><span class="o">.</span><span class="n">data</span>
+<span class="go">np.ndarray(...)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This is a helper function for the BinarizeArray class</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.attrs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.attrs" title="Link to this definition"></a></dt>
-<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+<dd><p>Returns the attributes of the source array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Attributes of the source array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array does not have a name</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="p">(</span><span class="n">ZarrArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span><span class="o">.</span><span class="n">attrs</span>
+<span class="go">{&#39;name&#39;: &#39;source_array&#39;, &#39;resolution&#39;: [4, 4, 40]}</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This is a helper function for the BinarizeArray class</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask.MissingAnnotationsMask.channels" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Returns the names of the channels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Names of the channels</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Generator[str]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array does not have a name</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="p">(</span><span class="n">ZarrArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span><span class="o">.</span><span class="n">channels</span>
+<span class="go">Generator[&#39;channel1&#39;, &#39;channel2&#39;, ...]</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This is a helper function for the BinarizeArray class</p>
+</dd></dl>
 
 </dd></dl>
 

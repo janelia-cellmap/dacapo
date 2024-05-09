@@ -37,27 +37,32 @@ Classes
 
    .. attribute:: RAW
 
+      str
       The raw data key.
-
-      :type: str
 
    .. attribute:: GT
 
+      str
       The ground truth data key.
-
-      :type: str
 
    .. attribute:: MASK
 
+      str
       The data mask key.
-
-      :type: str
 
    .. attribute:: NON_EMPTY
 
+      str
       The data key for non-empty mask.
 
-      :type: str
+   .. method:: __str__()
+
+      
+      Return the string representation of the key.
+
+   .. rubric:: Notes
+
+   This class is a base class and should not be instantiated.
 
    .. py:attribute:: RAW
       :value: 'raw'
@@ -89,9 +94,17 @@ Classes
 
    .. attribute:: SPECIFIED_LOCATIONS
 
+      str
       The key for specified locations in the graph.
 
-      :type: str
+   .. method:: __str__()
+
+      
+      Return the string representation of the key.
+
+   .. rubric:: Notes
+
+   This class is a base class and should not be instantiated.
 
    .. py:attribute:: SPECIFIED_LOCATIONS
       :value: 'specified_locations'
@@ -105,5 +118,39 @@ Classes
 
 
    Represent a base class for various types of keys in Dacapo library.
+
+   .. attribute:: RAW
+
+      str
+      The raw data key.
+
+   .. attribute:: GT
+
+      str
+      The ground truth data key.
+
+   .. attribute:: MASK
+
+      str
+      The data mask key.
+
+   .. attribute:: NON_EMPTY
+
+      str
+      The data key for non-empty mask.
+
+   .. attribute:: SPECIFIED_LOCATIONS
+
+      str
+      The key for specified locations in the graph.
+
+   .. method:: __str__()
+
+      
+      Return the string representation of the key.
+
+   .. rubric:: Notes
+
+   This class is a base class and should not be instantiated.
 
 

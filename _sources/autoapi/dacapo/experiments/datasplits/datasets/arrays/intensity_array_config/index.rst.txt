@@ -23,7 +23,34 @@ Classes
 
 
    This config class provides the necessary configuration for turning an Annotated dataset into a
-   multi class binary classification problem
+   multi class binary classification problem. It takes a source array and normalizes the intensities
+   between 0 and 1. The source array is expected to contain a volume with uint64 voxels and no channel dimension.
+
+   .. attribute:: source_array_config
+
+      The Array from which to pull annotated data
+
+      :type: ArrayConfig
+
+   .. attribute:: min
+
+      The minimum intensity in your data
+
+      :type: float
+
+   .. attribute:: max
+
+      The maximum intensity in your data
+
+      :type: float
+
+   .. method:: to_array
+
+      Returns the IntensitiesArray object
+
+   .. rubric:: Notes
+
+   The source_array_config must be an ArrayConfig object.
 
    .. py:attribute:: array_type
 

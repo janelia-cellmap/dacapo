@@ -24,7 +24,40 @@ Classes
 
    This config class provides the necessary configuration for cropping an
    Array to a smaller ROI. Especially useful for validation volumes that may
-   be too large for quick evaluation
+   be too large for quick evaluation. The ROI is specified in the config. The
+   cropped Array will have the same dtype as the source Array.
+
+   .. attribute:: source_array_config
+
+      The Array to crop
+
+      :type: ArrayConfig
+
+   .. attribute:: roi
+
+      The ROI for cropping
+
+      :type: Roi
+
+   .. method:: from_toml(cls, toml_path
+
+      str) -> CropArrayConfig:
+      Load the CropArrayConfig from a TOML file
+
+   .. method:: to_toml(self, toml_path
+
+      str) -> None:
+      Save the CropArrayConfig to a TOML file
+
+   .. method:: create_array(self) -> CropArray
+
+      
+      Create the CropArray from the config
+
+   .. note::
+
+      This class is a subclass of ArrayConfig and inherits all its attributes
+      and methods. The only difference is that the array_type is CropArray.
 
    .. py:attribute:: array_type
 

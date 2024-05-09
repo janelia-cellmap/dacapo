@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -109,15 +110,35 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.one_hot_task.OneHotTask" title="dacapo.experiments.tasks.one_hot_task.OneHotTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OneHotTask</span></code></a></p></td>
-<td><p>Helper class that provides a standard way to create an ABC using</p></td>
+<td><p>A task that uses a one-hot predictor. The model is loaded from a file</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.one_hot_task.OneHotTask">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.one_hot_task.</span></span><span class="sig-name descname"><span class="pre">OneHotTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.one_hot_task.OneHotTask" title="Link to this definition"></a></dt>
-<dd><p>Helper class that provides a standard way to create an ABC using
-inheritance.</p>
+<dd><p>A task that uses a one-hot predictor. The model is loaded from a file
+and the weights are loaded from a file. The loss is a dummy loss and the
+post processor is an argmax post processor. The evaluator is a dummy evaluator.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.one_hot_task.OneHotTask.weights">
+<span class="sig-name descname"><span class="pre">weights</span></span><a class="headerlink" href="#dacapo.experiments.tasks.one_hot_task.OneHotTask.weights" title="Link to this definition"></a></dt>
+<dd><p>The path to the weights file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.one_hot_task.OneHotTask.create_model">
+<span class="sig-name descname"><span class="pre">create_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">architecture</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../index.html#dacapo.experiments.Model" title="dacapo.experiments.Model"><span class="pre">Model</span></a></span></span><a class="headerlink" href="#dacapo.experiments.tasks.one_hot_task.OneHotTask.create_model" title="Link to this definition"></a></dt>
+<dd><p>This method creates a model using the given architecture.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This is a base class for all tasks that use one-hot predictors.</p>
 </dd></dl>
 
 </section>

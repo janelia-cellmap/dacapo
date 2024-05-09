@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -116,35 +117,82 @@
 <dt class="sig sig-object py" id="dacapo.gp.dacapo_array_source.DaCapoArraySource">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.gp.dacapo_array_source.</span></span><span class="sig-name descname"><span class="pre">DaCapoArraySource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.dacapo_array_source.DaCapoArraySource" title="Link to this definition"></a></dt>
 <dd><p>A DaCapo Array source node</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.dacapo_array_source.DaCapoArraySource.array">
+<span class="sig-name descname"><span class="pre">array</span></span><a class="headerlink" href="#dacapo.gp.dacapo_array_source.DaCapoArraySource.array" title="Link to this definition"></a></dt>
+<dd><p>The array to be served.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>Array</strong> (<a class="reference internal" href="../../experiments/datasplits/datasets/arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><em>Array</em></a>) – The DaCapo Array to pull data from</p></li>
-<li><p><strong>key</strong> (<code class="docutils literal notranslate"><span class="pre">gp.ArrayKey</span></code>) – The key to provide data into</p></li>
-</ul>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/datasplits/datasets/arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array">Array</a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.dacapo_array_source.DaCapoArraySource.key">
+<span class="sig-name descname"><span class="pre">key</span></span><a class="headerlink" href="#dacapo.gp.dacapo_array_source.DaCapoArraySource.key" title="Link to this definition"></a></dt>
+<dd><p>The key of the array to be served.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gp.ArrayKey</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.dacapo_array_source.DaCapoArraySource.setup">
 <span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.dacapo_array_source.DaCapoArraySource.setup" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>Called during initialization of the DAG. Callees can assume that all
-upstream providers are set up already.</p>
-<p>In setup, call <code class="xref py py-func docutils literal notranslate"><span class="pre">provides()</span></code> to announce the arrays and points
-provided by this node.</p>
+<dd><p>Set up the provider.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.dacapo_array_source.DaCapoArraySource.provide">
 <span class="sig-name descname"><span class="pre">provide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.dacapo_array_source.DaCapoArraySource.provide" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>This function takes a <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code> and should return the
-corresponding <code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code>.</p>
+<dd><p>Provides the array for the requested ROI.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is a subclass of gunpowder.BatchProvider and is used to
+serve array data to gunpowder pipelines.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Adds the key and the array spec to the provider.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code>) – The request to process.</p>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If the key is already provided.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_source</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">provide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Provides data based on the given request.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>gp.BatchRequest</em>) – The request for data</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The batch containing the provided data</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gp.Batch</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the input data contains NaN values</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_source</span><span class="o">.</span><span class="n">provide</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>

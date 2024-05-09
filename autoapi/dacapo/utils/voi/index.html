@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -159,6 +160,9 @@ By default, only the label 0 in the ground truth will be ignored.</p></li>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <cite>reconstruction</cite> and <cite>groundtruth</cite> have different shapes.</p>
+</dd>
 </dl>
 <p class="rubric">References</p>
 <p>[1] Meila, M. (2007). Comparing clusterings - an information based
@@ -230,6 +234,9 @@ per-segment conditional probability p log p.</p></li>
 </ul>
 </p>
 </dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If <cite>x</cite> and <cite>y</cite> have different shapes.</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -257,6 +264,9 @@ if <cite>norm=True</cite>.)</p>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>scipy.sparse.csc_matrix</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <cite>seg</cite> and <cite>gt</cite> have different shapes.</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -278,6 +288,9 @@ if <cite>norm=True</cite>.)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>same type as <cite>matrix</cite></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <cite>row</cite> contains zeros.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -301,6 +314,9 @@ if <cite>norm=True</cite>.)</p>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>same type as <cite>matrix</cite></p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If <cite>column</cite> contains zeros.</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -322,6 +338,9 @@ if <cite>norm=True</cite>.)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>same type as x</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If x contains negative values.</p>
 </dd>
 </dl>
 </dd></dl>

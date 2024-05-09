@@ -59,6 +59,13 @@ Classes
 
       :type: bool
 
+   .. method:: node(_raw_key=None, _gt_key=None, _mask_key=None)
+
+      Returns the object of ElasticAugment with the given
+      configuration details.
+      
+      
+
    .. py:attribute:: control_point_spacing
       :type: List[int]
 
@@ -98,6 +105,12 @@ Classes
                                 `control_point_displacement_sigma`, `rotation_interval`, `subsample` and
                                 `uniform_3d_rotation`.
       :rtype: ElasticAugment
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> node = elastic_augment_config.node()
 
 
 

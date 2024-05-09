@@ -30,6 +30,77 @@ Classes
    like BCELossWithLogits, since you want to avoid applying softmax while training,
    but apply it during evaluation.
 
+   .. attribute:: architecture
+
+      The architecture of the model.
+
+      :type: Architecture
+
+   .. attribute:: prediction_head
+
+      The prediction head of the model.
+
+      :type: torch.nn.Module
+
+   .. attribute:: chain
+
+      The architecture followed by the prediction head.
+
+      :type: torch.nn.Sequential
+
+   .. attribute:: num_in_channels
+
+      The number of input channels.
+
+      :type: int
+
+   .. attribute:: input_shape
+
+      The shape of the input tensor.
+
+      :type: Coordinate
+
+   .. attribute:: eval_input_shape
+
+      The shape of the input tensor during evaluation.
+
+      :type: Coordinate
+
+   .. attribute:: num_out_channels
+
+      The number of output channels.
+
+      :type: int
+
+   .. attribute:: output_shape
+
+      The shape of the output
+
+      :type: Coordinate
+
+   .. attribute:: eval_activation
+
+      The activation function to apply during evaluation.
+
+      :type: torch.nn.Module | None
+
+   .. method:: forward(x
+
+      torch.Tensor) -> torch.Tensor:
+      Forward pass of the model.
+
+   .. method:: compute_output_shape(input_shape
+
+      Coordinate) -> Tuple[int, Coordinate]:
+      Compute the spatial shape of this model, when fed a tensor of the given spatial shape as input.
+
+   .. method:: scale(voxel_size
+
+      Coordinate) -> Coordinate:
+      Scale the model by the given voxel size.
+
+   .. note:: The output shape is the spatial shape of the model, i.e., not accounting for channels and batch dimensions.
+
    .. py:attribute:: num_out_channels
       :type: int
 
@@ -42,6 +113,22 @@ Classes
 
    .. py:method:: forward(x)
 
+      Forward pass of the model.
+
+      :param x: The input tensor.
+      :type x: torch.Tensor
+
+      :returns: The output tensor.
+      :rtype: torch.Tensor
+
+      .. rubric:: Examples
+
+      >>> model = Model(architecture, prediction_head)
+      >>> model.forward(x)
+      torch.Tensor
+
+      .. note:: The eval_activation is only applied during evaluation. This is particularly useful if you want to train with something like BCELossWithLogits, since you want to avoid applying softmax while training, but apply it during evaluation.
+
 
    .. py:method:: compute_output_shape(input_shape: funlib.geometry.Coordinate) -> Tuple[int, funlib.geometry.Coordinate]
 
@@ -49,8 +136,42 @@ Classes
       batch dimensions) of this model, when fed a tensor of the given spatial
       shape as input.
 
+      :param input_shape: The shape of the input tensor.
+      :type input_shape: Coordinate
+
+      :returns: The number of output channels and the spatial shape of the output.
+      :rtype: Tuple[int, Coordinate]
+
+      :raises AssertionError: If the input_shape is not a Coordinate.
+
+      .. rubric:: Examples
+
+      >>> model = Model(architecture, prediction_head)
+      >>> model.compute_output_shape(input_shape)
+      (1, Coordinate(1, 1, 1))
+
+      .. note:: The output shape is the spatial shape of the model, i.e., not accounting for channels and batch dimensions.
+
 
    .. py:method:: scale(voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
+
+      Scale the model by the given voxel size.
+
+      :param voxel_size: The voxel size to scale the model by.
+      :type voxel_size: Coordinate
+
+      :returns: The scaled model.
+      :rtype: Coordinate
+
+      :raises AssertionError: If the voxel_size is not a Coordinate.
+
+      .. rubric:: Examples
+
+      >>> model = Model(architecture, prediction_head)
+      >>> model.scale(voxel_size)
+      Coordinate(1, 1, 1)
+
+      .. note:: The output shape is the spatial shape of the model, i.e., not accounting for channels and batch dimensions.
 
 
 

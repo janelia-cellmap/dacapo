@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -108,14 +109,14 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.training_iteration_stats.TrainingIterationStats" title="dacapo.experiments.training_iteration_stats.TrainingIterationStats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainingIterationStats</span></code></a></p></td>
-<td><p>A class to represent the training iteration statistics.</p></td>
+<td><p>A class to represent the training iteration statistics. It contains the loss and time taken for each iteration.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.training_iteration_stats.TrainingIterationStats">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.training_iteration_stats.</span></span><span class="sig-name descname"><span class="pre">TrainingIterationStats</span></span><a class="headerlink" href="#dacapo.experiments.training_iteration_stats.TrainingIterationStats" title="Link to this definition"></a></dt>
-<dd><p>A class to represent the training iteration statistics.</p>
+<dd><p>A class to represent the training iteration statistics. It contains the loss and time taken for each iteration.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.training_iteration_stats.TrainingIterationStats.iteration">
 <span class="sig-name descname"><span class="pre">iteration</span></span><a class="headerlink" href="#dacapo.experiments.training_iteration_stats.TrainingIterationStats.iteration" title="Link to this definition"></a></dt>
@@ -149,6 +150,12 @@
 </dl>
 </dd></dl>
 
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The iteration stats list is structured as follows:
+- The outer list contains the stats for each iteration.
+- The inner list contains the stats for each training iteration.</p>
+</div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id0">
 <span class="sig-name descname"><span class="pre">iteration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>

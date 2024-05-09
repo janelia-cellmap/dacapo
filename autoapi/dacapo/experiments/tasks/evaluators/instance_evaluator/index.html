@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -110,7 +111,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator" title="dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InstanceEvaluator</span></code></a></p></td>
-<td><p>Base class of all evaluators.</p></td>
+<td><p>A class representing an evaluator for instance segmentation tasks.</p></td>
 </tr>
 </tbody>
 </table>
@@ -123,7 +124,7 @@
 <td><p>Relabel array, such that IDs are consecutive. Excludes 0.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.voi" title="dacapo.experiments.tasks.evaluators.instance_evaluator.voi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">voi</span></code></a>(truth, test)</p></td>
-<td><p></p></td>
+<td><p>Calculate the variation of information (VOI) between two segmentations.</p></td>
 </tr>
 </tbody>
 </table>
@@ -156,49 +157,125 @@ the array) to old labels.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p>A tuple <code class="docutils literal notranslate"><span class="pre">(relabelled,</span> <span class="pre">n)</span></code>, where <code class="docutils literal notranslate"><span class="pre">relabelled</span></code> is the relabelled
-array and <code class="docutils literal notranslate"><span class="pre">n</span></code> the number of unique labels found.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">return_backwards_map</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns <code class="docutils literal notranslate"><span class="pre">(relabelled,</span> <span class="pre">n,</span>
+<dd class="field-even"><p>A tuple <code class="docutils literal notranslate"><span class="pre">(relabelled,</span> <span class="pre">n)</span></code>, where <code class="docutils literal notranslate"><span class="pre">relabelled</span></code> is the relabelled
+array and <code class="docutils literal notranslate"><span class="pre">n</span></code> the number of unique labels found.
+If <code class="docutils literal notranslate"><span class="pre">return_backwards_map</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns <code class="docutils literal notranslate"><span class="pre">(relabelled,</span> <span class="pre">n,</span>
 <span class="pre">backwards_map)</span></code>.</p>
-</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">array</span></code> is not of type <code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code>.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">relabel</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+<span class="go">(array([[1, 2, 0], [0, 2, 1]]), 2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">relabel</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">return_backwards_map</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">(array([[1, 2, 0], [0, 2, 1]]), 2, [0, 1, 2])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to relabel an array, such that IDs are consecutive. Excludes 0.</p>
+</div>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.instance_evaluator.</span></span><span class="sig-name descname"><span class="pre">InstanceEvaluator</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator" title="Link to this definition"></a></dt>
-<dd><p>Base class of all evaluators.</p>
-<p>An evaluator takes a post-processor’s output and compares it against
-ground-truth.</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator.score">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../instance_evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores" title="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores</span></a></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator.score" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
+<dd><p>A class representing an evaluator for instance segmentation tasks.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator.criteria">
-<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['voi_merge',</span> <span class="pre">'voi_split',</span> <span class="pre">'voi']</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator.criteria" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">criteria</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator.criteria" title="Link to this definition"></a></dt>
+<dd><p>List[str]
+the evaluation criteria</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator.evaluate">
 <span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator.evaluate" title="Link to this definition"></a></dt>
-<dd><p>Compares and evaluates the output array against the evaluation array.</p>
+<dd><p>Evaluate the output array against the evaluation array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.InstanceEvaluator.score" title="Link to this definition"></a></dt>
+<dd><p>Return the evaluation scores.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The InstanceEvaluator class is used to evaluate the performance of an instance segmentation task.</p>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../instance_evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores" title="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores</span></a></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Return the evaluation scores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>InstanceEvaluationScores</dt><dd><p>the evaluation scores</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – if the function is not implemented</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">instance_evaluator</span> <span class="o">=</span> <span class="n">InstanceEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance_evaluator</span><span class="o">.</span><span class="n">score</span>
+<span class="go">InstanceEvaluationScores(voi_merge=0.0, voi_split=0.0)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to return the evaluation scores.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['voi_merge',</span> <span class="pre">'voi_split',</span> <span class="pre">'voi']</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the output array against the evaluation array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>output_array_identifier</strong> (<a class="reference internal" href="../../../datasplits/datasets/arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><em>Array</em></a>) – The output data array to evaluate</p></li>
-<li><p><strong>evaluation_array</strong> (<a class="reference internal" href="../../../datasplits/datasets/arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><em>Array</em></a>) – The evaluation data array to compare with the output</p></li>
+<li><p><strong>output_array_identifier</strong> – str
+the identifier of the output array</p></li>
+<li><p><strong>evaluation_array</strong> – ZarrArray
+the evaluation array</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The detailed evaluation scores after the comparison.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores" title="dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores">EvaluationScores</a></p>
+<dd class="field-even"><p><dl class="simple">
+<dt>InstanceEvaluationScores</dt><dd><p>the evaluation scores</p>
 </dd>
 </dl>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if the output array identifier is not valid</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">instance_evaluator</span> <span class="o">=</span> <span class="n">InstanceEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output_array_identifier</span> <span class="o">=</span> <span class="s2">&quot;output_array&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="o">.</span><span class="n">open_from_array_identifier</span><span class="p">(</span><span class="s2">&quot;evaluation_array&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance_evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">output_array_identifier</span><span class="p">,</span> <span class="n">evaluation_array</span><span class="p">)</span>
+<span class="go">InstanceEvaluationScores(voi_merge=0.0, voi_split=0.0)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to evaluate the output array against the evaluation array.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -206,7 +283,39 @@ ground-truth.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluator.voi">
 <span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.instance_evaluator.</span></span><span class="sig-name descname"><span class="pre">voi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluator.voi" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Calculate the variation of information (VOI) between two segmentations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth</strong> – ndarray
+the ground truth segmentation</p></li>
+<li><p><strong>test</strong> – ndarray
+the test segmentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>dict</dt><dd><p>the variation of information (VOI) scores</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if the truth and test arrays are not of type np.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">truth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">voi</span><span class="p">(</span><span class="n">truth</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+<span class="go">{&#39;voi_split&#39;: 0.0, &#39;voi_merge&#39;: 0.0}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to calculate the variation of information (VOI) between two segmentations.</p>
+</div>
+</dd></dl>
 
 </section>
 </section>

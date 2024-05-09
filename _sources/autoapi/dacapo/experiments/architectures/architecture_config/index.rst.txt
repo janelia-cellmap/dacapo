@@ -20,17 +20,19 @@ Classes
 .. py:class:: ArchitectureConfig
 
 
-   A class to represent the base configurations of any architecture.
+   A class to represent the base configurations of any architecture. It is used to define the architecture of a neural network model.
 
    .. attribute:: name
 
+      str
       a unique name for the architecture.
-
-      :type: str
 
    .. method:: verify()
 
+      
       validates the given architecture.
+
+   .. note:: The class is abstract and requires to implement the abstract methods.
 
    .. py:attribute:: name
       :type: str
@@ -41,8 +43,18 @@ Classes
 
       A method to validate an architecture configuration.
 
-      :returns: * *bool* -- A flag indicating whether the config is valid or not.
-                * *str* -- A description of the architecture.
+      :returns: A tuple of a boolean indicating if the architecture is valid and a message.
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> config = ArchitectureConfig("MyModel")
+      >>> is_valid, message = config.verify()
+      >>> print(is_valid, message)
+
+      .. note:: The method should be implemented in the derived class.
 
 
 

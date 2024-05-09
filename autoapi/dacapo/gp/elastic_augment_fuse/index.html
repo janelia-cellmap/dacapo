@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -131,63 +132,107 @@
 <dt class="sig sig-object py" id="dacapo.gp.elastic_augment_fuse.ElasticAugment">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.gp.elastic_augment_fuse.</span></span><span class="sig-name descname"><span class="pre">ElasticAugment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_point_spacing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_point_displacement_sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augmentation_probability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uniform_3d_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.elastic_augment_fuse.ElasticAugment" title="Link to this definition"></a></dt>
 <dd><p>Elasticly deform a batch. Requests larger batches upstream to avoid data
-loss due to rotation and jitter.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>control_point_spacing</strong> (<code class="docutils literal notranslate"><span class="pre">tuple</span></code> of <code class="docutils literal notranslate"><span class="pre">int</span></code>) – Distance between control points for the elastic deformation, in
-voxels per dimension.</p></li>
-<li><p><strong>control_point_displacement_sigma</strong> (<code class="docutils literal notranslate"><span class="pre">tuple</span></code> of <code class="docutils literal notranslate"><span class="pre">float</span></code>) – Standard deviation of control point displacement distribution, in world coordinates.</p></li>
-<li><p><strong>rotation_interval</strong> (<code class="docutils literal notranslate"><span class="pre">tuple</span></code> of two <code class="docutils literal notranslate"><span class="pre">floats</span></code>) – Interval to randomly sample rotation angles from (0, 2PI).</p></li>
-<li><p><strong>subsample</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Instead of creating an elastic transformation on the full
-resolution, create one sub-sampled by the given factor, and linearly
-interpolate to obtain the full resolution transformation. This can
-significantly speed up this node, at the expense of having visible
-piecewise linear deformations for large factors. Usually, a factor
-of 4 can safely be used without noticeable changes. However, the
-default is 1 (i.e., no sub-sampling).</p></li>
-<li><p><strong>seed</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Set random state for reproducible results (tests only, do not use
-in production code!!)</p></li>
+loss due to rotation and jitter.
+:param control_point_spacing: Distance between control points for the elastic deformation, in voxels per dimension.
+:type control_point_spacing: tuple of int
+:param control_point_displacement_sigma: Standard deviation of control point displacement distribution, in world coordinates.
+:type control_point_displacement_sigma: tuple of float
+:param rotation_interval: Interval to randomly sample rotation angles from (0, 2PI).
+:type rotation_interval: tuple of two float
+:param subsample: Instead of creating an elastic transformation on the full resolution, create one sub-sampled by the given factor, and linearly interpolate to obtain the full resolution transformation. This can significantly speed up this node, at the expense of having visible piecewise linear deformations for large factors. Usually, a factor of 4 can safely be used without noticeable changes. However, the default is 1 (i.e., no sub-sampling).
+:type subsample: int
+:param seed: Set random state for reproducible results (tests only, do not use in production code!!)
+:type seed: int
+:param augmentation_probability: Probability to apply the augmentation.
+:type augmentation_probability: float
+:param uniform_3d_rotation: Use a uniform 3D rotation instead of a rotation around a random axis.
+:type uniform_3d_rotation: bool</p>
+<dl class="simple">
+<dt>Provides:</dt><dd><ul class="simple">
+<li><p>The arrays in the batch, deformed.</p></li>
 </ul>
 </dd>
+<dt>Requests:</dt><dd><ul class="simple">
+<li><p>The arrays in the batch, enlarged such that the deformed ROI fits into
+the enlarged input ROI.</p></li>
+</ul>
+</dd>
+<dt>Method:</dt><dd><p>setup: Set up the ElasticAugment node.
+prepare: Prepare the ElasticAugment node.
+process: Process the ElasticAugment node.</p>
+</dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>This node is a port of the ElasticAugment node from the original
+<a href="#id1"><span class="problematic" id="id2">`</span></a>gunpowder &lt;</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.elastic_augment_fuse.ElasticAugment.setup">
 <span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.elastic_augment_fuse.ElasticAugment.setup" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>Called during initialization of the DAG. Callees can assume that all
-upstream providers are set up already.</p>
-<p>In setup, call <code class="xref py py-func docutils literal notranslate"><span class="pre">provides()</span></code> or <code class="xref py py-func docutils literal notranslate"><span class="pre">updates()</span></code> to announce the
-arrays and points provided or changed by this node.</p>
+<dd><p>Set up the object by calculating the voxel size and spatial dimensions.</p>
+<p>This method calculates the voxel size by finding the minimum value for each axis
+from the voxel sizes of all array specs. It then sets the <cite>voxel_size</cite> attribute
+of the object. The spatial dimensions are also set based on the dimensions of the
+voxel size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AssertionError</strong> – If the voxel size is not a Coordinate object.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">setup</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.elastic_augment_fuse.ElasticAugment.prepare">
 <span class="sig-name descname"><span class="pre">prepare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.elastic_augment_fuse.ElasticAugment.prepare" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>Prepare for a batch request. Should return a <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code> of
-needed dependencies. If None is returned, it will be assumed that all
-of request is needed.</p>
+<dd><p>Prepares the request for augmentation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> – The request object containing the data to be augmented.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If the key in the request is not an ArrayKey or GraphKey.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">prepare</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method prepares the request for augmentation by performing the following steps:
+1. Logs the preparation details, including the transformation voxel size.
+2. Calculates the master ROI based on the total ROI.
+3. Generates a uniform random sample and determines whether to perform augmentation based on the augmentation probability.
+4. If augmentation is not required, logs the decision and returns.
+5. Snaps the master ROI to the grid based on the voxel size and calculates the master transformation.
+6. Clears the existing transformations and target ROIs.
+7. Iterates over each key in the request and prepares it for augmentation.
+8. Updates the upstream request with the modified ROI.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.elastic_augment_fuse.ElasticAugment.process">
 <span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.elastic_augment_fuse.ElasticAugment.process" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>Filter a batch, will be called after <a class="reference internal" href="#dacapo.gp.elastic_augment_fuse.ElasticAugment.prepare" title="dacapo.gp.elastic_augment_fuse.ElasticAugment.prepare"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare()</span></code></a>. Should return a
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code> containing modified Arrays and Graphs. Keys in the returned
-batch will replace the associated data in the original batch. If None is
-returned it is assumed that the batch has been modified in place. <code class="docutils literal notranslate"><span class="pre">request</span></code>
-is the same as passed to <a class="reference internal" href="#dacapo.gp.elastic_augment_fuse.ElasticAugment.prepare" title="dacapo.gp.elastic_augment_fuse.ElasticAugment.prepare"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare()</span></code></a>, provided for convenience.</p>
+<dd><p>Process the ElasticAugment node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>batch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code>) – The batch received from upstream to be modified by this node.</p></li>
-<li><p><strong>request</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code>) – The request this node received. The updated batch should meet
-this request.</p></li>
+<li><p><strong>batch</strong> – The batch object containing the data to be processed.</p></li>
+<li><p><strong>request</strong> – The request object specifying the data to be processed.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If the key in the request is not an ArrayKey or GraphKey.</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">process</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method applies the transformation to the data in the batch and restores the original ROIs.</p>
 </dd></dl>
 
 </dd></dl>

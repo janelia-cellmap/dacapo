@@ -34,7 +34,21 @@ Attributes
 
    Train a run
 
+   :param run_name: Name of the run to train
+
+   :raises ValueError: If run_name is not found in config store
+
+   .. rubric:: Examples
+
+   >>> train("run_name")
+
 
 .. py:function:: train_run(run: dacapo.experiments.Run)
+
+   Train a run
+
+   :param run: Run object to train
+
+   :raises ValueError: If run_name is not found in config store
 
 

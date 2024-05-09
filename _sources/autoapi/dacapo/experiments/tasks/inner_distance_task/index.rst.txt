@@ -45,4 +45,12 @@ Classes
 
       Used for evaluating the results using binary segmentation.
 
+   .. method:: __init__(self, task_config)
+
+      Initializes an instance of InnerDistanceTask.
+
+   .. rubric:: Notes
+
+   This is a subclass of Task.
+
 

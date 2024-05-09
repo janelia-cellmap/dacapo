@@ -22,11 +22,58 @@ Classes
 
 
 
-   Trainer Abstract Base Class
+   This class is used to train a model using dummy data and is used for testing purposes. It contains attributes
+   related to learning rate, batch size, and mirror augment. It also contains methods to create an optimizer, iterate
+   over the training data, build a batch provider, and check if the trainer can train on the given data split. This class
+   contains methods to enter and exit the context manager. The iterate method yields training iteration statistics.
 
-   This serves as the blueprint for any trainer classes in the dacapo library.
-   It defines essential methods that every subclass must implement for effective
-   training of a neural network model.
+   .. attribute:: learning_rate
+
+      The learning rate to use.
+
+      :type: float
+
+   .. attribute:: batch_size
+
+      The batch size to use.
+
+      :type: int
+
+   .. attribute:: mirror_augment
+
+      A boolean value indicating whether to use mirror augmentation or not.
+
+      :type: bool
+
+   .. method:: __init__(self, trainer_config)
+
+      This method initializes the DummyTrainer object.
+
+   .. method:: create_optimizer(self, model)
+
+      This method creates an optimizer for the given model.
+
+   .. method:: iterate(self, num_iterations
+
+      int, model, optimizer, device): This method iterates over the training data for the specified number of iterations.
+
+   .. method:: build_batch_provider(self, datasplit, architecture, task, snapshot_container)
+
+      This method builds a batch provider for the given data split, architecture, task, and snapshot container.
+
+   .. method:: can_train(self, datasplit)
+
+      This method checks if the trainer can train on the given data split.
+
+   .. method:: __enter__(self)
+
+      This method enters the context manager.
+
+   .. method:: __exit__(self, exc_type, exc_val, exc_tb)
+
+      This method exits the context manager.
+
+   .. note:: The iterate method yields TrainingIterationStats.
 
    .. py:attribute:: iteration
       :value: 0
@@ -35,60 +82,80 @@ Classes
 
    .. py:method:: create_optimizer(model)
 
-      Creates an optimizer for the model.
+      Create an optimizer for the given model.
 
-      :param model: The model for which the optimizer will be created.
+      :param model: The model to optimize.
       :type model: Model
 
-      :returns: The optimizer created for the model.
+      :returns: The optimizer object.
       :rtype: torch.optim.Optimizer
+
+      .. rubric:: Examples
+
+      >>> optimizer = create_optimizer(model)
 
 
    .. py:method:: iterate(num_iterations: int, model: dacapo.experiments.model.Model, optimizer, device)
 
-      Performs a number of training iterations.
+      Iterate over the training data for the specified number of iterations.
 
-      :param num_iterations: Number of training iterations.
+      :param num_iterations: The number of iterations to perform.
       :type num_iterations: int
-      :param model: The model to be trained.
+      :param model: The model to train.
       :type model: Model
-      :param optimizer: The optimizer for the model.
+      :param optimizer: The optimizer to use.
       :type optimizer: torch.optim.Optimizer
-      :param device: The device (GPU/CPU) where the model will be trained.
+      :param device: The device to perform the computations on.
       :type device: torch.device
 
-      :returns: An iterator of the training statistics.
-      :rtype: Iterator[TrainingIterationStats]
+      :Yields: *TrainingIterationStats* -- The training iteration statistics.
+
+      :raises ValueError: If the number of iterations is less than or equal to zero.
+
+      .. rubric:: Examples
+
+      >>> for stats in iterate(num_iterations, model, optimizer, device):
+      >>>     print(stats)
 
 
    .. py:method:: build_batch_provider(datasplit, architecture, task, snapshot_container)
 
-      Initializes the training pipeline using various components.
+      Build a batch provider for the given data split, architecture, task, and snapshot container.
 
-      This method uses the datasets, model, task, and snapshot_container to set up the
-      training pipeline.
-
-      :param datasets: The datasets to pull data from.
-      :type datasets: List[Dataset]
-      :param model: The model to inform the pipeline of required input/output sizes.
-      :type model: Model
-      :param task: The task to transform ground truth into target.
+      :param datasplit: The data split to use.
+      :type datasplit: DataSplit
+      :param architecture: The architecture to use.
+      :type architecture: Architecture
+      :param task: The task to perform.
       :type task: Task
-      :param snapshot_container: Defines where snapshots will be saved.
-      :type snapshot_container: LocalContainerIdentifier
+      :param snapshot_container: The snapshot container to use.
+      :type snapshot_container: SnapshotContainer
+
+      :returns: The batch provider object.
+      :rtype: BatchProvider
+
+      :raises ValueError: If the task loss is not set.
+
+      .. rubric:: Examples
+
+      >>> batch_provider = build_batch_provider(datasplit, architecture, task, snapshot_container)
 
 
    .. py:method:: can_train(datasplit)
 
-      Checks if the trainer can train with a specific set of datasets.
+      Check if the trainer can train on the given data split.
 
-      Some trainers may have specific requirements for their training datasets.
+      :param datasplit: The data split to check.
+      :type datasplit: DataSplit
 
-      :param datasets: The training datasets.
-      :type datasets: List[Dataset]
-
-      :returns: True if the trainer can train on the given datasets, False otherwise.
+      :returns: True if the trainer can train on the data split, False otherwise.
       :rtype: bool
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> can_train(datasplit)
 
 
 

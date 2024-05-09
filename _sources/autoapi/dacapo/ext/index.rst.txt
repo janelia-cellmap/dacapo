@@ -20,4 +20,30 @@ Classes
 .. py:class:: NoSuchModule(name)
 
 
+   This class is used to raise an exception when a module is not found.
+
+   .. attribute:: __name
+
+      The name of the module that was not found.
+
+      :type: str
+
+   .. attribute:: __traceback_str
+
+      The traceback string of the exception.
+
+      :type: str
+
+   .. attribute:: __exception
+
+      The exception raised.
+
+      :type: Exception
+
+   .. method:: __getattr__(item)
+
+      Raises the exception.
+      
+      
+
 

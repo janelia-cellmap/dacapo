@@ -37,30 +37,200 @@ Attributes
    A MongoDB store for run statistics. Used to store and retrieve training
    statistics and validation scores.
 
+   .. attribute:: db_host
+
+      The host of the MongoDB database.
+
+      :type: str
+
+   .. attribute:: db_name
+
+      The name of the MongoDB database.
+
+      :type: str
+
+   .. attribute:: client
+
+      The MongoDB client.
+
+      :type: MongoClient
+
+   .. attribute:: database
+
+      The MongoDB database.
+
+      :type: Database
+
+   .. attribute:: training_stats
+
+      The collection for training statistics.
+
+      :type: Collection
+
+   .. attribute:: validation_scores
+
+      The collection for validation scores.
+
+      :type: Collection
+
+   .. method:: store_training_stats(run_name, stats)
+
+      Store the training stats of a given run.
+
+   .. method:: retrieve_training_stats(run_name)
+
+      Retrieve the training stats for a given run.
+
+   .. method:: store_validation_iteration_scores(run_name, scores)
+
+      Store the validation iteration scores of a given run.
+
+   .. method:: retrieve_validation_iteration_scores(run_name)
+
+      Retrieve the validation iteration scores for a given run.
+
+   .. method:: delete_training_stats(run_name)
+
+      Delete the training stats associated with a specific run.
+
+   .. rubric:: Notes
+
+   The MongoStatsStore uses the 'training_stats' and 'validation_scores' collections to store the statistics.
+
    .. py:method:: store_training_stats(run_name: str, stats: dacapo.experiments.TrainingStats)
 
-      Store training stats of a given run.
+      Store the training statistics for a specific run.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param stats: The training statistics to be stored.
+      :type stats: TrainingStats
+
+      :raises ValueError: If the training statistics are already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoStatsStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> stats = TrainingStats()
+      >>> store.store_training_stats(run_name, stats)
+
+      .. rubric:: Notes
+
+      The training statistics are stored in the 'training_stats' collection.
 
 
    .. py:method:: retrieve_training_stats(run_name: str, subsample: bool = False) -> dacapo.experiments.TrainingStats
 
-      Retrieve the training stats for a given run.
+      Retrieve the training statistics for a given run.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param subsample: Whether to subsample the training statistics. Defaults to False.
+      :type subsample: bool, optional
+
+      :returns: The training statistics for the specified run.
+      :rtype: TrainingStats
+
+      :raises ValueError: If the training statistics are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoStatsStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> store.retrieve_training_stats(run_name)
+
+      .. rubric:: Notes
+
+      The training statistics are retrieved from the 'training_stats' collection.
 
 
    .. py:method:: store_validation_iteration_scores(run_name: str, scores: dacapo.experiments.ValidationScores)
 
-      Store the validation iteration scores of a given run.
+      Stores the validation iteration scores for a given run.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param scores: The validation scores to store.
+      :type scores: ValidationScores
+
+      .. rubric:: Examples
+
+      >>> store = MongoStatsStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> scores = ValidationScores()
+      >>> store.store_validation_iteration_scores(run_name, scores)
+
+      .. rubric:: Notes
+
+      The validation iteration scores are stored in the 'validation_scores' collection.
 
 
    .. py:method:: retrieve_validation_iteration_scores(run_name: str, subsample: bool = False, validation_interval: Optional[int] = None) -> List[dacapo.experiments.ValidationIterationScores]
 
       Retrieve the validation iteration scores for a given run.
 
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param subsample: Whether to subsample the scores. Defaults to False.
+      :type subsample: bool, optional
+      :param validation_interval: The interval at which to retrieve the scores. Defaults to None.
+      :type validation_interval: int, optional
+
+      :returns: A list of validation iteration scores.
+      :rtype: List[ValidationIterationScores]
+
+      :raises ValueError: If the validation iteration scores are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoStatsStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> store.retrieve_validation_iteration_scores(run_name)
+
+      .. rubric:: Notes
+
+      The validation iteration scores are retrieved from the 'validation_scores' collection.
+
 
    .. py:method:: delete_validation_scores(run_name: str) -> None
 
+      Deletes the validation scores for a given run.
+
+      :param run_name: The name of the run for which validation scores should be deleted.
+      :type run_name: str
+
+      :raises ValueError: If the validation scores are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoStatsStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> store.delete_validation_scores(run_name)
+
+      .. rubric:: Notes
+
+      The validation scores are deleted from the 'validation_scores' collection.
+
 
    .. py:method:: delete_training_stats(run_name: str) -> None
+
+      Deletes the training stats for a given run.
+
+      :param run_name: The name of the run for which training stats should be deleted.
+      :type run_name: str
+
+      :raises ValueError: If the training statistics are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoStatsStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> store.delete_training_stats(run_name)
+
+      .. rubric:: Notes
+
+      The training statistics are deleted from the 'training_stats' collection.
 
 
 

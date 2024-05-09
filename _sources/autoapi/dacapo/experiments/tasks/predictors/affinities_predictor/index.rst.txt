@@ -22,69 +22,285 @@ Classes
 
 
 
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+   A predictor for generating affinity predictions from input data.
+
+   .. attribute:: neighborhood
+
+      The neighborhood.
+
+      :type: List[Coordinate]
+
+   .. attribute:: lsds
+
+      Whether to compute local shape descriptors.
+
+      :type: bool
+
+   .. attribute:: num_voxels
+
+      The number of voxels.
+
+      :type: int
+
+   .. attribute:: downsample_lsds
+
+      The downsample rate for LSDs.
+
+      :type: int
+
+   .. attribute:: grow_boundary_iterations
+
+      The number of iterations to grow the boundary.
+
+      :type: int
+
+   .. attribute:: affs_weight_clipmin
+
+      The minimum weight for affinities.
+
+      :type: float
+
+   .. attribute:: affs_weight_clipmax
+
+      The maximum weight for affinities.
+
+      :type: float
+
+   .. attribute:: lsd_weight_clipmin
+
+      The minimum weight for LSDs.
+
+      :type: float
+
+   .. attribute:: lsd_weight_clipmax
+
+      The maximum weight for LSDs.
+
+      :type: float
+
+   .. attribute:: background_as_object
+
+      Whether to treat the background as an object.
+
+      :type: bool
+
+   .. method:: __init__(
+
+      
+      self,
+      neighborhood: List[Coordinate],
+      lsds: bool = True,
+      num_voxels: int = 20,
+      downsample_lsds: int = 1,
+      grow_boundary_iterations: int = 0,
+      affs_weight_clipmin: float = 0.05,
+      affs_weight_clipmax: float = 0.95,
+      lsd_weight_clipmin: float = 0.05,
+      lsd_weight_clipmax: float = 0.95,
+      background_as_object: bool = False
+
+   .. method:: )
+
+      Initializes the AffinitiesPredictor.
+
+   .. method:: extractor(self, voxel_size)
+
+      Get the LSD extractor.
+
+   .. method:: dims
+
+      Get the number of dimensions.
+
+   .. method:: sigma(self, voxel_size)
+
+      Compute the sigma value for LSD computation.
+
+   .. method:: lsd_pad(self, voxel_size)
+
+      Compute the padding for LSD computation.
+
+   .. method:: num_channels
+
+      Get the number of channels.
+
+   .. method:: create_model(self, architecture)
+
+      Create the model.
+
+   .. method:: create_target(self, gt)
+
+      Create the target data.
+
+   .. method:: _grow_boundaries(self, mask, slab)
+
+      Grow the boundaries of the mask.
+
+   .. method:: create_weight(self, gt, target, mask, moving_class_counts=None)
+
+      Create the weight data.
+
+   .. method:: gt_region_for_roi(self, target_spec)
+
+      Get the ground truth region for the target region of interest (ROI).
+
+   .. method:: output_array_type
+
+      Get the output array type.
+
+   .. rubric:: Notes
+
+   This is a subclass of Predictor.
 
    .. py:property:: dims
 
+      Get the number of dimensions.
+
+      :returns: The number of dimensions.
+      :rtype: int
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.dims
 
    .. py:property:: num_channels
 
+      Get the number of channels.
+
+      :returns: The number of channels.
+      :rtype: int
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.num_channels
 
    .. py:property:: output_array_type
 
+      Get the output array type.
+
+      :returns: The output array type.
+      :rtype: EmbeddingArray
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.output_array_type
 
    .. py:method:: extractor(voxel_size)
+
+      Get the LSD extractor.
+
+      :param voxel_size: The voxel size.
+      :type voxel_size: Coordinate
+
+      :returns: The LSD extractor.
+      :rtype: LsdExtractor
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> extractor = predictor.extractor(voxel_size)
 
 
    .. py:method:: sigma(voxel_size)
 
+      Compute the sigma value for LSD computation.
+
+      :param voxel_size: The voxel size.
+      :type voxel_size: Coordinate
+
+      :returns: The sigma value.
+      :rtype: Coordinate
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.sigma(voxel_size)
+
 
    .. py:method:: lsd_pad(voxel_size)
+
+      Compute the padding for LSD computation.
+
+      :param voxel_size: The voxel size.
+      :type voxel_size: Coordinate
+
+      :returns: The padding value.
+      :rtype: Coordinate
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.lsd_pad(voxel_size)
 
 
    .. py:method:: create_model(architecture)
 
-      Given a training architecture, create a model for this predictor.
-      This is usually done by appending extra layers to the output of the
-      architecture to get the output tensor of the architecture into the
-      right shape for this predictor.
+      Create the model.
+
+      :param architecture: The architecture for the model.
+
+      :returns: The created model.
+      :rtype: Model
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> model = predictor.create_model(architecture)
 
 
    .. py:method:: create_target(gt)
 
-      Create the target array for training, given a ground-truth array.
+      Create the target data.
 
-      In general, the target is different from the ground-truth.
+      :param gt: The ground truth data.
 
-      The target is the array that is passed to the loss, and hence directly
-      compared to the prediction (i.e., the output of the model). Depending
-      on the predictor, the target can therefore be different from the
-      ground-truth (e.g., an instance segmentation ground-truth would have to
-      be converted into boundaries, if the model is predicting boundaries).
+      :returns: The created target data.
+      :rtype: NumpyArray
 
-      By default, it is assumed that the spatial dimensions of ground-truth
-      and target are the same.
+      :raises NotImplementedError: This method is not implemented.
 
-      If your predictor needs more ground-truth context to create a target
-      (e.g., because it predicts the distance to a boundary, up to a certain
-      threshold), you can request a larger ground-truth region. See method
-      ``gt_region_for_roi``.
+      .. rubric:: Examples
+
+      >>> predictor.create_target(gt)
 
 
    .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
 
-      Create the weight array for training, given a ground-truth and
-      associated target array.
+      Create the weight data.
+
+      :param gt: The ground truth data.
+      :param target: The target data.
+      :param mask: The mask data.
+      :param moving_class_counts: The moving class counts.
+
+      :returns: The created weight data and moving class counts.
+      :rtype: Tuple[NumpyArray, Tuple]
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.create_weight(gt, target, mask, moving_class_counts)
 
 
    .. py:method:: gt_region_for_roi(target_spec)
 
-      Report how much spatial context this predictor needs to generate a
-      target for the given ROI. By default, uses the same ROI.
+      Get the ground truth region for the target region of interest (ROI).
 
-      Overwrite this method to request ground-truth in a larger ROI, as
-      needed.
+      :param target_spec: The target region of interest (ROI) specification.
+
+      :returns: The ground truth region specification.
+
+      :raises NotImplementedError: This method is not implemented.
 
 
 

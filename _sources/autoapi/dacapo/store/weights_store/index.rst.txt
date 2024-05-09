@@ -21,6 +21,25 @@ Classes
 .. py:class:: Weights(model_state_dict, optimizer_state_dict)
 
 
+   A class representing the weights of a model and optimizer.
+
+   .. attribute:: optimizer
+
+      The optimizer's state dictionary.
+
+      :type: OrderedDict[str, torch.Tensor]
+
+   .. attribute:: model
+
+      The model's state dictionary.
+
+      :type: OrderedDict[str, torch.Tensor]
+
+   .. method:: __init__(model_state_dict, optimizer_state_dict)
+
+      Initializes the Weights object with the given model and optimizer state dictionaries.
+      
+
    .. py:attribute:: optimizer
       :type: collections.OrderedDict[str, torch.Tensor]
 
@@ -39,14 +58,73 @@ Classes
 
    Base class for network weight stores.
 
+   .. method:: load_weights(run, iteration)
+
+      Load the weights of the given iteration into the given run.
+
+   .. method:: load_best(run, dataset, criterion)
+
+      Load the best weights for the given run, dataset, and criterion into the given run.
+
+   .. method:: latest_iteration(run)
+
+      Return the latest iteration for which weights are available for the given run.
+
+   .. method:: store_weights(run, iteration)
+
+      Store the network weights of the given run.
+
+   .. method:: retrieve_weights(run, iteration)
+
+      Retrieve the network weights of the given run.
+
+   .. method:: remove(run, iteration)
+
+      Delete the weights associated with a specific run/iteration.
+
+   .. method:: retrieve_best(run, dataset, criterion)
+
+      Retrieve the best weights for the given run, dataset, and criterion.
+      
+
    .. py:method:: load_weights(run: dacapo.experiments.run.Run, iteration: int) -> None
 
       Load this iterations weights into the given run.
+      :param run: The run to load the weights into.
+      :type run: Run
+      :param iteration: The iteration to load the weights from.
+      :type iteration: int
+
+      :raises ValueError: If the iteration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = WeightsStore()
+      >>> run = Run()
+      >>> iteration = 0
+      >>> store.load_weights(run, iteration)
 
 
    .. py:method:: load_best(run: dacapo.experiments.run.Run, dataset: str, criterion: str) -> None
 
       Load the best weights for this Run,dataset,criterion into Run.model
+
+      :param run: The run to load the weights into.
+      :type run: Run
+      :param dataset: The dataset to load the weights from.
+      :type dataset: str
+      :param criterion: The criterion to load the weights from.
+      :type criterion: str
+
+      :raises ValueError: If the best iteration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = WeightsStore()
+      >>> run = Run()
+      >>> dataset = 'mnist'
+      >>> criterion = 'accuracy'
+      >>> store.load_best(run, dataset, criterion)
 
 
    .. py:method:: latest_iteration(run: str) -> Optional[int]
@@ -55,11 +133,39 @@ Classes
       Return the latest iteration for which weights are available for the
       given run.
 
+      :param run: The name of the run.
+      :type run: str
+
+      :returns: The latest iteration for which weights are available.
+      :rtype: int
+
+      :raises ValueError: If no weights are available for the given run.
+
+      .. rubric:: Examples
+
+      >>> store = WeightsStore()
+      >>> run = 'run_0'
+      >>> store.latest_iteration(run)
+
 
    .. py:method:: store_weights(run: dacapo.experiments.run.Run, iteration: int) -> None
       :abstractmethod:
 
       Store the network weights of the given run.
+
+      :param run: The run to store the weights of.
+      :type run: Run
+      :param iteration: The iteration to store the weights for.
+      :type iteration: int
+
+      :raises ValueError: If the iteration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = WeightsStore()
+      >>> run = Run()
+      >>> iteration = 0
+      >>> store.store_weights(run, iteration)
 
 
    .. py:method:: retrieve_weights(run: str, iteration: int) -> Weights
@@ -67,17 +173,68 @@ Classes
 
       Retrieve the network weights of the given run.
 
+      :param run: The name of the run.
+      :type run: str
+      :param iteration: The iteration to retrieve the weights for.
+      :type iteration: int
+
+      :returns: The weights of the given run and iteration.
+      :rtype: Weights
+
+      :raises ValueError: If the weights are not available.
+
+      .. rubric:: Examples
+
+      >>> store = WeightsStore()
+      >>> run = 'run_0'
+      >>> iteration = 0
+      >>> store.retrieve_weights(run, iteration)
+
 
    .. py:method:: remove(run: str, iteration: int) -> None
       :abstractmethod:
 
       Delete the weights associated with a specific run/iteration
 
+      :param run: The name of the run.
+      :type run: str
+      :param iteration: The iteration to delete the weights for.
+      :type iteration: int
+
+      :raises ValueError: If the weights are not available.
+
+      .. rubric:: Examples
+
+      >>> store = WeightsStore()
+      >>> run = 'run_0'
+      >>> iteration = 0
+      >>> store.remove(run, iteration)
+
 
    .. py:method:: retrieve_best(run: str, dataset: str, criterion: str) -> int
       :abstractmethod:
 
       Retrieve the best weights for this run/dataset/criterion
+
+      :param run: The name of the run.
+      :type run: str
+      :param dataset: The dataset to retrieve the best weights for.
+      :type dataset: str
+      :param criterion: The criterion to retrieve the best weights for.
+      :type criterion: str
+
+      :returns: The iteration of the best weights.
+      :rtype: int
+
+      :raises ValueError: If the best weights are not available.
+
+      .. rubric:: Examples
+
+      >>> store = WeightsStore()
+      >>> run = 'run_0'
+      >>> dataset = 'mnist'
+      >>> criterion = 'accuracy'
+      >>> store.retrieve_best(run, dataset, criterion)
 
 
 

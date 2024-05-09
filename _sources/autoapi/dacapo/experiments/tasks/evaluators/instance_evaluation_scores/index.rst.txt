@@ -22,10 +22,58 @@ Classes
 
 
 
-   Base class for evaluation scores.
+   The evaluation scores for the instance segmentation task. The scores include the variation of information (VOI) split, VOI merge, and VOI.
+
+   .. attribute:: voi_split
+
+      float
+      the variation of information (VOI) split
+
+   .. attribute:: voi_merge
+
+      float
+      the variation of information (VOI) merge
+
+   .. attribute:: voi
+
+      float
+      the variation of information (VOI)
+
+   .. method:: higher_is_better(criterion)
+
+      
+      Return whether higher is better for the given criterion.
+
+   .. method:: bounds(criterion)
+
+      
+      Return the bounds for the given criterion.
+
+   .. method:: store_best(criterion)
+
+      
+      Return whether to store the best score for the given criterion.
+
+   .. note:: The InstanceEvaluationScores class is used to store the evaluation scores for the instance segmentation task.
 
    .. py:property:: voi
 
+      Return the average of the VOI split and VOI merge.
+
+      :returns:
+
+                float
+                    the average of the VOI split and VOI merge
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> instance_evaluation_scores = InstanceEvaluationScores(voi_split=0.1, voi_merge=0.2)
+      >>> instance_evaluation_scores.voi
+      0.15
+
+      .. note:: This function is used to calculate the average of the VOI split and VOI merge.
 
    .. py:attribute:: criteria
       :value: ['voi_split', 'voi_merge', 'voi']
@@ -45,20 +93,70 @@ Classes
    .. py:method:: higher_is_better(criterion: str) -> bool
       :staticmethod:
 
-      Wether or not higher is better for this criterion.
+      Return whether higher is better for the given criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether higher is better for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> InstanceEvaluationScores.higher_is_better("voi_split")
+      False
+
+      .. note:: This function is used to determine whether higher is better for the given criterion.
 
 
    .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
       :staticmethod:
 
-      The bounds for this criterion
+      Return the bounds for the given criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                Tuple[Union[int, float, None], Union[int, float, None]]
+                    the bounds for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> InstanceEvaluationScores.bounds("voi_split")
+      (0, 1)
+
+      .. note:: This function is used to return the bounds for the given criterion.
 
 
    .. py:method:: store_best(criterion: str) -> bool
       :staticmethod:
 
-      Whether or not to save the best validation block and model
-      weights for this criterion.
+      Return whether to store the best score for the given criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether to store the best score for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> InstanceEvaluationScores.store_best("voi_split")
+      True
+
+      .. note:: This function is used to determine whether to store the best score for the given criterion.
 
 
 

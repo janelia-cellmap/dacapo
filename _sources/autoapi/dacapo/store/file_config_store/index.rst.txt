@@ -37,131 +37,515 @@ Attributes
    A Local File based store for configurations. Used to store and retrieve
    configurations for runs, tasks, architectures, trainers, and datasplits.
 
-   .. py:property:: users
-      :type: pathlib.Path
+   .. attribute:: path
 
+      The path to the file.
+
+      :type: Path
+
+   .. method:: store_run_config(run_config, ignore=None)
+
+      Stores the run configuration in the file config store.
+
+   .. method:: retrieve_run_config(run_name)
+
+      Retrieve the run configuration for a given run name.
+
+   .. method:: retrieve_run_config_names()
+
+      Retrieve the names of the run configurations.
+
+   .. method:: store_task_config(task_config, ignore=None)
+
+      Stores the task configuration in the file config store.
+
+   .. method:: retrieve_task_config(task_name)
+
+      Retrieve the task configuration for a given task name.
+
+   .. method:: retrieve_task_config_names()
+
+      Retrieve the names of the task configurations.
+
+   .. method:: store_architecture_config(architecture_config, ignore=None)
+
+      Stores the architecture configuration in the file config store.
+
+   .. method:: retrieve_architecture_config(architecture_name)
+
+      Retrieve the architecture configuration for a given architecture name.
+
+   .. method:: retrieve_architecture_config_names()
+
+      Retrieve the names of the architecture configurations.
+
+   .. method:: store_trainer_config(trainer_config, ignore=None)
+
+      Stores the trainer configuration in the file config store.
+
+   .. method:: retrieve_trainer_config(trainer_name)
+
+      Retrieve the trainer configuration for a given trainer name.
+
+   .. method:: retrieve_trainer_config_names()
+
+      Retrieve the names of the trainer configurations.
+
+   .. method:: store_datasplit_config(datasplit_config, ignore=None)
+
+      Stores the datasplit configuration in the file config store.
+
+   .. method:: retrieve_datasplit_config(datasplit_name)
+
+      Retrieve the datasplit configuration for a given datasplit name.
+
+   .. method:: retrieve_datasplit_config_names()
+
+      Retrieve the names of the datasplit configurations.
+
+   .. method:: store_array_config(array_config, ignore=None)
+
+      Stores the array configuration in the file config store.
+
+   .. method:: retrieve_array_config(array_name)
+
+      Retrieve the array configuration for a given array name.
+
+   .. method:: retrieve_array_config_names()
+
+      Retrieve the names of the array configurations.
+
+   .. method:: __save_insert(collection, data, ignore=None)
+
+      Saves the data to the collection.
+
+   .. method:: __load(collection, name)
+
+      Loads the data
+
+   .. rubric:: Notes
+
+   The FileConfigStore is used to store and retrieve configurations for runs, tasks, architectures, trainers, and datasplits.
+   The FileConfigStore is a local file based store for configurations.
+
+   .. py:property:: users
+      :type: upath.UPath
+
+      Returns the path to the users directory.
+
+      :returns: The path to the users directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the users directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.users
+      Path("path/to/configs/users")
 
    .. py:property:: runs
-      :type: pathlib.Path
+      :type: upath.UPath
 
+      Returns the path to the runs directory.
+
+      :returns: The path to the runs directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the runs directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.runs
+      Path("path/to/configs/runs")
 
    .. py:property:: tasks
-      :type: pathlib.Path
+      :type: upath.UPath
 
+      Returns the path to the tasks directory.
+
+      :returns: The path to the tasks directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the tasks directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.tasks
+      Path("path/to/configs/tasks")
 
    .. py:property:: datasplits
-      :type: pathlib.Path
+      :type: upath.UPath
 
+      Returns the path to the datasplits directory.
+
+      :returns: The path to the datasplits directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the datasplits directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.datasplits
+      Path("path/to/configs/datasplits")
 
    .. py:property:: arrays
-      :type: pathlib.Path
+      :type: upath.UPath
 
+      Returns the path to the arrays directory.
+
+      :returns: The path to the arrays directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the arrays directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.arrays
+      Path("path/to/configs/arrays")
 
    .. py:property:: architectures
-      :type: pathlib.Path
+      :type: upath.UPath
 
+      Returns the path to the architectures directory.
+
+      :returns: The path to the architectures directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the architectures directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.architectures
+      Path("path/to/configs/architectures")
 
    .. py:property:: trainers
-      :type: pathlib.Path
+      :type: upath.UPath
 
+      Returns the path to the trainers directory.
+
+      :returns: The path to the trainers directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the trainers directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.trainers
+      Path("path/to/configs/trainers")
 
    .. py:property:: datasets
-      :type: pathlib.Path
+      :type: upath.UPath
 
+      Returns the path to the datasets directory.
+
+      :returns: The path to the datasets directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the datasets directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.datasets
+      Path("path/to/configs/datasets")
 
    .. py:method:: store_run_config(run_config, ignore=None)
 
-      Store a run config. This should also store the configs that are part
-      of the run config (i.e., task, architecture, trainer, and dataset
-      config).
+      Stores the run configuration in the file config store.
+
+      :param run_config: The run configuration to store.
+      :type run_config: RunConfig
+      :param ignore: A list of keys to ignore when comparing the stored configuration with the new configuration. Defaults to None.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If a configuration with the same name already exists.
+
+      .. rubric:: Examples
+
+      >>> store.store_run_config(run_config)
 
 
    .. py:method:: retrieve_run_config(run_name)
 
-      Retrieve a run config from a run name.
+      Retrieve the run configuration for a given run name.
+
+      :param run_name: The name of the run configuration to retrieve.
+      :type run_name: str
+
+      :returns: The run configuration object.
+      :rtype: RunConfig
+
+      :raises KeyError: If the run name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> run_config = store.retrieve_run_config("run1")
 
 
    .. py:method:: retrieve_run_config_names()
 
-      Retrieve all run config names.
+      Retrieve the names of the run configurations.
+
+      :returns: A list of run configuration names.
+
+      :raises KeyError: If no run configurations are stored.
+
+      .. rubric:: Examples
+
+      >>> run_names = store.retrieve_run_config_names()
 
 
    .. py:method:: store_task_config(task_config, ignore=None)
 
-      Store a task config.
+      Stores the task configuration in the file config store.
+
+      :param task_config: The task configuration to store.
+      :type task_config: TaskConfig
+      :param ignore: A list of keys to ignore when comparing the stored configuration with the new configuration. Defaults to None.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If a configuration with the same name already exists.
+
+      .. rubric:: Examples
+
+      >>> store.store_task_config(task_config)
 
 
    .. py:method:: retrieve_task_config(task_name)
 
-      Retrieve a task config from a task name.
+      Retrieve the task configuration for a given task name.
+
+      :param task_name: The name of the task configuration to retrieve.
+      :type task_name: str
+
+      :returns: The task configuration object.
+      :rtype: TaskConfig
+
+      :raises KeyError: If the task name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> task_config = store.retrieve_task_config("task1")
 
 
    .. py:method:: retrieve_task_config_names()
 
-      Retrieve all task config names.
+      Retrieve the names of the task configurations.
+
+      :returns: A list of task configuration names.
+
+      :raises KeyError: If no task configurations are stored.
+
+      .. rubric:: Examples
+
+      >>> task_names = store.retrieve_task_config_names()
 
 
    .. py:method:: store_architecture_config(architecture_config, ignore=None)
 
-      Store a architecture config.
+      Stores the architecture configuration in the file config store.
+
+      :param architecture_config: The architecture configuration to store.
+      :type architecture_config: ArchitectureConfig
+      :param ignore: A list of keys to ignore when comparing the stored configuration with the new configuration. Defaults to None.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If a configuration with the same name already exists.
+
+      .. rubric:: Examples
+
+      >>> store.store_architecture_config(architecture_config)
 
 
    .. py:method:: retrieve_architecture_config(architecture_name)
 
-      Retrieve a architecture config from a architecture name.
+      Retrieve the architecture configuration for a given architecture name.
+
+      :param architecture_name: The name of the architecture configuration to retrieve.
+      :type architecture_name: str
+
+      :returns: The architecture configuration object.
+      :rtype: ArchitectureConfig
+
+      :raises KeyError: If the architecture name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> architecture_config = store.retrieve_architecture_config("architecture1")
 
 
    .. py:method:: retrieve_architecture_config_names()
 
-      Retrieve all architecture config names.
+      Retrieve the names of the architecture configurations.
+
+      :returns: A list of architecture configuration names.
+
+      :raises KeyError: If no architecture configurations are stored.
+
+      .. rubric:: Examples
+
+      >>> architecture_names = store.retrieve_architecture_config_names()
 
 
    .. py:method:: store_trainer_config(trainer_config, ignore=None)
 
-      Store a trainer config.
+      Stores the trainer configuration in the file config store.
+
+      :param trainer_config: The trainer configuration to store.
+      :type trainer_config: TrainerConfig
+      :param ignore: A list of keys to ignore when comparing the stored configuration with the new configuration. Defaults to None.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If a configuration with the same name already exists.
+
+      .. rubric:: Examples
+
+      >>> store.store_trainer_config(trainer_config)
 
 
    .. py:method:: retrieve_trainer_config(trainer_name)
 
-      Retrieve a trainer config from a trainer name.
+      Retrieve the trainer configuration for a given trainer name.
+
+      :param trainer_name: The name of the trainer configuration to retrieve.
+      :type trainer_name: str
+
+      :returns: The trainer configuration object.
+      :rtype: TrainerConfig
+
+      :raises KeyError: If the trainer name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> trainer_config = store.retrieve_trainer_config("trainer1")
 
 
    .. py:method:: retrieve_trainer_config_names()
 
-      Retrieve all trainer config names.
+      Retrieve the names of the trainer configurations.
+
+      :param trainer_name: The name of the trainer configuration to retrieve.
+      :type trainer_name: str
+
+      :returns: The trainer configuration object.
+      :rtype: TrainerConfig
+
+      :raises KeyError: If the trainer name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> trainer_config = store.retrieve_trainer_config("trainer1")
 
 
    .. py:method:: store_datasplit_config(datasplit_config, ignore=None)
 
-      Store a datasplit config.
+      Stores the datasplit configuration in the file config store.
+
+      :param datasplit_config: The datasplit configuration to store.
+      :type datasplit_config: DataSplitConfig
+      :param ignore: A list of keys to ignore when comparing the stored configuration with the new configuration. Defaults to None.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If a configuration with the same name already exists.
+
+      .. rubric:: Examples
+
+      >>> store.store_datasplit_config(datasplit_config)
 
 
    .. py:method:: retrieve_datasplit_config(datasplit_name)
 
-      Retrieve a datasplit config from a datasplit name.
+      Retrieve the datasplit configuration for a given datasplit name.
+
+      :param datasplit_name: The name of the datasplit configuration to retrieve.
+      :type datasplit_name: str
+
+      :returns: The datasplit configuration object.
+      :rtype: DataSplitConfig
+
+      :raises KeyError: If the datasplit name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> datasplit_config = store.retrieve_datasplit_config("datasplit1")
 
 
    .. py:method:: retrieve_datasplit_config_names()
 
-      Retrieve all datasplit names.
+      Retrieve the names of the datasplit configurations.
+
+      :param datasplit_name: The name of the datasplit configuration to retrieve.
+      :type datasplit_name: str
+
+      :returns: The datasplit configuration object.
+      :rtype: DataSplitConfig
+
+      :raises KeyError: If the datasplit name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> datasplit_config = store.retrieve_datasplit_config("datasplit1")
 
 
    .. py:method:: store_array_config(array_config, ignore=None)
 
-      Store a array config.
+      Stores the array configuration in the file config store.
+
+      :param array_config: The array configuration to store.
+      :type array_config: ArrayConfig
+      :param ignore: A list of keys to ignore when comparing the stored configuration with the new configuration. Defaults to None.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If a configuration with the same name already exists.
+
+      .. rubric:: Examples
+
+      >>> store.store_array_config(array_config)
 
 
    .. py:method:: retrieve_array_config(array_name)
 
-      Retrieve a array config from a array name.
+      Retrieve the array configuration for a given array name.
+
+      :param array_name: The name of the array configuration to retrieve.
+      :type array_name: str
+
+      :returns: The array configuration object.
+      :rtype: ArrayConfig
+
+      :raises KeyError: If the array name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> array_config = store.retrieve_array_config("array1")
 
 
    .. py:method:: retrieve_array_config_names()
 
-      Retrieve all array names.
+      Retrieve the names of the array configurations.
+
+      :returns: A list of array configuration names.
+
+      :raises KeyError: If no array configurations are stored.
+
+      .. rubric:: Examples
+
+      >>> array_names = store.retrieve_array_config_names()
 
 
-   .. py:method:: delete_config(database: pathlib.Path, config_name: str) -> None
+   .. py:method:: delete_config(database: upath.UPath, config_name: str) -> None
+
+      Deletes a configuration file from the specified database.
+
+      :param database: The path to the database where the configuration file is stored.
+      :type database: Path
+      :param config_name: The name of the configuration file to be deleted.
+      :type config_name: str
+
+      :raises FileNotFoundError: If the configuration file does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.delete_config(Path("path/to/configs"), "run1")
 
 
 

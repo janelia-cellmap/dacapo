@@ -46,7 +46,34 @@ Classes
 
 
 
-   Base class for evaluation scores.
+   The evaluation scores for the dummy task. The scores include the frizz level and blipp score. A higher frizz level indicates more frizz, while a higher blipp score indicates better performance.
+
+   .. attribute:: frizz_level
+
+      float
+      the frizz level
+
+   .. attribute:: blipp_score
+
+      float
+      the blipp score
+
+   .. method:: higher_is_better(criterion)
+
+      
+      Return whether higher is better for the given criterion.
+
+   .. method:: bounds(criterion)
+
+      
+      Return the bounds for the given criterion.
+
+   .. method:: store_best(criterion)
+
+      
+      Return whether to store the best score for the given criterion.
+
+   .. note:: The DummyEvaluationScores class is used to store the evaluation scores for the dummy task. The class also provides methods to determine whether higher is better for a given criterion, the bounds for a given criterion, and whether to store the best score for a given criterion.
 
    .. py:attribute:: criteria
       :value: ['frizz_level', 'blipp_score']
@@ -66,20 +93,70 @@ Classes
    .. py:method:: higher_is_better(criterion: str) -> bool
       :staticmethod:
 
-      Wether or not higher is better for this criterion.
+      Return whether higher is better for the given criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether higher is better for this criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> DummyEvaluationScores.higher_is_better("frizz_level")
+      True
+
+      .. note:: This function is used to determine whether higher is better for the given criterion.
 
 
    .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
       :staticmethod:
 
-      The bounds for this criterion
+      Return the bounds for the given criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                Tuple[Union[int, float, None], Union[int, float, None]]
+                    the bounds for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> DummyEvaluationScores.bounds("frizz_level")
+      (0.0, 1.0)
+
+      .. note:: This function is used to return the bounds for the given criterion.
 
 
    .. py:method:: store_best(criterion: str) -> bool
       :staticmethod:
 
-      Whether or not to save the best validation block and model
-      weights for this criterion.
+      Return whether to store the best score for the given criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether to store the best score for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> DummyEvaluationScores.store_best("frizz_level")
+      True
+
+      .. note:: This function is used to determine whether to store the best score for the given criterion.
 
 
 
@@ -88,14 +165,40 @@ Classes
 
 
 
-   Base class of all evaluators.
+   A class representing a dummy evaluator. This evaluator is used for testing purposes.
 
-   An evaluator takes a post-processor's output and compares it against
-   ground-truth.
+   .. attribute:: criteria
+
+      List[str]
+      the evaluation criteria
+
+   .. method:: evaluate(output_array_identifier, evaluation_dataset)
+
+      
+      Evaluate the output array against the evaluation dataset.
+
+   .. method:: score
+
+      
+      Return the evaluation scores.
+
+   .. note:: The DummyEvaluator class is used to evaluate the performance of a dummy task.
 
    .. py:property:: score
       :type: dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores
 
+      Return the evaluation scores.
+
+      :returns: An object of DummyEvaluationScores class, with the evaluation scores.
+      :rtype: DummyEvaluationScores
+
+      .. rubric:: Examples
+
+      >>> dummy_evaluator = DummyEvaluator()
+      >>> dummy_evaluator.score
+      DummyEvaluationScores(frizz_level=0.0, blipp_score=0.0)
+
+      .. note:: This function is used to return the evaluation scores.
 
    .. py:attribute:: criteria
       :value: ['frizz_level', 'blipp_score']
@@ -112,17 +215,69 @@ Classes
       :returns: An object of DummyEvaluationScores class, with the evaluation scores.
       :rtype: DummyEvaluationScore
 
+      :raises ValueError: if the output array identifier is not valid
+
+      .. rubric:: Examples
+
+      >>> dummy_evaluator = DummyEvaluator()
+      >>> output_array_identifier = "output_array"
+      >>> evaluation_dataset = "evaluation_dataset"
+      >>> dummy_evaluator.evaluate(output_array_identifier, evaluation_dataset)
+      DummyEvaluationScores(frizz_level=0.0, blipp_score=0.0)
+
+      .. note:: This function is used to evaluate the output array against the evaluation dataset.
+
 
 
 .. py:class:: EvaluationScores
 
 
-   Base class for evaluation scores.
+   Base class for evaluation scores. This class is used to store the evaluation scores for a task.
+   The scores include the evaluation criteria. The class also provides methods to determine whether higher is better for a given criterion,
+   the bounds for a given criterion, and whether to store the best score for a given criterion.
+
+   .. attribute:: criteria
+
+      List[str]
+      the evaluation criteria
+
+   .. method:: higher_is_better(criterion)
+
+      
+      Return whether higher is better for the given criterion.
+
+   .. method:: bounds(criterion)
+
+      
+      Return the bounds for the given criterion.
+
+   .. method:: store_best(criterion)
+
+      
+      Return whether to store the best score for the given criterion.
+
+   .. note:: The EvaluationScores class is used to store the evaluation scores for a task. All evaluation scores should inherit from this class.
 
    .. py:property:: criteria
       :type: List[str]
       :abstractmethod:
 
+      The evaluation criteria.
+
+      :returns:
+
+                List[str]
+                    the evaluation criteria
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> evaluation_scores.criteria
+      ["criterion1", "criterion2"]
+
+      .. note:: This function is used to return the evaluation criteria.
 
    .. py:method:: higher_is_better(criterion: str) -> bool
       :staticmethod:
@@ -130,12 +285,50 @@ Classes
 
       Wether or not higher is better for this criterion.
 
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether higher is better for this criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> criterion = "criterion1"
+      >>> evaluation_scores.higher_is_better(criterion)
+      True
+
+      .. note:: This function is used to determine whether higher is better for a given criterion.
+
 
    .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
       :staticmethod:
       :abstractmethod:
 
-      The bounds for this criterion
+      The bounds for this criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                Tuple[Union[int, float, None], Union[int, float, None]]
+                    the bounds for this criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> criterion = "criterion1"
+      >>> evaluation_scores.bounds(criterion)
+      (0, 1)
+
+      .. note:: This function is used to return the bounds for the given criterion.
 
 
    .. py:method:: store_best(criterion: str) -> bool
@@ -145,6 +338,25 @@ Classes
       Whether or not to save the best validation block and model
       weights for this criterion.
 
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether to store the best score for this criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> criterion = "criterion1"
+      >>> evaluation_scores.store_best(criterion)
+      True
+
+      .. note:: This function is used to return whether to store the best score for the given criterion.
+
 
 
 .. py:class:: Evaluator
@@ -152,14 +364,83 @@ Classes
 
 
 
-   Base class of all evaluators.
+   Base class of all evaluators: An abstract class representing an evaluator that compares and evaluates the output array against the evaluation array.
 
    An evaluator takes a post-processor's output and compares it against
-   ground-truth.
+   ground-truth. It then returns a set of scores that can be used to
+   determine the quality of the post-processor's output.
+
+   .. attribute:: best_scores
+
+      Dict[OutputIdentifier, BestScore]
+      the best scores for each dataset/post-processing parameter/criterion combination
+
+   .. method:: evaluate(output_array_identifier, evaluation_array)
+
+      
+      Compare and evaluate the output array against the evaluation array.
+
+   .. method:: is_best(dataset, parameter, criterion, score)
+
+      
+      Check if the provided score is the best for this dataset/parameter/criterion combo.
+
+   .. method:: get_overall_best(dataset, criterion)
+
+      
+      Return the best score for the given dataset and criterion.
+
+   .. method:: get_overall_best_parameters(dataset, criterion)
+
+      
+      Return the best parameters for the given dataset and criterion.
+
+   .. method:: compare(score_1, score_2, criterion)
+
+      
+      Compare two scores for the given criterion.
+
+   .. method:: set_best(validation_scores)
+
+      
+      Find the best iteration for each dataset/post_processing_parameter/criterion.
+
+   .. method:: higher_is_better(criterion)
+
+      
+      Return whether higher is better for the given criterion.
+
+   .. method:: bounds(criterion)
+
+      
+      Return the bounds for the given criterion.
+
+   .. method:: store_best(criterion)
+
+      
+      Return whether to store the best score for the given criterion.
+
+   .. note:: The Evaluator class is used to compare and evaluate the output array against the evaluation array.
 
    .. py:property:: best_scores
       :type: Dict[OutputIdentifier, BestScore]
 
+      The best scores for each dataset/post-processing parameter/criterion combination.
+
+      :returns:
+
+                Dict[OutputIdentifier, BestScore]
+                    the best scores for each dataset/post-processing parameter/criterion combination
+
+      :raises AttributeError: if the best scores are not set
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> evaluator.best_scores
+      {}
+
+      .. note:: This function is used to return the best scores for each dataset/post-processing parameter/criterion combination.
 
    .. py:property:: criteria
       :type: List[str]
@@ -170,57 +451,279 @@ Classes
       that the best iteration/post processing parameters will be the same
       for all 3 of these criteria
 
+      :returns:
+
+                List[str]
+                    the evaluation criteria
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> evaluator.criteria
+      []
+
+      .. note:: This function is used to return the evaluation criteria.
+
    .. py:property:: score
       :type: dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
       :abstractmethod:
 
+      The evaluation scores.
+
+      :returns:
+
+                EvaluationScores
+                    the evaluation scores
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> evaluator.score
+      EvaluationScores()
+
+      .. note:: This function is used to return the evaluation scores.
 
    .. py:method:: evaluate(output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, evaluation_array: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
       :abstractmethod:
 
       Compares and evaluates the output array against the evaluation array.
 
-      :param output_array_identifier: The output data array to evaluate
-      :type output_array_identifier: Array
-      :param evaluation_array: The evaluation data array to compare with the output
-      :type evaluation_array: Array
+      :param output_array_identifier: LocalArrayIdentifier
+                                      The identifier of the output array.
+      :param evaluation_array: Array
+                               The evaluation array.
 
-      :returns: The detailed evaluation scores after the comparison.
-      :rtype: EvaluationScores
+      :returns:
+
+                EvaluationScores
+                    The evaluation scores.
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> output_array_identifier = LocalArrayIdentifier("output_array")
+      >>> evaluation_array = Array()
+      >>> evaluator.evaluate(output_array_identifier, evaluation_array)
+      EvaluationScores()
+
+      .. note:: This function is used to compare and evaluate the output array against the evaluation array.
 
 
    .. py:method:: is_best(dataset: dacapo.experiments.datasplits.datasets.Dataset, parameter: dacapo.experiments.tasks.post_processors.PostProcessorParameters, criterion: str, score: dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores) -> bool
 
-      Check if the provided score is the best for this dataset/parameter/criterion combo
+      Check if the provided score is the best for this dataset/parameter/criterion combo.
+
+      :param dataset: Dataset
+                      the dataset
+      :param parameter: PostProcessorParameters
+                        the post-processor parameters
+      :param criterion: str
+                        the criterion
+      :param score: EvaluationScores
+                    the evaluation scores
+
+      :returns:
+
+                bool
+                    whether the provided score is the best for this dataset/parameter/criterion combo
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> dataset = Dataset()
+      >>> parameter = PostProcessorParameters()
+      >>> criterion = "criterion"
+      >>> score = EvaluationScores()
+      >>> evaluator.is_best(dataset, parameter, criterion, score)
+      False
+
+      .. note:: This function is used to check if the provided score is the best for this dataset/parameter/criterion combo.
 
 
    .. py:method:: get_overall_best(dataset: dacapo.experiments.datasplits.datasets.Dataset, criterion: str)
 
+      Return the best score for the given dataset and criterion.
+
+      :param dataset: Dataset
+                      the dataset
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                Optional[float]
+                    the best score for the given dataset and criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> dataset = Dataset()
+      >>> criterion = "criterion"
+      >>> evaluator.get_overall_best(dataset, criterion)
+      None
+
+      .. note:: This function is used to return the best score for the given dataset and criterion.
+
 
    .. py:method:: get_overall_best_parameters(dataset: dacapo.experiments.datasplits.datasets.Dataset, criterion: str)
+
+      Return the best parameters for the given dataset and criterion.
+
+      :param dataset: Dataset
+                      the dataset
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                Optional[PostProcessorParameters]
+                    the best parameters for the given dataset and criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> dataset = Dataset()
+      >>> criterion = "criterion"
+      >>> evaluator.get_overall_best_parameters(dataset, criterion)
+      None
+
+      .. note:: This function is used to return the best parameters for the given dataset and criterion.
 
 
    .. py:method:: compare(score_1, score_2, criterion)
 
+      Compare two scores for the given criterion.
+
+      :param score_1: float
+                      the first score
+      :param score_2: float
+                      the second score
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                bool
+                    whether the first score is better than the second score for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> score_1 = 0.0
+      >>> score_2 = 0.0
+      >>> criterion = "criterion"
+      >>> evaluator.compare(score_1, score_2, criterion)
+      False
+
+      .. note:: This function is used to compare two scores for the given criterion.
+
 
    .. py:method:: set_best(validation_scores: dacapo.experiments.validation_scores.ValidationScores) -> None
 
-      Find the best iteration for each dataset/post_processing_parameter/criterion
+      Find the best iteration for each dataset/post_processing_parameter/criterion.
+
+      :param validation_scores: ValidationScores
+                                the validation scores
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> validation_scores = ValidationScores()
+      >>> evaluator.set_best(validation_scores)
+      None
+
+      .. note::
+
+         This function is used to find the best iteration for each dataset/post_processing_parameter/criterion.
+         Typically, this function is called after the validation scores have been computed.
 
 
    .. py:method:: higher_is_better(criterion: str) -> bool
 
       Wether or not higher is better for this criterion.
 
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                bool
+                    whether higher is better for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> criterion = "criterion"
+      >>> evaluator.higher_is_better(criterion)
+      False
+
+      .. note:: This function is used to determine whether higher is better for the given criterion.
+
 
    .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
 
       The bounds for this criterion
 
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                Tuple[Union[int, float, None], Union[int, float, None]]
+                    the bounds for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> criterion = "criterion"
+      >>> evaluator.bounds(criterion)
+      (0, 1)
+
+      .. note:: This function is used to return the bounds for the given criterion.
+
 
    .. py:method:: store_best(criterion: str) -> bool
 
       The bounds for this criterion
+
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                bool
+                    whether to store the best score for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> criterion = "criterion"
+      >>> evaluator.store_best(criterion)
+      False
+
+      .. note:: This function is used to return whether to store the best score for the given criterion.
 
 
 
@@ -229,10 +732,47 @@ Classes
 
 
 
-   Base class for evaluation scores.
+   Class representing evaluation scores for multi-channel binary segmentation tasks.
+
+   .. attribute:: channel_scores
+
+      The list of channel scores.
+
+      :type: List[Tuple[str, BinarySegmentationEvaluationScores]]
+
+   .. method:: higher_is_better(criterion
+
+      str) -> bool: Determines whether a higher value is better for a given criterion.
+
+   .. method:: store_best(criterion
+
+      str) -> bool: Whether or not to store the best weights/validation blocks for this criterion.
+
+   .. method:: bounds(criterion
+
+      str) -> Tuple[Union[int, float, None], Union[int, float, None]]: Determines the bounds for a given criterion.
+
+   .. rubric:: Notes
+
+   The evaluation scores are stored as attributes of the class. The class also contains methods to determine whether a higher value is better for a given criterion, whether or not to store the best weights/validation blocks for a given criterion, and the bounds for a given criterion.
 
    .. py:property:: criteria
 
+      Returns a list of all criteria for all channels.
+
+      :returns: The list of criteria.
+      :rtype: List[str]
+
+      :raises ValueError: If the criterion is not recognized.
+
+      .. rubric:: Examples
+
+      >>> channel_scores = [("channel1", BinarySegmentationEvaluationScores()), ("channel2", BinarySegmentationEvaluationScores())]
+      >>> MultiChannelBinarySegmentationEvaluationScores(channel_scores).criteria
+
+      .. rubric:: Notes
+
+      The method returns a list of all criteria for all channels. The criteria are stored as attributes of the class.
 
    .. py:attribute:: channel_scores
       :type: List[Tuple[str, BinarySegmentationEvaluationScores]]
@@ -242,20 +782,76 @@ Classes
    .. py:method:: higher_is_better(criterion: str) -> bool
       :staticmethod:
 
-      Wether or not higher is better for this criterion.
+      Determines whether a higher value is better for a given criterion.
+
+      :param criterion: The evaluation criterion.
+      :type criterion: str
+
+      :returns: True if a higher value is better, False otherwise.
+      :rtype: bool
+
+      :raises ValueError: If the criterion is not recognized.
+
+      .. rubric:: Examples
+
+      >>> MultiChannelBinarySegmentationEvaluationScores.higher_is_better("channel1__dice")
+      True
+      >>> MultiChannelBinarySegmentationEvaluationScores.higher_is_better("channel1__f1_score")
+      True
+
+      .. rubric:: Notes
+
+      The method returns True if the criterion is recognized and False otherwise. Whether a higher value is better for a given criterion is determined by the mapping dictionary.
 
 
    .. py:method:: store_best(criterion: str) -> bool
       :staticmethod:
 
-      Whether or not to save the best validation block and model
-      weights for this criterion.
+      Determines whether or not to store the best weights/validation blocks for a given criterion.
+
+      :param criterion: The evaluation criterion.
+      :type criterion: str
+
+      :returns: True if the best weights/validation blocks should be stored, False otherwise.
+      :rtype: bool
+
+      :raises ValueError: If the criterion is not recognized.
+
+      .. rubric:: Examples
+
+      >>> MultiChannelBinarySegmentationEvaluationScores.store_best("channel1__dice")
+      False
+      >>> MultiChannelBinarySegmentationEvaluationScores.store_best("channel1__f1_score")
+      True
+
+      .. rubric:: Notes
+
+      The method returns True if the criterion is recognized and False otherwise. Whether or not to store the best weights/validation blocks for a given criterion is determined by the mapping dictionary.
 
 
    .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
       :staticmethod:
 
-      The bounds for this criterion
+      Determines the bounds for a given criterion. The bounds are used to determine the best value for a given criterion.
+
+      :param criterion: The evaluation criterion.
+      :type criterion: str
+
+      :returns: The lower and upper bounds for the criterion.
+      :rtype: Tuple[Union[int, float, None], Union[int, float, None]]
+
+      :raises ValueError: If the criterion is not recognized.
+
+      .. rubric:: Examples
+
+      >>> MultiChannelBinarySegmentationEvaluationScores.bounds("channel1__dice")
+      (0, 1)
+      >>> MultiChannelBinarySegmentationEvaluationScores.bounds("channel1__hausdorff")
+      (0, nan)
+
+      .. rubric:: Notes
+
+      The method returns the lower and upper bounds for the criterion. The bounds are determined by the mapping dictionary.
 
 
 
@@ -264,7 +860,170 @@ Classes
 
 
 
-   Base class for evaluation scores.
+   Class representing evaluation scores for binary segmentation tasks.
+
+   The metrics include:
+   - Dice coefficient: 2 * |A ∩ B| / |A| + |B| ; where A and B are the binary segmentations
+   - Jaccard coefficient: |A ∩ B| / |A ∪ B| ; where A and B are the binary segmentations
+   - Hausdorff distance: max(h(A, B), h(B, A)) ; where h(A, B) is the Hausdorff distance between A and B
+   - False negative rate: |A - B| / |A| ; where A and B are the binary segmentations
+   - False positive rate: |B - A| / |B| ; where A and B are the binary segmentations
+   - False discovery rate: |B - A| / |A| ; where A and B are the binary segmentations
+   - VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality
+   - Mean false distance: 0.5 * (mean false positive distance + mean false negative distance)
+   - Mean false negative distance: mean distance of false negatives
+   - Mean false positive distance: mean distance of false positives
+   - Mean false distance clipped: 0.5 * (mean false positive distance clipped + mean false negative distance clipped) ; clipped to a maximum distance
+   - Mean false negative distance clipped: mean distance of false negatives clipped ; clipped to a maximum distance
+   - Mean false positive distance clipped: mean distance of false positives clipped ; clipped to a maximum distance
+   - Precision with tolerance: TP / (TP + FP) ; where TP and FP are the true and false positives within a tolerance distance
+   - Recall with tolerance: TP / (TP + FN) ; where TP and FN are the true and false positives within a tolerance distance
+   - F1 score with tolerance: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives within a tolerance distance
+   - Precision: TP / (TP + FP) ; where TP and FP are the true and false positives
+   - Recall: TP / (TP + FN) ; where TP and FN are the true and false positives
+   - F1 score: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives
+
+   .. attribute:: dice
+
+      The Dice coefficient.
+
+      :type: float
+
+   .. attribute:: jaccard
+
+      The Jaccard index.
+
+      :type: float
+
+   .. attribute:: hausdorff
+
+      The Hausdorff distance.
+
+      :type: float
+
+   .. attribute:: false_negative_rate
+
+      The false negative rate.
+
+      :type: float
+
+   .. attribute:: false_negative_rate_with_tolerance
+
+      The false negative rate with tolerance.
+
+      :type: float
+
+   .. attribute:: false_positive_rate
+
+      The false positive rate.
+
+      :type: float
+
+   .. attribute:: false_discovery_rate
+
+      The false discovery rate.
+
+      :type: float
+
+   .. attribute:: false_positive_rate_with_tolerance
+
+      The false positive rate with tolerance.
+
+      :type: float
+
+   .. attribute:: voi
+
+      The variation of information.
+
+      :type: float
+
+   .. attribute:: mean_false_distance
+
+      The mean false distance.
+
+      :type: float
+
+   .. attribute:: mean_false_negative_distance
+
+      The mean false negative distance.
+
+      :type: float
+
+   .. attribute:: mean_false_positive_distance
+
+      The mean false positive distance.
+
+      :type: float
+
+   .. attribute:: mean_false_distance_clipped
+
+      The mean false distance clipped.
+
+      :type: float
+
+   .. attribute:: mean_false_negative_distance_clipped
+
+      The mean false negative distance clipped.
+
+      :type: float
+
+   .. attribute:: mean_false_positive_distance_clipped
+
+      The mean false positive distance clipped.
+
+      :type: float
+
+   .. attribute:: precision_with_tolerance
+
+      The precision with tolerance.
+
+      :type: float
+
+   .. attribute:: recall_with_tolerance
+
+      The recall with tolerance.
+
+      :type: float
+
+   .. attribute:: f1_score_with_tolerance
+
+      The F1 score with tolerance.
+
+      :type: float
+
+   .. attribute:: precision
+
+      The precision.
+
+      :type: float
+
+   .. attribute:: recall
+
+      The recall.
+
+      :type: float
+
+   .. attribute:: f1_score
+
+      The F1 score.
+
+      :type: float
+
+   .. method:: store_best(criterion
+
+      str) -> bool: Whether or not to store the best weights/validation blocks for this criterion.
+
+   .. method:: higher_is_better(criterion
+
+      str) -> bool: Determines whether a higher value is better for a given criterion.
+
+   .. method:: bounds(criterion
+
+      str) -> Tuple[Union[int, float, None], Union[int, float, None]]: Determines the bounds for a given criterion.
+
+   .. rubric:: Notes
+
+   The evaluation scores are stored as attributes of the class. The class also contains methods to determine whether a higher value is better for a given criterion, whether or not to store the best weights/validation blocks for a given criterion, and the bounds for a given criterion.
 
    .. py:attribute:: dice
       :type: float
@@ -379,20 +1138,76 @@ Classes
    .. py:method:: store_best(criterion: str) -> bool
       :staticmethod:
 
-      Whether or not to save the best validation block and model
-      weights for this criterion.
+      Determines whether or not to store the best weights/validation blocks for a given criterion.
+
+      :param criterion: The evaluation criterion.
+      :type criterion: str
+
+      :returns: True if the best weights/validation blocks should be stored, False otherwise.
+      :rtype: bool
+
+      :raises ValueError: If the criterion is not recognized.
+
+      .. rubric:: Examples
+
+      >>> BinarySegmentationEvaluationScores.store_best("dice")
+      False
+      >>> BinarySegmentationEvaluationScores.store_best("f1_score")
+      True
+
+      .. rubric:: Notes
+
+      The method returns True if the criterion is recognized and False otherwise. Whether or not to store the best weights/validation blocks for a given criterion is determined by the mapping dictionary.
 
 
    .. py:method:: higher_is_better(criterion: str) -> bool
       :staticmethod:
 
-      Wether or not higher is better for this criterion.
+      Determines whether a higher value is better for a given criterion.
+
+      :param criterion: The evaluation criterion.
+      :type criterion: str
+
+      :returns: True if a higher value is better, False otherwise.
+      :rtype: bool
+
+      :raises ValueError: If the criterion is not recognized.
+
+      .. rubric:: Examples
+
+      >>> BinarySegmentationEvaluationScores.higher_is_better("dice")
+      True
+      >>> BinarySegmentationEvaluationScores.higher_is_better("f1_score")
+      True
+
+      .. rubric:: Notes
+
+      The method returns True if the criterion is recognized and False otherwise. Whether a higher value is better for a given criterion is determined by the mapping dictionary.
 
 
    .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
       :staticmethod:
 
-      The bounds for this criterion
+      Determines the bounds for a given criterion. The bounds are used to determine the best value for a given criterion.
+
+      :param criterion: The evaluation criterion.
+      :type criterion: str
+
+      :returns: The lower and upper bounds for the criterion.
+      :rtype: Tuple[Union[int, float, None], Union[int, float, None]]
+
+      :raises ValueError: If the criterion is not recognized.
+
+      .. rubric:: Examples
+
+      >>> BinarySegmentationEvaluationScores.bounds("dice")
+      (0, 1)
+      >>> BinarySegmentationEvaluationScores.bounds("hausdorff")
+      (0, nan)
+
+      .. rubric:: Notes
+
+      The method returns the lower and upper bounds for the criterion. The bounds are determined by the mapping dictionary.
 
 
 
@@ -401,10 +1216,86 @@ Classes
 
 
 
-   Given a binary segmentation, compute various metrics to determine their similarity.
+   Given a binary segmentation, compute various metrics to determine their similarity. The metrics include:
+   - Dice coefficient: 2 * |A ∩ B| / |A| + |B| ; where A and B are the binary segmentations
+   - Jaccard coefficient: |A ∩ B| / |A ∪ B| ; where A and B are the binary segmentations
+   - Hausdorff distance: max(h(A, B), h(B, A)) ; where h(A, B) is the Hausdorff distance between A and B
+   - False negative rate: |A - B| / |A| ; where A and B are the binary segmentations
+   - False positive rate: |B - A| / |B| ; where A and B are the binary segmentations
+   - False discovery rate: |B - A| / |A| ; where A and B are the binary segmentations
+   - VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality
+   - Mean false distance: 0.5 * (mean false positive distance + mean false negative distance)
+   - Mean false negative distance: mean distance of false negatives
+   - Mean false positive distance: mean distance of false positives
+   - Mean false distance clipped: 0.5 * (mean false positive distance clipped + mean false negative distance clipped) ; clipped to a maximum distance
+   - Mean false negative distance clipped: mean distance of false negatives clipped ; clipped to a maximum distance
+   - Mean false positive distance clipped: mean distance of false positives clipped ; clipped to a maximum distance
+   - Precision with tolerance: TP / (TP + FP) ; where TP and FP are the true and false positives within a tolerance distance
+   - Recall with tolerance: TP / (TP + FN) ; where TP and FN are the true and false positives within a tolerance distance
+   - F1 score with tolerance: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives within a tolerance distance
+   - Precision: TP / (TP + FP) ; where TP and FP are the true and false positives
+   - Recall: TP / (TP + FN) ; where TP and FN are the true and false positives
+   - F1 score: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives
+
+   .. attribute:: clip_distance
+
+      float
+      the clip distance
+
+   .. attribute:: tol_distance
+
+      float
+      the tolerance distance
+
+   .. attribute:: channels
+
+      List[str]
+      the channels
+
+   .. attribute:: criteria
+
+      List[str]
+      the evaluation criteria
+
+   .. method:: evaluate(output_array_identifier, evaluation_array)
+
+      
+      Evaluate the output array against the evaluation array.
+
+   .. method:: score
+
+      
+      Return the evaluation scores.
+
+   .. note::
+
+      The BinarySegmentationEvaluator class is used to evaluate the performance of a binary segmentation task.
+      The class provides methods to evaluate the output array against the evaluation array and return the evaluation scores.
+      All evaluation scores should inherit from this class.
+      
+      Clip distance is the maximum distance between the ground truth and the predicted segmentation for a pixel to be considered a false positive.
+      Tolerance distance is the maximum distance between the ground truth and the predicted segmentation for a pixel to be considered a true positive.
+      Channels are the channels of the binary segmentation.
+      Criteria are the evaluation criteria.
 
    .. py:property:: score
 
+      Return the evaluation scores.
+
+      :returns:
+
+                BinarySegmentationEvaluationScores or MultiChannelBinarySegmentationEvaluationScores
+                    the evaluation scores
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> binary_segmentation_evaluator = BinarySegmentationEvaluator(clip_distance=200, tol_distance=40, channels=["channel1", "channel2"])
+      >>> binary_segmentation_evaluator.score
+      BinarySegmentationEvaluationScores(dice=0.0, jaccard=0.0, hausdorff=0.0, false_negative_rate=0.0, false_positive_rate=0.0, false_discovery_rate=0.0, voi=0.0, mean_false_distance=0.0, mean_false_negative_distance=0.0, mean_false_positive_distance=0.0, mean_false_distance_clipped=0.0, mean_false_negative_distance_clipped=0.0, mean_false_positive_distance_clipped=0.0, precision_with_tolerance=0.0, recall_with_tolerance=0.0, f1_score_with_tolerance=0.0, precision=0.0, recall=0.0, f1_score=0.0)
+
+      .. note:: This function is used to return the evaluation scores.
 
    .. py:attribute:: criteria
       :value: ['jaccard', 'voi']
@@ -413,15 +1304,29 @@ Classes
 
    .. py:method:: evaluate(output_array_identifier, evaluation_array)
 
-      Compares and evaluates the output array against the evaluation array.
+      Evaluate the output array against the evaluation array.
 
-      :param output_array_identifier: The output data array to evaluate
-      :type output_array_identifier: Array
-      :param evaluation_array: The evaluation data array to compare with the output
-      :type evaluation_array: Array
+      :param output_array_identifier: str
+                                      the identifier of the output array
+      :param evaluation_array: ZarrArray
+                               the evaluation array
 
-      :returns: The detailed evaluation scores after the comparison.
-      :rtype: EvaluationScores
+      :returns:
+
+                BinarySegmentationEvaluationScores or MultiChannelBinarySegmentationEvaluationScores
+                    the evaluation scores
+
+      :raises ValueError: if the output array identifier is not valid
+
+      .. rubric:: Examples
+
+      >>> binary_segmentation_evaluator = BinarySegmentationEvaluator(clip_distance=200, tol_distance=40, channels=["channel1", "channel2"])
+      >>> output_array_identifier = "output_array"
+      >>> evaluation_array = ZarrArray.open_from_array_identifier("evaluation_array")
+      >>> binary_segmentation_evaluator.evaluate(output_array_identifier, evaluation_array)
+      BinarySegmentationEvaluationScores(dice=0.0, jaccard=0.0, hausdorff=0.0, false_negative_rate=0.0, false_positive_rate=0.0, false_discovery_rate=0.0, voi=0.0, mean_false_distance=0.0, mean_false_negative_distance=0.0, mean_false_positive_distance=0.0, mean_false_distance_clipped=0.0, mean_false_negative_distance_clipped=0.0, mean_false_positive_distance_clipped=0.0, precision_with_tolerance=0.0, recall_with_tolerance=0.0, f1_score_with_tolerance=0.0, precision=0.0, recall=0.0, f1_score=0.0)
+
+      .. note:: This function is used to evaluate the output array against the evaluation array.
 
 
 
@@ -430,10 +1335,58 @@ Classes
 
 
 
-   Base class for evaluation scores.
+   The evaluation scores for the instance segmentation task. The scores include the variation of information (VOI) split, VOI merge, and VOI.
+
+   .. attribute:: voi_split
+
+      float
+      the variation of information (VOI) split
+
+   .. attribute:: voi_merge
+
+      float
+      the variation of information (VOI) merge
+
+   .. attribute:: voi
+
+      float
+      the variation of information (VOI)
+
+   .. method:: higher_is_better(criterion)
+
+      
+      Return whether higher is better for the given criterion.
+
+   .. method:: bounds(criterion)
+
+      
+      Return the bounds for the given criterion.
+
+   .. method:: store_best(criterion)
+
+      
+      Return whether to store the best score for the given criterion.
+
+   .. note:: The InstanceEvaluationScores class is used to store the evaluation scores for the instance segmentation task.
 
    .. py:property:: voi
 
+      Return the average of the VOI split and VOI merge.
+
+      :returns:
+
+                float
+                    the average of the VOI split and VOI merge
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> instance_evaluation_scores = InstanceEvaluationScores(voi_split=0.1, voi_merge=0.2)
+      >>> instance_evaluation_scores.voi
+      0.15
+
+      .. note:: This function is used to calculate the average of the VOI split and VOI merge.
 
    .. py:attribute:: criteria
       :value: ['voi_split', 'voi_merge', 'voi']
@@ -453,20 +1406,70 @@ Classes
    .. py:method:: higher_is_better(criterion: str) -> bool
       :staticmethod:
 
-      Wether or not higher is better for this criterion.
+      Return whether higher is better for the given criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether higher is better for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> InstanceEvaluationScores.higher_is_better("voi_split")
+      False
+
+      .. note:: This function is used to determine whether higher is better for the given criterion.
 
 
    .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
       :staticmethod:
 
-      The bounds for this criterion
+      Return the bounds for the given criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                Tuple[Union[int, float, None], Union[int, float, None]]
+                    the bounds for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> InstanceEvaluationScores.bounds("voi_split")
+      (0, 1)
+
+      .. note:: This function is used to return the bounds for the given criterion.
 
 
    .. py:method:: store_best(criterion: str) -> bool
       :staticmethod:
 
-      Whether or not to save the best validation block and model
-      weights for this criterion.
+      Return whether to store the best score for the given criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether to store the best score for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> InstanceEvaluationScores.store_best("voi_split")
+      True
+
+      .. note:: This function is used to determine whether to store the best score for the given criterion.
 
 
 
@@ -475,14 +1478,44 @@ Classes
 
 
 
-   Base class of all evaluators.
+   A class representing an evaluator for instance segmentation tasks.
 
-   An evaluator takes a post-processor's output and compares it against
-   ground-truth.
+   .. attribute:: criteria
+
+      List[str]
+      the evaluation criteria
+
+   .. method:: evaluate(output_array_identifier, evaluation_array)
+
+      
+      Evaluate the output array against the evaluation array.
+
+   .. method:: score
+
+      
+      Return the evaluation scores.
+
+   .. note:: The InstanceEvaluator class is used to evaluate the performance of an instance segmentation task.
 
    .. py:property:: score
       :type: dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores
 
+      Return the evaluation scores.
+
+      :returns:
+
+                InstanceEvaluationScores
+                    the evaluation scores
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> instance_evaluator = InstanceEvaluator()
+      >>> instance_evaluator.score
+      InstanceEvaluationScores(voi_merge=0.0, voi_split=0.0)
+
+      .. note:: This function is used to return the evaluation scores.
 
    .. py:attribute:: criteria
       :type: List[str]
@@ -492,15 +1525,29 @@ Classes
 
    .. py:method:: evaluate(output_array_identifier, evaluation_array)
 
-      Compares and evaluates the output array against the evaluation array.
+      Evaluate the output array against the evaluation array.
 
-      :param output_array_identifier: The output data array to evaluate
-      :type output_array_identifier: Array
-      :param evaluation_array: The evaluation data array to compare with the output
-      :type evaluation_array: Array
+      :param output_array_identifier: str
+                                      the identifier of the output array
+      :param evaluation_array: ZarrArray
+                               the evaluation array
 
-      :returns: The detailed evaluation scores after the comparison.
-      :rtype: EvaluationScores
+      :returns:
+
+                InstanceEvaluationScores
+                    the evaluation scores
+
+      :raises ValueError: if the output array identifier is not valid
+
+      .. rubric:: Examples
+
+      >>> instance_evaluator = InstanceEvaluator()
+      >>> output_array_identifier = "output_array"
+      >>> evaluation_array = ZarrArray.open_from_array_identifier("evaluation_array")
+      >>> instance_evaluator.evaluate(output_array_identifier, evaluation_array)
+      InstanceEvaluationScores(voi_merge=0.0, voi_split=0.0)
+
+      .. note:: This function is used to evaluate the output array against the evaluation array.
 
 
 

@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -108,109 +109,113 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask" title="dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DaCapoBlockwiseTask</span></code></a></p></td>
-<td><p>Definition of a <code class="docutils literal notranslate"><span class="pre">daisy</span></code> task that is to be run in a block-wise</p></td>
+<td><p>A task to run a blockwise worker function. This task is used to run a</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.blockwise_task.</span></span><span class="sig-name descname"><span class="pre">DaCapoBlockwiseTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">worker_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">daisy.Roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">read_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">daisy.Roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">daisy.Roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upstream_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask" title="Link to this definition"></a></dt>
-<dd><p>Definition of a <code class="docutils literal notranslate"><span class="pre">daisy</span></code> task that is to be run in a block-wise
-fashion.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.blockwise_task.</span></span><span class="sig-name descname"><span class="pre">DaCapoBlockwiseTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">worker_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">upath.UPath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">daisy.Roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">read_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">daisy.Roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">daisy.Roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upstream_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask" title="Link to this definition"></a></dt>
+<dd><p>A task to run a blockwise worker function. This task is used to run a
+blockwise worker function on a given ROI.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.worker_file">
+<span class="sig-name descname"><span class="pre">worker_file</span></span><a class="headerlink" href="#dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.worker_file" title="Link to this definition"></a></dt>
+<dd><p>The path to the worker file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<code class="docutils literal notranslate"><span class="pre">string</span></code>) – The unique name of the task.</p></li>
-<li><p><strong>(</strong><strong>`class</strong> (<em>write_roi</em>) – <p>daisy.Roi`):</p>
-<p>The region of interest (ROI) of the complete volume to process.</p>
-</p></li>
-<li><p><strong>(</strong><strong>`class</strong> – <p>daisy.Roi`):</p>
-<p>The ROI every block needs to read data from. Will be shifted over
-the <code class="docutils literal notranslate"><span class="pre">total_roi</span></code> to cover the whole volume.</p>
-</p></li>
-<li><p><strong>(</strong><strong>`class</strong> – <p>daisy.Roi`):</p>
-<p>The ROI every block writes data from. Will be shifted over the
-<code class="docutils literal notranslate"><span class="pre">total_roi</span></code> to cover the whole volume.</p>
-</p></li>
-<li><p><strong>process_function</strong> (<em>function</em>) – <p>A function that will be called as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">process_function</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>with <code class="docutils literal notranslate"><span class="pre">block</span></code> being the shifted read and write ROI for each
-location in the volume.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">read_write_conflict</span></code> is <code class="docutils literal notranslate"><span class="pre">True`,</span> <span class="pre">the</span> <span class="pre">callee</span> <span class="pre">can</span> <span class="pre">assume</span> <span class="pre">that</span>
-<span class="pre">there</span> <span class="pre">are</span> <span class="pre">no</span> <span class="pre">read/write</span> <span class="pre">concurencies,</span> <span class="pre">i.e.,</span> <span class="pre">at</span> <span class="pre">any</span> <span class="pre">given</span> <span class="pre">point</span> <span class="pre">in</span>
-<span class="pre">time</span> <span class="pre">the</span> <span class="pre">``read_roi</span></code> does not overlap with the <code class="docutils literal notranslate"><span class="pre">write_roi</span></code> of
-another process.</p>
-</p></li>
-<li><p><strong>check_function</strong> (<em>function</em><em>, </em><em>optional</em>) – <p>A function that will be called as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check_function</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This function should return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the block was completed.
-This is used internally to avoid processing blocks that are already
-done and to check if a block was correctly processed.</p>
-<p>If a tuple of two functions is given, the first one will be called
-to check if the block needs to be run, and if so, the second one
-will be called after it was run to check if the run succeeded.</p>
-</p></li>
-<li><p><strong>init_callback_fn</strong> (<em>function</em><em>, </em><em>optional</em>) – <p>A function that Daisy will call once when the task is started.
-It will be called as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">init_callback_fn</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Where <cite>context</cite> is the <cite>daisy.Context</cite> string that can be used
-by the daisy clients to connect to the server.</p>
-</p></li>
-<li><p><strong>read_write_conflict</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>, optional) – Whether the read and write ROIs are conflicting, i.e., accessing
-the same resource. If set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, all blocks can run at the
-same time in parallel. In this case, providing a <code class="docutils literal notranslate"><span class="pre">read_roi</span></code> is
-simply a means of convenience to ensure no out-of-bound accesses
-and to avoid re-computation of it in each block.</p></li>
-<li><p><strong>fit</strong> (<code class="docutils literal notranslate"><span class="pre">string</span></code>, optional) – <p>How to handle cases where shifting blocks by the size of
-<code class="docutils literal notranslate"><span class="pre">write_roi</span></code> does not tile the <code class="docutils literal notranslate"><span class="pre">total_roi</span></code>. Possible options
-are:</p>
-<p>”valid”: Skip blocks that would lie outside of <code class="docutils literal notranslate"><span class="pre">total_roi</span></code>. This
-is the default:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">|---------------------------|</span>     <span class="n">total</span> <span class="n">ROI</span>
-
-<span class="o">|</span><span class="n">rrrr</span><span class="o">|</span><span class="n">wwwwww</span><span class="o">|</span><span class="n">rrrr</span><span class="o">|</span>                <span class="n">block</span> <span class="mi">1</span>
-       <span class="o">|</span><span class="n">rrrr</span><span class="o">|</span><span class="n">wwwwww</span><span class="o">|</span><span class="n">rrrr</span><span class="o">|</span>         <span class="n">block</span> <span class="mi">2</span>
-                                  <span class="n">no</span> <span class="n">further</span> <span class="n">block</span>
-</pre></div>
-</div>
-<p>”overhang”: Add all blocks that overlap with <code class="docutils literal notranslate"><span class="pre">total_roi</span></code>, even if
-they leave it. Client code has to take care of save access beyond
-<code class="docutils literal notranslate"><span class="pre">total_roi</span></code> in this case.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">|---------------------------|</span>     <span class="n">total</span> <span class="n">ROI</span>
-
-<span class="o">|</span><span class="n">rrrr</span><span class="o">|</span><span class="n">wwwwww</span><span class="o">|</span><span class="n">rrrr</span><span class="o">|</span>                <span class="n">block</span> <span class="mi">1</span>
-       <span class="o">|</span><span class="n">rrrr</span><span class="o">|</span><span class="n">wwwwww</span><span class="o">|</span><span class="n">rrrr</span><span class="o">|</span>         <span class="n">block</span> <span class="mi">2</span>
-              <span class="o">|</span><span class="n">rrrr</span><span class="o">|</span><span class="n">wwwwww</span><span class="o">|</span><span class="n">rrrr</span><span class="o">|</span>  <span class="n">block</span> <span class="mi">3</span> <span class="p">(</span><span class="n">overhanging</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>”shrink”: Like “overhang”, but shrink the boundary blocks’ read and
-write ROIs such that they are guaranteed to lie within
-<code class="docutils literal notranslate"><span class="pre">total_roi</span></code>. The shrinking will preserve the context, i.e., the
-difference between the read ROI and write ROI stays the same.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">|---------------------------|</span>     <span class="n">total</span> <span class="n">ROI</span>
-
-<span class="o">|</span><span class="n">rrrr</span><span class="o">|</span><span class="n">wwwwww</span><span class="o">|</span><span class="n">rrrr</span><span class="o">|</span>                <span class="n">block</span> <span class="mi">1</span>
-       <span class="o">|</span><span class="n">rrrr</span><span class="o">|</span><span class="n">wwwwww</span><span class="o">|</span><span class="n">rrrr</span><span class="o">|</span>         <span class="n">block</span> <span class="mi">2</span>
-              <span class="o">|</span><span class="n">rrrr</span><span class="o">|</span><span class="n">www</span><span class="o">|</span><span class="n">rrrr</span><span class="o">|</span>     <span class="n">block</span> <span class="mi">3</span> <span class="p">(</span><span class="n">shrunk</span><span class="p">)</span>
-</pre></div>
-</div>
-</p></li>
-<li><p><strong>num_workers</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of parallel processes to run.</p></li>
-<li><p><strong>max_retries</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum number of times a task will be retried if failed
-(either due to failed post check or application crashes or network
-failure)</p></li>
-<li><p><strong>timeout</strong> (<em>int</em><em>, </em><em>optional</em>) – Time in seconds to wait for a block to be returned from a worker.
-The worker is killed (and the block retried) if this time is
-exceeded.</p></li>
-</ul>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str | Path</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.total_roi">
+<span class="sig-name descname"><span class="pre">total_roi</span></span><a class="headerlink" href="#dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.total_roi" title="Link to this definition"></a></dt>
+<dd><p>The ROI to process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Roi</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.read_roi">
+<span class="sig-name descname"><span class="pre">read_roi</span></span><a class="headerlink" href="#dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.read_roi" title="Link to this definition"></a></dt>
+<dd><p>The ROI to read from for a block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Roi</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.write_roi">
+<span class="sig-name descname"><span class="pre">write_roi</span></span><a class="headerlink" href="#dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.write_roi" title="Link to this definition"></a></dt>
+<dd><p>The ROI to write to for a block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Roi</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.num_workers">
+<span class="sig-name descname"><span class="pre">num_workers</span></span><a class="headerlink" href="#dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.num_workers" title="Link to this definition"></a></dt>
+<dd><p>The number of workers to use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.max_retries">
+<span class="sig-name descname"><span class="pre">max_retries</span></span><a class="headerlink" href="#dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.max_retries" title="Link to this definition"></a></dt>
+<dd><p>The maximum number of times a task will be retried if failed
+(either due to failed post check or application crashes or network
+failure)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.timeout">
+<span class="sig-name descname"><span class="pre">timeout</span></span><a class="headerlink" href="#dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.timeout" title="Link to this definition"></a></dt>
+<dd><p>The timeout for the task.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.upstream_tasks">
+<span class="sig-name descname"><span class="pre">upstream_tasks</span></span><a class="headerlink" href="#dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.upstream_tasks" title="Link to this definition"></a></dt>
+<dd><p>The upstream tasks.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">\*args</span></span></dt>
+<dd><p>Additional positional arguments to pass to <code class="docutils literal notranslate"><span class="pre">worker_function</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">\*\*kwargs</span></span></dt>
+<dd><p>Additional keyword arguments to pass to <code class="docutils literal notranslate"><span class="pre">worker_function</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the task.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>

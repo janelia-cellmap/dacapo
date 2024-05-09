@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#subpackages">Subpackages</a><ul class="current">
@@ -107,14 +108,54 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.ext.NoSuchModule" title="dacapo.ext.NoSuchModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoSuchModule</span></code></a></p></td>
-<td><p></p></td>
+<td><p>This class is used to raise an exception when a module is not found.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.ext.NoSuchModule">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.ext.</span></span><span class="sig-name descname"><span class="pre">NoSuchModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.ext.NoSuchModule" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>This class is used to raise an exception when a module is not found.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.ext.NoSuchModule.__name">
+<span class="sig-name descname"><span class="pre">__name</span></span><a class="headerlink" href="#dacapo.ext.NoSuchModule.__name" title="Link to this definition"></a></dt>
+<dd><p>The name of the module that was not found.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.ext.NoSuchModule.__traceback_str">
+<span class="sig-name descname"><span class="pre">__traceback_str</span></span><a class="headerlink" href="#dacapo.ext.NoSuchModule.__traceback_str" title="Link to this definition"></a></dt>
+<dd><p>The traceback string of the exception.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.ext.NoSuchModule.__exception">
+<span class="sig-name descname"><span class="pre">__exception</span></span><a class="headerlink" href="#dacapo.ext.NoSuchModule.__exception" title="Link to this definition"></a></dt>
+<dd><p>The exception raised.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Exception</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.ext.NoSuchModule.__getattr__">
+<span class="sig-name descname"><span class="pre">__getattr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.ext.NoSuchModule.__getattr__" title="Link to this definition"></a></dt>
+<dd><p>Raises the exception.</p>
+</dd></dl>
+
+</dd></dl>
 
 </section>
 </section>

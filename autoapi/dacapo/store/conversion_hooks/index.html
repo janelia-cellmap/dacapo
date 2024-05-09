@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -122,6 +123,35 @@
 <dt class="sig sig-object py" id="dacapo.store.conversion_hooks.register_hierarchy_hooks">
 <span class="sig-prename descclassname"><span class="pre">dacapo.store.conversion_hooks.</span></span><span class="sig-name descname"><span class="pre">register_hierarchy_hooks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">converter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.conversion_hooks.register_hierarchy_hooks" title="Link to this definition"></a></dt>
 <dd><p>Central place to register type hierarchies for conversion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>converter</strong> (<em>Converter</em>) – The converter to register the hooks with.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If <code class="docutils literal notranslate"><span class="pre">cls</span></code> is not a class.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>If class <code class="docutils literal notranslate"><span class="pre">A</span></code> is the base of class <code class="docutils literal notranslate"><span class="pre">B</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">converter.register_hierarchy(A,</span> <span class="pre">lambda</span> <span class="pre">typ:</span> <span class="pre">eval(typ))</span></code> has been
+called, the dictionary <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">converter.unstructure(x)</span></code> will
+contain a <code class="docutils literal notranslate"><span class="pre">__type__</span></code> field that is <code class="docutils literal notranslate"><span class="pre">'A'</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">A()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">B</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">B()</span></code>.</p>
+<p>This <code class="docutils literal notranslate"><span class="pre">__type__</span></code> field is then used by <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span>
+<span class="pre">converter.structure(y,</span> <span class="pre">A)</span></code> to recreate the concrete type of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to register a class hierarchy for typed
+structure/unstructure conversion. For each class in the hierarchy
+under (including) <code class="docutils literal notranslate"><span class="pre">cls</span></code>, this will store an additional
+<code class="docutils literal notranslate"><span class="pre">__type__</span></code> attribute (a string) in the object dictionary. This
+<code class="docutils literal notranslate"><span class="pre">__type__</span></code> string will be the concrete class of the object, and
+will be used to structure the dictionary back into an object of the
+correct class.</p>
+<p>For this to work, this function needs to know how to convert a
+<code class="docutils literal notranslate"><span class="pre">__type__</span></code> string back into a class, for which it used the
+provided <code class="docutils literal notranslate"><span class="pre">cls_fn</span></code>.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -129,6 +159,35 @@
 <span class="sig-prename descclassname"><span class="pre">dacapo.store.conversion_hooks.</span></span><span class="sig-name descname"><span class="pre">register_hooks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">converter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.conversion_hooks.register_hooks" title="Link to this definition"></a></dt>
 <dd><p>Central place to register all conversion hooks with the given
 converter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>converter</strong> (<em>Converter</em>) – The converter to register the hooks with.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If <code class="docutils literal notranslate"><span class="pre">cls</span></code> is not a class.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>If class <code class="docutils literal notranslate"><span class="pre">A</span></code> is the base of class <code class="docutils literal notranslate"><span class="pre">B</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">converter.register_hierarchy(A,</span> <span class="pre">lambda</span> <span class="pre">typ:</span> <span class="pre">eval(typ))</span></code> has been
+called, the dictionary <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">converter.unstructure(x)</span></code> will
+contain a <code class="docutils literal notranslate"><span class="pre">__type__</span></code> field that is <code class="docutils literal notranslate"><span class="pre">'A'</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">A()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">B</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">B()</span></code>.</p>
+<p>This <code class="docutils literal notranslate"><span class="pre">__type__</span></code> field is then used by <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span>
+<span class="pre">converter.structure(y,</span> <span class="pre">A)</span></code> to recreate the concrete type of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to register a class hierarchy for typed
+structure/unstructure conversion. For each class in the hierarchy
+under (including) <code class="docutils literal notranslate"><span class="pre">cls</span></code>, this will store an additional
+<code class="docutils literal notranslate"><span class="pre">__type__</span></code> attribute (a string) in the object dictionary. This
+<code class="docutils literal notranslate"><span class="pre">__type__</span></code> string will be the concrete class of the object, and
+will be used to structure the dictionary back into an object of the
+correct class.</p>
+<p>For this to work, this function needs to know how to convert a
+<code class="docutils literal notranslate"><span class="pre">__type__</span></code> string back into a class, for which it used the
+provided <code class="docutils literal notranslate"><span class="pre">cls_fn</span></code>.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -136,6 +195,28 @@ converter.</p>
 <span class="sig-prename descclassname"><span class="pre">dacapo.store.conversion_hooks.</span></span><span class="sig-name descname"><span class="pre">cls_fun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typ</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.conversion_hooks.cls_fun" title="Link to this definition"></a></dt>
 <dd><p>Convert a type string into the corresponding class. The class must be
 visible to this module (hence the star imports at the top).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>typ</strong> (<em>str</em>) – The type string to convert.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The class corresponding to the type string.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>class</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NameError</strong> – If the class is not visible to this module.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p><code class="docutils literal notranslate"><span class="pre">cls_fun('TaskConfig')</span></code> will return the class <code class="docutils literal notranslate"><span class="pre">TaskConfig</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to convert a type string back into a class. It is
+used in conjunction with the <code class="docutils literal notranslate"><span class="pre">register_hierarchy</span></code> function to
+register a class hierarchy for typed structure/unstructure conversion.</p>
+</div>
 </dd></dl>
 
 </section>

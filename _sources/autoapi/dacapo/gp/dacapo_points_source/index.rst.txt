@@ -39,10 +39,30 @@ Classes
 
       :type: gp.Graph
 
+   .. method:: setup()
+
+      Set up the provider.
+
+   .. method:: provide(request)
+
+      Provides the graph for the requested ROI.
+      
+
+   .. note::
+
+      This class is a subclass of gunpowder.BatchProvider and is used to
+      serve graph data to gunpowder pipelines.
+
    .. py:method:: setup()
 
       Set up the provider. This function sets the provider to provide the
       graph with the given key.
+
+      :raises RuntimeError: If the key is already provided.
+
+      .. rubric:: Examples
+
+      >>> graph_source.setup()
 
 
    .. py:method:: provide(request)
@@ -59,6 +79,14 @@ Classes
 
       :returns: The graph contained in a Batch.
       :rtype: outputs (gp.Batch)
+
+      :raises KeyError: If the requested key is not in the request.
+
+      .. rubric:: Examples
+
+      >>> request = gp.BatchRequest()
+      >>> request[gp.GraphKey("GRAPH")] = gp.GraphSpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
+      >>> graph_source.provide(request)
 
 
 

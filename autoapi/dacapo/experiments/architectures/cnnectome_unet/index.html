@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -109,288 +110,801 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet" title="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CNNectomeUNet</span></code></a></p></td>
-<td><p>An abstract base class for defining the architecture of a neural network model.</p></td>
+<td><p>A U-Net architecture for 3D or 4D data. The U-Net expects 3D or 4D tensors</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule" title="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CNNectomeUNetModule</span></code></a></p></td>
-<td><p>Base class for all neural network modules.</p></td>
+<td><p>A U-Net module for 3D or 4D data. The U-Net expects 3D or 4D tensors shaped</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.architectures.cnnectome_unet.ConvPass" title="dacapo.experiments.architectures.cnnectome_unet.ConvPass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConvPass</span></code></a></p></td>
-<td><p>Base class for all neural network modules.</p></td>
+<td><p>Convolutional pass module. This module performs a series of convolutional</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.architectures.cnnectome_unet.Downsample" title="dacapo.experiments.architectures.cnnectome_unet.Downsample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Downsample</span></code></a></p></td>
-<td><p>Base class for all neural network modules.</p></td>
+<td><p>Downsample module. This module performs downsampling of the input tensor</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.architectures.cnnectome_unet.Upsample" title="dacapo.experiments.architectures.cnnectome_unet.Upsample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Upsample</span></code></a></p></td>
-<td><p>Base class for all neural network modules.</p></td>
+<td><p>Upsample module. This module performs upsampling of the input tensor using</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.architectures.cnnectome_unet.AttentionBlockModule" title="dacapo.experiments.architectures.cnnectome_unet.AttentionBlockModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AttentionBlockModule</span></code></a></p></td>
-<td><p>Base class for all neural network modules.</p></td>
+<td><p>Attention Block Module:</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.architectures.cnnectome_unet.</span></span><span class="sig-name descname"><span class="pre">CNNectomeUNet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet" title="Link to this definition"></a></dt>
-<dd><p>An abstract base class for defining the architecture of a neural network model.
-It is inherited from PyTorch’s Module and built-in class <cite>ABC</cite> (Abstract Base Classes).
-Other classes can inherit this class to define their own specific variations of architecture.
-It requires to implement several property methods, and also includes additional methods related to the architecture design.</p>
+<dd><p>A U-Net architecture for 3D or 4D data. The U-Net expects 3D or 4D tensors
+shaped like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>``(batch=1, channels, [length,] depth, height, width)``.
+</pre></div>
+</div>
+<p>This U-Net performs only “valid” convolutions, i.e., sizes of the feature
+maps decrease after each convolution. It will perfrom 4D convolutions as
+long as <code class="docutils literal notranslate"><span class="pre">length</span></code> is greater than 1. As soon as <code class="docutils literal notranslate"><span class="pre">length</span></code> is 1 due to a
+valid convolution, the time dimension will be dropped and tensors with
+<code class="docutils literal notranslate"><span class="pre">(b,</span> <span class="pre">c,</span> <span class="pre">z,</span> <span class="pre">y,</span> <span class="pre">x)</span></code> will be use (and returned) from there on.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.fmaps_in">
+<span class="sig-name descname"><span class="pre">fmaps_in</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.fmaps_in" title="Link to this definition"></a></dt>
+<dd><p>The number of input channels.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.fmaps_out">
+<span class="sig-name descname"><span class="pre">fmaps_out</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.fmaps_out" title="Link to this definition"></a></dt>
+<dd><p>The number of feature maps in the output layer. This is also the
+number of output feature maps. Stored in the <code class="docutils literal notranslate"><span class="pre">channels</span></code> dimension.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.num_fmaps">
+<span class="sig-name descname"><span class="pre">num_fmaps</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.num_fmaps" title="Link to this definition"></a></dt>
+<dd><p>The number of feature maps in the first layer. This is also the
+number of output feature maps. Stored in the <code class="docutils literal notranslate"><span class="pre">channels</span></code> dimension.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.fmap_inc_factor">
+<span class="sig-name descname"><span class="pre">fmap_inc_factor</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.fmap_inc_factor" title="Link to this definition"></a></dt>
+<dd><p>By how much to multiply the number of feature maps between layers.
+If layer 0 has <code class="docutils literal notranslate"><span class="pre">k</span></code> feature maps, layer <code class="docutils literal notranslate"><span class="pre">l</span></code> will have
+<code class="docutils literal notranslate"><span class="pre">k*fmap_inc_factor**l</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.downsample_factors">
+<span class="sig-name descname"><span class="pre">downsample_factors</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.downsample_factors" title="Link to this definition"></a></dt>
+<dd><p>List of tuples <code class="docutils literal notranslate"><span class="pre">(z,</span> <span class="pre">y,</span> <span class="pre">x)</span></code> to use to down- and up-sample the
+feature maps between layers.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.kernel_size_down">
+<span class="sig-name descname"><span class="pre">kernel_size_down</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.kernel_size_down" title="Link to this definition"></a></dt>
+<dd><p>List of lists of kernel sizes. The number of sizes in a list
+determines the number of convolutional layers in the corresponding
+level of the build on the left side. Kernel sizes can be given as
+tuples or integer. If not given, each convolutional pass will
+consist of two 3x3x3 convolutions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.kernel_size_up">
+<span class="sig-name descname"><span class="pre">kernel_size_up</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.kernel_size_up" title="Link to this definition"></a></dt>
+<dd><p>List of lists of kernel sizes. The number of sizes in a list
+determines the number of convolutional layers in the corresponding
+level of the build on the right side. Within one of the lists going
+from left to right. Kernel sizes can be given as tuples or integer.
+If not given, each convolutional pass will consist of two 3x3x3
+convolutions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.activation">
+<span class="sig-name descname"><span class="pre">activation</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.activation" title="Link to this definition"></a></dt>
+<dd><p>Which activation to use after a convolution. Accepts the name of
+any tensorflow activation function (e.g., <code class="docutils literal notranslate"><span class="pre">ReLU</span></code> for
+<code class="docutils literal notranslate"><span class="pre">torch.nn.ReLU</span></code>).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.fov">
+<span class="sig-name descname"><span class="pre">fov</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.fov" title="Link to this definition"></a></dt>
+<dd><p>Initial field of view in physical units</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.voxel_size">
+<span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>Size of a voxel in the input data, in physical units</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.num_heads">
+<span class="sig-name descname"><span class="pre">num_heads</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.num_heads" title="Link to this definition"></a></dt>
+<dd><p>Number of decoders. The resulting U-Net has one single encoder
+path and num_heads decoder paths. This is useful in a multi-task
+learning context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.constant_upsample">
+<span class="sig-name descname"><span class="pre">constant_upsample</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.constant_upsample" title="Link to this definition"></a></dt>
+<dd><p>If set to true, perform a constant upsampling instead of a
+transposed convolution in the upsampling layers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.padding">
+<span class="sig-name descname"><span class="pre">padding</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.padding" title="Link to this definition"></a></dt>
+<dd><p>How to pad convolutions. Either ‘same’ or ‘valid’ (default).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.upsample_channel_contraction">
+<span class="sig-name descname"><span class="pre">upsample_channel_contraction</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.upsample_channel_contraction" title="Link to this definition"></a></dt>
+<dd><p>When performing the ConvTranspose, whether to reduce the number
+of channels by the fmap_increment_factor. can be either bool or
+list of bools to apply independently per layer.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.activation_on_upsample">
+<span class="sig-name descname"><span class="pre">activation_on_upsample</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.activation_on_upsample" title="Link to this definition"></a></dt>
+<dd><p>Whether or not to add an activation after the upsample operation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.use_attention">
+<span class="sig-name descname"><span class="pre">use_attention</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.use_attention" title="Link to this definition"></a></dt>
+<dd><p>Whether or not to use an attention block in the U-Net.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Methods:</dt><dd><dl class="simple">
+<dt>forward(x):</dt><dd><p>Forward pass of the U-Net.</p>
+</dd>
+<dt>scale(voxel_size):</dt><dd><p>Scale the voxel size according to the upsampling factors.</p>
+</dd>
+<dt>input_shape:</dt><dd><p>Return the input shape of the U-Net.</p>
+</dd>
+<dt>num_in_channels:</dt><dd><p>Return the number of input channels.</p>
+</dd>
+<dt>num_out_channels:</dt><dd><p>Return the number of output channels.</p>
+</dd>
+<dt>eval_shape_increase:</dt><dd><p>Return the increase in shape due to the U-Net.</p>
+</dd>
+</dl>
+</dd>
+<dt>Note:</dt><dd><p>This class is a wrapper around the <code class="docutils literal notranslate"><span class="pre">CNNectomeUNetModule</span></code> class.
+The <code class="docutils literal notranslate"><span class="pre">CNNectomeUNetModule</span></code> class is the actual implementation of the
+U-Net architecture.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.eval_shape_increase">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eval_shape_increase</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.eval_shape_increase" title="Link to this definition"></a></dt>
-<dd><p>Provides information about how much to increase the input shape during prediction.</p>
+<dd><p>The increase in shape due to the U-Net.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>An instance representing the amount to increase in each dimension of the input shape.</p>
+<dd class="field-odd"><p>The increase in shape due to the U-Net.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Coordinate</p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – If the increase in shape is not given.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">unet</span><span class="o">.</span><span class="n">eval_shape_increase</span>
+<span class="go">(1, 1, 128, 128, 128)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The increase in shape should be given as a tuple <code class="docutils literal notranslate"><span class="pre">(batch,</span> <span class="pre">channels,</span> <span class="pre">[length,]</span> <span class="pre">depth,</span> <span class="pre">height,</span> <span class="pre">width)</span></code>.</p>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.input_shape">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">input_shape</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.input_shape" title="Link to this definition"></a></dt>
-<dd><p>Abstract method to define the spatial input shape for the neural network architecture.
-The shape should not account for the channels and batch dimensions.</p>
+<dd><p>Return the input shape of the U-Net.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The spatial input shape.</p>
+<dd class="field-odd"><p>The input shape of the U-Net.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Coordinate</p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – If the input shape is not given.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">unet</span><span class="o">.</span><span class="n">input_shape</span>
+<span class="go">(1, 1, 128, 128, 128)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input shape should be given as a tuple <code class="docutils literal notranslate"><span class="pre">(batch,</span> <span class="pre">channels,</span> <span class="pre">[length,]</span> <span class="pre">depth,</span> <span class="pre">height,</span> <span class="pre">width)</span></code>.</p>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.num_in_channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_in_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.num_in_channels" title="Link to this definition"></a></dt>
-<dd><p>Abstract method to return number of input channels required by the architecture.</p>
+<dd><p>Return the number of input channels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Required number of input channels.</p>
+<dd class="field-odd"><p>The number of input channels.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>int</p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – If the number of input channels is not given.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">unet</span><span class="o">.</span><span class="n">num_in_channels</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The number of input channels should be given as an integer.</p>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.num_out_channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_out_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.num_out_channels" title="Link to this definition"></a></dt>
-<dd><p>Abstract method to return the number of output channels provided by the architecture.</p>
+<dd><p>Return the number of output channels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Number of output channels.</p>
+<dd class="field-odd"><p>The number of output channels.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>int</p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – If the number of output channels is not given.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">unet</span><span class="o">.</span><span class="n">num_out_channels</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The number of output channels should be given as an integer.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.module">
 <span class="sig-name descname"><span class="pre">module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.module" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Create the U-Net module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The U-Net module.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>AttributeError</strong> – If the number of input channels is not given.</p></li>
+<li><p><strong>AttributeError</strong> – If the number of output channels is not given.</p></li>
+<li><p><strong>AttributeError</strong> – If the number of feature maps in the first layer is not given.</p></li>
+<li><p><strong>AttributeError</strong> – If the factor by which the number of feature maps increases between layers is not given.</p></li>
+<li><p><strong>AttributeError</strong> – If the downsample factors are not given.</p></li>
+<li><p><strong>AttributeError</strong> – If the kernel sizes for the down pass are not given.</p></li>
+<li><p><strong>AttributeError</strong> – If the kernel sizes for the up pass are not given.</p></li>
+<li><p><strong>AttributeError</strong> – If the constant upsample flag is not given.</p></li>
+<li><p><strong>AttributeError</strong> – If the padding is not given.</p></li>
+<li><p><strong>AttributeError</strong> – If the upsample factors are not given.</p></li>
+<li><p><strong>AttributeError</strong> – If the activation on upsample flag is not given.</p></li>
+<li><p><strong>AttributeError</strong> – If the use attention flag is not given.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">unet</span><span class="o">.</span><span class="n">module</span><span class="p">()</span>
+<span class="go">CNNectomeUNetModule(</span>
+<span class="go">    in_channels=1,</span>
+<span class="go">    num_fmaps=24,</span>
+<span class="go">    num_fmaps_out=1,</span>
+<span class="go">    fmap_inc_factor=2,</span>
+<span class="go">    kernel_size_down=[[(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)]],</span>
+<span class="go">    kernel_size_up=[[(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)]],</span>
+<span class="go">    downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],</span>
+<span class="go">    constant_upsample=False,</span>
+<span class="go">    padding=&#39;valid&#39;,</span>
+<span class="go">    activation_on_upsample=True,</span>
+<span class="go">    upsample_channel_contraction=[False, True, True],</span>
+<span class="go">    use_attention=False</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The U-Net module is an instance of the <code class="docutils literal notranslate"><span class="pre">CNNectomeUNetModule</span></code> class.</p>
+</div>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.scale">
 <span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">voxel_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.scale" title="Link to this definition"></a></dt>
-<dd><p>Method to scale the input voxel size as required by the architecture.</p>
+<dd><p>Scale the voxel size according to the upsampling factors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>input_voxel_size</strong> (<em>Coordinate</em>) – The original size of the input voxel.</p>
+<dd class="field-odd"><p><strong>voxel_size</strong> (<em>tuple</em>) – The size of a voxel in the input data.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The scaled voxel size.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Coordinate</p>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the voxel size is not given.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">unet</span><span class="o">.</span><span class="n">scale</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="go">(1, 1, 1)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The voxel size should be given as a tuple <code class="docutils literal notranslate"><span class="pre">(z,</span> <span class="pre">y,</span> <span class="pre">x)</span></code>.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.forward" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Forward pass of the U-Net.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>Tensor</em>) – The input tensor.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output tensor.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If the tensors have different dimensions.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">unet</span> <span class="o">=</span> <span class="n">CNNectomeUNet</span><span class="p">(</span><span class="n">architecture_config</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unet</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input tensor should be given as a 5D tensor.</p>
+</div>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.architectures.cnnectome_unet.</span></span><span class="sig-name descname"><span class="pre">CNNectomeUNetModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_fmaps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmap_inc_factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downsample_factors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size_down</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size_up</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ReLU'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_fmaps_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_heads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constant_upsample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'valid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upsample_channel_contraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation_on_upsample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_attention</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule" title="Link to this definition"></a></dt>
-<dd><p>Base class for all neural network modules.</p>
-<p>Your models should also subclass this class.</p>
-<p>Modules can also contain other Modules, allowing to nest them in
-a tree structure. You can assign the submodules as regular attributes:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
-
-<span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<dd><p>A U-Net module for 3D or 4D data. The U-Net expects 3D or 4D tensors shaped
+like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>``(batch=1, channels, [length,] depth, height, width)``.
 </pre></div>
 </div>
-<p>Submodules assigned in this way will be registered, and will have their
-parameters converted too when you call <code class="xref py py-meth docutils literal notranslate"><span class="pre">to()</span></code>, etc.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>As per the example above, an <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> call to the parent class
-must be made before assignment on the child.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Variables<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>training</strong> (<em>bool</em>) – Boolean represents whether this module is in training or
-evaluation mode.</p>
-</dd>
-</dl>
+<p>This U-Net performs only “valid” convolutions, i.e., sizes of the feature maps
+decrease after each convolution. It will perfrom 4D convolutions as long as
+<code class="docutils literal notranslate"><span class="pre">length</span></code> is greater than 1. As soon as <code class="docutils literal notranslate"><span class="pre">length</span></code> is 1 due to a valid
+convolution, the time dimension will be dropped and tensors with <code class="docutils literal notranslate"><span class="pre">(b,</span> <span class="pre">c,</span> <span class="pre">z,</span> <span class="pre">y,</span> <span class="pre">x)</span></code>
+will be use (and returned) from there on.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.num_levels">
+<span class="sig-name descname"><span class="pre">num_levels</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.num_levels" title="Link to this definition"></a></dt>
+<dd><p>The number of levels in the U-Net.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.num_heads">
+<span class="sig-name descname"><span class="pre">num_heads</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.num_heads" title="Link to this definition"></a></dt>
+<dd><p>The number of decoders.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.in_channels">
+<span class="sig-name descname"><span class="pre">in_channels</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.in_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of input channels.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.out_channels">
+<span class="sig-name descname"><span class="pre">out_channels</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.out_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of output channels.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.dims">
+<span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.dims" title="Link to this definition"></a></dt>
+<dd><p>The number of dimensions.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.use_attention">
+<span class="sig-name descname"><span class="pre">use_attention</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.use_attention" title="Link to this definition"></a></dt>
+<dd><p>Whether or not to use an attention block in the U-Net.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.l_conv">
+<span class="sig-name descname"><span class="pre">l_conv</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.l_conv" title="Link to this definition"></a></dt>
+<dd><p>The left convolutional passes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.l_down">
+<span class="sig-name descname"><span class="pre">l_down</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.l_down" title="Link to this definition"></a></dt>
+<dd><p>The left downsample layers.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.r_up">
+<span class="sig-name descname"><span class="pre">r_up</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.r_up" title="Link to this definition"></a></dt>
+<dd><p>The right up/crop/concatenate layers.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.r_conv">
+<span class="sig-name descname"><span class="pre">r_conv</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.r_conv" title="Link to this definition"></a></dt>
+<dd><p>The right convolutional passes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.kernel_size_down">
+<span class="sig-name descname"><span class="pre">kernel_size_down</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.kernel_size_down" title="Link to this definition"></a></dt>
+<dd><p>The kernel sizes for the down pass.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.kernel_size_up">
+<span class="sig-name descname"><span class="pre">kernel_size_up</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.kernel_size_up" title="Link to this definition"></a></dt>
+<dd><p>The kernel sizes for the up pass.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.fmap_inc_factor">
+<span class="sig-name descname"><span class="pre">fmap_inc_factor</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.fmap_inc_factor" title="Link to this definition"></a></dt>
+<dd><p>The factor by which the number of feature maps increases between layers.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.downsample_factors">
+<span class="sig-name descname"><span class="pre">downsample_factors</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.downsample_factors" title="Link to this definition"></a></dt>
+<dd><p>The downsample factors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.constant_upsample">
+<span class="sig-name descname"><span class="pre">constant_upsample</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.constant_upsample" title="Link to this definition"></a></dt>
+<dd><p>Whether to perform a constant upsampling instead of a transposed convolution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.padding">
+<span class="sig-name descname"><span class="pre">padding</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.padding" title="Link to this definition"></a></dt>
+<dd><p>How to pad convolutions.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.upsample_channel_contraction">
+<span class="sig-name descname"><span class="pre">upsample_channel_contraction</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.upsample_channel_contraction" title="Link to this definition"></a></dt>
+<dd><p>Whether to reduce the number of channels by the fmap_increment_factor.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.activation_on_upsample">
+<span class="sig-name descname"><span class="pre">activation_on_upsample</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.activation_on_upsample" title="Link to this definition"></a></dt>
+<dd><p>Whether or not to add an activation after the upsample operation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">use_attention</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Whether or not to use an attention block in the U-Net.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.attention">
+<span class="sig-name descname"><span class="pre">attention</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.attention" title="Link to this definition"></a></dt>
+<dd><p>The attention blocks.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.rec_forward">
 <span class="sig-name descname"><span class="pre">rec_forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_in</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.rec_forward" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Recursive forward pass of the U-Net.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.forward" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Forward pass of the U-Net.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input tensor should be given as a 5D tensor.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">rec_forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_in</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Recursive forward pass of the U-Net.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>level</strong> (<em>int</em>) – The level of the U-Net.</p></li>
+<li><p><strong>f_in</strong> (<em>Tensor</em>) – The input tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output tensor.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If the tensors have different dimensions.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">unet</span> <span class="o">=</span> <span class="n">CNNectomeUNetModule</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">num_fmaps</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">num_fmaps_out</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">fmap_inc_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">kernel_size_down</span><span class="o">=</span><span class="p">[[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]],</span>
+<span class="gp">... </span>    <span class="n">kernel_size_up</span><span class="o">=</span><span class="p">[[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]],</span>
+<span class="gp">... </span>    <span class="n">downsample_factors</span><span class="o">=</span><span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
+<span class="gp">... </span>    <span class="n">constant_upsample</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">activation_on_upsample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">upsample_channel_contraction</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">use_attention</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unet</span><span class="o">.</span><span class="n">rec_forward</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input tensor should be given as a 5D tensor.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Forward pass of the U-Net.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>Tensor</em>) – The input tensor.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output tensor.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If the tensors have different dimensions.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">unet</span> <span class="o">=</span> <span class="n">CNNectomeUNetModule</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">num_fmaps</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">num_fmaps_out</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">fmap_inc_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">kernel_size_down</span><span class="o">=</span><span class="p">[[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]],</span>
+<span class="gp">... </span>    <span class="n">kernel_size_up</span><span class="o">=</span><span class="p">[[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]],</span>
+<span class="gp">... </span>    <span class="n">downsample_factors</span><span class="o">=</span><span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
+<span class="gp">... </span>    <span class="n">constant_upsample</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">activation_on_upsample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">upsample_channel_contraction</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">use_attention</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unet</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input tensor should be given as a 5D tensor.</p>
+</div>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.ConvPass">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.architectures.cnnectome_unet.</span></span><span class="sig-name descname"><span class="pre">ConvPass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_sizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'valid'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.ConvPass" title="Link to this definition"></a></dt>
-<dd><p>Base class for all neural network modules.</p>
-<p>Your models should also subclass this class.</p>
-<p>Modules can also contain other Modules, allowing to nest them in
-a tree structure. You can assign the submodules as regular attributes:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<dd><p>Convolutional pass module. This module performs a series of convolutional
+layers followed by an activation function. The module can also pad the
+feature maps to ensure translation equivariance. The module can perform
+2D or 3D convolutions.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.ConvPass.dims">
+<span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.ConvPass.dims" title="Link to this definition"></a></dt>
+<dd><p>The number of dimensions.</p>
+</dd></dl>
 
-<span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.ConvPass.conv_pass">
+<span class="sig-name descname"><span class="pre">conv_pass</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.ConvPass.conv_pass" title="Link to this definition"></a></dt>
+<dd><p>The convolutional pass module.</p>
+</dd></dl>
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Submodules assigned in this way will be registered, and will have their
-parameters converted too when you call <code class="xref py py-meth docutils literal notranslate"><span class="pre">to()</span></code>, etc.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>As per the example above, an <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> call to the parent class
-must be made before assignment on the child.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Variables<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>training</strong> (<em>bool</em>) – Boolean represents whether this module is in training or
-evaluation mode.</p>
-</dd>
-</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.ConvPass.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.ConvPass.forward" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Forward pass of the Conv</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input tensor should be given as a 5D tensor.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd><p>Forward pass of the ConvPass module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>Tensor</em>) – The input tensor.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output tensor.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If the tensors have different dimensions.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">conv_pass</span> <span class="o">=</span> <span class="n">ConvPass</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span> <span class="s2">&quot;ReLU&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">conv_pass</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input tensor should be given as a 5D tensor.</p>
+</div>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.Downsample">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.architectures.cnnectome_unet.</span></span><span class="sig-name descname"><span class="pre">Downsample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">downsample_factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.Downsample" title="Link to this definition"></a></dt>
-<dd><p>Base class for all neural network modules.</p>
-<p>Your models should also subclass this class.</p>
-<p>Modules can also contain other Modules, allowing to nest them in
-a tree structure. You can assign the submodules as regular attributes:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<dd><p>Downsample module. This module performs downsampling of the input tensor
+using either max-pooling or average pooling. The module can also crop the
+feature maps to ensure translation equivariance with a stride of the
+downsampling factor.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.Downsample.dims">
+<span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.Downsample.dims" title="Link to this definition"></a></dt>
+<dd><p>The number of dimensions.</p>
+</dd></dl>
 
-<span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.Downsample.downsample_factor">
+<span class="sig-name descname"><span class="pre">downsample_factor</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.Downsample.downsample_factor" title="Link to this definition"></a></dt>
+<dd><p>The downsampling factor.</p>
+</dd></dl>
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Submodules assigned in this way will be registered, and will have their
-parameters converted too when you call <code class="xref py py-meth docutils literal notranslate"><span class="pre">to()</span></code>, etc.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>As per the example above, an <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> call to the parent class
-must be made before assignment on the child.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Variables<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>training</strong> (<em>bool</em>) – Boolean represents whether this module is in training or
-evaluation mode.</p>
-</dd>
-</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.Downsample.down">
+<span class="sig-name descname"><span class="pre">down</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.Downsample.down" title="Link to this definition"></a></dt>
+<dd><p>The downsampling layer.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.Downsample.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.Downsample.forward" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Downsample the input tensor.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input tensor should be given as a 5D tensor.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd><p>Downsample the input tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>Tensor</em>) – The input tensor.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The downsampled tensor.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If the tensors have different dimensions.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">downsample</span> <span class="o">=</span> <span class="n">Downsample</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">downsample</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input tensor should be given as a 5D tensor.</p>
+</div>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.Upsample">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.architectures.cnnectome_unet.</span></span><span class="sig-name descname"><span class="pre">Upsample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'transposed_conv'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crop_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">next_conv_kernel_sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.Upsample" title="Link to this definition"></a></dt>
-<dd><p>Base class for all neural network modules.</p>
-<p>Your models should also subclass this class.</p>
-<p>Modules can also contain other Modules, allowing to nest them in
-a tree structure. You can assign the submodules as regular attributes:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<dd><p>Upsample module. This module performs upsampling of the input tensor using
+either transposed convolutions or nearest neighbor interpolation. The
+module can also crop the feature maps to ensure translation equivariance
+with a stride of the upsampling factor.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.Upsample.crop_factor">
+<span class="sig-name descname"><span class="pre">crop_factor</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.Upsample.crop_factor" title="Link to this definition"></a></dt>
+<dd><p>The crop factor.</p>
+</dd></dl>
 
-<span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.Upsample.next_conv_kernel_sizes">
+<span class="sig-name descname"><span class="pre">next_conv_kernel_sizes</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.Upsample.next_conv_kernel_sizes" title="Link to this definition"></a></dt>
+<dd><p>The kernel sizes for the convolutional layers.</p>
+</dd></dl>
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Submodules assigned in this way will be registered, and will have their
-parameters converted too when you call <code class="xref py py-meth docutils literal notranslate"><span class="pre">to()</span></code>, etc.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>As per the example above, an <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> call to the parent class
-must be made before assignment on the child.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Variables<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>training</strong> (<em>bool</em>) – Boolean represents whether this module is in training or
-evaluation mode.</p>
-</dd>
-</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.Upsample.dims">
+<span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.Upsample.dims" title="Link to this definition"></a></dt>
+<dd><p>The number of dimensions.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.Upsample.up">
+<span class="sig-name descname"><span class="pre">up</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.Upsample.up" title="Link to this definition"></a></dt>
+<dd><p>The upsampling layer.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.Upsample.crop_to_factor">
 <span class="sig-name descname"><span class="pre">crop_to_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_sizes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.Upsample.crop_to_factor" title="Link to this definition"></a></dt>
 <dd><p>Crop feature maps to ensure translation equivariance with stride of
-upsampling factor. This should be done right after upsampling, before
-application of the convolutions with the given kernel sizes.</p>
-<p>The crop could be done after the convolutions, but it is more efficient
-to do that before (feature maps will be smaller).</p>
+upsampling factor.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -402,59 +916,253 @@ to do that before (feature maps will be smaller).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.Upsample.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.Upsample.forward" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Forward pass of the Upsample module.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input tensor should be given as a 5D tensor.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">crop_to_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_sizes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd><p>Crop feature maps to ensure translation equivariance with stride of
+upsampling factor. This should be done right after upsampling, before
+application of the convolutions with the given kernel sizes.</p>
+<p>The crop could be done after the convolutions, but it is more efficient
+to do that before (feature maps will be smaller).</p>
+<p>We need to ensure that the feature map is large enough to ensure that
+the translation equivariance is maintained. This is done by cropping
+the feature map to the largest size that is a multiple of the factor
+and that is large enough to ensure that the translation equivariance
+is maintained.</p>
+<p>We need (spatial_shape - convolution_crop) to be a multiple of factor,
+i.e.:
+(s - c) = n*k</p>
+<p>where s is the spatial size of the feature map, c is the crop due to
+the convolutions, n is the number of strides of the upsampling factor,
+and k is the upsampling factor.</p>
+<p>We want to find the largest n for which s’ = n*k + c &lt;= s</p>
+<p>n = floor((s - c)/k)</p>
+<p>This gives us the target shape s’</p>
+<p>s’ = n*k + c</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>Tensor</em>) – The input tensor.</p></li>
+<li><p><strong>factor</strong> (<em>tuple</em>) – The upsampling factor.</p></li>
+<li><p><strong>kernel_sizes</strong> (<em>list</em>) – The kernel sizes for the convolutional layers.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The cropped tensor.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If the feature map is too small to ensure translation equivariance.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">upsample</span> <span class="o">=</span> <span class="n">Upsample</span><span class="p">(</span><span class="n">scale_factor</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">upsample</span><span class="o">.</span><span class="n">crop_to_factor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input tensor should be given as a 5D tensor.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">crop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd><p>Center-crop x to match spatial dimensions given by shape.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>Tensor</em>) – The input tensor.</p></li>
+<li><p><strong>shape</strong> (<em>tuple</em>) – The target shape.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The center-cropped tensor.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If the tensors have different dimensions.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">upsample</span> <span class="o">=</span> <span class="n">Upsample</span><span class="p">(</span><span class="n">scale_factor</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">upsample</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input tensor should be given as a 5D tensor.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd><p>Forward pass of the Upsample module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g_out</strong> (<em>Tensor</em>) – The gating signal tensor.</p></li>
+<li><p><strong>f_left</strong> (<em>Tensor</em>) – The input feature tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output feature tensor.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If the tensors have different dimensions.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">upsample</span> <span class="o">=</span> <span class="n">Upsample</span><span class="p">(</span><span class="n">scale_factor</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g_out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f_left</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">upsample</span><span class="p">(</span><span class="n">g_out</span><span class="p">,</span> <span class="n">f_left</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The gating signal and input feature tensors should be given as 5D tensors.</p>
+</div>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.AttentionBlockModule">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.architectures.cnnectome_unet.</span></span><span class="sig-name descname"><span class="pre">AttentionBlockModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">F_g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upsample_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.AttentionBlockModule" title="Link to this definition"></a></dt>
-<dd><p>Base class for all neural network modules.</p>
-<p>Your models should also subclass this class.</p>
-<p>Modules can also contain other Modules, allowing to nest them in
-a tree structure. You can assign the submodules as regular attributes:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
-
-<span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Submodules assigned in this way will be registered, and will have their
-parameters converted too when you call <code class="xref py py-meth docutils literal notranslate"><span class="pre">to()</span></code>, etc.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>As per the example above, an <code class="docutils literal notranslate"><span class="pre">__init__()</span></code> call to the parent class
-must be made before assignment on the child.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Variables<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>training</strong> (<em>bool</em>) – Boolean represents whether this module is in training or
-evaluation mode.</p>
+<dd><p>Attention Block Module:</p>
+<blockquote>
+<div><p>The AttentionBlock uses two separate pathways to process ‘g’ and ‘x’,
+combines them, and applies a sigmoid activation to generate an attention map.
+This map is then used to scale the input features ‘x’, resulting in an output
+that focuses on important features as dictated by the gating signal ‘g’.</p>
+<p>The attention block takes two inputs: ‘g’ (gating signal) and ‘x’ (input features).</p>
+<blockquote>
+<div><dl class="simple">
+<dt>[g] –&gt; W_g –                /–&gt; psi –&gt; * –&gt; [output]</dt><dd><p>              /</p>
 </dd>
 </dl>
+<p>[x] –&gt; W_x –&gt; [+] –&gt; relu –</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Where:</dt><dd><ul class="simple">
+<li><p>W_g and W_x are 1x1 Convolution followed by Batch Normalization</p></li>
+<li><p>[+] indicates element-wise addition</p></li>
+<li><p>relu is the Rectified Linear Unit activation function</p></li>
+<li><p>psi is a sequence of 1x1 Convolution, Batch Normalization, and Sigmoid activation</p></li>
+<li><ul>
+<li><p>indicates element-wise multiplication between the output of psi and input feature ‘x’</p></li>
+</ul>
+</li>
+<li><p>[output] has the same dimensions as input ‘x’, selectively emphasized by attention weights</p></li>
+</ul>
+</dd>
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>dims:</dt><dd><p>The number of dimensions of the input tensors.</p>
+</dd>
+<dt>kernel_sizes:</dt><dd><p>The kernel sizes for the convolutional layers.</p>
+</dd>
+<dt>upsample_factor:</dt><dd><p>The factor by which to upsample the attention map.</p>
+</dd>
+<dt>W_g:</dt><dd><p>The 1x1 Convolutional layer for the gating signal.</p>
+</dd>
+<dt>W_x:</dt><dd><p>The 1x1 Convolutional layer for the input features.</p>
+</dd>
+<dt>psi:</dt><dd><p>The 1x1 Convolutional layer followed by Sigmoid activation.</p>
+</dd>
+<dt>up:</dt><dd><p>The upsampling layer to match the dimensions of the input features.</p>
+</dd>
+<dt>relu:</dt><dd><p>The Rectified Linear Unit activation function.</p>
+</dd>
+</dl>
+</dd>
+<dt>Methods:</dt><dd><dl class="simple">
+<dt>calculate_and_apply_padding(smaller_tensor, larger_tensor):</dt><dd><p>Calculate and apply symmetric padding to the smaller tensor to match the dimensions of the larger tensor.</p>
+</dd>
+<dt>forward(g, x):</dt><dd><p>Forward pass of the Attention Block.</p>
+</dd>
+</dl>
+</dd>
+<dt>Note:</dt><dd><p>The AttentionBlockModule is an instance of the <code class="docutils literal notranslate"><span class="pre">torch.nn.Module</span></code> class.</p>
+</dd>
+</dl>
+</div></blockquote>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.AttentionBlockModule.calculate_and_apply_padding">
 <span class="sig-name descname"><span class="pre">calculate_and_apply_padding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smaller_tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">larger_tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.AttentionBlockModule.calculate_and_apply_padding" title="Link to this definition"></a></dt>
 <dd><p>Calculate and apply symmetric padding to the smaller tensor to match the dimensions of the larger tensor.</p>
-<p>Args:
-smaller_tensor (Tensor): The tensor to be padded.
-larger_tensor (Tensor): The tensor whose dimensions the smaller tensor needs to match.</p>
-<p>Returns:
-Tensor: The padded smaller tensor with the same dimensions as the larger tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>smaller_tensor</strong> (<em>Tensor</em>) – The tensor to be padded.</p></li>
+<li><p><strong>larger_tensor</strong> (<em>Tensor</em>) – The tensor whose dimensions the smaller tensor needs to match.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The padded smaller tensor with the same dimensions as the larger tensor.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tensor</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the tensors have different dimensions.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">larger_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smaller_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">attention_block</span> <span class="o">=</span> <span class="n">AttentionBlockModule</span><span class="p">(</span><span class="n">F_g</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">F_l</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">F_int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">padded_tensor</span> <span class="o">=</span> <span class="n">attention_block</span><span class="o">.</span><span class="n">calculate_and_apply_padding</span><span class="p">(</span><span class="n">smaller_tensor</span><span class="p">,</span> <span class="n">larger_tensor</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The tensors should have the same dimensions.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.AttentionBlockModule.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.AttentionBlockModule.forward" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Forward pass of the Attention Block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> (<em>Tensor</em>) – The gating signal tensor.</p></li>
+<li><p><strong>x</strong> (<em>Tensor</em>) – The input feature tensor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output tensor with the same dimensions as the input feature tensor.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tensor</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the gating signal and input feature tensors have different dimensions.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">attention_block</span> <span class="o">=</span> <span class="n">AttentionBlockModule</span><span class="p">(</span><span class="n">F_g</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">F_l</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">F_int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">attention_block</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The gating signal and input feature tensors should have the same dimensions.</p>
+</div>
+</dd></dl>
 
 </dd></dl>
 

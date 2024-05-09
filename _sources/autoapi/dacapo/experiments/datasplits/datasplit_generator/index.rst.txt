@@ -46,13 +46,79 @@ Attributes
 
    
 
-.. py:function:: is_zarr_group(file_name: str, dataset: str)
+.. py:function:: is_zarr_group(file_name: upath.UPath, dataset: str)
+
+   Check if the dataset is a Zarr group. If the dataset is a Zarr group, it will return True, otherwise False.
+
+   :param file_name: str
+                     The name of the file.
+   :param dataset: str
+                   The name of the dataset.
+
+   :returns: True if the dataset is a Zarr group, otherwise False.
+   :rtype: bool
+
+   :raises FileNotFoundError: If the file does not exist, a FileNotFoundError is raised.
+
+   .. rubric:: Examples
+
+   >>> is_zarr_group(file_name, dataset)
+
+   .. rubric:: Notes
+
+   This function is used to check if the dataset is a Zarr group.
 
 
 .. py:function:: resize_if_needed(array_config: dacapo.experiments.datasplits.datasets.arrays.ZarrArrayConfig, target_resolution: funlib.geometry.Coordinate, extra_str='')
 
+   Resize the array if needed. If the array needs to be resized, it will return the resized array, otherwise it will return the original array.
 
-.. py:function:: get_right_resolution_array_config(container: pathlib.Path, dataset, target_resolution, extra_str='')
+   :param array_config: obj
+                        The configuration of the array.
+   :param target_resolution: obj
+                             The target resolution.
+   :param extra_str: str
+                     An extra string.
+
+   :returns: The resized array if needed, otherwise the original array.
+   :rtype: obj
+
+   :raises FileNotFoundError: If the file does not exist, a FileNotFoundError is raised.
+
+   .. rubric:: Examples
+
+   >>> resize_if_needed(array_config, target_resolution, extra_str)
+
+   .. rubric:: Notes
+
+   This function is used to resize the array if needed.
+
+
+.. py:function:: get_right_resolution_array_config(container: upath.UPath, dataset, target_resolution, extra_str='')
+
+   Get the right resolution array configuration. It will return the right resolution array configuration.
+
+   :param container: obj
+                     The container.
+   :param dataset: str
+                   The dataset.
+   :param target_resolution: obj
+                             The target resolution.
+   :param extra_str: str
+                     An extra string.
+
+   :returns: The right resolution array configuration.
+   :rtype: obj
+
+   :raises FileNotFoundError: If the file does not exist, a FileNotFoundError is raised.
+
+   .. rubric:: Examples
+
+   >>> get_right_resolution_array_config(container, dataset, target_resolution, extra_str)
+
+   .. rubric:: Notes
+
+   This function is used to get the right resolution array configuration.
 
 
 .. py:class:: CustomEnumMeta
@@ -60,7 +126,21 @@ Attributes
 
 
 
-   Metaclass for Enum
+   Custom Enum Meta class to raise KeyError when an invalid option is passed.
+
+   .. attribute:: _member_names_
+
+      list
+      The list of member names.
+
+   .. method:: __getitem__(self, item)
+
+      
+      A method to get the item.
+
+   .. rubric:: Notes
+
+   This class is used to raise KeyError when an invalid option is passed.
 
 
 .. py:class:: CustomEnum
@@ -68,9 +148,21 @@ Attributes
 
 
 
-   Generic enumeration.
+   A custom Enum class to raise KeyError when an invalid option is passed.
 
-   Derive from this class to define new enumerations.
+   .. attribute:: __str__
+
+      str
+      The string representation of the class.
+
+   .. method:: __str__(self)
+
+      
+      A method to get the string representation of the class.
+
+   .. rubric:: Notes
+
+   This class is used to raise KeyError when an invalid option is passed.
 
 
 .. py:class:: DatasetType
@@ -78,9 +170,26 @@ Attributes
 
 
 
-   Generic enumeration.
+   An Enum class to represent the dataset type. It is derived from `CustomEnum` class.
 
-   Derive from this class to define new enumerations.
+   .. attribute:: val
+
+      int
+      The value of the dataset type.
+
+   .. attribute:: train
+
+      int
+      The training dataset type.
+
+   .. method:: __str__(self)
+
+      
+      A method to get the string representation of the class.
+
+   .. rubric:: Notes
+
+   This class is used to represent the dataset type.
 
    .. py:attribute:: val
       :value: 1
@@ -98,9 +207,26 @@ Attributes
 
 
 
-   Generic enumeration.
+   An Enum class to represent the segmentation type. It is derived from `CustomEnum` class.
 
-   Derive from this class to define new enumerations.
+   .. attribute:: semantic
+
+      int
+      The semantic segmentation type.
+
+   .. attribute:: instance
+
+      int
+      The instance segmentation type.
+
+   .. method:: __str__(self)
+
+      
+      A method to get the string representation of the class.
+
+   .. rubric:: Notes
+
+   This class is used to represent the segmentation type.
 
    .. py:attribute:: semantic
       :value: 1
@@ -113,39 +239,335 @@ Attributes
       
 
 
-.. py:class:: DatasetSpec(dataset_type: Union[str, DatasetType], raw_container: Union[str, pathlib.Path], raw_dataset: str, gt_container: Union[str, pathlib.Path], gt_dataset: str)
+.. py:class:: DatasetSpec(dataset_type: Union[str, DatasetType], raw_container: Union[str, upath.UPath], raw_dataset: str, gt_container: Union[str, upath.UPath], gt_dataset: str)
 
 
+   A class for dataset specification. It is used to specify the dataset.
 
-.. py:function:: generate_dataspec_from_csv(csv_path: pathlib.Path)
+   .. attribute:: dataset_type
+
+      obj
+      The dataset type.
+
+   .. attribute:: raw_container
+
+      obj
+      The raw container.
+
+   .. attribute:: raw_dataset
+
+      str
+      The raw dataset.
+
+   .. attribute:: gt_container
+
+      obj
+      The ground truth container.
+
+   .. attribute:: gt_dataset
+
+      str
+      The ground truth dataset.
+
+   .. method:: __init__(dataset_type, raw_container, raw_dataset, gt_container, gt_dataset)
+
+      
+      Initializes the DatasetSpec class with the specified dataset type, raw container, raw dataset, ground truth container, and ground truth dataset.
+
+   .. method:: __str__(self)
+
+      
+      A method to get the string representation of the class.
+
+   .. rubric:: Notes
+
+   This class is used to specify the dataset.
+
+
+.. py:function:: generate_dataspec_from_csv(csv_path: upath.UPath)
+
+   Generate the dataset specification from the CSV file. It will return the dataset specification.
+
+   :param csv_path: obj
+                    The CSV file path.
+
+   :returns: The dataset specification.
+   :rtype: list
+
+   :raises FileNotFoundError: If the file does not exist, a FileNotFoundError is raised.
+
+   .. rubric:: Examples
+
+   >>> generate_dataspec_from_csv(csv_path)
+
+   .. rubric:: Notes
+
+   This function is used to generate the dataset specification from the CSV file.
 
 
 .. py:class:: DataSplitGenerator(name: str, datasets: List[DatasetSpec], input_resolution: funlib.geometry.Coordinate, output_resolution: funlib.geometry.Coordinate, targets: Optional[List[str]] = None, segmentation_type: Union[str, SegmentationType] = 'semantic', max_gt_downsample=32, max_gt_upsample=4, max_raw_training_downsample=16, max_raw_training_upsample=2, max_raw_validation_downsample=8, max_raw_validation_upsample=2, min_training_volume_size=8000, raw_min=0, raw_max=255, classes_separator_caracter='&')
 
 
-   Generates DataSplitConfig for a given task config and datasets.
-   class names in gt_dataset shoulb be within [] e.g. [mito&peroxisome&er] for mutiple classes or [mito] for one class
-   Currently only supports:
-    - semantic segmentation.
-    Supports:
+   Generates DataSplitConfig for a given task config and datasets. A csv file can be generated
+   from the DataSplitConfig and used to generate the DataSplitConfig again.
+
+   Currently only supports semantic segmentation.
+   Supports:
        - 2D and 3D datasets.
        - Zarr, N5 and OME-Zarr datasets.
        - Multi class targets.
+       - Different resolutions for raw and ground truth datasets.
+       - Different resolutions for training and validation datasets.
+
+   .. attribute:: name
+
+      str
+      The name of the data split generator.
+
+   .. attribute:: datasets
+
+      list
+      The list of dataset specifications.
+
+   .. attribute:: input_resolution
+
+      obj
+      The input resolution.
+
+   .. attribute:: output_resolution
+
+      obj
+      The output resolution.
+
+   .. attribute:: targets
+
+      list
+      The list of targets.
+
+   .. attribute:: segmentation_type
+
+      obj
+      The segmentation type.
+
+   .. attribute:: max_gt_downsample
+
+      int
+      The maximum ground truth downsample.
+
+   .. attribute:: max_gt_upsample
+
+      int
+      The maximum ground truth upsample.
+
+   .. attribute:: max_raw_training_downsample
+
+      int
+      The maximum raw training downsample.
+
+   .. attribute:: max_raw_training_upsample
+
+      int
+      The maximum raw training upsample.
+
+   .. attribute:: max_raw_validation_downsample
+
+      int
+      The maximum raw validation downsample.
+
+   .. attribute:: max_raw_validation_upsample
+
+      int
+      The maximum raw validation upsample.
+
+   .. attribute:: min_training_volume_size
+
+      int
+      The minimum training volume size.
+
+   .. attribute:: raw_min
+
+      int
+      The minimum raw value.
+
+   .. attribute:: raw_max
+
+      int
+      The maximum raw value.
+
+   .. attribute:: classes_separator_caracter
+
+      str
+      The classes separator character.
+
+   .. method:: __init__(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_caracter)
+
+      
+      Initializes the DataSplitGenerator class with the specified name, datasets, input resolution, output resolution, targets, segmentation type, maximum ground truth downsample, maximum ground truth upsample, maximum raw training downsample, maximum raw training upsample, maximum raw validation downsample, maximum raw validation upsample, minimum training volume size, minimum raw value, maximum raw value, and classes separator character.
+
+   .. method:: __str__(self)
+
+      
+      A method to get the string representation of the class.
+
+   .. method:: class_name(self)
+
+      
+      A method to get the class name.
+
+   .. method:: check_class_name(self, class_name)
+
+      
+      A method to check the class name.
+
+   .. method:: compute(self)
+
+      
+      A method to compute the data split.
+
+   .. method:: __generate_semantic_seg_datasplit(self)
+
+      
+      A method to generate the semantic segmentation data split.
+
+   .. method:: __generate_semantic_seg_dataset_crop(self, dataset)
+
+      
+      A method to generate the semantic segmentation dataset crop.
+
+   .. method:: generate_csv(datasets, csv_path)
+
+      
+      A method to generate the CSV file.
+
+   .. method:: generate_from_csv(csv_path, input_resolution, output_resolution, name, **kwargs)
+
+      
+      A method to generate the data split from the CSV file.
+
+   .. rubric:: Notes
+
+   - This class is used to generate the DataSplitConfig for a given task config and datasets.
+   - Class names in gt_dataset shoulb be within [] e.g. [mito&peroxisome&er] for mutiple classes or [mito] for one class
 
    .. py:property:: class_name
 
+      Get the class name.
+
+      :param self: obj
+                   The object.
+
+      :returns: The class name.
+      :rtype: obj
+
+      :raises ValueError:
+      :raises If the class name is already set, a ValueError is raised.:
+
+      .. rubric:: Examples
+
+      >>> class_name
+
+      .. rubric:: Notes
+
+      This function is used to get the class name.
 
    .. py:method:: check_class_name(class_name)
+
+      Check the class name.
+
+      :param self: obj
+                   The object.
+      :param class_name: obj
+                         The class name.
+
+      :returns: The class name.
+      :rtype: obj
+
+      :raises ValueError:
+      :raises If the class name is already set, a ValueError is raised.:
+
+      .. rubric:: Examples
+
+      >>> check_class_name(class_name)
+
+      .. rubric:: Notes
+
+      This function is used to check the class name.
 
 
    .. py:method:: compute()
 
+      Compute the data split.
 
-   .. py:method:: generate_from_csv(csv_path: pathlib.Path, input_resolution: funlib.geometry.Coordinate, output_resolution: funlib.geometry.Coordinate, name: Optional[str] = None, **kwargs)
+      :param self: obj
+                   The object.
+
+      :returns: The data split.
+      :rtype: obj
+
+      :raises NotImplementedError:
+      :raises If the segmentation type is not implemented, a NotImplementedError is raised.:
+
+      .. rubric:: Examples
+
+      >>> compute()
+
+      .. rubric:: Notes
+
+      This function is used to compute the data split.
+
+
+   .. py:method:: generate_from_csv(csv_path: upath.UPath, input_resolution: funlib.geometry.Coordinate, output_resolution: funlib.geometry.Coordinate, name: Optional[str] = None, **kwargs)
       :staticmethod:
+
+      Generate the data split from the CSV file.
+
+      :param csv_path: obj
+                       The CSV file path.
+      :param input_resolution: obj
+                               The input resolution.
+      :param output_resolution: obj
+                                The output resolution.
+      :param name: str
+                   The name.
+      :param \*\*kwargs: dict
+                         The keyword arguments.
+
+      :returns: The data split.
+      :rtype: obj
+
+      :raises FileNotFoundError:
+      :raises If the file does not exist, a FileNotFoundError is raised.:
+
+      .. rubric:: Examples
+
+      >>> generate_from_csv(csv_path, input_resolution, output_resolution, name, **kwargs)
+
+      .. rubric:: Notes
+
+      This function is used to generate the data split from the CSV file.
 
 
 
 .. py:function:: format_class_name(class_name, separator_character='&')
+
+   Format the class name.
+
+   :param class_name: obj
+                      The class name.
+   :param separator_character: str
+                               The separator character.
+
+   :returns: The class name.
+   :rtype: obj
+
+   :raises ValueError: If the class name is invalid, a ValueError is raised.
+
+   .. rubric:: Examples
+
+   >>> format_class_name(class_name, separator_character)
+
+   .. rubric:: Notes
+
+   This function is used to format the class name.
 
 

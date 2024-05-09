@@ -27,6 +27,84 @@ Classes
 
    Includes support for super resolution via the upsampling factors.
 
+   .. attribute:: input_shape
+
+      Coordinate
+      The shape of the data passed into the network during training.
+
+   .. attribute:: fmaps_out
+
+      int
+      The number of channels produced by your architecture.
+
+   .. attribute:: fmaps_in
+
+      int
+      The number of channels expected from the raw data.
+
+   .. attribute:: num_fmaps
+
+      int
+      The number of feature maps in the top level of the UNet.
+
+   .. attribute:: fmap_inc_factor
+
+      int
+      The multiplication factor for the number of feature maps for each level of the UNet.
+
+   .. attribute:: downsample_factors
+
+      List[Coordinate]
+      The factors to downsample the feature maps along each axis per layer.
+
+   .. attribute:: kernel_size_down
+
+      Optional[List[Coordinate]]
+      The size of the convolutional kernels used before downsampling in each layer.
+
+   .. attribute:: kernel_size_up
+
+      Optional[List[Coordinate]]
+      The size of the convolutional kernels used before upsampling in each layer.
+
+   .. attribute:: _eval_shape_increase
+
+      Optional[Coordinate]
+      The amount by which to increase the input size when just prediction rather than training.
+      It is generally possible to significantly increase the input size since we don't have the memory
+      constraints of the gradients, the optimizer and the batch size.
+
+   .. attribute:: upsample_factors
+
+      Optional[List[Coordinate]]
+      The amount by which to upsample the output of the UNet.
+
+   .. attribute:: constant_upsample
+
+      bool
+      Whether to use a transpose convolution or simply copy voxels to upsample.
+
+   .. attribute:: padding
+
+      str
+      The padding to use in convolution operations.
+
+   .. attribute:: use_attention
+
+      bool
+      Whether to use attention blocks in the UNet. This is supported for 2D and  3D.
+
+   .. method:: architecture_type()
+
+      
+      Returns the architecture type.
+
+   .. note:: The architecture_type attribute is set to CNNectomeUNet.
+
+   .. rubric:: References
+
+   Saalfeld, S., Fetter, R., Cardona, A., & Tomancak, P. (2012).
+
    .. py:attribute:: architecture_type
 
       
@@ -62,12 +140,12 @@ Classes
       
 
    .. py:attribute:: kernel_size_down
-      :type: Optional[List[funlib.geometry.Coordinate]]
+      :type: Optional[List[List[funlib.geometry.Coordinate]]]
 
       
 
    .. py:attribute:: kernel_size_up
-      :type: Optional[List[funlib.geometry.Coordinate]]
+      :type: Optional[List[List[funlib.geometry.Coordinate]]]
 
       
 

@@ -60,6 +60,10 @@ Classes
 
       :type: bool
 
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method verifies the HotDistanceTaskConfig object.
+
    .. note::
 
       Generating distance transforms over regular affinities provides you with a denser

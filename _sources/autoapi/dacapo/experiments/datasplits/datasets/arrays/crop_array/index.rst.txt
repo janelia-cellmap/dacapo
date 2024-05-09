@@ -22,56 +22,373 @@ Classes
 
 
 
-   Used to crop a larger array to a smaller array.
+   Used to crop a larger array to a smaller array. This is useful when you
+   want to work with a subset of a larger array, but don't want to copy the
+   data. The crop is done on demand, so the data is not copied until you
+   actually access it.
+
+   .. attribute:: name
+
+      The name of the array.
+
+   .. attribute:: source_array
+
+      The array to crop.
+
+   .. attribute:: crop_roi
+
+      The region of interest to crop to.
+
+   .. method:: attrs
+
+      Returns the attributes of the source array.
+
+   .. method:: axes
+
+      Returns the axes of the source array.
+
+   .. method:: dims
+
+      Returns the number of dimensions of the source array.
+
+   .. method:: voxel_size
+
+      Returns the voxel size of the source array.
+
+   .. method:: roi
+
+      Returns the region of interest of the source array.
+
+   .. method:: writable
+
+      Returns whether the array is writable.
+
+   .. method:: dtype
+
+      Returns the data type of the source array.
+
+   .. method:: num_channels
+
+      Returns the number of channels of the source array.
+
+   .. method:: data
+
+      Returns the data of the source array.
+
+   .. method:: channels
+
+      Returns the channels of the source array.
+
+   .. method:: __getitem__(roi)
+
+      Returns the data of the source array within the
+      region of interest.
+
+   .. method:: _can_neuroglance()
+
+      Returns whether the source array can be viewed in
+      Neuroglancer.
+
+   .. method:: _neuroglancer_source()
+
+      Returns the source of the source array for
+      Neuroglancer.
+
+   .. method:: _neuroglancer_layer()
+
+      Returns the layer of the source array for
+      Neuroglancer.
+
+   .. method:: _source_name()
+
+      Returns the name of the source array.
+
+   .. note:: This class is a subclass of Array.
 
    .. py:property:: attrs
 
-      Return a dictionary of metadata attributes stored on this array.
+      Returns the attributes of the source array.
+
+      :returns: The attributes of the source array.
+
+      :raises ValueError: If the region of interest to crop to is not within the
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
+      >>> from dacapo.experiments.datasplits.datasets.arrays import CropArray
+      >>> from funlib.geometry import Roi
+      >>> import numpy as np
+      >>> array_config = ArrayConfig(
+      ...     name='array',
+      ...     source_array_config=source_array_config,
+      ...     roi=Roi((0, 0, 0), (10, 10, 10))
+      ... )
+      >>> crop_array = CropArray(array_config)
+      >>> crop_array.attrs
+      {}
+
+      .. note:: The attributes are empty because the source array is not modified.
 
    .. py:property:: axes
 
-      Returns the axes of this dataset as a string of charactes, as they
-      are indexed. Permitted characters are:
+      Returns the axes of the source array.
 
-          * ``zyx`` for spatial dimensions
-          * ``c`` for channels
-          * ``s`` for samples
+      :returns: The axes of the source array.
+
+      :raises ValueError: If the region of interest to crop to is not within the
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
+      >>> from dacapo.experiments.datasplits.datasets.arrays import CropArray
+      >>> from funlib.geometry import Roi
+      >>> import numpy as np
+      >>> array_config = ArrayConfig(
+      ...     name='array',
+      ...     source_array_config=source_array_config,
+      ...     roi=Roi((0, 0, 0), (10, 10, 10))
+      ... )
+      >>> crop_array = CropArray(array_config)
+      >>> crop_array.axes
+      'zyx'
+
+      .. note:: The axes are 'zyx' because the source array is not modified.
 
    .. py:property:: dims
       :type: int
 
-      Returns the number of spatial dimensions.
+      Returns the number of dimensions of the source array.
+
+      :returns: The number of dimensions of the source array.
+
+      :raises ValueError: If the region of interest to crop to is not within the
+          region of interest of the source array.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
+      >>> from dacapo.experiments.datasplits.datasets.arrays import CropArray
+      >>> from funlib.geometry import Roi
+      >>> import numpy as np
+      >>> array_config = ArrayConfig(
+      ...     name='array',
+      ...     source_array_config=source_array_config,
+      ...     roi=Roi((0, 0, 0), (10, 10, 10))
+      ... )
+      >>> crop_array = CropArray(array_config)
+      >>> crop_array.dims
+      3
+
+      .. note::
+
+         The number of dimensions is 3 because the source array is not
+         modified.
 
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
-      The size of a voxel in physical units.
+      Returns the voxel size of the source array.
+
+      :returns: The voxel size of the source array.
+
+      :raises ValueError: If the region of interest to crop to is not within the
+          region of interest of the source array.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
+      >>> from dacapo.experiments.datasplits.datasets.arrays import CropArray
+      >>> from funlib.geometry import Roi
+      >>> import numpy as np
+      >>> array_config = ArrayConfig(
+      ...     name='array',
+      ...     source_array_config=source_array_config,
+      ...     roi=Roi((0, 0, 0), (10, 10, 10))
+      ... )
+      >>> crop_array = CropArray(array_config)
+      >>> crop_array.voxel_size
+      Coordinate(x=1.0, y=1.0, z=1.0)
+
+      .. note::
+
+         The voxel size is (1.0, 1.0, 1.0) because the source array is not
+         modified.
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
 
-      The total ROI of this array, in world units.
+      Returns the region of interest of the source array.
+
+      :returns: The region of interest of the source array.
+
+      :raises ValueError: If the region of interest to crop to is not within the
+          region of interest of the source array.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
+      >>> from dacapo.experiments.datasplits.datasets.arrays import CropArray
+      >>> from funlib.geometry import Roi
+      >>> import numpy as np
+      >>> array_config = ArrayConfig(
+      ...     name='array',
+      ...     source_array_config=source_array_config,
+      ...     roi=Roi((0, 0, 0), (10, 10, 10))
+      ... )
+      >>> crop_array = CropArray(array_config)
+      >>> crop_array.roi
+      Roi(offset=(0, 0, 0), shape=(10, 10, 10))
+
+      .. note::
+
+         The region of interest is (0, 0, 0) with shape (10, 10, 10)
+         because the source array is not modified.
 
    .. py:property:: writable
       :type: bool
 
-      Can we write to this Array?
+      Returns whether the array is writable.
+
+      :returns: False
+
+      :raises ValueError: If the region of interest to crop to is not within the
+          region of interest of the source array.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
+      >>> from dacapo.experiments.datasplits.datasets.arrays import CropArray
+      >>> from funlib.geometry import Roi
+      >>> import numpy as np
+      >>> array_config = ArrayConfig(
+      ...     name='array',
+      ...     source_array_config=source_array_config,
+      ...     roi=Roi((0, 0, 0), (10, 10, 10))
+      ... )
+      >>> crop_array = CropArray(array_config)
+      >>> crop_array.writable
+      False
+
+      .. note::
+
+         The array is not writable because it is a virtual array created by
+         modifying another array on demand.
 
    .. py:property:: dtype
 
-      The dtype of this array, in numpy dtypes
+      Returns the data type of the source array.
+
+      :returns: The data type of the source array.
+
+      :raises ValueError: If the region of interest to crop to is not within the
+          region of interest of the source array.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
+      >>> from dacapo.experiments.datasplits.datasets.arrays import CropArray
+      >>> from funlib.geometry import Roi
+      >>> import numpy as np
+      >>> array_config = ArrayConfig(
+      ...     name='array',
+      ...     source_array_config=source_array_config,
+      ...     roi=Roi((0, 0, 0), (10, 10, 10))
+      ... )
+      >>> crop_array = CropArray(array_config)
+      >>> crop_array.dtype
+      numpy.dtype('uint8')
+
+      .. note:: The data type is uint8 because the source array is not modified.
 
    .. py:property:: num_channels
       :type: int
 
-      The number of channels provided by this dataset.
-      Should return None if the channel dimension doesn't exist.
+      Returns the number of channels of the source array.
+
+      :returns: The number of channels of the source array.
+
+      :raises ValueError: If the region of interest to crop to is not within the
+          region of interest of the source array.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
+      >>> from dacapo.experiments.datasplits.datasets.arrays import CropArray
+      >>> from funlib.geometry import Roi
+      >>> import numpy as np
+      >>> array_config = ArrayConfig(
+      ...     name='array',
+      ...     source_array_config=source_array_config,
+      ...     roi=Roi((0, 0, 0), (10, 10, 10))
+      ... )
+      >>> crop_array = CropArray(array_config)
+      >>> crop_array.num_channels
+      1
+
+      .. note::
+
+         The number of channels is 1 because the source array is not
+         modified.
 
    .. py:property:: data
 
-      Get a numpy like readable and writable view into this array.
+      Returns the data of the source array.
+
+      :returns: The data of the source array.
+
+      :raises ValueError: If the region of interest to crop to is not within the
+          region of interest of the source array.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
+      >>> from dacapo.experiments.datasplits.datasets.arrays import CropArray
+      >>> from funlib.geometry import Roi
+      >>> import numpy as np
+      >>> array_config = ArrayConfig(
+      ...     name='array',
+      ...     source_array_config=source_array_config,
+      ...     roi=Roi((0, 0, 0), (10, 10, 10))
+      ... )
+      >>> crop_array = CropArray(array_config)
+      >>> crop_array.data
+      array([[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+             [[0, 0, 0, 0, 0, 0, 0, 0, 0
 
    .. py:property:: channels
 
+      Returns the channels of the source array.
+
+      :returns: The channels of the source array.
+
+      :raises ValueError: If the region of interest to crop to is not within the
+          region of interest of the source array.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
+      >>> from dacapo.experiments.datasplits.datasets.arrays import CropArray
+      >>> from funlib.geometry import Roi
+      >>> import numpy as np
+      >>> array_config = ArrayConfig(
+      ...     name='array',
+      ...     source_array_config=source_array_config,
+      ...     roi=Roi((0, 0, 0), (10, 10, 10))
+      ... )
+      >>> crop_array = CropArray(array_config)
+      >>> crop_array.channels
+      1
+
+      .. note:: The channels is 1 because the source array is not modified.
 
 

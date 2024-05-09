@@ -22,8 +22,35 @@ Classes
 
 
 
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+   A predictor is a class that defines how to train a model to predict a
+   certain output from a certain input.
+
+   A predictor is responsible for creating the model, the target, the weight,
+   and the output array type for a given training architecture.
+
+   .. method:: create_model(self, architecture
+
+      "Architecture") -> "Model": Given a training architecture, create a model for this predictor.
+
+   .. method:: create_target(self, gt
+
+      "Array") -> "Array": Create the target array for training, given a ground-truth array.
+
+   .. method:: create_weight(self, gt
+
+      "Array", target: "Array", mask: "Array", moving_class_counts: Any) -> Tuple["Array", Any]: Create the weight array for training, given a ground-truth and associated target array.
+
+   .. method:: gt_region_for_roi(self, target_spec)
+
+      Report how much spatial context this predictor needs to generate a target for the given ROI.
+
+   .. method:: padding(self, gt_voxel_size
+
+      Coordinate) -> Coordinate: Return the padding needed for the ground-truth array.
+
+   .. rubric:: Notes
+
+   This is a subclass of ABC.
 
    .. py:property:: output_array_type
       :abstractmethod:
@@ -36,6 +63,16 @@ Classes
       This is usually done by appending extra layers to the output of the
       architecture to get the output tensor of the architecture into the
       right shape for this predictor.
+
+      :param architecture: The training architecture.
+
+      :returns: The model.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.create_model(architecture)
 
 
    .. py:method:: create_target(gt: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.datasplits.datasets.arrays.Array
@@ -59,12 +96,35 @@ Classes
       threshold), you can request a larger ground-truth region. See method
       ``gt_region_for_roi``.
 
+      :param gt: The ground-truth array.
+
+      :returns: The target array.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.create_target(gt)
+
 
    .. py:method:: create_weight(gt: dacapo.experiments.datasplits.datasets.arrays.Array, target: dacapo.experiments.datasplits.datasets.arrays.Array, mask: dacapo.experiments.datasplits.datasets.arrays.Array, moving_class_counts: Any) -> Tuple[dacapo.experiments.datasplits.datasets.arrays.Array, Any]
       :abstractmethod:
 
       Create the weight array for training, given a ground-truth and
       associated target array.
+
+      :param gt: The ground-truth array.
+      :param target: The target array.
+      :param mask: The mask array.
+      :param moving_class_counts: The moving class counts.
+
+      :returns: The weight array and the moving class counts.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.create_weight(gt, target, mask, moving_class_counts)
 
 
    .. py:method:: gt_region_for_roi(target_spec)
@@ -75,8 +135,30 @@ Classes
       Overwrite this method to request ground-truth in a larger ROI, as
       needed.
 
+      :param target_spec: The ROI for which the target is requested.
+
+      :returns: The ROI for which the ground-truth is requested.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.gt_region_for_roi(target_spec)
+
 
    .. py:method:: padding(gt_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
+
+      Return the padding needed for the ground-truth array.
+
+      :param gt_voxel_size: The voxel size of the ground-truth array.
+
+      :returns: The padding needed for the ground-truth array.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.padding(gt_voxel_size)
 
 
 

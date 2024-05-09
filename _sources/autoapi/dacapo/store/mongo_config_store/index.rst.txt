@@ -37,111 +37,602 @@ Attributes
    A MongoDB store for configurations. Used to store and retrieve
    configurations for runs, tasks, architectures, trainers, and datasets.
 
+   .. attribute:: db_host
+
+      The host of the MongoDB database.
+
+      :type: str
+
+   .. attribute:: db_name
+
+      The name of the MongoDB database.
+
+      :type: str
+
+   .. attribute:: client
+
+      The MongoDB client.
+
+      :type: MongoClient
+
+   .. attribute:: database
+
+      The MongoDB database.
+
+      :type: Database
+
+   .. attribute:: users
+
+      The users collection.
+
+      :type: Collection
+
+   .. attribute:: runs
+
+      The runs collection.
+
+      :type: Collection
+
+   .. attribute:: tasks
+
+      The tasks collection.
+
+      :type: Collection
+
+   .. attribute:: datasplits
+
+      The datasplits collection.
+
+      :type: Collection
+
+   .. attribute:: datasets
+
+      The datasets collection.
+
+      :type: Collection
+
+   .. attribute:: arrays
+
+      The arrays collection.
+
+      :type: Collection
+
+   .. attribute:: architectures
+
+      The architectures collection.
+
+      :type: Collection
+
+   .. attribute:: trainers
+
+      The trainers collection.
+
+      :type: Collection
+
+   .. method:: store_run_config(run_config, ignore)
+
+      Store the run configuration.
+
+   .. method:: retrieve_run_config(run_name)
+
+      Retrieve the run configuration.
+
+   .. method:: delete_run_config(run_name)
+
+      Delete the run configuration.
+
+   .. method:: retrieve_run_config_names(task_names, datasplit_names, architecture_names, trainer_names)
+
+      Retrieve the names of the run configurations.
+
+   .. method:: store_task_config(task_config, ignore)
+
+      Store the task configuration.
+
+   .. method:: retrieve_task_config(task_name)
+
+      Retrieve the task configuration.
+
+   .. method:: retrieve_task_config_names()
+
+      Retrieve the names of the task configurations.
+
+   .. method:: store_architecture_config(architecture_config, ignore)
+
+      Store the architecture configuration.
+
+   .. method:: retrieve_architecture_config(architecture_name)
+
+      Retrieve the architecture configuration.
+
+   .. method:: retrieve_architecture_config_names()
+
+      Retrieve the names of the architecture configurations.
+
+   .. method:: store_trainer_config(trainer_config, ignore)
+
+      Store the trainer configuration.
+
+   .. method:: retrieve_trainer_config(trainer_name)
+
+      Retrieve the trainer configuration.
+
+   .. method:: retrieve_trainer_config_names()
+
+      Retrieve the names of the trainer configurations.
+
+   .. method:: store_datasplit_config(datasplit_config, ignore)
+
+      Store the datasplit configuration.
+
+   .. method:: retrieve_datasplit_config(datasplit_name)
+
+      Retrieve the datasplit configuration.
+
+   .. method:: retrieve_datasplit_config_names()
+
+      Retrieve the names of the datasplit configurations.
+
+   .. method:: store_dataset_config(dataset_config, ignore)
+
+      Store the dataset configuration.
+
+   .. method:: retrieve_dataset_config(dataset_name)
+
+      Retrieve the dataset configuration.
+
+   .. method:: retrieve_dataset_config_names()
+
+      Retrieve the names of the dataset configurations.
+
+   .. method:: store_array_config(array_config, ignore)
+
+      Store the array configuration.
+
+   .. method:: retrieve_array_config(array_name)
+
+      Retrieve the array configuration.
+
+   .. method:: retrieve_array_config_names()
+
+      Retrieve the names of the array configurations.
+
+   .. method:: __save_insert(collection, data, ignore)
+
+      Save or insert a document into a collection.
+
+   .. method:: __same_doc(a, b, ignore)
+
+      Check if two documents are the same.
+
+   .. method:: __init_db()
+
+      Initialize the database.
+
+   .. method:: __open_collections()
+
+      Open the collections.
+
+   .. rubric:: Notes
+
+   The store is initialized with the host and database name.
+
    .. py:method:: delete_config(database, config_name: str) -> None
+
+      Deletes a configuration from the database.
+
+      :param database: The database object.
+      :param config_name: The name of the configuration to delete.
+
+      :raises ValueError: If the configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> config_name = 'config_0'
+      >>> store.delete_config(store.tasks, config_name)
 
 
    .. py:method:: store_run_config(run_config, ignore=None)
 
-      Store a run config. This should also store the configs that are part
-      of the run config (i.e., task, architecture, trainer, and dataset
-      config).
+      Stores the run configuration in the MongoDB runs collection.
+
+      :param run_config: The run configuration to be stored.
+      :type run_config: dict
+      :param ignore: A list of fields to ignore during the storage process.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If the run configuration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> run_config = {'name': 'run_0'}
+      >>> store.store_run_config(run_config)
 
 
    .. py:method:: retrieve_run_config(run_name)
 
-      Retrieve a run config from a run name.
+      Retrieve the run configuration for a given run name.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+
+      :returns: The run configuration for the given run name.
+      :rtype: RunConfig
+
+      :raises ValueError: If the run configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> store.retrieve_run_config(run_name)
 
 
    .. py:method:: delete_run_config(run_name)
 
+      Delete a run configuration from the MongoDB collection.
+
+      :param run_name: The name of the run configuration to delete.
+      :type run_name: str
+
+      :raises ValueError: If the run configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> store.delete_run_config(run_name)
+
 
    .. py:method:: retrieve_run_config_names(task_names=None, datasplit_names=None, architecture_names=None, trainer_names=None)
 
-      Retrieve all run config names.
+      Retrieve the names of run configurations based on specified filters.
+
+      :param task_names: List of task names to filter the run configurations. Defaults to None.
+      :type task_names: list, optional
+      :param datasplit_names: List of datasplit names to filter the run configurations. Defaults to None.
+      :type datasplit_names: list, optional
+      :param architecture_names: List of architecture names to filter the run configurations. Defaults to None.
+      :type architecture_names: list, optional
+      :param trainer_names: List of trainer names to filter the run configurations. Defaults to None.
+      :type trainer_names: list, optional
+
+      :returns: A list of run configuration names that match the specified filters.
+      :rtype: list
+
+      :raises ValueError: If the run configurations are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> task_names = ['task_0']
+      >>> datasplit_names = ['datasplit_0']
+      >>> architecture_names = ['architecture_0']
+      >>> trainer_names = ['trainer_0']
+      >>> store.retrieve_run_config_names(task_names, datasplit_names, architecture_names, trainer_names)
 
 
    .. py:method:: store_task_config(task_config, ignore=None)
 
-      Store a task config.
+      Store the task configuration in the MongoDB tasks collection.
+
+      :param task_config: The task configuration to be stored.
+      :type task_config: TaskConfig
+      :param ignore: A list of fields to ignore during the storage process.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If the task configuration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> task_config = TaskConfig(name='task_0')
+      >>> store.store_task_config(task_config)
 
 
    .. py:method:: retrieve_task_config(task_name)
 
-      Retrieve a task config from a task name.
+      Retrieve the task configuration for a given task name.
+
+      :param task_name: The name of the task.
+      :type task_name: str
+
+      :returns: The task configuration object.
+      :rtype: TaskConfig
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> task_name = 'task_0'
+      >>> store.retrieve_task_config(task_name)
 
 
    .. py:method:: retrieve_task_config_names()
 
-      Retrieve all task config names.
+      Retrieve the names of all task configurations.
+
+      :returns: A list of task configuration names.
+
+      :raises ValueError: If the task configurations are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> store.retrieve_task_config_names()
 
 
    .. py:method:: store_architecture_config(architecture_config, ignore=None)
 
-      Store a architecture config.
+      Store the architecture configuration in the MongoDB.
+
+      :param architecture_config: The architecture configuration to be stored.
+      :type architecture_config: ArchitectureConfig
+      :param ignore: List of fields to ignore during storage. Defaults to None.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If the architecture configuration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> architecture_config = ArchitectureConfig(name='architecture_0')
+      >>> store.store_architecture_config(architecture_config)
 
 
    .. py:method:: retrieve_architecture_config(architecture_name)
 
-      Retrieve a architecture config from a architecture name.
+      Retrieve the architecture configuration for the given architecture name.
+
+      :param architecture_name: The name of the architecture.
+      :type architecture_name: str
+
+      :returns: The architecture configuration object.
+      :rtype: ArchitectureConfig
+
+      :raises ValueError: If the architecture configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> architecture_name = 'architecture_0'
+      >>> store.retrieve_architecture_config(architecture_name)
 
 
    .. py:method:: retrieve_architecture_config_names()
 
-      Retrieve all architecture config names.
+      Retrieve the names of all architecture configurations.
+
+      :returns: A list of architecture configuration names.
+
+      :raises ValueError: If the architecture configurations are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> store.retrieve_architecture_config_names()
 
 
    .. py:method:: store_trainer_config(trainer_config, ignore=None)
 
-      Store a trainer config.
+      Store the trainer configuration in the MongoDB.
+
+      :param trainer_config: The trainer configuration to be stored.
+      :type trainer_config: TrainerConfig
+      :param ignore: List of fields to ignore during storage. Defaults to None.
+      :type ignore: list, optional
+
+      :returns: If the trainer configuration is already stored.
+      :rtype: DuplicateNameError
+
+      :raises DuplicateNameError: If the trainer configuration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> trainer_config = TrainerConfig(name='trainer_0')
+      >>> store.store_trainer_config(trainer_config)
 
 
    .. py:method:: retrieve_trainer_config(trainer_name)
 
-      Retrieve a trainer config from a trainer name.
+      Retrieve the trainer configuration for the given trainer name.
+
+      :param trainer_name: The name of the trainer.
+      :type trainer_name: str
+
+      :returns: The trainer configuration object.
+      :rtype: TrainerConfig
+
+      :raises ValueError: If the trainer configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> trainer_name = 'trainer_0'
+      >>> store.retrieve_trainer_config(trainer_name)
 
 
    .. py:method:: retrieve_trainer_config_names()
 
-      Retrieve all trainer config names.
+      Retrieve the names of all trainer configurations.
+
+      :param trainer_name: The name of the trainer.
+      :type trainer_name: str
+
+      :returns: The trainer configuration object.
+      :rtype: TrainerConfig
+
+      :raises ValueError: If the trainer configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> trainer_name = 'trainer_0'
+      >>> store.retrieve_trainer_config(trainer_name)
 
 
    .. py:method:: store_datasplit_config(datasplit_config, ignore=None)
 
-      Store a datasplit config.
+      Store the datasplit configuration in the MongoDB.
+
+      :param datasplit_config: The datasplit configuration to be stored.
+      :type datasplit_config: DataSplitConfig
+      :param ignore: List of fields to ignore during storage. Defaults to None.
+      :type ignore: list, optional
+
+      :returns: If the datasplit configuration is already stored.
+      :rtype: DuplicateNameError
+
+      :raises DuplicateNameError: If the datasplit configuration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> datasplit_config = DataSplitConfig(name='datasplit_0')
+      >>> store.store_datasplit_config(datasplit_config)
 
 
    .. py:method:: retrieve_datasplit_config(datasplit_name)
 
-      Retrieve a datasplit config from a datasplit name.
+      Retrieve the datasplit configuration for the given datasplit name.
+
+      :param datasplit_name: The name of the datasplit.
+      :type datasplit_name: str
+
+      :returns: The datasplit configuration object.
+      :rtype: DataSplitConfig
+
+      :raises ValueError: If the datasplit configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> datasplit_name = 'datasplit_0'
+      >>> store.retrieve_datasplit_config(datasplit_name)
 
 
    .. py:method:: retrieve_datasplit_config_names()
 
-      Retrieve all datasplit names.
+      Retrieve the names of all datasplit configurations.
+
+      :returns: A list of datasplit configuration names.
+
+      :raises ValueError: If the datasplit configurations are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> store.retrieve_datasplit_config_names()
 
 
    .. py:method:: store_dataset_config(dataset_config, ignore=None)
 
+      Store the dataset configuration in the MongoDB.
+
+      :param dataset_config: The dataset configuration to be stored.
+      :type dataset_config: DatasetConfig
+      :param ignore: List of fields to ignore during storage. Defaults to None.
+      :type ignore: list, optional
+
+      :returns: If the dataset configuration is already stored.
+      :rtype: DuplicateNameError
+
+      :raises DuplicateNameError: If the dataset configuration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> dataset_config = DatasetConfig(name='dataset_0')
+      >>> store.store_dataset_config(dataset_config)
+
 
    .. py:method:: retrieve_dataset_config(dataset_name)
+
+      Retrieve the dataset configuration for the given dataset name.
+
+      :param dataset_name: The name of the dataset.
+      :type dataset_name: str
+
+      :returns: The dataset configuration object.
+      :rtype: DatasetConfig
+
+      :raises ValueError: If the dataset configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> dataset_name = 'dataset_0'
+      >>> store.retrieve_dataset_config(dataset_name)
 
 
    .. py:method:: retrieve_dataset_config_names()
 
+      Retrieve the names of all dataset configurations.
+
+      :returns: A list of dataset configuration names.
+
+      :raises ValueError: If the dataset configurations are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> store.retrieve_dataset_config_names()
+
 
    .. py:method:: store_array_config(array_config, ignore=None)
 
-      Store a array config.
+      Store the array configuration in the MongoDB.
+
+      :param array_config: The array configuration to be stored.
+      :type array_config: ArrayConfig
+      :param ignore: List of fields to ignore during storage. Defaults to None.
+      :type ignore: list, optional
+
+      :returns: If the array configuration is already stored.
+      :rtype: DuplicateNameError
+
+      :raises DuplicateNameError: If the array configuration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> array_config = ArrayConfig(name='array_0')
+      >>> store.store_array_config(array_config)
 
 
    .. py:method:: retrieve_array_config(array_name)
 
-      Retrieve a array config from a array name.
+      Retrieve the array configuration for the given array name.
+
+      :param array_name: The name of the array.
+      :type array_name: str
+
+      :returns: The array configuration object.
+      :rtype: ArrayConfig
+
+      :raises ValueError: If the array configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> array_name = 'array_0'
+      >>> store.retrieve_array_config(array_name)
 
 
    .. py:method:: retrieve_array_config_names()
 
-      Retrieve all array names.
+      Retrieve the names of all array configurations.
+
+      :returns: A list of array configuration names.
+
+      :raises ValueError: If the array configurations are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> store.retrieve_array_config_names()
 
 
 

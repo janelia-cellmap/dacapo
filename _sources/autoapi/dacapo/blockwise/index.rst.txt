@@ -43,114 +43,76 @@ Functions
 
 
 
-.. py:class:: DaCapoBlockwiseTask(worker_file: str | pathlib.Path, total_roi: daisy.Roi, read_roi: daisy.Roi, write_roi: daisy.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, *args, **kwargs)
+.. py:class:: DaCapoBlockwiseTask(worker_file: str | upath.UPath, total_roi: daisy.Roi, read_roi: daisy.Roi, write_roi: daisy.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, *args, **kwargs)
 
 
 
 
-   Definition of a ``daisy`` task that is to be run in a block-wise
-   fashion.
+   A task to run a blockwise worker function. This task is used to run a
+   blockwise worker function on a given ROI.
 
-   :param name: The unique name of the task.
-   :type name: ``string``
-   :param total_roi (`class: daisy.Roi`):
+   .. attribute:: worker_file
 
-                             The region of interest (ROI) of the complete volume to process.
-   :param read_roi (`class: daisy.Roi`):
+      The path to the worker file.
 
-                            The ROI every block needs to read data from. Will be shifted over
-                            the ``total_roi`` to cover the whole volume.
-   :param write_roi (`class: daisy.Roi`):
+      :type: str | Path
 
-                             The ROI every block writes data from. Will be shifted over the
-                             ``total_roi`` to cover the whole volume.
-   :param process_function:
-                            A function that will be called as::
+   .. attribute:: total_roi
 
-                                process_function(block)
+      The ROI to process.
 
-                            with ``block`` being the shifted read and write ROI for each
-                            location in the volume.
+      :type: Roi
 
-                            If ``read_write_conflict`` is ``True`, the callee can assume that
-                            there are no read/write concurencies, i.e., at any given point in
-                            time the ``read_roi`` does not overlap with the ``write_roi`` of
-                            another process.
-   :type process_function: function
-   :param check_function:
-                          A function that will be called as::
+   .. attribute:: read_roi
 
-                              check_function(block)
+      The ROI to read from for a block.
 
-                          This function should return ``True`` if the block was completed.
-                          This is used internally to avoid processing blocks that are already
-                          done and to check if a block was correctly processed.
+      :type: Roi
 
-                          If a tuple of two functions is given, the first one will be called
-                          to check if the block needs to be run, and if so, the second one
-                          will be called after it was run to check if the run succeeded.
-   :type check_function: function, optional
-   :param init_callback_fn: A function that Daisy will call once when the task is started.
-                            It will be called as::
+   .. attribute:: write_roi
 
-                                init_callback_fn(context)
+      The ROI to write to for a block.
 
-                            Where `context` is the `daisy.Context` string that can be used
-                            by the daisy clients to connect to the server.
-   :type init_callback_fn: function, optional
-   :param read_write_conflict: Whether the read and write ROIs are conflicting, i.e., accessing
-                               the same resource. If set to ``False``, all blocks can run at the
-                               same time in parallel. In this case, providing a ``read_roi`` is
-                               simply a means of convenience to ensure no out-of-bound accesses
-                               and to avoid re-computation of it in each block.
-   :type read_write_conflict: ``bool``, optional
-   :param fit: How to handle cases where shifting blocks by the size of
-               ``write_roi`` does not tile the ``total_roi``. Possible options
-               are:
+      :type: Roi
 
-               "valid": Skip blocks that would lie outside of ``total_roi``. This
-               is the default::
+   .. attribute:: num_workers
 
-                   |---------------------------|     total ROI
+      The number of workers to use.
 
-                   |rrrr|wwwwww|rrrr|                block 1
-                          |rrrr|wwwwww|rrrr|         block 2
-                                                     no further block
+      :type: int
 
-               "overhang": Add all blocks that overlap with ``total_roi``, even if
-               they leave it. Client code has to take care of save access beyond
-               ``total_roi`` in this case.::
+   .. attribute:: max_retries
 
-                   |---------------------------|     total ROI
+      The maximum number of times a task will be retried if failed
+      (either due to failed post check or application crashes or network
+      failure)
 
-                   |rrrr|wwwwww|rrrr|                block 1
-                          |rrrr|wwwwww|rrrr|         block 2
-                                 |rrrr|wwwwww|rrrr|  block 3 (overhanging)
+      :type: int
 
-               "shrink": Like "overhang", but shrink the boundary blocks' read and
-               write ROIs such that they are guaranteed to lie within
-               ``total_roi``. The shrinking will preserve the context, i.e., the
-               difference between the read ROI and write ROI stays the same.::
+   .. attribute:: timeout
 
-                   |---------------------------|     total ROI
+      The timeout for the task.
 
-                   |rrrr|wwwwww|rrrr|                block 1
-                          |rrrr|wwwwww|rrrr|         block 2
-                                 |rrrr|www|rrrr|     block 3 (shrunk)
-   :type fit: ``string``, optional
-   :param num_workers: The number of parallel processes to run.
-   :type num_workers: int, optional
-   :param max_retries: The maximum number of times a task will be retried if failed
-                       (either due to failed post check or application crashes or network
-                       failure)
-   :type max_retries: int, optional
-   :param timeout: Time in seconds to wait for a block to be returned from a worker.
-                   The worker is killed (and the block retried) if this time is
-                   exceeded.
-   :type timeout: int, optional
+   .. attribute:: upstream_tasks
+
+      The upstream tasks.
+
+   .. attribute:: \*args
+
+      Additional positional arguments to pass to ``worker_function``.
+
+   .. attribute:: \*\*kwargs
+
+      Additional keyword arguments to pass to ``worker_function``.
+
+   .. method:: __init__
+
+      
+      Initialize the task.
+      
 
 
-.. py:function:: run_blockwise(worker_file: str | pathlib.Path, total_roi: funlib.geometry.Roi, read_roi: funlib.geometry.Roi, write_roi: funlib.geometry.Roi, num_workers: int = 16, max_retries: int = 1, timeout=None, upstream_tasks=None, *args, **kwargs)
+.. py:function:: run_blockwise(worker_file: str | upath.UPath, total_roi: funlib.geometry.Roi, read_roi: funlib.geometry.Roi, write_roi: funlib.geometry.Roi, num_workers: int = 16, max_retries: int = 1, timeout=None, upstream_tasks=None, *args, **kwargs)
 
    Run a function in parallel over a large volume.
 
@@ -175,8 +137,12 @@ Functions
 
    :returns: ``Bool``.
 
+   .. rubric:: Examples
 
-.. py:function:: segment_blockwise(segment_function_file: str | pathlib.Path, context: funlib.geometry.Coordinate, total_roi: funlib.geometry.Roi, read_roi: funlib.geometry.Roi, write_roi: funlib.geometry.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, *args, **kwargs)
+   >>> run_blockwise(worker_file, total_roi, read_roi, write_roi, num_workers, max_retries, timeout, upstream_tasks)
+
+
+.. py:function:: segment_blockwise(segment_function_file: str | upath.UPath, context: funlib.geometry.Coordinate, total_roi: funlib.geometry.Roi, read_roi: funlib.geometry.Roi, write_roi: funlib.geometry.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, keep_tmpdir=False, *args, **kwargs)
 
    Run a segmentation function in parallel over a large volume.
 
@@ -202,9 +168,15 @@ Functions
    :type timeout: ``int``
    :param upstream_tasks: List of upstream tasks.
    :type upstream_tasks: ``List``
+   :param keep_tmpdir: Whether to keep the temporary directory.
+   :type keep_tmpdir: ``bool``
    :param \*args: Additional positional arguments to pass to ``worker_function``.
    :param \*\*kwargs: Additional keyword arguments to pass to ``worker_function``.
 
    :returns: ``Bool``.
+
+   .. rubric:: Examples
+
+   >>> segment_blockwise(segment_function_file, context, total_roi, read_roi, write_roi, num_workers, max_retries, timeout, upstream_tasks)
 
 

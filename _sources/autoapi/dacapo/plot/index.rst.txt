@@ -33,10 +33,42 @@ Attributes
 
 .. py:function:: smooth_values(a, n, stride=1)
 
+   Smooth values with a moving average.
+
+   :param a: values to smooth
+   :param n: number of values to average
+   :param stride: stride of the smoothing
+
+   :returns: smoothed values
+             s: standard deviation of the smoothed values
+   :rtype: m
+
+   :raises ValueError: If run_name is not found in config store
+
+   .. rubric:: Examples
+
+   >>> smooth_values([1,2,3,4,5], 3)
+
 
 .. py:function:: get_runs_info(run_config_names: List[str], validation_score_names: List[str], plot_losses: List[bool]) -> List[RunInfo]
 
 
 .. py:function:: plot_runs(run_config_base_names, smooth=100, validation_scores=None, higher_is_betters=None, plot_losses=None, return_json=False)
+
+   Plot runs.
+   :param run_config_base_names: Names of run configs to plot
+   :param smooth: Smoothing factor
+   :param validation_scores: Validation scores to plot
+   :param higher_is_betters: Whether higher is better
+   :param plot_losses: Whether to plot losses
+   :param return_json: Whether to return JSON
+
+   :returns: JSON or HTML plot
+
+   :raises ValueError: If run_name is not found in config store
+
+   .. rubric:: Examples
+
+   >>> plot_runs(["run_name"], 100, None, None, [True])
 
 

@@ -36,25 +36,123 @@ Attributes
 
    A local store for network weights.
 
+   All weights are stored in a directory structure like this:
+
+       ```
+       basedir
+       ├── run1
+       │   ├── checkpoints
+       │   │   ├── iterations
+       │   │   │   ├── 0
+       │   │   │   ├── 1
+       │   │   │   ├── ...
+       │   ├── dataset1
+       │   │   ├── criterion1.json
+       │   ├── dataset2
+       │   │   ├── criterion2.json
+       ├── run2
+       │   ├── ...
+       ```
+
+   .. attribute:: basedir
+
+      The base directory where the weights are stored.
+
+   .. method:: latest_iteration
+
+      Return the latest iteration for which weights are available for the given run.
+
+   .. method:: store_weights
+
+      Store the network weights of the given run.
+
+   .. method:: retrieve_weights
+
+      Retrieve the network weights of the given run.
+
+   .. method:: remove
+
+      Remove the network weights of the given run.
+
+   .. method:: store_best
+
+      Store the best weights in a easy to find location.
+
+   .. method:: retrieve_best
+
+      Retrieve the best weights of the given run.
+
+   .. note:: The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
+
    .. py:method:: latest_iteration(run: str) -> Optional[int]
 
       Return the latest iteration for which weights are available for the
       given run.
+
+      :param run: The name of the run.
+
+      :returns: The latest iteration for which weights are available, or None if no
+                weights are available.
+
+      :raises FileNotFoundError: If the run directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.latest_iteration("run1")
+
+      .. note:: The iteration is determined by the number of the subdirectories in the "iterations" directory.
 
 
    .. py:method:: store_weights(run: dacapo.experiments.run.Run, iteration: int)
 
       Store the network weights of the given run.
 
+      :param run: The run object.
+      :param iteration: The iteration number.
+
+      :raises FileNotFoundError: If the run directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.store_weights(run, 0)
+
+      .. note:: The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
+
 
    .. py:method:: retrieve_weights(run: str, iteration: int) -> dacapo.store.weights_store.Weights
 
       Retrieve the network weights of the given run.
 
+      :param run: The name of the run.
+      :param iteration: The iteration number.
+
+      :returns: The network weights.
+
+      :raises FileNotFoundError: If the weights file does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.retrieve_weights("run1", 0)
+
+      .. note:: The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
+
 
    .. py:method:: remove(run: str, iteration: int)
 
-      Delete the weights associated with a specific run/iteration
+      Remove the weights for a specific run and iteration.
+
+      :param run: The name of the run.
+      :type run: str
+      :param iteration: The iteration number.
+      :type iteration: int
+
+      :raises FileNotFoundError: If the weights file does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.remove("run1", 0)
+
+      .. note:: The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
 
 
    .. py:method:: store_best(run: str, iteration: int, dataset: str, criterion: str)
@@ -63,10 +161,45 @@ Attributes
       Symlinks weights from appropriate iteration
       # TODO: simply store a yaml of dataset/criterion -> iteration/parameter id
 
+      :param run: The name of the run.
+      :type run: str
+      :param iteration: The iteration number.
+      :type iteration: int
+      :param dataset: The name of the dataset.
+      :type dataset: str
+      :param criterion: The criterion for selecting the best weights.
+      :type criterion: str
+
+      :raises FileNotFoundError: If the weights file does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.store_best("run1", 0, "dataset1", "criterion1")
+
+      .. note:: The best weights are stored in a json file that contains the iteration number.
+
 
    .. py:method:: retrieve_best(run: str, dataset: str | dacapo.experiments.datasplits.datasets.dataset.Dataset, criterion: str) -> int
 
-      Retrieve the best weights for this run/dataset/criterion
+      Retrieve the best weights for a given run, dataset, and criterion.
+
+      :param run: The name of the run.
+      :type run: str
+      :param dataset: The name of the dataset or a Dataset object.
+      :type dataset: str | Dataset
+      :param criterion: The criterion for selecting the best weights.
+      :type criterion: str
+
+      :returns: The iteration number of the best weights.
+      :rtype: int
+
+      :raises FileNotFoundError: If the weights file does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.retrieve_best("run1", "dataset1", "criterion1")
+
+      .. note:: The best weights are stored in a json file that contains the iteration number.
 
 
 

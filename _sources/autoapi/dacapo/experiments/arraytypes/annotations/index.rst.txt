@@ -23,15 +23,39 @@ Classes
 
 
    An AnnotationArray is a uint8, uint16, uint32 or uint64 Array where each
-   voxel has a value associated with its class.
+   voxel has a value associated with its class. The class of each voxel can be
+   determined by simply taking the value.
+
+   .. attribute:: classes
+
+      A mapping from class label to class name.
+
+      :type: Dict[int, str]
+
+   .. method:: interpolatable(self) -> bool
+
+      It is a method that returns False.
+
+   .. note:: This class is used to create an AnnotationArray object which is used to represent an array of class labels.
 
    .. py:property:: interpolatable
 
-      This is an abstract method which should be overridden in each of the subclasses
-      to determine if an array is interpolatable or not.
+      Method to return False.
 
-      :returns: True if the array is interpolatable, False otherwise.
-      :rtype: bool
+      :returns:
+
+                bool
+                    Returns a boolean value of False representing that the values are not interpolatable.
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> annotation_array = AnnotationArray(classes={1: "mitochondria", 2: "membrane"})
+      >>> annotation_array.interpolatable
+      False
+
+      .. note:: This method is used to check if the array is interpolatable.
 
    .. py:attribute:: classes
       :type: Dict[int, str]

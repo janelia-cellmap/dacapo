@@ -22,8 +22,31 @@ Classes
 
 
 
-   Base class for gunpowder augment configurations. Each subclass of a `Augment`
-   should have a corresponding config class derived from `AugmentConfig`.
+   This class is an implementation of AugmentConfig that applies intensity augmentations.
+
+   .. attribute:: scale
+
+      A range within which to choose a random scale factor.
+
+      :type: Tuple[float, float]
+
+   .. attribute:: shift
+
+      A range within which to choose a random additive shift.
+
+      :type: Tuple[float, float]
+
+   .. attribute:: clip
+
+      Set to False if modified values should not be clipped to [0, 1]
+
+      :type: bool
+
+   .. method:: node(raw_key, _gt_key=None, _mask_key=None)
+
+      Get a gp.IntensityAugment node.
+      
+      
 
    .. py:attribute:: scale
       :type: Tuple[float, float]
@@ -42,7 +65,23 @@ Classes
 
    .. py:method:: node(raw_key: gunpowder.ArrayKey, _gt_key=None, _mask_key=None)
 
-      return a gunpowder node that performs this augmentation
+      Get a gp.IntensityAugment node.
+
+      :param raw_key: Key for raw data.
+      :type raw_key: gp.ArrayKey
+      :param _gt_key: Specific key for ground truth data, not used in this implementation. Defaults to None.
+      :type _gt_key: [type], optional
+      :param _mask_key: Specific key for mask data, not used in this implementation. Defaults to None.
+      :type _mask_key: [type], optional
+
+      :returns: Intensity augmentation node which can be incorporated in the pipeline.
+      :rtype: gunpowder.IntensityAugment
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> node = intensity_augment_config.node(raw_key)
 
 
 

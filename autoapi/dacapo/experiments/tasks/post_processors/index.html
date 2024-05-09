@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -126,59 +127,164 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.DummyPostProcessor" title="dacapo.experiments.tasks.post_processors.DummyPostProcessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyPostProcessor</span></code></a></p></td>
-<td><p>Base class of all post-processors.</p></td>
+<td><p>Dummy post-processor that stores some dummy data. The dummy data is a 10x10x10</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.DummyPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.DummyPostProcessorParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyPostProcessorParameters</span></code></a></p></td>
-<td><p>Base class for post-processor parameters.</p></td>
+<td><p>Parameters for the dummy post-processor. The dummy post-processor will set</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.PostProcessorParameters" title="dacapo.experiments.tasks.post_processors.PostProcessorParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PostProcessorParameters</span></code></a></p></td>
-<td><p>Base class for post-processor parameters.</p></td>
+<td><p>Base class for post-processor parameters. Post-processor parameters are</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.PostProcessor" title="dacapo.experiments.tasks.post_processors.PostProcessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PostProcessor</span></code></a></p></td>
 <td><p>Base class of all post-processors.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessor" title="dacapo.experiments.tasks.post_processors.ThresholdPostProcessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThresholdPostProcessor</span></code></a></p></td>
-<td><p>Base class of all post-processors.</p></td>
+<td><p>A post-processor that applies a threshold to the prediction.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.ThresholdPostProcessorParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThresholdPostProcessorParameters</span></code></a></p></td>
-<td><p>Base class for post-processor parameters.</p></td>
+<td><p>Parameters for the threshold post-processor. The threshold post-processor</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor" title="dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArgmaxPostProcessor</span></code></a></p></td>
-<td><p>Base class of all post-processors.</p></td>
+<td><p>Post-processor that takes the argmax of the input array along the channel</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.ArgmaxPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.ArgmaxPostProcessorParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArgmaxPostProcessorParameters</span></code></a></p></td>
-<td><p>Base class for post-processor parameters.</p></td>
+<td><p>Parameters for the argmax post-processor. The argmax post-processor will set</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessor" title="dacapo.experiments.tasks.post_processors.WatershedPostProcessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WatershedPostProcessor</span></code></a></p></td>
-<td><p>Base class of all post-processors.</p></td>
+<td><p>A post-processor that applies a watershed transformation to the</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WatershedPostProcessorParameters</span></code></a></p></td>
-<td><p>Base class for post-processor parameters.</p></td>
+<td><p>Parameters for the watershed post-processor.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.DummyPostProcessor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.</span></span><span class="sig-name descname"><span class="pre">DummyPostProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">detection_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.DummyPostProcessor" title="Link to this definition"></a></dt>
-<dd><p>Base class of all post-processors.</p>
-<p>A post-processor takes a model’s prediction and converts it into the final
-output (e.g., per-voxel class probabilities into a semantic segmentation).</p>
+<dd><p>Dummy post-processor that stores some dummy data. The dummy data is a 10x10x10
+array filled with the value of the min_size parameter. The min_size parameter
+is specified in the parameters of the post-processor. The post-processor has
+a detection threshold that is used to determine if an object is detected.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.DummyPostProcessor.detection_threshold">
+<span class="sig-name descname"><span class="pre">detection_threshold</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.DummyPostProcessor.detection_threshold" title="Link to this definition"></a></dt>
+<dd><p>The detection threshold.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.DummyPostProcessor.enumerate_parameters">
-<span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="dummy_post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.DummyPostProcessor.enumerate_parameters" title="Link to this definition"></a></dt>
-<dd><p>Enumerate all possible parameters of this post-processor. Should
-return instances of <code class="docutils literal notranslate"><span class="pre">PostProcessorParameters</span></code>.</p>
+<span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.DummyPostProcessor.enumerate_parameters" title="Link to this definition"></a></dt>
+<dd><p>Enumerate all possible parameters of this post-processor.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.DummyPostProcessor.set_prediction">
-<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction_array_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.DummyPostProcessor.set_prediction" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.DummyPostProcessor.set_prediction" title="Link to this definition"></a></dt>
+<dd><p>Set the prediction array identifier.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.DummyPostProcessor.process">
-<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.DummyPostProcessor.process" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.DummyPostProcessor.process" title="Link to this definition"></a></dt>
 <dd><p>Convert predictions into the final output.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is abstract. Subclasses must implement the abstract methods. Once
+created, the values of its attributes cannot be changed.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="dummy_post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Enumerate all possible parameters of this post-processor. Should
+return instances of <code class="docutils literal notranslate"><span class="pre">PostProcessorParameters</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An iterable of <cite>PostProcessorParameters</cite> instances.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span> <span class="o">=</span> <span class="n">DummyPostProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">parameters</span> <span class="ow">in</span> <span class="n">post_processor</span><span class="o">.</span><span class="n">enumerate_parameters</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+<span class="go">DummyPostProcessorParameters(id=0, min_size=1)</span>
+<span class="go">DummyPostProcessorParameters(id=1, min_size=2)</span>
+<span class="go">DummyPostProcessorParameters(id=2, min_size=3)</span>
+<span class="go">DummyPostProcessorParameters(id=3, min_size=4)</span>
+<span class="go">DummyPostProcessorParameters(id=4, min_size=5)</span>
+<span class="go">DummyPostProcessorParameters(id=5, min_size=6)</span>
+<span class="go">DummyPostProcessorParameters(id=6, min_size=7)</span>
+<span class="go">DummyPostProcessorParameters(id=7, min_size=8)</span>
+<span class="go">DummyPostProcessorParameters(id=8, min_size=9)</span>
+<span class="go">DummyPostProcessorParameters(id=9, min_size=10)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should return an
+iterable of <cite>PostProcessorParameters</cite> instances.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction_array_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Set the prediction array identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prediction_array_identifier</strong> – The identifier of the array containing
+the model’s prediction.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span> <span class="o">=</span> <span class="n">DummyPostProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span><span class="o">.</span><span class="n">set_prediction</span><span class="p">(</span><span class="s2">&quot;prediction&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should set the
+<cite>prediction_array_identifier</cite> attribute.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Convert predictions into the final output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameters</strong> – The parameters of the post-processor.</p></li>
+<li><p><strong>output_array_identifier</strong> – The identifier of the output array.</p></li>
+<li><p><strong>num_workers</strong> – The number of workers to use.</p></li>
+<li><p><strong>chunk_size</strong> – The size of the chunks to process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output array.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span> <span class="o">=</span> <span class="n">DummyPostProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should process the
+predictions and store the output in the output array.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -186,10 +292,30 @@ return instances of <code class="docutils literal notranslate"><span class="pre"
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.DummyPostProcessorParameters">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.</span></span><span class="sig-name descname"><span class="pre">DummyPostProcessorParameters</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.DummyPostProcessorParameters" title="Link to this definition"></a></dt>
-<dd><p>Base class for post-processor parameters.</p>
+<dd><p>Parameters for the dummy post-processor. The dummy post-processor will set
+the output to 1 if the input is greater than the minimum size, and 0
+otherwise.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.DummyPostProcessorParameters.min_size">
-<span class="sig-name descname"><span class="pre">min_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.DummyPostProcessorParameters.min_size" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">min_size</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.DummyPostProcessorParameters.min_size" title="Link to this definition"></a></dt>
+<dd><p>The minimum size. If the input is greater than this value, the
+output will be set to 1. Otherwise, the output will be set to 0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.DummyPostProcessorParameters.parameter_names">
+<span class="sig-name descname"><span class="pre">parameter_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.DummyPostProcessorParameters.parameter_names" title="Link to this definition"></a></dt>
+<dd><p>Get the names of the parameters.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is immutable. Once created, the values of its attributes
+cannot be changed.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">min_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -197,15 +323,54 @@ return instances of <code class="docutils literal notranslate"><span class="pre"
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.PostProcessorParameters">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.</span></span><span class="sig-name descname"><span class="pre">PostProcessorParameters</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.PostProcessorParameters" title="Link to this definition"></a></dt>
-<dd><p>Base class for post-processor parameters.</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.PostProcessorParameters.parameter_names">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.PostProcessorParameters.parameter_names" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
+<dd><p>Base class for post-processor parameters. Post-processor parameters are
+immutable objects that define the parameters of a post-processor. The
+parameters are used to configure the post-processor.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.PostProcessorParameters.id">
-<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.PostProcessorParameters.id" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.PostProcessorParameters.id" title="Link to this definition"></a></dt>
+<dd><p>The identifier of the post-processor parameter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.PostProcessorParameters.parameter_names">
+<span class="sig-name descname"><span class="pre">parameter_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.PostProcessorParameters.parameter_names" title="Link to this definition"></a></dt>
+<dd><p>Get the names of the parameters.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is immutable. Once created, the values of its attributes
+cannot be changed.</p>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="id4">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd><p>Get the names of the parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of parameter names.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span> <span class="o">=</span> <span class="n">PostProcessorParameters</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span><span class="o">.</span><span class="n">parameter_names</span>
+<span class="go">[&quot;id&quot;]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should return a
+list of parameter names.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -215,22 +380,128 @@ return instances of <code class="docutils literal notranslate"><span class="pre"
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.</span></span><span class="sig-name descname"><span class="pre">PostProcessor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.PostProcessor" title="Link to this definition"></a></dt>
 <dd><p>Base class of all post-processors.</p>
 <p>A post-processor takes a model’s prediction and converts it into the final
-output (e.g., per-voxel class probabilities into a semantic segmentation).</p>
+output (e.g., per-voxel class probabilities into a semantic segmentation). A
+post-processor can have multiple parameters, which can be enumerated using
+the <cite>enumerate_parameters</cite> method. The <cite>process</cite> method takes a set of
+parameters and applies the post-processing to the prediction.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.PostProcessor.prediction_array_identifier">
+<span class="sig-name descname"><span class="pre">prediction_array_identifier</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.PostProcessor.prediction_array_identifier" title="Link to this definition"></a></dt>
+<dd><p>The identifier of the array containing the
+model’s prediction.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.PostProcessor.enumerate_parameters">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters" title="dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.PostProcessor.enumerate_parameters" title="Link to this definition"></a></dt>
-<dd><p>Enumerate all possible parameters of this post-processor.</p>
+<span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.PostProcessor.enumerate_parameters" title="Link to this definition"></a></dt>
+<dd><p>Enumerate all possible parameters of this
+post-processor.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.PostProcessor.set_prediction">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dacapo.store.local_array_store.LocalArrayIdentifier</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.PostProcessor.set_prediction" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.PostProcessor.set_prediction" title="Link to this definition"></a></dt>
+<dd><p>Set the prediction array identifier.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.PostProcessor.process">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters" title="dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dacapo.store.local_array_store.LocalArrayIdentifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Coordinate</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Coordinate((64,</span> <span class="pre">64,</span> <span class="pre">64))</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.PostProcessor.process" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.PostProcessor.process" title="Link to this definition"></a></dt>
 <dd><p>Convert predictions into the final output.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is abstract. Subclasses must implement the abstract methods. Once
+created, the values of its attributes cannot be changed.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters" title="dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd><p>Enumerate all possible parameters of this post-processor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An iterable of <cite>PostProcessorParameters</cite> instances.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span> <span class="o">=</span> <span class="n">MyPostProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">parameters</span> <span class="ow">in</span> <span class="n">post_processor</span><span class="o">.</span><span class="n">enumerate_parameters</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+<span class="go">MyPostProcessorParameters(param1=0.0, param2=0.0)</span>
+<span class="go">MyPostProcessorParameters(param1=0.0, param2=1.0)</span>
+<span class="go">MyPostProcessorParameters(param1=1.0, param2=0.0)</span>
+<span class="go">MyPostProcessorParameters(param1=1.0, param2=1.0)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should return an
+iterable of <cite>PostProcessorParameters</cite> instances.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id7">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dacapo.store.local_array_store.LocalArrayIdentifier</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd><p>Set the prediction array identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prediction_array_identifier</strong> – The identifier of the array containing
+the model’s prediction.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span> <span class="o">=</span> <span class="n">MyPostProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span><span class="o">.</span><span class="n">set_prediction</span><span class="p">(</span><span class="s2">&quot;prediction&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should set the
+<cite>prediction_array_identifier</cite> attribute.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id8">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters" title="dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dacapo.store.local_array_store.LocalArrayIdentifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Coordinate</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Coordinate((64,</span> <span class="pre">64,</span> <span class="pre">64))</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></span></span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd><p>Convert predictions into the final output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameters</strong> – The parameters of the post-processor.</p></li>
+<li><p><strong>output_array_identifier</strong> – The identifier of the array to store the
+output.</p></li>
+<li><p><strong>num_workers</strong> – The number of workers to use.</p></li>
+<li><p><strong>chunk_size</strong> – The size of the chunks to process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output array.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span> <span class="o">=</span> <span class="n">MyPostProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span><span class="o">.</span><span class="n">set_prediction</span><span class="p">(</span><span class="s2">&quot;prediction&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span> <span class="o">=</span> <span class="n">MyPostProcessorParameters</span><span class="p">(</span><span class="n">param1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">post_processor</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should convert the
+model’s prediction into the final output.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -238,24 +509,121 @@ output (e.g., per-voxel class probabilities into a semantic segmentation).</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ThresholdPostProcessor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.</span></span><span class="sig-name descname"><span class="pre">ThresholdPostProcessor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessor" title="Link to this definition"></a></dt>
-<dd><p>Base class of all post-processors.</p>
-<p>A post-processor takes a model’s prediction and converts it into the final
-output (e.g., per-voxel class probabilities into a semantic segmentation).</p>
+<dd><p>A post-processor that applies a threshold to the prediction.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ThresholdPostProcessor.prediction_array_identifier">
+<span class="sig-name descname"><span class="pre">prediction_array_identifier</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessor.prediction_array_identifier" title="Link to this definition"></a></dt>
+<dd><p>The identifier of the prediction array.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ThresholdPostProcessor.prediction_array">
+<span class="sig-name descname"><span class="pre">prediction_array</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessor.prediction_array" title="Link to this definition"></a></dt>
+<dd><p>The prediction array.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ThresholdPostProcessor.enumerate_parameters">
-<span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="threshold_post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessor.enumerate_parameters" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessor.enumerate_parameters" title="Link to this definition"></a></dt>
 <dd><p>Enumerate all possible parameters of this post-processor.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ThresholdPostProcessor.set_prediction">
-<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction_array_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessor.set_prediction" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessor.set_prediction" title="Link to this definition"></a></dt>
+<dd><p>Set the prediction array.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ThresholdPostProcessor.process">
-<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="threshold_post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">daisy.Coordinate</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Coordinate((256,</span> <span class="pre">256,</span> <span class="pre">256))</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../datasplits/datasets/arrays/zarr_array/index.html#dacapo.experiments.datasplits.datasets.arrays.zarr_array.ZarrArray" title="dacapo.experiments.datasplits.datasets.arrays.zarr_array.ZarrArray"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.zarr_array.ZarrArray</span></a></span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessor.process" title="Link to this definition"></a></dt>
-<dd><p>Convert predictions into the final output.</p>
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessor.process" title="Link to this definition"></a></dt>
+<dd><p>Process the prediction with the given parameters.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This post-processor applies a threshold to the prediction. The threshold is used to define the segmentation. The prediction array is set using the <cite>set_prediction</cite> method.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="threshold_post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dd><p>Enumerate all possible parameters of this post-processor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A generator of parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Generator[<a class="reference internal" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.ThresholdPostProcessorParameters">ThresholdPostProcessorParameters</a>]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the method is not implemented.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">parameters</span> <span class="ow">in</span> <span class="n">post_processor</span><span class="o">.</span><span class="n">enumerate_parameters</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method should return a generator of instances of <code class="docutils literal notranslate"><span class="pre">ThresholdPostProcessorParameters</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction_array_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<dd><p>Set the prediction array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prediction_array_identifier</strong> (<a class="reference internal" href="../../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The identifier of the prediction array.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span><span class="o">.</span><span class="n">set_prediction</span><span class="p">(</span><span class="n">prediction_array_identifier</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method should set the prediction array using the given identifier.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="threshold_post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">daisy.Coordinate</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Coordinate((256,</span> <span class="pre">256,</span> <span class="pre">256))</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../datasplits/datasets/arrays/zarr_array/index.html#dacapo.experiments.datasplits.datasets.arrays.zarr_array.ZarrArray" title="dacapo.experiments.datasplits.datasets.arrays.zarr_array.ZarrArray"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.zarr_array.ZarrArray</span></a></span></span><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
+<dd><p>Process the prediction with the given parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameters</strong> (<a class="reference internal" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.ThresholdPostProcessorParameters"><em>ThresholdPostProcessorParameters</em></a>) – The parameters to use for processing.</p></li>
+<li><p><strong>output_array_identifier</strong> (<a class="reference internal" href="../../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The identifier of the output array.</p></li>
+<li><p><strong>num_workers</strong> (<em>int</em>) – The number of workers to use for processing.</p></li>
+<li><p><strong>block_size</strong> (<em>Coordinate</em>) – The block size to use for processing.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.ZarrArray" title="dacapo.experiments.datasplits.datasets.arrays.ZarrArray">ZarrArray</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">output_array_identifier</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method should process the prediction with the given parameters and return the output array. The method uses the <cite>run_blockwise</cite> function from the <cite>dacapo.blockwise.scheduler</cite> module to run the blockwise post-processing.
+The output array is created using the <cite>ZarrArray.create_from_array_identifier</cite> function from the <cite>dacapo.experiments.datasplits.datasets.arrays</cite> module.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -263,10 +631,25 @@ output (e.g., per-voxel class probabilities into a semantic segmentation).</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ThresholdPostProcessorParameters">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.</span></span><span class="sig-name descname"><span class="pre">ThresholdPostProcessorParameters</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessorParameters" title="Link to this definition"></a></dt>
-<dd><p>Base class for post-processor parameters.</p>
+<dd><p>Parameters for the threshold post-processor. The threshold post-processor
+will set the output to 1 if the input is greater than the threshold, and 0
+otherwise.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ThresholdPostProcessorParameters.threshold">
-<span class="sig-name descname"><span class="pre">threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessorParameters.threshold" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">threshold</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ThresholdPostProcessorParameters.threshold" title="Link to this definition"></a></dt>
+<dd><p>The threshold value. If the input is greater than this
+value, the output will be set to 1. Otherwise, the output will be
+set to 0.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is immutable. Once created, the values of its attributes
+cannot be changed.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -274,25 +657,121 @@ output (e.g., per-voxel class probabilities into a semantic segmentation).</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.</span></span><span class="sig-name descname"><span class="pre">ArgmaxPostProcessor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor" title="Link to this definition"></a></dt>
-<dd><p>Base class of all post-processors.</p>
-<p>A post-processor takes a model’s prediction and converts it into the final
-output (e.g., per-voxel class probabilities into a semantic segmentation).</p>
+<dd><p>Post-processor that takes the argmax of the input array along the channel
+axis. The output is a binary array where the value is 1 if the argmax is
+greater than the threshold, and 0 otherwise.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor.prediction_array">
+<span class="sig-name descname"><span class="pre">prediction_array</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor.prediction_array" title="Link to this definition"></a></dt>
+<dd><p>The array containing the model’s prediction.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor.enumerate_parameters">
 <span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor.enumerate_parameters" title="Link to this definition"></a></dt>
-<dd><p>Enumerate all possible parameters of this post-processor. Should
-return instances of <code class="docutils literal notranslate"><span class="pre">PostProcessorParameters</span></code>.</p>
+<dd><p>Enumerate all possible parameters of this post-processor.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor.set_prediction">
-<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction_array_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor.set_prediction" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor.set_prediction" title="Link to this definition"></a></dt>
+<dd><p>Set the prediction array identifier.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor.process">
-<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">daisy.Coordinate</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Coordinate((256,</span> <span class="pre">256,</span> <span class="pre">256))</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor.process" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ArgmaxPostProcessor.process" title="Link to this definition"></a></dt>
 <dd><p>Convert predictions into the final output.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is abstract. Subclasses must implement the abstract methods. Once
+created, the values of its attributes cannot be changed.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
+<dd><p>Enumerate all possible parameters of this post-processor. Should
+return instances of <code class="docutils literal notranslate"><span class="pre">PostProcessorParameters</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An iterable of <cite>PostProcessorParameters</cite> instances.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span> <span class="o">=</span> <span class="n">ArgmaxPostProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">parameters</span> <span class="ow">in</span> <span class="n">post_processor</span><span class="o">.</span><span class="n">enumerate_parameters</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+<span class="go">ArgmaxPostProcessorParameters(id=0)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should return an
+iterable of <cite>PostProcessorParameters</cite> instances.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction_array_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id14" title="Link to this definition"></a></dt>
+<dd><p>Set the prediction array identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prediction_array_identifier</strong> – The identifier of the array containing
+the model’s prediction.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span> <span class="o">=</span> <span class="n">ArgmaxPostProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span><span class="o">.</span><span class="n">set_prediction</span><span class="p">(</span><span class="s2">&quot;prediction&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should set the
+<cite>prediction_array_identifier</cite> attribute.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">daisy.Coordinate</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Coordinate((256,</span> <span class="pre">256,</span> <span class="pre">256))</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
+<dd><p>Convert predictions into the final output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameters</strong> – The parameters of the post-processor.</p></li>
+<li><p><strong>output_array_identifier</strong> – The identifier of the output array.</p></li>
+<li><p><strong>num_workers</strong> – The number of workers to use.</p></li>
+<li><p><strong>block_size</strong> – The size of the blocks to process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output array.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span> <span class="o">=</span> <span class="n">ArgmaxPostProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span><span class="o">.</span><span class="n">set_prediction</span><span class="p">(</span><span class="s2">&quot;prediction&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should process the
+predictions and return the output array.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -300,31 +779,137 @@ return instances of <code class="docutils literal notranslate"><span class="pre"
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ArgmaxPostProcessorParameters">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.</span></span><span class="sig-name descname"><span class="pre">ArgmaxPostProcessorParameters</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ArgmaxPostProcessorParameters" title="Link to this definition"></a></dt>
-<dd><p>Base class for post-processor parameters.</p>
+<dd><p>Parameters for the argmax post-processor. The argmax post-processor will set
+the output to the index of the maximum value in the input array.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.ArgmaxPostProcessorParameters.parameter_names">
+<span class="sig-name descname"><span class="pre">parameter_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.ArgmaxPostProcessorParameters.parameter_names" title="Link to this definition"></a></dt>
+<dd><p>Get the names of the parameters.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is immutable. Once created, the values of its attributes
+cannot be changed.</p>
+</div>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.WatershedPostProcessor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.</span></span><span class="sig-name descname"><span class="pre">WatershedPostProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offsets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">funlib.geometry.Coordinate</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessor" title="Link to this definition"></a></dt>
-<dd><p>Base class of all post-processors.</p>
-<p>A post-processor takes a model’s prediction and converts it into the final
-output (e.g., per-voxel class probabilities into a semantic segmentation).</p>
+<dd><p>A post-processor that applies a watershed transformation to the
+prediction.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.WatershedPostProcessor.offsets">
+<span class="sig-name descname"><span class="pre">offsets</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessor.offsets" title="Link to this definition"></a></dt>
+<dd><p>List of offsets for the watershed transformation.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.WatershedPostProcessor.enumerate_parameters">
 <span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessor.enumerate_parameters" title="Link to this definition"></a></dt>
-<dd><p>Enumerate all possible parameters of this post-processor. Should
-return instances of <code class="docutils literal notranslate"><span class="pre">PostProcessorParameters</span></code>.</p>
+<dd><p>Enumerate all possible parameters of this post-processor.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.WatershedPostProcessor.set_prediction">
-<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction_array_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessor.set_prediction" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessor.set_prediction" title="Link to this definition"></a></dt>
+<dd><p>Set the prediction array.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.WatershedPostProcessor.process">
-<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="watershed_post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Coordinate</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Coordinate((256,</span> <span class="pre">256,</span> <span class="pre">256))</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessor.process" title="Link to this definition"></a></dt>
-<dd><p>Convert predictions into the final output.</p>
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessor.process" title="Link to this definition"></a></dt>
+<dd><p>Process the prediction with the given parameters.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This post-processor uses the <cite>watershed_function.py</cite> script to apply the watershed transformation. The offsets are used to define the neighborhood for the watershed transformation.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
+<dd><p>Enumerate all possible parameters of this post-processor. Should
+return instances of <code class="docutils literal notranslate"><span class="pre">PostProcessorParameters</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A generator of parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Generator[<a class="reference internal" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters">WatershedPostProcessorParameters</a>]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the method is not implemented.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">parameters</span> <span class="ow">in</span> <span class="n">post_processor</span><span class="o">.</span><span class="n">enumerate_parameters</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method should be implemented by the subclass. It should return a generator of instances of <code class="docutils literal notranslate"><span class="pre">WatershedPostProcessorParameters</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction_array_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
+<dd><p>Set the prediction array identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prediction_array_identifier</strong> – The identifier of the array containing
+the model’s prediction.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span> <span class="o">=</span> <span class="n">MyPostProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span><span class="o">.</span><span class="n">set_prediction</span><span class="p">(</span><span class="s2">&quot;prediction&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should set the
+<cite>prediction_array_identifier</cite> attribute.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="watershed_post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Coordinate</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Coordinate((256,</span> <span class="pre">256,</span> <span class="pre">256))</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
+<dd><p>Process the prediction with the given parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameters</strong> (<a class="reference internal" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters"><em>WatershedPostProcessorParameters</em></a>) – The parameters to use for processing.</p></li>
+<li><p><strong>output_array_identifier</strong> (<a class="reference internal" href="../../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The output array identifier.</p></li>
+<li><p><strong>num_workers</strong> (<em>int</em>) – The number of workers to use for processing.</p></li>
+<li><p><strong>block_size</strong> (<em>Coordinate</em>) – The block size to use for processing.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output array identifier.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier">LocalArrayIdentifier</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">output_array_identifier</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method should be implemented by the subclass. To run the watershed transformation, the method uses the <cite>segment_blockwise</cite> function from the <cite>dacapo.blockwise.scheduler</cite> module.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -332,15 +917,59 @@ return instances of <code class="docutils literal notranslate"><span class="pre"
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.</span></span><span class="sig-name descname"><span class="pre">WatershedPostProcessorParameters</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters" title="Link to this definition"></a></dt>
-<dd><p>Base class for post-processor parameters.</p>
+<dd><p>Parameters for the watershed post-processor.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters.offsets">
+<span class="sig-name descname"><span class="pre">offsets</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters.offsets" title="Link to this definition"></a></dt>
+<dd><p>List of offsets for the watershed transformation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters.threshold">
+<span class="sig-name descname"><span class="pre">threshold</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters.threshold" title="Link to this definition"></a></dt>
+<dd><p>Threshold for the watershed transformation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters.sigma">
+<span class="sig-name descname"><span class="pre">sigma</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters.sigma" title="Link to this definition"></a></dt>
+<dd><p>Sigma for the watershed transformation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters.min_size">
+<span class="sig-name descname"><span class="pre">min_size</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters.min_size" title="Link to this definition"></a></dt>
+<dd><p>Minimum size of the segments.</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters.bias">
-<span class="sig-name descname"><span class="pre">bias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters.bias" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">bias</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters.bias" title="Link to this definition"></a></dt>
+<dd><p>Bias for the watershed transformation.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters.context">
-<span class="sig-name descname"><span class="pre">context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters.context" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">context</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters.context" title="Link to this definition"></a></dt>
+<dd><p>Context for the watershed transformation.</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">WatershedPostProcessorParameters</span><span class="p">(</span><span class="n">offsets</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">min_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is used by the <code class="docutils literal notranslate"><span class="pre">WatershedPostProcessor</span></code> to define the parameters for the watershed transformation. The offsets are used to define the neighborhood for the watershed transformation.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id19">
+<span class="sig-name descname"><span class="pre">bias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id19" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id20">
+<span class="sig-name descname"><span class="pre">context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#id20" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

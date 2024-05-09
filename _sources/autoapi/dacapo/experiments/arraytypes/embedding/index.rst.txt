@@ -23,16 +23,41 @@ Classes
 
 
    A generic output of a model that could represent almost anything. Assumed to be
-   float, interpolatable, and have sum number of channels.
+   float, interpolatable, and have sum number of channels. The channels are not
+   specified, and the array can be of any shape.
+
+   .. attribute:: embedding_dims
+
+      The dimension of your embedding.
+
+      :type: int
+
+   .. method:: interpolatable()
+
+      
+      It is a method that returns True.
+
+   .. note:: This class is used to represent an EmbeddingArray object in the system.
 
    .. py:property:: interpolatable
       :type: bool
 
-      This is an abstract method which should be overridden in each of the subclasses
-      to determine if an array is interpolatable or not.
+      Method to return True.
 
-      :returns: True if the array is interpolatable, False otherwise.
-      :rtype: bool
+      :returns:
+
+                bool
+                    Returns a boolean value of True representing that the values are interpolatable.
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> embedding_array = EmbeddingArray(embedding_dims=10)
+      >>> embedding_array.interpolatable
+      True
+
+      .. note:: This method is used to check if the array is interpolatable.
 
    .. py:attribute:: embedding_dims
       :type: int

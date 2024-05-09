@@ -50,6 +50,8 @@ Functions
    :returns: **(split, merge)** -- The variation of information split and merge error, i.e., H(X|Y) and H(Y|X)
    :rtype: float
 
+   :raises ValueError: If `reconstruction` and `groundtruth` have different shapes.
+
    .. rubric:: References
 
    [1] Meila, M. (2007). Comparing clusterings - an information based
@@ -113,6 +115,8 @@ Functions
                per-segment conditional entropies of `x` given `y` and vice-versa, the
                per-segment conditional probability p log p.
 
+   :raises ValueError: If `x` and `y` have different shapes.
+
 
 .. py:function:: contingency_table(seg, gt, ignore_seg=[0], ignore_gt=[0], norm=True)
 
@@ -136,6 +140,8 @@ Functions
              if `norm=True`.)
    :rtype: scipy.sparse.csc_matrix
 
+   :raises ValueError: If `seg` and `gt` have different shapes.
+
 
 .. py:function:: divide_columns(matrix, row, in_place=False)
 
@@ -152,6 +158,8 @@ Functions
 
    :returns: **out** -- The result of the row-wise division.
    :rtype: same type as `matrix`
+
+   :raises ValueError: If `row` contains zeros.
 
 
 .. py:function:: divide_rows(matrix, column, in_place=False)
@@ -170,6 +178,8 @@ Functions
    :returns: **out** -- The result of the row-wise division.
    :rtype: same type as `matrix`
 
+   :raises ValueError: If `column` contains zeros.
+
 
 .. py:function:: xlogx(x, out=None, in_place=False)
 
@@ -186,5 +196,7 @@ Functions
 
    :returns: **y** -- Result of x * log_2(x).
    :rtype: same type as x
+
+   :raises ValueError: If x contains negative values.
 
 

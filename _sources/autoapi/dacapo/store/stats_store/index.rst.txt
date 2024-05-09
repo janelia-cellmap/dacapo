@@ -24,10 +24,45 @@ Classes
 
    Base class for statistics stores.
 
+   .. method:: store_training_stats(run_name, training_stats)
+
+      Store the training stats of a given run.
+
+   .. method:: retrieve_training_stats(run_name)
+
+      Retrieve the training stats for a given run.
+
+   .. method:: store_validation_iteration_scores(run_name, validation_scores)
+
+      Store the validation iteration scores of a given run.
+
+   .. method:: retrieve_validation_iteration_scores(run_name)
+
+      Retrieve the validation iteration scores for a given run.
+
+   .. method:: delete_training_stats(run_name)
+
+      Delete the training stats associated with a specific run.
+      
+
    .. py:method:: store_training_stats(run_name: str, training_stats: dacapo.experiments.training_stats.TrainingStats)
       :abstractmethod:
 
       Store training stats of a given run.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param training_stats: The training stats to store.
+      :type training_stats: TrainingStats
+
+      :raises ValueError: If the training stats are already stored.
+
+      .. rubric:: Examples
+
+      >>> store = StatsStore()
+      >>> run_name = 'run_0'
+      >>> training_stats = TrainingStats()
+      >>> store.store_training_stats(run_name, training_stats)
 
 
    .. py:method:: retrieve_training_stats(run_name: str) -> dacapo.experiments.training_stats.TrainingStats
@@ -35,11 +70,39 @@ Classes
 
       Retrieve the training stats for a given run.
 
+      :param run_name: The name of the run.
+      :type run_name: str
+
+      :returns: The training stats for the given run.
+      :rtype: TrainingStats
+
+      :raises ValueError: If the training stats are not available.
+
+      .. rubric:: Examples
+
+      >>> store = StatsStore()
+      >>> run_name = 'run_0'
+      >>> store.retrieve_training_stats(run_name)
+
 
    .. py:method:: store_validation_iteration_scores(run_name: str, validation_scores: dacapo.experiments.validation_scores.ValidationScores)
       :abstractmethod:
 
       Store the validation iteration scores of a given run.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param validation_scores: The validation scores to store.
+      :type validation_scores: ValidationScores
+
+      :raises ValueError: If the validation iteration scores are already stored.
+
+      .. rubric:: Examples
+
+      >>> store = StatsStore()
+      >>> run_name = 'run_0'
+      >>> validation_scores = ValidationScores()
+      >>> store.store_validation_iteration_scores(run_name, validation_scores)
 
 
    .. py:method:: retrieve_validation_iteration_scores(run_name: str) -> List[dacapo.experiments.validation_scores.ValidationIterationScores]
@@ -47,9 +110,36 @@ Classes
 
       Retrieve the validation iteration scores for a given run.
 
+      :param run_name: The name of the run.
+      :type run_name: str
+
+      :returns: The validation iteration scores for the given run.
+      :rtype: List[ValidationIterationScores]
+
+      :raises ValueError: If the validation iteration scores are not available.
+
+      .. rubric:: Examples
+
+      >>> store = StatsStore()
+      >>> run_name = 'run_0'
+      >>> store.retrieve_validation_iteration_scores(run_name)
+
 
    .. py:method:: delete_training_stats(run_name: str) -> None
       :abstractmethod:
+
+      Deletes the training statistics for a given run.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+
+      :raises ValueError: If the training stats are not available.
+
+      .. rubric:: Example
+
+      >>> store = StatsStore()
+      >>> run_name = 'run_0'
+      >>> store.delete_training_stats(run_name)
 
 
 

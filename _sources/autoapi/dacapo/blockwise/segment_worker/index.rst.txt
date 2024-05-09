@@ -36,6 +36,11 @@ Attributes
 
 .. py:function:: cli(log_level)
 
+   CLI for running the segment worker.
+
+   :param log_level: The log level to use.
+   :type log_level: str
+
 
 .. py:data:: fit
    :value: 'shrink'
@@ -51,7 +56,7 @@ Attributes
 
    
 
-.. py:function:: start_worker(input_container: str, input_dataset: str, output_container: str, output_dataset: str, tmpdir: str, function_path: str)
+.. py:function:: start_worker(input_container: str, input_dataset: str, output_container: str, output_dataset: str, tmpdir: str, function_path: str, return_io_loop: bool = False)
 
    Start a worker to run a segment function on a given dataset.
 
@@ -67,6 +72,8 @@ Attributes
    :type tmpdir: str
    :param function_path: The path to the segment function.
    :type function_path: str
+   :param return_io_loop: Whether to return the io loop or run it.
+   :type return_io_loop: bool
 
 
 .. py:function:: spawn_worker(input_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, tmpdir: str, function_path: str)
@@ -79,5 +86,8 @@ Attributes
    :type raw_array: Array
    :param prediction_array_identifier: The identifier of the prediction array.
    :type prediction_array_identifier: LocalArrayIdentifier
+
+   :returns: The function to run the worker.
+   :rtype: Callable
 
 

@@ -43,39 +43,113 @@ Attributes
    of each class that is being segmented can be passed in as a list of strings
    in the channels argument.
 
+   .. attribute:: channels
+
+      The list of channel names.
+
+      :type: List[str]
+
+   .. attribute:: scale_factor
+
+      The amount by which to scale distances before applying a tanh normalization.
+
+      :type: float
+
+   .. method:: __init__(self, channels
+
+      List[str], scale_factor: float): Initializes the InnerDistancePredictor.
+
+   .. method:: create_model(self, architecture)
+
+      Create the model for the predictor.
+
+   .. method:: create_target(self, gt)
+
+      Create the target array for training.
+
+   .. method:: create_weight(self, gt, target, mask, moving_class_counts=None)
+
+      Create the weight array for training.
+
+   .. method:: output_array_type
+
+      Get the output array type.
+
+   .. method:: process(self, labels
+
+      np.ndarray, voxel_size: Coordinate, normalize=None, normalize_args=None): Process the labels array and convert it to signed distances.
+
+   .. method:: __find_boundaries(self, labels)
+
+      Find the boundaries in a labels array.
+
+   .. method:: __normalize(self, distances, norm, normalize_args)
+
+      Normalize the distances.
+
+   .. method:: gt_region_for_roi(self, target_spec)
+
+      Get the ground-truth region for the given ROI.
+
+   .. method:: padding(self, gt_voxel_size
+
+      Coordinate) -> Coordinate: Get the padding needed for the ground-truth array.
+
+   .. rubric:: Notes
+
+   This is a subclass of Predictor.
+
    .. py:property:: embedding_dims
 
+      Get the number of embedding dimensions.
+
+      :returns: The number of embedding dimensions.
+      :rtype: int
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> embedding_dims = predictor.embedding_dims
 
    .. py:property:: output_array_type
 
+      Get the output array type.
+
+      :returns: The DistanceArray.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.output_array_type
 
    .. py:method:: create_model(architecture)
 
-      Given a training architecture, create a model for this predictor.
-      This is usually done by appending extra layers to the output of the
-      architecture to get the output tensor of the architecture into the
-      right shape for this predictor.
+      Create the model for the predictor.
+
+      :param architecture: The architecture for the model.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> model = predictor.create_model(architecture)
 
 
    .. py:method:: create_target(gt)
 
-      Create the target array for training, given a ground-truth array.
+      Create the target array for training.
 
-      In general, the target is different from the ground-truth.
+      :param gt: The ground-truth array.
 
-      The target is the array that is passed to the loss, and hence directly
-      compared to the prediction (i.e., the output of the model). Depending
-      on the predictor, the target can therefore be different from the
-      ground-truth (e.g., an instance segmentation ground-truth would have to
-      be converted into boundaries, if the model is predicting boundaries).
+      :returns: The DistanceArray.
 
-      By default, it is assumed that the spatial dimensions of ground-truth
-      and target are the same.
+      :raises NotImplementedError: This method is not implemented.
 
-      If your predictor needs more ground-truth context to create a target
-      (e.g., because it predicts the distance to a boundary, up to a certain
-      threshold), you can request a larger ground-truth region. See method
-      ``gt_region_for_roi``.
+      .. rubric:: Examples
+
+      >>> predictor.create_target(gt)
 
 
    .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
@@ -83,8 +157,36 @@ Attributes
       Create the weight array for training, given a ground-truth and
       associated target array.
 
+      :param gt: The ground-truth array.
+      :param target: The target array.
+      :param mask: The mask array.
+      :param moving_class_counts: The moving class counts.
+
+      :returns: The weight array and the moving class counts.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.create_weight(gt, target, mask, moving_class_counts)
+
 
    .. py:method:: process(labels: numpy.ndarray, voxel_size: funlib.geometry.Coordinate, normalize=None, normalize_args=None)
+
+      Process the labels array and convert it to signed distances.
+
+      :param labels: The labels array.
+      :param voxel_size: The voxel size.
+      :param normalize: The normalization method.
+      :param normalize_args: The normalization arguments.
+
+      :returns: The signed distances.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.process(labels, voxel_size, normalize, normalize_args)
 
 
    .. py:method:: gt_region_for_roi(target_spec)
@@ -92,11 +194,30 @@ Attributes
       Report how much spatial context this predictor needs to generate a
       target for the given ROI. By default, uses the same ROI.
 
-      Overwrite this method to request ground-truth in a larger ROI, as
-      needed.
+      :param target_spec: The ROI for which the target is requested.
+
+      :returns: The ROI for which the ground-truth is requested.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.gt_region_for_roi(target_spec)
 
 
    .. py:method:: padding(gt_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
+
+      Return the padding needed for the ground-truth array.
+
+      :param gt_voxel_size: The voxel size of the ground-truth array.
+
+      :returns: The padding needed for the ground-truth array.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.padding(gt_voxel_size)
 
 
 

@@ -34,6 +34,35 @@ Attributes
    class hierarchies. Used to reconstruct a concrete class from unstructured
    data.
 
+   .. attribute:: hooks
+
+      A dictionary mapping classes to lists of
+      hooks that should be applied to them.
+
+      :type: Dict[Type, List[Hook]]
+
+   .. method:: register_hierarchy
+
+      Register a class hierarchy for typed
+      structure/unstructure conversion.
+
+   .. method:: __typed_unstructure
+
+      Unstructure an object, adding a '__type__' field
+      with the class name.
+
+   .. method:: __typed_structure
+
+      Structure an object, using the '__type__' field to
+      determine the class.
+
+   .. note::
+
+      This class is a subclass of cattr.Converter, and extends it with the
+      ability to store and retrieve type information for selected class
+      hierarchies. This is useful for reconstructing a concrete class from
+      unstructured data.
+
    .. py:method:: register_hierarchy(cls, cls_fn)
 
       Register a class hierarchy for typed structure/unstructure
@@ -56,6 +85,8 @@ Attributes
                      ``cls`` are visible to the module that calls this method.
       :type cls_fn: function
 
+      :raises TypeError: If ``cls`` is not a class.
+
       .. rubric:: Example
 
       If class ``A`` is the base of class ``B``, and
@@ -66,6 +97,20 @@ Attributes
 
       This ``__type__`` field is then used by ``x =
       converter.structure(y, A)`` to recreate the concrete type of ``x``.
+
+      .. note::
+
+         This method is used to register a class hierarchy for typed
+         structure/unstructure conversion. For each class in the hierarchy
+         under (including) ``cls``, this will store an additional
+         ``__type__`` attribute (a string) in the object dictionary. This
+         ``__type__`` string will be the concrete class of the object, and
+         will be used to structure the dictionary back into an object of the
+         correct class.
+         
+         For this to work, this function needs to know how to convert a
+         ``__type__`` string back into a class, for which it used the
+         provided ``cls_fn``.
 
 
 

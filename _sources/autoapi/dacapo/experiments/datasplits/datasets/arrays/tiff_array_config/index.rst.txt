@@ -24,12 +24,34 @@ Classes
 
    This config class provides the necessary configuration for a tiff array
 
+   .. attribute:: file_name
+
+      Path
+      The file name of the tiff.
+
+   .. attribute:: offset
+
+      Coordinate
+      The offset of the array.
+
+   .. attribute:: voxel_size
+
+      Coordinate
+      The voxel size of the array.
+
+   .. attribute:: axes
+
+      List[str]
+      The axes of the array.
+
+   .. note:: This class is a subclass of ArrayConfig.
+
    .. py:attribute:: array_type
 
       
 
    .. py:attribute:: file_name
-      :type: pathlib.Path
+      :type: upath.UPath
 
       
 

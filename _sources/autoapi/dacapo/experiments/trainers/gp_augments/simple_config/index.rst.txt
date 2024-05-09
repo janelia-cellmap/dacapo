@@ -28,8 +28,11 @@ Classes
    :param _gt_key: Key for ground truth data. Not used in this implementation. Defaults to None.
    :param _mask_key: Key for mask data. Not used in this implementation. Defaults to None.
 
-   :returns: A node that can be included in a pipeline to perform simple data augmentations.
-   :rtype: Gunpowder SimpleAugment Node
+   .. method:: node(_raw_key=None, _gt_key=None, _mask_key=None)
+
+      Get a gp.SimpleAugment node.
+
+   .. note:: This class is a subclass of AugmentConfig.
 
    .. py:method:: node(_raw_key=None, _gt_key=None, _mask_key=None)
 
@@ -44,6 +47,12 @@ Classes
 
       :returns: Simple augmentation node which can be incorporated in the pipeline.
       :rtype: gunpowder.SimpleAugment
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> node = simple_augment_config.node()
 
 
 

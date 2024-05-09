@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -109,7 +110,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.starts.cosem_start.CosemStart" title="dacapo.experiments.starts.cosem_start.CosemStart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CosemStart</span></code></a></p></td>
-<td><p>This class interfaces with the dacapo store to retrieve and load the</p></td>
+<td><p>A class to represent the starting point for tasks. This class inherits</p></td>
 </tr>
 </tbody>
 </table>
@@ -119,7 +120,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.starts.cosem_start.get_model_setup" title="dacapo.experiments.starts.cosem_start.get_model_setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_model_setup</span></code></a>(run)</p></td>
-<td><p></p></td>
+<td><p>Loads the model setup from the dacapo store for the specified run. The</p></td>
 </tr>
 </tbody>
 </table>
@@ -141,54 +142,157 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.cosem_start.get_model_setup">
 <span class="sig-prename descclassname"><span class="pre">dacapo.experiments.starts.cosem_start.</span></span><span class="sig-name descname"><span class="pre">get_model_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.starts.cosem_start.get_model_setup" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Loads the model setup from the dacapo store for the specified run. The
+model setup includes the classes_channels, voxel_size_input and
+voxel_size_output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run</strong> – str
+The run for which the model setup is to be loaded.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>list</dt><dd><p>The classes_channels of the model.</p>
+</dd>
+<dt>voxel_size_input<span class="classifier">list</span></dt><dd><p>The voxel_size_input of the model.</p>
+</dd>
+<dt>voxel_size_output<span class="classifier">list</span></dt><dd><p>The voxel_size_output of the model.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>classes_channels</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – If the model setup cannot be loaded, an Exception is thrown which
+is logged and handled by training the model without head matching.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">classes_channels</span><span class="p">,</span> <span class="n">voxel_size_input</span><span class="p">,</span> <span class="n">voxel_size_output</span> <span class="o">=</span> <span class="n">get_model_setup</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This function is called by the CosemStart class to load the model setup
+from the dacapo store for the specified run.</p>
+</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.cosem_start.CosemStart">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.starts.cosem_start.</span></span><span class="sig-name descname"><span class="pre">CosemStart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.starts.cosem_start.CosemStart" title="Link to this definition"></a></dt>
-<dd><p>This class interfaces with the dacapo store to retrieve and load the
-weights of the starter model used for finetuning.</p>
+<dd><p>A class to represent the starting point for tasks. This class inherits
+from the Start class and is used to load the weights of the starter model
+used for finetuning. The weights are loaded from the dacapo store for the
+specified run and criterion.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.cosem_start.CosemStart.run">
 <span class="sig-name descname"><span class="pre">run</span></span><a class="headerlink" href="#dacapo.experiments.starts.cosem_start.CosemStart.run" title="Link to this definition"></a></dt>
-<dd><p>The specified run to retrieve weights for the model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
+<dd><p>str
+The run to be used as a starting point for tasks.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.cosem_start.CosemStart.criterion">
 <span class="sig-name descname"><span class="pre">criterion</span></span><a class="headerlink" href="#dacapo.experiments.starts.cosem_start.CosemStart.criterion" title="Link to this definition"></a></dt>
-<dd><p>The policy that was used to decide when to store the weights.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
+<dd><p>str
+The criterion to be used for choosing weights from run.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.cosem_start.CosemStart.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.experiments.starts.cosem_start.CosemStart.name" title="Link to this definition"></a></dt>
+<dd><p>str
+The name of the run and criterion.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.cosem_start.CosemStart.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#dacapo.experiments.starts.cosem_start.CosemStart.channels" title="Link to this definition"></a></dt>
+<dd><p>list
+The classes_channels of the model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.cosem_start.CosemStart.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.starts.cosem_start.CosemStart.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes the CosemStart class with specified config to run the
+initialization of weights for a model associated with a specific
+criterion.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.cosem_start.CosemStart.check">
 <span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.starts.cosem_start.CosemStart.check" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Checks if the checkpoint for the specified run and criterion exists.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.cosem_start.CosemStart.initialize_weights">
 <span class="sig-name descname"><span class="pre">initialize_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_head</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.starts.cosem_start.CosemStart.initialize_weights" title="Link to this definition"></a></dt>
 <dd><p>Retrieves the weights from the dacapo store and load them into
-the model.
-:param model: The model to which the weights are to be loaded.
-:type model: obj</p>
+the model.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This class is used to represent the starting point for tasks. The weights
+of the starter model used for finetuning are loaded from the dacapo store.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Checks if the checkpoint for the specified run and criterion exists.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>RuntimeError</strong> – If weights of a non-existing or mismatched layer are being
+<dd class="field-odd"><p><strong>Exception</strong> – If the checkpoint does not exist, an Exception is thrown which
+is logged and handled by training the model without head matching.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">check</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This function is called by the CosemStart class to check if the
+checkpoint for the specified run and criterion exists.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">initialize_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_head</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Retrieves the weights from the dacapo store and load them into
+the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – obj
+The model to which the weights are to be loaded.</p></li>
+<li><p><strong>new_head</strong> – list
+The labels of the new head.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>obj</dt><dd><p>The model with the weights loaded from the dacapo store.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>model</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If weights of a non-existing or mismatched layer are being
 loaded, a RuntimeError exception is thrown which is logged
 and handled by loading only the common layers from weights.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">initialize_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">new_head</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This function is called by the CosemStart class to retrieve the weights
+from the dacapo store and load them into the model.</p>
 </dd></dl>
 
 </dd></dl>

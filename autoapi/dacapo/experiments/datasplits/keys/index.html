@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -134,47 +135,39 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.keys.ArrayKey.RAW">
 <span class="sig-name descname"><span class="pre">RAW</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.keys.ArrayKey.RAW" title="Link to this definition"></a></dt>
-<dd><p>The raw data key.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
+<dd><p>str
+The raw data key.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.keys.ArrayKey.GT">
 <span class="sig-name descname"><span class="pre">GT</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.keys.ArrayKey.GT" title="Link to this definition"></a></dt>
-<dd><p>The ground truth data key.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
+<dd><p>str
+The ground truth data key.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.keys.ArrayKey.MASK">
 <span class="sig-name descname"><span class="pre">MASK</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.keys.ArrayKey.MASK" title="Link to this definition"></a></dt>
-<dd><p>The data mask key.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
+<dd><p>str
+The data mask key.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.keys.ArrayKey.NON_EMPTY">
 <span class="sig-name descname"><span class="pre">NON_EMPTY</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.keys.ArrayKey.NON_EMPTY" title="Link to this definition"></a></dt>
-<dd><p>The data key for non-empty mask.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
+<dd><p>str
+The data key for non-empty mask.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.keys.ArrayKey.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.keys.ArrayKey.__str__" title="Link to this definition"></a></dt>
+<dd><p>Return the string representation of the key.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This class is a base class and should not be instantiated.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id0">
 <span class="sig-name descname"><span class="pre">RAW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'raw'</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
@@ -204,14 +197,18 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.keys.GraphKey.SPECIFIED_LOCATIONS">
 <span class="sig-name descname"><span class="pre">SPECIFIED_LOCATIONS</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.keys.GraphKey.SPECIFIED_LOCATIONS" title="Link to this definition"></a></dt>
-<dd><p>The key for specified locations in the graph.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
+<dd><p>str
+The key for specified locations in the graph.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.keys.GraphKey.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.keys.GraphKey.__str__" title="Link to this definition"></a></dt>
+<dd><p>Return the string representation of the key.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This class is a base class and should not be instantiated.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id4">
 <span class="sig-name descname"><span class="pre">SPECIFIED_LOCATIONS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'specified_locations'</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
@@ -223,6 +220,49 @@
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.keys.DataKey">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.keys.</span></span><span class="sig-name descname"><span class="pre">DataKey</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.keys.DataKey" title="Link to this definition"></a></dt>
 <dd><p>Represent a base class for various types of keys in Dacapo library.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.keys.DataKey.RAW">
+<span class="sig-name descname"><span class="pre">RAW</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.keys.DataKey.RAW" title="Link to this definition"></a></dt>
+<dd><p>str
+The raw data key.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.keys.DataKey.GT">
+<span class="sig-name descname"><span class="pre">GT</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.keys.DataKey.GT" title="Link to this definition"></a></dt>
+<dd><p>str
+The ground truth data key.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.keys.DataKey.MASK">
+<span class="sig-name descname"><span class="pre">MASK</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.keys.DataKey.MASK" title="Link to this definition"></a></dt>
+<dd><p>str
+The data mask key.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.keys.DataKey.NON_EMPTY">
+<span class="sig-name descname"><span class="pre">NON_EMPTY</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.keys.DataKey.NON_EMPTY" title="Link to this definition"></a></dt>
+<dd><p>str
+The data key for non-empty mask.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.keys.DataKey.SPECIFIED_LOCATIONS">
+<span class="sig-name descname"><span class="pre">SPECIFIED_LOCATIONS</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.keys.DataKey.SPECIFIED_LOCATIONS" title="Link to this definition"></a></dt>
+<dd><p>str
+The key for specified locations in the graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.keys.DataKey.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.keys.DataKey.__str__" title="Link to this definition"></a></dt>
+<dd><p>Return the string representation of the key.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This class is a base class and should not be instantiated.</p>
 </dd></dl>
 
 </section>

@@ -35,6 +35,16 @@ Classes
 
       Config for the training dataset. Defaults to DummyDatasetConfig.
 
+   .. method:: verify()
+
+      
+      A method for verification. This method always return 'False' plus
+      a string indicating the condition.
+
+   .. rubric:: Notes
+
+   This class is used to represent the configuration for Dummy DataSplit.
+
    .. py:attribute:: datasplit_type
 
       
@@ -51,6 +61,16 @@ Classes
 
       :returns: A tuple contains a boolean 'False' and a string.
       :rtype: Tuple[bool, str]
+
+      .. rubric:: Examples
+
+      >>> dummy_datasplit_config = DummyDataSplitConfig(train_config)
+      >>> dummy_datasplit_config.verify()
+      (False, "This is a DummyDataSplit and is never valid")
+
+      .. rubric:: Notes
+
+      This method is used to verify the configuration of DummyDataSplit.
 
 
 

@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -110,48 +111,64 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.losses.mse_loss.MSELoss" title="dacapo.experiments.tasks.losses.mse_loss.MSELoss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MSELoss</span></code></a></p></td>
-<td><p>A class used to represent the Mean Square Error Loss function (MSELoss).</p></td>
+<td><p>A class used to represent the Mean Square Error Loss function (MSELoss). This class inherits from the Loss class.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.mse_loss.MSELoss">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.losses.mse_loss.</span></span><span class="sig-name descname"><span class="pre">MSELoss</span></span><a class="headerlink" href="#dacapo.experiments.tasks.losses.mse_loss.MSELoss" title="Link to this definition"></a></dt>
-<dd><p>A class used to represent the Mean Square Error Loss function (MSELoss).</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.mse_loss.MSELoss.None">
-<span class="sig-name descname"><span class="pre">None</span></span><a class="headerlink" href="#dacapo.experiments.tasks.losses.mse_loss.MSELoss.None" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">compute(prediction,</span> <span class="pre">target,</span> <span class="pre">weight):</span></span></dt>
-<dd><p>Computes the MSELoss with the given weight for the predictiom and target.</p>
-</dd></dl>
-
+<dd><p>A class used to represent the Mean Square Error Loss function (MSELoss). This class inherits from the Loss class.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.losses.mse_loss.MSELoss.compute">
-<span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.losses.mse_loss.MSELoss.compute" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">torch.Tensor</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.losses.mse_loss.MSELoss.compute" title="Link to this definition"></a></dt>
 <dd><p>Function to compute the MSELoss for the provided prediction and target, with respect to the weight.</p>
-<section id="parameters">
-<h4>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
-<dl class="simple">
-<dt>prediction<span class="classifier">torch.Tensor</span></dt><dd><p>The prediction tensor for which loss needs to be calculated.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is abstract. Subclasses must implement the abstract methods. Once created, the values of its attributes
+cannot be changed.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Function to compute the MSELoss for the provided prediction and target, with respect to the weight.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prediction</strong> – torch.Tensor
+The predicted tensor.</p></li>
+<li><p><strong>target</strong> – torch.Tensor
+The target tensor.</p></li>
+<li><p><strong>weight</strong> – torch.Tensor
+The weight tensor.</p></li>
+</ul>
 </dd>
-<dt>target<span class="classifier">torch.Tensor</span></dt><dd><p>The target tensor with respect to which loss is calculated.</p>
-</dd>
-<dt>weight<span class="classifier">torch.Tensor</span></dt><dd><p>The weight tensor used to weigh the prediction in the loss calculation.</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>torch.Tensor</dt><dd><p>The computed MSELoss tensor.</p>
 </dd>
 </dl>
-</section>
-<section id="returns">
-<h4>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h4>
-<p>:
-torch.Tensor</p>
-<blockquote>
-<div><p>The computed MSELoss tensor.</p>
-</div></blockquote>
-</section>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span> <span class="o">=</span> <span class="n">MSELoss</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weight</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
+<span class="go">tensor(0.)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should return the computed MSELoss tensor.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

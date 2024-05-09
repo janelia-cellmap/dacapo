@@ -52,9 +52,20 @@ Attributes
 
    :returns: A tuple ``(relabelled, n)``, where ``relabelled`` is the relabelled
              array and ``n`` the number of unique labels found.
-
              If ``return_backwards_map`` is ``True``, returns ``(relabelled, n,
              backwards_map)``.
+
+   :raises ValueError: If ``array`` is not of type ``np.ndarray``.
+
+   .. rubric:: Examples
+
+   >>> array = np.array([[1, 2, 0], [0, 2, 1]])
+   >>> relabel(array)
+   (array([[1, 2, 0], [0, 2, 1]]), 2)
+   >>> relabel(array, return_backwards_map=True)
+   (array([[1, 2, 0], [0, 2, 1]]), 2, [0, 1, 2])
+
+   .. note:: This function is used to relabel an array, such that IDs are consecutive. Excludes 0.
 
 
 .. py:class:: InstanceEvaluator
@@ -62,14 +73,44 @@ Attributes
 
 
 
-   Base class of all evaluators.
+   A class representing an evaluator for instance segmentation tasks.
 
-   An evaluator takes a post-processor's output and compares it against
-   ground-truth.
+   .. attribute:: criteria
+
+      List[str]
+      the evaluation criteria
+
+   .. method:: evaluate(output_array_identifier, evaluation_array)
+
+      
+      Evaluate the output array against the evaluation array.
+
+   .. method:: score
+
+      
+      Return the evaluation scores.
+
+   .. note:: The InstanceEvaluator class is used to evaluate the performance of an instance segmentation task.
 
    .. py:property:: score
       :type: dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores
 
+      Return the evaluation scores.
+
+      :returns:
+
+                InstanceEvaluationScores
+                    the evaluation scores
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> instance_evaluator = InstanceEvaluator()
+      >>> instance_evaluator.score
+      InstanceEvaluationScores(voi_merge=0.0, voi_split=0.0)
+
+      .. note:: This function is used to return the evaluation scores.
 
    .. py:attribute:: criteria
       :type: List[str]
@@ -79,18 +120,55 @@ Attributes
 
    .. py:method:: evaluate(output_array_identifier, evaluation_array)
 
-      Compares and evaluates the output array against the evaluation array.
+      Evaluate the output array against the evaluation array.
 
-      :param output_array_identifier: The output data array to evaluate
-      :type output_array_identifier: Array
-      :param evaluation_array: The evaluation data array to compare with the output
-      :type evaluation_array: Array
+      :param output_array_identifier: str
+                                      the identifier of the output array
+      :param evaluation_array: ZarrArray
+                               the evaluation array
 
-      :returns: The detailed evaluation scores after the comparison.
-      :rtype: EvaluationScores
+      :returns:
+
+                InstanceEvaluationScores
+                    the evaluation scores
+
+      :raises ValueError: if the output array identifier is not valid
+
+      .. rubric:: Examples
+
+      >>> instance_evaluator = InstanceEvaluator()
+      >>> output_array_identifier = "output_array"
+      >>> evaluation_array = ZarrArray.open_from_array_identifier("evaluation_array")
+      >>> instance_evaluator.evaluate(output_array_identifier, evaluation_array)
+      InstanceEvaluationScores(voi_merge=0.0, voi_split=0.0)
+
+      .. note:: This function is used to evaluate the output array against the evaluation array.
 
 
 
 .. py:function:: voi(truth, test)
+
+   Calculate the variation of information (VOI) between two segmentations.
+
+   :param truth: ndarray
+                 the ground truth segmentation
+   :param test: ndarray
+                the test segmentation
+
+   :returns:
+
+             dict
+                 the variation of information (VOI) scores
+
+   :raises ValueError: if the truth and test arrays are not of type np.ndarray
+
+   .. rubric:: Examples
+
+   >>> truth = np.array([[1, 1, 0], [0, 2, 2]])
+   >>> test = np.array([[1, 1, 0], [0, 2, 2]])
+   >>> voi(truth, test)
+   {'voi_split': 0.0, 'voi_merge': 0.0}
+
+   .. note:: This function is used to calculate the variation of information (VOI) between two segmentations.
 
 

@@ -32,9 +32,57 @@ Attributes
 
 .. py:function:: seg_to_affgraph(seg: numpy.ndarray, neighborhood: List[funlib.geometry.Coordinate]) -> numpy.ndarray
 
+   Constructs an affinity graph from a segmentation.
+
+   :param seg: The segmentation array.
+   :type seg: np.ndarray
+   :param neighborhood: The list of coordinates representing the neighborhood.
+   :type neighborhood: List[Coordinate]
+
+   :returns: The affinity graph.
+   :rtype: np.ndarray
+
+   :raises RuntimeError: If the number of dimensions is not 2 or 3.
+
+   .. rubric:: Examples
+
+   >>> seg = np.array([[1, 1, 2], [1, 1, 2], [3, 3, 4]])
+   >>> neighborhood = [Coordinate(1, 0), Coordinate(0, 1)]
+   >>> seg_to_affgraph(seg, neighborhood)
+   array([[[0, 0, 0],
+           [0, 0, 0],
+           [0, 0, 0]],
+   <BLANKLINE>
+          [[1, 1, 0],
+           [1, 1, 0],
+           [0, 0, 0]]], dtype=int32)
+
+   .. rubric:: Notes
+
+   The affinity graph is represented as:
+   shape = (e, z, y, x)
+   nhood.shape = (edges, 3)
+
 
 .. py:function:: padding(neighborhood, voxel_size)
 
    Get the appropriate padding to make sure all provided affinities are "True"
+
+   :param neighborhood: The list of coordinates representing the neighborhood.
+   :type neighborhood: List[Coordinate]
+   :param voxel_size: The voxel size.
+   :type voxel_size: Coordinate
+
+   :returns: The negative and positive padding.
+   :rtype: Tuple[Coordinate, Coordinate]
+
+   :raises RuntimeError: If the number of dimensions is not 2 or 3.
+
+   .. rubric:: Examples
+
+   >>> neighborhood = [Coordinate(1, 0), Coordinate(0, 1)]
+   >>> voxel_size = Coordinate(1, 1)
+   >>> padding(neighborhood, voxel_size)
+   (Coordinate(0, 0), Coordinate(1, 1))
 
 

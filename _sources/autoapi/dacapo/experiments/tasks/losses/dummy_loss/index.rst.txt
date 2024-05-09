@@ -26,24 +26,49 @@ Classes
 
    Inherits the Loss class.
 
+   .. attribute:: name
+
+      str
+      name of the loss function
+
    .. method:: compute(prediction, target, weight=None)
 
+      
       Calculate the total loss between prediction and target.
 
+   .. note::
+
+      The dummy loss is used to test the training loop and the loss calculation. It is not a real loss function.
+      It is used to test the training loop and the loss calculation.
 
    .. py:method:: compute(prediction, target, weight=None)
 
       Method to calculate the total dummy loss.
 
-      :param prediction: predicted output
-      :type prediction: float or int
-      :param target: true output
-      :type target: float or int
-      :param weight: weight parameter for the loss, by default None
-      :type weight: float or int, optional
+      :param prediction: torch.Tensor
+                         the model's prediction
+      :param target: torch.Tensor
+                     the target values
+      :param weight: torch.Tensor
+                     the weight to apply to the loss
 
-      :returns: Total loss calculated as the sum of absolute differences between prediction and target.
-      :rtype: float or int
+      :returns:
+
+                torch.Tensor
+                    the total loss between prediction and target
+
+      .. rubric:: Examples
+
+      >>> dummy_loss = DummyLoss()
+      >>> prediction = torch.tensor([1, 2, 3])
+      >>> target = torch.tensor([4, 5, 6])
+      >>> dummy_loss.compute(prediction, target)
+      tensor(9)
+
+      .. note::
+
+         The dummy loss is used to test the training loop and the loss calculation. It is not a real loss function.
+         It is used to test the training loop and the loss calculation.
 
 
 

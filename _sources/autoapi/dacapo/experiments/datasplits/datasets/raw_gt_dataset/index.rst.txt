@@ -22,43 +22,41 @@ Classes
 
 
 
-   A class to represent a dataset.
-
-   .. attribute:: name
-
-      The name of the dataset.
-
-      :type: str
+   A dataset that contains raw and ground truth data. Optionally, it can also contain a mask.
 
    .. attribute:: raw
 
-      The raw dataset.
-
-      :type: Array
+      Array
+      The raw data.
 
    .. attribute:: gt
 
+      Array
       The ground truth data.
-
-      :type: Array, optional
 
    .. attribute:: mask
 
-      The mask for the data.
-
-      :type: Array, optional
-
-   .. attribute:: weight
-
-      The weight of the dataset.
-
-      :type: int, optional
+      Optional[Array]
+      The mask data.
 
    .. attribute:: sample_points
 
-      The list of sample points in the dataset.
+      Optional[List[Coordinate]]
+      The sample points in the graph.
 
-      :type: list[Coordinate], optional
+   .. attribute:: weight
+
+      Optional[float]
+      The weight of the dataset.
+
+   .. method:: __init__(dataset_config)
+
+      
+      Initialize the dataset.
+
+   .. rubric:: Notes
+
+   This class is a base class and should not be instantiated.
 
    .. py:attribute:: raw
       :type: dacapo.experiments.datasplits.datasets.arrays.Array

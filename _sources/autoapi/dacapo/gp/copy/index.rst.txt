@@ -53,11 +53,21 @@ Classes
    .. method:: process
 
       Processes the batch by copying the mask from the array_key to the copy_key.
-      
+
+   .. note::
+
+      This class is a subclass of gunpowder.BatchFilter and is used to
+      copy a mask into a new key with the option to drop channels via max collapse.
 
    .. py:method:: setup()
 
       Sets up the filter by enabling autoskip and providing the copied key.
+
+      :raises RuntimeError: If the key is already provided.
+
+      .. rubric:: Examples
+
+      >>> copy_mask.setup()
 
 
    .. py:method:: prepare(request)
@@ -68,6 +78,14 @@ Classes
 
       :returns: The prepared dependencies.
       :rtype: deps
+
+      :raises NotImplementedError: If the copy_key is not provided.
+
+      .. rubric:: Examples
+
+      >>> request = gp.BatchRequest()
+      >>> request[self.copy_key] = gp.ArraySpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
+      >>> copy_mask.prepare(request)
 
 
    .. py:method:: process(batch, request)
@@ -81,6 +99,14 @@ Classes
 
       :returns: The processed outputs.
       :rtype: outputs
+
+      :raises KeyError: If the requested key is not in the request.
+
+      .. rubric:: Examples
+
+      >>> request = gp.BatchRequest()
+      >>> request[gp.ArrayKey("ARRAY")] = gp.ArraySpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
+      >>> copy_mask.process(batch, request)
 
 
 

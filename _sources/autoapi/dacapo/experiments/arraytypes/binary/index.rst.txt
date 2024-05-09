@@ -23,7 +23,7 @@ Classes
 
 
    A subclass of ArrayType representing BinaryArray. The BinaryArray object is created with two attributes; channels.
-   Each voxel in this array is either 1 or 0.
+   Each voxel in this array is either 1 or 0. The class of each voxel can be determined by simply taking the argmax.
 
    .. attribute:: channels
 
@@ -31,13 +31,11 @@ Classes
 
       :type: Dict[int, str]
 
-   :param channels: A dictionary input where keys are channel numbers and values are their corresponding class for binary classification.
-   :type channels: Dict[int, str]
-
    .. method:: interpolatable
 
       Returns False as binary array type is not interpolatable.
-      
+
+   .. note:: This class is used to represent a BinaryArray object in the system.
 
    .. py:property:: interpolatable
       :type: bool
@@ -46,6 +44,16 @@ Classes
 
       :returns: Always returns False because interpolation is not possible.
       :rtype: bool
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> binary_array = BinaryArray(channels={1: "class1"})
+      >>> binary_array.interpolatable
+      False
+
+      .. note:: This method is used to check if the array is interpolatable.
 
    .. py:attribute:: channels
       :type: Dict[int, str]

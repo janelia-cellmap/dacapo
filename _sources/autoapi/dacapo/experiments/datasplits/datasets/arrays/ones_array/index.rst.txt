@@ -25,55 +25,361 @@ Classes
    This is a wrapper around another `source_array` that simply provides ones
    with the same metadata as the `source_array`.
 
+   This is useful for creating a mask array that is the same size as the
+   original array, but with all values set to 1.
+
+   .. attribute:: source_array
+
+      The source array that this array is based on.
+
+   .. method:: like
+
+      Create a new OnesArray with the same metadata as another array.
+
+   .. method:: attrs
+
+      Get the attributes of the array.
+
+   .. method:: axes
+
+      Get the axes of the array.
+
+   .. method:: dims
+
+      Get the dimensions of the array.
+
+   .. method:: voxel_size
+
+      Get the voxel size of the array.
+
+   .. method:: roi
+
+      Get the region of interest of the array.
+
+   .. method:: writable
+
+      Check if the array is writable.
+
+   .. method:: data
+
+      Get the data of the array.
+
+   .. method:: dtype
+
+      Get the data type of the array.
+
+   .. method:: num_channels
+
+      Get the number of channels of the array.
+
+   .. method:: __getitem__
+
+      Get a subarray of the array.
+
+   .. note::
+
+      This class is not meant to be instantiated directly. Instead, use the
+      `like` method to create a new OnesArray with the same metadata as
+      another array.
+
    .. py:property:: attrs
 
-      Return a dictionary of metadata attributes stored on this array.
+      Get the attributes of the array.
+
+      :returns: An empty dictionary.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.attrs
+      {}
+
+      .. rubric:: Notes
+
+      This method is used to get the attributes of the array. The attributes
+      are stored as key-value pairs in a dictionary. This method returns an
+      empty dictionary because the OnesArray does not have any attributes.
 
    .. py:property:: source_array
       :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
 
+      Get the source array that this array is based on.
+
+      :returns: The source array.
+
+      :raises RuntimeError: If the source array is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.source_array
+      NumpyArray(data=array([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]]), voxel_size=(1.0, 1.0, 1.0), roi=Roi((0, 0, 0), (10, 10, 10)), num_channels=1)
+
+      .. rubric:: Notes
+
+      This method is used to get the source array that this array is based on.
+      The source array is the array that the OnesArray is created from. This
+      method returns the source array that was specified when the OnesArray
+      was created.
 
    .. py:property:: axes
 
-      Returns the axes of this dataset as a string of charactes, as they
-      are indexed. Permitted characters are:
+      Get the axes of the array.
 
-          * ``zyx`` for spatial dimensions
-          * ``c`` for channels
-          * ``s`` for samples
+      :returns: The axes of the array.
+
+      :raises RuntimeError: If the axes are not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.axes
+      'zyx'
+
+      .. rubric:: Notes
+
+      This method is used to get the axes of the array. The axes are the
+      order of the dimensions of the array. This method returns the axes of
+      the array that was specified when the OnesArray was created.
 
    .. py:property:: dims
 
-      Returns the number of spatial dimensions.
+      Get the dimensions of the array.
+
+      :returns: The dimensions of the array.
+
+      :raises RuntimeError: If the dimensions are not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.dims
+      (10, 10, 10)
+
+      .. rubric:: Notes
+
+      This method is used to get the dimensions of the array. The dimensions
+      are the size of the array along each axis. This method returns the
+      dimensions of the array that was specified when the OnesArray was created.
 
    .. py:property:: voxel_size
 
-      The size of a voxel in physical units.
+      Get the voxel size of the array.
+
+      :returns: The voxel size of the array.
+
+      :raises RuntimeError: If the voxel size is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.voxel_size
+      (1.0, 1.0, 1.0)
+
+      .. rubric:: Notes
+
+      This method is used to get the voxel size of the array. The voxel size
+      is the size of each voxel in the array. This method returns the voxel
+      size of the array that was specified when the OnesArray was created.
 
    .. py:property:: roi
 
-      The total ROI of this array, in world units.
+      Get the region of interest of the array.
+
+      :returns: The region of interest of the array.
+
+      :raises RuntimeError: If the region of interest is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> from funlib.geometry import Roi
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.roi
+      Roi((0, 0, 0), (10, 10, 10))
+
+      .. rubric:: Notes
+
+      This method is used to get the region of interest of the array. The
+      region of interest is the region of the array that contains the data.
+      This method returns the region of interest of the array that was specified
+      when the OnesArray was created.
 
    .. py:property:: writable
       :type: bool
 
-      Can we write to this Array?
+      Check if the array is writable.
+
+      :returns: False.
+
+      :raises RuntimeError: If the writability of the array is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.writable
+      False
+
+      .. rubric:: Notes
+
+      This method is used to check if the array is writable. An array is
+      writable if it can be modified in place. This method returns False
+      because the OnesArray is read-only and cannot be modified.
 
    .. py:property:: data
 
-      Get a numpy like readable and writable view into this array.
+      Get the data of the array.
+
+      :returns: The data of the array.
+
+      :raises RuntimeError: If the data is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.data
+      array([[[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]])
+
+      .. rubric:: Notes
+
+      This method is used to get the data of the array. The data is the
+      values that are stored in the array. This method returns a subarray
+      of the array with all values set to 1.
 
    .. py:property:: dtype
 
-      The dtype of this array, in numpy dtypes
+      Get the data type of the array.
+
+      :returns: The data type of the array.
+
+      :raises RuntimeError: If the data type is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.dtype
+      <class 'numpy.bool_'>
+
+      .. rubric:: Notes
+
+      This method is used to get the data type of the array. The data type
+      is the type of the values that are stored in the array. This method
+      returns the data type of the array that was specified when the OnesArray
+      was created.
 
    .. py:property:: num_channels
 
-      The number of channels provided by this dataset.
-      Should return None if the channel dimension doesn't exist.
+      Get the number of channels of the array.
+
+      :returns: The number of channels of the array.
+
+      :raises RuntimeError: If the number of channels is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.num_channels
+      1
+
+      .. rubric:: Notes
+
+      This method is used to get the number of channels of the array. The
+      number of channels is the number of values that are stored at each
+      voxel in the array. This method returns the number of channels of the
+      array that was specified when the OnesArray was created.
 
    .. py:method:: like(array: dacapo.experiments.datasplits.datasets.arrays.array.Array)
       :classmethod:
+
+      Create a new OnesArray with the same metadata as another array.
+
+      :param array: The source array.
+
+      :returns: The new OnesArray with the same metadata as the source array.
+
+      :raises RuntimeError: If the source array is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray.like(source_array)
+      >>> ones_array.source_array
+      NumpyArray(data=array([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]]), voxel_size=(1.0, 1.0, 1.0), roi=Roi((0, 0, 0), (10, 10, 10)), num_channels=1)
+
+      .. rubric:: Notes
+
+      This class is not meant to be instantiated directly. Instead, use the
+      `like` method to create a new OnesArray with the same metadata as
+      another array.
 
 
 

@@ -42,4 +42,12 @@ Classes
 
       BinarySegmentationEvaluator object.
 
+   .. method:: __init__(self, task_config)
+
+      Constructs all the necessary attributes for the HotDistanceTask object.
+
+   .. rubric:: Notes
+
+   This is a subclass of Task.
+
 

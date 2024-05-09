@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -110,17 +111,37 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyPostProcessorParameters</span></code></a></p></td>
-<td><p>Base class for post-processor parameters.</p></td>
+<td><p>Parameters for the dummy post-processor. The dummy post-processor will set</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.</span></span><span class="sig-name descname"><span class="pre">DummyPostProcessorParameters</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters" title="Link to this definition"></a></dt>
-<dd><p>Base class for post-processor parameters.</p>
+<dd><p>Parameters for the dummy post-processor. The dummy post-processor will set
+the output to 1 if the input is greater than the minimum size, and 0
+otherwise.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters.min_size">
-<span class="sig-name descname"><span class="pre">min_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters.min_size" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">min_size</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters.min_size" title="Link to this definition"></a></dt>
+<dd><p>The minimum size. If the input is greater than this value, the
+output will be set to 1. Otherwise, the output will be set to 0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters.parameter_names">
+<span class="sig-name descname"><span class="pre">parameter_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters.parameter_names" title="Link to this definition"></a></dt>
+<dd><p>Get the names of the parameters.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is immutable. Once created, the values of its attributes
+cannot be changed.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">min_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

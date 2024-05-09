@@ -61,6 +61,14 @@ Classes
 
       :type: Optional[List[Coordinate]]
 
+   .. method:: verify
+
+      A method to verify the validity of the configuration.
+
+   .. rubric:: Notes
+
+   This class is used to create a configuration object for the standard dataset with both raw and GT Array.
+
    .. py:attribute:: dataset_type
 
       

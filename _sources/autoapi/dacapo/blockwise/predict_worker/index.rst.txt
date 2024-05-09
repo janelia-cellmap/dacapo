@@ -52,8 +52,30 @@ Attributes
 
 .. py:function:: cli(log_level)
 
+   CLI for running the predict worker.
 
-.. py:function:: start_worker(run_name: str, iteration: int | None, input_container: pathlib.Path | str, input_dataset: str, output_container: pathlib.Path | str, output_dataset: str)
+   The predict worker is used to apply a trained model to a dataset.
+
+   :param log_level: The log level to use for logging.
+   :type log_level: str
+
+
+.. py:function:: start_worker(run_name: str, iteration: int | None, input_container: upath.UPath | str, input_dataset: str, output_container: upath.UPath | str, output_dataset: str, return_io_loop: Optional[bool] = False)
+
+   Start a worker to apply a trained model to a dataset.
+
+   :param run_name: The name of the run to apply.
+   :type run_name: str
+   :param iteration: The training iteration of the model to use for prediction.
+   :type iteration: int or None
+   :param input_container: The input container.
+   :type input_container: Path | str
+   :param input_dataset: The input dataset.
+   :type input_dataset: str
+   :param output_container: The output container.
+   :type output_container: Path | str
+   :param output_dataset: The output dataset.
+   :type output_dataset: str
 
 
 .. py:function:: spawn_worker(run_name: str, iteration: int | None, input_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier)
@@ -68,5 +90,8 @@ Attributes
    :type input_array_identifier: LocalArrayIdentifier
    :param output_array_identifier: The identifier of the prediction array.
    :type output_array_identifier: LocalArrayIdentifier
+
+   :returns: The function to run the worker.
+   :rtype: Callable
 
 

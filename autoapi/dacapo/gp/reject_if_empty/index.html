@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -130,36 +131,68 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.gp.reject_if_empty.RejectIfEmpty">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.gp.reject_if_empty.</span></span><span class="sig-name descname"><span class="pre">RejectIfEmpty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.reject_if_empty.RejectIfEmpty" title="Link to this definition"></a></dt>
-<dd><p>Reject batches based on the masked-in vs. masked-out ratio.</p>
+<dd><p>Reject batches based on the masked-in vs. masked-out ratio.
+.. attribute:: gt</p>
+<blockquote>
+<div><p>The gt array to use</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>gt</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ArrayKey</span></code>, optional) – The gt array to use</p></li>
-<li><p><strong>p</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>, optional) – The probability that we reject until gt is nonempty</p></li>
-</ul>
+<dt class="field-odd">type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ArrayKey</span></code>, optional</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.reject_if_empty.RejectIfEmpty.p">
+<span class="sig-name descname"><span class="pre">p</span></span><a class="headerlink" href="#dacapo.gp.reject_if_empty.RejectIfEmpty.p" title="Link to this definition"></a></dt>
+<dd><p>The probability that we reject until gt is nonempty</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">float</span></code>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="simple">
+<dt>Method:</dt><dd><p>setup: Set up the provider.
+provide: Provide a batch.</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.reject_if_empty.RejectIfEmpty.setup">
 <span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.reject_if_empty.RejectIfEmpty.setup" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>Called during initialization of the DAG. Callees can assume that all
-upstream providers are set up already.</p>
-<p>In setup, call <code class="xref py py-func docutils literal notranslate"><span class="pre">provides()</span></code> or <code class="xref py py-func docutils literal notranslate"><span class="pre">updates()</span></code> to announce the
-arrays and points provided or changed by this node.</p>
+<dd><p>Set up the provider.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AssertionError</strong> – If only 1 upstream provider is supported.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">setup</span><span class="p">()</span>
+<span class="go">setup()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.reject_if_empty.RejectIfEmpty.provide">
 <span class="sig-name descname"><span class="pre">provide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.reject_if_empty.RejectIfEmpty.provide" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>This function takes a <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code> and should return the
-corresponding <code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code>.</p>
+<dd><p>Provides a batch of data, rejecting empty ground truth (gt) if requested.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code>) – The request to process.</p>
+<dd class="field-odd"><p><strong>request</strong> – The request object containing the necessary information.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The batch of data.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AssertionError</strong> – If the requested gt is not present in the request.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">provide</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="go">provide(request)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>

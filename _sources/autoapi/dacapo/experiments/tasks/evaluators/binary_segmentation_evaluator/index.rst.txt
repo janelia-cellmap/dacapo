@@ -42,10 +42,86 @@ Attributes
 
 
 
-   Given a binary segmentation, compute various metrics to determine their similarity.
+   Given a binary segmentation, compute various metrics to determine their similarity. The metrics include:
+   - Dice coefficient: 2 * |A ∩ B| / |A| + |B| ; where A and B are the binary segmentations
+   - Jaccard coefficient: |A ∩ B| / |A ∪ B| ; where A and B are the binary segmentations
+   - Hausdorff distance: max(h(A, B), h(B, A)) ; where h(A, B) is the Hausdorff distance between A and B
+   - False negative rate: |A - B| / |A| ; where A and B are the binary segmentations
+   - False positive rate: |B - A| / |B| ; where A and B are the binary segmentations
+   - False discovery rate: |B - A| / |A| ; where A and B are the binary segmentations
+   - VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality
+   - Mean false distance: 0.5 * (mean false positive distance + mean false negative distance)
+   - Mean false negative distance: mean distance of false negatives
+   - Mean false positive distance: mean distance of false positives
+   - Mean false distance clipped: 0.5 * (mean false positive distance clipped + mean false negative distance clipped) ; clipped to a maximum distance
+   - Mean false negative distance clipped: mean distance of false negatives clipped ; clipped to a maximum distance
+   - Mean false positive distance clipped: mean distance of false positives clipped ; clipped to a maximum distance
+   - Precision with tolerance: TP / (TP + FP) ; where TP and FP are the true and false positives within a tolerance distance
+   - Recall with tolerance: TP / (TP + FN) ; where TP and FN are the true and false positives within a tolerance distance
+   - F1 score with tolerance: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives within a tolerance distance
+   - Precision: TP / (TP + FP) ; where TP and FP are the true and false positives
+   - Recall: TP / (TP + FN) ; where TP and FN are the true and false positives
+   - F1 score: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives
+
+   .. attribute:: clip_distance
+
+      float
+      the clip distance
+
+   .. attribute:: tol_distance
+
+      float
+      the tolerance distance
+
+   .. attribute:: channels
+
+      List[str]
+      the channels
+
+   .. attribute:: criteria
+
+      List[str]
+      the evaluation criteria
+
+   .. method:: evaluate(output_array_identifier, evaluation_array)
+
+      
+      Evaluate the output array against the evaluation array.
+
+   .. method:: score
+
+      
+      Return the evaluation scores.
+
+   .. note::
+
+      The BinarySegmentationEvaluator class is used to evaluate the performance of a binary segmentation task.
+      The class provides methods to evaluate the output array against the evaluation array and return the evaluation scores.
+      All evaluation scores should inherit from this class.
+      
+      Clip distance is the maximum distance between the ground truth and the predicted segmentation for a pixel to be considered a false positive.
+      Tolerance distance is the maximum distance between the ground truth and the predicted segmentation for a pixel to be considered a true positive.
+      Channels are the channels of the binary segmentation.
+      Criteria are the evaluation criteria.
 
    .. py:property:: score
 
+      Return the evaluation scores.
+
+      :returns:
+
+                BinarySegmentationEvaluationScores or MultiChannelBinarySegmentationEvaluationScores
+                    the evaluation scores
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> binary_segmentation_evaluator = BinarySegmentationEvaluator(clip_distance=200, tol_distance=40, channels=["channel1", "channel2"])
+      >>> binary_segmentation_evaluator.score
+      BinarySegmentationEvaluationScores(dice=0.0, jaccard=0.0, hausdorff=0.0, false_negative_rate=0.0, false_positive_rate=0.0, false_discovery_rate=0.0, voi=0.0, mean_false_distance=0.0, mean_false_negative_distance=0.0, mean_false_positive_distance=0.0, mean_false_distance_clipped=0.0, mean_false_negative_distance_clipped=0.0, mean_false_positive_distance_clipped=0.0, precision_with_tolerance=0.0, recall_with_tolerance=0.0, f1_score_with_tolerance=0.0, precision=0.0, recall=0.0, f1_score=0.0)
+
+      .. note:: This function is used to return the evaluation scores.
 
    .. py:attribute:: criteria
       :value: ['jaccard', 'voi']
@@ -54,155 +130,1412 @@ Attributes
 
    .. py:method:: evaluate(output_array_identifier, evaluation_array)
 
-      Compares and evaluates the output array against the evaluation array.
+      Evaluate the output array against the evaluation array.
 
-      :param output_array_identifier: The output data array to evaluate
-      :type output_array_identifier: Array
-      :param evaluation_array: The evaluation data array to compare with the output
-      :type evaluation_array: Array
+      :param output_array_identifier: str
+                                      the identifier of the output array
+      :param evaluation_array: ZarrArray
+                               the evaluation array
 
-      :returns: The detailed evaluation scores after the comparison.
-      :rtype: EvaluationScores
+      :returns:
+
+                BinarySegmentationEvaluationScores or MultiChannelBinarySegmentationEvaluationScores
+                    the evaluation scores
+
+      :raises ValueError: if the output array identifier is not valid
+
+      .. rubric:: Examples
+
+      >>> binary_segmentation_evaluator = BinarySegmentationEvaluator(clip_distance=200, tol_distance=40, channels=["channel1", "channel2"])
+      >>> output_array_identifier = "output_array"
+      >>> evaluation_array = ZarrArray.open_from_array_identifier("evaluation_array")
+      >>> binary_segmentation_evaluator.evaluate(output_array_identifier, evaluation_array)
+      BinarySegmentationEvaluationScores(dice=0.0, jaccard=0.0, hausdorff=0.0, false_negative_rate=0.0, false_positive_rate=0.0, false_discovery_rate=0.0, voi=0.0, mean_false_distance=0.0, mean_false_negative_distance=0.0, mean_false_positive_distance=0.0, mean_false_distance_clipped=0.0, mean_false_negative_distance_clipped=0.0, mean_false_positive_distance_clipped=0.0, precision_with_tolerance=0.0, recall_with_tolerance=0.0, f1_score_with_tolerance=0.0, precision=0.0, recall=0.0, f1_score=0.0)
+
+      .. note:: This function is used to evaluate the output array against the evaluation array.
 
 
 
 .. py:class:: ArrayEvaluator(truth_binary, test_binary, truth_empty, test_empty, metric_params, resolution)
 
 
+   Given a binary segmentation, compute various metrics to determine their similarity. The metrics include:
+   - Dice coefficient: 2 * |A ∩ B| / |A| + |B| ; where A and B are the binary segmentations
+   - Jaccard coefficient: |A ∩ B| / |A ∪ B| ; where A and B are the binary segmentations
+   - Hausdorff distance: max(h(A, B), h(B, A)) ; where h(A, B) is the Hausdorff distance between A and B
+   - False negative rate: |A - B| / |A| ; where A and B are the binary segmentations
+   - False positive rate: |B - A| / |B| ; where A and B are the binary segmentations
+   - False discovery rate: |B - A| / |A| ; where A and B are the binary segmentations
+   - VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality
+   - Mean false distance: 0.5 * (mean false positive distance + mean false negative distance)
+   - Mean false negative distance: mean distance of false negatives
+   - Mean false positive distance: mean distance of false positives
+   - Mean false distance clipped: 0.5 * (mean false positive distance clipped + mean false negative distance clipped) ; clipped to a maximum distance
+   - Mean false negative distance clipped: mean distance of false negatives clipped ; clipped to a maximum distance
+   - Mean false positive distance clipped: mean distance of false positives clipped ; clipped to a maximum distance
+   - Precision with tolerance: TP / (TP + FP) ; where TP and FP are the true and false positives within a tolerance distance
+   - Recall with tolerance: TP / (TP + FN) ; where TP and FN are the true and false positives within a tolerance distance
+   - F1 score with tolerance: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives within a tolerance distance
+   - Precision: TP / (TP + FP) ; where TP and FP are the true and false positives
+   - Recall: TP / (TP + FN) ; where TP and FN are the true and false positives
+   - F1 score: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives
+
+   .. attribute:: truth
+
+      np.ndarray
+      the truth binary segmentation
+
+   .. attribute:: test
+
+      np.ndarray
+      the test binary segmentation
+
+   .. attribute:: truth_empty
+
+      bool
+      whether the truth binary segmentation is empty
+
+   .. attribute:: test_empty
+
+      bool
+      whether the test binary segmentation is empty
+
+   .. attribute:: cremieval
+
+      CremiEvaluator
+      the cremi evaluator
+
+   .. attribute:: resolution
+
+      Tuple[float, float, float]
+      the resolution
+
+   .. method:: dice
+
+      
+      Return the Dice coefficient.
+
+   .. method:: jaccard
+
+      
+      Return the Jaccard coefficient.
+
+   .. method:: hausdorff
+
+      
+      Return the Hausdorff distance.
+
+   .. method:: false_negative_rate
+
+      
+      Return the false negative rate.
+
+   .. method:: false_positive_rate
+
+      
+      Return the false positive rate.
+
+   .. method:: false_discovery_rate
+
+      
+      Return the false discovery rate.
+
+   .. method:: precision
+
+      
+      Return the precision.
+
+   .. method:: recall
+
+      
+      Return the recall.
+
+   .. method:: f1_score
+
+      
+      Return the F1 score.
+
+   .. method:: voi
+
+      
+      Return the VOI.
+
+   .. method:: mean_false_distance
+
+      
+      Return the mean false distance.
+
+   .. method:: mean_false_negative_distance
+
+      
+      Return the mean false negative distance.
+
+   .. method:: mean_false_positive_distance
+
+      
+      Return the mean false positive distance.
+
+   .. method:: mean_false_distance_clipped
+
+      
+      Return the mean false distance clipped.
+
+   .. method:: mean_false_negative_distance_clipped
+
+      
+      Return the mean false negative distance clipped.
+
+   .. method:: mean_false_positive_distance_clipped
+
+      
+      Return the mean false positive distance clipped.
+
+   .. method:: false_positive_rate_with_tolerance
+
+      
+      Return the false positive rate with tolerance.
+
+   .. method:: false_negative_rate_with_tolerance
+
+      
+      Return the false negative rate with tolerance.
+
+   .. method:: precision_with_tolerance
+
+      
+      Return the precision with tolerance.
+
+   .. method:: recall_with_tolerance
+
+      
+      Return the recall with tolerance.
+
+   .. method:: f1_score_with_tolerance
+
+      
+      Return the F1 score with tolerance.
+
+   .. note::
+
+      The ArrayEvaluator class is used to evaluate the performance of a binary segmentation task.
+      The class provides methods to evaluate the truth binary segmentation against the test binary segmentation.
+      All evaluation scores should inherit from this class.
+
    .. py:method:: truth_itk()
+
+      A SimpleITK image of the truth binary segmentation.
+
+      :returns:
+
+                sitk.Image
+                    the truth binary segmentation as a SimpleITK image
+
+      .. rubric:: Examples
+
+      >>> array_evaluator = ArrayEvaluator(truth_binary, test_binary, truth_empty, test_empty, metric_params, resolution)
+      >>> array_evaluator.truth_itk
+      <SimpleITK.SimpleITK.Image; proxy of <Swig Object of type 'std::vector< itk::simple::Image >::value_type *' at 0x7f8b1c0b3f30> >
+
+      .. note:: This function is used to return the truth binary segmentation as a SimpleITK image.
 
 
    .. py:method:: test_itk()
 
+      A SimpleITK image of the test binary segmentation.
+
+      :param test: np.ndarray
+                   the test binary segmentation
+      :param resolution: Tuple[float, float, float]
+                         the resolution
+
+      :returns:
+
+                sitk.Image
+                    the test binary segmentation as a SimpleITK image
+
+      :raises ValueError: if the test binary segmentation is not valid
+
+      .. rubric:: Examples
+
+      >>> array_evaluator = ArrayEvaluator(truth_binary, test_binary, truth_empty, test_empty, metric_params, resolution)
+      >>> array_evaluator.test_itk
+      <SimpleITK.SimpleITK.Image; proxy of <Swig Object of type 'std::vector< itk::simple::Image >::value_type *' at 0x7f8b1c0b3f30> >
+
+      .. note:: This function is used to return the test binary segmentation as a SimpleITK image.
+
 
    .. py:method:: overlap_measures_filter()
+
+      A SimpleITK filter to compute overlap measures.
+
+      :param truth_itk: sitk.Image
+                        the truth binary segmentation as a SimpleITK image
+      :param test_itk: sitk.Image
+                       the test binary segmentation as a SimpleITK image
+
+      :returns:
+
+                sitk.LabelOverlapMeasuresImageFilter
+                    the overlap measures filter
+
+      :raises ValueError: if the truth binary segmentation or the test binary segmentation is not valid
+
+      .. rubric:: Examples
+
+      >>> array_evaluator = ArrayEvaluator(truth_binary, test_binary, truth_empty, test_empty, metric_params, resolution)
+      >>> array_evaluator.overlap_measures_filter
+      <SimpleITK.SimpleITK.LabelOverlapMeasuresImageFilter; proxy of <Swig Object of type 'itk::simple::LabelOverlapMeasuresImageFilter *' at 0x7f8b1c0b3f30> >
+
+      .. note:: This function is used to return the overlap measures filter.
 
 
    .. py:method:: dice()
 
+      The Dice coefficient.
+
+      :param truth_itk: sitk.Image
+                        the truth binary segmentation as a SimpleITK image
+      :param test_itk: sitk.Image
+                       the test binary segmentation as a SimpleITK image
+
+      :returns:
+
+                float
+                    the Dice coefficient
+
+      :raises ValueError: if the truth binary segmentation or the test binary segmentation is not valid
+
+      .. rubric:: Examples
+
+      >>> array_evaluator = ArrayEvaluator(truth_binary, test_binary, truth_empty, test_empty, metric_params, resolution)
+      >>> array_evaluator.dice()
+      0.0
+
+      .. note:: This function is used to return the Dice coefficient.
+
 
    .. py:method:: jaccard()
+
+      The Jaccard coefficient.
+
+      :param truth_itk: sitk.Image
+                        the truth binary segmentation as a SimpleITK image
+      :param test_itk: sitk.Image
+                       the test binary segmentation as a SimpleITK image
+
+      :returns:
+
+                float
+                    the Jaccard coefficient
+
+      :raises ValueError: if the truth binary segmentation or the test binary segmentation is not valid
+
+      .. rubric:: Examples
+
+      >>> array_evaluator = ArrayEvaluator(truth_binary, test_binary, truth_empty, test_empty, metric_params, resolution)
+      >>> array_evaluator.jaccard()
+      0.0
+
+      .. note:: This function is used to return the Jaccard coefficient.
 
 
    .. py:method:: hausdorff()
 
+      The Hausdorff distance.
+
+      :param None:
+
+      :returns: the Hausdorff distance
+      :rtype: float
+
+      :raises None:
+
+      .. rubric:: Examples
+
+      >>> array_evaluator = ArrayEvaluator(truth_binary, test_binary, truth_empty, test_empty, metric_params, resolution)
+      >>> array_evaluator.hausdorff()
+      0.0
+
+      .. note::
+
+         This function is used to return the Hausdorff distance between the truth binary segmentation and the test binary segmentation.
+         
+         If either the truth or test binary segmentation is empty, the function returns 0.
+         Otherwise, it calculates the Hausdorff distance using the HausdorffDistanceImageFilter from the SimpleITK library.
+
 
    .. py:method:: false_negative_rate()
+
+      The false negative rate.
+
+      :returns:
+
+                float
+                    the false negative rate
+
+      :returns: if the truth binary segmentation or the test binary segmentation is not valid
+      :rtype: ValueError
+
+      .. rubric:: Examples
+
+      >>> array_evaluator = ArrayEvaluator(truth_binary, test_binary, truth_empty, test_empty, metric_params, resolution)
+      >>> array_evaluator.false_negative_rate()
+      0.0
+
+      .. note:: This function is used to return the false negative rate.
 
 
    .. py:method:: false_positive_rate()
 
+      The false positive rate.
+
+      :param truth_itk: sitk.Image
+                        the truth binary segmentation as a SimpleITK image
+      :param test_itk: sitk.Image
+                       the test binary segmentation as a SimpleITK image
+
+      :returns:
+
+                float
+                    the false positive rate
+
+      :raises ValueError: if the truth binary segmentation or the test binary segmentation is not valid
+
+      .. rubric:: Examples
+
+      >>> array_evaluator = ArrayEvaluator(truth_binary, test_binary, truth_empty, test_empty, metric_params, resolution)
+      >>> array_evaluator.false_positive_rate()
+      0.0
+
+      .. note:: This function is used to return the false positive rate.
+
 
    .. py:method:: false_discovery_rate()
+
+      Calculate the false discovery rate (FDR) for the binary segmentation evaluation.
+
+      :returns: The false discovery rate.
+      :rtype: float
+
+      :raises None:
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.false_discovery_rate()
+      0.25
+
+      .. note::
+
+         The false discovery rate is a measure of the proportion of false positives among the predicted positive samples.
+         It is calculated as the ratio of false positives to the sum of true positives and false positives.
+         If either the ground truth or the predicted segmentation is empty, the FDR is set to NaN.
 
 
    .. py:method:: precision()
 
+      Calculate the precision of the binary segmentation evaluation.
+
+      :returns: The precision value.
+      :rtype: float
+
+      :raises None.:
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.precision()
+      0.75
+
+      .. note::
+
+         Precision is a measure of the accuracy of the positive predictions made by the model.
+         It is calculated as the ratio of true positives to the total number of positive predictions.
+         If either the ground truth or the predicted values are empty, the precision value will be NaN.
+
 
    .. py:method:: recall()
+
+      Calculate the recall metric for binary segmentation evaluation.
+
+      :returns: The recall value.
+      :rtype: float
+
+      :raises None:
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.recall()
+      0.75
+
+      .. note::
+
+         Recall is a measure of the ability of a binary classifier to identify all positive samples.
+         It is calculated as the ratio of true positives to the total number of actual positives.
 
 
    .. py:method:: f1_score()
 
+      Calculate the F1 score for binary segmentation evaluation.
+
+      :returns: The F1 score value.
+      :rtype: float
+
+      :raises None.:
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.f1_score()
+      0.75
+
+      .. note::
+
+         The F1 score is the harmonic mean of precision and recall.
+         It is a measure of the balance between precision and recall, providing a single metric to evaluate the model's performance.
+         
+         If either the ground truth or the predicted values are empty, the F1 score will be NaN.
+
 
    .. py:method:: voi()
+
+      Calculate the Variation of Information (VOI) for binary segmentation evaluation.
+
+      :param truth: np.ndarray
+                    the truth binary segmentation
+      :param test: np.ndarray
+                   the test binary segmentation
+
+      :returns: The VOI value.
+      :rtype: float
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.voi()
+      0.75
+
+      .. note::
+
+         The VOI is a measure of the similarity between two segmentations.
+         It combines the split and merge errors into a single measure of segmentation quality.
+         If either the ground truth or the predicted values are empty, the VOI will be NaN.
 
 
    .. py:method:: mean_false_distance()
 
+      Calculate the mean false distance between the ground truth and the test results.
+
+      :param truth: np.ndarray
+                    the truth binary segmentation
+      :param test: np.ndarray
+                   the test binary segmentation
+
+      :returns: The mean false distance.
+      :rtype: float
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.mean_false_distance()
+      0.25
+
+      .. note::
+
+         - This method returns np.nan if either the ground truth or the test results are empty.
+         - The mean false distance is a measure of the average distance between the false positive pixels in the test results and the nearest true positive pixels in the ground truth.
+
 
    .. py:method:: mean_false_negative_distance()
+
+      Calculate the mean false negative distance between the ground truth and the test results.
+
+      :param truth: np.ndarray
+                    the truth binary segmentation
+      :param test: np.ndarray
+                   the test binary segmentation
+
+      :returns: The mean false negative distance.
+      :rtype: float
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.mean_false_negative_distance()
+      0.25
+
+      .. note:: This method returns np.nan if either the ground truth or the test results are empty.
 
 
    .. py:method:: mean_false_positive_distance()
 
+      Calculate the mean false positive distance.
+
+      This method calculates the mean false positive distance between the ground truth and the test results.
+      If either the ground truth or the test results are empty, the method returns NaN.
+
+      :param truth: np.ndarray
+                    the truth binary segmentation
+      :param test: np.ndarray
+                   the test binary segmentation
+
+      :returns: The mean false positive distance.
+      :rtype: float
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.mean_false_positive_distance()
+      0.5
+
+      .. note::
+
+         The mean false positive distance is a measure of the average distance between false positive pixels in the
+         test results and the corresponding ground truth pixels. It is commonly used to evaluate the performance of
+         binary segmentation algorithms.
+
 
    .. py:method:: mean_false_distance_clipped()
+
+      Calculate the mean false distance (clipped) between the ground truth and the test results.
+
+      :param truth: np.ndarray
+                    the truth binary segmentation
+      :param test: np.ndarray
+                   the test binary segmentation
+
+      :returns: The mean false distance (clipped) value.
+      :rtype: float
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.mean_false_distance_clipped()
+      0.123
+
+      .. note:: This method returns np.nan if either the ground truth or the test results are empty.
 
 
    .. py:method:: mean_false_negative_distance_clipped()
 
+      Calculate the mean false negative distance, with clipping.
+
+      This method calculates the mean false negative distance between the ground truth and the test results.
+      The distance is clipped to avoid extreme values.
+
+      :param truth: np.ndarray
+                    the truth binary segmentation
+      :param test: np.ndarray
+                   the test binary segmentation
+
+      :returns: The mean false negative distance with clipping.
+      :rtype: float
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.mean_false_negative_distance_clipped()
+      0.123
+
+      .. note::
+
+         - The mean false negative distance is a measure of the average distance between the false negative pixels in the ground truth and the test results.
+         - Clipping the distance helps to avoid extreme values that may skew the overall evaluation.
+
 
    .. py:method:: mean_false_positive_distance_clipped()
+
+      Calculate the mean false positive distance, with clipping.
+
+      This method calculates the mean false positive distance between the ground truth and the test results,
+      taking into account any clipping that may have been applied.
+
+      :param truth: np.ndarray
+                    the truth binary segmentation
+      :param test: np.ndarray
+                   the test binary segmentation
+
+      :returns: The mean false positive distance with clipping.
+      :rtype: float
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.mean_false_positive_distance_clipped()
+      0.25
+
+      .. note::
+
+         - The mean false positive distance is a measure of the average distance between false positive pixels
+           in the test results and the corresponding ground truth pixels.
+         - If either the ground truth or the test results are empty, the method returns NaN.
 
 
    .. py:method:: false_positive_rate_with_tolerance()
 
+      Calculate the false positive rate with tolerance.
+
+      :param truth: np.ndarray
+                    the truth binary segmentation
+      :param test: np.ndarray
+                   the test binary segmentation
+
+      :returns: The false positive rate with tolerance.
+      :rtype: float
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.false_positive_rate_with_tolerance()
+      0.25
+
+      .. note::
+
+         This method calculates the false positive rate with tolerance by comparing the truth and test data.
+         If either the truth or test data is empty, it returns NaN.
+
 
    .. py:method:: false_negative_rate_with_tolerance()
+
+      Calculate the false negative rate with tolerance.
+
+      :param truth: np.ndarray
+                    the truth binary segmentation
+      :param test: np.ndarray
+                   the test binary segmentation
+
+      :returns: The false negative rate with tolerance as a floating-point number.
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.false_negative_rate_with_tolerance()
+      0.25
+
+      .. note:: This method calculates the false negative rate with tolerance, which is a measure of the proportion of false negatives in a binary segmentation evaluation. If either the ground truth or the test data is empty, the method returns NaN.
 
 
    .. py:method:: precision_with_tolerance()
 
+      Calculate the precision with tolerance.
+
+      This method calculates the precision with tolerance by comparing the truth and test data.
+      Precision is the ratio of true positives to the sum of true positives and false positives.
+      Tolerance is a distance threshold within which two pixels are considered to be a match.
+
+      :param truth: np.ndarray
+                    the truth binary segmentation
+      :param test: np.ndarray
+                   the test binary segmentation
+
+      :returns: The precision with tolerance.
+      :rtype: float
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.precision_with_tolerance()
+      0.75
+
+      .. note::
+
+         - Precision is a measure of the accuracy of the positive predictions.
+         - If either the ground truth or the test data is empty, the method returns NaN.
+
 
    .. py:method:: recall_with_tolerance()
 
+      Calculate the recall with tolerance for the binary segmentation evaluator.
+
+      :returns: The recall with tolerance value.
+      :rtype: float
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.recall_with_tolerance()
+      0.75
+
+      .. note:: This method calculates the recall with tolerance, which is a measure of how well the binary segmentation evaluator performs. It returns the recall with tolerance value as a float. If either the truth or test data is empty, it returns NaN.
+
 
    .. py:method:: f1_score_with_tolerance()
+
+      Calculate the F1 score with tolerance.
+
+      This method calculates the F1 score with tolerance between the ground truth and the test results.
+      If either the ground truth or the test results are empty, the function returns NaN.
+
+      :param truth: np.ndarray
+                    the truth binary segmentation
+      :param test: np.ndarray
+                   the test binary segmentation
+
+      :returns: The F1 score with tolerance.
+      :rtype: float
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.f1_score_with_tolerance()
+      0.85
+
+      .. note::
+
+         The F1 score is a measure of a test's accuracy. It considers both the precision and recall of the test to compute the score.
+         The tolerance parameter allows for a certain degree of variation between the ground truth and the test results.
 
 
 
 .. py:class:: CremiEvaluator(truth, test, sampling=(1, 1, 1), clip_distance=200, tol_distance=40)
 
 
+   Evaluate the performance of a binary segmentation task using the CREMI score.
+   The CREMI score is a measure of the similarity between two binary segmentations.
+
+   .. attribute:: truth
+
+      np.ndarray
+      the truth binary segmentation
+
+   .. attribute:: test
+
+      np.ndarray
+      the test binary segmentation
+
+   .. attribute:: sampling
+
+      Tuple[float, float, float]
+      the sampling resolution
+
+   .. attribute:: clip_distance
+
+      float
+      the maximum distance to clip
+
+   .. attribute:: tol_distance
+
+      float
+      the tolerance distance
+
+   .. method:: false_positive_distances
+
+      
+      Return the false positive distances.
+
+   .. method:: false_positives_with_tolerance
+
+      
+      Return the false positives with tolerance.
+
+   .. method:: false_positive_rate_with_tolerance
+
+      
+      Return the false positive rate with tolerance.
+
+   .. method:: false_negatives_with_tolerance
+
+      
+      Return the false negatives with tolerance.
+
+   .. method:: false_negative_rate_with_tolerance
+
+      
+      Return the false negative rate with tolerance.
+
+   .. method:: true_positives_with_tolerance
+
+      
+      Return the true positives with tolerance.
+
+   .. method:: precision_with_tolerance
+
+      
+      Return the precision with tolerance.
+
+   .. method:: recall_with_tolerance
+
+      
+      Return the recall with tolerance.
+
+   .. method:: f1_score_with_tolerance
+
+      
+      Return the F1 score with tolerance.
+
+   .. method:: mean_false_positive_distances_clipped
+
+      
+      Return the mean false positive distances clipped.
+
+   .. method:: mean_false_negative_distances_clipped
+
+      
+      Return the mean false negative distances clipped.
+
+   .. method:: mean_false_positive_distance
+
+      
+      Return the mean false positive distance.
+
+   .. method:: false_negative_distances
+
+      
+      Return the false negative distances.
+
+   .. method:: mean_false_negative_distance
+
+      
+      Return the mean false negative distance.
+
+   .. method:: mean_false_distance
+
+      
+      Return the mean false distance.
+
+   .. method:: mean_false_distance_clipped
+
+      
+      Return the mean false distance clipped.
+
+   .. note::
+
+      - The CremiEvaluator class is used to evaluate the performance of a binary segmentation task using the CREMI score.
+      - True and test binary segmentations are compared to calculate various evaluation metrics.
+      - The class provides methods to evaluate the performance of the binary segmentation task.
+      - Toleration distance is used to determine the tolerance level for the evaluation.
+      - Clip distance is used to clip the distance values to avoid extreme values.
+      - All evaluation scores should inherit from this class.
+
    .. py:method:: test_mask()
+
+      Generate a binary mask for the test data.
+
+      :param test: np.ndarray
+                   the test binary segmentation
+
+      :returns: A binary mask indicating the regions of interest in the test data.
+      :rtype: test_mask (ndarray)
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.test = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
+      >>> evaluator.test_mask()
+      array([[False,  True, False],
+              [ True,  True,  True],
+              [False,  True, False]])
+
+      .. note:: This method assumes that the background class is represented by the constant `BG`.
 
 
    .. py:method:: truth_mask()
 
+      Returns a binary mask indicating the truth values.
+
+      :param truth: np.ndarray
+                    the truth binary segmentation
+
+      :returns: A binary mask where True indicates the truth values and False indicates other values.
+      :rtype: truth_mask (ndarray)
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> mask = evaluator.truth_mask()
+      >>> print(mask)
+      [[ True  True False]
+          [False  True False]
+          [ True False False]]
+
+      .. note:: The truth mask is computed by comparing the truth values with a predefined background value (BG).
+
 
    .. py:method:: test_edt()
+
+      Calculate the Euclidean Distance Transform (EDT) of the test mask.
+
+      :param self.test_mask: The binary test mask.
+      :type self.test_mask: ndarray
+      :param self.sampling: The pixel spacing or sampling along each dimension.
+      :type self.sampling: float or sequence of floats
+
+      :returns: The Euclidean Distance Transform of the test mask.
+      :rtype: ndarray
+
+      .. rubric:: Examples
+
+      # Example 1:
+      test_mask = np.array([[0, 0, 1],
+                            [1, 1, 1],
+                            [0, 0, 0]])
+      sampling = 1.0
+      result = test_edt(test_mask, sampling)
+      # Output: array([[1.        , 1.        , 0.        ],
+      #                [0.        , 0.        , 0.        ],
+      #                [1.        , 1.        , 1.41421356]])
+
+      # Example 2:
+      test_mask = np.array([[0, 1, 0],
+                            [1, 0, 1],
+                            [0, 1, 0]])
+      sampling = 0.5
+      result = test_edt(test_mask, sampling)
+      # Output: array([[0.5       , 0.        , 0.5       ],
+      #                [0.        , 0.70710678, 0.        ],
+      #                [0.5       , 0.        , 0.5       ]])
+
+      .. note:: The Euclidean Distance Transform (EDT) calculates the distance from each pixel in the binary mask to the nearest boundary pixel. It is commonly used in image processing and computer vision tasks, such as edge detection and shape analysis.
 
 
    .. py:method:: truth_edt()
 
+      Calculate the Euclidean Distance Transform (EDT) of the ground truth mask.
+
+      :param self.truth_mask: The binary ground truth mask.
+      :type self.truth_mask: ndarray
+      :param self.sampling: The pixel spacing or sampling along each dimension.
+      :type self.sampling: float or sequence of floats
+
+      :returns: The Euclidean Distance Transform of the ground truth mask.
+      :rtype: ndarray
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> edt = evaluator.truth_edt()
+
+      .. note:: The Euclidean Distance Transform (EDT) calculates the distance from each pixel in the binary mask to the nearest boundary pixel. It is commonly used in image processing and computer vision tasks.
+
 
    .. py:method:: false_positive_distances()
+
+      Calculate the distances of false positive pixels from the ground truth segmentation.
+
+      :param self.test_mask: The binary test mask.
+      :type self.test_mask: ndarray
+      :param self.truth_edt: The Euclidean Distance Transform of the ground truth segmentation.
+      :type self.truth_edt: ndarray
+
+      :returns: An array containing the distances of false positive pixels from the ground truth segmentation.
+      :rtype: numpy.ndarray
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> distances = evaluator.false_positive_distances()
+      >>> print(distances)
+      [1.2, 0.8, 2.5, 1.0]
+
+      .. note::
+
+         This method assumes that the ground truth segmentation and the test mask have been initialized.
+         The ground truth segmentation is stored in the `truth_edt` attribute, and the test mask is obtained by inverting the `test_mask` attribute.
 
 
    .. py:method:: false_positives_with_tolerance()
 
+      Calculate the number of false positives with a given tolerance distance.
+
+      :param self.false_positive_distances: The distances of false positive pixels from the ground truth segmentation.
+      :type self.false_positive_distances: ndarray
+      :param self.tol_distance: The tolerance distance.
+      :type self.tol_distance: float
+
+      :returns: The number of false positives with a distance greater than the tolerance distance.
+      :rtype: int
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.false_positive_distances = [1, 2, 3]
+      >>> evaluator.tol_distance = 2
+      >>> false_positives = evaluator.false_positives_with_tolerance()
+      >>> print(false_positives)
+      1
+
+      .. note:: The `false_positive_distances` attribute should be initialized before calling this method.
+
 
    .. py:method:: false_positive_rate_with_tolerance()
+
+      Calculate the false positive rate with tolerance.
+
+      This method calculates the false positive rate by dividing the number of false positives with tolerance
+      by the number of condition negatives.
+
+      :param self.false_positives_with_tolerance: The number of false positives with tolerance.
+      :type self.false_positives_with_tolerance: int
+      :param self.truth_mask: The binary ground truth mask.
+      :type self.truth_mask: ndarray
+
+      :returns: The false positive rate with tolerance.
+      :rtype: float
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.false_positives_with_tolerance = 10
+      >>> evaluator.truth_mask = np.array([0, 1, 0, 1, 0])
+      >>> evaluator.false_positive_rate_with_tolerance()
+      0.5
+
+      .. note::
+
+         The false positive rate with tolerance is a measure of the proportion of false positive predictions
+         with respect to the total number of condition negatives. It is commonly used in binary segmentation tasks.
 
 
    .. py:method:: false_negatives_with_tolerance()
 
+      Calculate the number of false negatives with tolerance.
+
+      :param self.false_negative_distances: The distances of false negative pixels from the ground truth segmentation.
+      :type self.false_negative_distances: ndarray
+      :param self.tol_distance: The tolerance distance.
+      :type self.tol_distance: float
+
+      :returns: The number of false negatives with tolerance.
+      :rtype: int
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.false_negative_distances = [1, 2, 3]
+      >>> evaluator.tol_distance = 2
+      >>> false_negatives = evaluator.false_negatives_with_tolerance()
+      >>> print(false_negatives)
+      1
+
+      .. note::
+
+         False negatives are cases where the model incorrectly predicts the absence of a positive class.
+         The tolerance distance is used to determine whether a false negative is within an acceptable range.
+
 
    .. py:method:: false_negative_rate_with_tolerance()
+
+      Calculate the false negative rate with tolerance.
+
+      This method calculates the false negative rate by dividing the number of false negatives
+      with tolerance by the number of condition positives.
+
+      :param self.false_negatives_with_tolerance: The number of false negatives with tolerance.
+      :type self.false_negatives_with_tolerance: int
+      :param self.false_negative_distances: The distances of false negative pixels from the ground truth segmentation.
+      :type self.false_negative_distances: ndarray
+
+      :returns: The false negative rate with tolerance.
+      :rtype: float
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.false_negative_distances = [1, 2, 3]
+      >>> evaluator.false_negatives_with_tolerance = 2
+      >>> evaluator.false_negative_rate_with_tolerance()
+      0.6666666666666666
+
+      .. note::
+
+         The false negative rate with tolerance is a measure of the proportion of condition positives
+         that are incorrectly classified as negatives, considering a certain tolerance level.
 
 
    .. py:method:: true_positives_with_tolerance()
 
+      Calculate the number of true positives with tolerance.
+
+      :param self.test_mask: The test binary segmentation mask.
+      :type self.test_mask: ndarray
+      :param self.truth_mask: The ground truth binary segmentation mask.
+      :type self.truth_mask: ndarray
+      :param self.false_negatives_with_tolerance: The number of false negatives with tolerance.
+      :type self.false_negatives_with_tolerance: int
+      :param self.false_positives_with_tolerance: The number of false positives with tolerance.
+      :type self.false_positives_with_tolerance: int
+
+      :returns: The number of true positives with tolerance.
+      :rtype: int
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.test_mask = np.array([[0, 1], [1, 0]])
+      >>> evaluator.truth_mask = np.array([[0, 1], [1, 0]])
+      >>> evaluator.false_negatives_with_tolerance = 1
+      >>> evaluator.false_positives_with_tolerance = 1
+      >>> true_positives = evaluator.true_positives_with_tolerance()
+      >>> print(true_positives)
+      2
+
+      .. note::
+
+         True positives are cases where the model correctly predicts the presence of a positive class.
+         The tolerance distance is used to determine whether a true positive is within an acceptable range.
+
 
    .. py:method:: precision_with_tolerance()
+
+      Calculate the precision with tolerance.
+
+      This method calculates the precision with tolerance by dividing the number of true positives
+      with tolerance by the sum of true positives with tolerance and false positives with tolerance.
+
+      :param self.true_positives_with_tolerance: The number of true positives with tolerance.
+      :type self.true_positives_with_tolerance: int
+      :param self.false_positives_with_tolerance: The number of false positives with tolerance.
+      :type self.false_positives_with_tolerance: int
+
+      :returns: The precision with tolerance.
+      :rtype: float
+
+      :raises ZeroDivisionError: If the sum of true positives with tolerance and false positives with tolerance is zero.
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.true_positives_with_tolerance = 10
+      >>> evaluator.false_positives_with_tolerance = 5
+      >>> evaluator.precision_with_tolerance()
+      0.6666666666666666
+
+      .. note::
+
+         The precision with tolerance is a measure of the proportion of true positives with tolerance
+         out of the total number of predicted positives with tolerance.
+         It indicates how well the binary segmentation evaluator performs in terms of correctly identifying positive samples.
+         If the sum of true positives with tolerance and false positives with tolerance is zero, the precision with tolerance is undefined and a ZeroDivisionError is raised.
 
 
    .. py:method:: recall_with_tolerance()
 
+      A measure of the ability of a binary classifier to identify all positive samples.
+
+      :param self.true_positives_with_tolerance: The number of true positives with tolerance.
+      :type self.true_positives_with_tolerance: int
+      :param self.false_negatives_with_tolerance: The number of false negatives with tolerance.
+      :type self.false_negatives_with_tolerance: int
+
+      :returns: The recall with tolerance value.
+      :rtype: float
+
+      :raises ZeroDivisionError: If the sum of true positives with tolerance and false negatives with tolerance is zero.
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.recall_with_tolerance()
+      0.75
+
+      .. note:: This method calculates the recall with tolerance, which is a measure of how well the binary segmentation evaluator performs. It returns the recall with tolerance value as a float. If either the truth or test data is empty, it returns NaN.
+
 
    .. py:method:: f1_score_with_tolerance()
+
+      Calculate the F1 score with tolerance.
+
+      :param self.recall_with_tolerance: The recall with tolerance value.
+      :type self.recall_with_tolerance: float
+      :param self.precision_with_tolerance: The precision with tolerance value.
+      :type self.precision_with_tolerance: float
+
+      :returns: The F1 score with tolerance.
+      :rtype: float
+
+      :raises ZeroDivisionError: If both the recall with tolerance and precision with tolerance are zero.
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.recall_with_tolerance = 0.8
+      >>> evaluator.precision_with_tolerance = 0.9
+      >>> evaluator.f1_score_with_tolerance()
+      0.8571428571428571
+
+      .. note::
+
+         The F1 score is a measure of a test's accuracy. It considers both the precision and recall of the test to compute the score.
+         The F1 score with tolerance is calculated using the formula:
+         F1 = 2 * (recall_with_tolerance * precision_with_tolerance) / (recall_with_tolerance + precision_with_tolerance)
+         If both recall_with_tolerance and precision_with_tolerance are 0, the F1 score with tolerance will be NaN.
 
 
    .. py:method:: mean_false_positive_distances_clipped()
 
+      Calculate the mean of the false positive distances, clipped to a maximum distance.
+
+      :param self.false_positive_distances: The distances of false positive pixels from the ground truth segmentation.
+      :type self.false_positive_distances: ndarray
+      :param self.clip_distance: The maximum distance to clip.
+      :type self.clip_distance: float
+
+      :returns: The mean of the false positive distances, clipped to a maximum distance.
+      :rtype: float
+
+      :raises ValueError: If the clip distance is not set.
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.false_positive_distances = [1, 2, 3, 4, 5]
+      >>> evaluator.clip_distance = 3
+      >>> evaluator.mean_false_positive_distances_clipped()
+      2.5
+
+      .. note:: This method calculates the mean of the false positive distances, where the distances are clipped to a maximum distance. The `false_positive_distances` attribute should be set before calling this method. The `clip_distance` attribute determines the maximum distance to which the distances are clipped.
+
 
    .. py:method:: mean_false_negative_distances_clipped()
+
+      Calculate the mean of the false negative distances, clipped to a maximum distance.
+
+      :param self.false_negative_distances: The distances of false negative pixels from the ground truth segmentation.
+      :type self.false_negative_distances: ndarray
+      :param self.clip_distance: The maximum distance to clip.
+      :type self.clip_distance: float
+
+      :returns: The mean of the false negative distances, clipped to a maximum distance.
+      :rtype: float
+
+      :raises ValueError: If the clip distance is not set.
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.false_negative_distances = [1, 2, 3, 4, 5]
+      >>> evaluator.clip_distance = 3
+      >>> evaluator.mean_false_negative_distances_clipped()
+      2.5
+
+      .. note:: This method calculates the mean of the false negative distances, where the distances are clipped to a maximum distance. The `false_negative_distances` attribute should be set before calling this method. The `clip_distance` attribute determines the maximum distance to which the distances are clipped.
 
 
    .. py:method:: mean_false_positive_distance()
 
+      Calculate the mean false positive distance.
+
+      This method calculates the mean distance between the false positive points and the ground truth points.
+
+      :param self.false_positive_distances: The distances of false positive pixels from the ground truth mask.
+      :type self.false_positive_distances: ndarray
+
+      :returns: The mean false positive distance.
+      :rtype: float
+
+      :raises ValueError: If the false positive distances are not set.
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.false_positive_distances = [1.2, 3.4, 2.1]
+      >>> evaluator.mean_false_positive_distance()
+      2.2333333333333334
+
+      .. note:: The false positive distances should be set before calling this method using the `false_positive_distances` attribute.
+
 
    .. py:method:: false_negative_distances()
+
+      Calculate the distances of false negative pixels from the ground truth mask.
+
+      :param self.truth_mask: The binary ground truth mask.
+      :type self.truth_mask: ndarray
+
+      :returns: An array containing the distances of false negative pixels.
+      :rtype: numpy.ndarray
+
+      :raises ValueError: If the truth mask is not set.
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> distances = evaluator.false_negative_distances()
+      >>> print(distances)
+      [0.5, 1.0, 1.5, 2.0]
+
+      .. note:: This method assumes that the ground truth mask and the test mask have already been set.
 
 
    .. py:method:: mean_false_negative_distance()
 
+      Calculate the mean false negative distance.
+
+      :param self.false_negative_distances: The distances of false negative pixels from the ground truth mask.
+      :type self.false_negative_distances: ndarray
+
+      :returns: The mean false negative distance.
+      :rtype: float
+
+      :raises ValueError: If the false negative distances are not set.
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.false_negative_distances = [1.2, 3.4, 2.1]
+      >>> evaluator.mean_false_negative_distance()
+      2.2333333333333334
+
+      .. note:: The mean false negative distance is calculated as the average of all false negative distances.
+
 
    .. py:method:: mean_false_distance()
 
+      Calculate the mean false distance.
+
+      This method calculates the mean false distance by taking the average of the mean false positive distance
+      and the mean false negative distance.
+
+      :param self.mean_false_positive_distance: The mean false positive distance.
+      :type self.mean_false_positive_distance: float
+      :param self.mean_false_negative_distance: The mean false negative distance.
+      :type self.mean_false_negative_distance: float
+
+      :returns: The calculated mean false distance.
+      :rtype: float
+
+      :raises ValueError: If the mean false positive distance or the mean false negative distance is not set.
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.mean_false_distance()
+      5.0
+
+      .. note::
+
+         The mean false distance is a metric used to evaluate the performance of a binary segmentation model.
+         It provides a measure of the average distance between false positive and false negative predictions.
+
 
    .. py:method:: mean_false_distance_clipped()
+
+      Calculates the mean false distance clipped.
+
+      This method calculates the mean false distance clipped by taking the average of the mean false positive distances
+      clipped and the mean false negative distances clipped.
+
+      :param self.mean_false_positive_distances_clipped: The mean false positive distances clipped.
+      :type self.mean_false_positive_distances_clipped: float
+      :param self.mean_false_negative_distances_clipped: The mean false negative distances clipped.
+      :type self.mean_false_negative_distances_clipped: float
+
+      :returns: The calculated mean false distance clipped.
+      :rtype: float
+
+      :raises ValueError: If the mean false positive distances clipped or the mean false negative distances clipped are not set.
+
+      .. rubric:: Examples
+
+      >>> evaluator = BinarySegmentationEvaluator()
+      >>> evaluator.mean_false_distance_clipped()
+      2.5
+
+      .. note::
+
+         The mean false distance clipped is calculated as 0.5 * (mean_false_positive_distances_clipped +
+         mean_false_negative_distances_clipped).
 
 
 

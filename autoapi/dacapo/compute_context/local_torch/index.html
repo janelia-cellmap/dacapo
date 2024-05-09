@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -134,16 +135,50 @@ LocalTorch is used to specify that computations are to be done on the local mach
 <span class="sig-name descname"><span class="pre">take</span> <span class="pre">&quot;cuda&quot;</span> <span class="pre">for</span> <span class="pre">GPU</span> <span class="pre">or</span> <span class="pre">&quot;cpu&quot;</span> <span class="pre">for</span> <span class="pre">CPU.</span> <span class="pre">None</span> <span class="pre">value</span> <span class="pre">results</span> <span class="pre">in</span> <span class="pre">automatic</span> <span class="pre">detection</span> <span class="pre">of</span> <span class="pre">device</span> <span class="pre">type.</span></span></dt>
 <dd></dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="dacapo.compute_context.local_torch.LocalTorch.device">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">device</span></span><a class="headerlink" href="#dacapo.compute_context.local_torch.LocalTorch.device" title="Link to this definition"></a></dt>
-<dd><p>A property method that returns the torch device object. It automatically detects and uses “cuda” (GPU) if
-available, else it falls back on using “cpu”.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.compute_context.local_torch.LocalTorch.oom_limit">
+<span class="sig-name descname"><span class="pre">oom_limit</span></span><a class="headerlink" href="#dacapo.compute_context.local_torch.LocalTorch.oom_limit" title="Link to this definition"></a></dt>
+<dd><p>The out of GPU memory to leave free in GB. If the free memory is below</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[float | int]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.compute_context.local_torch.LocalTorch.oom_limit">
-<span class="sig-name descname"><span class="pre">oom_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#dacapo.compute_context.local_torch.LocalTorch.oom_limit" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">this</span> <span class="pre">limit,</span> <span class="pre">we</span> <span class="pre">will</span> <span class="pre">fall</span> <span class="pre">back</span> <span class="pre">on</span> <span class="pre">CPU.</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.compute_context.local_torch.LocalTorch.device">
+<span class="sig-name descname"><span class="pre">device</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.compute_context.local_torch.LocalTorch.device" title="Link to this definition"></a></dt>
+<dd><p>Returns the torch device object.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The class is a subclass of the ComputeContext class.</p>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">device</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>A property method that returns the torch device object. It automatically detects and uses “cuda” (GPU) if
+available, else it falls back on using “cpu”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The torch device object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>torch.device</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">oom_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

@@ -34,6 +34,11 @@ Classes
 
       :type: List[str]
 
+   .. note::
+
+      This class is used to create a ProbabilityArray object which is used to represent an array containing probability distributions for each voxel pointed by its coordinate.
+      The class of each voxel can be determined by simply taking the argmax.
+
    .. py:property:: interpolatable
       :type: bool
 
@@ -41,6 +46,16 @@ Classes
 
       :returns: True indicating that the data can be interpolated.
       :rtype: bool
+
+      :raises NotImplementedError: This method is not implemented in this class
+
+      .. rubric:: Examples
+
+      >>> probability_array = ProbabilityArray(classes=["class1", "class2"])
+      >>> probability_array.interpolatable
+      True
+
+      .. note:: This method is used to check if the array is interpolatable.
 
    .. py:attribute:: classes
       :type: List[str]

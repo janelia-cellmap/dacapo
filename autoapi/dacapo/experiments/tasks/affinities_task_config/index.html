@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -119,48 +120,104 @@
 <dd><p>This is a Affinities task config used for generating and
 evaluating voxel affinities for instance segmentations.</p>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.neighborhood">
+<span class="sig-name descname"><span class="pre">neighborhood</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.neighborhood" title="Link to this definition"></a></dt>
+<dd><p>A list of Coordinate objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsds">
+<span class="sig-name descname"><span class="pre">lsds</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsds" title="Link to this definition"></a></dt>
+<dd><p>Whether or not to train lsds along with your affinities.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsds_to_affs_weight_ratio">
+<span class="sig-name descname"><span class="pre">lsds_to_affs_weight_ratio</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsds_to_affs_weight_ratio" title="Link to this definition"></a></dt>
+<dd><p>If training with lsds, set how much they should be weighted compared to affs.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.affs_weight_clipmin">
+<span class="sig-name descname"><span class="pre">affs_weight_clipmin</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.affs_weight_clipmin" title="Link to this definition"></a></dt>
+<dd><p>The minimum value for affinities weights.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.affs_weight_clipmax">
+<span class="sig-name descname"><span class="pre">affs_weight_clipmax</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.affs_weight_clipmax" title="Link to this definition"></a></dt>
+<dd><p>The maximum value for affinities weights.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsd_weight_clipmin">
+<span class="sig-name descname"><span class="pre">lsd_weight_clipmin</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsd_weight_clipmin" title="Link to this definition"></a></dt>
+<dd><p>The minimum value for lsds weights.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsd_weight_clipmax">
+<span class="sig-name descname"><span class="pre">lsd_weight_clipmax</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsd_weight_clipmax" title="Link to this definition"></a></dt>
+<dd><p>The maximum value for lsds weights.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.background_as_object">
+<span class="sig-name descname"><span class="pre">background_as_object</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.background_as_object" title="Link to this definition"></a></dt>
+<dd><p>Whether to treat the background as a separate object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.verify">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.verify" title="Link to this definition"></a></dt>
+<dd><p>This method verifies the AffinitiesTaskConfig</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This is a subclass of TaskConfig.</p>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.task_type">
 <span class="sig-name descname"><span class="pre">task_type</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.task_type" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.neighborhood">
-<span class="sig-name descname"><span class="pre">neighborhood</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">funlib.geometry.Coordinate</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.neighborhood" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">neighborhood</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">funlib.geometry.Coordinate</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsds">
-<span class="sig-name descname"><span class="pre">lsds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsds" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">lsds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsds_to_affs_weight_ratio">
-<span class="sig-name descname"><span class="pre">lsds_to_affs_weight_ratio</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsds_to_affs_weight_ratio" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">lsds_to_affs_weight_ratio</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.affs_weight_clipmin">
-<span class="sig-name descname"><span class="pre">affs_weight_clipmin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.affs_weight_clipmin" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">affs_weight_clipmin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.affs_weight_clipmax">
-<span class="sig-name descname"><span class="pre">affs_weight_clipmax</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.affs_weight_clipmax" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">affs_weight_clipmax</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsd_weight_clipmin">
-<span class="sig-name descname"><span class="pre">lsd_weight_clipmin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsd_weight_clipmin" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">lsd_weight_clipmin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsd_weight_clipmax">
-<span class="sig-name descname"><span class="pre">lsd_weight_clipmax</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.lsd_weight_clipmax" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">lsd_weight_clipmax</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.background_as_object">
-<span class="sig-name descname"><span class="pre">background_as_object</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig.background_as_object" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">background_as_object</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

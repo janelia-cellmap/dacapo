@@ -114,6 +114,21 @@ Classes
    Base class for task configurations. Each subclass of a `Task` should
    have a corresponding config class derived from `TaskConfig`.
 
+   .. attribute:: name
+
+      A unique name for this task. This will be saved so you and
+      others can find and reuse this task. Keep it short and avoid
+      special characters.
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method verifies the TaskConfig object.
+
+   .. rubric:: Notes
+
+   This is a base class for all task configurations. It is not meant to be
+   used directly.
+
    .. py:attribute:: name
       :type: str
 
@@ -122,6 +137,18 @@ Classes
    .. py:method:: verify() -> Tuple[bool, str]
 
       Check whether this is a valid Task
+
+      :returns:
+
+                A tuple containing a boolean value indicating whether the TaskConfig object is valid
+                    and a string containing the reason why the object is invalid.
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> valid, reason = task_config.verify()
 
 
 
@@ -154,6 +181,12 @@ Classes
 
       :type: float
 
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method verifies the DummyTaskConfig object.
+
+   .. note:: This is a subclass of TaskConfig.
+
    .. py:attribute:: task_type
 
       
@@ -178,6 +211,12 @@ Classes
       :returns: A tuple containing a boolean status and a string message.
       :rtype: tuple
 
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> valid, reason = task_config.verify()
+
 
 
 .. py:class:: DummyTask(task_config)
@@ -191,27 +230,32 @@ Classes
 
    .. attribute:: predictor
 
+      Object
       Instance of DummyPredictor class.
-
-      :type: Object
 
    .. attribute:: loss
 
+      Object
       Instance of DummyLoss class.
-
-      :type: Object
 
    .. attribute:: post_processor
 
+      Object
       Instance of DummyPostProcessor class.
-
-      :type: Object
 
    .. attribute:: evaluator
 
+      Object
       Instance of DummyEvaluator class.
 
-      :type: Object
+   .. method:: __init__(self, task_config)
+
+      
+      Initializes all components for the dummy task.
+
+   .. rubric:: Notes
+
+   This is a subclass of Task.
 
 
 .. py:class:: DistanceTaskConfig
@@ -227,6 +271,44 @@ Classes
    affinities is you can get a denser signal, i.e. 1 misclassified
    pixel in an affinity prediction could merge 2 otherwise very
    distinct objects, this cannot happen with distances.
+
+   .. attribute:: channels
+
+      A list of channel names.
+
+   .. attribute:: clip_distance
+
+      Maximum distance to consider for false positive/negatives.
+
+   .. attribute:: tol_distance
+
+      Tolerance distance for counting false positives/negatives
+
+   .. attribute:: scale_factor
+
+      The amount by which to scale distances before applying a tanh normalization.
+
+   .. attribute:: mask_distances
+
+      Whether or not to mask out regions where the true distance to
+      object boundary cannot be known. This is anywhere that the distance to crop boundary
+      is less than the distance to object boundary.
+
+   .. attribute:: clipmin
+
+      The minimum value for distance weights.
+
+   .. attribute:: clipmax
+
+      The maximum value for distance weights.
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method verifies the DistanceTaskConfig object.
+
+   .. rubric:: Notes
+
+   This is a subclass of TaskConfig.
 
    .. py:attribute:: task_type
 
@@ -297,6 +379,14 @@ Classes
 
       BinarySegmentationEvaluator object
 
+   .. method:: __init__(self, task_config)
+
+      Initializes attributes of DistanceTask
+
+   .. rubric:: Notes
+
+   This is a subclass of Task.
+
 
 .. py:class:: OneHotTaskConfig
 
@@ -335,14 +425,52 @@ Classes
 
 
 
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+   A task that uses a one-hot predictor. The model is loaded from a file
+   and the weights are loaded from a file. The loss is a dummy loss and the
+   post processor is an argmax post processor. The evaluator is a dummy evaluator.
+
+   .. attribute:: weights
+
+      The path to the weights file.
+
+      :type: Path
+
+   .. method:: create_model(self, architecture) -> Model
+
+      This method creates a model using the given architecture.
+
+   .. rubric:: Notes
+
+   This is a base class for all tasks that use one-hot predictors.
 
 
 .. py:class:: PretrainedTaskConfig
 
 
 
+
+   Configuration for a task that uses a pretrained model. The model is loaded from a file
+   and the weights are loaded from a file.
+
+   .. attribute:: sub_task_config
+
+      The task to run starting with the provided pretrained weights.
+
+      :type: TaskConfig
+
+   .. attribute:: weights
+
+      A checkpoint containing pretrained model weights.
+
+      :type: Path
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method verifies the PretrainedTaskConfig object.
+
+   .. rubric:: Notes
+
+   This is a subclass of TaskConfig.
 
    .. py:attribute:: task_type
 
@@ -354,7 +482,7 @@ Classes
       
 
    .. py:attribute:: weights
-      :type: pathlib.Path
+      :type: upath.UPath
 
       
 
@@ -364,10 +492,38 @@ Classes
 
 
 
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+   A task that uses a pretrained model. The model is loaded from a file
+   and the weights are loaded from a file.
+
+   .. attribute:: weights
+
+      The path to the weights file.
+
+      :type: Path
+
+   .. method:: create_model(self, architecture) -> Model
+
+      This method creates a model using the given architecture.
+
+   .. rubric:: Notes
+
+   This is a base class for all tasks that use pretrained models.
 
    .. py:method:: create_model(architecture)
+
+      Create a model using the given architecture.
+
+      :param architecture: The architecture of the model.
+      :type architecture: str
+
+      :returns: The model created using the given architecture.
+      :rtype: Model
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> model = task.create_model(architecture)
 
 
 
@@ -378,6 +534,46 @@ Classes
 
    This is a Affinities task config used for generating and
    evaluating voxel affinities for instance segmentations.
+
+   .. attribute:: neighborhood
+
+      A list of Coordinate objects.
+
+   .. attribute:: lsds
+
+      Whether or not to train lsds along with your affinities.
+
+   .. attribute:: lsds_to_affs_weight_ratio
+
+      If training with lsds, set how much they should be weighted compared to affs.
+
+   .. attribute:: affs_weight_clipmin
+
+      The minimum value for affinities weights.
+
+   .. attribute:: affs_weight_clipmax
+
+      The maximum value for affinities weights.
+
+   .. attribute:: lsd_weight_clipmin
+
+      The minimum value for lsds weights.
+
+   .. attribute:: lsd_weight_clipmax
+
+      The maximum value for lsds weights.
+
+   .. attribute:: background_as_object
+
+      Whether to treat the background as a separate object.
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method verifies the AffinitiesTaskConfig
+
+   .. rubric:: Notes
+
+   This is a subclass of TaskConfig.
 
    .. py:attribute:: task_type
 
@@ -429,7 +625,33 @@ Classes
 
 
 
-   This is a task for generating voxel affinities.
+   This is a task for generating voxel affinities. It uses an `AffinitiesPredictor` for prediction,
+   an `AffinitiesLoss` for loss calculation, a `WatershedPostProcessor` for post-processing, and an
+   `InstanceEvaluator` for evaluation.
+
+   .. attribute:: predictor
+
+      AffinitiesPredictor object
+
+   .. attribute:: loss
+
+      AffinitiesLoss object
+
+   .. attribute:: post_processor
+
+      WatershedPostProcessor object
+
+   .. attribute:: evaluator
+
+      InstanceEvaluator object
+
+   .. method:: __init__(self, task_config)
+
+      Initializes all components for the affinities task.
+
+   .. rubric:: Notes
+
+   This is a subclass of Task.
 
 
 .. py:class:: InnerDistanceTaskConfig
@@ -445,6 +667,26 @@ Classes
    affinities is you can get a denser signal, i.e. 1 misclassified
    pixel in an affinity prediction could merge 2 otherwise very
    distinct objects, this cannot happen with distances.
+
+   .. attribute:: channels
+
+      A list of channel names.
+
+   .. attribute:: clip_distance
+
+      Maximum distance to consider for false positive/negatives.
+
+   .. attribute:: tol_distance
+
+      Tolerance distance for counting false positives/negatives
+
+   .. attribute:: scale_factor
+
+      The amount by which to scale distances before applying a tanh normalization.
+
+   .. rubric:: Notes
+
+   This is a subclass of TaskConfig.
 
    .. py:attribute:: task_type
 
@@ -499,6 +741,14 @@ Classes
 
       Used for evaluating the results using binary segmentation.
 
+   .. method:: __init__(self, task_config)
+
+      Initializes an instance of InnerDistanceTask.
+
+   .. rubric:: Notes
+
+   This is a subclass of Task.
+
 
 .. py:class:: HotDistanceTaskConfig
 
@@ -542,6 +792,10 @@ Classes
       object boundary cannot be known. Defaults to False
 
       :type: bool
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method verifies the HotDistanceTaskConfig object.
 
    .. note::
 
@@ -603,5 +857,13 @@ Classes
    .. attribute:: evaluator
 
       BinarySegmentationEvaluator object.
+
+   .. method:: __init__(self, task_config)
+
+      Constructs all the necessary attributes for the HotDistanceTask object.
+
+   .. rubric:: Notes
+
+   This is a subclass of Task.
 
 

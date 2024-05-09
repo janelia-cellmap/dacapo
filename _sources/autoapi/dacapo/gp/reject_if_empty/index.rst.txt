@@ -35,32 +35,49 @@ Attributes
 
 
    Reject batches based on the masked-in vs. masked-out ratio.
+   .. attribute:: gt
 
-   :param gt: The gt array to use
-   :type gt: :class:`ArrayKey`, optional
-   :param p: The probability that we reject until gt is nonempty
-   :type p: ``float``, optional
+      The gt array to use
+
+      :type: :class:`ArrayKey`, optional
+
+   .. attribute:: p
+
+      The probability that we reject until gt is nonempty
+
+      :type: ``float``, optional
+
+   Method:
+       setup: Set up the provider.
+       provide: Provide a batch.
+
 
    .. py:method:: setup()
 
-      To be implemented in subclasses.
+      Set up the provider.
 
-      Called during initialization of the DAG. Callees can assume that all
-      upstream providers are set up already.
+      :raises AssertionError: If only 1 upstream provider is supported.
 
-      In setup, call :func:`provides` or :func:`updates` to announce the
-      arrays and points provided or changed by this node.
+      .. rubric:: Examples
+
+      >>> setup()
+      setup()
 
 
    .. py:method:: provide(request)
 
-      To be implemented in subclasses.
+      Provides a batch of data, rejecting empty ground truth (gt) if requested.
 
-      This function takes a :class:`BatchRequest` and should return the
-      corresponding :class:`Batch`.
+      :param request: The request object containing the necessary information.
 
-      :param request: The request to process.
-      :type request: :class:`BatchRequest`
+      :returns: The batch of data.
+
+      :raises AssertionError: If the requested gt is not present in the request.
+
+      .. rubric:: Examples
+
+      >>> provide(request)
+      provide(request)
 
 
 

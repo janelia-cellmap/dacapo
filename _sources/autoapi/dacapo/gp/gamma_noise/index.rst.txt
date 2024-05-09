@@ -60,10 +60,18 @@ Attributes
 
       Private method to perform the actual augmentation
       
+      
 
    .. py:method:: setup()
 
       Configuring the internal state by iterating over arrays.
+
+      :raises AssertionError: If the array data type is not float32 or float64
+
+      .. rubric:: Examples
+
+      >>> setup()
+      setup()
 
 
    .. py:method:: process(batch, request)
@@ -72,6 +80,15 @@ Attributes
 
       :param batch: The input batch to be processed.
       :param request: An object which holds the requested output location.
+
+      :returns: The batch with the gamma noise applied.
+
+      :raises AssertionError: If the array data type is not float32 or float64
+
+      .. rubric:: Examples
+
+      >>> process(batch, request)
+      process(batch, request)
 
 
 

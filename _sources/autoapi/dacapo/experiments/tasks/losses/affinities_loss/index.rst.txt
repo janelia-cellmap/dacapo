@@ -22,17 +22,53 @@ Classes
 
 
 
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+   A class representing a loss function that calculates the loss between affinities and local shape descriptors (LSDs).
+
+   .. attribute:: num_affinities
+
+      int
+      the number of affinities
+
+   .. attribute:: lsds_to_affs_weight_ratio
+
+      float
+      the ratio of the weight of the loss between affinities and LSDs
+
+   .. method:: compute(prediction, target, weight=None)
+
+      
+      Calculate the total loss between prediction and target.
+
+   .. note:: The AffinitiesLoss class is used to calculate the loss between affinities and local shape descriptors (LSDs).
 
    .. py:method:: compute(prediction, target, weight)
 
-      Compute the loss for the given prediction and target. Optionally, if
-      given, a loss weight should be considered.
+      Method to calculate the total loss between affinities and LSDs.
 
-      All arguments are ``torch`` tensors. The return type should be a
-      ``torch`` scalar that can be used with an optimizer, just as usual when
-      training with ``torch``.
+      :param prediction: torch.Tensor
+                         the model's prediction
+      :param target: torch.Tensor
+                     the target values
+      :param weight: torch.Tensor
+                     the weight to apply to the loss
+
+      :returns:
+
+                torch.Tensor
+                    the total loss between affinities and LSDs
+
+      :raises ValueError: if the number of affinities in the prediction and target does not match
+
+      .. rubric:: Examples
+
+      >>> affinities_loss = AffinitiesLoss(3, 0.5)
+      >>> prediction = torch.tensor([[1, 2, 3, 4], [5, 6, 7, 8]])
+      >>> target = torch.tensor([[9, 10, 11, 12], [13, 14, 15, 16]])
+      >>> weight = torch.tensor([[1, 1, 1, 1], [1, 1, 1, 1]])
+      >>> affinities_loss.compute(prediction, target, weight)
+      tensor(0.5)
+
+      .. note:: The AffinitiesLoss class is used to calculate the loss between affinities and local shape descriptors (LSDs).
 
 
 

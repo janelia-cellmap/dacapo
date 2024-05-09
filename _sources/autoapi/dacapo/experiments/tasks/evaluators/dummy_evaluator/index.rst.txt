@@ -22,14 +22,40 @@ Classes
 
 
 
-   Base class of all evaluators.
+   A class representing a dummy evaluator. This evaluator is used for testing purposes.
 
-   An evaluator takes a post-processor's output and compares it against
-   ground-truth.
+   .. attribute:: criteria
+
+      List[str]
+      the evaluation criteria
+
+   .. method:: evaluate(output_array_identifier, evaluation_dataset)
+
+      
+      Evaluate the output array against the evaluation dataset.
+
+   .. method:: score
+
+      
+      Return the evaluation scores.
+
+   .. note:: The DummyEvaluator class is used to evaluate the performance of a dummy task.
 
    .. py:property:: score
       :type: dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores
 
+      Return the evaluation scores.
+
+      :returns: An object of DummyEvaluationScores class, with the evaluation scores.
+      :rtype: DummyEvaluationScores
+
+      .. rubric:: Examples
+
+      >>> dummy_evaluator = DummyEvaluator()
+      >>> dummy_evaluator.score
+      DummyEvaluationScores(frizz_level=0.0, blipp_score=0.0)
+
+      .. note:: This function is used to return the evaluation scores.
 
    .. py:attribute:: criteria
       :value: ['frizz_level', 'blipp_score']
@@ -45,6 +71,18 @@ Classes
 
       :returns: An object of DummyEvaluationScores class, with the evaluation scores.
       :rtype: DummyEvaluationScore
+
+      :raises ValueError: if the output array identifier is not valid
+
+      .. rubric:: Examples
+
+      >>> dummy_evaluator = DummyEvaluator()
+      >>> output_array_identifier = "output_array"
+      >>> evaluation_dataset = "evaluation_dataset"
+      >>> dummy_evaluator.evaluate(output_array_identifier, evaluation_dataset)
+      DummyEvaluationScores(frizz_level=0.0, blipp_score=0.0)
+
+      .. note:: This function is used to evaluate the output array against the evaluation dataset.
 
 
 

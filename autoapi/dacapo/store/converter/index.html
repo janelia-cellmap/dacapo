@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -128,9 +129,49 @@
 <dd><p>A converter that stores and retrieves type information for selected
 class hierarchies. Used to reconstruct a concrete class from unstructured
 data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.store.converter.TypedConverter.hooks">
+<span class="sig-name descname"><span class="pre">hooks</span></span><a class="headerlink" href="#dacapo.store.converter.TypedConverter.hooks" title="Link to this definition"></a></dt>
+<dd><p>A dictionary mapping classes to lists of
+hooks that should be applied to them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[Type, List[Hook]]</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.converter.TypedConverter.register_hierarchy">
-<span class="sig-name descname"><span class="pre">register_hierarchy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_fn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.converter.TypedConverter.register_hierarchy" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">register_hierarchy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.converter.TypedConverter.register_hierarchy" title="Link to this definition"></a></dt>
+<dd><p>Register a class hierarchy for typed
+structure/unstructure conversion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.converter.TypedConverter.__typed_unstructure">
+<span class="sig-name descname"><span class="pre">__typed_unstructure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.converter.TypedConverter.__typed_unstructure" title="Link to this definition"></a></dt>
+<dd><p>Unstructure an object, adding a ‘__type__’ field
+with the class name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.converter.TypedConverter.__typed_structure">
+<span class="sig-name descname"><span class="pre">__typed_structure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.converter.TypedConverter.__typed_structure" title="Link to this definition"></a></dt>
+<dd><p>Structure an object, using the ‘__type__’ field to
+determine the class.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is a subclass of cattr.Converter, and extends it with the
+ability to store and retrieve type information for selected class
+hierarchies. This is useful for reconstructing a concrete class from
+unstructured data.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">register_hierarchy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_fn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd><p>Register a class hierarchy for typed structure/unstructure
 conversion.</p>
 <p>For each class in the hierarchy under (including) <code class="docutils literal notranslate"><span class="pre">cls</span></code>, this will
@@ -150,6 +191,9 @@ simple as <code class="docutils literal notranslate"><span class="pre">lambda</s
 <code class="docutils literal notranslate"><span class="pre">cls</span></code> are visible to the module that calls this method.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If <code class="docutils literal notranslate"><span class="pre">cls</span></code> is not a class.</p>
+</dd>
 </dl>
 <p class="rubric">Example</p>
 <p>If class <code class="docutils literal notranslate"><span class="pre">A</span></code> is the base of class <code class="docutils literal notranslate"><span class="pre">B</span></code>, and
@@ -159,6 +203,19 @@ contain a <code class="docutils literal notranslate"><span class="pre">__type__<
 <code class="docutils literal notranslate"><span class="pre">B</span></code> if <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">B()</span></code>.</p>
 <p>This <code class="docutils literal notranslate"><span class="pre">__type__</span></code> field is then used by <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span>
 <span class="pre">converter.structure(y,</span> <span class="pre">A)</span></code> to recreate the concrete type of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to register a class hierarchy for typed
+structure/unstructure conversion. For each class in the hierarchy
+under (including) <code class="docutils literal notranslate"><span class="pre">cls</span></code>, this will store an additional
+<code class="docutils literal notranslate"><span class="pre">__type__</span></code> attribute (a string) in the object dictionary. This
+<code class="docutils literal notranslate"><span class="pre">__type__</span></code> string will be the concrete class of the object, and
+will be used to structure the dictionary back into an object of the
+correct class.</p>
+<p>For this to work, this function needs to know how to convert a
+<code class="docutils literal notranslate"><span class="pre">__type__</span></code> string back into a class, for which it used the
+provided <code class="docutils literal notranslate"><span class="pre">cls_fn</span></code>.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

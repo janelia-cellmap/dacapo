@@ -24,31 +24,57 @@ Classes
 
    A DaCapo Array source node
 
-   :param Array: The DaCapo Array to pull data from
-   :type Array: Array
-   :param key: The key to provide data into
-   :type key: ``gp.ArrayKey``
+   .. attribute:: array
+
+      The array to be served.
+
+      :type: Array
+
+   .. attribute:: key
+
+      The key of the array to be served.
+
+      :type: gp.ArrayKey
+
+   .. method:: setup()
+
+      Set up the provider.
+
+   .. method:: provide(request)
+
+      Provides the array for the requested ROI.
+
+   .. note::
+
+      This class is a subclass of gunpowder.BatchProvider and is used to
+      serve array data to gunpowder pipelines.
 
    .. py:method:: setup()
 
-      To be implemented in subclasses.
+      Adds the key and the array spec to the provider.
 
-      Called during initialization of the DAG. Callees can assume that all
-      upstream providers are set up already.
+      :raises RuntimeError: If the key is already provided.
 
-      In setup, call :func:`provides` to announce the arrays and points
-      provided by this node.
+      .. rubric:: Examples
+
+      >>> array_source.setup()
 
 
    .. py:method:: provide(request)
 
-      To be implemented in subclasses.
+      Provides data based on the given request.
 
-      This function takes a :class:`BatchRequest` and should return the
-      corresponding :class:`Batch`.
+      :param request: The request for data
+      :type request: gp.BatchRequest
 
-      :param request: The request to process.
-      :type request: :class:`BatchRequest`
+      :returns: The batch containing the provided data
+      :rtype: gp.Batch
+
+      :raises ValueError: If the input data contains NaN values
+
+      .. rubric:: Examples
+
+      >>> array_source.provide(request)
 
 
 

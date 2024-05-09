@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -122,83 +123,357 @@
 Because we often want to predict classes that are a combination
 of a set of labels we wrap a ZarrArray with the BinarizeArray
 and provide something like <cite>groupings=[(“mito”, [3,4,5])]</cite>
-where 4 corresponds to mito_membrane, 5 is mito_ribos, and
-3 is everything else that is part of a mitochondria. The BinarizeArray
-will simply combine labels 3,4,5 into a single binary channel for th
-class of “mito”.
-We use a single channel per class because some classes may overlap.
+where 4 corresponds to mito_mem (mitochondria membrane), 5 is mito_ribo
+(mitochondria ribosomes), and 3 is everything else that is part of a
+mitochondria. The BinarizeArray will simply combine labels 3,4,5 into
+a single binary channel for the class of “mito”.</p>
+<p>We use a single channel per class because some classes may overlap.
 For example if you had <cite>groupings=[(“mito”, [3,4,5]), (“membrane”, [4, 8, 1])]</cite>
-where 4 is mito_membrane, 8 is er_membrane, and 1 is plasma_membrane.
+where 4 is mito_mem, 8 is er_mem (ER membrane), and 1 is pm (plasma membrane).
 Now you can have a binary classification for membrane or not which in
 some cases overlaps with the channel for mitochondria which includes
 the mito membrane.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.source_array">
+<span class="sig-name descname"><span class="pre">source_array</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.source_array" title="Link to this definition"></a></dt>
+<dd><p>The source array to binarize.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array">Array</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.background">
+<span class="sig-name descname"><span class="pre">background</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.background" title="Link to this definition"></a></dt>
+<dd><p>The label to treat as background.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.groupings">
+<span class="sig-name descname"><span class="pre">groupings</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.groupings" title="Link to this definition"></a></dt>
+<dd><p>A list of tuples where the first
+element is the name of the class and the second element is a list of
+labels that should be combined into a single binary channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[str, List[int]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.__init__" title="Link to this definition"></a></dt>
+<dd><p>This method initializes the BinarizeArray object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.__attrs_post_init__">
+<span class="sig-name descname"><span class="pre">__attrs_post_init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.__attrs_post_init__" title="Link to this definition"></a></dt>
+<dd><p>This method is called after the instance has been initialized by the constructor. It is used to set the default_config to an instance of ArrayConfig if it is None.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__getitem__(self,</span> <span class="pre">roi</span></span></dt>
+<dd><p>Roi) -&gt; np.ndarray: This method returns the binary channels for the given region of interest.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray._can_neuroglance">
+<span class="sig-name descname"><span class="pre">_can_neuroglance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray._can_neuroglance" title="Link to this definition"></a></dt>
+<dd><p>This method returns True if the source array can be visualized in neuroglance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray._neuroglancer_source">
+<span class="sig-name descname"><span class="pre">_neuroglancer_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray._neuroglancer_source" title="Link to this definition"></a></dt>
+<dd><p>This method returns the source array for neuroglancer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray._neuroglancer_layer">
+<span class="sig-name descname"><span class="pre">_neuroglancer_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray._neuroglancer_layer" title="Link to this definition"></a></dt>
+<dd><p>This method returns the neuroglancer layer for the source array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray._source_name">
+<span class="sig-name descname"><span class="pre">_source_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray._source_name" title="Link to this definition"></a></dt>
+<dd><p>This method returns the name of the source array.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is used to create a BinarizeArray object which is a wrapper around a ZarrArray containing uint annotations.</p>
+</div>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.attrs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.attrs" title="Link to this definition"></a></dt>
-<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+<dd><p>This method returns the attributes of the source array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The attributes of the source array.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array is not writable.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binarize_array</span><span class="o">.</span><span class="n">attrs</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to return the attributes of the source array.</p>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.axes">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.axes" title="Link to this definition"></a></dt>
-<dd><p>Returns the axes of this dataset as a string of charactes, as they
-are indexed. Permitted characters are:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
-</ul>
-</div></blockquote>
+<dd><p>This method returns the axes of the source array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The axes of the source array.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[str]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array is not writable.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binarize_array</span><span class="o">.</span><span class="n">axes</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to return the axes of the source array.</p>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.dims">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.dims" title="Link to this definition"></a></dt>
-<dd><p>Returns the number of spatial dimensions.</p>
+<dd><p>This method returns the dimensions of the source array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The dimensions of the source array.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array is not writable.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binarize_array</span><span class="o">.</span><span class="n">dims</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to return the dimensions of the source array.</p>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.voxel_size">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.voxel_size" title="Link to this definition"></a></dt>
-<dd><p>The size of a voxel in physical units.</p>
+<dd><p>This method returns the voxel size of the source array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The voxel size of the source array.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Coordinate</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array is not writable.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binarize_array</span><span class="o">.</span><span class="n">voxel_size</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to return the voxel size of the source array.</p>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.roi">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.roi" title="Link to this definition"></a></dt>
-<dd><p>The total ROI of this array, in world units.</p>
+<dd><p>This method returns the region of interest of the source array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The region of interest of the source array.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Roi</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array is not writable.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binarize_array</span><span class="o">.</span><span class="n">roi</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to return the region of interest of the source array.</p>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.writable">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.writable" title="Link to this definition"></a></dt>
-<dd><p>Can we write to this Array?</p>
+<dd><p>This method returns True if the source array is writable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the source array is writable.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array is not writable.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binarize_array</span><span class="o">.</span><span class="n">writable</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to return True if the source array is writable.</p>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.dtype">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.dtype" title="Link to this definition"></a></dt>
-<dd><p>The dtype of this array, in numpy dtypes</p>
+<dd><p>This method returns the data type of the source array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The data type of the source array.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.dtype</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array is not writable.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binarize_array</span><span class="o">.</span><span class="n">dtype</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to return the data type of the source array.</p>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.num_channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.num_channels" title="Link to this definition"></a></dt>
-<dd><p>The number of channels provided by this dataset.
-Should return None if the channel dimension doesn’t exist.</p>
+<dd><p>This method returns the number of channels in the source array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The number of channels in the source array.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array is not writable.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binarize_array</span><span class="o">.</span><span class="n">num_channels</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to return the number of channels in the source array.</p>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.data">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.data" title="Link to this definition"></a></dt>
-<dd><p>Get a numpy like readable and writable view into this array.</p>
+<dd><p>This method returns the data of the source array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The data of the source array.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array is not writable.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binarize_array</span><span class="o">.</span><span class="n">data</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to return the data of the source array.</p>
+</div>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray.channels" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>This method returns the channel names of the source array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The channel names of the source array.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Iterator[str]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the source array is not writable.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binarize_array</span><span class="o">.</span><span class="n">channels</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to return the channel names of the source array.</p>
+</div>
+</dd></dl>
 
 </dd></dl>
 

@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -120,28 +121,60 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.</span></span><span class="sig-name descname"><span class="pre">ZarrArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig" title="Link to this definition"></a></dt>
 <dd><p>This config class provides the necessary configuration for a tiff array</p>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.file_name">
+<span class="sig-name descname"><span class="pre">file_name</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.file_name" title="Link to this definition"></a></dt>
+<dd><p>Path
+The file name of the tiff.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.offset">
+<span class="sig-name descname"><span class="pre">offset</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.offset" title="Link to this definition"></a></dt>
+<dd><p>Coordinate
+The offset of the array.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.voxel_size">
+<span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>Coordinate
+The voxel size of the array.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.axes">
+<span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.axes" title="Link to this definition"></a></dt>
+<dd><p>List[str]
+The axes of the array.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is a subclass of ArrayConfig.</p>
+</div>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.array_type">
 <span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.array_type" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.file_name">
-<span class="sig-name descname"><span class="pre">file_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.file_name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">file_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">upath.UPath</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.offset">
-<span class="sig-name descname"><span class="pre">offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.offset" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.voxel_size">
-<span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.voxel_size" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.axes">
-<span class="sig-name descname"><span class="pre">axes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig.axes" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">axes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

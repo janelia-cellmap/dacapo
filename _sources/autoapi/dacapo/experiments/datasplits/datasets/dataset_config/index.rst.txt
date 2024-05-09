@@ -42,7 +42,10 @@ Classes
       
       Checks and validates the dataset configuration. The specific rules for
       validation need to be defined by the user.
-      
+
+   .. rubric:: Notes
+
+   This class is used to create a configuration object for datasets.
 
    .. py:attribute:: name
       :type: str
@@ -65,6 +68,18 @@ Classes
       :returns: A tuple of boolean value indicating the check (True or False) and
                 message specifying result of validation.
       :rtype: tuple
+
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> dataset_config = DatasetConfig(name="sample_dataset")
+      >>> dataset_config.verify()
+      (True, "No validation for this DataSet")
+
+      .. rubric:: Notes
+
+      This method is used to validate the configuration of the dataset.
 
 
 

@@ -27,6 +27,58 @@ Classes
 
    .. py:property:: device
 
+      A property method that returns the device on which computations are to be done.
+
+      A device can be a CPU, GPU, TPU, etc. It is used to specify the context in which computations are to be done.
+
+      :returns: The device on which computations are to be done.
+      :rtype: str
+
+      .. rubric:: Examples
+
+      >>> context = Bsub()
+      >>> device = context.device
+
+   .. py:attribute:: distribute_workers
+      :type: Optional[bool]
+
+      The Bsub class is a subclass of the ComputeContext class. It is used to specify the
+      context in which computations are to be done. Bsub is used to specify that
+      computations are to be done on a cluster using LSF.
+
+      .. attribute:: queue
+
+         The queue to run on.
+
+         :type: str
+
+      .. attribute:: num_gpus
+
+         The number of gpus to train on. Currently only 1 gpu can be used.
+
+         :type: int
+
+      .. attribute:: num_cpus
+
+         The number of cpus to use to generate training data.
+
+         :type: int
+
+      .. attribute:: billing
+
+         Project name that will be paying for this Job.
+
+         :type: Optional[str]
+
+      .. method:: device()
+
+         Returns the device on which computations are to be done.
+
+      .. method:: _wrap_command(command)
+
+         Wraps a command in the context specific command.
+
+      .. note:: The class is a subclass of the ComputeContext class.
 
    .. py:attribute:: queue
       :type: str

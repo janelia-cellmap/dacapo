@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -110,18 +111,84 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores" title="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InstanceEvaluationScores</span></code></a></p></td>
-<td><p>Base class for evaluation scores.</p></td>
+<td><p>The evaluation scores for the instance segmentation task. The scores include the variation of information (VOI) split, VOI merge, and VOI.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.instance_evaluation_scores.</span></span><span class="sig-name descname"><span class="pre">InstanceEvaluationScores</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores" title="Link to this definition"></a></dt>
-<dd><p>Base class for evaluation scores.</p>
-<dl class="py property">
+<dd><p>The evaluation scores for the instance segmentation task. The scores include the variation of information (VOI) split, VOI merge, and VOI.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.voi_split">
+<span class="sig-name descname"><span class="pre">voi_split</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.voi_split" title="Link to this definition"></a></dt>
+<dd><p>float
+the variation of information (VOI) split</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.voi_merge">
+<span class="sig-name descname"><span class="pre">voi_merge</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.voi_merge" title="Link to this definition"></a></dt>
+<dd><p>float
+the variation of information (VOI) merge</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.voi">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voi</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.voi" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">voi</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.voi" title="Link to this definition"></a></dt>
+<dd><p>float
+the variation of information (VOI)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.higher_is_better">
+<span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.higher_is_better" title="Link to this definition"></a></dt>
+<dd><p>Return whether higher is better for the given criterion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.bounds">
+<span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.bounds" title="Link to this definition"></a></dt>
+<dd><p>Return the bounds for the given criterion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.store_best">
+<span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.store_best" title="Link to this definition"></a></dt>
+<dd><p>Return whether to store the best score for the given criterion.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The InstanceEvaluationScores class is used to store the evaluation scores for the instance segmentation task.</p>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voi</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Return the average of the VOI split and VOI merge.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>float</dt><dd><p>the average of the VOI split and VOI merge</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – if the function is not implemented</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">instance_evaluation_scores</span> <span class="o">=</span> <span class="n">InstanceEvaluationScores</span><span class="p">(</span><span class="n">voi_split</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">voi_merge</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance_evaluation_scores</span><span class="o">.</span><span class="n">voi</span>
+<span class="go">0.15</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to calculate the average of the VOI split and VOI merge.</p>
+</div>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.criteria">
@@ -129,32 +196,106 @@
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.voi_split">
-<span class="sig-name descname"><span class="pre">voi_split</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.voi_split" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">voi_split</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.voi_merge">
-<span class="sig-name descname"><span class="pre">voi_merge</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.voi_merge" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">voi_merge</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.higher_is_better">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.higher_is_better" title="Link to this definition"></a></dt>
-<dd><p>Wether or not higher is better for this criterion.</p>
+<dt class="sig sig-object py" id="id3">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd><p>Return whether higher is better for the given criterion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criterion</strong> – str
+the evaluation criterion</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>bool</dt><dd><p>whether higher is better for the given criterion</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – if the function is not implemented</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">InstanceEvaluationScores</span><span class="o">.</span><span class="n">higher_is_better</span><span class="p">(</span><span class="s2">&quot;voi_split&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to determine whether higher is better for the given criterion.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.bounds">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.bounds" title="Link to this definition"></a></dt>
-<dd><p>The bounds for this criterion</p>
+<dt class="sig sig-object py" id="id4">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd><p>Return the bounds for the given criterion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criterion</strong> – str
+the evaluation criterion</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Tuple[Union[int, float, None], Union[int, float, None]]</dt><dd><p>the bounds for the given criterion</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – if the function is not implemented</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">InstanceEvaluationScores</span><span class="o">.</span><span class="n">bounds</span><span class="p">(</span><span class="s2">&quot;voi_split&quot;</span><span class="p">)</span>
+<span class="go">(0, 1)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to return the bounds for the given criterion.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.store_best">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores.store_best" title="Link to this definition"></a></dt>
-<dd><p>Whether or not to save the best validation block and model
-weights for this criterion.</p>
+<dt class="sig sig-object py" id="id5">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd><p>Return whether to store the best score for the given criterion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criterion</strong> – str
+the evaluation criterion</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>bool</dt><dd><p>whether to store the best score for the given criterion</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – if the function is not implemented</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">InstanceEvaluationScores</span><span class="o">.</span><span class="n">store_best</span><span class="p">(</span><span class="s2">&quot;voi_split&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to determine whether to store the best score for the given criterion.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

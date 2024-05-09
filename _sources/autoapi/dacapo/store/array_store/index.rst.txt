@@ -22,8 +22,25 @@ Classes
 .. py:class:: LocalArrayIdentifier
 
 
+   Represents a local array identifier.
+
+   .. attribute:: container
+
+      The path to the container.
+
+      :type: Path
+
+   .. attribute:: dataset
+
+      The dataset name.
+
+      :type: str
+
+   Method:
+       __str__ : Returns the string representation of the identifier.
+
    .. py:attribute:: container
-      :type: pathlib.Path
+      :type: upath.UPath
 
       
 
@@ -36,12 +53,39 @@ Classes
 .. py:class:: LocalContainerIdentifier
 
 
+   Represents a local container identifier.
+
+   .. attribute:: container
+
+      The path to the container.
+
+      :type: Path
+
+   Method:
+       array_identifier : Creates a local array identifier for the given dataset.
+
+
    .. py:attribute:: container
-      :type: pathlib.Path
+      :type: upath.UPath
 
       
 
    .. py:method:: array_identifier(dataset) -> LocalArrayIdentifier
+
+      Creates a local array identifier for the given dataset.
+
+      :param dataset: The dataset for which to create the array identifier.
+
+      :returns: The local array identifier.
+      :rtype: LocalArrayIdentifier
+
+      :raises TypeError: If the dataset is not a string.
+
+      .. rubric:: Examples
+
+      >>> container = Path('path/to/container')
+      >>> container.array_identifier('dataset')
+      LocalArrayIdentifier(container=Path('path/to/container'), dataset='dataset')
 
 
 
@@ -56,16 +100,61 @@ Classes
    only rudimentary support for IO itself (currently only to remove
    arrays).
 
+   .. attribute:: container
+
+      The path to the container.
+
+      :type: Path
+
+   .. attribute:: dataset
+
+      The dataset name.
+
+      :type: str
+
+   Method:
+       __str__ : Returns the string representation of the identifier.
+
+
    .. py:method:: validation_prediction_array(run_name: str, iteration: int, dataset: str) -> LocalArrayIdentifier
       :abstractmethod:
 
       Get the array identifier for a particular validation prediction.
+
+      :param run_name: The name of the run.
+      :param iteration: The iteration number.
+      :param dataset: The dataset name.
+
+      :returns: The array identifier.
+      :rtype: LocalArrayIdentifier
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> validation_prediction_array('run_name', 1, 'dataset')
+      LocalArrayIdentifier(container=Path('path/to/container'), dataset='dataset')
 
 
    .. py:method:: validation_output_array(run_name: str, iteration: int, parameters: str, dataset: str) -> LocalArrayIdentifier
       :abstractmethod:
 
       Get the array identifier for a particular validation output.
+
+      :param run_name: The name of the run.
+      :param iteration: The iteration number.
+      :param parameters: The parameters.
+      :param dataset: The dataset name.
+
+      :returns: The array identifier.
+      :rtype: LocalArrayIdentifier
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> validation_output_array('run_name', 1, 'parameters', 'dataset')
+      LocalArrayIdentifier(container=Path('path/to/container'), dataset='dataset')
 
 
    .. py:method:: validation_input_arrays(run_name: str, index: Optional[str] = None) -> Tuple[LocalArrayIdentifier, LocalArrayIdentifier]
@@ -79,11 +168,32 @@ Classes
       the data then we don't need to search for it.
       This convenience comes at the cost of some extra memory usage.
 
+      :param run_name: The name of the run.
+      :param index: The index of the validation input.
+
+      :returns: The array identifiers.
+      :rtype: Tuple[LocalArrayIdentifier, LocalArrayIdentifier]
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> validation_input_arrays('run_name', 'index')
+      (LocalArrayIdentifier(container=Path('path/to/container'), dataset='dataset'), LocalArrayIdentifier(container=Path('path/to/container'), dataset='dataset'))
+
 
    .. py:method:: remove(array_identifier: LocalArrayIdentifier) -> None
       :abstractmethod:
 
       Remove an array by its identifier.
+
+      :param array_identifier: The array identifier.
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> remove(LocalArrayIdentifier(container=Path('path/to/container'), dataset='dataset'))
 
 
    .. py:method:: snapshot_container(run_name: str) -> LocalContainerIdentifier
@@ -91,11 +201,35 @@ Classes
 
       Get a container identifier for storage of a snapshot.
 
+      :param run_name: The name of the run.
+
+      :returns: The container identifier.
+      :rtype: LocalContainerIdentifier
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> snapshot_container('run_name')
+      LocalContainerIdentifier(container=Path('path/to/container'))
+
 
    .. py:method:: validation_container(run_name: str) -> LocalContainerIdentifier
       :abstractmethod:
 
       Get a container identifier for storage of a snapshot.
+
+      :param run_name: The name of the run.
+
+      :returns: The container identifier.
+      :rtype: LocalContainerIdentifier
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> validation_container('run_name')
+      LocalContainerIdentifier(container=Path('path/to/container'))
 
 
 

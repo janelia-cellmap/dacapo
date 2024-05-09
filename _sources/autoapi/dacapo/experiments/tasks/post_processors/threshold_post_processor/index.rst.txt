@@ -22,22 +22,89 @@ Classes
 
 
 
-   Base class of all post-processors.
+   A post-processor that applies a threshold to the prediction.
 
-   A post-processor takes a model's prediction and converts it into the final
-   output (e.g., per-voxel class probabilities into a semantic segmentation).
+   .. attribute:: prediction_array_identifier
+
+      The identifier of the prediction array.
+
+   .. attribute:: prediction_array
+
+      The prediction array.
+
+   .. method:: enumerate_parameters
+
+      Enumerate all possible parameters of this post-processor.
+
+   .. method:: set_prediction
+
+      Set the prediction array.
+
+   .. method:: process
+
+      Process the prediction with the given parameters.
+
+   .. note:: This post-processor applies a threshold to the prediction. The threshold is used to define the segmentation. The prediction array is set using the `set_prediction` method.
 
    .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters]
 
       Enumerate all possible parameters of this post-processor.
 
+      :returns: A generator of parameters.
+      :rtype: Generator[ThresholdPostProcessorParameters]
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> for parameters in post_processor.enumerate_parameters():
+      ...     print(parameters)
+
+      .. note:: This method should return a generator of instances of ``ThresholdPostProcessorParameters``.
+
 
    .. py:method:: set_prediction(prediction_array_identifier)
+
+      Set the prediction array.
+
+      :param prediction_array_identifier: The identifier of the prediction array.
+      :type prediction_array_identifier: LocalArrayIdentifier
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> post_processor.set_prediction(prediction_array_identifier)
+
+      .. note:: This method should set the prediction array using the given identifier.
 
 
    .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, num_workers: int = 16, block_size: daisy.Coordinate = Coordinate((256, 256, 256))) -> dacapo.experiments.datasplits.datasets.arrays.zarr_array.ZarrArray
 
-      Convert predictions into the final output.
+      Process the prediction with the given parameters.
+
+      :param parameters: The parameters to use for processing.
+      :type parameters: ThresholdPostProcessorParameters
+      :param output_array_identifier: The identifier of the output array.
+      :type output_array_identifier: LocalArrayIdentifier
+      :param num_workers: The number of workers to use for processing.
+      :type num_workers: int
+      :param block_size: The block size to use for processing.
+      :type block_size: Coordinate
+
+      :returns: The output array.
+      :rtype: ZarrArray
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> post_processor.process(parameters, output_array_identifier)
+
+      .. note::
+
+         This method should process the prediction with the given parameters and return the output array. The method uses the `run_blockwise` function from the `dacapo.blockwise.scheduler` module to run the blockwise post-processing.
+         The output array is created using the `ZarrArray.create_from_array_identifier` function from the `dacapo.experiments.datasplits.datasets.arrays` module.
 
 
 

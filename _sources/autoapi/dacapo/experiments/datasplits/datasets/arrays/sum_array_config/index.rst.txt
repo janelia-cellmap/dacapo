@@ -22,9 +22,15 @@ Classes
 
 
 
-   Base class for array configurations. Each subclass of an
-   `Array` should have a corresponding config class derived from
-   `ArrayConfig`.
+   This config class provides the necessary configuration for a sum
+   array.
+
+   .. attribute:: source_array_configs
+
+      List[ArrayConfig]
+      The Array of masks from which to take the union
+
+   .. note:: This class is a subclass of ArrayConfig.
 
    .. py:attribute:: array_type
 

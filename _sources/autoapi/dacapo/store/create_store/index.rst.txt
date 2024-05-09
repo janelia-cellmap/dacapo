@@ -24,19 +24,74 @@ Functions
 
    Create a config store based on the global DaCapo options.
 
+   :returns: The created config store.
+   :rtype: ConfigStore
+
+   :raises ValueError: If the store type is not supported.
+
+   .. rubric:: Examples
+
+   >>> create_config_store()
+   <dacapo.store.file_config_store.FileConfigStore object at 0x7f2e4f8e9e80>
+
+   .. note:: Currently, only the FileConfigStore and MongoConfigStore are supported.
+
 
 .. py:function:: create_stats_store()
 
    Create a statistics store based on the global DaCapo options.
+
+   :param options: The global DaCapo options.
+   :type options: Options
+
+   :returns: The created statistics store.
+   :rtype: StatsStore
+
+   :raises ValueError: If the store type is not supported.
+
+   .. rubric:: Examples
+
+   >>> create_stats_store()
+   <dacapo.store.file_stats_store.FileStatsStore object at 0x7f2e4f8e9e80>
+
+   .. note:: Currently, only the FileStatsStore and MongoStatsStore are supported.
 
 
 .. py:function:: create_weights_store()
 
    Create a weights store based on the global DaCapo options.
 
+   :param options: The global DaCapo options.
+   :type options: Options
+
+   :returns: The created weights store.
+   :rtype: WeightsStore
+
+   .. rubric:: Examples
+
+   >>> create_weights_store()
+   <dacapo.store.local_weights_store.LocalWeightsStore object at 0x7f2e4f8e9e80>
+
+   .. note:: Currently, only the LocalWeightsStore is supported.
+
 
 .. py:function:: create_array_store()
 
    Create an array store based on the global DaCapo options.
+
+   :param options: The global DaCapo options.
+   :type options: Options
+
+   :returns: The created array store.
+   :rtype: ArrayStore
+
+   :raises ValueError: If the store type is not supported.
+
+   .. rubric:: Examples
+
+   >>> create_array_store()
+   <dacapo.store.local_array_store.LocalArrayStore object at 0x7f2e4f8e9e80>
+
+   .. note:: Currently, only the LocalArrayStore is supported.
 
 

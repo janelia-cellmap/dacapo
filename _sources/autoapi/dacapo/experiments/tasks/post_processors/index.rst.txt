@@ -49,23 +49,105 @@ Classes
 
 
 
-   Base class of all post-processors.
+   Dummy post-processor that stores some dummy data. The dummy data is a 10x10x10
+   array filled with the value of the min_size parameter. The min_size parameter
+   is specified in the parameters of the post-processor. The post-processor has
+   a detection threshold that is used to determine if an object is detected.
 
-   A post-processor takes a model's prediction and converts it into the final
-   output (e.g., per-voxel class probabilities into a semantic segmentation).
+   .. attribute:: detection_threshold
+
+      The detection threshold.
+
+   .. method:: enumerate_parameters
+
+      Enumerate all possible parameters of this post-processor.
+
+   .. method:: set_prediction
+
+      Set the prediction array identifier.
+
+   .. method:: process
+
+      Convert predictions into the final output.
+
+   .. note::
+
+      This class is abstract. Subclasses must implement the abstract methods. Once
+      created, the values of its attributes cannot be changed.
 
    .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters]
 
       Enumerate all possible parameters of this post-processor. Should
       return instances of ``PostProcessorParameters``.
 
+      :returns: An iterable of `PostProcessorParameters` instances.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> post_processor = DummyPostProcessor()
+      >>> for parameters in post_processor.enumerate_parameters():
+      ...     print(parameters)
+      DummyPostProcessorParameters(id=0, min_size=1)
+      DummyPostProcessorParameters(id=1, min_size=2)
+      DummyPostProcessorParameters(id=2, min_size=3)
+      DummyPostProcessorParameters(id=3, min_size=4)
+      DummyPostProcessorParameters(id=4, min_size=5)
+      DummyPostProcessorParameters(id=5, min_size=6)
+      DummyPostProcessorParameters(id=6, min_size=7)
+      DummyPostProcessorParameters(id=7, min_size=8)
+      DummyPostProcessorParameters(id=8, min_size=9)
+      DummyPostProcessorParameters(id=9, min_size=10)
+
+      .. note::
+
+         This method must be implemented in the subclass. It should return an
+         iterable of `PostProcessorParameters` instances.
+
 
    .. py:method:: set_prediction(prediction_array_identifier)
+
+      Set the prediction array identifier.
+
+      :param prediction_array_identifier: The identifier of the array containing
+                                          the model's prediction.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> post_processor = DummyPostProcessor()
+      >>> post_processor.set_prediction("prediction")
+
+      .. note::
+
+         This method must be implemented in the subclass. It should set the
+         `prediction_array_identifier` attribute.
 
 
    .. py:method:: process(parameters, output_array_identifier, *args, **kwargs)
 
       Convert predictions into the final output.
+
+      :param parameters: The parameters of the post-processor.
+      :param output_array_identifier: The identifier of the output array.
+      :param num_workers: The number of workers to use.
+      :param chunk_size: The size of the chunks to process.
+
+      :returns: The output array.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> post_processor = DummyPostProcessor()
+      >>> post_processor.process(parameters, "output")
+
+      .. note::
+
+         This method must be implemented in the subclass. It should process the
+         predictions and store the output in the output array.
 
 
 
@@ -74,7 +156,23 @@ Classes
 
 
 
-   Base class for post-processor parameters.
+   Parameters for the dummy post-processor. The dummy post-processor will set
+   the output to 1 if the input is greater than the minimum size, and 0
+   otherwise.
+
+   .. attribute:: min_size
+
+      The minimum size. If the input is greater than this value, the
+      output will be set to 1. Otherwise, the output will be set to 0.
+
+   .. method:: parameter_names
+
+      Get the names of the parameters.
+
+   .. note::
+
+      This class is immutable. Once created, the values of its attributes
+      cannot be changed.
 
    .. py:attribute:: min_size
       :type: int
@@ -85,11 +183,42 @@ Classes
 .. py:class:: PostProcessorParameters
 
 
-   Base class for post-processor parameters.
+   Base class for post-processor parameters. Post-processor parameters are
+   immutable objects that define the parameters of a post-processor. The
+   parameters are used to configure the post-processor.
+
+   .. attribute:: id
+
+      The identifier of the post-processor parameter.
+
+   .. method:: parameter_names
+
+      Get the names of the parameters.
+
+   .. note::
+
+      This class is immutable. Once created, the values of its attributes
+      cannot be changed.
 
    .. py:property:: parameter_names
       :type: List[str]
 
+      Get the names of the parameters.
+
+      :returns: A list of parameter names.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> parameters = PostProcessorParameters(0)
+      >>> parameters.parameter_names
+      ["id"]
+
+      .. note::
+
+         This method must be implemented in the subclass. It should return a
+         list of parameter names.
 
    .. py:attribute:: id
       :type: int
@@ -105,22 +234,106 @@ Classes
    Base class of all post-processors.
 
    A post-processor takes a model's prediction and converts it into the final
-   output (e.g., per-voxel class probabilities into a semantic segmentation).
+   output (e.g., per-voxel class probabilities into a semantic segmentation). A
+   post-processor can have multiple parameters, which can be enumerated using
+   the `enumerate_parameters` method. The `process` method takes a set of
+   parameters and applies the post-processing to the prediction.
+
+   .. attribute:: prediction_array_identifier
+
+      The identifier of the array containing the
+      model's prediction.
+
+   .. method:: enumerate_parameters
+
+      Enumerate all possible parameters of this
+      post-processor.
+
+   .. method:: set_prediction
+
+      Set the prediction array identifier.
+
+   .. method:: process
+
+      Convert predictions into the final output.
+
+   .. note::
+
+      This class is abstract. Subclasses must implement the abstract methods. Once
+      created, the values of its attributes cannot be changed.
 
    .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters]
       :abstractmethod:
 
       Enumerate all possible parameters of this post-processor.
 
+      :returns: An iterable of `PostProcessorParameters` instances.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> post_processor = MyPostProcessor()
+      >>> for parameters in post_processor.enumerate_parameters():
+      ...     print(parameters)
+      MyPostProcessorParameters(param1=0.0, param2=0.0)
+      MyPostProcessorParameters(param1=0.0, param2=1.0)
+      MyPostProcessorParameters(param1=1.0, param2=0.0)
+      MyPostProcessorParameters(param1=1.0, param2=1.0)
+
+      .. note::
+
+         This method must be implemented in the subclass. It should return an
+         iterable of `PostProcessorParameters` instances.
+
 
    .. py:method:: set_prediction(prediction_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier) -> None
       :abstractmethod:
+
+      Set the prediction array identifier.
+
+      :param prediction_array_identifier: The identifier of the array containing
+                                          the model's prediction.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> post_processor = MyPostProcessor()
+      >>> post_processor.set_prediction("prediction")
+
+      .. note::
+
+         This method must be implemented in the subclass. It should set the
+         `prediction_array_identifier` attribute.
 
 
    .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters, output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, num_workers: int = 16, chunk_size: funlib.geometry.Coordinate = Coordinate((64, 64, 64))) -> dacapo.experiments.datasplits.datasets.arrays.Array
       :abstractmethod:
 
       Convert predictions into the final output.
+
+      :param parameters: The parameters of the post-processor.
+      :param output_array_identifier: The identifier of the array to store the
+                                      output.
+      :param num_workers: The number of workers to use.
+      :param chunk_size: The size of the chunks to process.
+
+      :returns: The output array.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> post_processor = MyPostProcessor()
+      >>> post_processor.set_prediction("prediction")
+      >>> parameters = MyPostProcessorParameters(param1=0.0, param2=0.0)
+      >>> output = post_processor.process(parameters, "output")
+
+      .. note::
+
+         This method must be implemented in the subclass. It should convert the
+         model's prediction into the final output.
 
 
 
@@ -129,22 +342,89 @@ Classes
 
 
 
-   Base class of all post-processors.
+   A post-processor that applies a threshold to the prediction.
 
-   A post-processor takes a model's prediction and converts it into the final
-   output (e.g., per-voxel class probabilities into a semantic segmentation).
+   .. attribute:: prediction_array_identifier
+
+      The identifier of the prediction array.
+
+   .. attribute:: prediction_array
+
+      The prediction array.
+
+   .. method:: enumerate_parameters
+
+      Enumerate all possible parameters of this post-processor.
+
+   .. method:: set_prediction
+
+      Set the prediction array.
+
+   .. method:: process
+
+      Process the prediction with the given parameters.
+
+   .. note:: This post-processor applies a threshold to the prediction. The threshold is used to define the segmentation. The prediction array is set using the `set_prediction` method.
 
    .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters]
 
       Enumerate all possible parameters of this post-processor.
 
+      :returns: A generator of parameters.
+      :rtype: Generator[ThresholdPostProcessorParameters]
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> for parameters in post_processor.enumerate_parameters():
+      ...     print(parameters)
+
+      .. note:: This method should return a generator of instances of ``ThresholdPostProcessorParameters``.
+
 
    .. py:method:: set_prediction(prediction_array_identifier)
+
+      Set the prediction array.
+
+      :param prediction_array_identifier: The identifier of the prediction array.
+      :type prediction_array_identifier: LocalArrayIdentifier
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> post_processor.set_prediction(prediction_array_identifier)
+
+      .. note:: This method should set the prediction array using the given identifier.
 
 
    .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, num_workers: int = 16, block_size: daisy.Coordinate = Coordinate((256, 256, 256))) -> dacapo.experiments.datasplits.datasets.arrays.zarr_array.ZarrArray
 
-      Convert predictions into the final output.
+      Process the prediction with the given parameters.
+
+      :param parameters: The parameters to use for processing.
+      :type parameters: ThresholdPostProcessorParameters
+      :param output_array_identifier: The identifier of the output array.
+      :type output_array_identifier: LocalArrayIdentifier
+      :param num_workers: The number of workers to use for processing.
+      :type num_workers: int
+      :param block_size: The block size to use for processing.
+      :type block_size: Coordinate
+
+      :returns: The output array.
+      :rtype: ZarrArray
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> post_processor.process(parameters, output_array_identifier)
+
+      .. note::
+
+         This method should process the prediction with the given parameters and return the output array. The method uses the `run_blockwise` function from the `dacapo.blockwise.scheduler` module to run the blockwise post-processing.
+         The output array is created using the `ZarrArray.create_from_array_identifier` function from the `dacapo.experiments.datasplits.datasets.arrays` module.
 
 
 
@@ -153,7 +433,20 @@ Classes
 
 
 
-   Base class for post-processor parameters.
+   Parameters for the threshold post-processor. The threshold post-processor
+   will set the output to 1 if the input is greater than the threshold, and 0
+   otherwise.
+
+   .. attribute:: threshold
+
+      The threshold value. If the input is greater than this
+      value, the output will be set to 1. Otherwise, the output will be
+      set to 0.
+
+   .. note::
+
+      This class is immutable. Once created, the values of its attributes
+      cannot be changed.
 
    .. py:attribute:: threshold
       :type: float
@@ -166,23 +459,96 @@ Classes
 
 
 
-   Base class of all post-processors.
+   Post-processor that takes the argmax of the input array along the channel
+   axis. The output is a binary array where the value is 1 if the argmax is
+   greater than the threshold, and 0 otherwise.
 
-   A post-processor takes a model's prediction and converts it into the final
-   output (e.g., per-voxel class probabilities into a semantic segmentation).
+   .. attribute:: prediction_array
+
+      The array containing the model's prediction.
+
+   .. method:: enumerate_parameters
+
+      Enumerate all possible parameters of this post-processor.
+
+   .. method:: set_prediction
+
+      Set the prediction array identifier.
+
+   .. method:: process
+
+      Convert predictions into the final output.
+
+   .. note::
+
+      This class is abstract. Subclasses must implement the abstract methods. Once
+      created, the values of its attributes cannot be changed.
 
    .. py:method:: enumerate_parameters()
 
       Enumerate all possible parameters of this post-processor. Should
       return instances of ``PostProcessorParameters``.
 
+      :returns: An iterable of `PostProcessorParameters` instances.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> post_processor = ArgmaxPostProcessor()
+      >>> for parameters in post_processor.enumerate_parameters():
+      ...     print(parameters)
+      ArgmaxPostProcessorParameters(id=0)
+
+      .. note::
+
+         This method must be implemented in the subclass. It should return an
+         iterable of `PostProcessorParameters` instances.
+
 
    .. py:method:: set_prediction(prediction_array_identifier)
+
+      Set the prediction array identifier.
+
+      :param prediction_array_identifier: The identifier of the array containing
+                                          the model's prediction.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> post_processor = ArgmaxPostProcessor()
+      >>> post_processor.set_prediction("prediction")
+
+      .. note::
+
+         This method must be implemented in the subclass. It should set the
+         `prediction_array_identifier` attribute.
 
 
    .. py:method:: process(parameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, num_workers: int = 16, block_size: daisy.Coordinate = Coordinate((256, 256, 256)))
 
       Convert predictions into the final output.
+
+      :param parameters: The parameters of the post-processor.
+      :param output_array_identifier: The identifier of the output array.
+      :param num_workers: The number of workers to use.
+      :param block_size: The size of the blocks to process.
+
+      :returns: The output array.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> post_processor = ArgmaxPostProcessor()
+      >>> post_processor.set_prediction("prediction")
+      >>> post_processor.process(parameters, "output")
+
+      .. note::
+
+         This method must be implemented in the subclass. It should process the
+         predictions and return the output array.
 
 
 
@@ -191,7 +557,17 @@ Classes
 
 
 
-   Base class for post-processor parameters.
+   Parameters for the argmax post-processor. The argmax post-processor will set
+   the output to the index of the maximum value in the input array.
+
+   .. method:: parameter_names
+
+      Get the names of the parameters.
+
+   .. note::
+
+      This class is immutable. Once created, the values of its attributes
+      cannot be changed.
 
 
 .. py:class:: WatershedPostProcessor(offsets: List[funlib.geometry.Coordinate])
@@ -199,23 +575,88 @@ Classes
 
 
 
-   Base class of all post-processors.
+   A post-processor that applies a watershed transformation to the
+   prediction.
 
-   A post-processor takes a model's prediction and converts it into the final
-   output (e.g., per-voxel class probabilities into a semantic segmentation).
+   .. attribute:: offsets
+
+      List of offsets for the watershed transformation.
+
+   .. method:: enumerate_parameters
+
+      Enumerate all possible parameters of this post-processor.
+
+   .. method:: set_prediction
+
+      Set the prediction array.
+
+   .. method:: process
+
+      Process the prediction with the given parameters.
+
+   .. note:: This post-processor uses the `watershed_function.py` script to apply the watershed transformation. The offsets are used to define the neighborhood for the watershed transformation.
 
    .. py:method:: enumerate_parameters()
 
       Enumerate all possible parameters of this post-processor. Should
       return instances of ``PostProcessorParameters``.
 
+      :returns: A generator of parameters.
+      :rtype: Generator[WatershedPostProcessorParameters]
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> for parameters in post_processor.enumerate_parameters():
+      ...     print(parameters)
+
+      .. note:: This method should be implemented by the subclass. It should return a generator of instances of ``WatershedPostProcessorParameters``.
+
 
    .. py:method:: set_prediction(prediction_array_identifier)
+
+      Set the prediction array identifier.
+
+      :param prediction_array_identifier: The identifier of the array containing
+                                          the model's prediction.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> post_processor = MyPostProcessor()
+      >>> post_processor.set_prediction("prediction")
+
+      .. note::
+
+         This method must be implemented in the subclass. It should set the
+         `prediction_array_identifier` attribute.
 
 
    .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, num_workers: int = 16, block_size: funlib.geometry.Coordinate = Coordinate((256, 256, 256)))
 
-      Convert predictions into the final output.
+      Process the prediction with the given parameters.
+
+      :param parameters: The parameters to use for processing.
+      :type parameters: WatershedPostProcessorParameters
+      :param output_array_identifier: The output array identifier.
+      :type output_array_identifier: LocalArrayIdentifier
+      :param num_workers: The number of workers to use for processing.
+      :type num_workers: int
+      :param block_size: The block size to use for processing.
+      :type block_size: Coordinate
+
+      :returns: The output array identifier.
+      :rtype: LocalArrayIdentifier
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> post_processor.process(parameters, output_array_identifier)
+
+      .. note:: This method should be implemented by the subclass. To run the watershed transformation, the method uses the `segment_blockwise` function from the `dacapo.blockwise.scheduler` module.
 
 
 
@@ -224,7 +665,37 @@ Classes
 
 
 
-   Base class for post-processor parameters.
+   Parameters for the watershed post-processor.
+
+   .. attribute:: offsets
+
+      List of offsets for the watershed transformation.
+
+   .. attribute:: threshold
+
+      Threshold for the watershed transformation.
+
+   .. attribute:: sigma
+
+      Sigma for the watershed transformation.
+
+   .. attribute:: min_size
+
+      Minimum size of the segments.
+
+   .. attribute:: bias
+
+      Bias for the watershed transformation.
+
+   .. attribute:: context
+
+      Context for the watershed transformation.
+
+   .. rubric:: Examples
+
+   >>> WatershedPostProcessorParameters(offsets=[(0, 0, 1), (0, 1, 0), (1, 0, 0)], threshold=0.5, sigma=1.0, min_size=100, bias=0.5, context=(32, 32, 32))
+
+   .. note:: This class is used by the ``WatershedPostProcessor`` to define the parameters for the watershed transformation. The offsets are used to define the neighborhood for the watershed transformation.
 
    .. py:attribute:: bias
       :type: float

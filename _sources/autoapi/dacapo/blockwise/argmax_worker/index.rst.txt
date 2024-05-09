@@ -52,8 +52,24 @@ Attributes
 
 .. py:function:: cli(log_level)
 
+   CLI for running the threshold worker.
 
-.. py:function:: start_worker(input_container: pathlib.Path | str, input_dataset: str, output_container: pathlib.Path | str, output_dataset: str)
+   :param log_level: The log level to use.
+   :type log_level: str
+
+
+.. py:function:: start_worker(input_container: upath.UPath | str, input_dataset: str, output_container: upath.UPath | str, output_dataset: str, return_io_loop: bool = False)
+
+   Start the threshold worker.
+
+   :param input_container: The input container.
+   :type input_container: Path | str
+   :param input_dataset: The input dataset.
+   :type input_dataset: str
+   :param output_container: The output container.
+   :type output_container: Path | str
+   :param output_dataset: The output dataset.
+   :type output_dataset: str
 
 
 .. py:function:: spawn_worker(input_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier)
@@ -66,5 +82,8 @@ Attributes
    :type raw_array: Array
    :param prediction_array_identifier: The identifier of the prediction array.
    :type prediction_array_identifier: LocalArrayIdentifier
+
+   :returns: The function to run the worker.
+   :rtype: Callable
 
 

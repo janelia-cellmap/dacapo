@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -108,10 +109,10 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.utils.view.BestScore" title="dacapo.utils.view.BestScore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BestScore</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Represents the best score achieved during a run.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.utils.view.NeuroglancerRunViewer" title="dacapo.utils.view.NeuroglancerRunViewer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NeuroglancerRunViewer</span></code></a></p></td>
-<td><p></p></td>
+<td><p>A class for viewing neuroglancer runs.</p></td>
 </tr>
 </tbody>
 </table>
@@ -121,108 +122,720 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.utils.view.get_viewer" title="dacapo.utils.view.get_viewer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_viewer</span></code></a>(→ neuroglancer.Viewer | IPython.display.IFrame)</p></td>
-<td><p></p></td>
+<td><p>Creates a neuroglancer viewer to visualize arrays.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.utils.view.add_seg_layer" title="dacapo.utils.view.add_seg_layer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_seg_layer</span></code></a>(state, name, data, voxel_size[, meshes])</p></td>
-<td><p></p></td>
+<td><p>Add a segmentation layer to the Neuroglancer state.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.utils.view.add_scalar_layer" title="dacapo.utils.view.add_scalar_layer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_scalar_layer</span></code></a>(state, name, data, voxel_size)</p></td>
-<td><p></p></td>
+<td><p>Add a scalar layer to the state.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.utils.view.get_viewer">
 <span class="sig-prename descclassname"><span class="pre">dacapo.utils.view.</span></span><span class="sig-name descname"><span class="pre">get_viewer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arrays</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">600</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headless</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">neuroglancer.Viewer</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">IPython.display.IFrame</span></span></span><a class="headerlink" href="#dacapo.utils.view.get_viewer" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Creates a neuroglancer viewer to visualize arrays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arrays</strong> (<em>dict</em>) – A dictionary containing arrays to be visualized.</p></li>
+<li><p><strong>width</strong> (<em>int</em><em>, </em><em>optional</em>) – The width of the viewer window in pixels. Defaults to 1500.</p></li>
+<li><p><strong>height</strong> (<em>int</em><em>, </em><em>optional</em>) – The height of the viewer window in pixels. Defaults to 600.</p></li>
+<li><p><strong>headless</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, returns the viewer object. If False, returns an IFrame object embedding the viewer. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The neuroglancer viewer object or an IFrame object embedding the viewer.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>neuroglancer.Viewer | IFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the array is not a numpy array or a neuroglancer.LocalVolume object.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">neuroglancer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">get_viewer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arrays</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s2">&quot;raw&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;array&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="p">},</span>
+<span class="gp">... </span>    <span class="s2">&quot;seg&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;array&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)),</span>
+<span class="gp">... </span>        <span class="s2">&quot;is_seg&quot;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">get_viewer</span><span class="p">(</span><span class="n">arrays</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.utils.view.add_seg_layer">
 <span class="sig-prename descclassname"><span class="pre">dacapo.utils.view.</span></span><span class="sig-name descname"><span class="pre">add_seg_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meshes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.add_seg_layer" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Add a segmentation layer to the Neuroglancer state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<em>neuroglancer.ViewerState</em>) – The Neuroglancer viewer state.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name of the segmentation layer.</p></li>
+<li><p><strong>data</strong> (<em>ndarray</em>) – The segmentation data.</p></li>
+<li><p><strong>voxel_size</strong> (<em>list</em>) – The voxel size in nm.</p></li>
+<li><p><strong>meshes</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to generate meshes for the segments. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the data is not a numpy array.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">neuroglancer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">add_seg_layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">neuroglancer</span><span class="o">.</span><span class="n">ViewerState</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">voxel_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add_seg_layer</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="s2">&quot;seg&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.utils.view.add_scalar_layer">
 <span class="sig-prename descclassname"><span class="pre">dacapo.utils.view.</span></span><span class="sig-name descname"><span class="pre">add_scalar_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.add_scalar_layer" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Add a scalar layer to the state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<em>neuroglancer.ViewerState</em>) – The viewer state to add the layer to.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name of the layer.</p></li>
+<li><p><strong>data</strong> (<em>ndarray</em>) – The scalar data to be displayed.</p></li>
+<li><p><strong>voxel_size</strong> (<em>list</em>) – The voxel size in nm.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the data is not a numpy array.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">neuroglancer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">add_scalar_layer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">neuroglancer</span><span class="o">.</span><span class="n">ViewerState</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">voxel_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add_scalar_layer</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.utils.view.BestScore">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.utils.view.</span></span><span class="sig-name descname"><span class="pre">BestScore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run"><span class="pre">dacapo.experiments.run.Run</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.BestScore" title="Link to this definition"></a></dt>
-<dd><dl class="py method">
+<dd><p>Represents the best score achieved during a run.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.BestScore.run">
+<span class="sig-name descname"><span class="pre">run</span></span><a class="headerlink" href="#dacapo.utils.view.BestScore.run" title="Link to this definition"></a></dt>
+<dd><p>The run object associated with the best score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run">Run</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.BestScore.score">
+<span class="sig-name descname"><span class="pre">score</span></span><a class="headerlink" href="#dacapo.utils.view.BestScore.score" title="Link to this definition"></a></dt>
+<dd><p>The best score achieved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.BestScore.iteration">
+<span class="sig-name descname"><span class="pre">iteration</span></span><a class="headerlink" href="#dacapo.utils.view.BestScore.iteration" title="Link to this definition"></a></dt>
+<dd><p>The iteration number at which the best score was achieved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.BestScore.parameter">
+<span class="sig-name descname"><span class="pre">parameter</span></span><a class="headerlink" href="#dacapo.utils.view.BestScore.parameter" title="Link to this definition"></a></dt>
+<dd><p>The parameter associated with the best score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.BestScore.validation_parameters">
+<span class="sig-name descname"><span class="pre">validation_parameters</span></span><a class="headerlink" href="#dacapo.utils.view.BestScore.validation_parameters" title="Link to this definition"></a></dt>
+<dd><p>The validation parameters used during the run.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.BestScore.array_store">
+<span class="sig-name descname"><span class="pre">array_store</span></span><a class="headerlink" href="#dacapo.utils.view.BestScore.array_store" title="Link to this definition"></a></dt>
+<dd><p>The array store object used to store prediction arrays.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.BestScore.stats_store">
+<span class="sig-name descname"><span class="pre">stats_store</span></span><a class="headerlink" href="#dacapo.utils.view.BestScore.stats_store" title="Link to this definition"></a></dt>
+<dd><p>The stats store object used to store iteration scores.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.BestScore.ds">
+<span class="sig-name descname"><span class="pre">ds</span></span><a class="headerlink" href="#dacapo.utils.view.BestScore.ds" title="Link to this definition"></a></dt>
+<dd><p>The dataset object associated with the best score.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.BestScore.get_ds">
 <span class="sig-name descname"><span class="pre">get_ds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.BestScore.get_ds" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves the dataset object associated with the best score.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.BestScore.does_new_best_exist">
 <span class="sig-name descname"><span class="pre">does_new_best_exist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.BestScore.does_new_best_exist" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Checks if a new best score exists.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">get_ds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Retrieves the dataset object associated with the best score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iteration</strong> (<em>int</em>) – The iteration number.</p></li>
+<li><p><strong>validation_dataset</strong> – The validation dataset object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the dataset object does not exist.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">BestScore</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">best_score</span> <span class="o">=</span> <span class="n">BestScore</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iteration</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">validation_dataset</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">datasplit</span><span class="o">.</span><span class="n">validate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">best_score</span><span class="o">.</span><span class="n">get_ds</span><span class="p">(</span><span class="n">iteration</span><span class="p">,</span> <span class="n">validation_dataset</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">does_new_best_exist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Checks if a new best score exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if a new best score exists, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If the dataset object does not exist.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">BestScore</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">best_score</span> <span class="o">=</span> <span class="n">BestScore</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_best_exists</span> <span class="o">=</span> <span class="n">best_score</span><span class="o">.</span><span class="n">does_new_best_exist</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.utils.view.</span></span><span class="sig-name descname"><span class="pre">NeuroglancerRunViewer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run"><span class="pre">dacapo.experiments.run.Run</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer" title="Link to this definition"></a></dt>
-<dd><dl class="py method">
+<dd><p>A class for viewing neuroglancer runs.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.run">
+<span class="sig-name descname"><span class="pre">run</span></span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.run" title="Link to this definition"></a></dt>
+<dd><p>The run object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run">Run</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.best_score">
+<span class="sig-name descname"><span class="pre">best_score</span></span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.best_score" title="Link to this definition"></a></dt>
+<dd><p>The best score object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dacapo.utils.view.BestScore" title="dacapo.utils.view.BestScore">BestScore</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.embedded">
+<span class="sig-name descname"><span class="pre">embedded</span></span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.embedded" title="Link to this definition"></a></dt>
+<dd><p>Whether the viewer is embedded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.viewer">
+<span class="sig-name descname"><span class="pre">viewer</span></span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.viewer" title="Link to this definition"></a></dt>
+<dd><p>The neuroglancer viewer.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.raw">
+<span class="sig-name descname"><span class="pre">raw</span></span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.raw" title="Link to this definition"></a></dt>
+<dd><p>The raw dataset.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.gt">
+<span class="sig-name descname"><span class="pre">gt</span></span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.gt" title="Link to this definition"></a></dt>
+<dd><p>The ground truth dataset.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.segmentation">
+<span class="sig-name descname"><span class="pre">segmentation</span></span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.segmentation" title="Link to this definition"></a></dt>
+<dd><p>The segmentation dataset.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.most_recent_iteration">
+<span class="sig-name descname"><span class="pre">most_recent_iteration</span></span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.most_recent_iteration" title="Link to this definition"></a></dt>
+<dd><p>The most recent iteration.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.run_thread">
+<span class="sig-name descname"><span class="pre">run_thread</span></span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.run_thread" title="Link to this definition"></a></dt>
+<dd><p>The run thread.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.array_store">
+<span class="sig-name descname"><span class="pre">array_store</span></span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.array_store" title="Link to this definition"></a></dt>
+<dd><p>The array store object.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.updated_neuroglancer_layer">
 <span class="sig-name descname"><span class="pre">updated_neuroglancer_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.updated_neuroglancer_layer" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Update the neuroglancer layer with the given name and data source.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.deprecated_start_neuroglancer">
 <span class="sig-name descname"><span class="pre">deprecated_start_neuroglancer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.deprecated_start_neuroglancer" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Deprecated method to start the neuroglancer viewer.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.start_neuroglancer">
 <span class="sig-name descname"><span class="pre">start_neuroglancer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.start_neuroglancer" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Start the neuroglancer viewer.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.start">
 <span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.start" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Start the viewer.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.open_from_array_identitifier">
 <span class="sig-name descname"><span class="pre">open_from_array_identitifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.open_from_array_identitifier" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Open the array from the given identifier.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.get_datasets">
 <span class="sig-name descname"><span class="pre">get_datasets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.get_datasets" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the datasets for validation.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.update_best_info">
 <span class="sig-name descname"><span class="pre">update_best_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.update_best_info" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Update the best info.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.update_neuroglancer">
 <span class="sig-name descname"><span class="pre">update_neuroglancer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.update_neuroglancer" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Update the neuroglancer viewer.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.update_best_layer">
 <span class="sig-name descname"><span class="pre">update_best_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.update_best_layer" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Update the best layer.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.new_validation_checker">
 <span class="sig-name descname"><span class="pre">new_validation_checker</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.new_validation_checker" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Start a new validation checker thread.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.update_with_new_validation_if_possible">
 <span class="sig-name descname"><span class="pre">update_with_new_validation_if_possible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.update_with_new_validation_if_possible" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Update with new validation if possible.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.utils.view.NeuroglancerRunViewer.stop">
 <span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.view.NeuroglancerRunViewer.stop" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Stop the viewer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">updated_neuroglancer_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Update the neuroglancer layer with the given name and data source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_name</strong> (<em>str</em>) – The name of the layer.</p></li>
+<li><p><strong>ds</strong> – The data source.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the dataset object does not exist.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">layer_name</span> <span class="o">=</span> <span class="s2">&quot;prediction&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">viewer</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">datasplit</span><span class="o">.</span><span class="n">validate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">_source_array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">updated_neuroglancer_layer</span><span class="p">(</span><span class="n">layer_name</span><span class="p">,</span> <span class="n">ds</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">deprecated_start_neuroglancer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd><p>Deprecated method to start the neuroglancer viewer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The embedded viewer.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>IFrame</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If the dataset object does not exist.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">deprecated_start_neuroglancer</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">start_neuroglancer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd><p>Start the neuroglancer viewer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The embedded viewer.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>IFrame</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If the dataset object does not exist.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">start_neuroglancer</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd><p>Start the viewer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The embedded viewer.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>IFrame</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If the dataset object does not exist.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">open_from_array_identitifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd><p>Open the array from the given identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>array_identifier</strong> – The array identifier.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The opened dataset or None if it doesn’t exist.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If the dataset object does not exist.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array_identifier</span> <span class="o">=</span> <span class="n">viewer</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">datasplit</span><span class="o">.</span><span class="n">validate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">_source_array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">viewer</span><span class="o">.</span><span class="n">open_from_array_identitifier</span><span class="p">(</span><span class="n">array_identifier</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">get_datasets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd><p>Get the datasets for validation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run</strong> (<a class="reference internal" href="../../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run"><em>Run</em></a>) – The run object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The raw and ground truth datasets for validation.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – If the dataset object does not exist.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">get_datasets</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">update_best_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd><p>Update the best info.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run</strong> (<a class="reference internal" href="../../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run"><em>Run</em></a>) – The run object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The embedded viewer.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>IFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the dataset object does not exist.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">update_best_info</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">update_neuroglancer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dd><p>Update the neuroglancer viewer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run</strong> (<a class="reference internal" href="../../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run"><em>Run</em></a>) – The run object.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the dataset object does not exist.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">update_neuroglancer</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">update_best_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<dd><p>Update the best layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run</strong> (<a class="reference internal" href="../../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run"><em>Run</em></a>) – The run object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The embedded viewer.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>IFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the dataset object does not exist.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">update_best_layer</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">new_validation_checker</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
+<dd><p>Start a new validation checker thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run</strong> (<a class="reference internal" href="../../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run"><em>Run</em></a>) – The run object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The embedded viewer.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>IFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the dataset object does not exist.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">new_validation_checker</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">update_with_new_validation_if_possible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
+<dd><p>Update with new validation if possible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run</strong> (<a class="reference internal" href="../../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run"><em>Run</em></a>) – The run object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The embedded viewer.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>IFrame</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the dataset object does not exist.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">update_with_new_validation_if_possible</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
+<dd><p>Stop the viewer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run</strong> (<a class="reference internal" href="../../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run"><em>Run</em></a>) – The run object.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the dataset object does not exist.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The embedded viewer.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>IFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
 
 </dd></dl>
 

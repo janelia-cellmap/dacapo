@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -110,22 +111,66 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WatershedPostProcessorParameters</span></code></a></p></td>
-<td><p>Base class for post-processor parameters.</p></td>
+<td><p>Parameters for the watershed post-processor.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.</span></span><span class="sig-name descname"><span class="pre">WatershedPostProcessorParameters</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters" title="Link to this definition"></a></dt>
-<dd><p>Base class for post-processor parameters.</p>
+<dd><p>Parameters for the watershed post-processor.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters.offsets">
+<span class="sig-name descname"><span class="pre">offsets</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters.offsets" title="Link to this definition"></a></dt>
+<dd><p>List of offsets for the watershed transformation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters.threshold">
+<span class="sig-name descname"><span class="pre">threshold</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters.threshold" title="Link to this definition"></a></dt>
+<dd><p>Threshold for the watershed transformation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters.sigma">
+<span class="sig-name descname"><span class="pre">sigma</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters.sigma" title="Link to this definition"></a></dt>
+<dd><p>Sigma for the watershed transformation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters.min_size">
+<span class="sig-name descname"><span class="pre">min_size</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters.min_size" title="Link to this definition"></a></dt>
+<dd><p>Minimum size of the segments.</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters.bias">
-<span class="sig-name descname"><span class="pre">bias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters.bias" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">bias</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters.bias" title="Link to this definition"></a></dt>
+<dd><p>Bias for the watershed transformation.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters.context">
-<span class="sig-name descname"><span class="pre">context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters.context" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">context</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters.context" title="Link to this definition"></a></dt>
+<dd><p>Context for the watershed transformation.</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">WatershedPostProcessorParameters</span><span class="p">(</span><span class="n">offsets</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">min_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is used by the <code class="docutils literal notranslate"><span class="pre">WatershedPostProcessor</span></code> to define the parameters for the watershed transformation. The offsets are used to define the neighborhood for the watershed transformation.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">bias</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

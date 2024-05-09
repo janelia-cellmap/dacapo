@@ -20,7 +20,7 @@ Classes
 .. py:class:: TrainingIterationStats
 
 
-   A class to represent the training iteration statistics.
+   A class to represent the training iteration statistics. It contains the loss and time taken for each iteration.
 
    .. attribute:: iteration
 
@@ -39,6 +39,12 @@ Classes
       The time it took to process this iteration.
 
       :type: float
+
+   .. note::
+
+      The iteration stats list is structured as follows:
+      - The outer list contains the stats for each iteration.
+      - The inner list contains the stats for each training iteration.
 
    .. py:attribute:: iteration
       :type: int

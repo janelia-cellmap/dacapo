@@ -24,4 +24,18 @@ Classes
    `GraphStore` should have a corresponding config class derived from
    `GraphStoreConfig`.
 
+   .. attribute:: store_type
+
+      The type of graph store that is being configured.
+
+      :type: class
+
+   .. method:: verify
+
+      A method to verify the validity of the configuration.
+
+   .. rubric:: Notes
+
+   This class is used to create a configuration object for the graph store.
+
 

@@ -35,57 +35,333 @@ Attributes
 
 
    This is a wrapper around other `source_arrays` that concatenates
-   them along the channel dimension.
+   them along the channel dimension. The `source_arrays` are expected
+   to have the same shape and ROI, but can have different data types.
+
+   .. attribute:: name
+
+      The name of the array.
+
+   .. attribute:: channels
+
+      The list of channel names.
+
+   .. attribute:: source_arrays
+
+      A dictionary mapping channel names to source arrays.
+
+   .. attribute:: default_array
+
+      An optional default array to use for channels that are
+      not present in `source_arrays`.
+
+   .. method:: from_toml(cls, toml_path
+
+      str) -> ConcatArrayConfig:
+      Load the ConcatArrayConfig from a TOML file
+
+   .. method:: to_toml(self, toml_path
+
+      str) -> None:
+      Save the ConcatArrayConfig to a TOML file
+
+   .. method:: create_array(self) -> ConcatArray
+
+      
+      Create the ConcatArray from the config
+
+   .. note::
+
+      This class is a subclass of Array and inherits all its attributes
+      and methods. The only difference is that the array_type is ConcatArray.
 
    .. py:property:: attrs
 
-      Return a dictionary of metadata attributes stored on this array.
+      Return the attributes of the ConcatArray as a dictionary.
+
+      :returns: The attributes of the ConcatArray.
+      :rtype: Dict[str, Any]
+
+      :raises AssertionError: If the source arrays have different attributes.
+
+      .. rubric:: Examples
+
+      >>> config = ConcatArrayConfig(
+      ...     name="my_concat_array",
+      ...     channels=["A", "B"],
+      ...     source_array_configs={
+      ...         "A": ArrayConfig(...),
+      ...         "B": ArrayConfig(...),
+      ...     },
+      ...     default_config=ArrayConfig(...),
+      ... )
+      >>> array = ConcatArray(config)
+      >>> array.attrs
+      {'axes': 'cxyz', 'roi': Roi(...), 'voxel_size': (1, 1, 1)}
+
+      .. note:: The `source_arrays` are expected to have the same attributes.
 
    .. py:property:: source_arrays
       :type: Dict[str, dacapo.experiments.datasplits.datasets.arrays.array.Array]
 
+      Return the source arrays of the ConcatArray.
+
+      :returns: The source arrays of the ConcatArray.
+      :rtype: Dict[str, Array]
+
+      :raises AssertionError: If the source arrays are empty.
+
+      .. rubric:: Examples
+
+      >>> config = ConcatArrayConfig(
+      ...     name="my_concat_array",
+      ...     channels=["A", "B"],
+      ...     source_array_configs={
+      ...         "A": ArrayConfig(...),
+      ...         "B": ArrayConfig(...),
+      ...     },
+      ...     default_config=ArrayConfig(...),
+      ... )
+      >>> array = ConcatArray(config)
+      >>> array.source_arrays
+      {'A': Array(...), 'B': Array(...)}
+
+      .. note:: The `source_arrays` are expected to have the same shape and ROI.
 
    .. py:property:: source_array
       :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
 
+      Return the source array of the ConcatArray.
+
+      :returns: The source array of the ConcatArray.
+      :rtype: Array
+
+      :raises AssertionError: If the source array is None.
+
+      .. rubric:: Examples
+
+      >>> config = ConcatArrayConfig(
+      ...     name="my_concat_array",
+      ...     channels=["A", "B"],
+      ...     source_array_configs={
+      ...         "A": ArrayConfig(...),
+      ...         "B": ArrayConfig(...),
+      ...     },
+      ...     default_config=ArrayConfig(...),
+      ... )
+      >>> array = ConcatArray(config)
+      >>> array.source_array
+      Array(...)
+
+      .. note:: The `source_array` is expected to have the same shape and ROI.
 
    .. py:property:: axes
 
-      Returns the axes of this dataset as a string of charactes, as they
-      are indexed. Permitted characters are:
+      Return the axes of the ConcatArray.
 
-          * ``zyx`` for spatial dimensions
-          * ``c`` for channels
-          * ``s`` for samples
+      :returns: The axes of the ConcatArray.
+      :rtype: str
+
+      :raises AssertionError: If the source arrays have different axes.
+
+      .. rubric:: Examples
+
+      >>> config = ConcatArrayConfig(
+      ...     name="my_concat_array",
+      ...     channels=["A", "B"],
+      ...     source_array_configs={
+      ...         "A": ArrayConfig(...),
+      ...         "B": ArrayConfig(...),
+      ...     },
+      ...     default_config=ArrayConfig(...),
+      ... )
+      >>> array = ConcatArray(config)
+      >>> array.axes
+      'cxyz'
+
+      .. note:: The `source_arrays` are expected to have the same axes.
 
    .. py:property:: dims
 
-      Returns the number of spatial dimensions.
+      Return the dimensions of the ConcatArray.
+
+      :returns: The dimensions of the ConcatArray.
+      :rtype: Tuple[int]
+
+      :raises AssertionError: If the source arrays have different dimensions.
+
+      .. rubric:: Examples
+
+      >>> config = ConcatArrayConfig(
+      ...     name="my_concat_array",
+      ...     channels=["A", "B"],
+      ...     source_array_configs={
+      ...         "A": ArrayConfig(...),
+      ...         "B": ArrayConfig(...),
+      ...     },
+      ...     default_config=ArrayConfig(...),
+      ... )
+      >>> array = ConcatArray(config)
+      >>> array.dims
+      (2, 100, 100, 100)
+
+      .. note:: The `source_arrays` are expected to have the same dimensions.
 
    .. py:property:: voxel_size
 
-      The size of a voxel in physical units.
+      Return the voxel size of the ConcatArray.
+
+      :returns: The voxel size of the ConcatArray.
+      :rtype: Tuple[float]
+
+      :raises AssertionError: If the source arrays have different voxel sizes.
+
+      .. rubric:: Examples
+
+      >>> config = ConcatArrayConfig(
+      ...     name="my_concat_array",
+      ...     channels=["A", "B"],
+      ...     source_array_configs={
+      ...         "A": ArrayConfig(...),
+      ...         "B": ArrayConfig(...),
+      ...     },
+      ...     default_config=ArrayConfig(...),
+      ... )
+      >>> array = ConcatArray(config)
+      >>> array.voxel_size
+      (1, 1, 1)
+
+      .. note:: The `source_arrays` are expected to have the same voxel size.
 
    .. py:property:: roi
 
-      The total ROI of this array, in world units.
+      Return the ROI of the ConcatArray.
+
+      :returns: The ROI of the ConcatArray.
+      :rtype: Roi
+
+      :raises AssertionError: If the source arrays have different ROIs.
+
+      .. rubric:: Examples
+
+      >>> config = ConcatArrayConfig(
+      ...     name="my_concat_array",
+      ...     channels=["A", "B"],
+      ...     source_array_configs={
+      ...         "A": ArrayConfig(...),
+      ...         "B": ArrayConfig(...),
+      ...     },
+      ...     default_config=ArrayConfig(...),
+      ... )
+      >>> array = ConcatArray(config)
+      >>> array.roi
+      Roi(...)
+
+      .. note:: The `source_arrays` are expected to have the same ROI.
 
    .. py:property:: writable
       :type: bool
 
-      Can we write to this Array?
+      Return whether the ConcatArray is writable.
+
+      :returns: Whether the ConcatArray is writable.
+      :rtype: bool
+
+      :raises AssertionError: If the ConcatArray is writable.
+
+      .. rubric:: Examples
+
+      >>> config = ConcatArrayConfig(
+      ...     name="my_concat_array",
+      ...     channels=["A", "B"],
+      ...     source_array_configs={
+      ...         "A": ArrayConfig(...),
+      ...         "B": ArrayConfig(...),
+      ...     },
+      ...     default_config=ArrayConfig(...),
+      ... )
+      >>> array = ConcatArray(config)
+      >>> array.writable
+      False
+
+      .. note:: The ConcatArray is not writable.
 
    .. py:property:: data
 
-      Get a numpy like readable and writable view into this array.
+      Return the data of the ConcatArray.
+
+      :returns: The data of the ConcatArray.
+      :rtype: np.ndarray
+
+      :raises RuntimeError: If the ConcatArray is not writable.
+
+      .. rubric:: Examples
+
+      >>> config = ConcatArrayConfig(
+      ...     name="my_concat_array",
+      ...     channels=["A", "B"],
+      ...     source_array_configs={
+      ...         "A": ArrayConfig(...),
+      ...         "B": ArrayConfig(...),
+      ...     },
+      ...     default_config=ArrayConfig(...),
+      ... )
+      >>> array = ConcatArray(config)
+      >>> array.data
+      np.ndarray(...)
+
+      .. note:: The ConcatArray is not writable.
 
    .. py:property:: dtype
 
-      The dtype of this array, in numpy dtypes
+      Return the data type of the ConcatArray.
+
+      :returns: The data type of the ConcatArray.
+      :rtype: np.dtype
+
+      :raises AssertionError: If the source arrays have different data types.
+
+      .. rubric:: Examples
+
+      >>> config = ConcatArrayConfig(
+      ...     name="my_concat_array",
+      ...     channels=["A", "B"],
+      ...     source_array_configs={
+      ...         "A": ArrayConfig(...),
+      ...         "B": ArrayConfig(...),
+      ...     },
+      ...     default_config=ArrayConfig(...),
+      ... )
+      >>> array = ConcatArray(config)
+      >>> array.dtype
+      np.float32
+
+      .. note:: The `source_arrays` are expected to have the same data type.
 
    .. py:property:: num_channels
 
-      The number of channels provided by this dataset.
-      Should return None if the channel dimension doesn't exist.
+      Return the number of channels of the ConcatArray.
+
+      :returns: The number of channels of the ConcatArray.
+      :rtype: int
+
+      :raises AssertionError: If the source arrays have different numbers of channels.
+
+      .. rubric:: Examples
+
+      >>> config = ConcatArrayConfig(
+      ...     name="my_concat_array",
+      ...     channels=["A", "B"],
+      ...     source_array_configs={
+      ...         "A": ArrayConfig(...),
+      ...         "B": ArrayConfig(...),
+      ...     },
+      ...     default_config=ArrayConfig(...),
+      ... )
+      >>> array = ConcatArray(config)
+      >>> array.num_channels
+      2
+
+      .. note:: The `source_arrays` are expected to have the same number of channels.
 
 

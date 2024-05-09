@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -108,16 +109,16 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.empanada_function.segment_function" title="dacapo.blockwise.empanada_function.segment_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">segment_function</span></code></a>(input_array, block, **parameters)</p></td>
-<td><p></p></td>
+<td><p>Segment a 3D block using the empanada-napari library.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.empanada_function.stack_inference" title="dacapo.blockwise.empanada_function.stack_inference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stack_inference</span></code></a>(engine, volume, axis_name)</p></td>
-<td><p></p></td>
+<td><p>Perform inference on a single axis of a 3D volume.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.empanada_function.orthoplane_inference" title="dacapo.blockwise.empanada_function.orthoplane_inference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orthoplane_inference</span></code></a>(engine, volume)</p></td>
-<td><p></p></td>
+<td><p>Perform inference on the orthogonal planes of a 3D volume.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.empanada_function.empanada_segmenter" title="dacapo.blockwise.empanada_function.empanada_segmenter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">empanada_segmenter</span></code></a>(image[, model_config, use_gpu, ...])</p></td>
-<td><p></p></td>
+<td><p>Segment a 3D volume using the empanada-napari library.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.empanada_function.stack_postprocessing" title="dacapo.blockwise.empanada_function.stack_postprocessing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stack_postprocessing</span></code></a>(trackers, model_config[, ...])</p></td>
 <td><p>Relabels and filters each class defined in trackers. Yields a numpy</p></td>
@@ -156,7 +157,51 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.empanada_function.segment_function">
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.empanada_function.</span></span><span class="sig-name descname"><span class="pre">segment_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.empanada_function.segment_function" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Segment a 3D block using the empanada-napari library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_array</strong> (<em>np.ndarray</em>) – The 3D array to segment.</p></li>
+<li><p><strong>block</strong> (<em>dask.array.core.Block</em>) – The block object.</p></li>
+<li><p><strong>**parameters</strong> – Parameters for the empanada-napari segmenter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The segmented 3D array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ImportError</strong> – If empanada-napari is not installed.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dask</span> <span class="kn">import</span> <span class="n">array</span> <span class="k">as</span> <span class="n">da</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.blockwise.empanada_function</span> <span class="kn">import</span> <span class="n">segment_function</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span><span class="n">input_array</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">segmented_array</span> <span class="o">=</span> <span class="n">segment_function</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">model_config</span><span class="o">=</span><span class="s2">&quot;MitoNet_v1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <cite>model_config</cite> parameter should be one of the following:
+- MitoNet_v1
+- MitoNet_v2
+- MitoNet_v3
+- MitoNet_v4
+- MitoNet_v5
+- MitoNet_v6</p>
+</div>
+<dl class="simple">
+<dt>Reference:</dt><dd><ul class="simple">
+<li><p>doi: 10.1016/j.cels.2022.12.006</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="dacapo.blockwise.empanada_function.model_configs">
@@ -166,23 +211,242 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.empanada_function.stack_inference">
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.empanada_function.</span></span><span class="sig-name descname"><span class="pre">stack_inference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.empanada_function.stack_inference" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Perform inference on a single axis of a 3D volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine3d</em>) – The engine object.</p></li>
+<li><p><strong>volume</strong> (<em>np.ndarray</em>) – The 3D volume to segment.</p></li>
+<li><p><strong>axis_name</strong> (<em>str</em>) – The axis name to segment.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The stack, axis name, and trackers dictionary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ImportError</strong> – If empanada-napari is not installed.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">empanada_napari.inference</span> <span class="kn">import</span> <span class="n">Engine3d</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.blockwise.empanada_function</span> <span class="kn">import</span> <span class="n">stack_inference</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model_config</span> <span class="o">=</span> <span class="s2">&quot;MitoNet_v1&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">use_gpu</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">use_quantized</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine3d</span><span class="p">(</span><span class="n">model_config</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">use_quantized</span><span class="o">=</span><span class="n">use_quantized</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">volume</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">axis_name</span> <span class="o">=</span> <span class="s2">&quot;xy&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stack</span><span class="p">,</span> <span class="n">axis_name</span><span class="p">,</span> <span class="n">trackers_dict</span> <span class="o">=</span> <span class="n">stack_inference</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="n">axis_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <cite>axis_name</cite> parameter should be one of the following:</p>
+</div>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.empanada_function.orthoplane_inference">
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.empanada_function.</span></span><span class="sig-name descname"><span class="pre">orthoplane_inference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.empanada_function.orthoplane_inference" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Perform inference on the orthogonal planes of a 3D volume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>Engine3d</em>) – The engine object.</p></li>
+<li><p><strong>volume</strong> (<em>np.ndarray</em>) – The 3D volume to segment.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The trackers dictionary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ImportError</strong> – If empanada-napari is not installed.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">empanada_napari.inference</span> <span class="kn">import</span> <span class="n">Engine3d</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.blockwise.empanada_function</span> <span class="kn">import</span> <span class="n">orthoplane_inference</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model_config</span> <span class="o">=</span> <span class="s2">&quot;MitoNet_v1&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">use_gpu</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">use_quantized</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine3d</span><span class="p">(</span><span class="n">model_config</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">use_quantized</span><span class="o">=</span><span class="n">use_quantized</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">volume</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trackers_dict</span> <span class="o">=</span> <span class="n">orthoplane_inference</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">volume</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <cite>model_config</cite> parameter should be one of the following:
+- MitoNet_v1
+- MitoNet_v2
+- MitoNet_v3
+- MitoNet_v4
+- MitoNet_v5
+- MitoNet_v6</p>
+</div>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.empanada_function.empanada_segmenter">
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.empanada_function.</span></span><span class="sig-name descname"><span class="pre">empanada_segmenter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MitoNet_v1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quantized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multigpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downsampling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center_confidence_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_distance_object_centers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">21</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fine_boundaries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semantic_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">median_slices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_extent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum_objects_per_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inference_plane</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'xy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orthoplane</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_panoptic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_vote_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_one_view</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.empanada_function.empanada_segmenter" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Segment a 3D volume using the empanada-napari library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>np.ndarray</em>) – The 3D volume to segment.</p></li>
+<li><p><strong>model_config</strong> (<em>str</em>) – The model configuration to use.</p></li>
+<li><p><strong>use_gpu</strong> (<em>bool</em>) – Whether to use the GPU.</p></li>
+<li><p><strong>use_quantized</strong> (<em>bool</em>) – Whether to use quantized inference.</p></li>
+<li><p><strong>multigpu</strong> (<em>bool</em>) – Whether to use multiple GPUs.</p></li>
+<li><p><strong>downsampling</strong> (<em>int</em>) – The downsampling factor.</p></li>
+<li><p><strong>confidence_thr</strong> (<em>float</em>) – The confidence threshold.</p></li>
+<li><p><strong>center_confidence_thr</strong> (<em>float</em>) – The center confidence threshold.</p></li>
+<li><p><strong>min_distance_object_centers</strong> (<em>int</em>) – The minimum distance between object centers.</p></li>
+<li><p><strong>fine_boundaries</strong> (<em>bool</em>) – Whether to use fine boundaries.</p></li>
+<li><p><strong>semantic_only</strong> (<em>bool</em>) – Whether to use semantic segmentation only.</p></li>
+<li><p><strong>median_slices</strong> (<em>int</em>) – The number of median slices.</p></li>
+<li><p><strong>min_size</strong> (<em>int</em>) – The minimum size of objects.</p></li>
+<li><p><strong>min_extent</strong> (<em>int</em>) – The minimum extent.</p></li>
+<li><p><strong>maximum_objects_per_class</strong> (<em>int</em>) – The maximum number of objects per class.</p></li>
+<li><p><strong>inference_plane</strong> (<em>str</em>) – The inference plane.</p></li>
+<li><p><strong>orthoplane</strong> (<em>bool</em>) – Whether to use orthoplane inference.</p></li>
+<li><p><strong>return_panoptic</strong> (<em>bool</em>) – Whether to return the panoptic segmentation.</p></li>
+<li><p><strong>pixel_vote_thr</strong> (<em>int</em>) – The pixel vote threshold.</p></li>
+<li><p><strong>allow_one_view</strong> (<em>bool</em>) – Whether to allow one view.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The volume, class name, and tracker.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ImportError</strong> – If empanada-napari is not installed.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">empanada_napari.inference</span> <span class="kn">import</span> <span class="n">Engine3d</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.blockwise.empanada_function</span> <span class="kn">import</span> <span class="n">empanada_segmenter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model_config</span> <span class="o">=</span> <span class="s2">&quot;MitoNet_v1&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">use_gpu</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">use_quantized</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">multigpu</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">downsampling</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">confidence_thr</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">center_confidence_thr</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">min_distance_object_centers</span> <span class="o">=</span> <span class="mi">21</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fine_boundaries</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">semantic_only</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">median_slices</span> <span class="o">=</span> <span class="mi">11</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">min_size</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">min_extent</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maximum_objects_per_class</span> <span class="o">=</span> <span class="mi">1000000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">inference_plane</span> <span class="o">=</span> <span class="s2">&quot;xy&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">orthoplane</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">return_panoptic</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pixel_vote_thr</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">allow_one_view</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">vol</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">tracker</span> <span class="ow">in</span> <span class="n">empanada_segmenter</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">image</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">model_config</span><span class="o">=</span><span class="n">model_config</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">use_quantized</span><span class="o">=</span><span class="n">use_quantized</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">multigpu</span><span class="o">=</span><span class="n">multigpu</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">downsampling</span><span class="o">=</span><span class="n">downsampling</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">confidence_thr</span><span class="o">=</span><span class="n">confidence_thr</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">center_confidence_thr</span><span class="o">=</span><span class="n">center_confidence_thr</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">min_distance_object_centers</span><span class="o">=</span><span class="n">min_distance_object_centers</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">fine_boundaries</span><span class="o">=</span><span class="n">fine_boundaries</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">semantic_only</span><span class="o">=</span><span class="n">semantic_only</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">median_slices</span><span class="o">=</span><span class="n">median_slices</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">min_size</span><span class="o">=</span><span class="n">min_size</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">min_extent</span><span class="o">=</span><span class="n">min_extent</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">maximum_objects_per_class</span><span class="o">=</span><span class="n">maximum_objects_per_class</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">inference_plane</span><span class="o">=</span><span class="n">inference_plane</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">orthoplane</span><span class="o">=</span><span class="n">orthoplane</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">return_panoptic</span><span class="o">=</span><span class="n">return_panoptic</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">pixel_vote_thr</span><span class="o">=</span><span class="n">pixel_vote_thr</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">allow_one_view</span><span class="o">=</span><span class="n">allow_one_view</span>
+<span class="gp">... </span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">vol</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">tracker</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <cite>model_config</cite> parameter should be one of the following:
+- MitoNet_v1
+- MitoNet_v2
+- MitoNet_v3
+- MitoNet_v4
+- MitoNet_v5
+- MitoNet_v6</p>
+</div>
+<dl class="simple">
+<dt>Reference:</dt><dd><ul class="simple">
+<li><p>doi: 10.1016/j.cels.2022.12.006</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.empanada_function.stack_postprocessing">
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.empanada_function.</span></span><span class="sig-name descname"><span class="pre">stack_postprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trackers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_divisor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_extent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">np.uint32</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.empanada_function.stack_postprocessing" title="Link to this definition"></a></dt>
 <dd><p>Relabels and filters each class defined in trackers. Yields a numpy
 or zarr volume along with the name of the class that is segmented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trackers</strong> (<em>dict</em>) – The trackers dictionary.</p></li>
+<li><p><strong>model_config</strong> (<em>str</em>) – The model configuration to use.</p></li>
+<li><p><strong>label_divisor</strong> (<em>int</em>) – The label divisor.</p></li>
+<li><p><strong>min_size</strong> (<em>int</em>) – The minimum size of objects.</p></li>
+<li><p><strong>min_extent</strong> (<em>int</em>) – The minimum extent of objects.</p></li>
+<li><p><strong>dtype</strong> (<em>type</em>) – The data type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generator object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>generator</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ImportError</strong> – If empanada-napari is not installed.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">vol</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">tracker</span> <span class="ow">in</span> <span class="n">stack_postprocessing</span><span class="p">(</span><span class="n">trackers</span><span class="p">,</span> <span class="n">model_config</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">vol</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">tracker</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <cite>model_config</cite> parameter should be one of the following:
+- MitoNet_v1
+- MitoNet_v2
+- MitoNet_v3
+- MitoNet_v4
+- MitoNet_v5
+- MitoNet_v6</p>
+</div>
+<dl class="simple">
+<dt>Reference:</dt><dd><ul class="simple">
+<li><p>doi: 10.1016/j.cels.2022.12.006</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -190,6 +454,50 @@ or zarr volume along with the name of the class that is segmented.</p>
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.empanada_function.</span></span><span class="sig-name descname"><span class="pre">tracker_consensus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trackers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_vote_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_iou_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_one_view</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_extent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">np.uint32</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.empanada_function.tracker_consensus" title="Link to this definition"></a></dt>
 <dd><p>Calculate the orthoplane consensus from trackers. Yields a numpy
 or zarr volume along with the name of the class that is segmented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trackers</strong> (<em>dict</em>) – The trackers dictionary.</p></li>
+<li><p><strong>model_config</strong> (<em>str</em>) – The model configuration to use.</p></li>
+<li><p><strong>pixel_vote_thr</strong> (<em>int</em>) – The pixel vote threshold.</p></li>
+<li><p><strong>cluster_iou_thr</strong> (<em>float</em>) – The cluster IoU threshold.</p></li>
+<li><p><strong>allow_one_view</strong> (<em>bool</em>) – Whether to allow one view.</p></li>
+<li><p><strong>min_size</strong> (<em>int</em>) – The minimum size of objects.</p></li>
+<li><p><strong>min_extent</strong> (<em>int</em>) – The minimum extent of objects.</p></li>
+<li><p><strong>dtype</strong> (<em>type</em>) – The data type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generator object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>generator</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ImportError</strong> – If empanada-napari is not installed.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">vol</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">tracker</span> <span class="ow">in</span> <span class="n">tracker_consensus</span><span class="p">(</span><span class="n">trackers</span><span class="p">,</span> <span class="n">model_config</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">vol</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">tracker</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <cite>model_config</cite> parameter should be one of the following:
+- MitoNet_v1
+- MitoNet_v2
+- MitoNet_v3
+- MitoNet_v4
+- MitoNet_v5
+- MitoNet_v6</p>
+</div>
+<dl class="simple">
+<dt>Reference:</dt><dd><ul class="simple">
+<li><p>doi: 10.1016/j.cels.2022.12.006</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

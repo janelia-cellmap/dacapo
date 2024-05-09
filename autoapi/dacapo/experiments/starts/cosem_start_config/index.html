@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -119,6 +120,37 @@
 <dd><p>Starter for COSEM pretained models. This is a subclass of <cite>StartConfig</cite> and
 should be used to initialize the model with pretrained weights from a previous
 run.</p>
+<p>The weights are loaded from the dacapo store for the specified run. The
+configuration is used to initialize the weights for the model associated with
+a specific criterion.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.cosem_start_config.CosemStartConfig.run">
+<span class="sig-name descname"><span class="pre">run</span></span><a class="headerlink" href="#dacapo.experiments.starts.cosem_start_config.CosemStartConfig.run" title="Link to this definition"></a></dt>
+<dd><p>str
+The run to be used as a starting point for tasks.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.cosem_start_config.CosemStartConfig.criterion">
+<span class="sig-name descname"><span class="pre">criterion</span></span><a class="headerlink" href="#dacapo.experiments.starts.cosem_start_config.CosemStartConfig.criterion" title="Link to this definition"></a></dt>
+<dd><p>str
+The criterion to be used for choosing weights from run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.cosem_start_config.CosemStartConfig.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.starts.cosem_start_config.CosemStartConfig.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes the CosemStartConfig class with specified config to run the
+initialization of weights for a model associated with a specific
+criterion.</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">start_config</span> <span class="o">=</span> <span class="n">CosemStartConfig</span><span class="p">(</span><span class="n">run</span><span class="o">=</span><span class="s2">&quot;run_1&quot;</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This class is used to represent the configuration for running tasks.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.cosem_start_config.CosemStartConfig.start_type">
 <span class="sig-name descname"><span class="pre">start_type</span></span><a class="headerlink" href="#dacapo.experiments.starts.cosem_start_config.CosemStartConfig.start_type" title="Link to this definition"></a></dt>

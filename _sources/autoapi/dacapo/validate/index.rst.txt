@@ -13,8 +13,8 @@ Functions
 
 .. autoapisummary::
 
-   dacapo.validate.validate
    dacapo.validate.validate_run
+   dacapo.validate.validate
 
 
 
@@ -31,19 +31,30 @@ Attributes
 
    
 
-.. py:function:: validate(run_name: str, iteration: int, num_workers: int = 1, output_dtype: str = 'uint8', overwrite: bool = True)
+.. py:function:: validate_run(run: dacapo.experiments.Run, iteration: int, num_workers: int = 1, output_dtype: str = 'uint8', overwrite: bool = True)
+
+   validate_run is deprecated and will be removed in a future version. Please use validate instead.
+
+
+.. py:function:: validate(run_name: str | dacapo.experiments.Run, iteration: int, num_workers: int = 1, output_dtype: str = 'uint8', overwrite: bool = True)
 
    Validate a run at a given iteration. Loads the weights from a previously
    stored checkpoint. Returns the best parameters and scores for this
    iteration.
 
+   :param run_name: The name of the run to validate.
+   :param iteration: The iteration to validate.
+   :param num_workers: The number of workers to use for validation.
+   :param output_dtype: The dtype to use for the output arrays.
+   :param overwrite: Whether to overwrite existing output arrays
 
-.. py:function:: validate_run(run: dacapo.experiments.Run, iteration: int, num_workers: int = 1, output_dtype: str = 'uint8', overwrite: bool = True)
+   :returns: The best parameters and scores for this iteration
 
-   Validate an already loaded run at the given iteration. This does not
-   load the weights of that iteration, it is assumed that the model is already
-   loaded correctly. Returns the best parameters and scores for this
-   iteration.
+   :raises ValueError: If the run does not have a validation dataset or the dataset does not have ground truth.
+
+   .. rubric:: Example
+
+   validate("my_run", 1000)
 
 
 .. py:data:: parser

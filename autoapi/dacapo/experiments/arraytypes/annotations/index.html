@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -117,25 +118,60 @@
 <dt class="sig sig-object py" id="dacapo.experiments.arraytypes.annotations.AnnotationArray">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.arraytypes.annotations.</span></span><span class="sig-name descname"><span class="pre">AnnotationArray</span></span><a class="headerlink" href="#dacapo.experiments.arraytypes.annotations.AnnotationArray" title="Link to this definition"></a></dt>
 <dd><p>An AnnotationArray is a uint8, uint16, uint32 or uint64 Array where each
-voxel has a value associated with its class.</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="dacapo.experiments.arraytypes.annotations.AnnotationArray.interpolatable">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpolatable</span></span><a class="headerlink" href="#dacapo.experiments.arraytypes.annotations.AnnotationArray.interpolatable" title="Link to this definition"></a></dt>
-<dd><p>This is an abstract method which should be overridden in each of the subclasses
-to determine if an array is interpolatable or not.</p>
+voxel has a value associated with its class. The class of each voxel can be
+determined by simply taking the value.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.arraytypes.annotations.AnnotationArray.classes">
+<span class="sig-name descname"><span class="pre">classes</span></span><a class="headerlink" href="#dacapo.experiments.arraytypes.annotations.AnnotationArray.classes" title="Link to this definition"></a></dt>
+<dd><p>A mapping from class label to class name.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>True if the array is interpolatable, False otherwise.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>bool</p>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[int, str]</p>
 </dd>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.arraytypes.annotations.AnnotationArray.interpolatable">
+<span class="sig-name descname"><span class="pre">interpolatable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.arraytypes.annotations.AnnotationArray.interpolatable" title="Link to this definition"></a></dt>
+<dd><p>It is a method that returns False.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is used to create an AnnotationArray object which is used to represent an array of class labels.</p>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpolatable</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Method to return False.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>bool</dt><dd><p>Returns a boolean value of False representing that the values are not interpolatable.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – This method is not implemented in this class.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">annotation_array</span> <span class="o">=</span> <span class="n">AnnotationArray</span><span class="p">(</span><span class="n">classes</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;mitochondria&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;membrane&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">annotation_array</span><span class="o">.</span><span class="n">interpolatable</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is used to check if the array is interpolatable.</p>
+</div>
+</dd></dl>
+
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.arraytypes.annotations.AnnotationArray.classes">
-<span class="sig-name descname"><span class="pre">classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.arraytypes.annotations.AnnotationArray.classes" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

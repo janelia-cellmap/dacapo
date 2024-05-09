@@ -28,6 +28,46 @@ Classes
    It defines essential methods that every subclass must implement for effective
    training of a neural network model.
 
+   .. attribute:: iteration
+
+      The number of training iterations.
+
+      :type: int
+
+   .. attribute:: batch_size
+
+      The size of the training batch.
+
+      :type: int
+
+   .. attribute:: learning_rate
+
+      The learning rate for the optimizer.
+
+      :type: float
+
+   .. method:: create_optimizer(model
+
+      Model) -> torch.optim.Optimizer:
+      Creates an optimizer for the model.
+
+   .. method:: iterate(num_iterations
+
+      int, model: Model, optimizer: torch.optim.Optimizer, device: torch.device) -> Iterator[TrainingIterationStats]:
+      Performs a number of training iterations.
+
+   .. method:: can_train(datasets
+
+      List[Dataset]) -> bool:
+      Checks if the trainer can train with a specific set of datasets.
+
+   .. method:: build_batch_provider(datasets
+
+      List[Dataset], model: Model, task: Task, snapshot_container: LocalContainerIdentifier) -> None:
+      Initializes the training pipeline using various components.
+
+   .. note:: The Trainer class is an abstract class that cannot be instantiated directly. It is meant to be subclassed.
+
    .. py:attribute:: iteration
       :type: int
 
@@ -54,6 +94,14 @@ Classes
       :returns: The optimizer created for the model.
       :rtype: torch.optim.Optimizer
 
+      :raises NotImplementedError: If the method is not implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> optimizer = trainer.create_optimizer(model)
+
+      .. note:: This method must be implemented by the subclass.
+
 
    .. py:method:: iterate(num_iterations: int, model: dacapo.experiments.model.Model, optimizer: torch.optim.Optimizer, device: torch.device) -> Iterator[dacapo.experiments.training_iteration_stats.TrainingIterationStats]
       :abstractmethod:
@@ -72,6 +120,15 @@ Classes
       :returns: An iterator of the training statistics.
       :rtype: Iterator[TrainingIterationStats]
 
+      :raises NotImplementedError: If the method is not implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> for iteration_stats in trainer.iterate(num_iterations, model, optimizer, device):
+      >>>     print(iteration_stats)
+
+      .. note:: This method must be implemented by the subclass.
+
 
    .. py:method:: can_train(datasets: List[dacapo.experiments.datasplits.datasets.Dataset]) -> bool
       :abstractmethod:
@@ -85,6 +142,14 @@ Classes
 
       :returns: True if the trainer can train on the given datasets, False otherwise.
       :rtype: bool
+
+      :raises NotImplementedError: If the method is not implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> can_train = trainer.can_train(datasets)
+
+      .. note:: This method must be implemented by the subclass.
 
 
    .. py:method:: build_batch_provider(datasets: List[dacapo.experiments.datasplits.datasets.Dataset], model: dacapo.experiments.model.Model, task: dacapo.experiments.tasks.task.Task, snapshot_container: dacapo.store.array_store.LocalContainerIdentifier) -> None
@@ -103,6 +168,14 @@ Classes
       :type task: Task
       :param snapshot_container: Defines where snapshots will be saved.
       :type snapshot_container: LocalContainerIdentifier
+
+      :raises NotImplementedError: If the method is not implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> trainer.build_batch_provider(datasets, model, task, snapshot_container)
+
+      .. note:: This method must be implemented by the subclass.
 
 
 

@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -110,80 +111,57 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset" title="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RawGTDataset</span></code></a></p></td>
-<td><p>A class to represent a dataset.</p></td>
+<td><p>A dataset that contains raw and ground truth data. Optionally, it can also contain a mask.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.raw_gt_dataset.</span></span><span class="sig-name descname"><span class="pre">RawGTDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset" title="Link to this definition"></a></dt>
-<dd><p>A class to represent a dataset.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.name" title="Link to this definition"></a></dt>
-<dd><p>The name of the dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
+<dd><p>A dataset that contains raw and ground truth data. Optionally, it can also contain a mask.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.raw">
 <span class="sig-name descname"><span class="pre">raw</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.raw" title="Link to this definition"></a></dt>
-<dd><p>The raw dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array">Array</a></p>
-</dd>
-</dl>
+<dd><p>Array
+The raw data.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.gt">
 <span class="sig-name descname"><span class="pre">gt</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.gt" title="Link to this definition"></a></dt>
-<dd><p>The ground truth data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array">Array</a>, optional</p>
-</dd>
-</dl>
+<dd><p>Array
+The ground truth data.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.mask">
 <span class="sig-name descname"><span class="pre">mask</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.mask" title="Link to this definition"></a></dt>
-<dd><p>The mask for the data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array">Array</a>, optional</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.weight">
-<span class="sig-name descname"><span class="pre">weight</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.weight" title="Link to this definition"></a></dt>
-<dd><p>The weight of the dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int, optional</p>
-</dd>
-</dl>
+<dd><p>Optional[Array]
+The mask data.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.sample_points">
 <span class="sig-name descname"><span class="pre">sample_points</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.sample_points" title="Link to this definition"></a></dt>
-<dd><p>The list of sample points in the dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list[Coordinate], optional</p>
-</dd>
-</dl>
+<dd><p>Optional[List[Coordinate]]
+The sample points in the graph.</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.weight" title="Link to this definition"></a></dt>
+<dd><p>Optional[float]
+The weight of the dataset.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.raw_gt_dataset.RawGTDataset.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the dataset.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This class is a base class and should not be instantiated.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id0">
 <span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>

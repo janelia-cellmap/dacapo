@@ -22,43 +22,85 @@ Classes
 
 
 
-   multiplies two arrays
+   A BatchFilter that multiplies two input arrays and produces an output array.
+
+   .. attribute:: x1_key
+
+      The key of the first input array.
+
+      :type: :class:`ArrayKey`
+
+   .. attribute:: x2_key
+
+      The key of the second input array.
+
+      :type: :class:`ArrayKey`
+
+   .. attribute:: y_key
+
+      The key of the output array.
+
+      :type: :class:`ArrayKey`
+
+   Provides:
+       y_key (gp.ArrayKey): The key of the output array.
+   Method:
+       __init__: Initialize the Product BatchFilter.
+       setup: Set up the Product BatchFilter.
+       prepare: Prepare the Product BatchFilter.
+       process: Process the Product BatchFilter.
+
 
    .. py:method:: setup()
 
-      To be implemented in subclasses.
+      Set up the Product BatchFilter.
 
-      Called during initialization of the DAG. Callees can assume that all
-      upstream providers are set up already.
+      Enables autoskip and specifies the output array.
 
-      In setup, call :func:`provides` or :func:`updates` to announce the
-      arrays and points provided or changed by this node.
+      :raises AssertionError: If the input arrays are not provided.
+
+      .. rubric:: Examples
+
+      >>> setup()
+      setup()
 
 
    .. py:method:: prepare(request)
 
-      To be implemented in subclasses.
+      Prepare the Product BatchFilter.
 
-      Prepare for a batch request. Should return a :class:`BatchRequest` of
-      needed dependencies. If None is returned, it will be assumed that all
-      of request is needed.
+      :param request: The batch request.
+      :type request: gp.BatchRequest
+
+      :returns: The dependencies.
+      :rtype: gp.BatchRequest
+
+      :raises AssertionError: If the input arrays are not provided.
+
+      .. rubric:: Examples
+
+      >>> prepare(request)
+      prepare(request)
 
 
    .. py:method:: process(batch, request)
 
-      To be implemented in subclasses.
+      Process the Product BatchFilter.
 
-      Filter a batch, will be called after :func:`prepare`. Should return a
-      :class:`Batch` containing modified Arrays and Graphs. Keys in the returned
-      batch will replace the associated data in the original batch. If None is
-      returned it is assumed that the batch has been modified in place. ``request``
-      is the same as passed to :func:`prepare`, provided for convenience.
+      :param batch: The input batch.
+      :type batch: gp.Batch
+      :param request: The batch request.
+      :type request: gp.BatchRequest
 
-      :param batch: The batch received from upstream to be modified by this node.
-      :type batch: :class:`Batch`
-      :param request: The request this node received. The updated batch should meet
-                      this request.
-      :type request: :class:`BatchRequest`
+      :returns: The output batch.
+      :rtype: gp.Batch
+
+      :raises AssertionError: If the input arrays are not provided.
+
+      .. rubric:: Examples
+
+      >>> process(batch, request)
+      process(batch, request)
 
 
 

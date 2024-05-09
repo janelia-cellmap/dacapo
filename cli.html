@@ -50,6 +50,7 @@
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CLI</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#dacapo">dacapo</a><ul>
@@ -93,6 +94,36 @@
 <h1>CLI<a class="headerlink" href="#cli" title="Link to this heading"></a></h1>
 <section id="dacapo">
 <h2>dacapo<a class="headerlink" href="#dacapo" title="Link to this heading"></a></h2>
+<p>Command-line interface for the DACAPO application.</p>
+<dl>
+<dt>Args:</dt><dd><p>log_level (str): The desired log level for the application.</p>
+</dd>
+<dt>Examples:</dt><dd><p>To train a model, run:
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">dacapo</span> <span class="pre">train</span> <span class="pre">--run-name</span> <span class="pre">my_run</span>
+<span class="pre">`</span></code></p>
+<p>To validate a model, run:
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">dacapo</span> <span class="pre">validate</span> <span class="pre">--run-name</span> <span class="pre">my_run</span> <span class="pre">--iteration</span> <span class="pre">100</span>
+<span class="pre">`</span></code></p>
+<p>To apply a model, run:
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">dacapo</span> <span class="pre">apply</span> <span class="pre">--run-name</span> <span class="pre">my_run</span> <span class="pre">--input-container</span> <span class="pre">/path/to/input</span> <span class="pre">--input-dataset</span> <span class="pre">my_dataset</span> <span class="pre">--output-path</span> <span class="pre">/path/to/output</span>
+<span class="pre">`</span></code></p>
+<p>To predict with a model, run:
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">dacapo</span> <span class="pre">predict</span> <span class="pre">--run-name</span> <span class="pre">my_run</span> <span class="pre">--iteration</span> <span class="pre">100</span> <span class="pre">--input-container</span> <span class="pre">/path/to/input</span> <span class="pre">--input-dataset</span> <span class="pre">my_dataset</span> <span class="pre">--output-path</span> <span class="pre">/path/to/output</span>
+<span class="pre">`</span></code></p>
+<p>To run a blockwise operation, run:
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">dacapo</span> <span class="pre">run-blockwise</span> <span class="pre">--input-container</span> <span class="pre">/path/to/input</span> <span class="pre">--input-dataset</span> <span class="pre">my_dataset</span> <span class="pre">--output-container</span> <span class="pre">/path/to/output</span> <span class="pre">--output-dataset</span> <span class="pre">my_output</span> <span class="pre">--worker-file</span> <span class="pre">/path/to/worker.py</span> <span class="pre">--total-roi</span> <span class="pre">[0:100,0:100,0:100]</span> <span class="pre">--read-roi-size</span> <span class="pre">[10,10,10]</span> <span class="pre">--write-roi-size</span> <span class="pre">[10,10,10]</span> <span class="pre">--num-workers</span> <span class="pre">16</span>
+<span class="pre">`</span></code></p>
+<p>To segment blockwise, run:
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">dacapo</span> <span class="pre">segment-blockwise</span> <span class="pre">--input-container</span> <span class="pre">/path/to/input</span> <span class="pre">--input-dataset</span> <span class="pre">my_dataset</span> <span class="pre">--output-container</span> <span class="pre">/path/to/output</span> <span class="pre">--output-dataset</span> <span class="pre">my_output</span> <span class="pre">--segment-function-file</span> <span class="pre">/path/to/segment_function.py</span> <span class="pre">--total-roi</span> <span class="pre">[0:100,0:100,0:100]</span> <span class="pre">--read-roi-size</span> <span class="pre">[10,10,10]</span> <span class="pre">--write-roi-size</span> <span class="pre">[10,10,10]</span> <span class="pre">--num-workers</span> <span class="pre">16</span>
+<span class="pre">`</span></code></p>
+</dd>
+</dl>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>dacapo<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>ARGS<span class="o">]</span>...
 </pre></div>
 </div>
@@ -109,6 +140,29 @@
 
 <section id="dacapo-apply">
 <h3>apply<a class="headerlink" href="#dacapo-apply" title="Link to this heading"></a></h3>
+<p>Apply a trained run to an input dataset.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>run_name (str): The name of the run to apply.
+input_container (Path | str): The path to the input container.
+input_dataset (str): The name of the input dataset.
+output_path (Path | str): The path to the output directory.
+validation_dataset (Dataset | str, optional): The name of the validation dataset. Defaults to None.
+criterion (str, optional): The criterion to use for applying the run. Defaults to “voi”.
+iteration (int, optional): The iteration of the model to use for prediction. Defaults to None.
+parameters (PostProcessorParameters | str, optional): The parameters for the post-processor. Defaults to None.
+roi (Roi | str, optional): The roi to predict on. Passed in as [lower:upper, lower:upper, … ]. Defaults to None.
+num_workers (int, optional): The number of workers to use for prediction. Defaults to 30.
+output_dtype (np.dtype | str, optional): The output data type. Defaults to “uint8”.
+overwrite (bool, optional): Whether to overwrite existing output files. Defaults to True.</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If the run_name is not valid.</p>
+</dd>
+<dt>Examples:</dt><dd><p>To apply a trained run to an input dataset, run:
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">dacapo</span> <span class="pre">apply</span> <span class="pre">--run-name</span> <span class="pre">my_run</span> <span class="pre">--input-container</span> <span class="pre">/path/to/input</span> <span class="pre">--input-dataset</span> <span class="pre">my_dataset</span> <span class="pre">--output-path</span> <span class="pre">/path/to/output</span>
+<span class="pre">`</span></code></p>
+</dd>
+</dl>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>dacapo<span class="w"> </span>apply<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
@@ -122,40 +176,44 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-apply-ic">
 <span id="cmdoption-dacapo-apply-input_container"></span><span class="sig-name descname"><span class="pre">-ic</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_container</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_container&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-ic" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The path to the input container.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-apply-id">
 <span id="cmdoption-dacapo-apply-input_dataset"></span><span class="sig-name descname"><span class="pre">-id</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_dataset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_dataset&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-id" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The name of the input dataset.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-apply-op">
 <span id="cmdoption-dacapo-apply-output_path"></span><span class="sig-name descname"><span class="pre">-op</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_path</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_path&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-op" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The path to the output directory.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-apply-vd">
 <span id="cmdoption-dacapo-apply-validation_dataset"></span><span class="sig-name descname"><span class="pre">-vd</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--validation_dataset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;validation_dataset&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-vd" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The name of the validation dataset.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-apply-c">
 <span id="cmdoption-dacapo-apply-criterion"></span><span class="sig-name descname"><span class="pre">-c</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--criterion</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;criterion&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-c" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The criterion to use for applying the run.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-apply-i">
 <span id="cmdoption-dacapo-apply-iteration"></span><span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--iteration</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;iteration&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-i" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The iteration of the model to use for prediction.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-apply-p">
 <span id="cmdoption-dacapo-apply-parameters"></span><span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--parameters</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;parameters&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-p" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The parameters for the post-processor.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-apply-roi">
@@ -166,21 +224,44 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-apply-w">
 <span id="cmdoption-dacapo-apply-num_workers"></span><span class="sig-name descname"><span class="pre">-w</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--num_workers</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;num_workers&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-w" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The number of workers to use for prediction.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-apply-dt">
 <span id="cmdoption-dacapo-apply-output_dtype"></span><span class="sig-name descname"><span class="pre">-dt</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_dtype</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_dtype&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-apply-dt" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The output data type.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-apply-ow">
 <span id="cmdoption-dacapo-apply-overwrite"></span><span class="sig-name descname"><span class="pre">-ow</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--overwrite</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dacapo-apply-ow" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Whether to overwrite existing output files.</p>
+</dd></dl>
 
 </section>
 <section id="dacapo-predict">
 <h3>predict<a class="headerlink" href="#dacapo-predict" title="Link to this heading"></a></h3>
+<p>Apply a trained model to predict on a dataset.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>run_name (str): The name of the run to apply.
+iteration (int): The training iteration of the model to use for prediction.
+input_container (Path | str): The path to the input container.
+input_dataset (str): The name of the input dataset.
+output_path (Path | str): The path to the output directory.
+output_roi (Optional[str | Roi], optional): The roi to predict on. Passed in as [lower:upper, lower:upper, … ]. Defaults to None.
+num_workers (int, optional): The number of workers to use for prediction. Defaults to 30.
+output_dtype (np.dtype | str, optional): The output data type. Defaults to np.uint8.
+overwrite (bool, optional): Whether to overwrite existing output files. Defaults to True.</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If the run_name is not valid.</p>
+</dd>
+<dt>Examples:</dt><dd><p>To predict with a model, run:
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">dacapo</span> <span class="pre">predict</span> <span class="pre">--run-name</span> <span class="pre">my_run</span> <span class="pre">--iteration</span> <span class="pre">100</span> <span class="pre">--input-container</span> <span class="pre">/path/to/input</span> <span class="pre">--input-dataset</span> <span class="pre">my_dataset</span> <span class="pre">--output-path</span> <span class="pre">/path/to/output</span>
+<span class="pre">`</span></code></p>
+</dd>
+</dl>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>dacapo<span class="w"> </span>predict<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
@@ -200,19 +281,19 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-predict-ic">
 <span id="cmdoption-dacapo-predict-input_container"></span><span class="sig-name descname"><span class="pre">-ic</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_container</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_container&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-predict-ic" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The path to the input container.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-predict-id">
 <span id="cmdoption-dacapo-predict-input_dataset"></span><span class="sig-name descname"><span class="pre">-id</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_dataset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_dataset&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-predict-id" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The name of the input dataset.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-predict-op">
 <span id="cmdoption-dacapo-predict-output_path"></span><span class="sig-name descname"><span class="pre">-op</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_path</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_path&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-predict-op" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The path to the output directory.</p>
 </dd></dl>
 
 <dl class="std option">
@@ -224,21 +305,49 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-predict-w">
 <span id="cmdoption-dacapo-predict-num_workers"></span><span class="sig-name descname"><span class="pre">-w</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--num_workers</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;num_workers&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-predict-w" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The number of workers to use for prediction.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-predict-dt">
 <span id="cmdoption-dacapo-predict-output_dtype"></span><span class="sig-name descname"><span class="pre">-dt</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_dtype</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_dtype&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-predict-dt" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The output data type.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-predict-ow">
 <span id="cmdoption-dacapo-predict-overwrite"></span><span class="sig-name descname"><span class="pre">-ow</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--overwrite</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dacapo-predict-ow" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Whether to overwrite existing output files.</p>
+</dd></dl>
 
 </section>
 <section id="dacapo-run-blockwise">
 <h3>run-blockwise<a class="headerlink" href="#dacapo-run-blockwise" title="Link to this heading"></a></h3>
+<p>Run blockwise processing on a dataset.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>input_container: The path to the input container.
+input_dataset: The name of the input dataset.
+output_container: The path to the output container.
+output_dataset: The name of the output dataset.
+worker_file: The path to the worker file.
+total_roi: The total roi to be processed. Format is [start:end, start:end, … ] in voxels. Defaults to the roi of the input dataset. Do not use spaces in CLI argument.
+read_roi_size: The size of the roi to be read for each block, in the format of [z,y,x] in voxels.
+write_roi_size: The size of the roi to be written for each block, in the format of [z,y,x] in voxels.
+num_workers: The number of workers to use.
+max_retries: The maximum number of retries.
+timeout: The timeout in seconds.
+overwrite: Whether to overwrite existing output files.
+channels_out: The number of output channels.
+output_dtype: The output data type.</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If the run_name is not valid.</p>
+</dd>
+<dt>Examples:</dt><dd><p>To run a blockwise operation, run:
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">dacapo</span> <span class="pre">run-blockwise</span> <span class="pre">--input-container</span> <span class="pre">/path/to/input</span> <span class="pre">--input-dataset</span> <span class="pre">my_dataset</span> <span class="pre">--output-container</span> <span class="pre">/path/to/output</span> <span class="pre">--output-dataset</span> <span class="pre">my_output</span> <span class="pre">--worker-file</span> <span class="pre">/path/to/worker.py</span> <span class="pre">--total-roi</span> <span class="pre">[0:100,0:100,0:100]</span> <span class="pre">--read-roi-size</span> <span class="pre">[10,10,10]</span> <span class="pre">--write-roi-size</span> <span class="pre">[10,10,10]</span> <span class="pre">--num-workers</span> <span class="pre">16</span>
+<span class="pre">`</span></code></p>
+</dd>
+</dl>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>dacapo<span class="w"> </span>run-blockwise<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
@@ -246,25 +355,25 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-ic">
 <span id="cmdoption-dacapo-run-blockwise-input_container"></span><span class="sig-name descname"><span class="pre">-ic</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_container</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_container&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-ic" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The path to the input container.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-id">
 <span id="cmdoption-dacapo-run-blockwise-input_dataset"></span><span class="sig-name descname"><span class="pre">-id</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_dataset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_dataset&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-id" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The name of the input dataset.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-oc">
 <span id="cmdoption-dacapo-run-blockwise-output_container"></span><span class="sig-name descname"><span class="pre">-oc</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_container</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_container&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-oc" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The path to the output container.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-od">
 <span id="cmdoption-dacapo-run-blockwise-output_dataset"></span><span class="sig-name descname"><span class="pre">-od</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_dataset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_dataset&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-od" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The name of the output dataset.</p>
 </dd></dl>
 
 <dl class="std option">
@@ -294,36 +403,67 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-nw">
 <span id="cmdoption-dacapo-run-blockwise-num_workers"></span><span class="sig-name descname"><span class="pre">-nw</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--num_workers</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;num_workers&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-nw" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The number of workers to use.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-mr">
 <span id="cmdoption-dacapo-run-blockwise-max_retries"></span><span class="sig-name descname"><span class="pre">-mr</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--max_retries</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;max_retries&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-mr" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The maximum number of retries.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-t">
 <span id="cmdoption-dacapo-run-blockwise-timeout"></span><span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--timeout</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;timeout&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-t" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The timeout in seconds.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-ow">
 <span id="cmdoption-dacapo-run-blockwise-overwrite"></span><span class="sig-name descname"><span class="pre">-ow</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--overwrite</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-ow" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Whether to overwrite existing output files.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-co">
 <span id="cmdoption-dacapo-run-blockwise-channels_out"></span><span class="sig-name descname"><span class="pre">-co</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">-channels_out</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;co&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-co" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The number of output channels.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-run-blockwise-dt">
 <span id="cmdoption-dacapo-run-blockwise-output_dtype"></span><span class="sig-name descname"><span class="pre">-dt</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_dtype</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_dtype&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-run-blockwise-dt" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The output data type.</p>
+</dd></dl>
 
 </section>
 <section id="dacapo-segment-blockwise">
 <h3>segment-blockwise<a class="headerlink" href="#dacapo-segment-blockwise" title="Link to this heading"></a></h3>
+<p>Segment the input dataset blockwise using a segment function file.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>input_container (str): The path to the input container.
+input_dataset (str): The name of the input dataset.
+output_container (str): The path to the output container.
+output_dataset (str): The name of the output dataset.
+segment_function_file (str): The path to the segment function file.
+total_roi (str): The total roi to be processed. Format is [start:end,start:end,…] in voxels. Defaults to the roi of the input dataset. Do not use spaces in CLI argument.
+read_roi_size (str): The size of the roi to be read for each block, in the format of [z,y,x] in voxels.
+write_roi_size (str): The size of the roi to be written for each block, in the format of [z,y,x] in voxels.
+context (str, optional): The context to be used, in the format of [z,y,x] in voxels. Defaults to the difference between the read and write rois.
+num_workers (int, optional): The number of workers to use. Defaults to 16.
+max_retries (int, optional): The maximum number of retries. Defaults to 2.
+timeout (int, optional): The timeout in seconds. Defaults to None.
+overwrite (bool, optional): Whether to overwrite existing output files. Defaults to True.
+channels_out (int, optional): The number of output channels. Defaults to None.</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If the run_name is not valid.</p>
+</dd>
+<dt>Examples:</dt><dd><p>To segment blockwise, run:
+<code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">dacapo</span> <span class="pre">segment-blockwise</span> <span class="pre">--input-container</span> <span class="pre">/path/to/input</span> <span class="pre">--input-dataset</span> <span class="pre">my_dataset</span> <span class="pre">--output-container</span> <span class="pre">/path/to/output</span> <span class="pre">--output-dataset</span> <span class="pre">my_output</span> <span class="pre">--segment-function-file</span> <span class="pre">/path/to/segment_function.py</span> <span class="pre">--total-roi</span> <span class="pre">[0:100,0:100,0:100]</span> <span class="pre">--read-roi-size</span> <span class="pre">[10,10,10]</span> <span class="pre">--write-roi-size</span> <span class="pre">[10,10,10]</span> <span class="pre">--num-workers</span> <span class="pre">16</span>
+<span class="pre">`</span></code></p>
+</dd>
+</dl>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>dacapo<span class="w"> </span>segment-blockwise<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
@@ -331,31 +471,31 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-ic">
 <span id="cmdoption-dacapo-segment-blockwise-input_container"></span><span class="sig-name descname"><span class="pre">-ic</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_container</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_container&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-ic" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The path to the input container.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-id">
 <span id="cmdoption-dacapo-segment-blockwise-input_dataset"></span><span class="sig-name descname"><span class="pre">-id</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--input_dataset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;input_dataset&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-id" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The name of the input dataset.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-oc">
 <span id="cmdoption-dacapo-segment-blockwise-output_container"></span><span class="sig-name descname"><span class="pre">-oc</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_container</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_container&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-oc" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The path to the output container.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-od">
 <span id="cmdoption-dacapo-segment-blockwise-output_dataset"></span><span class="sig-name descname"><span class="pre">-od</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output_dataset</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_dataset&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-od" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The name of the output dataset.</p>
 </dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-sf">
 <span id="cmdoption-dacapo-segment-blockwise-segment_function_file"></span><span class="sig-name descname"><span class="pre">-sf</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--segment_function_file</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;segment_function_file&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-sf" title="Link to this definition"></a></dt>
-<dd><p><strong>Required</strong></p>
+<dd><p><strong>Required</strong> The path to the segment function file.</p>
 </dd></dl>
 
 <dl class="std option">
@@ -385,27 +525,32 @@
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-nw">
 <span id="cmdoption-dacapo-segment-blockwise-num_workers"></span><span class="sig-name descname"><span class="pre">-nw</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--num_workers</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;num_workers&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-nw" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The number of workers to use.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-mr">
 <span id="cmdoption-dacapo-segment-blockwise-max_retries"></span><span class="sig-name descname"><span class="pre">-mr</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--max_retries</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;max_retries&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-mr" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The maximum number of retries.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-t">
 <span id="cmdoption-dacapo-segment-blockwise-timeout"></span><span class="sig-name descname"><span class="pre">-t</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--timeout</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;timeout&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-t" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The timeout in seconds.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-ow">
 <span id="cmdoption-dacapo-segment-blockwise-overwrite"></span><span class="sig-name descname"><span class="pre">-ow</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--overwrite</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-ow" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Whether to overwrite existing output files.</p>
+</dd></dl>
 
 <dl class="std option">
 <dt class="sig sig-object std" id="cmdoption-dacapo-segment-blockwise-co">
 <span id="cmdoption-dacapo-segment-blockwise-channels_out"></span><span class="sig-name descname"><span class="pre">-co</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--channels_out</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;channels_out&gt;</span></span><a class="headerlink" href="#cmdoption-dacapo-segment-blockwise-co" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The number of output channels.</p>
+</dd></dl>
 
 </section>
 <section id="dacapo-train">

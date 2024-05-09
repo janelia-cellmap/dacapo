@@ -22,7 +22,21 @@ Classes
 
 
 
-   This config class provides the necessary configuration for a DVID array
+   This config class provides the necessary configuration for a DVID array. It takes a source string and returns the DVIDArray object.
+
+   .. attribute:: source
+
+      The source strings
+
+      :type: Tuple[str, str, str]
+
+   .. method:: to_array
+
+      Returns the DVIDArray object
+
+   .. rubric:: Notes
+
+   The source must be a tuple of strings.
 
    .. py:attribute:: array_type
 
@@ -36,6 +50,21 @@ Classes
    .. py:method:: verify() -> Tuple[bool, str]
 
       Check whether this is a valid Array
+
+      :returns: Whether the Array is valid and a message
+      :rtype: Tuple[bool, str]
+
+      :raises ValueError: If the source is not a tuple of strings
+
+      .. rubric:: Examples
+
+      >>> dvid_array_config = DVIDArrayConfig(...)
+      >>> dvid_array_config.verify()
+      (True, "No validation for this Array")
+
+      .. rubric:: Notes
+
+      The source must be a tuple of strings.
 
 
 

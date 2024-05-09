@@ -22,49 +22,185 @@ Classes
 
 
 
-   This is just a dummy array for testing.
+   This is just a dummy array for testing. It has a shape of (100, 50, 50) and is filled with zeros.
+
+   .. attribute:: array_config
+
+      The config object for the array
+
+      :type: ArrayConfig
+
+   .. method:: __getitem__
+
+      Returns the intensities normalized to the range (0, 1)
+
+   .. rubric:: Notes
+
+   The array_config must be an ArrayConfig object.
+   The min and max values are used to normalize the intensities.
+   All intensities are converted to float32.
 
    .. py:property:: attrs
 
-      Return a dictionary of metadata attributes stored on this array.
+      Returns the attributes of the source array
+
+      :returns: The attributes of the source array
+      :rtype: dict
+
+      :raises ValueError: If the attributes is not a dictionary
+
+      .. rubric:: Examples
+
+      >>> intensities_array.attrs
+      {'resolution': (1.0, 1.0, 1.0), 'unit': 'micrometer'}
 
    .. py:property:: axes
 
-      Returns the axes of this dataset as a string of charactes, as they
-      are indexed. Permitted characters are:
+      Returns the axes of the source array
 
-          * ``zyx`` for spatial dimensions
-          * ``c`` for channels
-          * ``s`` for samples
+      :returns: The axes of the source array
+      :rtype: str
+
+      :raises ValueError: If the axes is not a string
+
+      .. rubric:: Examples
+
+      >>> intensities_array.axes
+      'zyx'
+
+      .. rubric:: Notes
+
+      The axes are the same as the source array
 
    .. py:property:: dims
 
-      Returns the number of spatial dimensions.
+      Returns the number of dimensions of the source array
+
+      :returns: The number of dimensions of the source array
+      :rtype: int
+
+      :raises ValueError: If the dims is not an integer
+
+      .. rubric:: Examples
+
+      >>> intensities_array.dims
+      3
+
+      .. rubric:: Notes
+
+      The dims are the same as the source array
 
    .. py:property:: voxel_size
 
-      The size of a voxel in physical units.
+      Returns the voxel size of the source array
+
+      :returns: The voxel size of the source array
+      :rtype: Coordinate
+
+      :raises ValueError: If the voxel size is not a Coordinate object
+
+      .. rubric:: Examples
+
+      >>> intensities_array.voxel_size
+      Coordinate(x=1.0, y=1.0, z=1.0)
+
+      .. rubric:: Notes
+
+      The voxel size is the same as the source array
 
    .. py:property:: roi
 
-      The total ROI of this array, in world units.
+      Returns the region of interest of the source array
+
+      :returns: The region of interest of the source array
+      :rtype: Roi
+
+      :raises ValueError: If the roi is not a Roi object
+
+      .. rubric:: Examples
+
+      >>> intensities_array.roi
+      Roi(offset=(0, 0, 0), shape=(100, 100, 100))
+
+      .. rubric:: Notes
+
+      The roi is the same as the source array
 
    .. py:property:: writable
       :type: bool
 
-      Can we write to this Array?
+      Returns whether the array is writable
+
+      :returns: Whether the array is writable
+      :rtype: bool
+
+      .. rubric:: Examples
+
+      >>> intensities_array.writable
+      True
+
+      .. rubric:: Notes
+
+      The array is always writable
 
    .. py:property:: data
 
-      Get a numpy like readable and writable view into this array.
+      Returns the data of the source array
+
+      :returns: The data of the source array
+      :rtype: np.ndarray
+
+      :raises ValueError: If the data is not a numpy array
+
+      .. rubric:: Examples
+
+      >>> intensities_array.data
+      array([[[0., 0., 0., ..., 0., 0., 0.],
+              [0., 0., 0., ..., 0., 0., 0.],
+              [0., 0., 0., ..., 0., 0., 0.],
+              ...,
+              [0., 0., 0., ..., 0., 0., 0.],
+              [0., 0., 0., ..., 0., 0., 0.],
+              [0., 0., 0., ..., 0., 0., 0.]],
+
+      .. rubric:: Notes
+
+      The data is the same as the source array
 
    .. py:property:: dtype
 
-      The dtype of this array, in numpy dtypes
+      Returns the data type of the array
+
+      :returns: The data type of the array
+      :rtype: type
+
+      :raises ValueError: If the data type is not a type
+
+      .. rubric:: Examples
+
+      >>> intensities_array.dtype
+      numpy.float32
+
+      .. rubric:: Notes
+
+      The data type is the same as the source array
 
    .. py:property:: num_channels
 
-      The number of channels provided by this dataset.
-      Should return None if the channel dimension doesn't exist.
+      Returns the number of channels in the source array
+
+      :returns: The number of channels in the source array
+      :rtype: int
+
+      :raises ValueError: If the number of channels is not an integer
+
+      .. rubric:: Examples
+
+      >>> intensities_array.num_channels
+      1
+
+      .. rubric:: Notes
+
+      The number of channels is the same as the source array
 
 

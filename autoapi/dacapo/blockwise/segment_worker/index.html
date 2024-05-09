@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -108,9 +109,9 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.segment_worker.cli" title="dacapo.blockwise.segment_worker.cli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cli</span></code></a>(log_level)</p></td>
-<td><p></p></td>
+<td><p>CLI for running the segment worker.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.segment_worker.start_worker" title="dacapo.blockwise.segment_worker.start_worker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_worker</span></code></a>(input_container, input_dataset, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.segment_worker.start_worker" title="dacapo.blockwise.segment_worker.start_worker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_worker</span></code></a>(input_container, input_dataset, ...[, ...])</p></td>
 <td><p>Start a worker to run a segment function on a given dataset.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.segment_worker.spawn_worker" title="dacapo.blockwise.segment_worker.spawn_worker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spawn_worker</span></code></a>(input_array_identifier, ...)</p></td>
@@ -145,7 +146,13 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.segment_worker.cli">
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.segment_worker.</span></span><span class="sig-name descname"><span class="pre">cli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.segment_worker.cli" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>CLI for running the segment worker.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>log_level</strong> (<em>str</em>) – The log level to use.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="dacapo.blockwise.segment_worker.fit">
@@ -164,7 +171,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.segment_worker.start_worker">
-<span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.segment_worker.</span></span><span class="sig-name descname"><span class="pre">start_worker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_container</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_container</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmpdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.segment_worker.start_worker" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.segment_worker.</span></span><span class="sig-name descname"><span class="pre">start_worker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_container</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_container</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmpdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_io_loop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.segment_worker.start_worker" title="Link to this definition"></a></dt>
 <dd><p>Start a worker to run a segment function on a given dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -175,6 +182,7 @@
 <li><p><strong>output_dataset</strong> (<em>str</em>) – The output dataset.</p></li>
 <li><p><strong>tmpdir</strong> (<em>str</em>) – The temporary directory.</p></li>
 <li><p><strong>function_path</strong> (<em>str</em>) – The path to the segment function.</p></li>
+<li><p><strong>return_io_loop</strong> (<em>bool</em>) – Whether to return the io loop or run it.</p></li>
 </ul>
 </dd>
 </dl>
@@ -191,6 +199,12 @@
 <li><p><strong>raw_array</strong> (<a class="reference internal" href="../../experiments/datasplits/datasets/arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><em>Array</em></a>) – The raw data to predict on.</p></li>
 <li><p><strong>prediction_array_identifier</strong> (<a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The identifier of the prediction array.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The function to run the worker.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Callable</p>
 </dd>
 </dl>
 </dd></dl>

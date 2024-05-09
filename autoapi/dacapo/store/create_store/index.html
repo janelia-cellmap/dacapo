@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -125,24 +126,110 @@
 <dt class="sig sig-object py" id="dacapo.store.create_store.create_config_store">
 <span class="sig-prename descclassname"><span class="pre">dacapo.store.create_store.</span></span><span class="sig-name descname"><span class="pre">create_config_store</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.create_store.create_config_store" title="Link to this definition"></a></dt>
 <dd><p>Create a config store based on the global DaCapo options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The created config store.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../config_store/index.html#dacapo.store.config_store.ConfigStore" title="dacapo.store.config_store.ConfigStore">ConfigStore</a></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the store type is not supported.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">create_config_store</span><span class="p">()</span>
+<span class="go">&lt;dacapo.store.file_config_store.FileConfigStore object at 0x7f2e4f8e9e80&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, only the FileConfigStore and MongoConfigStore are supported.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.store.create_store.create_stats_store">
 <span class="sig-prename descclassname"><span class="pre">dacapo.store.create_store.</span></span><span class="sig-name descname"><span class="pre">create_stats_store</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.create_store.create_stats_store" title="Link to this definition"></a></dt>
 <dd><p>Create a statistics store based on the global DaCapo options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<a class="reference internal" href="../../index.html#dacapo.Options" title="dacapo.Options"><em>Options</em></a>) – The global DaCapo options.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created statistics store.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../stats_store/index.html#dacapo.store.stats_store.StatsStore" title="dacapo.store.stats_store.StatsStore">StatsStore</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the store type is not supported.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">create_stats_store</span><span class="p">()</span>
+<span class="go">&lt;dacapo.store.file_stats_store.FileStatsStore object at 0x7f2e4f8e9e80&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, only the FileStatsStore and MongoStatsStore are supported.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.store.create_store.create_weights_store">
 <span class="sig-prename descclassname"><span class="pre">dacapo.store.create_store.</span></span><span class="sig-name descname"><span class="pre">create_weights_store</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.create_store.create_weights_store" title="Link to this definition"></a></dt>
 <dd><p>Create a weights store based on the global DaCapo options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<a class="reference internal" href="../../index.html#dacapo.Options" title="dacapo.Options"><em>Options</em></a>) – The global DaCapo options.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created weights store.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../weights_store/index.html#dacapo.store.weights_store.WeightsStore" title="dacapo.store.weights_store.WeightsStore">WeightsStore</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">create_weights_store</span><span class="p">()</span>
+<span class="go">&lt;dacapo.store.local_weights_store.LocalWeightsStore object at 0x7f2e4f8e9e80&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, only the LocalWeightsStore is supported.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.store.create_store.create_array_store">
 <span class="sig-prename descclassname"><span class="pre">dacapo.store.create_store.</span></span><span class="sig-name descname"><span class="pre">create_array_store</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.create_store.create_array_store" title="Link to this definition"></a></dt>
 <dd><p>Create an array store based on the global DaCapo options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<a class="reference internal" href="../../index.html#dacapo.Options" title="dacapo.Options"><em>Options</em></a>) – The global DaCapo options.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created array store.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.ArrayStore" title="dacapo.store.array_store.ArrayStore">ArrayStore</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the store type is not supported.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">create_array_store</span><span class="p">()</span>
+<span class="go">&lt;dacapo.store.local_array_store.LocalArrayStore object at 0x7f2e4f8e9e80&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, only the LocalArrayStore is supported.</p>
+</div>
 </dd></dl>
 
 </section>

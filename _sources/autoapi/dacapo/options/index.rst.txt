@@ -33,13 +33,51 @@ Attributes
 .. py:class:: DaCapoConfig
 
 
+   Configuration class for DaCapo.
+
+   .. attribute:: type
+
+      The type of store to use for storing configurations and statistics.
+
+      :type: str
+
+   .. attribute:: runs_base_dir
+
+      The path at DaCapo will use for reading and writing any necessary data.
+
+      :type: Path
+
+   .. attribute:: compute_context
+
+      The configuration for the compute context to use.
+
+      :type: dict
+
+   .. attribute:: mongo_db_host
+
+      The host of the MongoDB instance to use for storing configurations and statistics.
+
+      :type: Optional[str]
+
+   .. attribute:: mongo_db_name
+
+      The name of the MongoDB database to use for storing configurations and statistics.
+
+      :type: Optional[str]
+
+   .. method:: serialize
+
+      Serialize the DaCapoConfig object.
+      
+      
+
    .. py:attribute:: type
       :type: str
 
       
 
    .. py:attribute:: runs_base_dir
-      :type: pathlib.Path
+      :type: upath.UPath
 
       
 
@@ -60,17 +98,70 @@ Attributes
 
    .. py:method:: serialize()
 
+      Serialize the DaCapoConfig object.
+
+      :returns: The serialized representation of the DaCapoConfig object.
+      :rtype: dict
+
+      .. rubric:: Examples
+
+      >>> config = DaCapoConfig()
+      >>> config.serialize()
+      {'type': 'files', 'runs_base_dir': '/home/user/dacapo', 'compute_context': {'type': 'LocalTorch', 'config': {}}, 'mongo_db_host': None, 'mongo_db_name': None}
+
 
 
 .. py:class:: Options
 
 
+   A class that provides options for configuring DaCapo.
+
+   This class is designed as a singleton and should be accessed using the `instance` method.
+
+   .. method:: instance
+
+      Returns an instance of the Options class.
+
+   .. method:: config_file
+
+      Returns the path to the configuration file.
+
+   .. method:: __parse_options_from_file
+
+      Parses options from the configuration file.
+
+   .. method:: __parse_options
+
+      Parses options from the configuration file and updates them with the provided kwargs.
+      
+
    .. py:method:: instance(**kwargs) -> DaCapoConfig
       :classmethod:
 
+      Returns an instance of the Options class.
 
-   .. py:method:: config_file() -> Optional[pathlib.Path]
+      :param kwargs: Additional keyword arguments to update the options.
+
+      :returns: An instance of the DaCapoConfig class.
+
+      .. rubric:: Examples
+
+      >>> options = Options.instance()
+      >>> options
+      DaCapoConfig(type='files', runs_base_dir=PosixPath('/home/user/dacapo'), compute_context={'type': 'LocalTorch', 'config': {}}, mongo_db_host=None, mongo_db_name=None)
+
+
+   .. py:method:: config_file() -> Optional[upath.UPath]
       :classmethod:
+
+      Returns the path to the configuration file.
+
+      :returns: The path to the configuration file if found, otherwise None.
+
+      .. rubric:: Examples
+
+      >>> Options.config_file()
+      PosixPath('/home/user/.config/dacapo/dacapo.yaml')
 
 
 

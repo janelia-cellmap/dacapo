@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -108,19 +109,19 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.relabel_worker.cli" title="dacapo.blockwise.relabel_worker.cli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cli</span></code></a>(log_level)</p></td>
-<td><p></p></td>
+<td><p>CLI for running the relabel worker.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.relabel_worker.start_worker" title="dacapo.blockwise.relabel_worker.start_worker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_worker</span></code></a>(output_container, output_dataset, tmpdir, ...)</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.relabel_worker.start_worker" title="dacapo.blockwise.relabel_worker.start_worker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_worker</span></code></a>(output_container, output_dataset, tmpdir)</p></td>
+<td><p>Start the relabel worker.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.relabel_worker.relabel_in_block" title="dacapo.blockwise.relabel_worker.relabel_in_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relabel_in_block</span></code></a>(array_out, old_values, new_values, block)</p></td>
-<td><p></p></td>
+<td><p>Relabel the array in the given block.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.relabel_worker.find_components" title="dacapo.blockwise.relabel_worker.find_components"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_components</span></code></a>(nodes, edges)</p></td>
-<td><p></p></td>
+<td><p>Find the components.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.relabel_worker.read_cross_block_merges" title="dacapo.blockwise.relabel_worker.read_cross_block_merges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_cross_block_merges</span></code></a>(tmpdir)</p></td>
-<td><p></p></td>
+<td><p>Read the cross block merges.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.relabel_worker.spawn_worker" title="dacapo.blockwise.relabel_worker.spawn_worker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spawn_worker</span></code></a>(output_array_identifier, tmpdir, *args, ...)</p></td>
 <td><p>Spawn a worker to predict on a given dataset.</p></td>
@@ -146,7 +147,13 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.relabel_worker.cli">
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.relabel_worker.</span></span><span class="sig-name descname"><span class="pre">cli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.relabel_worker.cli" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>CLI for running the relabel worker.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>log_level</strong> (<em>str</em>) – The log level to use.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="dacapo.blockwise.relabel_worker.fit">
@@ -165,23 +172,71 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.relabel_worker.start_worker">
-<span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.relabel_worker.</span></span><span class="sig-name descname"><span class="pre">start_worker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_container</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmpdir</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.relabel_worker.start_worker" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.relabel_worker.</span></span><span class="sig-name descname"><span class="pre">start_worker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_container</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmpdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_io_loop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.relabel_worker.start_worker" title="Link to this definition"></a></dt>
+<dd><p>Start the relabel worker.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_container</strong> (<em>str</em>) – The output container</p></li>
+<li><p><strong>output_dataset</strong> (<em>str</em>) – The output dataset</p></li>
+<li><p><strong>tmpdir</strong> (<em>str</em>) – The temporary directory</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.relabel_worker.relabel_in_block">
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.relabel_worker.</span></span><span class="sig-name descname"><span class="pre">relabel_in_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.relabel_worker.relabel_in_block" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Relabel the array in the given block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array_out</strong> (<em>np.ndarray</em>) – The output array</p></li>
+<li><p><strong>old_values</strong> (<em>np.ndarray</em>) – The old values</p></li>
+<li><p><strong>new_values</strong> (<em>np.ndarray</em>) – The new values</p></li>
+<li><p><strong>block</strong> (<em>daisy.Block</em>) – The block</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.relabel_worker.find_components">
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.relabel_worker.</span></span><span class="sig-name descname"><span class="pre">find_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.relabel_worker.find_components" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Find the components.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nodes</strong> (<em>np.ndarray</em>) – The nodes</p></li>
+<li><p><strong>edges</strong> (<em>np.ndarray</em>) – The edges</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The components</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[int]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.relabel_worker.read_cross_block_merges">
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.relabel_worker.</span></span><span class="sig-name descname"><span class="pre">read_cross_block_merges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmpdir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.relabel_worker.read_cross_block_merges" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Read the cross block merges.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tmpdir</strong> (<em>str</em>) – The temporary directory</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The nodes and edges</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[np.ndarray, np.ndarray]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.blockwise.relabel_worker.spawn_worker">
@@ -193,6 +248,12 @@
 <li><p><strong>output_array_identifier</strong> (<a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The output array identifier</p></li>
 <li><p><strong>tmpdir</strong> (<em>str</em>) – The temporary directory</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The function to run the worker</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Callable</p>
 </dd>
 </dl>
 </dd></dl>

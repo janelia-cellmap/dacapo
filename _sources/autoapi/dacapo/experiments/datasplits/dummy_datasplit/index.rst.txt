@@ -22,27 +22,28 @@ Classes
 
 
 
-   A class for creating a simple train dataset and no validation dataset.
+   A class for creating a simple train dataset and no validation dataset. It is derived from `DataSplit` class.
+   It is used to split the data into training and validation datasets. The training and validation datasets are
+   used to train and validate the model respectively.
 
-   It is derived from `DataSplit` class.
-
-   ...
    .. attribute:: train
 
+      list
       The list containing training datasets. In this class, it contains only one dataset for training.
-
-      :type: list
 
    .. attribute:: validate
 
+      list
       The list containing validation datasets. In this class, it is an empty list as no validation dataset is set.
 
-      :type: list
+   .. method:: __init__(self, datasplit_config)
 
-   .. method:: __init__(self, datasplit_config):
-
+      
       The constructor for DummyDataSplit class. It initialises a list with training datasets according to the input configuration.
 
+   .. rubric:: Notes
+
+   This class is used to split the data into training and validation datasets.
 
    .. py:attribute:: train
       :type: List[dacapo.experiments.datasplits.datasets.Dataset]

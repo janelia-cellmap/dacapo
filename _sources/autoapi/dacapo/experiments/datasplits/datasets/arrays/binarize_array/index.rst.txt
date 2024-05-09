@@ -26,65 +26,227 @@ Classes
    Because we often want to predict classes that are a combination
    of a set of labels we wrap a ZarrArray with the BinarizeArray
    and provide something like `groupings=[("mito", [3,4,5])]`
-   where 4 corresponds to mito_membrane, 5 is mito_ribos, and
-   3 is everything else that is part of a mitochondria. The BinarizeArray
-   will simply combine labels 3,4,5 into a single binary channel for th
-   class of "mito".
+   where 4 corresponds to mito_mem (mitochondria membrane), 5 is mito_ribo
+   (mitochondria ribosomes), and 3 is everything else that is part of a
+   mitochondria. The BinarizeArray will simply combine labels 3,4,5 into
+   a single binary channel for the class of "mito".
+
    We use a single channel per class because some classes may overlap.
    For example if you had `groupings=[("mito", [3,4,5]), ("membrane", [4, 8, 1])]`
-   where 4 is mito_membrane, 8 is er_membrane, and 1 is plasma_membrane.
+   where 4 is mito_mem, 8 is er_mem (ER membrane), and 1 is pm (plasma membrane).
    Now you can have a binary classification for membrane or not which in
    some cases overlaps with the channel for mitochondria which includes
    the mito membrane.
 
+   .. attribute:: name
+
+      The name of the array.
+
+      :type: str
+
+   .. attribute:: source_array
+
+      The source array to binarize.
+
+      :type: Array
+
+   .. attribute:: background
+
+      The label to treat as background.
+
+      :type: int
+
+   .. attribute:: groupings
+
+      A list of tuples where the first
+      element is the name of the class and the second element is a list of
+      labels that should be combined into a single binary channel.
+
+      :type: List[Tuple[str, List[int]]]
+
+   .. method:: __init__(self, array_config)
+
+      This method initializes the BinarizeArray object.
+
+   .. method:: __attrs_post_init__(self)
+
+      This method is called after the instance has been initialized by the constructor. It is used to set the default_config to an instance of ArrayConfig if it is None.
+
+   .. method:: __getitem__(self, roi
+
+      Roi) -> np.ndarray: This method returns the binary channels for the given region of interest.
+
+   .. method:: _can_neuroglance(self)
+
+      This method returns True if the source array can be visualized in neuroglance.
+
+   .. method:: _neuroglancer_source(self)
+
+      This method returns the source array for neuroglancer.
+
+   .. method:: _neuroglancer_layer(self)
+
+      This method returns the neuroglancer layer for the source array.
+
+   .. method:: _source_name(self)
+
+      This method returns the name of the source array.
+
+   .. note:: This class is used to create a BinarizeArray object which is a wrapper around a ZarrArray containing uint annotations.
+
    .. py:property:: attrs
 
-      Return a dictionary of metadata attributes stored on this array.
+      This method returns the attributes of the source array.
+
+      :returns: The attributes of the source array.
+      :rtype: Dict
+
+      :raises ValueError: If the source array is not writable.
+
+      .. rubric:: Examples
+
+      >>> binarize_array.attrs
+
+      .. note:: This method is used to return the attributes of the source array.
 
    .. py:property:: axes
 
-      Returns the axes of this dataset as a string of charactes, as they
-      are indexed. Permitted characters are:
+      This method returns the axes of the source array.
 
-          * ``zyx`` for spatial dimensions
-          * ``c`` for channels
-          * ``s`` for samples
+      :returns: The axes of the source array.
+      :rtype: List[str]
+
+      :raises ValueError: If the source array is not writable.
+
+      .. rubric:: Examples
+
+      >>> binarize_array.axes
+
+      .. note:: This method is used to return the axes of the source array.
 
    .. py:property:: dims
       :type: int
 
-      Returns the number of spatial dimensions.
+      This method returns the dimensions of the source array.
+
+      :returns: The dimensions of the source array.
+      :rtype: int
+
+      :raises ValueError: If the source array is not writable.
+
+      .. rubric:: Examples
+
+      >>> binarize_array.dims
+
+      .. note:: This method is used to return the dimensions of the source array.
 
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
-      The size of a voxel in physical units.
+      This method returns the voxel size of the source array.
+
+      :returns: The voxel size of the source array.
+      :rtype: Coordinate
+
+      :raises ValueError: If the source array is not writable.
+
+      .. rubric:: Examples
+
+      >>> binarize_array.voxel_size
+
+      .. note:: This method is used to return the voxel size of the source array.
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
 
-      The total ROI of this array, in world units.
+      This method returns the region of interest of the source array.
+
+      :returns: The region of interest of the source array.
+      :rtype: Roi
+
+      :raises ValueError: If the source array is not writable.
+
+      .. rubric:: Examples
+
+      >>> binarize_array.roi
+
+      .. note:: This method is used to return the region of interest of the source array.
 
    .. py:property:: writable
       :type: bool
 
-      Can we write to this Array?
+      This method returns True if the source array is writable.
+
+      :returns: True if the source array is writable.
+      :rtype: bool
+
+      :raises ValueError: If the source array is not writable.
+
+      .. rubric:: Examples
+
+      >>> binarize_array.writable
+
+      .. note:: This method is used to return True if the source array is writable.
 
    .. py:property:: dtype
 
-      The dtype of this array, in numpy dtypes
+      This method returns the data type of the source array.
+
+      :returns: The data type of the source array.
+      :rtype: np.dtype
+
+      :raises ValueError: If the source array is not writable.
+
+      .. rubric:: Examples
+
+      >>> binarize_array.dtype
+
+      .. note:: This method is used to return the data type of the source array.
 
    .. py:property:: num_channels
       :type: int
 
-      The number of channels provided by this dataset.
-      Should return None if the channel dimension doesn't exist.
+      This method returns the number of channels in the source array.
+
+      :returns: The number of channels in the source array.
+      :rtype: int
+
+      :raises ValueError: If the source array is not writable.
+
+      .. rubric:: Examples
+
+      >>> binarize_array.num_channels
+
+      .. note:: This method is used to return the number of channels in the source array.
 
    .. py:property:: data
 
-      Get a numpy like readable and writable view into this array.
+      This method returns the data of the source array.
+
+      :returns: The data of the source array.
+      :rtype: np.ndarray
+
+      :raises ValueError: If the source array is not writable.
+
+      .. rubric:: Examples
+
+      >>> binarize_array.data
+
+      .. note:: This method is used to return the data of the source array.
 
    .. py:property:: channels
 
+      This method returns the channel names of the source array.
+
+      :returns: The channel names of the source array.
+      :rtype: Iterator[str]
+
+      :raises ValueError: If the source array is not writable.
+
+      .. rubric:: Examples
+
+      >>> binarize_array.channels
+
+      .. note:: This method is used to return the channel names of the source array.
 
 

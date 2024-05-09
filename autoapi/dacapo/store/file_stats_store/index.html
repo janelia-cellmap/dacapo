@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -108,7 +109,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.file_stats_store.FileStatsStore" title="dacapo.store.file_stats_store.FileStatsStore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FileStatsStore</span></code></a></p></td>
-<td><p>A File based store for run statistics. Used to store and retrieve training</p></td>
+<td><p>A File based store for run statistics. Used to store and retrieve training statistics and validation scores.</p></td>
 </tr>
 </tbody>
 </table>
@@ -130,36 +131,137 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.store.file_stats_store.FileStatsStore">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.file_stats_store.</span></span><span class="sig-name descname"><span class="pre">FileStatsStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.file_stats_store.FileStatsStore" title="Link to this definition"></a></dt>
-<dd><p>A File based store for run statistics. Used to store and retrieve training
-statistics and validation scores.</p>
+<dd><p>A File based store for run statistics. Used to store and retrieve training statistics and validation scores.</p>
+<p>The store is organized as follows:
+- A directory for training statistics, with a subdirectory for each run. Each run directory contains a pickled list of TrainingIterationStats objects.
+- A directory for validation scores, with a subdirectory for each run. Each run directory contains a pickled list of ValidationIterationScores objects.</p>
+<p>Attributes:
+- path: The root directory for the store.
+- training_stats: The directory for training statistics.
+- validation_scores: The directory for validation scores.</p>
+<p>Methods:
+- store_training_stats(run_name, stats): Store the training statistics for a run.
+- retrieve_training_stats(run_name): Retrieve the training statistics for a run.
+- store_validation_iteration_scores(run_name, scores): Store the validation scores for a run.
+- retrieve_validation_iteration_scores(run_name): Retrieve the validation scores for a run.
+- delete_training_stats(run_name): Delete the training statistics for a run.</p>
+<p>Note: The store does not support concurrent access. It is intended for use in single-threaded applications.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.file_stats_store.FileStatsStore.store_training_stats">
 <span class="sig-name descname"><span class="pre">store_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.file_stats_store.FileStatsStore.store_training_stats" title="Link to this definition"></a></dt>
-<dd><p>Store training stats of a given run.</p>
+<dd><p>Stores the training statistics for a specific run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_name</strong> (<em>str</em>) – The name of the run.</p></li>
+<li><p><strong>stats</strong> (<em>Stats</em>) – The training statistics to be stored.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the run name is invalid.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">store_training_stats</span><span class="p">(</span><span class="s2">&quot;run1&quot;</span><span class="p">,</span> <span class="n">stats</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If the training statistics for the given run already exist in the database, the method will compare the
+existing statistics with the new statistics and update or overwrite them accordingly.</p></li>
+<li><p>If the new statistics go further than the existing statistics, the method will update the statistics from
+the last stored iteration.</p></li>
+<li><p>If the new statistics are behind the existing statistics, the method will overwrite the existing statistics.</p></li>
+</ul>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.file_stats_store.FileStatsStore.retrieve_training_stats">
 <span class="sig-name descname"><span class="pre">retrieve_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.file_stats_store.FileStatsStore.retrieve_training_stats" title="Link to this definition"></a></dt>
-<dd><p>Retrieve the training stats for a given run.</p>
+<dd><p>Retrieve the training statistics for a specific run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run_name</strong> (<em>str</em>) – The name of the run for which to retrieve the training statistics.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the training statistics for the specified run.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.file_stats_store.FileStatsStore.store_validation_iteration_scores">
 <span class="sig-name descname"><span class="pre">store_validation_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.file_stats_store.FileStatsStore.store_validation_iteration_scores" title="Link to this definition"></a></dt>
-<dd><p>Store the validation iteration scores of a given run.</p>
+<dd><p>Stores the validation scores for a specific run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_name</strong> (<em>str</em>) – The name of the run.</p></li>
+<li><p><strong>scores</strong> (<em>Scores</em>) – The validation scores to be stored.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the run name is invalid.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">store_validation_iteration_scores</span><span class="p">(</span><span class="s2">&quot;run1&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If the validation scores for the given run already exist in the database, the method will compare the
+existing scores with the new scores and update or overwrite them accordingly.</p></li>
+<li><p>If the new scores go further than the existing scores, the method will update the scores from
+the last stored iteration.</p></li>
+<li><p>If the new scores are behind the existing scores, the method will overwrite the existing scores.</p></li>
+</ul>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.file_stats_store.FileStatsStore.retrieve_validation_iteration_scores">
 <span class="sig-name descname"><span class="pre">retrieve_validation_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.file_stats_store.FileStatsStore.retrieve_validation_iteration_scores" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the validation iteration scores for a given run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run_name</strong> (<em>str</em>) – The name of the run for which to retrieve the validation iteration scores.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of validation iteration scores.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the run name is invalid.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">retrieve_validation_iteration_scores</span><span class="p">(</span><span class="s2">&quot;run1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.file_stats_store.FileStatsStore.delete_training_stats">
 <span class="sig-name descname"><span class="pre">delete_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.file_stats_store.FileStatsStore.delete_training_stats" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Deletes the training stats for a specific run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run_name</strong> (<em>str</em>) – The name of the run for which to delete the training stats.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the run name is invalid.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">delete_training_stats</span><span class="p">(</span><span class="s2">&quot;run1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
 
 </dd></dl>
 

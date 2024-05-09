@@ -22,16 +22,55 @@ Classes
 
 
 
-   An IntensitiesArray is an Array of measured intensities.
+   An IntensitiesArray is an Array of measured intensities. Each voxel has a value in the range [min, max].
+
+   .. attribute:: channels
+
+      A mapping from channel to a name describing that channel.
+
+      :type: Dict[int, str]
+
+   .. attribute:: min
+
+      The minimum possible value of your intensities.
+
+      :type: float
+
+   .. attribute:: max
+
+      The maximum possible value of your intensities.
+
+      :type: float
+
+   .. method:: __attrs_post_init__(self)
+
+      This method is called after the instance has been initialized by the constructor.
+
+   .. method:: interpolatable(self) -> bool
+
+      It is a method that returns True.
+
+   .. note:: This class is used to create an IntensitiesArray object which is used to represent an array of measured intensities.
 
    .. py:property:: interpolatable
       :type: bool
 
-      This is an abstract method which should be overridden in each of the subclasses
-      to determine if an array is interpolatable or not.
+      Method to return True.
 
-      :returns: True if the array is interpolatable, False otherwise.
-      :rtype: bool
+      :returns:
+
+                bool
+                    Returns a boolean value of True representing that the values are interpolatable.
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> intensities_array = IntensitiesArray(channels={1: "channel1"}, min=0, max=1)
+      >>> intensities_array.interpolatable
+      True
+
+      .. note:: This method is used to check if the array is interpolatable.
 
    .. py:attribute:: channels
       :type: Dict[int, str]

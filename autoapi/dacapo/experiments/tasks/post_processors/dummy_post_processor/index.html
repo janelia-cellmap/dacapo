@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -110,32 +111,137 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor" title="dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyPostProcessor</span></code></a></p></td>
-<td><p>Base class of all post-processors.</p></td>
+<td><p>Dummy post-processor that stores some dummy data. The dummy data is a 10x10x10</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.dummy_post_processor.</span></span><span class="sig-name descname"><span class="pre">DummyPostProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">detection_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor" title="Link to this definition"></a></dt>
-<dd><p>Base class of all post-processors.</p>
-<p>A post-processor takes a model’s prediction and converts it into the final
-output (e.g., per-voxel class probabilities into a semantic segmentation).</p>
+<dd><p>Dummy post-processor that stores some dummy data. The dummy data is a 10x10x10
+array filled with the value of the min_size parameter. The min_size parameter
+is specified in the parameters of the post-processor. The post-processor has
+a detection threshold that is used to determine if an object is detected.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor.detection_threshold">
+<span class="sig-name descname"><span class="pre">detection_threshold</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor.detection_threshold" title="Link to this definition"></a></dt>
+<dd><p>The detection threshold.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor.enumerate_parameters">
-<span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../dummy_post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor.enumerate_parameters" title="Link to this definition"></a></dt>
-<dd><p>Enumerate all possible parameters of this post-processor. Should
-return instances of <code class="docutils literal notranslate"><span class="pre">PostProcessorParameters</span></code>.</p>
+<span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor.enumerate_parameters" title="Link to this definition"></a></dt>
+<dd><p>Enumerate all possible parameters of this post-processor.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor.set_prediction">
-<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction_array_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor.set_prediction" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor.set_prediction" title="Link to this definition"></a></dt>
+<dd><p>Set the prediction array identifier.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor.process">
-<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor.process" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.dummy_post_processor.DummyPostProcessor.process" title="Link to this definition"></a></dt>
 <dd><p>Convert predictions into the final output.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is abstract. Subclasses must implement the abstract methods. Once
+created, the values of its attributes cannot be changed.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">enumerate_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../dummy_post_processor_parameters/index.html#dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Enumerate all possible parameters of this post-processor. Should
+return instances of <code class="docutils literal notranslate"><span class="pre">PostProcessorParameters</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An iterable of <cite>PostProcessorParameters</cite> instances.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span> <span class="o">=</span> <span class="n">DummyPostProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">parameters</span> <span class="ow">in</span> <span class="n">post_processor</span><span class="o">.</span><span class="n">enumerate_parameters</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+<span class="go">DummyPostProcessorParameters(id=0, min_size=1)</span>
+<span class="go">DummyPostProcessorParameters(id=1, min_size=2)</span>
+<span class="go">DummyPostProcessorParameters(id=2, min_size=3)</span>
+<span class="go">DummyPostProcessorParameters(id=3, min_size=4)</span>
+<span class="go">DummyPostProcessorParameters(id=4, min_size=5)</span>
+<span class="go">DummyPostProcessorParameters(id=5, min_size=6)</span>
+<span class="go">DummyPostProcessorParameters(id=6, min_size=7)</span>
+<span class="go">DummyPostProcessorParameters(id=7, min_size=8)</span>
+<span class="go">DummyPostProcessorParameters(id=8, min_size=9)</span>
+<span class="go">DummyPostProcessorParameters(id=9, min_size=10)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should return an
+iterable of <cite>PostProcessorParameters</cite> instances.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">set_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction_array_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Set the prediction array identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prediction_array_identifier</strong> – The identifier of the array containing
+the model’s prediction.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span> <span class="o">=</span> <span class="n">DummyPostProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span><span class="o">.</span><span class="n">set_prediction</span><span class="p">(</span><span class="s2">&quot;prediction&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should set the
+<cite>prediction_array_identifier</cite> attribute.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Convert predictions into the final output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameters</strong> – The parameters of the post-processor.</p></li>
+<li><p><strong>output_array_identifier</strong> – The identifier of the output array.</p></li>
+<li><p><strong>num_workers</strong> – The number of workers to use.</p></li>
+<li><p><strong>chunk_size</strong> – The size of the chunks to process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output array.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span> <span class="o">=</span> <span class="n">DummyPostProcessor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">post_processor</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should process the
+predictions and store the output in the output array.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

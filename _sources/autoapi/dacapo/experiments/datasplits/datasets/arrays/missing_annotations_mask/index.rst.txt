@@ -32,54 +32,214 @@ Classes
    presence of labels in your ground truth.
    "https://github.com/janelia-cosem/fibsem-tools"
 
+   .. attribute:: array_config
+
+      A BinarizeArrayConfig object
+
+   .. method:: __getitem__(roi
+
+      Roi) -> np.ndarray: Returns a binary mask of the
+      annotations that are present but not annotated.
+
+   .. note::
+
+      This class is not meant to be used directly. It is used by the
+      BinarizeArray class to mask out annotations that are present but
+      not annotated.
+
    .. py:property:: axes
 
-      Returns the axes of this dataset as a string of charactes, as they
-      are indexed. Permitted characters are:
+      Returns the axes of the source array
 
-          * ``zyx`` for spatial dimensions
-          * ``c`` for channels
-          * ``s`` for samples
+      :returns: Axes of the source array
+      :rtype: list
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.axes
+      ['x', 'y', 'z']
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
 
    .. py:property:: dims
       :type: int
 
-      Returns the number of spatial dimensions.
+      Returns the number of dimensions of the source array
+
+      :returns: Number of dimensions of the source array
+      :rtype: int
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.dims
+      3
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
 
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
-      The size of a voxel in physical units.
+      Returns the voxel size of the source array
+
+      :returns: Voxel size of the source array
+      :rtype: Coordinate
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.voxel_size
+      Coordinate(x=4, y=4, z=40)
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
 
-      The total ROI of this array, in world units.
+      Returns the region of interest of the source array
+
+      :returns: Region of interest of the source array
+      :rtype: Roi
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.roi
+      Roi(offset=(0, 0, 0), shape=(100, 100, 100))
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
 
    .. py:property:: writable
       :type: bool
 
-      Can we write to this Array?
+      Returns whether the source array is writable
+
+      :returns: Whether the source array is writable
+      :rtype: bool
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.writable
+      False
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
 
    .. py:property:: dtype
 
-      The dtype of this array, in numpy dtypes
+      Returns the data type of the source array
+
+      :returns: Data type of the source array
+      :rtype: np.dtype
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.dtype
+      np.uint8
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
 
    .. py:property:: num_channels
       :type: int
 
-      The number of channels provided by this dataset.
-      Should return None if the channel dimension doesn't exist.
+      Returns the number of channels
+
+      :returns: Number of channels
+      :rtype: int
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.num_channels
+      2
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
 
    .. py:property:: data
 
-      Get a numpy like readable and writable view into this array.
+      Returns the data of the source array
+
+      :returns: Data of the source array
+      :rtype: np.ndarray
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.data
+      np.ndarray(...)
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
 
    .. py:property:: attrs
 
-      Return a dictionary of metadata attributes stored on this array.
+      Returns the attributes of the source array
+
+      :returns: Attributes of the source array
+      :rtype: dict
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.attrs
+      {'name': 'source_array', 'resolution': [4, 4, 40]}
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
 
    .. py:property:: channels
 
+      Returns the names of the channels
+
+      :returns: Names of the channels
+      :rtype: Generator[str]
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.channels
+      Generator['channel1', 'channel2', ...]
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
 
 

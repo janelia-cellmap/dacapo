@@ -36,10 +36,29 @@ Classes
 
       
 
+   .. attribute:: oom_limit
+
+      The out of GPU memory to leave free in GB. If the free memory is below
+
+      :type: Optional[float | int]
+
+   .. attribute:: this limit, we will fall back on CPU.
+
+      
+
+   .. method:: device()
+
+      Returns the torch device object.
+
+   .. note:: The class is a subclass of the ComputeContext class.
+
    .. py:property:: device
 
       A property method that returns the torch device object. It automatically detects and uses "cuda" (GPU) if
       available, else it falls back on using "cpu".
+
+      :returns: The torch device object.
+      :rtype: torch.device
 
    .. py:attribute:: oom_limit
       :type: Optional[float | int]

@@ -25,6 +25,20 @@ Classes
    This config class takes a source array and performs a logical or over the channels.
    Good for union multiple masks.
 
+   .. attribute:: source_array_config
+
+      The Array of masks from which to take the union
+
+      :type: ArrayConfig
+
+   .. method:: to_array
+
+      Returns the LogicalOrArray object
+
+   .. rubric:: Notes
+
+   The source_array_config must be an ArrayConfig object.
+
    .. py:attribute:: array_type
 
       

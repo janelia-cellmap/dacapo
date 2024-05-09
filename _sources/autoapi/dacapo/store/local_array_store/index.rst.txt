@@ -36,22 +36,108 @@ Attributes
 
    A local array store that uses zarr containers.
 
+   .. attribute:: basedir
+
+      The base directory where the store will write data.
+
+   .. method:: best_validation_array
+
+      Get the array identifier for the best validation array.
+
+   .. method:: validation_prediction_array
+
+      Get the array identifier for a particular validation prediction.
+
+   .. method:: validation_output_array
+
+      Get the array identifier for a particular validation output.
+
+   .. method:: validation_input_arrays
+
+      Get the array identifiers for the validation input raw/gt.
+
+   .. method:: snapshot_container
+
+      Get a container identifier for storage of a snapshot.
+
+   .. method:: validation_container
+
+      Get a container identifier for storage of a validation.
+
+   .. method:: remove
+
+      Remove a dataset from a container.
+      
+      
+
    .. py:method:: best_validation_array(run_name: str, criterion: str, index: Optional[str] = None) -> dacapo.store.array_store.LocalArrayIdentifier
+
+      Get the array identifier for the best validation array.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param criterion: The criterion for the validation array.
+      :type criterion: str
+      :param index: The index of the validation array. Defaults to None.
+      :type index: str, optional
+
+      :returns: The array identifier for the best validation array.
+      :rtype: LocalArrayIdentifier
+
+      :raises ValueError: If the container does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.best_validation_array("run1", "loss")
 
 
    .. py:method:: validation_prediction_array(run_name: str, iteration: int, dataset: str) -> dacapo.store.array_store.LocalArrayIdentifier
 
       Get the array identifier for a particular validation prediction.
 
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param iteration: The iteration of the validation prediction.
+      :type iteration: int
+      :param dataset: The dataset of the validation prediction.
+      :type dataset: str
+
+      :returns: The array identifier for the validation prediction.
+      :rtype: LocalArrayIdentifier
+
+      :raises ValueError: If the container does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.validation_prediction_array("run1", 0, "train")
+
 
    .. py:method:: validation_output_array(run_name: str, iteration: int, parameters: str, dataset: str) -> dacapo.store.array_store.LocalArrayIdentifier
 
       Get the array identifier for a particular validation output.
 
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param iteration: The iteration of the validation output.
+      :type iteration: int
+      :param parameters: The parameters of the validation output.
+      :type parameters: str
+      :param dataset: The dataset of the validation output.
+      :type dataset: str
+
+      :returns: The array identifier for the validation output.
+      :rtype: LocalArrayIdentifier
+
+      :raises ValueError: If the container does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.validation_output_array("run1", 0, "params1", "train")
+
 
    .. py:method:: validation_input_arrays(run_name: str, index: Optional[str] = None) -> Tuple[dacapo.store.array_store.LocalArrayIdentifier, dacapo.store.array_store.LocalArrayIdentifier]
 
-      Get an array identifiers for the validation input raw/gt.
+      Get the array identifiers for the validation input raw/gt.
 
       It would be nice to store raw/gt with the validation predictions/outputs.
       If we don't store these we would have to look up the datasplit config
@@ -59,20 +145,67 @@ Attributes
       the data then we don't need to search for it.
       This convenience comes at the cost of some extra memory usage.
 
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param index: The index of the validation input. Defaults to None.
+      :type index: str, optional
+
+      :returns: The array identifiers for the validation input raw/gt.
+      :rtype: Tuple[LocalArrayIdentifier, LocalArrayIdentifier]
+
+      :raises ValueError: If the container does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.validation_input_arrays("run1")
+
 
    .. py:method:: snapshot_container(run_name: str) -> dacapo.store.array_store.LocalContainerIdentifier
 
       Get a container identifier for storage of a snapshot.
 
+      :param run_name: The name of the run.
+      :type run_name: str
+
+      :returns: The container identifier for the snapshot.
+      :rtype: LocalContainerIdentifier
+
+      :raises ValueError: If the container does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.snapshot_container("run1")
+
 
    .. py:method:: validation_container(run_name: str) -> dacapo.store.array_store.LocalContainerIdentifier
 
-      Get a container identifier for storage of a snapshot.
+      Get a container identifier for storage of a validation.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+
+      :returns: The container identifier for the validation.
+      :rtype: LocalContainerIdentifier
+
+      :raises ValueError: If the container does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.validation_container("run1")
 
 
    .. py:method:: remove(array_identifier: dacapo.store.array_store.LocalArrayIdentifier) -> None
 
-      Remove an array by its identifier.
+      Remove a dataset from a container.
+
+      :param array_identifier: The array identifier of the dataset to remove.
+      :type array_identifier: LocalArrayIdentifier
+
+      :raises ValueError: If the container path does not end with '.zarr'.
+
+      .. rubric:: Examples
+
+      >>> store.remove(array_identifier)
 
 
 

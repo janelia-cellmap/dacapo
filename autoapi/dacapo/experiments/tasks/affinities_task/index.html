@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -109,14 +110,48 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.affinities_task.AffinitiesTask" title="dacapo.experiments.tasks.affinities_task.AffinitiesTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AffinitiesTask</span></code></a></p></td>
-<td><p>This is a task for generating voxel affinities.</p></td>
+<td><p>This is a task for generating voxel affinities. It uses an <cite>AffinitiesPredictor</cite> for prediction,</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task.AffinitiesTask">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.affinities_task.</span></span><span class="sig-name descname"><span class="pre">AffinitiesTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task.AffinitiesTask" title="Link to this definition"></a></dt>
-<dd><p>This is a task for generating voxel affinities.</p>
+<dd><p>This is a task for generating voxel affinities. It uses an <cite>AffinitiesPredictor</cite> for prediction,
+an <cite>AffinitiesLoss</cite> for loss calculation, a <cite>WatershedPostProcessor</cite> for post-processing, and an
+<cite>InstanceEvaluator</cite> for evaluation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task.AffinitiesTask.predictor">
+<span class="sig-name descname"><span class="pre">predictor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task.AffinitiesTask.predictor" title="Link to this definition"></a></dt>
+<dd><p>AffinitiesPredictor object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task.AffinitiesTask.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task.AffinitiesTask.loss" title="Link to this definition"></a></dt>
+<dd><p>AffinitiesLoss object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task.AffinitiesTask.post_processor">
+<span class="sig-name descname"><span class="pre">post_processor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task.AffinitiesTask.post_processor" title="Link to this definition"></a></dt>
+<dd><p>WatershedPostProcessor object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task.AffinitiesTask.evaluator">
+<span class="sig-name descname"><span class="pre">evaluator</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task.AffinitiesTask.evaluator" title="Link to this definition"></a></dt>
+<dd><p>InstanceEvaluator object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task.AffinitiesTask.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task.AffinitiesTask.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes all components for the affinities task.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This is a subclass of Task.</p>
 </dd></dl>
 
 </section>

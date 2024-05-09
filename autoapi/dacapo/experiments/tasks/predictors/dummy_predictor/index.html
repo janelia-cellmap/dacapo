@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -110,52 +111,153 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor" title="dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyPredictor</span></code></a></p></td>
-<td><p>Helper class that provides a standard way to create an ABC using</p></td>
+<td><p>A dummy predictor class that inherits from the base Predictor class.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.predictors.dummy_predictor.</span></span><span class="sig-name descname"><span class="pre">DummyPredictor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embedding_dims</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor" title="Link to this definition"></a></dt>
-<dd><p>Helper class that provides a standard way to create an ABC using
-inheritance.</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.output_array_type">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">output_array_type</span></span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.output_array_type" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>A dummy predictor class that inherits from the base Predictor class.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.embedding_dims">
+<span class="sig-name descname"><span class="pre">embedding_dims</span></span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.embedding_dims" title="Link to this definition"></a></dt>
+<dd><p>The number of embedding dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__(self,</span> <span class="pre">embedding_dims</span></span></dt>
+<dd><p>int): Initializes a new instance of the DummyPredictor class.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.create_model">
-<span class="sig-name descname"><span class="pre">create_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.create_model" title="Link to this definition"></a></dt>
-<dd><p>Given a training architecture, create a model for this predictor.
-This is usually done by appending extra layers to the output of the
-architecture to get the output tensor of the architecture into the
-right shape for this predictor.</p>
+<span class="sig-name descname"><span class="pre">create_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">architecture</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.create_model" title="Link to this definition"></a></dt>
+<dd><p>Creates a model using the given architecture.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.create_target">
-<span class="sig-name descname"><span class="pre">create_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.create_target" title="Link to this definition"></a></dt>
-<dd><p>Create the target array for training, given a ground-truth array.</p>
-<p>In general, the target is different from the ground-truth.</p>
-<p>The target is the array that is passed to the loss, and hence directly
-compared to the prediction (i.e., the output of the model). Depending
-on the predictor, the target can therefore be different from the
-ground-truth (e.g., an instance segmentation ground-truth would have to
-be converted into boundaries, if the model is predicting boundaries).</p>
-<p>By default, it is assumed that the spatial dimensions of ground-truth
-and target are the same.</p>
-<p>If your predictor needs more ground-truth context to create a target
-(e.g., because it predicts the distance to a boundary, up to a certain
-threshold), you can request a larger ground-truth region. See method
-<code class="docutils literal notranslate"><span class="pre">gt_region_for_roi</span></code>.</p>
+<span class="sig-name descname"><span class="pre">create_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.create_target" title="Link to this definition"></a></dt>
+<dd><p>Creates a target based on the ground truth.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.create_weight">
-<span class="sig-name descname"><span class="pre">create_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moving_class_counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.create_weight" title="Link to this definition"></a></dt>
-<dd><p>Create the weight array for training, given a ground-truth and
-associated target array.</p>
+<span class="sig-name descname"><span class="pre">create_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moving_class_counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.create_weight" title="Link to this definition"></a></dt>
+<dd><p>Creates a weight based on the ground truth, target, and mask.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.output_array_type">
+<span class="sig-name descname"><span class="pre">output_array_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.dummy_predictor.DummyPredictor.output_array_type" title="Link to this definition"></a></dt>
+<dd><p>Gets the output array type.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This is a subclass of Predictor.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">output_array_type</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Gets the output array type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The output array type.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../../../arraytypes/embedding/index.html#dacapo.experiments.arraytypes.embedding.EmbeddingArray" title="dacapo.experiments.arraytypes.embedding.EmbeddingArray">EmbeddingArray</a></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method is not implemented.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predictor</span><span class="o">.</span><span class="n">output_array_type</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">create_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Creates a model using the given architecture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>architecture</strong> – The architecture to use for creating the model.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../../index.html#dacapo.experiments.Model" title="dacapo.experiments.Model">Model</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – This method is not implemented.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">predictor</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="n">architecture</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">create_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Creates a target based on the ground truth.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>gt</strong> – The ground truth.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created target.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray">NumpyArray</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – This method is not implemented.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predictor</span><span class="o">.</span><span class="n">create_target</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">create_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moving_class_counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd><p>Creates a weight based on the ground truth, target, and mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gt</strong> – The ground truth.</p></li>
+<li><p><strong>target</strong> – The target.</p></li>
+<li><p><strong>mask</strong> – The mask.</p></li>
+<li><p><strong>moving_class_counts</strong> – The moving class counts.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created weight and None.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[<a class="reference internal" href="../../../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray">NumpyArray</a>, None]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – This method is not implemented.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predictor</span><span class="o">.</span><span class="n">create_weight</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">moving_class_counts</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>

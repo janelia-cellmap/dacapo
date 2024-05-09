@@ -48,6 +48,12 @@ Classes
 
       :type: int
 
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method is used to check whether this is a valid architecture configuration.
+
+   .. note:: This class is used to represent a DummyArchitectureConfig object in the system.
+
    .. py:attribute:: architecture_type
 
       
@@ -71,6 +77,16 @@ Classes
 
       :returns: A tuple containing a boolean validity flag and a reason message string.
       :rtype: tuple
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> dummy_architecture_config = DummyArchitectureConfig(num_in_channels=1, num_out_channels=1)
+      >>> dummy_architecture_config.verify()
+      (False, "This is a DummyArchitectureConfig and is never valid")
+
+      .. note:: This method is used to check whether this is a valid architecture configuration.
 
 
 

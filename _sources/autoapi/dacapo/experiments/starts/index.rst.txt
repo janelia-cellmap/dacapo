@@ -42,45 +42,95 @@ Classes
 
    .. attribute:: run
 
+      str
       The specified run to retrieve weights for the model.
-
-      :type: str
 
    .. attribute:: criterion
 
+      str
       The policy that was used to decide when to store the weights.
 
-      :type: str
+   .. attribute:: channels
+
+      int
+      The number of channels in the input data.
+
+   .. method:: __init__(start_config)
+
+      
+      Initializes the Start class with specified config to run the
+      initialization of weights for a model associated with a specific
+      criterion.
+
+   .. method:: initialize_weights(model, new_head=None)
+
+      
+      Retrieves the weights from the dacapo store and load them into
+      the model.
+
+   .. rubric:: Notes
+
+   This class is used to retrieve and load the weights of the starter
+   model used for finetuning from the dacapo store.
 
    .. py:method:: initialize_weights(model, new_head=None)
 
       Retrieves the weights from the dacapo store and load them into
       the model.
-      :param model: The model to which the weights are to be loaded.
-      :type model: obj
+
+      :param model: obj
+                    The model to which the weights are to be loaded.
+      :param new_head: list
+                       The labels of the new head.
+
+      :returns:
+
+                obj
+                    The model with the weights loaded from the dacapo store.
+      :rtype: model
 
       :raises RuntimeError: If weights of a non-existing or mismatched layer are being
           loaded, a RuntimeError exception is thrown which is logged
           and handled by loading only the common layers from weights.
+
+      .. rubric:: Examples
+
+      >>> model = start.initialize_weights(model, new_head)
+
+      .. rubric:: Notes
+
+      This function is called by the Start class to retrieve the weights
+      from the dacapo store and load them into the model.
 
 
 
 .. py:class:: StartConfig
 
 
-   A class to represent the configuration for running tasks.
+   A class to represent the configuration for running tasks. This class
+   interfaces with the dacapo store to retrieve and load the weights of the
+   starter model used for finetuning.
 
    .. attribute:: run
 
+      str
       The run to be used as a starting point for tasks.
-
-      :type: str
 
    .. attribute:: criterion
 
+      str
       The criterion to be used for choosing weights from run.
 
-      :type: str
+   .. method:: __init__(start_config)
+
+      
+      Initializes the StartConfig class with specified config to run the
+      initialization of weights for a model associated with a specific
+      criterion.
+
+   .. rubric:: Notes
+
+   This class is used to represent the configuration for running tasks.
 
    .. py:attribute:: start_type
 
@@ -102,34 +152,99 @@ Classes
 
 
 
-   This class interfaces with the dacapo store to retrieve and load the
-   weights of the starter model used for finetuning.
+   A class to represent the starting point for tasks. This class inherits
+   from the Start class and is used to load the weights of the starter model
+   used for finetuning. The weights are loaded from the dacapo store for the
+   specified run and criterion.
 
    .. attribute:: run
 
-      The specified run to retrieve weights for the model.
-
-      :type: str
+      str
+      The run to be used as a starting point for tasks.
 
    .. attribute:: criterion
 
-      The policy that was used to decide when to store the weights.
+      str
+      The criterion to be used for choosing weights from run.
 
-      :type: str
+   .. attribute:: name
+
+      str
+      The name of the run and criterion.
+
+   .. attribute:: channels
+
+      list
+      The classes_channels of the model.
+
+   .. method:: __init__(start_config)
+
+      
+      Initializes the CosemStart class with specified config to run the
+      initialization of weights for a model associated with a specific
+      criterion.
+
+   .. method:: check()
+
+      
+      Checks if the checkpoint for the specified run and criterion exists.
+
+   .. method:: initialize_weights(model, new_head=None)
+
+      
+      Retrieves the weights from the dacapo store and load them into
+      the model.
+
+   .. rubric:: Notes
+
+   This class is used to represent the starting point for tasks. The weights
+   of the starter model used for finetuning are loaded from the dacapo store.
 
    .. py:method:: check()
+
+      Checks if the checkpoint for the specified run and criterion exists.
+
+      :raises Exception: If the checkpoint does not exist, an Exception is thrown which
+          is logged and handled by training the model without head matching.
+
+      .. rubric:: Examples
+
+      >>> check()
+
+      .. rubric:: Notes
+
+      This function is called by the CosemStart class to check if the
+      checkpoint for the specified run and criterion exists.
 
 
    .. py:method:: initialize_weights(model, new_head=None)
 
       Retrieves the weights from the dacapo store and load them into
       the model.
-      :param model: The model to which the weights are to be loaded.
-      :type model: obj
+
+      :param model: obj
+                    The model to which the weights are to be loaded.
+      :param new_head: list
+                       The labels of the new head.
+
+      :returns:
+
+                obj
+                    The model with the weights loaded from the dacapo store.
+      :rtype: model
 
       :raises RuntimeError: If weights of a non-existing or mismatched layer are being
           loaded, a RuntimeError exception is thrown which is logged
           and handled by loading only the common layers from weights.
+
+      .. rubric:: Examples
+
+      >>> model = initialize_weights(model, new_head)
+
+      .. rubric:: Notes
+
+      This function is called by the CosemStart class to retrieve the weights
+      from the dacapo store and load them into the model.
 
 
 
@@ -141,6 +256,35 @@ Classes
    Starter for COSEM pretained models. This is a subclass of `StartConfig` and
    should be used to initialize the model with pretrained weights from a previous
    run.
+
+   The weights are loaded from the dacapo store for the specified run. The
+   configuration is used to initialize the weights for the model associated with
+   a specific criterion.
+
+   .. attribute:: run
+
+      str
+      The run to be used as a starting point for tasks.
+
+   .. attribute:: criterion
+
+      str
+      The criterion to be used for choosing weights from run.
+
+   .. method:: __init__(start_config)
+
+      
+      Initializes the CosemStartConfig class with specified config to run the
+      initialization of weights for a model associated with a specific
+      criterion.
+
+   .. rubric:: Examples
+
+   >>> start_config = CosemStartConfig(run="run_1", criterion="best")
+
+   .. rubric:: Notes
+
+   This class is used to represent the configuration for running tasks.
 
    .. py:attribute:: start_type
 

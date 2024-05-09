@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -110,13 +111,13 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinarySegmentationEvaluator</span></code></a></p></td>
-<td><p>Given a binary segmentation, compute various metrics to determine their similarity.</p></td>
+<td><p>Given a binary segmentation, compute various metrics to determine their similarity. The metrics include:</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArrayEvaluator</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Given a binary segmentation, compute various metrics to determine their similarity. The metrics include:</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CremiEvaluator</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Evaluate the performance of a binary segmentation task using the CREMI score.</p></td>
 </tr>
 </tbody>
 </table>
@@ -146,35 +147,145 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.</span></span><span class="sig-name descname"><span class="pre">BinarySegmentationEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clip_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator" title="Link to this definition"></a></dt>
-<dd><p>Given a binary segmentation, compute various metrics to determine their similarity.</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.score">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.score" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Given a binary segmentation, compute various metrics to determine their similarity. The metrics include:
+- Dice coefficient: 2 * <a href="#id40"><span class="problematic" id="id41">|A ∩ B|</span></a> / <a href="#id42"><span class="problematic" id="id43">|A|</span></a> + <a href="#id44"><span class="problematic" id="id45">|B|</span></a> ; where A and B are the binary segmentations
+- Jaccard coefficient: <a href="#id46"><span class="problematic" id="id47">|A ∩ B|</span></a> / <a href="#id48"><span class="problematic" id="id49">|A ∪ B|</span></a> ; where A and B are the binary segmentations
+- Hausdorff distance: max(h(A, B), h(B, A)) ; where h(A, B) is the Hausdorff distance between A and B
+- False negative rate: <a href="#id50"><span class="problematic" id="id51">|A - B|</span></a> / <a href="#id52"><span class="problematic" id="id53">|A|</span></a> ; where A and B are the binary segmentations
+- False positive rate: <a href="#id54"><span class="problematic" id="id55">|B - A|</span></a> / <a href="#id56"><span class="problematic" id="id57">|B|</span></a> ; where A and B are the binary segmentations
+- False discovery rate: <a href="#id58"><span class="problematic" id="id59">|B - A|</span></a> / <a href="#id60"><span class="problematic" id="id61">|A|</span></a> ; where A and B are the binary segmentations
+- VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality
+- Mean false distance: 0.5 * (mean false positive distance + mean false negative distance)
+- Mean false negative distance: mean distance of false negatives
+- Mean false positive distance: mean distance of false positives
+- Mean false distance clipped: 0.5 * (mean false positive distance clipped + mean false negative distance clipped) ; clipped to a maximum distance
+- Mean false negative distance clipped: mean distance of false negatives clipped ; clipped to a maximum distance
+- Mean false positive distance clipped: mean distance of false positives clipped ; clipped to a maximum distance
+- Precision with tolerance: TP / (TP + FP) ; where TP and FP are the true and false positives within a tolerance distance
+- Recall with tolerance: TP / (TP + FN) ; where TP and FN are the true and false positives within a tolerance distance
+- F1 score with tolerance: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives within a tolerance distance
+- Precision: TP / (TP + FP) ; where TP and FP are the true and false positives
+- Recall: TP / (TP + FN) ; where TP and FN are the true and false positives
+- F1 score: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.clip_distance">
+<span class="sig-name descname"><span class="pre">clip_distance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.clip_distance" title="Link to this definition"></a></dt>
+<dd><p>float
+the clip distance</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.tol_distance">
+<span class="sig-name descname"><span class="pre">tol_distance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.tol_distance" title="Link to this definition"></a></dt>
+<dd><p>float
+the tolerance distance</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.channels" title="Link to this definition"></a></dt>
+<dd><p>List[str]
+the channels</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.criteria">
-<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['jaccard',</span> <span class="pre">'voi']</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.criteria" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">criteria</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.criteria" title="Link to this definition"></a></dt>
+<dd><p>List[str]
+the evaluation criteria</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.evaluate">
 <span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.evaluate" title="Link to this definition"></a></dt>
-<dd><p>Compares and evaluates the output array against the evaluation array.</p>
+<dd><p>Evaluate the output array against the evaluation array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator.score" title="Link to this definition"></a></dt>
+<dd><p>Return the evaluation scores.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The BinarySegmentationEvaluator class is used to evaluate the performance of a binary segmentation task.
+The class provides methods to evaluate the output array against the evaluation array and return the evaluation scores.
+All evaluation scores should inherit from this class.</p>
+<p>Clip distance is the maximum distance between the ground truth and the predicted segmentation for a pixel to be considered a false positive.
+Tolerance distance is the maximum distance between the ground truth and the predicted segmentation for a pixel to be considered a true positive.
+Channels are the channels of the binary segmentation.
+Criteria are the evaluation criteria.</p>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Return the evaluation scores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>BinarySegmentationEvaluationScores or MultiChannelBinarySegmentationEvaluationScores</dt><dd><p>the evaluation scores</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – if the function is not implemented</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binary_segmentation_evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">(</span><span class="n">clip_distance</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">tol_distance</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;channel1&quot;</span><span class="p">,</span> <span class="s2">&quot;channel2&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">binary_segmentation_evaluator</span><span class="o">.</span><span class="n">score</span>
+<span class="go">BinarySegmentationEvaluationScores(dice=0.0, jaccard=0.0, hausdorff=0.0, false_negative_rate=0.0, false_positive_rate=0.0, false_discovery_rate=0.0, voi=0.0, mean_false_distance=0.0, mean_false_negative_distance=0.0, mean_false_positive_distance=0.0, mean_false_distance_clipped=0.0, mean_false_negative_distance_clipped=0.0, mean_false_positive_distance_clipped=0.0, precision_with_tolerance=0.0, recall_with_tolerance=0.0, f1_score_with_tolerance=0.0, precision=0.0, recall=0.0, f1_score=0.0)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to return the evaluation scores.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['jaccard',</span> <span class="pre">'voi']</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the output array against the evaluation array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>output_array_identifier</strong> (<a class="reference internal" href="../../../datasplits/datasets/arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><em>Array</em></a>) – The output data array to evaluate</p></li>
-<li><p><strong>evaluation_array</strong> (<a class="reference internal" href="../../../datasplits/datasets/arrays/array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><em>Array</em></a>) – The evaluation data array to compare with the output</p></li>
+<li><p><strong>output_array_identifier</strong> – str
+the identifier of the output array</p></li>
+<li><p><strong>evaluation_array</strong> – ZarrArray
+the evaluation array</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The detailed evaluation scores after the comparison.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores" title="dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores">EvaluationScores</a></p>
+<dd class="field-even"><p><dl class="simple">
+<dt>BinarySegmentationEvaluationScores or MultiChannelBinarySegmentationEvaluationScores</dt><dd><p>the evaluation scores</p>
 </dd>
 </dl>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if the output array identifier is not valid</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binary_segmentation_evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">(</span><span class="n">clip_distance</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">tol_distance</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;channel1&quot;</span><span class="p">,</span> <span class="s2">&quot;channel2&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output_array_identifier</span> <span class="o">=</span> <span class="s2">&quot;output_array&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="o">.</span><span class="n">open_from_array_identifier</span><span class="p">(</span><span class="s2">&quot;evaluation_array&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">binary_segmentation_evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">output_array_identifier</span><span class="p">,</span> <span class="n">evaluation_array</span><span class="p">)</span>
+<span class="go">BinarySegmentationEvaluationScores(dice=0.0, jaccard=0.0, hausdorff=0.0, false_negative_rate=0.0, false_positive_rate=0.0, false_discovery_rate=0.0, voi=0.0, mean_false_distance=0.0, mean_false_negative_distance=0.0, mean_false_positive_distance=0.0, mean_false_distance_clipped=0.0, mean_false_negative_distance_clipped=0.0, mean_false_positive_distance_clipped=0.0, precision_with_tolerance=0.0, recall_with_tolerance=0.0, f1_score_with_tolerance=0.0, precision=0.0, recall=0.0, f1_score=0.0)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to evaluate the output array against the evaluation array.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -182,230 +293,1826 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.</span></span><span class="sig-name descname"><span class="pre">ArrayEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">truth_binary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_binary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truth_empty</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_empty</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator" title="Link to this definition"></a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.truth_itk">
-<span class="sig-name descname"><span class="pre">truth_itk</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.truth_itk" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Given a binary segmentation, compute various metrics to determine their similarity. The metrics include:
+- Dice coefficient: 2 * <a href="#id62"><span class="problematic" id="id63">|A ∩ B|</span></a> / <a href="#id64"><span class="problematic" id="id65">|A|</span></a> + <a href="#id66"><span class="problematic" id="id67">|B|</span></a> ; where A and B are the binary segmentations
+- Jaccard coefficient: <a href="#id68"><span class="problematic" id="id69">|A ∩ B|</span></a> / <a href="#id70"><span class="problematic" id="id71">|A ∪ B|</span></a> ; where A and B are the binary segmentations
+- Hausdorff distance: max(h(A, B), h(B, A)) ; where h(A, B) is the Hausdorff distance between A and B
+- False negative rate: <a href="#id72"><span class="problematic" id="id73">|A - B|</span></a> / <a href="#id74"><span class="problematic" id="id75">|A|</span></a> ; where A and B are the binary segmentations
+- False positive rate: <a href="#id76"><span class="problematic" id="id77">|B - A|</span></a> / <a href="#id78"><span class="problematic" id="id79">|B|</span></a> ; where A and B are the binary segmentations
+- False discovery rate: <a href="#id80"><span class="problematic" id="id81">|B - A|</span></a> / <a href="#id82"><span class="problematic" id="id83">|A|</span></a> ; where A and B are the binary segmentations
+- VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality
+- Mean false distance: 0.5 * (mean false positive distance + mean false negative distance)
+- Mean false negative distance: mean distance of false negatives
+- Mean false positive distance: mean distance of false positives
+- Mean false distance clipped: 0.5 * (mean false positive distance clipped + mean false negative distance clipped) ; clipped to a maximum distance
+- Mean false negative distance clipped: mean distance of false negatives clipped ; clipped to a maximum distance
+- Mean false positive distance clipped: mean distance of false positives clipped ; clipped to a maximum distance
+- Precision with tolerance: TP / (TP + FP) ; where TP and FP are the true and false positives within a tolerance distance
+- Recall with tolerance: TP / (TP + FN) ; where TP and FN are the true and false positives within a tolerance distance
+- F1 score with tolerance: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives within a tolerance distance
+- Precision: TP / (TP + FP) ; where TP and FP are the true and false positives
+- Recall: TP / (TP + FN) ; where TP and FN are the true and false positives
+- F1 score: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.truth">
+<span class="sig-name descname"><span class="pre">truth</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.truth" title="Link to this definition"></a></dt>
+<dd><p>np.ndarray
+the truth binary segmentation</p>
+</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.test_itk">
-<span class="sig-name descname"><span class="pre">test_itk</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.test_itk" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.test">
+<span class="sig-name descname"><span class="pre">test</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.test" title="Link to this definition"></a></dt>
+<dd><p>np.ndarray
+the test binary segmentation</p>
+</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.overlap_measures_filter">
-<span class="sig-name descname"><span class="pre">overlap_measures_filter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.overlap_measures_filter" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.truth_empty">
+<span class="sig-name descname"><span class="pre">truth_empty</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.truth_empty" title="Link to this definition"></a></dt>
+<dd><p>bool
+whether the truth binary segmentation is empty</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.test_empty">
+<span class="sig-name descname"><span class="pre">test_empty</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.test_empty" title="Link to this definition"></a></dt>
+<dd><p>bool
+whether the test binary segmentation is empty</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.cremieval">
+<span class="sig-name descname"><span class="pre">cremieval</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.cremieval" title="Link to this definition"></a></dt>
+<dd><p>CremiEvaluator
+the cremi evaluator</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.resolution">
+<span class="sig-name descname"><span class="pre">resolution</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.resolution" title="Link to this definition"></a></dt>
+<dd><p>Tuple[float, float, float]
+the resolution</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.dice">
 <span class="sig-name descname"><span class="pre">dice</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.dice" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the Dice coefficient.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.jaccard">
 <span class="sig-name descname"><span class="pre">jaccard</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.jaccard" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the Jaccard coefficient.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.hausdorff">
 <span class="sig-name descname"><span class="pre">hausdorff</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.hausdorff" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the Hausdorff distance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_negative_rate">
 <span class="sig-name descname"><span class="pre">false_negative_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_negative_rate" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the false negative rate.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_positive_rate">
 <span class="sig-name descname"><span class="pre">false_positive_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_positive_rate" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the false positive rate.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_discovery_rate">
 <span class="sig-name descname"><span class="pre">false_discovery_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_discovery_rate" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the false discovery rate.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.precision">
 <span class="sig-name descname"><span class="pre">precision</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.precision" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the precision.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.recall">
 <span class="sig-name descname"><span class="pre">recall</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.recall" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the recall.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.f1_score">
 <span class="sig-name descname"><span class="pre">f1_score</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.f1_score" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the F1 score.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.voi">
 <span class="sig-name descname"><span class="pre">voi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.voi" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the VOI.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_distance">
 <span class="sig-name descname"><span class="pre">mean_false_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_distance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the mean false distance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_negative_distance">
 <span class="sig-name descname"><span class="pre">mean_false_negative_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_negative_distance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the mean false negative distance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_positive_distance">
 <span class="sig-name descname"><span class="pre">mean_false_positive_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_positive_distance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the mean false positive distance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_distance_clipped">
 <span class="sig-name descname"><span class="pre">mean_false_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_distance_clipped" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the mean false distance clipped.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_negative_distance_clipped">
 <span class="sig-name descname"><span class="pre">mean_false_negative_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_negative_distance_clipped" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the mean false negative distance clipped.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_positive_distance_clipped">
 <span class="sig-name descname"><span class="pre">mean_false_positive_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.mean_false_positive_distance_clipped" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the mean false positive distance clipped.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_positive_rate_with_tolerance">
 <span class="sig-name descname"><span class="pre">false_positive_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_positive_rate_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the false positive rate with tolerance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_negative_rate_with_tolerance">
 <span class="sig-name descname"><span class="pre">false_negative_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.false_negative_rate_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the false negative rate with tolerance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.precision_with_tolerance">
 <span class="sig-name descname"><span class="pre">precision_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.precision_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the precision with tolerance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.recall_with_tolerance">
 <span class="sig-name descname"><span class="pre">recall_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.recall_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the recall with tolerance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.f1_score_with_tolerance">
 <span class="sig-name descname"><span class="pre">f1_score_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.f1_score_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the F1 score with tolerance.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ArrayEvaluator class is used to evaluate the performance of a binary segmentation task.
+The class provides methods to evaluate the truth binary segmentation against the test binary segmentation.
+All evaluation scores should inherit from this class.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.truth_itk">
+<span class="sig-name descname"><span class="pre">truth_itk</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.truth_itk" title="Link to this definition"></a></dt>
+<dd><p>A SimpleITK image of the truth binary segmentation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>sitk.Image</dt><dd><p>the truth binary segmentation as a SimpleITK image</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span> <span class="o">=</span> <span class="n">ArrayEvaluator</span><span class="p">(</span><span class="n">truth_binary</span><span class="p">,</span> <span class="n">test_binary</span><span class="p">,</span> <span class="n">truth_empty</span><span class="p">,</span> <span class="n">test_empty</span><span class="p">,</span> <span class="n">metric_params</span><span class="p">,</span> <span class="n">resolution</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span><span class="o">.</span><span class="n">truth_itk</span>
+<span class="go">&lt;SimpleITK.SimpleITK.Image; proxy of &lt;Swig Object of type &#39;std::vector&lt; itk::simple::Image &gt;::value_type *&#39; at 0x7f8b1c0b3f30&gt; &gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to return the truth binary segmentation as a SimpleITK image.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.test_itk">
+<span class="sig-name descname"><span class="pre">test_itk</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.test_itk" title="Link to this definition"></a></dt>
+<dd><p>A SimpleITK image of the test binary segmentation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test</strong> – np.ndarray
+the test binary segmentation</p></li>
+<li><p><strong>resolution</strong> – Tuple[float, float, float]
+the resolution</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>sitk.Image</dt><dd><p>the test binary segmentation as a SimpleITK image</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if the test binary segmentation is not valid</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span> <span class="o">=</span> <span class="n">ArrayEvaluator</span><span class="p">(</span><span class="n">truth_binary</span><span class="p">,</span> <span class="n">test_binary</span><span class="p">,</span> <span class="n">truth_empty</span><span class="p">,</span> <span class="n">test_empty</span><span class="p">,</span> <span class="n">metric_params</span><span class="p">,</span> <span class="n">resolution</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span><span class="o">.</span><span class="n">test_itk</span>
+<span class="go">&lt;SimpleITK.SimpleITK.Image; proxy of &lt;Swig Object of type &#39;std::vector&lt; itk::simple::Image &gt;::value_type *&#39; at 0x7f8b1c0b3f30&gt; &gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to return the test binary segmentation as a SimpleITK image.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.overlap_measures_filter">
+<span class="sig-name descname"><span class="pre">overlap_measures_filter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.overlap_measures_filter" title="Link to this definition"></a></dt>
+<dd><p>A SimpleITK filter to compute overlap measures.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth_itk</strong> – sitk.Image
+the truth binary segmentation as a SimpleITK image</p></li>
+<li><p><strong>test_itk</strong> – sitk.Image
+the test binary segmentation as a SimpleITK image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>sitk.LabelOverlapMeasuresImageFilter</dt><dd><p>the overlap measures filter</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if the truth binary segmentation or the test binary segmentation is not valid</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span> <span class="o">=</span> <span class="n">ArrayEvaluator</span><span class="p">(</span><span class="n">truth_binary</span><span class="p">,</span> <span class="n">test_binary</span><span class="p">,</span> <span class="n">truth_empty</span><span class="p">,</span> <span class="n">test_empty</span><span class="p">,</span> <span class="n">metric_params</span><span class="p">,</span> <span class="n">resolution</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span><span class="o">.</span><span class="n">overlap_measures_filter</span>
+<span class="go">&lt;SimpleITK.SimpleITK.LabelOverlapMeasuresImageFilter; proxy of &lt;Swig Object of type &#39;itk::simple::LabelOverlapMeasuresImageFilter *&#39; at 0x7f8b1c0b3f30&gt; &gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to return the overlap measures filter.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">dice</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd><p>The Dice coefficient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth_itk</strong> – sitk.Image
+the truth binary segmentation as a SimpleITK image</p></li>
+<li><p><strong>test_itk</strong> – sitk.Image
+the test binary segmentation as a SimpleITK image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>float</dt><dd><p>the Dice coefficient</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if the truth binary segmentation or the test binary segmentation is not valid</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span> <span class="o">=</span> <span class="n">ArrayEvaluator</span><span class="p">(</span><span class="n">truth_binary</span><span class="p">,</span> <span class="n">test_binary</span><span class="p">,</span> <span class="n">truth_empty</span><span class="p">,</span> <span class="n">test_empty</span><span class="p">,</span> <span class="n">metric_params</span><span class="p">,</span> <span class="n">resolution</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span><span class="o">.</span><span class="n">dice</span><span class="p">()</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to return the Dice coefficient.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">jaccard</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd><p>The Jaccard coefficient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth_itk</strong> – sitk.Image
+the truth binary segmentation as a SimpleITK image</p></li>
+<li><p><strong>test_itk</strong> – sitk.Image
+the test binary segmentation as a SimpleITK image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>float</dt><dd><p>the Jaccard coefficient</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if the truth binary segmentation or the test binary segmentation is not valid</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span> <span class="o">=</span> <span class="n">ArrayEvaluator</span><span class="p">(</span><span class="n">truth_binary</span><span class="p">,</span> <span class="n">test_binary</span><span class="p">,</span> <span class="n">truth_empty</span><span class="p">,</span> <span class="n">test_empty</span><span class="p">,</span> <span class="n">metric_params</span><span class="p">,</span> <span class="n">resolution</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span><span class="o">.</span><span class="n">jaccard</span><span class="p">()</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to return the Jaccard coefficient.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">hausdorff</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd><p>The Hausdorff distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the Hausdorff distance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>None</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span> <span class="o">=</span> <span class="n">ArrayEvaluator</span><span class="p">(</span><span class="n">truth_binary</span><span class="p">,</span> <span class="n">test_binary</span><span class="p">,</span> <span class="n">truth_empty</span><span class="p">,</span> <span class="n">test_empty</span><span class="p">,</span> <span class="n">metric_params</span><span class="p">,</span> <span class="n">resolution</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span><span class="o">.</span><span class="n">hausdorff</span><span class="p">()</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to return the Hausdorff distance between the truth binary segmentation and the test binary segmentation.</p>
+<p>If either the truth or test binary segmentation is empty, the function returns 0.
+Otherwise, it calculates the Hausdorff distance using the HausdorffDistanceImageFilter from the SimpleITK library.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">false_negative_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd><p>The false negative rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>float</dt><dd><p>the false negative rate</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>if the truth binary segmentation or the test binary segmentation is not valid</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ValueError</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span> <span class="o">=</span> <span class="n">ArrayEvaluator</span><span class="p">(</span><span class="n">truth_binary</span><span class="p">,</span> <span class="n">test_binary</span><span class="p">,</span> <span class="n">truth_empty</span><span class="p">,</span> <span class="n">test_empty</span><span class="p">,</span> <span class="n">metric_params</span><span class="p">,</span> <span class="n">resolution</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span><span class="o">.</span><span class="n">false_negative_rate</span><span class="p">()</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to return the false negative rate.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">false_positive_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd><p>The false positive rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth_itk</strong> – sitk.Image
+the truth binary segmentation as a SimpleITK image</p></li>
+<li><p><strong>test_itk</strong> – sitk.Image
+the test binary segmentation as a SimpleITK image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>float</dt><dd><p>the false positive rate</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if the truth binary segmentation or the test binary segmentation is not valid</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span> <span class="o">=</span> <span class="n">ArrayEvaluator</span><span class="p">(</span><span class="n">truth_binary</span><span class="p">,</span> <span class="n">test_binary</span><span class="p">,</span> <span class="n">truth_empty</span><span class="p">,</span> <span class="n">test_empty</span><span class="p">,</span> <span class="n">metric_params</span><span class="p">,</span> <span class="n">resolution</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array_evaluator</span><span class="o">.</span><span class="n">false_positive_rate</span><span class="p">()</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to return the false positive rate.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">false_discovery_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd><p>Calculate the false discovery rate (FDR) for the binary segmentation evaluation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The false discovery rate.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_discovery_rate</span><span class="p">()</span>
+<span class="go">0.25</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The false discovery rate is a measure of the proportion of false positives among the predicted positive samples.
+It is calculated as the ratio of false positives to the sum of true positives and false positives.
+If either the ground truth or the predicted segmentation is empty, the FDR is set to NaN.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">precision</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dd><p>Calculate the precision of the binary segmentation evaluation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The precision value.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None.</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">precision</span><span class="p">()</span>
+<span class="go">0.75</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Precision is a measure of the accuracy of the positive predictions made by the model.
+It is calculated as the ratio of true positives to the total number of positive predictions.
+If either the ground truth or the predicted values are empty, the precision value will be NaN.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">recall</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<dd><p>Calculate the recall metric for binary segmentation evaluation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The recall value.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">recall</span><span class="p">()</span>
+<span class="go">0.75</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Recall is a measure of the ability of a binary classifier to identify all positive samples.
+It is calculated as the ratio of true positives to the total number of actual positives.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">f1_score</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
+<dd><p>Calculate the F1 score for binary segmentation evaluation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The F1 score value.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None.</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">f1_score</span><span class="p">()</span>
+<span class="go">0.75</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The F1 score is the harmonic mean of precision and recall.
+It is a measure of the balance between precision and recall, providing a single metric to evaluate the model’s performance.</p>
+<p>If either the ground truth or the predicted values are empty, the F1 score will be NaN.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">voi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
+<dd><p>Calculate the Variation of Information (VOI) for binary segmentation evaluation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth</strong> – np.ndarray
+the truth binary segmentation</p></li>
+<li><p><strong>test</strong> – np.ndarray
+the test binary segmentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The VOI value.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">voi</span><span class="p">()</span>
+<span class="go">0.75</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The VOI is a measure of the similarity between two segmentations.
+It combines the split and merge errors into a single measure of segmentation quality.
+If either the ground truth or the predicted values are empty, the VOI will be NaN.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">mean_false_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean false distance between the ground truth and the test results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth</strong> – np.ndarray
+the truth binary segmentation</p></li>
+<li><p><strong>test</strong> – np.ndarray
+the test binary segmentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mean false distance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">mean_false_distance</span><span class="p">()</span>
+<span class="go">0.25</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>This method returns np.nan if either the ground truth or the test results are empty.</p></li>
+<li><p>The mean false distance is a measure of the average distance between the false positive pixels in the test results and the nearest true positive pixels in the ground truth.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id14" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean false negative distance between the ground truth and the test results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth</strong> – np.ndarray
+the truth binary segmentation</p></li>
+<li><p><strong>test</strong> – np.ndarray
+the test binary segmentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mean false negative distance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">mean_false_negative_distance</span><span class="p">()</span>
+<span class="go">0.25</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method returns np.nan if either the ground truth or the test results are empty.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean false positive distance.</p>
+<p>This method calculates the mean false positive distance between the ground truth and the test results.
+If either the ground truth or the test results are empty, the method returns NaN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth</strong> – np.ndarray
+the truth binary segmentation</p></li>
+<li><p><strong>test</strong> – np.ndarray
+the test binary segmentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mean false positive distance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">mean_false_positive_distance</span><span class="p">()</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The mean false positive distance is a measure of the average distance between false positive pixels in the
+test results and the corresponding ground truth pixels. It is commonly used to evaluate the performance of
+binary segmentation algorithms.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">mean_false_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean false distance (clipped) between the ground truth and the test results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth</strong> – np.ndarray
+the truth binary segmentation</p></li>
+<li><p><strong>test</strong> – np.ndarray
+the test binary segmentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mean false distance (clipped) value.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">mean_false_distance_clipped</span><span class="p">()</span>
+<span class="go">0.123</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method returns np.nan if either the ground truth or the test results are empty.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean false negative distance, with clipping.</p>
+<p>This method calculates the mean false negative distance between the ground truth and the test results.
+The distance is clipped to avoid extreme values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth</strong> – np.ndarray
+the truth binary segmentation</p></li>
+<li><p><strong>test</strong> – np.ndarray
+the test binary segmentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mean false negative distance with clipping.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">mean_false_negative_distance_clipped</span><span class="p">()</span>
+<span class="go">0.123</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The mean false negative distance is a measure of the average distance between the false negative pixels in the ground truth and the test results.</p></li>
+<li><p>Clipping the distance helps to avoid extreme values that may skew the overall evaluation.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean false positive distance, with clipping.</p>
+<p>This method calculates the mean false positive distance between the ground truth and the test results,
+taking into account any clipping that may have been applied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth</strong> – np.ndarray
+the truth binary segmentation</p></li>
+<li><p><strong>test</strong> – np.ndarray
+the test binary segmentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mean false positive distance with clipping.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">mean_false_positive_distance_clipped</span><span class="p">()</span>
+<span class="go">0.25</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The mean false positive distance is a measure of the average distance between false positive pixels
+in the test results and the corresponding ground truth pixels.</p></li>
+<li><p>If either the ground truth or the test results are empty, the method returns NaN.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id19">
+<span class="sig-name descname"><span class="pre">false_positive_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id19" title="Link to this definition"></a></dt>
+<dd><p>Calculate the false positive rate with tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth</strong> – np.ndarray
+the truth binary segmentation</p></li>
+<li><p><strong>test</strong> – np.ndarray
+the test binary segmentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The false positive rate with tolerance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_positive_rate_with_tolerance</span><span class="p">()</span>
+<span class="go">0.25</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method calculates the false positive rate with tolerance by comparing the truth and test data.
+If either the truth or test data is empty, it returns NaN.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id20">
+<span class="sig-name descname"><span class="pre">false_negative_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id20" title="Link to this definition"></a></dt>
+<dd><p>Calculate the false negative rate with tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth</strong> – np.ndarray
+the truth binary segmentation</p></li>
+<li><p><strong>test</strong> – np.ndarray
+the test binary segmentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The false negative rate with tolerance as a floating-point number.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_negative_rate_with_tolerance</span><span class="p">()</span>
+<span class="go">0.25</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method calculates the false negative rate with tolerance, which is a measure of the proportion of false negatives in a binary segmentation evaluation. If either the ground truth or the test data is empty, the method returns NaN.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">precision_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id21" title="Link to this definition"></a></dt>
+<dd><p>Calculate the precision with tolerance.</p>
+<p>This method calculates the precision with tolerance by comparing the truth and test data.
+Precision is the ratio of true positives to the sum of true positives and false positives.
+Tolerance is a distance threshold within which two pixels are considered to be a match.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth</strong> – np.ndarray
+the truth binary segmentation</p></li>
+<li><p><strong>test</strong> – np.ndarray
+the test binary segmentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The precision with tolerance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">precision_with_tolerance</span><span class="p">()</span>
+<span class="go">0.75</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Precision is a measure of the accuracy of the positive predictions.</p></li>
+<li><p>If either the ground truth or the test data is empty, the method returns NaN.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id22">
+<span class="sig-name descname"><span class="pre">recall_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id22" title="Link to this definition"></a></dt>
+<dd><p>Calculate the recall with tolerance for the binary segmentation evaluator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The recall with tolerance value.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">recall_with_tolerance</span><span class="p">()</span>
+<span class="go">0.75</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method calculates the recall with tolerance, which is a measure of how well the binary segmentation evaluator performs. It returns the recall with tolerance value as a float. If either the truth or test data is empty, it returns NaN.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id23">
+<span class="sig-name descname"><span class="pre">f1_score_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id23" title="Link to this definition"></a></dt>
+<dd><p>Calculate the F1 score with tolerance.</p>
+<p>This method calculates the F1 score with tolerance between the ground truth and the test results.
+If either the ground truth or the test results are empty, the function returns NaN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>truth</strong> – np.ndarray
+the truth binary segmentation</p></li>
+<li><p><strong>test</strong> – np.ndarray
+the test binary segmentation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The F1 score with tolerance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">f1_score_with_tolerance</span><span class="p">()</span>
+<span class="go">0.85</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The F1 score is a measure of a test’s accuracy. It considers both the precision and recall of the test to compute the score.
+The tolerance parameter allows for a certain degree of variation between the ground truth and the test results.</p>
+</div>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.</span></span><span class="sig-name descname"><span class="pre">CremiEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">1,</span> <span class="pre">1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator" title="Link to this definition"></a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test_mask">
-<span class="sig-name descname"><span class="pre">test_mask</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test_mask" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Evaluate the performance of a binary segmentation task using the CREMI score.
+The CREMI score is a measure of the similarity between two binary segmentations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.truth">
+<span class="sig-name descname"><span class="pre">truth</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.truth" title="Link to this definition"></a></dt>
+<dd><p>np.ndarray
+the truth binary segmentation</p>
+</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.truth_mask">
-<span class="sig-name descname"><span class="pre">truth_mask</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.truth_mask" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test">
+<span class="sig-name descname"><span class="pre">test</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test" title="Link to this definition"></a></dt>
+<dd><p>np.ndarray
+the test binary segmentation</p>
+</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test_edt">
-<span class="sig-name descname"><span class="pre">test_edt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test_edt" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.sampling">
+<span class="sig-name descname"><span class="pre">sampling</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.sampling" title="Link to this definition"></a></dt>
+<dd><p>Tuple[float, float, float]
+the sampling resolution</p>
+</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.truth_edt">
-<span class="sig-name descname"><span class="pre">truth_edt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.truth_edt" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.clip_distance">
+<span class="sig-name descname"><span class="pre">clip_distance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.clip_distance" title="Link to this definition"></a></dt>
+<dd><p>float
+the maximum distance to clip</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.tol_distance">
+<span class="sig-name descname"><span class="pre">tol_distance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.tol_distance" title="Link to this definition"></a></dt>
+<dd><p>float
+the tolerance distance</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_positive_distances">
 <span class="sig-name descname"><span class="pre">false_positive_distances</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_positive_distances" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the false positive distances.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_positives_with_tolerance">
 <span class="sig-name descname"><span class="pre">false_positives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_positives_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the false positives with tolerance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_positive_rate_with_tolerance">
 <span class="sig-name descname"><span class="pre">false_positive_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_positive_rate_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the false positive rate with tolerance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_negatives_with_tolerance">
 <span class="sig-name descname"><span class="pre">false_negatives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_negatives_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the false negatives with tolerance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_negative_rate_with_tolerance">
 <span class="sig-name descname"><span class="pre">false_negative_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_negative_rate_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the false negative rate with tolerance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.true_positives_with_tolerance">
 <span class="sig-name descname"><span class="pre">true_positives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.true_positives_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the true positives with tolerance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.precision_with_tolerance">
 <span class="sig-name descname"><span class="pre">precision_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.precision_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the precision with tolerance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.recall_with_tolerance">
 <span class="sig-name descname"><span class="pre">recall_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.recall_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the recall with tolerance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.f1_score_with_tolerance">
 <span class="sig-name descname"><span class="pre">f1_score_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.f1_score_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the F1 score with tolerance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_positive_distances_clipped">
 <span class="sig-name descname"><span class="pre">mean_false_positive_distances_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_positive_distances_clipped" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the mean false positive distances clipped.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_negative_distances_clipped">
 <span class="sig-name descname"><span class="pre">mean_false_negative_distances_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_negative_distances_clipped" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the mean false negative distances clipped.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_positive_distance">
 <span class="sig-name descname"><span class="pre">mean_false_positive_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_positive_distance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the mean false positive distance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_negative_distances">
 <span class="sig-name descname"><span class="pre">false_negative_distances</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.false_negative_distances" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the false negative distances.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_negative_distance">
 <span class="sig-name descname"><span class="pre">mean_false_negative_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_negative_distance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the mean false negative distance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_distance">
 <span class="sig-name descname"><span class="pre">mean_false_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_distance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the mean false distance.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_distance_clipped">
 <span class="sig-name descname"><span class="pre">mean_false_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.mean_false_distance_clipped" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Return the mean false distance clipped.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The CremiEvaluator class is used to evaluate the performance of a binary segmentation task using the CREMI score.</p></li>
+<li><p>True and test binary segmentations are compared to calculate various evaluation metrics.</p></li>
+<li><p>The class provides methods to evaluate the performance of the binary segmentation task.</p></li>
+<li><p>Toleration distance is used to determine the tolerance level for the evaluation.</p></li>
+<li><p>Clip distance is used to clip the distance values to avoid extreme values.</p></li>
+<li><p>All evaluation scores should inherit from this class.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test_mask">
+<span class="sig-name descname"><span class="pre">test_mask</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test_mask" title="Link to this definition"></a></dt>
+<dd><p>Generate a binary mask for the test data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>test</strong> – np.ndarray
+the test binary segmentation</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A binary mask indicating the regions of interest in the test data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>test_mask (ndarray)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">test_mask</span><span class="p">()</span>
+<span class="go">array([[False,  True, False],</span>
+<span class="go">        [ True,  True,  True],</span>
+<span class="go">        [False,  True, False]])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method assumes that the background class is represented by the constant <cite>BG</cite>.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.truth_mask">
+<span class="sig-name descname"><span class="pre">truth_mask</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.truth_mask" title="Link to this definition"></a></dt>
+<dd><p>Returns a binary mask indicating the truth values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>truth</strong> – np.ndarray
+the truth binary segmentation</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A binary mask where True indicates the truth values and False indicates other values.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>truth_mask (ndarray)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mask</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">truth_mask</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+<span class="go">[[ True  True False]</span>
+<span class="go">    [False  True False]</span>
+<span class="go">    [ True False False]]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The truth mask is computed by comparing the truth values with a predefined background value (BG).</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test_edt">
+<span class="sig-name descname"><span class="pre">test_edt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test_edt" title="Link to this definition"></a></dt>
+<dd><p>Calculate the Euclidean Distance Transform (EDT) of the test mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.test_mask</strong> (<em>ndarray</em>) – The binary test mask.</p></li>
+<li><p><strong>self.sampling</strong> (<em>float</em><em> or </em><em>sequence</em><em> of </em><em>floats</em>) – The pixel spacing or sampling along each dimension.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Euclidean Distance Transform of the test mask.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p># Example 1:
+test_mask = np.array([[0, 0, 1],</p>
+<blockquote>
+<div><p>[1, 1, 1],
+[0, 0, 0]])</p>
+</div></blockquote>
+<p>sampling = 1.0
+result = test_edt(test_mask, sampling)
+# Output: array([[1.        , 1.        , 0.        ],
+#                [0.        , 0.        , 0.        ],
+#                [1.        , 1.        , 1.41421356]])</p>
+<p># Example 2:
+test_mask = np.array([[0, 1, 0],</p>
+<blockquote>
+<div><p>[1, 0, 1],
+[0, 1, 0]])</p>
+</div></blockquote>
+<p>sampling = 0.5
+result = test_edt(test_mask, sampling)
+# Output: array([[0.5       , 0.        , 0.5       ],
+#                [0.        , 0.70710678, 0.        ],
+#                [0.5       , 0.        , 0.5       ]])</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Euclidean Distance Transform (EDT) calculates the distance from each pixel in the binary mask to the nearest boundary pixel. It is commonly used in image processing and computer vision tasks, such as edge detection and shape analysis.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.truth_edt">
+<span class="sig-name descname"><span class="pre">truth_edt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.truth_edt" title="Link to this definition"></a></dt>
+<dd><p>Calculate the Euclidean Distance Transform (EDT) of the ground truth mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.truth_mask</strong> (<em>ndarray</em>) – The binary ground truth mask.</p></li>
+<li><p><strong>self.sampling</strong> (<em>float</em><em> or </em><em>sequence</em><em> of </em><em>floats</em>) – The pixel spacing or sampling along each dimension.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Euclidean Distance Transform of the ground truth mask.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">edt</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">truth_edt</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Euclidean Distance Transform (EDT) calculates the distance from each pixel in the binary mask to the nearest boundary pixel. It is commonly used in image processing and computer vision tasks.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id24">
+<span class="sig-name descname"><span class="pre">false_positive_distances</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id24" title="Link to this definition"></a></dt>
+<dd><p>Calculate the distances of false positive pixels from the ground truth segmentation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.test_mask</strong> (<em>ndarray</em>) – The binary test mask.</p></li>
+<li><p><strong>self.truth_edt</strong> (<em>ndarray</em>) – The Euclidean Distance Transform of the ground truth segmentation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array containing the distances of false positive pixels from the ground truth segmentation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">distances</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">false_positive_distances</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
+<span class="go">[1.2, 0.8, 2.5, 1.0]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method assumes that the ground truth segmentation and the test mask have been initialized.
+The ground truth segmentation is stored in the <cite>truth_edt</cite> attribute, and the test mask is obtained by inverting the <cite>test_mask</cite> attribute.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id25">
+<span class="sig-name descname"><span class="pre">false_positives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id25" title="Link to this definition"></a></dt>
+<dd><p>Calculate the number of false positives with a given tolerance distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.false_positive_distances</strong> (<em>ndarray</em>) – The distances of false positive pixels from the ground truth segmentation.</p></li>
+<li><p><strong>self.tol_distance</strong> (<em>float</em>) – The tolerance distance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of false positives with a distance greater than the tolerance distance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_positive_distances</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">tol_distance</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">false_positives</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">false_positives_with_tolerance</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">false_positives</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <cite>false_positive_distances</cite> attribute should be initialized before calling this method.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id26">
+<span class="sig-name descname"><span class="pre">false_positive_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id26" title="Link to this definition"></a></dt>
+<dd><p>Calculate the false positive rate with tolerance.</p>
+<p>This method calculates the false positive rate by dividing the number of false positives with tolerance
+by the number of condition negatives.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.false_positives_with_tolerance</strong> (<em>int</em>) – The number of false positives with tolerance.</p></li>
+<li><p><strong>self.truth_mask</strong> (<em>ndarray</em>) – The binary ground truth mask.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The false positive rate with tolerance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_positives_with_tolerance</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">truth_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_positive_rate_with_tolerance</span><span class="p">()</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The false positive rate with tolerance is a measure of the proportion of false positive predictions
+with respect to the total number of condition negatives. It is commonly used in binary segmentation tasks.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id27">
+<span class="sig-name descname"><span class="pre">false_negatives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id27" title="Link to this definition"></a></dt>
+<dd><p>Calculate the number of false negatives with tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.false_negative_distances</strong> (<em>ndarray</em>) – The distances of false negative pixels from the ground truth segmentation.</p></li>
+<li><p><strong>self.tol_distance</strong> (<em>float</em>) – The tolerance distance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of false negatives with tolerance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_negative_distances</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">tol_distance</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">false_negatives</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">false_negatives_with_tolerance</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">false_negatives</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>False negatives are cases where the model incorrectly predicts the absence of a positive class.
+The tolerance distance is used to determine whether a false negative is within an acceptable range.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id28">
+<span class="sig-name descname"><span class="pre">false_negative_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
+<dd><p>Calculate the false negative rate with tolerance.</p>
+<p>This method calculates the false negative rate by dividing the number of false negatives
+with tolerance by the number of condition positives.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.false_negatives_with_tolerance</strong> (<em>int</em>) – The number of false negatives with tolerance.</p></li>
+<li><p><strong>self.false_negative_distances</strong> (<em>ndarray</em>) – The distances of false negative pixels from the ground truth segmentation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The false negative rate with tolerance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_negative_distances</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_negatives_with_tolerance</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_negative_rate_with_tolerance</span><span class="p">()</span>
+<span class="go">0.6666666666666666</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The false negative rate with tolerance is a measure of the proportion of condition positives
+that are incorrectly classified as negatives, considering a certain tolerance level.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id29">
+<span class="sig-name descname"><span class="pre">true_positives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
+<dd><p>Calculate the number of true positives with tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.test_mask</strong> (<em>ndarray</em>) – The test binary segmentation mask.</p></li>
+<li><p><strong>self.truth_mask</strong> (<em>ndarray</em>) – The ground truth binary segmentation mask.</p></li>
+<li><p><strong>self.false_negatives_with_tolerance</strong> (<em>int</em>) – The number of false negatives with tolerance.</p></li>
+<li><p><strong>self.false_positives_with_tolerance</strong> (<em>int</em>) – The number of false positives with tolerance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of true positives with tolerance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">test_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">truth_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_negatives_with_tolerance</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_positives_with_tolerance</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">true_positives</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">true_positives_with_tolerance</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">true_positives</span><span class="p">)</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>True positives are cases where the model correctly predicts the presence of a positive class.
+The tolerance distance is used to determine whether a true positive is within an acceptable range.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id30">
+<span class="sig-name descname"><span class="pre">precision_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
+<dd><p>Calculate the precision with tolerance.</p>
+<p>This method calculates the precision with tolerance by dividing the number of true positives
+with tolerance by the sum of true positives with tolerance and false positives with tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.true_positives_with_tolerance</strong> (<em>int</em>) – The number of true positives with tolerance.</p></li>
+<li><p><strong>self.false_positives_with_tolerance</strong> (<em>int</em>) – The number of false positives with tolerance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The precision with tolerance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ZeroDivisionError</strong> – If the sum of true positives with tolerance and false positives with tolerance is zero.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">true_positives_with_tolerance</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_positives_with_tolerance</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">precision_with_tolerance</span><span class="p">()</span>
+<span class="go">0.6666666666666666</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The precision with tolerance is a measure of the proportion of true positives with tolerance
+out of the total number of predicted positives with tolerance.
+It indicates how well the binary segmentation evaluator performs in terms of correctly identifying positive samples.
+If the sum of true positives with tolerance and false positives with tolerance is zero, the precision with tolerance is undefined and a ZeroDivisionError is raised.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id31">
+<span class="sig-name descname"><span class="pre">recall_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
+<dd><p>A measure of the ability of a binary classifier to identify all positive samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.true_positives_with_tolerance</strong> (<em>int</em>) – The number of true positives with tolerance.</p></li>
+<li><p><strong>self.false_negatives_with_tolerance</strong> (<em>int</em>) – The number of false negatives with tolerance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The recall with tolerance value.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ZeroDivisionError</strong> – If the sum of true positives with tolerance and false negatives with tolerance is zero.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">recall_with_tolerance</span><span class="p">()</span>
+<span class="go">0.75</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method calculates the recall with tolerance, which is a measure of how well the binary segmentation evaluator performs. It returns the recall with tolerance value as a float. If either the truth or test data is empty, it returns NaN.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id32">
+<span class="sig-name descname"><span class="pre">f1_score_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id32" title="Link to this definition"></a></dt>
+<dd><p>Calculate the F1 score with tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.recall_with_tolerance</strong> (<em>float</em>) – The recall with tolerance value.</p></li>
+<li><p><strong>self.precision_with_tolerance</strong> (<em>float</em>) – The precision with tolerance value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The F1 score with tolerance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ZeroDivisionError</strong> – If both the recall with tolerance and precision with tolerance are zero.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">recall_with_tolerance</span> <span class="o">=</span> <span class="mf">0.8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">precision_with_tolerance</span> <span class="o">=</span> <span class="mf">0.9</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">f1_score_with_tolerance</span><span class="p">()</span>
+<span class="go">0.8571428571428571</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The F1 score is a measure of a test’s accuracy. It considers both the precision and recall of the test to compute the score.
+The F1 score with tolerance is calculated using the formula:
+F1 = 2 * (recall_with_tolerance * precision_with_tolerance) / (recall_with_tolerance + precision_with_tolerance)
+If both recall_with_tolerance and precision_with_tolerance are 0, the F1 score with tolerance will be NaN.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id33">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distances_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean of the false positive distances, clipped to a maximum distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.false_positive_distances</strong> (<em>ndarray</em>) – The distances of false positive pixels from the ground truth segmentation.</p></li>
+<li><p><strong>self.clip_distance</strong> (<em>float</em>) – The maximum distance to clip.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mean of the false positive distances, clipped to a maximum distance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the clip distance is not set.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_positive_distances</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">clip_distance</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">mean_false_positive_distances_clipped</span><span class="p">()</span>
+<span class="go">2.5</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method calculates the mean of the false positive distances, where the distances are clipped to a maximum distance. The <cite>false_positive_distances</cite> attribute should be set before calling this method. The <cite>clip_distance</cite> attribute determines the maximum distance to which the distances are clipped.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id34">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distances_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean of the false negative distances, clipped to a maximum distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.false_negative_distances</strong> (<em>ndarray</em>) – The distances of false negative pixels from the ground truth segmentation.</p></li>
+<li><p><strong>self.clip_distance</strong> (<em>float</em>) – The maximum distance to clip.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mean of the false negative distances, clipped to a maximum distance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the clip distance is not set.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_negative_distances</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">clip_distance</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">mean_false_negative_distances_clipped</span><span class="p">()</span>
+<span class="go">2.5</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method calculates the mean of the false negative distances, where the distances are clipped to a maximum distance. The <cite>false_negative_distances</cite> attribute should be set before calling this method. The <cite>clip_distance</cite> attribute determines the maximum distance to which the distances are clipped.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id35">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean false positive distance.</p>
+<p>This method calculates the mean distance between the false positive points and the ground truth points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>self.false_positive_distances</strong> (<em>ndarray</em>) – The distances of false positive pixels from the ground truth mask.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mean false positive distance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the false positive distances are not set.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_positive_distances</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">mean_false_positive_distance</span><span class="p">()</span>
+<span class="go">2.2333333333333334</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The false positive distances should be set before calling this method using the <cite>false_positive_distances</cite> attribute.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id36">
+<span class="sig-name descname"><span class="pre">false_negative_distances</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id36" title="Link to this definition"></a></dt>
+<dd><p>Calculate the distances of false negative pixels from the ground truth mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>self.truth_mask</strong> (<em>ndarray</em>) – The binary ground truth mask.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array containing the distances of false negative pixels.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the truth mask is not set.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">distances</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">false_negative_distances</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
+<span class="go">[0.5, 1.0, 1.5, 2.0]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method assumes that the ground truth mask and the test mask have already been set.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id37">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id37" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean false negative distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>self.false_negative_distances</strong> (<em>ndarray</em>) – The distances of false negative pixels from the ground truth mask.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mean false negative distance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the false negative distances are not set.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">false_negative_distances</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">mean_false_negative_distance</span><span class="p">()</span>
+<span class="go">2.2333333333333334</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The mean false negative distance is calculated as the average of all false negative distances.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id38">
+<span class="sig-name descname"><span class="pre">mean_false_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id38" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean false distance.</p>
+<p>This method calculates the mean false distance by taking the average of the mean false positive distance
+and the mean false negative distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.mean_false_positive_distance</strong> (<em>float</em>) – The mean false positive distance.</p></li>
+<li><p><strong>self.mean_false_negative_distance</strong> (<em>float</em>) – The mean false negative distance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The calculated mean false distance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the mean false positive distance or the mean false negative distance is not set.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">mean_false_distance</span><span class="p">()</span>
+<span class="go">5.0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The mean false distance is a metric used to evaluate the performance of a binary segmentation model.
+It provides a measure of the average distance between false positive and false negative predictions.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id39">
+<span class="sig-name descname"><span class="pre">mean_false_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id39" title="Link to this definition"></a></dt>
+<dd><p>Calculates the mean false distance clipped.</p>
+<p>This method calculates the mean false distance clipped by taking the average of the mean false positive distances
+clipped and the mean false negative distances clipped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self.mean_false_positive_distances_clipped</strong> (<em>float</em>) – The mean false positive distances clipped.</p></li>
+<li><p><strong>self.mean_false_negative_distances_clipped</strong> (<em>float</em>) – The mean false negative distances clipped.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The calculated mean false distance clipped.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the mean false positive distances clipped or the mean false negative distances clipped are not set.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluator</span><span class="o">.</span><span class="n">mean_false_distance_clipped</span><span class="p">()</span>
+<span class="go">2.5</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The mean false distance clipped is calculated as 0.5 * (mean_false_positive_distances_clipped +
+mean_false_negative_distances_clipped).</p>
+</div>
+</dd></dl>
 
 </dd></dl>
 

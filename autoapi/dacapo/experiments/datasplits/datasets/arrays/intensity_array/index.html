@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -122,67 +123,263 @@
 the range (0, 1) and convert to float32. Use this if you have your
 intensities stored as uint8 or similar and want your model to
 have floats as input.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.array_config">
+<span class="sig-name descname"><span class="pre">array_config</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.array_config" title="Link to this definition"></a></dt>
+<dd><p>The config object for the array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig">ArrayConfig</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.min">
+<span class="sig-name descname"><span class="pre">min</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.min" title="Link to this definition"></a></dt>
+<dd><p>The minimum intensity value in the array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.max">
+<span class="sig-name descname"><span class="pre">max</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.max" title="Link to this definition"></a></dt>
+<dd><p>The maximum intensity value in the array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.__getitem__" title="Link to this definition"></a></dt>
+<dd><p>Returns the intensities normalized to the range (0, 1)</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>The array_config must be an ArrayConfig object.
+The min and max values are used to normalize the intensities.
+All intensities are converted to float32.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.attrs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.attrs" title="Link to this definition"></a></dt>
-<dd><p>Return a dictionary of metadata attributes stored on this array.</p>
+<dd><p>Returns the attributes of the source array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The attributes of the source array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the attributes is not a dictionary</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">intensities_array</span><span class="o">.</span><span class="n">attrs</span>
+<span class="go">{&#39;resolution&#39;: (1.0, 1.0, 1.0), &#39;unit&#39;: &#39;micrometer&#39;}</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The attributes are the same as the source array</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.axes">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.axes" title="Link to this definition"></a></dt>
-<dd><p>Returns the axes of this dataset as a string of charactes, as they
-are indexed. Permitted characters are:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
-</ul>
-</div></blockquote>
+<dd><p>Returns the axes of the source array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The axes of the source array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the axes is not a string</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">intensities_array</span><span class="o">.</span><span class="n">axes</span>
+<span class="go">&#39;zyx&#39;</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The axes are the same as the source array</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.dims">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.dims" title="Link to this definition"></a></dt>
-<dd><p>Returns the number of spatial dimensions.</p>
+<dd><p>Returns the dimensions of the source array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The dimensions of the source array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the dimensions is not an integer</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">intensities_array</span><span class="o">.</span><span class="n">dims</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The dimensions are the same as the source array</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.voxel_size">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.voxel_size" title="Link to this definition"></a></dt>
-<dd><p>The size of a voxel in physical units.</p>
+<dd><p>Returns the voxel size of the source array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The voxel size of the source array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Coordinate</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the voxel size is not a Coordinate object</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">intensities_array</span><span class="o">.</span><span class="n">voxel_size</span>
+<span class="go">Coordinate(x=1.0, y=1.0, z=1.0)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The voxel size is the same as the source array</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.roi">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.roi" title="Link to this definition"></a></dt>
-<dd><p>The total ROI of this array, in world units.</p>
+<dd><p>Returns the region of interest of the source array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The region of interest of the source array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Roi</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the region of interest is not a Roi object</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">intensities_array</span><span class="o">.</span><span class="n">roi</span>
+<span class="go">Roi(offset=(0, 0, 0), shape=(10, 20, 30))</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The region of interest is the same as the source array</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.writable">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.writable" title="Link to this definition"></a></dt>
-<dd><p>Can we write to this Array?</p>
+<dd><p>Returns whether the array is writable</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether the array is writable</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the array is not writable</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">intensities_array</span><span class="o">.</span><span class="n">writable</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The array is not writable because it is a virtual array created by modifying another array on demand.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.dtype">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.dtype" title="Link to this definition"></a></dt>
-<dd><p>The dtype of this array, in numpy dtypes</p>
+<dd><p>Returns the data type of the array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The data type of the array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>type</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the data type is not a type</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">intensities_array</span><span class="o">.</span><span class="n">dtype</span>
+<span class="go">numpy.float32</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The data type is always float32</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.num_channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.num_channels" title="Link to this definition"></a></dt>
-<dd><p>The number of channels provided by this dataset.
-Should return None if the channel dimension doesn’t exist.</p>
+<dd><p>Returns the number of channels in the source array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The number of channels in the source array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the number of channels is not an integer</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">intensities_array</span><span class="o">.</span><span class="n">num_channels</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The number of channels is the same as the source array</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.data">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.intensity_array.IntensitiesArray.data" title="Link to this definition"></a></dt>
-<dd><p>Get a numpy like readable and writable view into this array.</p>
+<dd><p>Returns the data of the source array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The data of the source array</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the data is not a numpy array</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">intensities_array</span><span class="o">.</span><span class="n">data</span>
+<span class="go">array([[[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]], [[0.7, 0.8, 0.9], [1.0, 1.1, 1.2]]])</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The data is the same as the source array</p>
 </dd></dl>
 
 </dd></dl>

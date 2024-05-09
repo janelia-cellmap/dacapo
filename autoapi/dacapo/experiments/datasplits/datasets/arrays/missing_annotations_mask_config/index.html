@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -121,18 +122,38 @@
 <dd><p>This config class provides the necessary configuration for turning an Annotated dataset into a
 multi class binary classification problem</p>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.MissingAnnotationsMaskConfig.source_array_config">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.MissingAnnotationsMaskConfig.source_array_config" title="Link to this definition"></a></dt>
+<dd><p>ArrayConfig
+The Array from which to pull annotated data. Is expected to contain a volume with uint64 voxels and no channel dimension</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.MissingAnnotationsMaskConfig.groupings">
+<span class="sig-name descname"><span class="pre">groupings</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.MissingAnnotationsMaskConfig.groupings" title="Link to this definition"></a></dt>
+<dd><p>List[Tuple[str, List[int]]]
+List of id groups with a symantic name. Each id group is a List of ids.
+Group i found in groupings[i] will be binarized and placed in channel i.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The output array will have a channel dimension equal to the number of groups.
+Each channel will be a binary mask of the ids in the groupings list.</p>
+</div>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.MissingAnnotationsMaskConfig.array_type">
 <span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.MissingAnnotationsMaskConfig.array_type" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.MissingAnnotationsMaskConfig.source_array_config">
-<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.MissingAnnotationsMaskConfig.source_array_config" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.MissingAnnotationsMaskConfig.groupings">
-<span class="sig-name descname"><span class="pre">groupings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.MissingAnnotationsMaskConfig.groupings" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">groupings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

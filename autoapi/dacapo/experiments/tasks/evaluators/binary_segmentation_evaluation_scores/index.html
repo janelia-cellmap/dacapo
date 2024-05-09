@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -110,120 +111,391 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BinarySegmentationEvaluationScores</span></code></a></p></td>
-<td><p>Base class for evaluation scores.</p></td>
+<td><p>Class representing evaluation scores for binary segmentation tasks.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiChannelBinarySegmentationEvaluationScores</span></code></a></p></td>
-<td><p>Base class for evaluation scores.</p></td>
+<td><p>Class representing evaluation scores for multi-channel binary segmentation tasks.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.</span></span><span class="sig-name descname"><span class="pre">BinarySegmentationEvaluationScores</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores" title="Link to this definition"></a></dt>
-<dd><p>Base class for evaluation scores.</p>
+<dd><p>Class representing evaluation scores for binary segmentation tasks.</p>
+<p>The metrics include:
+- Dice coefficient: 2 * <a href="#id22"><span class="problematic" id="id23">|A ∩ B|</span></a> / <a href="#id24"><span class="problematic" id="id25">|A|</span></a> + <a href="#id26"><span class="problematic" id="id27">|B|</span></a> ; where A and B are the binary segmentations
+- Jaccard coefficient: <a href="#id28"><span class="problematic" id="id29">|A ∩ B|</span></a> / <a href="#id30"><span class="problematic" id="id31">|A ∪ B|</span></a> ; where A and B are the binary segmentations
+- Hausdorff distance: max(h(A, B), h(B, A)) ; where h(A, B) is the Hausdorff distance between A and B
+- False negative rate: <a href="#id32"><span class="problematic" id="id33">|A - B|</span></a> / <a href="#id34"><span class="problematic" id="id35">|A|</span></a> ; where A and B are the binary segmentations
+- False positive rate: <a href="#id36"><span class="problematic" id="id37">|B - A|</span></a> / <a href="#id38"><span class="problematic" id="id39">|B|</span></a> ; where A and B are the binary segmentations
+- False discovery rate: <a href="#id40"><span class="problematic" id="id41">|B - A|</span></a> / <a href="#id42"><span class="problematic" id="id43">|A|</span></a> ; where A and B are the binary segmentations
+- VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality
+- Mean false distance: 0.5 * (mean false positive distance + mean false negative distance)
+- Mean false negative distance: mean distance of false negatives
+- Mean false positive distance: mean distance of false positives
+- Mean false distance clipped: 0.5 * (mean false positive distance clipped + mean false negative distance clipped) ; clipped to a maximum distance
+- Mean false negative distance clipped: mean distance of false negatives clipped ; clipped to a maximum distance
+- Mean false positive distance clipped: mean distance of false positives clipped ; clipped to a maximum distance
+- Precision with tolerance: TP / (TP + FP) ; where TP and FP are the true and false positives within a tolerance distance
+- Recall with tolerance: TP / (TP + FN) ; where TP and FN are the true and false positives within a tolerance distance
+- F1 score with tolerance: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives within a tolerance distance
+- Precision: TP / (TP + FP) ; where TP and FP are the true and false positives
+- Recall: TP / (TP + FN) ; where TP and FN are the true and false positives
+- F1 score: 2 * (Recall * Precision) / (Recall + Precision) ; where Recall and Precision are the true and false positives</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.dice">
-<span class="sig-name descname"><span class="pre">dice</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.dice" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">dice</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.dice" title="Link to this definition"></a></dt>
+<dd><p>The Dice coefficient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.jaccard">
-<span class="sig-name descname"><span class="pre">jaccard</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.jaccard" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">jaccard</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.jaccard" title="Link to this definition"></a></dt>
+<dd><p>The Jaccard index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.hausdorff">
-<span class="sig-name descname"><span class="pre">hausdorff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.hausdorff" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">hausdorff</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.hausdorff" title="Link to this definition"></a></dt>
+<dd><p>The Hausdorff distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_negative_rate">
-<span class="sig-name descname"><span class="pre">false_negative_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_negative_rate" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">false_negative_rate</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_negative_rate" title="Link to this definition"></a></dt>
+<dd><p>The false negative rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_negative_rate_with_tolerance">
-<span class="sig-name descname"><span class="pre">false_negative_rate_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_negative_rate_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">false_negative_rate_with_tolerance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_negative_rate_with_tolerance" title="Link to this definition"></a></dt>
+<dd><p>The false negative rate with tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_positive_rate">
-<span class="sig-name descname"><span class="pre">false_positive_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_positive_rate" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">false_positive_rate</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_positive_rate" title="Link to this definition"></a></dt>
+<dd><p>The false positive rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_discovery_rate">
-<span class="sig-name descname"><span class="pre">false_discovery_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_discovery_rate" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">false_discovery_rate</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_discovery_rate" title="Link to this definition"></a></dt>
+<dd><p>The false discovery rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_positive_rate_with_tolerance">
-<span class="sig-name descname"><span class="pre">false_positive_rate_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_positive_rate_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">false_positive_rate_with_tolerance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.false_positive_rate_with_tolerance" title="Link to this definition"></a></dt>
+<dd><p>The false positive rate with tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.voi">
-<span class="sig-name descname"><span class="pre">voi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.voi" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">voi</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.voi" title="Link to this definition"></a></dt>
+<dd><p>The variation of information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_distance">
-<span class="sig-name descname"><span class="pre">mean_false_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_distance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">mean_false_distance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_distance" title="Link to this definition"></a></dt>
+<dd><p>The mean false distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_negative_distance">
-<span class="sig-name descname"><span class="pre">mean_false_negative_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_negative_distance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_negative_distance" title="Link to this definition"></a></dt>
+<dd><p>The mean false negative distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_positive_distance">
-<span class="sig-name descname"><span class="pre">mean_false_positive_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_positive_distance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_positive_distance" title="Link to this definition"></a></dt>
+<dd><p>The mean false positive distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_distance_clipped">
-<span class="sig-name descname"><span class="pre">mean_false_distance_clipped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_distance_clipped" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">mean_false_distance_clipped</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_distance_clipped" title="Link to this definition"></a></dt>
+<dd><p>The mean false distance clipped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_negative_distance_clipped">
-<span class="sig-name descname"><span class="pre">mean_false_negative_distance_clipped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_negative_distance_clipped" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance_clipped</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_negative_distance_clipped" title="Link to this definition"></a></dt>
+<dd><p>The mean false negative distance clipped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_positive_distance_clipped">
-<span class="sig-name descname"><span class="pre">mean_false_positive_distance_clipped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_positive_distance_clipped" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance_clipped</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.mean_false_positive_distance_clipped" title="Link to this definition"></a></dt>
+<dd><p>The mean false positive distance clipped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.precision_with_tolerance">
-<span class="sig-name descname"><span class="pre">precision_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.precision_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">precision_with_tolerance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.precision_with_tolerance" title="Link to this definition"></a></dt>
+<dd><p>The precision with tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.recall_with_tolerance">
-<span class="sig-name descname"><span class="pre">recall_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.recall_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">recall_with_tolerance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.recall_with_tolerance" title="Link to this definition"></a></dt>
+<dd><p>The recall with tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.f1_score_with_tolerance">
-<span class="sig-name descname"><span class="pre">f1_score_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.f1_score_with_tolerance" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">f1_score_with_tolerance</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.f1_score_with_tolerance" title="Link to this definition"></a></dt>
+<dd><p>The F1 score with tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.precision">
-<span class="sig-name descname"><span class="pre">precision</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.precision" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">precision</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.precision" title="Link to this definition"></a></dt>
+<dd><p>The precision.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.recall">
-<span class="sig-name descname"><span class="pre">recall</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.recall" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">recall</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.recall" title="Link to this definition"></a></dt>
+<dd><p>The recall.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.f1_score">
-<span class="sig-name descname"><span class="pre">f1_score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.f1_score" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">f1_score</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.f1_score" title="Link to this definition"></a></dt>
+<dd><p>The F1 score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">store_best(criterion</span></span></dt>
+<dd><p>str) -&gt; bool: Whether or not to store the best weights/validation blocks for this criterion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">higher_is_better(criterion</span></span></dt>
+<dd><p>str) -&gt; bool: Determines whether a higher value is better for a given criterion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">bounds(criterion</span></span></dt>
+<dd><p>str) -&gt; Tuple[Union[int, float, None], Union[int, float, None]]: Determines the bounds for a given criterion.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>The evaluation scores are stored as attributes of the class. The class also contains methods to determine whether a higher value is better for a given criterion, whether or not to store the best weights/validation blocks for a given criterion, and the bounds for a given criterion.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">dice</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">jaccard</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">hausdorff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">false_negative_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">false_negative_rate_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">false_positive_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">false_discovery_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">false_positive_rate_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">voi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">mean_false_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">mean_false_distance_clipped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance_clipped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance_clipped</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id14" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">precision_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">recall_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">f1_score_with_tolerance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">precision</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id19">
+<span class="sig-name descname"><span class="pre">recall</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id19" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id20">
+<span class="sig-name descname"><span class="pre">f1_score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id20" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -234,20 +506,88 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.store_best">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.store_best" title="Link to this definition"></a></dt>
-<dd><p>Whether or not to save the best validation block and model
-weights for this criterion.</p>
+<dd><p>Determines whether or not to store the best weights/validation blocks for a given criterion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criterion</strong> (<em>str</em>) – The evaluation criterion.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the best weights/validation blocks should be stored, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the criterion is not recognized.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">BinarySegmentationEvaluationScores</span><span class="o">.</span><span class="n">store_best</span><span class="p">(</span><span class="s2">&quot;dice&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BinarySegmentationEvaluationScores</span><span class="o">.</span><span class="n">store_best</span><span class="p">(</span><span class="s2">&quot;f1_score&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The method returns True if the criterion is recognized and False otherwise. Whether or not to store the best weights/validation blocks for a given criterion is determined by the mapping dictionary.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.higher_is_better">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.higher_is_better" title="Link to this definition"></a></dt>
-<dd><p>Wether or not higher is better for this criterion.</p>
+<dd><p>Determines whether a higher value is better for a given criterion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criterion</strong> (<em>str</em>) – The evaluation criterion.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if a higher value is better, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the criterion is not recognized.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">BinarySegmentationEvaluationScores</span><span class="o">.</span><span class="n">higher_is_better</span><span class="p">(</span><span class="s2">&quot;dice&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BinarySegmentationEvaluationScores</span><span class="o">.</span><span class="n">higher_is_better</span><span class="p">(</span><span class="s2">&quot;f1_score&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The method returns True if the criterion is recognized and False otherwise. Whether a higher value is better for a given criterion is determined by the mapping dictionary.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.bounds">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores.bounds" title="Link to this definition"></a></dt>
-<dd><p>The bounds for this criterion</p>
+<dd><p>Determines the bounds for a given criterion. The bounds are used to determine the best value for a given criterion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criterion</strong> (<em>str</em>) – The evaluation criterion.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The lower and upper bounds for the criterion.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[Union[int, float, None], Union[int, float, None]]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the criterion is not recognized.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">BinarySegmentationEvaluationScores</span><span class="o">.</span><span class="n">bounds</span><span class="p">(</span><span class="s2">&quot;dice&quot;</span><span class="p">)</span>
+<span class="go">(0, 1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BinarySegmentationEvaluationScores</span><span class="o">.</span><span class="n">bounds</span><span class="p">(</span><span class="s2">&quot;hausdorff&quot;</span><span class="p">)</span>
+<span class="go">(0, nan)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The method returns the lower and upper bounds for the criterion. The bounds are determined by the mapping dictionary.</p>
 </dd></dl>
 
 </dd></dl>
@@ -255,34 +595,152 @@ weights for this criterion.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.</span></span><span class="sig-name descname"><span class="pre">MultiChannelBinarySegmentationEvaluationScores</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores" title="Link to this definition"></a></dt>
-<dd><p>Base class for evaluation scores.</p>
+<dd><p>Class representing evaluation scores for multi-channel binary segmentation tasks.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores.channel_scores">
+<span class="sig-name descname"><span class="pre">channel_scores</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores.channel_scores" title="Link to this definition"></a></dt>
+<dd><p>The list of channel scores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Tuple[str, <a class="reference internal" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores">BinarySegmentationEvaluationScores</a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">higher_is_better(criterion</span></span></dt>
+<dd><p>str) -&gt; bool: Determines whether a higher value is better for a given criterion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">store_best(criterion</span></span></dt>
+<dd><p>str) -&gt; bool: Whether or not to store the best weights/validation blocks for this criterion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">bounds(criterion</span></span></dt>
+<dd><p>str) -&gt; Tuple[Union[int, float, None], Union[int, float, None]]: Determines the bounds for a given criterion.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>The evaluation scores are stored as attributes of the class. The class also contains methods to determine whether a higher value is better for a given criterion, whether or not to store the best weights/validation blocks for a given criterion, and the bounds for a given criterion.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores.criteria">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">criteria</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores.criteria" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Returns a list of all criteria for all channels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of criteria.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[str]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the criterion is not recognized.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">channel_scores</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;channel1&quot;</span><span class="p">,</span> <span class="n">BinarySegmentationEvaluationScores</span><span class="p">()),</span> <span class="p">(</span><span class="s2">&quot;channel2&quot;</span><span class="p">,</span> <span class="n">BinarySegmentationEvaluationScores</span><span class="p">())]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MultiChannelBinarySegmentationEvaluationScores</span><span class="p">(</span><span class="n">channel_scores</span><span class="p">)</span><span class="o">.</span><span class="n">criteria</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The method returns a list of all criteria for all channels. The criteria are stored as attributes of the class.</p>
+</dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores.channel_scores">
-<span class="sig-name descname"><span class="pre">channel_scores</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores"><span class="pre">BinarySegmentationEvaluationScores</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores.channel_scores" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">channel_scores</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores" title="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.BinarySegmentationEvaluationScores"><span class="pre">BinarySegmentationEvaluationScores</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id21" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores.higher_is_better">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores.higher_is_better" title="Link to this definition"></a></dt>
-<dd><p>Wether or not higher is better for this criterion.</p>
+<dd><p>Determines whether a higher value is better for a given criterion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criterion</strong> (<em>str</em>) – The evaluation criterion.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if a higher value is better, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the criterion is not recognized.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MultiChannelBinarySegmentationEvaluationScores</span><span class="o">.</span><span class="n">higher_is_better</span><span class="p">(</span><span class="s2">&quot;channel1__dice&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MultiChannelBinarySegmentationEvaluationScores</span><span class="o">.</span><span class="n">higher_is_better</span><span class="p">(</span><span class="s2">&quot;channel1__f1_score&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The method returns True if the criterion is recognized and False otherwise. Whether a higher value is better for a given criterion is determined by the mapping dictionary.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores.store_best">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores.store_best" title="Link to this definition"></a></dt>
-<dd><p>Whether or not to save the best validation block and model
-weights for this criterion.</p>
+<dd><p>Determines whether or not to store the best weights/validation blocks for a given criterion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criterion</strong> (<em>str</em>) – The evaluation criterion.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the best weights/validation blocks should be stored, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the criterion is not recognized.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MultiChannelBinarySegmentationEvaluationScores</span><span class="o">.</span><span class="n">store_best</span><span class="p">(</span><span class="s2">&quot;channel1__dice&quot;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MultiChannelBinarySegmentationEvaluationScores</span><span class="o">.</span><span class="n">store_best</span><span class="p">(</span><span class="s2">&quot;channel1__f1_score&quot;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The method returns True if the criterion is recognized and False otherwise. Whether or not to store the best weights/validation blocks for a given criterion is determined by the mapping dictionary.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores.bounds">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluation_scores.MultiChannelBinarySegmentationEvaluationScores.bounds" title="Link to this definition"></a></dt>
-<dd><p>The bounds for this criterion</p>
+<dd><p>Determines the bounds for a given criterion. The bounds are used to determine the best value for a given criterion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criterion</strong> (<em>str</em>) – The evaluation criterion.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The lower and upper bounds for the criterion.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[Union[int, float, None], Union[int, float, None]]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the criterion is not recognized.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MultiChannelBinarySegmentationEvaluationScores</span><span class="o">.</span><span class="n">bounds</span><span class="p">(</span><span class="s2">&quot;channel1__dice&quot;</span><span class="p">)</span>
+<span class="go">(0, 1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MultiChannelBinarySegmentationEvaluationScores</span><span class="o">.</span><span class="n">bounds</span><span class="p">(</span><span class="s2">&quot;channel1__hausdorff&quot;</span><span class="p">)</span>
+<span class="go">(0, nan)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The method returns the lower and upper bounds for the criterion. The bounds are determined by the mapping dictionary.</p>
 </dd></dl>
 
 </dd></dl>

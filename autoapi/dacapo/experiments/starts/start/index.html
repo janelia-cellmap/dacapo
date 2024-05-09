@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -119,7 +120,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.starts.start.match_heads" title="dacapo.experiments.starts.start.match_heads"><code class="xref py py-obj docutils literal notranslate"><span class="pre">match_heads</span></code></a>(model, head_weights, old_head, new_head)</p></td>
-<td><p></p></td>
+<td><p>Matches the head of the model to the new head by copying the weights</p></td>
 </tr>
 </tbody>
 </table>
@@ -149,7 +150,49 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.start.match_heads">
 <span class="sig-prename descclassname"><span class="pre">dacapo.experiments.starts.start.</span></span><span class="sig-name descname"><span class="pre">match_heads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_head</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_head</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.starts.start.match_heads" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Matches the head of the model to the new head by copying the weights
+of the old head to the new head. The weights of the old head are
+copied to the new head by matching the labels of the old head to the
+labels of the new head.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – obj
+The model to which the weights are to be loaded.</p></li>
+<li><p><strong>head_weights</strong> – dict
+The weights of the old head.</p></li>
+<li><p><strong>old_head</strong> – list
+The labels of the old head.</p></li>
+<li><p><strong>new_head</strong> – list
+The labels of the new head.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>obj</dt><dd><p>The model with the weights of the old head copied to the new
+head.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>model</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the old head is not found in the new head, a RuntimeError
+exception is thrown which is logged and handled by loading
+only the common layers from weights.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">match_heads</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">head_weights</span><span class="p">,</span> <span class="n">old_head</span><span class="p">,</span> <span class="n">new_head</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This function is called by the Start class to match the head of
+the model to the new head by copying the weights of the old head
+to the new head.</p>
+</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.start.Start">
@@ -159,39 +202,79 @@ weights of the starter model used for finetuning.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.start.Start.run">
 <span class="sig-name descname"><span class="pre">run</span></span><a class="headerlink" href="#dacapo.experiments.starts.start.Start.run" title="Link to this definition"></a></dt>
-<dd><p>The specified run to retrieve weights for the model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
+<dd><p>str
+The specified run to retrieve weights for the model.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.start.Start.criterion">
 <span class="sig-name descname"><span class="pre">criterion</span></span><a class="headerlink" href="#dacapo.experiments.starts.start.Start.criterion" title="Link to this definition"></a></dt>
-<dd><p>The policy that was used to decide when to store the weights.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
+<dd><p>str
+The policy that was used to decide when to store the weights.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.start.Start.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#dacapo.experiments.starts.start.Start.channels" title="Link to this definition"></a></dt>
+<dd><p>int
+The number of channels in the input data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.starts.start.Start.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.starts.start.Start.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes the Start class with specified config to run the
+initialization of weights for a model associated with a specific
+criterion.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.starts.start.Start.initialize_weights">
 <span class="sig-name descname"><span class="pre">initialize_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_head</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.starts.start.Start.initialize_weights" title="Link to this definition"></a></dt>
 <dd><p>Retrieves the weights from the dacapo store and load them into
-the model.
-:param model: The model to which the weights are to be loaded.
-:type model: obj</p>
+the model.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This class is used to retrieve and load the weights of the starter
+model used for finetuning from the dacapo store.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">initialize_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_head</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Retrieves the weights from the dacapo store and load them into
+the model.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>RuntimeError</strong> – If weights of a non-existing or mismatched layer are being
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – obj
+The model to which the weights are to be loaded.</p></li>
+<li><p><strong>new_head</strong> – list
+The labels of the new head.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>obj</dt><dd><p>The model with the weights loaded from the dacapo store.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>model</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If weights of a non-existing or mismatched layer are being
 loaded, a RuntimeError exception is thrown which is logged
 and handled by loading only the common layers from weights.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="n">initialize_weights</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">new_head</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This function is called by the Start class to retrieve the weights
+from the dacapo store and load them into the model.</p>
 </dd></dl>
 
 </dd></dl>

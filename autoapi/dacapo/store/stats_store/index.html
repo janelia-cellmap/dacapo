@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -118,32 +119,153 @@
 <dd><p>Base class for statistics stores.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.stats_store.StatsStore.store_training_stats">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/training_stats/index.html#dacapo.experiments.training_stats.TrainingStats" title="dacapo.experiments.training_stats.TrainingStats"><span class="pre">dacapo.experiments.training_stats.TrainingStats</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.stats_store.StatsStore.store_training_stats" title="Link to this definition"></a></dt>
-<dd><p>Store training stats of a given run.</p>
+<span class="sig-name descname"><span class="pre">store_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_stats</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.stats_store.StatsStore.store_training_stats" title="Link to this definition"></a></dt>
+<dd><p>Store the training stats of a given run.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.stats_store.StatsStore.retrieve_training_stats">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/training_stats/index.html#dacapo.experiments.training_stats.TrainingStats" title="dacapo.experiments.training_stats.TrainingStats"><span class="pre">dacapo.experiments.training_stats.TrainingStats</span></a></span></span><a class="headerlink" href="#dacapo.store.stats_store.StatsStore.retrieve_training_stats" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">retrieve_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.stats_store.StatsStore.retrieve_training_stats" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the training stats for a given run.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.stats_store.StatsStore.store_validation_iteration_scores">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_validation_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/validation_scores/index.html#dacapo.experiments.validation_scores.ValidationScores" title="dacapo.experiments.validation_scores.ValidationScores"><span class="pre">dacapo.experiments.validation_scores.ValidationScores</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.stats_store.StatsStore.store_validation_iteration_scores" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">store_validation_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_scores</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.stats_store.StatsStore.store_validation_iteration_scores" title="Link to this definition"></a></dt>
 <dd><p>Store the validation iteration scores of a given run.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.stats_store.StatsStore.retrieve_validation_iteration_scores">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_validation_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dacapo.experiments.validation_scores.ValidationIterationScores</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.store.stats_store.StatsStore.retrieve_validation_iteration_scores" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">retrieve_validation_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.stats_store.StatsStore.retrieve_validation_iteration_scores" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the validation iteration scores for a given run.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.stats_store.StatsStore.delete_training_stats">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.stats_store.StatsStore.delete_training_stats" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">delete_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.stats_store.StatsStore.delete_training_stats" title="Link to this definition"></a></dt>
+<dd><p>Delete the training stats associated with a specific run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/training_stats/index.html#dacapo.experiments.training_stats.TrainingStats" title="dacapo.experiments.training_stats.TrainingStats"><span class="pre">dacapo.experiments.training_stats.TrainingStats</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Store training stats of a given run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_name</strong> (<em>str</em>) – The name of the run.</p></li>
+<li><p><strong>training_stats</strong> (<a class="reference internal" href="../../experiments/index.html#dacapo.experiments.TrainingStats" title="dacapo.experiments.TrainingStats"><em>TrainingStats</em></a>) – The training stats to store.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the training stats are already stored.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">StatsStore</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run_name</span> <span class="o">=</span> <span class="s1">&#39;run_0&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">training_stats</span> <span class="o">=</span> <span class="n">TrainingStats</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">store_training_stats</span><span class="p">(</span><span class="n">run_name</span><span class="p">,</span> <span class="n">training_stats</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/training_stats/index.html#dacapo.experiments.training_stats.TrainingStats" title="dacapo.experiments.training_stats.TrainingStats"><span class="pre">dacapo.experiments.training_stats.TrainingStats</span></a></span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the training stats for a given run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run_name</strong> (<em>str</em>) – The name of the run.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The training stats for the given run.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/index.html#dacapo.experiments.TrainingStats" title="dacapo.experiments.TrainingStats">TrainingStats</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the training stats are not available.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">StatsStore</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run_name</span> <span class="o">=</span> <span class="s1">&#39;run_0&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">retrieve_training_stats</span><span class="p">(</span><span class="n">run_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_validation_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/validation_scores/index.html#dacapo.experiments.validation_scores.ValidationScores" title="dacapo.experiments.validation_scores.ValidationScores"><span class="pre">dacapo.experiments.validation_scores.ValidationScores</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Store the validation iteration scores of a given run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_name</strong> (<em>str</em>) – The name of the run.</p></li>
+<li><p><strong>validation_scores</strong> (<a class="reference internal" href="../../experiments/index.html#dacapo.experiments.ValidationScores" title="dacapo.experiments.ValidationScores"><em>ValidationScores</em></a>) – The validation scores to store.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the validation iteration scores are already stored.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">StatsStore</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run_name</span> <span class="o">=</span> <span class="s1">&#39;run_0&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">validation_scores</span> <span class="o">=</span> <span class="n">ValidationScores</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">store_validation_iteration_scores</span><span class="p">(</span><span class="n">run_name</span><span class="p">,</span> <span class="n">validation_scores</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_validation_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dacapo.experiments.validation_scores.ValidationIterationScores</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the validation iteration scores for a given run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run_name</strong> (<em>str</em>) – The name of the run.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The validation iteration scores for the given run.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="../../experiments/index.html#dacapo.experiments.ValidationIterationScores" title="dacapo.experiments.ValidationIterationScores">ValidationIterationScores</a>]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the validation iteration scores are not available.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">StatsStore</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run_name</span> <span class="o">=</span> <span class="s1">&#39;run_0&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">retrieve_validation_iteration_scores</span><span class="p">(</span><span class="n">run_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd><p>Deletes the training statistics for a given run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run_name</strong> (<em>str</em>) – The name of the run.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the training stats are not available.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">StatsStore</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run_name</span> <span class="o">=</span> <span class="s1">&#39;run_0&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">delete_training_stats</span><span class="p">(</span><span class="n">run_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
 
 </dd></dl>
 

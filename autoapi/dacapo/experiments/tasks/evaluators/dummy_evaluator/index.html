@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -110,29 +111,69 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator" title="dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyEvaluator</span></code></a></p></td>
-<td><p>Base class of all evaluators.</p></td>
+<td><p>A class representing a dummy evaluator. This evaluator is used for testing purposes.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.dummy_evaluator.</span></span><span class="sig-name descname"><span class="pre">DummyEvaluator</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator" title="Link to this definition"></a></dt>
-<dd><p>Base class of all evaluators.</p>
-<p>An evaluator takes a post-processor’s output and compares it against
-ground-truth.</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator.score">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../dummy_evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores" title="dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores</span></a></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator.score" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
+<dd><p>A class representing a dummy evaluator. This evaluator is used for testing purposes.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator.criteria">
-<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['frizz_level',</span> <span class="pre">'blipp_score']</span></em><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator.criteria" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">criteria</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator.criteria" title="Link to this definition"></a></dt>
+<dd><p>List[str]
+the evaluation criteria</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator.evaluate">
 <span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the output array against the evaluation dataset.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator.score" title="Link to this definition"></a></dt>
+<dd><p>Return the evaluation scores.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The DummyEvaluator class is used to evaluate the performance of a dummy task.</p>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../dummy_evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores" title="dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores</span></a></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Return the evaluation scores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An object of DummyEvaluationScores class, with the evaluation scores.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../dummy_evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores" title="dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores">DummyEvaluationScores</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dummy_evaluator</span> <span class="o">=</span> <span class="n">DummyEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dummy_evaluator</span><span class="o">.</span><span class="n">score</span>
+<span class="go">DummyEvaluationScores(frizz_level=0.0, blipp_score=0.0)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to return the evaluation scores.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['frizz_level',</span> <span class="pre">'blipp_score']</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd><p>Evaluate the given output array and dataset and returns the scores based on predefined criteria.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -147,7 +188,22 @@ ground-truth.</p>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>DummyEvaluationScore</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – if the output array identifier is not valid</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dummy_evaluator</span> <span class="o">=</span> <span class="n">DummyEvaluator</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output_array_identifier</span> <span class="o">=</span> <span class="s2">&quot;output_array&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_dataset</span> <span class="o">=</span> <span class="s2">&quot;evaluation_dataset&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dummy_evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">output_array_identifier</span><span class="p">,</span> <span class="n">evaluation_dataset</span><span class="p">)</span>
+<span class="go">DummyEvaluationScores(frizz_level=0.0, blipp_score=0.0)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is used to evaluate the output array against the evaluation dataset.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

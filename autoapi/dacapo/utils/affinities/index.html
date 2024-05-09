@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -108,7 +109,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.utils.affinities.seg_to_affgraph" title="dacapo.utils.affinities.seg_to_affgraph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">seg_to_affgraph</span></code></a>(→ numpy.ndarray)</p></td>
-<td><p></p></td>
+<td><p>Constructs an affinity graph from a segmentation.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.utils.affinities.padding" title="dacapo.utils.affinities.padding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">padding</span></code></a>(neighborhood, voxel_size)</p></td>
 <td><p>Get the appropriate padding to make sure all provided affinities are &quot;True&quot;</p></td>
@@ -133,12 +134,71 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.utils.affinities.seg_to_affgraph">
 <span class="sig-prename descclassname"><span class="pre">dacapo.utils.affinities.</span></span><span class="sig-name descname"><span class="pre">seg_to_affgraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neighborhood</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">funlib.geometry.Coordinate</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#dacapo.utils.affinities.seg_to_affgraph" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Constructs an affinity graph from a segmentation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seg</strong> (<em>np.ndarray</em>) – The segmentation array.</p></li>
+<li><p><strong>neighborhood</strong> (<em>List</em><em>[</em><em>Coordinate</em><em>]</em>) – The list of coordinates representing the neighborhood.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The affinity graph.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the number of dimensions is not 2 or 3.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">seg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">neighborhood</span> <span class="o">=</span> <span class="p">[</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seg_to_affgraph</span><span class="p">(</span><span class="n">seg</span><span class="p">,</span> <span class="n">neighborhood</span><span class="p">)</span>
+<span class="go">array([[[0, 0, 0],</span>
+<span class="go">        [0, 0, 0],</span>
+<span class="go">        [0, 0, 0]],</span>
+
+<span class="go">       [[1, 1, 0],</span>
+<span class="go">        [1, 1, 0],</span>
+<span class="go">        [0, 0, 0]]], dtype=int32)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The affinity graph is represented as:
+shape = (e, z, y, x)
+nhood.shape = (edges, 3)</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.utils.affinities.padding">
 <span class="sig-prename descclassname"><span class="pre">dacapo.utils.affinities.</span></span><span class="sig-name descname"><span class="pre">padding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neighborhood</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.utils.affinities.padding" title="Link to this definition"></a></dt>
 <dd><p>Get the appropriate padding to make sure all provided affinities are “True”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>neighborhood</strong> (<em>List</em><em>[</em><em>Coordinate</em><em>]</em>) – The list of coordinates representing the neighborhood.</p></li>
+<li><p><strong>voxel_size</strong> (<em>Coordinate</em>) – The voxel size.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The negative and positive padding.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[Coordinate, Coordinate]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the number of dimensions is not 2 or 3.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">neighborhood</span> <span class="o">=</span> <span class="p">[</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">voxel_size</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">padding</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">)</span>
+<span class="go">(Coordinate(0, 0), Coordinate(1, 1))</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>

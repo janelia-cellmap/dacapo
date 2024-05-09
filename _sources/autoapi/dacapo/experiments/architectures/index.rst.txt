@@ -46,6 +46,40 @@ Classes
    Other classes can inherit this class to define their own specific variations of architecture.
    It requires to implement several property methods, and also includes additional methods related to the architecture design.
 
+   .. attribute:: input_shape
+
+      The spatial input shape for the neural network architecture.
+
+      :type: Coordinate
+
+   .. attribute:: eval_shape_increase
+
+      The amount to increase the input shape during prediction.
+
+      :type: Coordinate
+
+   .. attribute:: num_in_channels
+
+      The number of input channels required by the architecture.
+
+      :type: int
+
+   .. attribute:: num_out_channels
+
+      The number of output channels provided by the architecture.
+
+      :type: int
+
+   .. method:: dims
+
+      Returns the number of dimensions of the input shape.
+
+   .. method:: scale
+
+      Scales the input voxel size as required by the architecture.
+
+   .. note:: The class is abstract and requires to implement the abstract methods.
+
    .. py:property:: input_shape
       :type: funlib.geometry.Coordinate
       :abstractmethod:
@@ -56,6 +90,15 @@ Classes
       :returns: The spatial input shape.
       :rtype: Coordinate
 
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> input_shape = Coordinate((128, 128, 128))
+      >>> model = MyModel(input_shape)
+
+      .. note:: The method should be implemented in the derived class.
+
    .. py:property:: eval_shape_increase
       :type: funlib.geometry.Coordinate
 
@@ -63,6 +106,15 @@ Classes
 
       :returns: An instance representing the amount to increase in each dimension of the input shape.
       :rtype: Coordinate
+
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> eval_shape_increase = Coordinate((0, 0, 0))
+      >>> model = MyModel(input_shape, eval_shape_increase)
+
+      .. note:: The method is optional and can be overridden in the derived class.
 
    .. py:property:: num_in_channels
       :type: int
@@ -73,6 +125,15 @@ Classes
       :returns: Required number of input channels.
       :rtype: int
 
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> num_in_channels = 1
+      >>> model = MyModel(input_shape, num_in_channels)
+
+      .. note:: The method should be implemented in the derived class.
+
    .. py:property:: num_out_channels
       :type: int
       :abstractmethod:
@@ -82,6 +143,15 @@ Classes
       :returns: Number of output channels.
       :rtype: int
 
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> num_out_channels = 1
+      >>> model = MyModel(input_shape, num_out_channels)
+
+      .. note:: The method should be implemented in the derived class.
+
    .. py:property:: dims
       :type: int
 
@@ -89,6 +159,17 @@ Classes
 
       :returns: The number of dimensions.
       :rtype: int
+
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> input_shape = Coordinate((128, 128, 128))
+      >>> model = MyModel(input_shape)
+      >>> model.dims
+      3
+
+      .. note:: The method is optional and can be overridden in the derived class.
 
    .. py:method:: scale(input_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
 
@@ -100,22 +181,35 @@ Classes
       :returns: The scaled voxel size.
       :rtype: Coordinate
 
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> input_voxel_size = Coordinate((1, 1, 1))
+      >>> model = MyModel(input_shape)
+      >>> model.scale(input_voxel_size)
+      Coordinate((1, 1, 1))
+
+      .. note:: The method is optional and can be overridden in the derived class.
+
 
 
 .. py:class:: ArchitectureConfig
 
 
-   A class to represent the base configurations of any architecture.
+   A class to represent the base configurations of any architecture. It is used to define the architecture of a neural network model.
 
    .. attribute:: name
 
+      str
       a unique name for the architecture.
-
-      :type: str
 
    .. method:: verify()
 
+      
       validates the given architecture.
+
+   .. note:: The class is abstract and requires to implement the abstract methods.
 
    .. py:attribute:: name
       :type: str
@@ -126,8 +220,18 @@ Classes
 
       A method to validate an architecture configuration.
 
-      :returns: * *bool* -- A flag indicating whether the config is valid or not.
-                * *str* -- A description of the architecture.
+      :returns: A tuple of a boolean indicating if the architecture is valid and a message.
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> config = ArchitectureConfig("MyModel")
+      >>> is_valid, message = config.verify()
+      >>> print(is_valid, message)
+
+      .. note:: The method should be implemented in the derived class.
 
 
 
@@ -162,6 +266,12 @@ Classes
 
       :type: int
 
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method is used to check whether this is a valid architecture configuration.
+
+   .. note:: This class is used to represent a DummyArchitectureConfig object in the system.
+
    .. py:attribute:: architecture_type
 
       
@@ -185,6 +295,16 @@ Classes
 
       :returns: A tuple containing a boolean validity flag and a reason message string.
       :rtype: tuple
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> dummy_architecture_config = DummyArchitectureConfig(num_in_channels=1, num_out_channels=1)
+      >>> dummy_architecture_config.verify()
+      (False, "This is a DummyArchitectureConfig and is never valid")
+
+      .. note:: This method is used to check whether this is a valid architecture configuration.
 
 
 
@@ -214,7 +334,16 @@ Classes
    .. method:: forward(x)
 
       Performs the forward pass of the network.
-      
+
+   .. method:: num_in_channels()
+
+      Returns the number of input channels for this architecture.
+
+   .. method:: num_out_channels()
+
+      Returns the number of output channels for this architecture.
+
+   .. note:: This class is used to represent a dummy architecture layer for a 3D CNN.
 
    .. py:property:: input_shape
 
@@ -223,6 +352,15 @@ Classes
       :returns: Input shape of the architecture.
       :rtype: Coordinate
 
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> dummy_architecture.input_shape
+      Coordinate(x=40, y=20, z=20)
+
+      .. note:: This method is used to return the input shape for this architecture.
+
    .. py:property:: num_in_channels
 
       Returns the number of input channels for this architecture.
@@ -230,12 +368,30 @@ Classes
       :returns: Number of input channels.
       :rtype: int
 
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> dummy_architecture.num_in_channels
+      1
+
+      .. note:: This method is used to return the number of input channels for this architecture.
+
    .. py:property:: num_out_channels
 
       Returns the number of output channels for this architecture.
 
       :returns: Number of output channels.
       :rtype: int
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> dummy_architecture.num_out_channels
+      1
+
+      .. note:: This method is used to return the number of output channels for this architecture.
 
    .. py:method:: forward(x)
 
@@ -245,6 +401,16 @@ Classes
 
       :returns: Output tensor after the forward pass.
       :rtype: Tensor
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> dummy_architecture = DummyArchitecture(architecture_config)
+      >>> x = torch.randn(1, 1, 40, 20, 20)
+      >>> dummy_architecture.forward(x)
+
+      .. note:: This method is used to perform the forward pass of the network.
 
 
 
@@ -257,6 +423,84 @@ Classes
    https://github.com/saalfeldlab/CNNectome/blob/master/CNNectome/networks/unet_class.py
 
    Includes support for super resolution via the upsampling factors.
+
+   .. attribute:: input_shape
+
+      Coordinate
+      The shape of the data passed into the network during training.
+
+   .. attribute:: fmaps_out
+
+      int
+      The number of channels produced by your architecture.
+
+   .. attribute:: fmaps_in
+
+      int
+      The number of channels expected from the raw data.
+
+   .. attribute:: num_fmaps
+
+      int
+      The number of feature maps in the top level of the UNet.
+
+   .. attribute:: fmap_inc_factor
+
+      int
+      The multiplication factor for the number of feature maps for each level of the UNet.
+
+   .. attribute:: downsample_factors
+
+      List[Coordinate]
+      The factors to downsample the feature maps along each axis per layer.
+
+   .. attribute:: kernel_size_down
+
+      Optional[List[Coordinate]]
+      The size of the convolutional kernels used before downsampling in each layer.
+
+   .. attribute:: kernel_size_up
+
+      Optional[List[Coordinate]]
+      The size of the convolutional kernels used before upsampling in each layer.
+
+   .. attribute:: _eval_shape_increase
+
+      Optional[Coordinate]
+      The amount by which to increase the input size when just prediction rather than training.
+      It is generally possible to significantly increase the input size since we don't have the memory
+      constraints of the gradients, the optimizer and the batch size.
+
+   .. attribute:: upsample_factors
+
+      Optional[List[Coordinate]]
+      The amount by which to upsample the output of the UNet.
+
+   .. attribute:: constant_upsample
+
+      bool
+      Whether to use a transpose convolution or simply copy voxels to upsample.
+
+   .. attribute:: padding
+
+      str
+      The padding to use in convolution operations.
+
+   .. attribute:: use_attention
+
+      bool
+      Whether to use attention blocks in the UNet. This is supported for 2D and  3D.
+
+   .. method:: architecture_type()
+
+      
+      Returns the architecture type.
+
+   .. note:: The architecture_type attribute is set to CNNectomeUNet.
+
+   .. rubric:: References
+
+   Saalfeld, S., Fetter, R., Cardona, A., & Tomancak, P. (2012).
 
    .. py:attribute:: architecture_type
 
@@ -293,12 +537,12 @@ Classes
       
 
    .. py:attribute:: kernel_size_down
-      :type: Optional[List[funlib.geometry.Coordinate]]
+      :type: Optional[List[List[funlib.geometry.Coordinate]]]
 
       
 
    .. py:attribute:: kernel_size_up
-      :type: Optional[List[funlib.geometry.Coordinate]]
+      :type: Optional[List[List[funlib.geometry.Coordinate]]]
 
       
 
@@ -328,57 +572,273 @@ Classes
 
 
 
-   An abstract base class for defining the architecture of a neural network model.
-   It is inherited from PyTorch's Module and built-in class `ABC` (Abstract Base Classes).
-   Other classes can inherit this class to define their own specific variations of architecture.
-   It requires to implement several property methods, and also includes additional methods related to the architecture design.
+   A U-Net architecture for 3D or 4D data. The U-Net expects 3D or 4D tensors
+   shaped like::
+
+       ``(batch=1, channels, [length,] depth, height, width)``.
+
+   This U-Net performs only "valid" convolutions, i.e., sizes of the feature
+   maps decrease after each convolution. It will perfrom 4D convolutions as
+   long as ``length`` is greater than 1. As soon as ``length`` is 1 due to a
+   valid convolution, the time dimension will be dropped and tensors with
+   ``(b, c, z, y, x)`` will be use (and returned) from there on.
+
+   .. attribute:: fmaps_in
+
+      The number of input channels.
+
+   .. attribute:: fmaps_out
+
+      The number of feature maps in the output layer. This is also the
+      number of output feature maps. Stored in the ``channels`` dimension.
+
+   .. attribute:: num_fmaps
+
+      The number of feature maps in the first layer. This is also the
+      number of output feature maps. Stored in the ``channels`` dimension.
+
+   .. attribute:: fmap_inc_factor
+
+      By how much to multiply the number of feature maps between layers.
+      If layer 0 has ``k`` feature maps, layer ``l`` will have
+      ``k*fmap_inc_factor**l``.
+
+   .. attribute:: downsample_factors
+
+      List of tuples ``(z, y, x)`` to use to down- and up-sample the
+      feature maps between layers.
+
+   .. attribute:: kernel_size_down
+
+      List of lists of kernel sizes. The number of sizes in a list
+      determines the number of convolutional layers in the corresponding
+      level of the build on the left side. Kernel sizes can be given as
+      tuples or integer. If not given, each convolutional pass will
+      consist of two 3x3x3 convolutions.
+
+      :type: optional
+
+   .. attribute:: kernel_size_up
+
+      List of lists of kernel sizes. The number of sizes in a list
+      determines the number of convolutional layers in the corresponding
+      level of the build on the right side. Within one of the lists going
+      from left to right. Kernel sizes can be given as tuples or integer.
+      If not given, each convolutional pass will consist of two 3x3x3
+      convolutions.
+
+      :type: optional
+
+   .. attribute:: activation
+
+      Which activation to use after a convolution. Accepts the name of
+      any tensorflow activation function (e.g., ``ReLU`` for
+      ``torch.nn.ReLU``).
+
+   .. attribute:: fov
+
+      Initial field of view in physical units
+
+      :type: optional
+
+   .. attribute:: voxel_size
+
+      Size of a voxel in the input data, in physical units
+
+      :type: optional
+
+   .. attribute:: num_heads
+
+      Number of decoders. The resulting U-Net has one single encoder
+      path and num_heads decoder paths. This is useful in a multi-task
+      learning context.
+
+      :type: optional
+
+   .. attribute:: constant_upsample
+
+      If set to true, perform a constant upsampling instead of a
+      transposed convolution in the upsampling layers.
+
+      :type: optional
+
+   .. attribute:: padding
+
+      How to pad convolutions. Either 'same' or 'valid' (default).
+
+      :type: optional
+
+   .. attribute:: upsample_channel_contraction
+
+      When performing the ConvTranspose, whether to reduce the number
+      of channels by the fmap_increment_factor. can be either bool or
+      list of bools to apply independently per layer.
+
+   .. attribute:: activation_on_upsample
+
+      Whether or not to add an activation after the upsample operation.
+
+   .. attribute:: use_attention
+
+      Whether or not to use an attention block in the U-Net.
+
+       Methods:
+           forward(x):
+               Forward pass of the U-Net.
+           scale(voxel_size):
+               Scale the voxel size according to the upsampling factors.
+           input_shape:
+               Return the input shape of the U-Net.
+           num_in_channels:
+               Return the number of input channels.
+           num_out_channels:
+               Return the number of output channels.
+           eval_shape_increase:
+               Return the increase in shape due to the U-Net.
+       Note:
+           This class is a wrapper around the ``CNNectomeUNetModule`` class.
+           The ``CNNectomeUNetModule`` class is the actual implementation of the
+           U-Net architecture.
 
    .. py:property:: eval_shape_increase
 
-      Provides information about how much to increase the input shape during prediction.
+      The increase in shape due to the U-Net.
 
-      :returns: An instance representing the amount to increase in each dimension of the input shape.
-      :rtype: Coordinate
+      :returns: The increase in shape due to the U-Net.
+
+      :raises AttributeError: If the increase in shape is not given.
+
+      .. rubric:: Examples
+
+      >>> unet.eval_shape_increase
+      (1, 1, 128, 128, 128)
+
+      .. note:: The increase in shape should be given as a tuple ``(batch, channels, [length,] depth, height, width)``.
 
    .. py:property:: input_shape
 
-      Abstract method to define the spatial input shape for the neural network architecture.
-      The shape should not account for the channels and batch dimensions.
+      Return the input shape of the U-Net.
 
-      :returns: The spatial input shape.
-      :rtype: Coordinate
+      :returns: The input shape of the U-Net.
+
+      :raises AttributeError: If the input shape is not given.
+
+      .. rubric:: Examples
+
+      >>> unet.input_shape
+      (1, 1, 128, 128, 128)
+
+      .. note:: The input shape should be given as a tuple ``(batch, channels, [length,] depth, height, width)``.
 
    .. py:property:: num_in_channels
       :type: int
 
-      Abstract method to return number of input channels required by the architecture.
+      Return the number of input channels.
 
-      :returns: Required number of input channels.
-      :rtype: int
+      :returns: The number of input channels.
+
+      :raises AttributeError: If the number of input channels is not given.
+
+      .. rubric:: Examples
+
+      >>> unet.num_in_channels
+      1
+
+      .. note:: The number of input channels should be given as an integer.
 
    .. py:property:: num_out_channels
       :type: int
 
-      Abstract method to return the number of output channels provided by the architecture.
+      Return the number of output channels.
 
-      :returns: Number of output channels.
-      :rtype: int
+      :returns: The number of output channels.
+
+      :raises AttributeError: If the number of output channels is not given.
+
+      .. rubric:: Examples
+
+      >>> unet.num_out_channels
+      1
+
+      .. note:: The number of output channels should be given as an integer.
 
    .. py:method:: module()
+
+      Create the U-Net module.
+
+      :returns: The U-Net module.
+
+      :raises AttributeError: If the number of input channels is not given.
+      :raises AttributeError: If the number of output channels is not given.
+      :raises AttributeError: If the number of feature maps in the first layer is not given.
+      :raises AttributeError: If the factor by which the number of feature maps increases between layers is not given.
+      :raises AttributeError: If the downsample factors are not given.
+      :raises AttributeError: If the kernel sizes for the down pass are not given.
+      :raises AttributeError: If the kernel sizes for the up pass are not given.
+      :raises AttributeError: If the constant upsample flag is not given.
+      :raises AttributeError: If the padding is not given.
+      :raises AttributeError: If the upsample factors are not given.
+      :raises AttributeError: If the activation on upsample flag is not given.
+      :raises AttributeError: If the use attention flag is not given.
+
+      .. rubric:: Examples
+
+      >>> unet.module()
+      CNNectomeUNetModule(
+          in_channels=1,
+          num_fmaps=24,
+          num_fmaps_out=1,
+          fmap_inc_factor=2,
+          kernel_size_down=[[(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)]],
+          kernel_size_up=[[(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)]],
+          downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],
+          constant_upsample=False,
+          padding='valid',
+          activation_on_upsample=True,
+          upsample_channel_contraction=[False, True, True],
+          use_attention=False
+      )
+
+      .. note:: The U-Net module is an instance of the ``CNNectomeUNetModule`` class.
 
 
    .. py:method:: scale(voxel_size)
 
-      Method to scale the input voxel size as required by the architecture.
+      Scale the voxel size according to the upsampling factors.
 
-      :param input_voxel_size: The original size of the input voxel.
-      :type input_voxel_size: Coordinate
+      :param voxel_size: The size of a voxel in the input data.
+      :type voxel_size: tuple
 
       :returns: The scaled voxel size.
-      :rtype: Coordinate
+
+      :raises ValueError: If the voxel size is not given.
+
+      .. rubric:: Examples
+
+      >>> unet.scale((1, 1, 1))
+      (1, 1, 1)
+
+      .. note:: The voxel size should be given as a tuple ``(z, y, x)``.
 
 
    .. py:method:: forward(x)
+
+      Forward pass of the U-Net.
+
+      :param x: The input tensor.
+      :type x: Tensor
+
+      :returns: The output tensor.
+
+      :raises RuntimeError: If the tensors have different dimensions.
+
+      .. rubric:: Examples
+
+      >>> unet = CNNectomeUNet(architecture_config)
+      >>> x = torch.randn(1, 1, 64, 64, 64)
+      >>> unet(x)
+
+      .. note:: The input tensor should be given as a 5D tensor.
 
 
 

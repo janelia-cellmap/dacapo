@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -132,39 +133,259 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.mongo_stats_store.</span></span><span class="sig-name descname"><span class="pre">MongoStatsStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore" title="Link to this definition"></a></dt>
 <dd><p>A MongoDB store for run statistics. Used to store and retrieve training
 statistics and validation scores.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.store.mongo_stats_store.MongoStatsStore.db_host">
+<span class="sig-name descname"><span class="pre">db_host</span></span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.db_host" title="Link to this definition"></a></dt>
+<dd><p>The host of the MongoDB database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.store.mongo_stats_store.MongoStatsStore.db_name">
+<span class="sig-name descname"><span class="pre">db_name</span></span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.db_name" title="Link to this definition"></a></dt>
+<dd><p>The name of the MongoDB database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.store.mongo_stats_store.MongoStatsStore.client">
+<span class="sig-name descname"><span class="pre">client</span></span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.client" title="Link to this definition"></a></dt>
+<dd><p>The MongoDB client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MongoClient</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.store.mongo_stats_store.MongoStatsStore.database">
+<span class="sig-name descname"><span class="pre">database</span></span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.database" title="Link to this definition"></a></dt>
+<dd><p>The MongoDB database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Database</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.store.mongo_stats_store.MongoStatsStore.training_stats">
+<span class="sig-name descname"><span class="pre">training_stats</span></span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.training_stats" title="Link to this definition"></a></dt>
+<dd><p>The collection for training statistics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Collection</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.store.mongo_stats_store.MongoStatsStore.validation_scores">
+<span class="sig-name descname"><span class="pre">validation_scores</span></span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.validation_scores" title="Link to this definition"></a></dt>
+<dd><p>The collection for validation scores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Collection</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.mongo_stats_store.MongoStatsStore.store_training_stats">
-<span class="sig-name descname"><span class="pre">store_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/index.html#dacapo.experiments.TrainingStats" title="dacapo.experiments.TrainingStats"><span class="pre">dacapo.experiments.TrainingStats</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.store_training_stats" title="Link to this definition"></a></dt>
-<dd><p>Store training stats of a given run.</p>
+<span class="sig-name descname"><span class="pre">store_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.store_training_stats" title="Link to this definition"></a></dt>
+<dd><p>Store the training stats of a given run.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.mongo_stats_store.MongoStatsStore.retrieve_training_stats">
-<span class="sig-name descname"><span class="pre">retrieve_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/index.html#dacapo.experiments.TrainingStats" title="dacapo.experiments.TrainingStats"><span class="pre">dacapo.experiments.TrainingStats</span></a></span></span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.retrieve_training_stats" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">retrieve_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.retrieve_training_stats" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the training stats for a given run.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.mongo_stats_store.MongoStatsStore.store_validation_iteration_scores">
-<span class="sig-name descname"><span class="pre">store_validation_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/index.html#dacapo.experiments.ValidationScores" title="dacapo.experiments.ValidationScores"><span class="pre">dacapo.experiments.ValidationScores</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.store_validation_iteration_scores" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">store_validation_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.store_validation_iteration_scores" title="Link to this definition"></a></dt>
 <dd><p>Store the validation iteration scores of a given run.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.mongo_stats_store.MongoStatsStore.retrieve_validation_iteration_scores">
-<span class="sig-name descname"><span class="pre">retrieve_validation_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../experiments/index.html#dacapo.experiments.ValidationIterationScores" title="dacapo.experiments.ValidationIterationScores"><span class="pre">dacapo.experiments.ValidationIterationScores</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.retrieve_validation_iteration_scores" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">retrieve_validation_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.retrieve_validation_iteration_scores" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the validation iteration scores for a given run.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.store.mongo_stats_store.MongoStatsStore.delete_training_stats">
+<span class="sig-name descname"><span class="pre">delete_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.delete_training_stats" title="Link to this definition"></a></dt>
+<dd><p>Delete the training stats associated with a specific run.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>The MongoStatsStore uses the ‘training_stats’ and ‘validation_scores’ collections to store the statistics.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">store_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/index.html#dacapo.experiments.TrainingStats" title="dacapo.experiments.TrainingStats"><span class="pre">dacapo.experiments.TrainingStats</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Store the training statistics for a specific run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_name</strong> (<em>str</em>) – The name of the run.</p></li>
+<li><p><strong>stats</strong> (<a class="reference internal" href="../../experiments/index.html#dacapo.experiments.TrainingStats" title="dacapo.experiments.TrainingStats"><em>TrainingStats</em></a>) – The training statistics to be stored.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the training statistics are already stored.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">MongoStatsStore</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;dacapo&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run_name</span> <span class="o">=</span> <span class="s1">&#39;run_0&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span> <span class="o">=</span> <span class="n">TrainingStats</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">store_training_stats</span><span class="p">(</span><span class="n">run_name</span><span class="p">,</span> <span class="n">stats</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The training statistics are stored in the ‘training_stats’ collection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">retrieve_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/index.html#dacapo.experiments.TrainingStats" title="dacapo.experiments.TrainingStats"><span class="pre">dacapo.experiments.TrainingStats</span></a></span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the training statistics for a given run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_name</strong> (<em>str</em>) – The name of the run.</p></li>
+<li><p><strong>subsample</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to subsample the training statistics. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The training statistics for the specified run.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/index.html#dacapo.experiments.TrainingStats" title="dacapo.experiments.TrainingStats">TrainingStats</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the training statistics are not available.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">MongoStatsStore</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;dacapo&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run_name</span> <span class="o">=</span> <span class="s1">&#39;run_0&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">retrieve_training_stats</span><span class="p">(</span><span class="n">run_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The training statistics are retrieved from the ‘training_stats’ collection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">store_validation_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/index.html#dacapo.experiments.ValidationScores" title="dacapo.experiments.ValidationScores"><span class="pre">dacapo.experiments.ValidationScores</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Stores the validation iteration scores for a given run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_name</strong> (<em>str</em>) – The name of the run.</p></li>
+<li><p><strong>scores</strong> (<a class="reference internal" href="../../experiments/index.html#dacapo.experiments.ValidationScores" title="dacapo.experiments.ValidationScores"><em>ValidationScores</em></a>) – The validation scores to store.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">MongoStatsStore</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;dacapo&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run_name</span> <span class="o">=</span> <span class="s1">&#39;run_0&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scores</span> <span class="o">=</span> <span class="n">ValidationScores</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">store_validation_iteration_scores</span><span class="p">(</span><span class="n">run_name</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The validation iteration scores are stored in the ‘validation_scores’ collection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">retrieve_validation_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../experiments/index.html#dacapo.experiments.ValidationIterationScores" title="dacapo.experiments.ValidationIterationScores"><span class="pre">dacapo.experiments.ValidationIterationScores</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the validation iteration scores for a given run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_name</strong> (<em>str</em>) – The name of the run.</p></li>
+<li><p><strong>subsample</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to subsample the scores. Defaults to False.</p></li>
+<li><p><strong>validation_interval</strong> (<em>int</em><em>, </em><em>optional</em>) – The interval at which to retrieve the scores. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of validation iteration scores.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="../../experiments/index.html#dacapo.experiments.ValidationIterationScores" title="dacapo.experiments.ValidationIterationScores">ValidationIterationScores</a>]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the validation iteration scores are not available.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">MongoStatsStore</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;dacapo&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run_name</span> <span class="o">=</span> <span class="s1">&#39;run_0&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">retrieve_validation_iteration_scores</span><span class="p">(</span><span class="n">run_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The validation iteration scores are retrieved from the ‘validation_scores’ collection.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.store.mongo_stats_store.MongoStatsStore.delete_validation_scores">
 <span class="sig-name descname"><span class="pre">delete_validation_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.delete_validation_scores" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Deletes the validation scores for a given run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run_name</strong> (<em>str</em>) – The name of the run for which validation scores should be deleted.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the validation scores are not available.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">MongoStatsStore</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;dacapo&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run_name</span> <span class="o">=</span> <span class="s1">&#39;run_0&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">delete_validation_scores</span><span class="p">(</span><span class="n">run_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The validation scores are deleted from the ‘validation_scores’ collection.</p>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_stats_store.MongoStatsStore.delete_training_stats">
-<span class="sig-name descname"><span class="pre">delete_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.mongo_stats_store.MongoStatsStore.delete_training_stats" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">delete_training_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd><p>Deletes the training stats for a given run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run_name</strong> (<em>str</em>) – The name of the run for which training stats should be deleted.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the training statistics are not available.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">MongoStatsStore</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;dacapo&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run_name</span> <span class="o">=</span> <span class="s1">&#39;run_0&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">delete_training_stats</span><span class="p">(</span><span class="n">run_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The training statistics are deleted from the ‘training_stats’ collection.</p>
+</dd></dl>
 
 </dd></dl>
 

@@ -23,7 +23,20 @@ Classes
 
 
    This is just a dummy array  config used for testing. None of the
-   attributes have any particular meaning.
+   attributes have any particular meaning. It is used to test the
+   ArrayConfig class.
+
+   .. method:: to_array
+
+      Returns the DummyArray object
+
+   .. method:: verify
+
+      Returns whether the DummyArrayConfig is valid
+
+   .. rubric:: Notes
+
+   The source_array_config must be an ArrayConfig object.
 
    .. py:attribute:: array_type
 
@@ -32,6 +45,21 @@ Classes
    .. py:method:: verify() -> Tuple[bool, str]
 
       Check whether this is a valid Array
+
+      :returns: Whether the Array is valid and a message
+      :rtype: Tuple[bool, str]
+
+      :raises ValueError: If the source is not a tuple of strings
+
+      .. rubric:: Examples
+
+      >>> dummy_array_config = DummyArrayConfig(...)
+      >>> dummy_array_config.verify()
+      (False, "This is a DummyArrayConfig and is never valid")
+
+      .. rubric:: Notes
+
+      The source must be a tuple of strings.
 
 
 

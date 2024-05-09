@@ -22,6 +22,32 @@ Classes
 
 
 
-   This is a task for generating voxel affinities.
+   This is a task for generating voxel affinities. It uses an `AffinitiesPredictor` for prediction,
+   an `AffinitiesLoss` for loss calculation, a `WatershedPostProcessor` for post-processing, and an
+   `InstanceEvaluator` for evaluation.
+
+   .. attribute:: predictor
+
+      AffinitiesPredictor object
+
+   .. attribute:: loss
+
+      AffinitiesLoss object
+
+   .. attribute:: post_processor
+
+      WatershedPostProcessor object
+
+   .. attribute:: evaluator
+
+      InstanceEvaluator object
+
+   .. method:: __init__(self, task_config)
+
+      Initializes all components for the affinities task.
+
+   .. rubric:: Notes
+
+   This is a subclass of Task.
 
 

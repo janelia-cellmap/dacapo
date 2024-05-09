@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
@@ -116,52 +117,150 @@
 <dt class="sig sig-object py" id="dacapo.gp.dacapo_create_target.DaCapoTargetFilter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.gp.dacapo_create_target.</span></span><span class="sig-name descname"><span class="pre">DaCapoTargetFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/tasks/predictors/index.html#dacapo.experiments.tasks.predictors.Predictor" title="dacapo.experiments.tasks.predictors.Predictor"><span class="pre">dacapo.experiments.tasks.predictors.Predictor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gt_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.dacapo_create_target.DaCapoTargetFilter" title="Link to this definition"></a></dt>
 <dd><p>A Gunpowder node for generating the target from the ground truth</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.dacapo_create_target.DaCapoTargetFilter.Predictor">
+<span class="sig-name descname"><span class="pre">Predictor</span></span><a class="headerlink" href="#dacapo.gp.dacapo_create_target.DaCapoTargetFilter.Predictor" title="Link to this definition"></a></dt>
+<dd><p>The DaCapo Predictor to use to transform gt into target</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>Predictor</strong> (<a class="reference internal" href="../../experiments/tasks/predictors/index.html#dacapo.experiments.tasks.predictors.Predictor" title="dacapo.experiments.tasks.predictors.Predictor"><em>Predictor</em></a>) – The DaCapo Predictor to use to transform gt into target</p></li>
-<li><p><strong>gt</strong> (<code class="docutils literal notranslate"><span class="pre">Array</span></code>) – The dataset to use for generating the target.</p></li>
-<li><p><strong>target_key</strong> (<code class="docutils literal notranslate"><span class="pre">gp.ArrayKey</span></code>) – The key with which to provide the target.</p></li>
-</ul>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/tasks/predictors/index.html#dacapo.experiments.tasks.predictors.Predictor" title="dacapo.experiments.tasks.predictors.Predictor">Predictor</a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.dacapo_create_target.DaCapoTargetFilter.gt">
+<span class="sig-name descname"><span class="pre">gt</span></span><a class="headerlink" href="#dacapo.gp.dacapo_create_target.DaCapoTargetFilter.gt" title="Link to this definition"></a></dt>
+<dd><p>The dataset to use for generating the target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">Array</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.dacapo_create_target.DaCapoTargetFilter.target_key">
+<span class="sig-name descname"><span class="pre">target_key</span></span><a class="headerlink" href="#dacapo.gp.dacapo_create_target.DaCapoTargetFilter.target_key" title="Link to this definition"></a></dt>
+<dd><p>The key with which to provide the target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">gp.ArrayKey</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.dacapo_create_target.DaCapoTargetFilter.weights_key">
+<span class="sig-name descname"><span class="pre">weights_key</span></span><a class="headerlink" href="#dacapo.gp.dacapo_create_target.DaCapoTargetFilter.weights_key" title="Link to this definition"></a></dt>
+<dd><p>The key with which to provide the weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">gp.ArrayKey</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.gp.dacapo_create_target.DaCapoTargetFilter.mask_key">
+<span class="sig-name descname"><span class="pre">mask_key</span></span><a class="headerlink" href="#dacapo.gp.dacapo_create_target.DaCapoTargetFilter.mask_key" title="Link to this definition"></a></dt>
+<dd><p>The key with which to provide the mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">gp.ArrayKey</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.dacapo_create_target.DaCapoTargetFilter.setup">
 <span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.dacapo_create_target.DaCapoTargetFilter.setup" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>Called during initialization of the DAG. Callees can assume that all
-upstream providers are set up already.</p>
-<p>In setup, call <code class="xref py py-func docutils literal notranslate"><span class="pre">provides()</span></code> or <code class="xref py py-func docutils literal notranslate"><span class="pre">updates()</span></code> to announce the
-arrays and points provided or changed by this node.</p>
+<dd><p>Set up the provider.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.dacapo_create_target.DaCapoTargetFilter.prepare">
 <span class="sig-name descname"><span class="pre">prepare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.dacapo_create_target.DaCapoTargetFilter.prepare" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>Prepare for a batch request. Should return a <code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code> of
-needed dependencies. If None is returned, it will be assumed that all
-of request is needed.</p>
+<dd><p>Prepare the request.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.gp.dacapo_create_target.DaCapoTargetFilter.process">
 <span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.gp.dacapo_create_target.DaCapoTargetFilter.process" title="Link to this definition"></a></dt>
-<dd><p>To be implemented in subclasses.</p>
-<p>Filter a batch, will be called after <a class="reference internal" href="#dacapo.gp.dacapo_create_target.DaCapoTargetFilter.prepare" title="dacapo.gp.dacapo_create_target.DaCapoTargetFilter.prepare"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare()</span></code></a>. Should return a
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code> containing modified Arrays and Graphs. Keys in the returned
-batch will replace the associated data in the original batch. If None is
-returned it is assumed that the batch has been modified in place. <code class="docutils literal notranslate"><span class="pre">request</span></code>
-is the same as passed to <a class="reference internal" href="#dacapo.gp.dacapo_create_target.DaCapoTargetFilter.prepare" title="dacapo.gp.dacapo_create_target.DaCapoTargetFilter.prepare"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare()</span></code></a>, provided for convenience.</p>
+<dd><p>Process the batch.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is a subclass of gunpowder.BatchFilter and is used to
+generate the target from the ground truth.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>Set up the provider. This function sets the provider to provide the
+target with the given key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If the key is already provided.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">target_filter</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">prepare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>Prepare the request.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>gp.BatchRequest</em>) – The request to prepare.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The dependencies.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>deps (gp.BatchRequest)</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the target_key is not provided.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">request</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">BatchRequest</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">request</span><span class="p">[</span><span class="n">gp</span><span class="o">.</span><span class="n">ArrayKey</span><span class="p">(</span><span class="s2">&quot;GT&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">ArraySpec</span><span class="p">(</span><span class="n">roi</span><span class="o">=</span><span class="n">gp</span><span class="o">.</span><span class="n">Roi</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target_filter</span><span class="o">.</span><span class="n">prepare</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>Process the batch.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>batch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code>) – The batch received from upstream to be modified by this node.</p></li>
-<li><p><strong>request</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BatchRequest</span></code>) – The request this node received. The updated batch should meet
-this request.</p></li>
+<li><p><strong>batch</strong> (<em>gp.Batch</em>) – The batch to process.</p></li>
+<li><p><strong>request</strong> (<em>gp.BatchRequest</em>) – The request to process.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output batch.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>output (gp.Batch)</p>
+</dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">request</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">BatchRequest</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">request</span><span class="p">[</span><span class="n">gp</span><span class="o">.</span><span class="n">ArrayKey</span><span class="p">(</span><span class="s2">&quot;GT&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">ArraySpec</span><span class="p">(</span><span class="n">roi</span><span class="o">=</span><span class="n">gp</span><span class="o">.</span><span class="n">Roi</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target_filter</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>

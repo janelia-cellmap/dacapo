@@ -56,5 +56,11 @@ Classes
       :returns: The augmentation method to be applied on the source data.
       :rtype: GammaAugment instance
 
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> node = gamma_augment_config.node(raw_key)
+
 
 

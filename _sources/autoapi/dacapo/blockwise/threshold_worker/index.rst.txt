@@ -53,18 +53,34 @@ Attributes
 .. py:function:: cli(log_level)
 
 
-.. py:function:: start_worker(input_container: pathlib.Path | str, input_dataset: str, output_container: pathlib.Path | str, output_dataset: str, threshold: float = 0.0)
+.. py:function:: start_worker(input_container: upath.UPath | str, input_dataset: str, output_container: upath.UPath | str, output_dataset: str, threshold: float = 0.0, return_io_loop: bool = False)
+
+   Start the threshold worker.
+
+   :param input_container: The input container.
+   :type input_container: Path | str
+   :param input_dataset: The input dataset.
+   :type input_dataset: str
+   :param output_container: The output container.
+   :type output_container: Path | str
+   :param output_dataset: The output dataset.
+   :type output_dataset: str
+   :param threshold: The threshold.
+   :type threshold: float
 
 
 .. py:function:: spawn_worker(input_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, threshold: float = 0.0)
 
    Spawn a worker to predict on a given dataset.
 
-   :param model: The model to use for prediction.
-   :type model: Model
-   :param raw_array: The raw data to predict on.
-   :type raw_array: Array
-   :param prediction_array_identifier: The identifier of the prediction array.
-   :type prediction_array_identifier: LocalArrayIdentifier
+   :param input_array_identifier: The raw data to predict on.
+   :type input_array_identifier: LocalArrayIdentifier
+   :param output_array_identifier: The identifier of the prediction array.
+   :type output_array_identifier: LocalArrayIdentifier
+   :param threshold: The threshold.
+   :type threshold: float
+
+   :returns: The function to run the worker.
+   :rtype: Callable
 
 
