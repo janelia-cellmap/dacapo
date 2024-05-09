@@ -1,9 +1,8 @@
 from dacapo.experiments.tasks import TaskConfig
 from upath import UPath as Path
-from typing import List
+from typing import List, Union, Optional, Sequence
 from enum import Enum, EnumMeta
 from funlib.geometry import Coordinate
-from typing import Union, Optional
 
 import zarr
 from zarr.n5 import N5FSStore
@@ -389,12 +388,14 @@ def generate_dataspec_from_csv(csv_path: Path):
 
 
 class DataSplitGenerator:
-    """
-    Generates DataSplitConfig for a given task config and datasets. A csv file can be generated
-    from the DataSplitConfig and used to generate the DataSplitConfig again.
+    """Generates DataSplitConfig for a given task config and datasets.
 
-    Currently only supports semantic segmentation.
-    Supports:
+    Class names in gt_dataset should be within [] e.g. [mito&peroxisome&er] for
+    multiple classes or [mito] for one class.
+
+    Currently only supports:
+     - semantic segmentation.
+     Supports:
         - 2D and 3D datasets.
         - Zarr, N5 and OME-Zarr datasets.
         - Multi class targets.
@@ -462,8 +463,8 @@ class DataSplitGenerator:
         self,
         name: str,
         datasets: List[DatasetSpec],
-        input_resolution: Coordinate,
-        output_resolution: Coordinate,
+        input_resolution: Union[Sequence[int], Coordinate],
+        output_resolution: Union[Sequence[int], Coordinate],
         targets: Optional[List[str]] = None,
         segmentation_type: Union[str, SegmentationType] = "semantic",
         max_gt_downsample=32,
@@ -540,16 +541,19 @@ class DataSplitGenerator:
             This function is used to initialize the DataSplitGenerator class with the specified name, datasets, input resolution, output resolution, targets, segmentation type, maximum ground truth downsample, maximum ground truth upsample, maximum raw training downsample, maximum raw training upsample, maximum raw validation downsample, maximum raw validation upsample, minimum training volume size, minimum raw value, maximum raw value, and classes separator character.
 
         """
+        if not isinstance(input_resolution, Coordinate):
+            input_resolution = Coordinate(input_resolution)
+        if not isinstance(output_resolution, Coordinate):
+            output_resolution = Coordinate(output_resolution)
+        if isinstance(segmentation_type, str):
+            segmentation_type = SegmentationType[segmentation_type.lower()]
+
         self.name = name
         self.datasets = datasets
         self.input_resolution = input_resolution
         self.output_resolution = output_resolution
         self.targets = targets
         self._class_name = None
-
-        if isinstance(segmentation_type, str):
-            segmentation_type = SegmentationType[segmentation_type.lower()]
-
         self.segmentation_type = segmentation_type
         self.max_gt_downsample = max_gt_downsample
         self.max_gt_upsample = max_gt_upsample
@@ -844,8 +848,8 @@ class DataSplitGenerator:
     @staticmethod
     def generate_from_csv(
         csv_path: Path,
-        input_resolution: Coordinate,
-        output_resolution: Coordinate,
+        input_resolution: Union[Sequence[int], Coordinate],
+        output_resolution: Union[Sequence[int], Coordinate],
         name: Optional[str] = None,
         **kwargs,
     ):
