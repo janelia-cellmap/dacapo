@@ -2,12 +2,13 @@ from cellpose.resnet_torch import CPnet
 from .architecture import Architecture
 from funlib.geometry import Coordinate
 
-    # example
-    # nout = 4
-    # sz = 3
-    # self.net = CPnet(
-    #     nbase, nout, sz, mkldnn=False, conv_3D=True, max_pool=True, diam_mean=30.0
-    # )
+
+# example
+# nout = 4
+# sz = 3
+# self.net = CPnet(
+#     nbase, nout, sz, mkldnn=False, conv_3D=True, max_pool=True, diam_mean=30.0
+# )
 # currently the input channels are embedded in nbdase, but they should be passed as a separate parameternbase = [in_chan, 32, 64, 128, 256]
 class CellposeUnet(Architecture):
     def __init__(self, architecture_config):
@@ -17,7 +18,7 @@ class CellposeUnet(Architecture):
         self._sz = self._input_shape.dims
         self._eval_shape_increase = Coordinate((0,) * self._sz)
         self._nout = architecture_config.nout
-        print("conv_3D:",architecture_config.conv_3D)
+        print("conv_3D:", architecture_config.conv_3D)
         self.unet = CPnet(
             architecture_config.nbase,
             architecture_config.nout,
@@ -50,13 +51,13 @@ class CellposeUnet(Architecture):
         if not self.unet.style_on:
             style = style * 0
         T1 = self.unet.upsample(style, T0, self.unet.mkldnn)
-        # head layer 
+        # head layer
         # T1 = self.unet.output(T1)
         if self.unet.mkldnn:
             T0 = [t0.to_dense() for t0 in T0]
             T1 = T1.to_dense()
         return T1
-    
+
     @property
     def input_shape(self):
         return self._input_shape
@@ -68,9 +69,7 @@ class CellposeUnet(Architecture):
     @property
     def num_out_channels(self) -> int:
         return self._nout
-    
+
     @property
     def eval_shape_increase(self):
         return self._eval_shape_increase
-
-
