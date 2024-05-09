@@ -6,7 +6,6 @@ from torch import nn
 
 
 class CellposeLoss(Loss):
-
     def compute(self, prediction, target, weights=None):
         """loss function between true labels target and prediction prediction"""
         criterion = nn.MSELoss(reduction="mean")

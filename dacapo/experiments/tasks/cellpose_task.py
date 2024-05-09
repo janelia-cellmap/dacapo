@@ -7,7 +7,6 @@ from .task import Task
 
 class CellposeTask(Task):
     def __init__(self, task_config):
-
         self.predictor = CellposePredictor(
             channels=task_config.channels,
             scale_factor=task_config.scale_factor,
