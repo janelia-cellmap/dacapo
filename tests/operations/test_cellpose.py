@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.INFO)
     ],
 )
 def test_train(
-        run_config,
+    run_config,
 ):
     print("Test train")
     # create a store
