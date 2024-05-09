@@ -58,6 +58,7 @@ dependencies = [
         "scipy",
         "upath",
         "boto3",
+	"cellpose",
         ]
 
 # extras
