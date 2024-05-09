@@ -6,6 +6,7 @@ from .training_stats import TrainingStats
 from .validation_scores import ValidationScores
 from .starts import Start
 from .model import Model
+from typing import Optional
 
 import torch
 
@@ -48,13 +49,13 @@ class Run:
     task: Task
     architecture: Architecture
     trainer: Trainer
-    datasplit: DataSplit
+    _datasplit: Optional[DataSplit]
 
     model: Model
     optimizer: torch.optim.Optimizer
 
     training_stats: TrainingStats
-    validation_scores: ValidationScores
+    _validation_scores: Optional[ValidationScores]
 
     def __init__(self, run_config, load_starter_model: bool = True):
         """
