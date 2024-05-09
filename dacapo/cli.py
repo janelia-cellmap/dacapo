@@ -1,4 +1,4 @@
-from pathlib import Path
+from upath import UPath as Path
 from typing import Optional
 
 import numpy as np
@@ -7,7 +7,6 @@ import dacapo
 import click
 import logging
 from funlib.geometry import Roi, Coordinate
-from funlib.persistence import open_ds
 from dacapo.experiments.datasplits.datasets.dataset import Dataset
 from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
     PostProcessorParameters,

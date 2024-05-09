@@ -1,4 +1,4 @@
-from pathlib import Path
+from upath import UPath as Path
 
 from dacapo.blockwise import run_blockwise
 import dacapo.blockwise

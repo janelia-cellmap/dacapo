@@ -10,6 +10,7 @@
    overview
    install
    tutorial
+   docker
    autoapi/index
    cli
 

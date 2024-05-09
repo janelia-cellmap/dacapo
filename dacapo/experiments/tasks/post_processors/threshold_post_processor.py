@@ -1,4 +1,4 @@
-from pathlib import Path
+from upath import UPath as Path
 from dacapo.blockwise.scheduler import run_blockwise
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from .threshold_post_processor_parameters import ThresholdPostProcessorParameters
@@ -12,15 +12,53 @@ from typing import Iterable
 
 
 class ThresholdPostProcessor(PostProcessor):
+    """
+    A post-processor that applies a threshold to the prediction.
+
+    Attributes:
+        prediction_array_identifier: The identifier of the prediction array.
+        prediction_array: The prediction array.
+    Methods:
+        enumerate_parameters: Enumerate all possible parameters of this post-processor.
+        set_prediction: Set the prediction array.
+        process: Process the prediction with the given parameters.
+    Note:
+        This post-processor applies a threshold to the prediction. The threshold is used to define the segmentation. The prediction array is set using the `set_prediction` method.
+    """
+
     def __init__(self):
         pass
 
     def enumerate_parameters(self) -> Iterable["ThresholdPostProcessorParameters"]:
-        """Enumerate all possible parameters of this post-processor."""
+        """
+        Enumerate all possible parameters of this post-processor.
+
+        Returns:
+            Generator[ThresholdPostProcessorParameters]: A generator of parameters.
+        Raises:
+            NotImplementedError: If the method is not implemented.
+        Examples:
+            >>> for parameters in post_processor.enumerate_parameters():
+            ...     print(parameters)
+        Note:
+            This method should return a generator of instances of ``ThresholdPostProcessorParameters``.
+        """
         for i, threshold in enumerate([100, 127, 150]):
             yield ThresholdPostProcessorParameters(id=i, threshold=threshold)
 
     def set_prediction(self, prediction_array_identifier):
+        """
+        Set the prediction array.
+
+        Args:
+            prediction_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
+        Raises:
+            NotImplementedError: If the method is not implemented.
+        Examples:
+            >>> post_processor.set_prediction(prediction_array_identifier)
+        Note:
+            This method should set the prediction array using the given identifier.
+        """
         self.prediction_array_identifier = prediction_array_identifier
         self.prediction_array = ZarrArray.open_from_array_identifier(
             prediction_array_identifier
@@ -33,6 +71,24 @@ class ThresholdPostProcessor(PostProcessor):
         num_workers: int = 16,
         block_size: Coordinate = Coordinate((256, 256, 256)),
     ) -> ZarrArray:
+        """
+        Process the prediction with the given parameters.
+
+        Args:
+            parameters (ThresholdPostProcessorParameters): The parameters to use for processing.
+            output_array_identifier (LocalArrayIdentifier): The identifier of the output array.
+            num_workers (int): The number of workers to use for processing.
+            block_size (Coordinate): The block size to use for processing.
+        Returns:
+            ZarrArray: The output array.
+        Raises:
+            NotImplementedError: If the method is not implemented.
+        Examples:
+            >>> post_processor.process(parameters, output_array_identifier)
+        Note:
+            This method should process the prediction with the given parameters and return the output array. The method uses the `run_blockwise` function from the `dacapo.blockwise.scheduler` module to run the blockwise post-processing.
+            The output array is created using the `ZarrArray.create_from_array_identifier` function from the `dacapo.experiments.datasplits.datasets.arrays` module.
+        """
         # TODO: Investigate Liskov substitution princple and whether it is a problem here
         # OOP theory states the super class should always be replaceable with its subclasses
         # meaning the input arguments to methods on the subclass can only be more loosely

@@ -117,10 +117,15 @@ class TypedConverter(Converter):
             to determine the class. This is useful for reconstructing a concrete
             class from unstructured data.
         """
-
-        cls = cls_fn(obj_data["__type__"])
-        structure_fn = make_dict_structure_fn(cls, self)
-        return structure_fn(obj_data, cls)
+        try:
+            cls = cls_fn(obj_data["__type__"])
+            structure_fn = make_dict_structure_fn(cls, self)
+            return structure_fn(obj_data, cls)
+        except:
+            print(
+                f"Could not structure object of type {obj_data}. will try unstructured data. attr __type__ can be missing because of old version of the data."
+            )
+            return obj_data
 
 
 # The global converter object, to be used by stores to convert objects into
