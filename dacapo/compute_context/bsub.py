@@ -1,5 +1,5 @@
 import os
-from pathlib import Path
+from upath import UPath as Path
 from .compute_context import ComputeContext
 import daisy
 
@@ -10,6 +10,12 @@ from typing import Optional
 
 @attr.s
 class Bsub(ComputeContext):
+    distribute_workers: Optional[bool] = attr.ib(
+        default=True,
+        metadata={
+            "help_text": "Whether to distribute the workers across multiple nodes or processes."
+        },
+    )
     """
     The Bsub class is a subclass of the ComputeContext class. It is used to specify the
     context in which computations are to be done. Bsub is used to specify that
@@ -27,7 +33,6 @@ class Bsub(ComputeContext):
         The class is a subclass of the ComputeContext class.
 
     """
-
     queue: str = attr.ib(default="local", metadata={"help_text": "The queue to run on"})
     num_gpus: int = attr.ib(
         default=1,
@@ -58,13 +63,9 @@ class Bsub(ComputeContext):
 
         Returns:
             str: The device on which computations are to be done.
-        Raises:
-            NotImplementedError: If the method is not implemented in the derived class.
         Examples:
             >>> context = Bsub()
             >>> device = context.device
-        Note:
-            The method is implemented in the class.
         """
         if self.num_gpus > 0:
             return "cuda"
@@ -79,14 +80,10 @@ class Bsub(ComputeContext):
             command (List[str]): The command to be wrapped.
         Returns:
             List[str]: The wrapped command.
-        Raises:
-            NotImplementedError: If the method is not implemented in the derived class.
         Examples:
             >>> context = Bsub()
             >>> command = ["python", "script.py"]
             >>> wrapped_command = context._wrap_command(command)
-        Note:
-            The method is implemented in the class.
         """
         try:
             client = daisy.Client()
@@ -102,8 +99,6 @@ class Bsub(ComputeContext):
                 f"{self.queue}",
                 "-n",
                 f"{self.num_cpus}",
-                "-gpu",
-                f"num={self.num_gpus}",
                 "-J",
                 "dacapo",
                 "-o",
@@ -111,6 +106,14 @@ class Bsub(ComputeContext):
                 "-e",
                 f"{basename}.err",
             ]
+            + (
+                [
+                    "-gpu",
+                    f"num={self.num_gpus}",
+                ]
+                if self.num_gpus > 0
+                else []
+            )
             + (
                 [
                     "-P",

@@ -9,10 +9,11 @@ import neuroglancer
 import lazy_property
 import numpy as np
 import zarr
+from zarr.n5 import N5FSStore
 
 from collections import OrderedDict
 import logging
-from pathlib import Path
+from upath import UPath as Path
 import json
 from typing import Dict, Tuple, Any, Optional, List
 
@@ -103,7 +104,7 @@ class ZarrArray(Array):
         self.name = array_config.name
         self.file_name = array_config.file_name
         self.dataset = array_config.dataset
-
+        self._mode = array_config.mode
         self._attributes = self.data.attrs
         self._axes = array_config._axes
         self.snap_to_grid = array_config.snap_to_grid
@@ -142,6 +143,14 @@ class ZarrArray(Array):
 
         """
         return f"ZarrArray({self.file_name}, {self.dataset})"
+
+    @property
+    def mode(self):
+        if not hasattr(self, "_mode"):
+            self._mode = "a"
+        if self._mode not in ["r", "w", "a"]:
+            raise ValueError(f"Mode {self._mode} not in ['r', 'w', 'a']")
+        return self._mode
 
     @property
     def attrs(self):
@@ -358,7 +367,12 @@ class ZarrArray(Array):
         Notes:
             This method is used to return the data of the array.
         """
-        zarr_container = zarr.open(str(self.file_name))
+        file_name = str(self.file_name)
+        # Zarr library does not detect the store for N5 datasets
+        if file_name.endswith(".n5"):
+            zarr_container = zarr.open(N5FSStore(str(file_name)), mode=self.mode)
+        else:
+            zarr_container = zarr.open(str(file_name), mode=self.mode)
         return zarr_container[self.dataset]
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
@@ -406,6 +420,7 @@ class ZarrArray(Array):
         num_channels,
         voxel_size,
         dtype,
+        mode="a",
         write_size=None,
         name=None,
         overwrite=False,

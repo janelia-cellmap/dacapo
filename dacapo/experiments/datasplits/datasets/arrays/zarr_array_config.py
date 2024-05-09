@@ -5,7 +5,7 @@ from .zarr_array import ZarrArray
 
 from funlib.geometry import Coordinate
 
-from pathlib import Path
+from upath import UPath as Path
 
 from typing import Optional, List, Tuple
 
@@ -54,6 +54,9 @@ class ZarrArrayConfig(ArrayConfig):
     )
     _axes: Optional[List[str]] = attr.ib(
         default=None, metadata={"help_text": "The axes of your data!"}
+    )
+    mode: Optional[str] = attr.ib(
+        default="a", metadata={"help_text": "The access mode!"}
     )
 
     def verify(self) -> Tuple[bool, str]:

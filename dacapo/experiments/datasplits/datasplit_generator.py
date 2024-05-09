@@ -1,11 +1,12 @@
 from dacapo.experiments.tasks import TaskConfig
-from pathlib import Path
+from upath import UPath as Path
 from typing import List
 from enum import Enum, EnumMeta
 from funlib.geometry import Coordinate
 from typing import Union, Optional
 
 import zarr
+from zarr.n5 import N5FSStore
 from dacapo.experiments.datasplits.datasets.arrays import (
     ZarrArrayConfig,
     ZarrArray,
@@ -21,7 +22,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def is_zarr_group(file_name: str, dataset: str):
+def is_zarr_group(file_name: Path, dataset: str):
     """
     Check if the dataset is a Zarr group. If the dataset is a Zarr group, it will return True, otherwise False.
 
@@ -40,7 +41,10 @@ def is_zarr_group(file_name: str, dataset: str):
     Notes:
         This function is used to check if the dataset is a Zarr group.
     """
-    zarr_file = zarr.open(str(file_name))
+    if file_name.suffix == ".n5":
+        zarr_file = zarr.open(N5FSStore(str(file_name)), mode="r")
+    else:
+        zarr_file = zarr.open(str(file_name), mode="r")
     return isinstance(zarr_file[dataset], zarr.hierarchy.Group)
 
 
@@ -121,6 +125,7 @@ def get_right_resolution_array_config(
         file_name=container,
         dataset=str(current_dataset_path),
         snap_to_grid=target_resolution,
+        mode="r",
     )
     zarr_array = ZarrArray(zarr_config)
     while (
@@ -133,6 +138,7 @@ def get_right_resolution_array_config(
             file_name=container,
             dataset=str(Path(dataset, f"s{level}")),
             snap_to_grid=target_resolution,
+            mode="r",
         )
 
         zarr_array = ZarrArray(zarr_config)
@@ -762,7 +768,7 @@ class DataSplitGenerator:
         #     f"Processing raw_container:{raw_container} raw_dataset:{raw_dataset} gt_path:{gt_path} gt_dataset:{gt_dataset}"
         # )
 
-        if is_zarr_group(str(raw_container), raw_dataset):
+        if is_zarr_group(raw_container, raw_dataset):
             raw_config = get_right_resolution_array_config(
                 raw_container, raw_dataset, self.input_resolution, "raw"
             )
@@ -772,6 +778,7 @@ class DataSplitGenerator:
                     name=f"raw_{raw_container.stem}_uint8",
                     file_name=raw_container,
                     dataset=raw_dataset,
+                    mode="r",
                 ),
                 self.input_resolution,
                 "raw",
@@ -789,7 +796,7 @@ class DataSplitGenerator:
                 raise FileNotFoundError(
                     f"GT path {gt_path/current_class_dataset} does not exist."
                 )
-            if is_zarr_group(str(gt_path), current_class_dataset):
+            if is_zarr_group(gt_path, current_class_dataset):
                 gt_config = get_right_resolution_array_config(
                     gt_path, current_class_dataset, self.output_resolution, "gt"
                 )
@@ -799,6 +806,7 @@ class DataSplitGenerator:
                         name=f"gt_{gt_path.stem}_{current_class_dataset}_uint8",
                         file_name=gt_path,
                         dataset=current_class_dataset,
+                        mode="r",
                     ),
                     self.output_resolution,
                     "gt",

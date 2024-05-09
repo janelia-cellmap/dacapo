@@ -1,6 +1,6 @@
 from datetime import datetime
 from importlib.machinery import SourceFileLoader
-from pathlib import Path
+from upath import UPath as Path
 from daisy import Task, Roi
 
 
@@ -25,8 +25,6 @@ class DaCapoBlockwiseTask(Task):
     Methods:
         __init__:
             Initialize the task.
-    Note:
-        The method is implemented in the class.
     """
 
     def __init__(
@@ -58,12 +56,6 @@ class DaCapoBlockwiseTask(Task):
             upstream_tasks: The upstream tasks.
             *args: Additional positional arguments to pass to ``worker_function``.
             **kwargs: Additional keyword arguments to pass to ``worker_function``.
-        Raises:
-            ValueError: If the worker file is not a valid path.
-        Examples:
-            >>> DaCapoBlockwiseTask(worker_file="worker_file", total_roi=Roi, read_roi=Roi, write_roi=Roi, num_workers=16, max_retries=2, timeout=None, upstream_tasks=None)
-        Note:
-            The method is implemented in the class.
         """
         # Load worker functions
         worker_name = Path(worker_file).stem

@@ -46,11 +46,6 @@ class LocalTorch(ComputeContext):
 
         Returns:
             torch.device: The torch device object.
-        Examples:
-            >>> context = LocalTorch()
-            >>> device = context.device
-        Note:
-            The method is implemented in the class.
         """
         if self._device is None:
             if torch.cuda.is_available():

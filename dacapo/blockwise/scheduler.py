@@ -1,4 +1,4 @@
-from pathlib import Path
+from upath import UPath as Path
 import shutil
 import tempfile
 import time
@@ -54,12 +54,8 @@ def run_blockwise(
             Additional keyword arguments to pass to ``worker_function``.
     Returns:
         ``Bool``.
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
     Examples:
         >>> run_blockwise(worker_file, total_roi, read_roi, write_roi, num_workers, max_retries, timeout, upstream_tasks)
-    Note:
-        The method is implemented in the class.
 
     """
 
@@ -92,6 +88,7 @@ def segment_blockwise(
     max_retries: int = 2,
     timeout=None,
     upstream_tasks=None,
+    keep_tmpdir=False,
     *args,
     **kwargs,
 ):
@@ -121,18 +118,16 @@ def segment_blockwise(
             The maximum time in seconds to wait for a worker to complete a task.
         upstream_tasks (``List``):
             List of upstream tasks.
+        keep_tmpdir (``bool``):
+            Whether to keep the temporary directory.
         *args:
             Additional positional arguments to pass to ``worker_function``.
         **kwargs:
             Additional keyword arguments to pass to ``worker_function``.
     Returns:
             ``Bool``.
-    Raises:
-        NotImplementedError: If the method is not implemented in the derived class.
     Examples:
         >>> segment_blockwise(segment_function_file, context, total_roi, read_roi, write_roi, num_workers, max_retries, timeout, upstream_tasks)
-    Note:
-        The method is implemented in the class.
     """
     options = Options.instance()
     if not options.runs_base_dir.exists():
@@ -197,5 +192,50 @@ def segment_blockwise(
 
     success = success and daisy.run_blockwise([task])
 
-    shutil.rmtree(tmpdir, ignore_errors=True)
+    if success and not keep_tmpdir:
+        shutil.rmtree(tmpdir, ignore_errors=True)
+    else:
+        # Write a relabel script to tmpdir
+        output_container = kwargs["output_array_identifier"].container
+        output_dataset = kwargs["output_array_identifier"].dataset
+        out_string = "from dacapo.blockwise import DaCapoBlockwiseTask\n"
+        out_string += (
+            "from dacapo.store.local_array_store import LocalArrayIdentifier\n"
+        )
+        out_string += "import daisy\n"
+        out_string += "from funlib.geometry import Roi, Coordinate\n"
+        out_string += "from upath import UPath as Path\n"
+        out_string += f"output_array_identifier = LocalArrayIdentifier(Path({output_container}), {output_dataset})\n"
+        out_string += (
+            f"total_roi = Roi({total_roi.get_begin()}, {total_roi.get_shape()})\n"
+        )
+        out_string += (
+            f"read_roi = Roi({read_roi.get_begin()}, {read_roi.get_shape()})\n"
+        )
+        out_string += (
+            f"write_roi = Roi({write_roi.get_begin()}, {write_roi.get_shape()})\n"
+        )
+        out_string += "task = DaCapoBlockwiseTask(\n"
+        out_string += f'    "{str(Path(Path(dacapo.blockwise.__file__).parent, "relabel_worker.py"))}"),\n'
+        out_string += "    total_roi,\n"
+        out_string += "    read_roi,\n"
+        out_string += "    write_roi,\n"
+        out_string += f"    {num_workers},\n"
+        out_string += f"    {max_retries},\n"
+        out_string += f"    {timeout},\n"
+        out_string += f"    tmpdir={tmpdir},\n"
+        out_string += f"    output_array_identifier=output_array_identifier,\n"
+        out_string += ")\n"
+        out_string += "success = daisy.run_blockwise([task])\n"
+        out_string += "if success:\n"
+        out_string += f"    shutil.rmtree({tmpdir}, ignore_errors=True)\n"
+        out_string += "else:\n"
+        out_string += '    print("Relabeling failed")\n'
+        with open(Path(tmpdir, "relabel.py"), "w") as f:
+            f.write(out_string)
+        raise RuntimeError(
+            f"Blockwise segmentation failed. Can rerun with merge files stored at:\n\t{tmpdir}"
+            f"Use read_roi: {read_roi} and write_roi: {write_roi} to rerun."
+            f"Or simply run the script at {Path(tmpdir, 'relabel.py')}"
+        )
     return success

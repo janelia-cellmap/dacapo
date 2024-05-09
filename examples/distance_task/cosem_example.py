@@ -160,7 +160,7 @@ trainer_config = GunpowderTrainerConfig(
     ],
     snapshot_interval=10000,
     min_masked=0.05,
-    clip_raw=True,
+    clip_raw=False,
 )
 config_store.store_trainer_config(trainer_config)
 
