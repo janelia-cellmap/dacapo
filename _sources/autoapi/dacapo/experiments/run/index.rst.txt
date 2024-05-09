@@ -149,11 +149,6 @@ Classes
 
       
 
-   .. py:attribute:: datasplit
-      :type: dacapo.experiments.datasplits.DataSplit
-
-      
-
    .. py:attribute:: model
       :type: dacapo.experiments.model.Model
 
@@ -166,11 +161,6 @@ Classes
 
    .. py:attribute:: training_stats
       :type: dacapo.experiments.training_stats.TrainingStats
-
-      
-
-   .. py:attribute:: validation_scores
-      :type: dacapo.experiments.validation_scores.ValidationScores
 
       
 
