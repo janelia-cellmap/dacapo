@@ -55,6 +55,7 @@ dependencies = [
         "numpy-indexed",
         "click",
         "pyyaml",
+        "cellpose",
         "scipy",
         "upath",
         "boto3",
