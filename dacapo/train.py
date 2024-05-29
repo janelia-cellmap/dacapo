@@ -186,17 +186,19 @@ def train_run(run: Run):
             weights_store.store_weights(run, iteration_stats.iteration + 1)
             try:
                 # launch validation in a separate thread to avoid blocking training
-                validate_thread = threading.Thread(
-                    target=validate,
-                    args=(run, iteration_stats.iteration + 1),
-                    name=f"validate_{run.name}_{iteration_stats.iteration + 1}",
-                    daemon=True,
-                )
-                validate_thread.start()
-                # validate(
-                #     run,
-                #     iteration_stats.iteration + 1,
-                # )
+                if compute_context.distribute_workers:
+                    validate_thread = threading.Thread(
+                        target=validate,
+                        args=(run, iteration_stats.iteration + 1),
+                        name=f"validate_{run.name}_{iteration_stats.iteration + 1}",
+                        daemon=True,
+                    )
+                    validate_thread.start()
+                else:
+                    validate(
+                        run,
+                        iteration_stats.iteration + 1,
+                    )
 
                 stats_store.store_validation_iteration_scores(
                     run.name, run.validation_scores
