@@ -23,6 +23,12 @@ class LocalTorch(ComputeContext):
         The class is a subclass of the ComputeContext class.
     """
 
+    distribute_workers: Optional[bool] = attr.ib(
+        default=False,
+        metadata={
+            "help_text": "Whether to distribute the workers across multiple nodes or processes."
+        },
+    )
     _device: Optional[str] = attr.ib(
         default=None,
         metadata={
