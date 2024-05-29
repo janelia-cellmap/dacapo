@@ -1,29 +1,26 @@
-:py:mod:`dacapo.experiments.tasks.predictors`
-=============================================
+dacapo.experiments.tasks.predictors
+===================================
 
 .. py:module:: dacapo.experiments.tasks.predictors
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   affinities_predictor/index.rst
-   distance_predictor/index.rst
-   dummy_predictor/index.rst
-   hot_distance_predictor/index.rst
-   inner_distance_predictor/index.rst
-   one_hot_predictor/index.rst
-   predictor/index.rst
+   /autoapi/dacapo/experiments/tasks/predictors/affinities_predictor/index
+   /autoapi/dacapo/experiments/tasks/predictors/distance_predictor/index
+   /autoapi/dacapo/experiments/tasks/predictors/dummy_predictor/index
+   /autoapi/dacapo/experiments/tasks/predictors/hot_distance_predictor/index
+   /autoapi/dacapo/experiments/tasks/predictors/inner_distance_predictor/index
+   /autoapi/dacapo/experiments/tasks/predictors/one_hot_predictor/index
+   /autoapi/dacapo/experiments/tasks/predictors/predictor/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -36,10 +33,10 @@ Classes
    dacapo.experiments.tasks.predictors.HotDistancePredictor
 
 
-
+Package Contents
+----------------
 
 .. py:class:: DummyPredictor(embedding_dims)
-
 
 
 
@@ -75,18 +72,6 @@ Classes
 
    This is a subclass of Predictor.
 
-   .. py:property:: output_array_type
-
-      Gets the output array type.
-
-      :returns: The output array type.
-      :rtype: EmbeddingArray
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> predictor.output_array_type
 
    .. py:method:: create_model(architecture)
 
@@ -104,6 +89,7 @@ Classes
       >>> model = predictor.create_model(architecture)
 
 
+
    .. py:method:: create_target(gt)
 
       Creates a target based on the ground truth.
@@ -118,6 +104,7 @@ Classes
       .. rubric:: Examples
 
       >>> predictor.create_target(gt)
+
 
 
    .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
@@ -140,8 +127,20 @@ Classes
 
 
 
-.. py:class:: DistancePredictor(channels: List[str], scale_factor: float, mask_distances: bool, clipmin: float = 0.05, clipmax: float = 0.95)
+   .. py:property:: output_array_type
+      Gets the output array type.
 
+      :returns: The output array type.
+      :rtype: EmbeddingArray
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.output_array_type
+
+
+.. py:class:: DistancePredictor(channels: List[str], scale_factor: float, mask_distances: bool, clipmin: float = 0.05, clipmax: float = 0.95)
 
 
 
@@ -231,8 +230,8 @@ Classes
    The clipmin argument is used to determine the minimum value to clip the weights to.
    The clipmax argument is used to determine the maximum value to clip the weights to.
 
-   .. py:property:: embedding_dims
 
+   .. py:property:: embedding_dims
       Get the number of embedding dimensions.
 
       :returns: The number of embedding dimensions.
@@ -244,18 +243,6 @@ Classes
 
       >>> embedding_dims = predictor.embedding_dims
 
-   .. py:property:: output_array_type
-
-      Get the output array type.
-
-      :returns: The output array type.
-      :rtype: DistanceArray
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> predictor.output_array_type
 
    .. py:method:: create_model(architecture)
 
@@ -273,6 +260,7 @@ Classes
       >>> model = predictor.create_model(architecture)
 
 
+
    .. py:method:: create_target(gt)
 
       Create the target array for training.
@@ -287,6 +275,7 @@ Classes
       .. rubric:: Examples
 
       >>> predictor.create_target(gt)
+
 
 
    .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
@@ -306,6 +295,20 @@ Classes
       .. rubric:: Examples
 
       >>> predictor.create_weight(gt, target, mask, moving_class_counts)
+
+
+
+   .. py:property:: output_array_type
+      Get the output array type.
+
+      :returns: The output array type.
+      :rtype: DistanceArray
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.output_array_type
 
 
    .. py:method:: create_distance_mask(distances: numpy.ndarray, mask: numpy.ndarray, voxel_size: funlib.geometry.Coordinate, normalize=None, normalize_args=None)
@@ -332,6 +335,7 @@ Classes
       >>> predictor.create_distance_mask(distances, mask, voxel_size, normalize, normalize_args)
 
 
+
    .. py:method:: process(labels: numpy.ndarray, voxel_size: funlib.geometry.Coordinate, normalize=None, normalize_args=None)
 
       Process the labels array and convert it to one-hot encoding.
@@ -354,6 +358,7 @@ Classes
       >>> predictor.process(labels, voxel_size, normalize, normalize_args)
 
 
+
    .. py:method:: gt_region_for_roi(target_spec)
 
       Report how much spatial context this predictor needs to generate a
@@ -368,6 +373,7 @@ Classes
       .. rubric:: Examples
 
       >>> predictor.gt_region_for_roi(target_spec)
+
 
 
    .. py:method:: padding(gt_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
@@ -389,7 +395,6 @@ Classes
 
 
 .. py:class:: OneHotPredictor(classes: List[str])
-
 
 
 
@@ -429,8 +434,8 @@ Classes
 
    This is a subclass of Predictor.
 
-   .. py:property:: embedding_dims
 
+   .. py:property:: embedding_dims
       Get the number of embedding dimensions.
 
       :returns: The number of embedding dimensions.
@@ -442,18 +447,6 @@ Classes
 
       >>> embedding_dims = predictor.embedding_dims
 
-   .. py:property:: output_array_type
-
-      Get the output array type.
-
-      :returns: The output array type.
-      :rtype: ProbabilityArray
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> output_array_type = predictor.output_array_type
 
    .. py:method:: create_model(architecture)
 
@@ -471,6 +464,7 @@ Classes
       >>> model = predictor.create_model(architecture)
 
 
+
    .. py:method:: create_target(gt)
 
       Create the target array for training.
@@ -485,6 +479,7 @@ Classes
       .. rubric:: Examples
 
       >>> target = predictor.create_target(gt)
+
 
 
    .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
@@ -504,6 +499,20 @@ Classes
       .. rubric:: Examples
 
       >>> predictor.create_weight(gt, target, mask, moving_class_counts)
+
+
+
+   .. py:property:: output_array_type
+      Get the output array type.
+
+      :returns: The output array type.
+      :rtype: ProbabilityArray
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> output_array_type = predictor.output_array_type
 
 
    .. py:method:: process(labels: numpy.ndarray)
@@ -529,7 +538,6 @@ Classes
 
 
 .. py:class:: Predictor
-
 
 
 
@@ -563,12 +571,10 @@ Classes
 
    This is a subclass of ABC.
 
-   .. py:property:: output_array_type
-      :abstractmethod:
-
 
    .. py:method:: create_model(architecture: dacapo.experiments.architectures.architecture.Architecture) -> dacapo.experiments.model.Model
       :abstractmethod:
+
 
       Given a training architecture, create a model for this predictor.
       This is usually done by appending extra layers to the output of the
@@ -586,8 +592,10 @@ Classes
       >>> predictor.create_model(architecture)
 
 
+
    .. py:method:: create_target(gt: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.datasplits.datasets.arrays.Array
       :abstractmethod:
+
 
       Create the target array for training, given a ground-truth array.
 
@@ -618,8 +626,10 @@ Classes
       >>> predictor.create_target(gt)
 
 
+
    .. py:method:: create_weight(gt: dacapo.experiments.datasplits.datasets.arrays.Array, target: dacapo.experiments.datasplits.datasets.arrays.Array, mask: dacapo.experiments.datasplits.datasets.arrays.Array, moving_class_counts: Any) -> Tuple[dacapo.experiments.datasplits.datasets.arrays.Array, Any]
       :abstractmethod:
+
 
       Create the weight array for training, given a ground-truth and
       associated target array.
@@ -636,6 +646,12 @@ Classes
       .. rubric:: Examples
 
       >>> predictor.create_weight(gt, target, mask, moving_class_counts)
+
+
+
+   .. py:property:: output_array_type
+      :abstractmethod:
+
 
 
    .. py:method:: gt_region_for_roi(target_spec)
@@ -657,6 +673,7 @@ Classes
       >>> predictor.gt_region_for_roi(target_spec)
 
 
+
    .. py:method:: padding(gt_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
 
       Return the padding needed for the ground-truth array.
@@ -674,7 +691,6 @@ Classes
 
 
 .. py:class:: AffinitiesPredictor(neighborhood: List[funlib.geometry.Coordinate], lsds: bool = True, num_voxels: int = 20, downsample_lsds: int = 1, grow_boundary_iterations: int = 0, affs_weight_clipmin: float = 0.05, affs_weight_clipmax: float = 0.95, lsd_weight_clipmin: float = 0.05, lsd_weight_clipmax: float = 0.95, background_as_object: bool = False)
-
 
 
 
@@ -807,44 +823,6 @@ Classes
 
    This is a subclass of Predictor.
 
-   .. py:property:: dims
-
-      Get the number of dimensions.
-
-      :returns: The number of dimensions.
-      :rtype: int
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> predictor.dims
-
-   .. py:property:: num_channels
-
-      Get the number of channels.
-
-      :returns: The number of channels.
-      :rtype: int
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> predictor.num_channels
-
-   .. py:property:: output_array_type
-
-      Get the output array type.
-
-      :returns: The output array type.
-      :rtype: EmbeddingArray
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> predictor.output_array_type
 
    .. py:method:: extractor(voxel_size)
 
@@ -861,6 +839,20 @@ Classes
       .. rubric:: Examples
 
       >>> extractor = predictor.extractor(voxel_size)
+
+
+
+   .. py:property:: dims
+      Get the number of dimensions.
+
+      :returns: The number of dimensions.
+      :rtype: int
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.dims
 
 
    .. py:method:: sigma(voxel_size)
@@ -880,6 +872,7 @@ Classes
       >>> predictor.sigma(voxel_size)
 
 
+
    .. py:method:: lsd_pad(voxel_size)
 
       Compute the padding for LSD computation.
@@ -895,6 +888,20 @@ Classes
       .. rubric:: Examples
 
       >>> predictor.lsd_pad(voxel_size)
+
+
+
+   .. py:property:: num_channels
+      Get the number of channels.
+
+      :returns: The number of channels.
+      :rtype: int
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.num_channels
 
 
    .. py:method:: create_model(architecture)
@@ -913,6 +920,7 @@ Classes
       >>> model = predictor.create_model(architecture)
 
 
+
    .. py:method:: create_target(gt)
 
       Create the target data.
@@ -927,6 +935,7 @@ Classes
       .. rubric:: Examples
 
       >>> predictor.create_target(gt)
+
 
 
    .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
@@ -948,6 +957,7 @@ Classes
       >>> predictor.create_weight(gt, target, mask, moving_class_counts)
 
 
+
    .. py:method:: gt_region_for_roi(target_spec)
 
       Get the ground truth region for the target region of interest (ROI).
@@ -960,8 +970,20 @@ Classes
 
 
 
-.. py:class:: InnerDistancePredictor(channels: List[str], scale_factor: float)
+   .. py:property:: output_array_type
+      Get the output array type.
 
+      :returns: The output array type.
+      :rtype: EmbeddingArray
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.output_array_type
+
+
+.. py:class:: InnerDistancePredictor(channels: List[str], scale_factor: float)
 
 
 
@@ -1030,8 +1052,8 @@ Classes
 
    This is a subclass of Predictor.
 
-   .. py:property:: embedding_dims
 
+   .. py:property:: embedding_dims
       Get the number of embedding dimensions.
 
       :returns: The number of embedding dimensions.
@@ -1043,17 +1065,6 @@ Classes
 
       >>> embedding_dims = predictor.embedding_dims
 
-   .. py:property:: output_array_type
-
-      Get the output array type.
-
-      :returns: The DistanceArray.
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> predictor.output_array_type
 
    .. py:method:: create_model(architecture)
 
@@ -1066,6 +1077,7 @@ Classes
       .. rubric:: Examples
 
       >>> model = predictor.create_model(architecture)
+
 
 
    .. py:method:: create_target(gt)
@@ -1081,6 +1093,7 @@ Classes
       .. rubric:: Examples
 
       >>> predictor.create_target(gt)
+
 
 
    .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
@@ -1102,6 +1115,19 @@ Classes
       >>> predictor.create_weight(gt, target, mask, moving_class_counts)
 
 
+
+   .. py:property:: output_array_type
+      Get the output array type.
+
+      :returns: The DistanceArray.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.output_array_type
+
+
    .. py:method:: process(labels: numpy.ndarray, voxel_size: funlib.geometry.Coordinate, normalize=None, normalize_args=None)
 
       Process the labels array and convert it to signed distances.
@@ -1120,6 +1146,7 @@ Classes
       >>> predictor.process(labels, voxel_size, normalize, normalize_args)
 
 
+
    .. py:method:: gt_region_for_roi(target_spec)
 
       Report how much spatial context this predictor needs to generate a
@@ -1134,6 +1161,7 @@ Classes
       .. rubric:: Examples
 
       >>> predictor.gt_region_for_roi(target_spec)
+
 
 
    .. py:method:: padding(gt_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
@@ -1153,7 +1181,6 @@ Classes
 
 
 .. py:class:: HotDistancePredictor(channels: List[str], scale_factor: float, mask_distances: bool)
-
 
 
 
@@ -1233,8 +1260,8 @@ Classes
 
    This is a subclass of Predictor.
 
-   .. py:property:: embedding_dims
 
+   .. py:property:: embedding_dims
       Get the number of embedding dimensions.
 
       :returns: The number of embedding dimensions.
@@ -1246,8 +1273,8 @@ Classes
 
       >>> embedding_dims = predictor.embedding_dims
 
-   .. py:property:: classes
 
+   .. py:property:: classes
       Get the number of classes.
 
       :returns: The number of classes.
@@ -1259,22 +1286,6 @@ Classes
 
       >>> classes = predictor.classes
 
-   .. py:property:: output_array_type
-
-      Get the output array type.
-
-      :returns: The output array type.
-      :rtype: ProbabilityArray
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> output_array_type = predictor.output_array_type
-
-      .. rubric:: Notes
-
-      Technically this is a probability array + distance array, but it is only ever referenced for interpolatability (which is true for both).
 
    .. py:method:: create_model(architecture)
 
@@ -1292,6 +1303,7 @@ Classes
       >>> model = predictor.create_model(architecture)
 
 
+
    .. py:method:: create_target(gt)
 
       Create the target array for training.
@@ -1306,6 +1318,7 @@ Classes
       .. rubric:: Examples
 
       >>> target = predictor.create_target(gt)
+
 
 
    .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
@@ -1328,6 +1341,24 @@ Classes
       >>> predictor.create_weight(gt, target, mask, moving_class_counts)
 
 
+
+   .. py:property:: output_array_type
+      Get the output array type.
+
+      :returns: The output array type.
+      :rtype: ProbabilityArray
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> output_array_type = predictor.output_array_type
+
+      .. rubric:: Notes
+
+      Technically this is a probability array + distance array, but it is only ever referenced for interpolatability (which is true for both).
+
+
    .. py:method:: create_distance_mask(distances: numpy.ndarray, mask: numpy.ndarray, voxel_size: funlib.geometry.Coordinate, normalize=None, normalize_args=None)
 
       Create the distance mask for training.
@@ -1346,6 +1377,7 @@ Classes
       .. rubric:: Examples
 
       >>> distance_mask = self.create_distance_mask(distances, mask, voxel_size, normalize, normalize_args)
+
 
 
    .. py:method:: process(labels: numpy.ndarray, voxel_size: funlib.geometry.Coordinate, normalize=None, normalize_args=None)
@@ -1367,6 +1399,7 @@ Classes
       >>> predictor.process(labels, voxel_size, normalize, normalize_args)
 
 
+
    .. py:method:: gt_region_for_roi(target_spec)
 
       Report how much spatial context this predictor needs to generate a
@@ -1381,6 +1414,7 @@ Classes
       .. rubric:: Examples
 
       >>> predictor.gt_region_for_roi(target_spec)
+
 
 
    .. py:method:: padding(gt_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate

@@ -1,15 +1,21 @@
-:py:mod:`dacapo.blockwise.empanada_function`
-============================================
+dacapo.blockwise.empanada_function
+==================================
 
 .. py:module:: dacapo.blockwise.empanada_function
 
 
-Module Contents
----------------
+Attributes
+----------
+
+.. autoapisummary::
+
+   dacapo.blockwise.empanada_function.logger
+   dacapo.blockwise.empanada_function.default_parameters
+   dacapo.blockwise.empanada_function.model_configs
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -21,24 +27,12 @@ Functions
    dacapo.blockwise.empanada_function.tracker_consensus
 
 
-
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.blockwise.empanada_function.logger
-   dacapo.blockwise.empanada_function.default_parameters
-   dacapo.blockwise.empanada_function.model_configs
-
+Module Contents
+---------------
 
 .. py:data:: logger
 
-   
-
 .. py:data:: default_parameters
-
-   
 
 .. py:function:: segment_function(input_array, block, **parameters)
 
@@ -79,8 +73,6 @@ Attributes
 
 
 .. py:data:: model_configs
-
-   
 
 .. py:function:: stack_inference(engine, volume, axis_name)
 

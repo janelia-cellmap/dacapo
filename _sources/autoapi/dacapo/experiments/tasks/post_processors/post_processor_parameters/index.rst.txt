@@ -1,24 +1,21 @@
-:py:mod:`dacapo.experiments.tasks.post_processors.post_processor_parameters`
-============================================================================
+dacapo.experiments.tasks.post_processors.post_processor_parameters
+==================================================================
 
 .. py:module:: dacapo.experiments.tasks.post_processors.post_processor_parameters
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters
 
 
-
+Module Contents
+---------------
 
 .. py:class:: PostProcessorParameters
-
 
    Base class for post-processor parameters. Post-processor parameters are
    immutable objects that define the parameters of a post-processor. The
@@ -36,6 +33,11 @@ Classes
 
       This class is immutable. Once created, the values of its attributes
       cannot be changed.
+
+
+   .. py:attribute:: id
+      :type:  int
+
 
    .. py:property:: parameter_names
       :type: List[str]
@@ -56,10 +58,5 @@ Classes
 
          This method must be implemented in the subclass. It should return a
          list of parameter names.
-
-   .. py:attribute:: id
-      :type: int
-
-      
 
 

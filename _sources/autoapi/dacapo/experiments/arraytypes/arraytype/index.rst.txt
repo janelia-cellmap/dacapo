@@ -1,24 +1,21 @@
-:py:mod:`dacapo.experiments.arraytypes.arraytype`
-=================================================
+dacapo.experiments.arraytypes.arraytype
+=======================================
 
 .. py:module:: dacapo.experiments.arraytypes.arraytype
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.experiments.arraytypes.arraytype.ArrayType
 
 
-
+Module Contents
+---------------
 
 .. py:class:: ArrayType
-
 
 
 
@@ -47,8 +44,10 @@ Classes
 
    .. note:: This class is used to create an ArrayType object which is used to represent the type of data provided by an array.
 
+
    .. py:property:: interpolatable
       :type: bool
+
       :abstractmethod:
 
       This is an abstract method which should be overridden in each of the subclasses

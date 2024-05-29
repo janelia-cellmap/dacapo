@@ -1,24 +1,549 @@
-:py:mod:`dacapo.experiments.datasplits.datasets.arrays.logical_or_array_config`
-===============================================================================
+dacapo.experiments.datasplits.datasets.arrays.logical_or_array_config
+=====================================================================
 
 .. py:module:: dacapo.experiments.datasplits.datasets.arrays.logical_or_array_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.logical_or_array_config.ArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.logical_or_array_config.LogicalOrArray
+   dacapo.experiments.datasplits.datasets.arrays.logical_or_array_config.LogicalOrArrayConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: ArrayConfig
 
-.. autoapisummary::
+   Base class for array configurations. Each subclass of an
+   `Array` should have a corresponding config class derived from
+   `ArrayConfig`. This class should be used to store the configuration
+   of the array.
 
-   dacapo.experiments.datasplits.datasets.arrays.logical_or_array_config.LogicalOrArrayConfig
+   .. attribute:: name
+
+      A unique name for this array. This will be saved so you
+      and others can find and reuse this array. Keep it short
+      and avoid special characters.
+
+      :type: str
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method is used to check whether this is a valid Array.
+
+   .. note::
+
+      This class is used to create a base class for array configurations. Each subclass of an
+      `Array` should have a corresponding config class derived from `ArrayConfig`.
+      This class should be used to store the configuration of the array.
 
 
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Array
+
+      :returns: A tuple with the first element being a boolean
+                indicating whether the array is valid and the second element being
+                a string with a message explaining why the array is invalid
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: This method is not implemented in this class
+
+      .. rubric:: Examples
+
+      >>> array_config = ArrayConfig(name="array_config")
+      >>> array_config.verify()
+      (True, "No validation for this Array")
+
+      .. note:: This method is used to check whether this is a valid Array.
+
+
+
+.. py:class:: LogicalOrArray(array_config)
+
+
+
+   Array that computes the logical OR of the instances in a list of source arrays.
+
+   .. attribute:: name
+
+      str
+      The name of the array
+
+   .. attribute:: source_array
+
+      Array
+      The source array from which to take the logical OR
+
+   .. method:: axes
+
+      () -> List[str]
+      Get the axes of the array
+
+   .. method:: dims
+
+      () -> int
+      Get the number of dimensions of the array
+
+   .. method:: voxel_size
+
+      () -> Coordinate
+      Get the voxel size of the array
+
+   .. method:: roi
+
+      () -> Roi
+      Get the region of interest of the array
+
+   .. method:: writable
+
+      () -> bool
+      Get whether the array is writable
+
+   .. method:: dtype
+
+      () -> type
+      Get the data type of the array
+
+   .. method:: num_channels
+
+      () -> int
+      Get the number of channels in the array
+
+   .. method:: data
+
+      () -> np.ndarray
+      Get the data of the array
+
+   .. method:: attrs
+
+      () -> dict
+      Get the attributes of the array
+
+   .. method:: __getitem__
+
+      (roi: Roi) -> np.ndarray
+      Get the data of the array in the region of interest
+
+   .. method:: _can_neuroglance
+
+      () -> bool
+      Get whether the array can be visualized in neuroglance
+
+   .. method:: _neuroglancer_source
+
+      () -> dict
+      Get the neuroglancer source of the array
+
+   .. method:: _neuroglancer_layer
+
+      () -> Tuple[neuroglancer.Layer, dict]
+      Get the neuroglancer layer of the array
+
+   .. method:: _source_name
+
+      () -> str
+      Get the name of the source array
+
+   .. rubric:: Notes
+
+   The LogicalOrArray class is used to create a LogicalOrArray. The LogicalOrArray
+   class is a subclass of the Array class.
+
+
+   .. py:property:: axes
+      Get the axes of the array
+
+      :returns: The axes of the array
+      :rtype: List[str]
+
+      :raises ValueError: If the array is not writable
+
+      .. rubric:: Examples
+
+      >>> array_config = MergeInstancesArrayConfig(
+      ...     name="logical_or",
+      ...     source_array_configs=[
+      ...         ArrayConfig(
+      ...             name="mask1",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask1",
+      ...                 mask_id=1,
+      ...             ),
+      ...         ),
+      ...         ArrayConfig(
+      ...             name="mask2",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask2",
+      ...                 mask_id=2,
+      ...             ),
+      ...         ),
+      ...     ],
+      ... )
+      >>> array = array_config.create_array()
+      >>> array.axes
+      ['x', 'y', 'z']
+
+      .. rubric:: Notes
+
+      The axes method is used to get the axes of the array. The axes are the dimensions
+      of the array.
+
+
+   .. py:property:: dims
+      :type: int
+
+      Get the number of dimensions of the array
+
+      :returns: The number of dimensions of the array
+      :rtype: int
+
+      :raises ValueError: If the array is not writable
+
+      .. rubric:: Examples
+
+      >>> array_config = MergeInstancesArrayConfig(
+      ...     name="logical_or",
+      ...     source_array_configs=[
+      ...         ArrayConfig(
+      ...             name="mask1",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask1",
+      ...                 mask_id=1,
+      ...             ),
+      ...         ),
+      ...         ArrayConfig(
+      ...             name="mask2",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask2",
+      ...                 mask_id=2,
+      ...             ),
+      ...         ),
+      ...     ],
+      ... )
+      >>> array = array_config.create_array()
+      >>> array.dims
+      3
+
+      .. rubric:: Notes
+
+      The dims method is used to get the number of dimensions of the array. The number
+      of dimensions is the number of axes of the array.
+
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      Get the voxel size of the array
+
+      :returns: The voxel size of the array
+      :rtype: Coordinate
+
+      :raises ValueError: If the array is not writable
+
+      .. rubric:: Examples
+
+      >>> array_config = MergeInstancesArrayConfig(
+      ...     name="logical_or",
+      ...     source_array_configs=[
+      ...         ArrayConfig(
+      ...             name="mask1",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask1",
+      ...                 mask_id=1,
+      ...             ),
+      ...         ),
+      ...         ArrayConfig(
+      ...             name="mask2",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask2",
+      ...                 mask_id=2,
+      ...             ),
+      ...         ),
+      ...     ],
+      ... )
+      >>> array = array_config.create_array()
+      >>> array.voxel_size
+      Coordinate(x=1.0, y=1.0, z=1.0)
+
+      .. rubric:: Notes
+
+      The voxel_size method is used to get the voxel size of the array. The voxel size
+      is the size of a voxel in the array.
+
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      Get the region of interest of the array
+
+      :returns: The region of interest of the array
+      :rtype: Roi
+
+      :raises ValueError: If the array is not writable
+
+      .. rubric:: Examples
+
+      >>> array_config = MergeInstancesArrayConfig(
+      ...     name="logical_or",
+      ...     source_array_configs=[
+      ...         ArrayConfig(
+      ...             name="mask1",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask1",
+      ...                 mask_id=1,
+      ...             ),
+      ...         ),
+      ...         ArrayConfig(
+      ...             name="mask2",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask2",
+      ...                 mask_id=2,
+      ...             ),
+      ...         ),
+      ...     ],
+      ... )
+      >>> array = array_config.create_array()
+      >>> array.roi
+      Roi(offset=(0, 0, 0), shape=(10, 10, 10))
+
+      .. rubric:: Notes
+
+      The roi method is used to get the region of interest of the array. The region of
+      interest is the shape and offset of the array.
+
+
+   .. py:property:: writable
+      :type: bool
+
+      Get whether the array is writable
+
+      :returns: Whether the array is writable
+      :rtype: bool
+
+      :raises ValueError: If the array is not writable
+
+      .. rubric:: Examples
+
+      >>> array_config = MergeInstancesArrayConfig(
+      ...     name="logical_or",
+      ...     source_array_configs=[
+      ...         ArrayConfig(
+      ...             name="mask1",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask1",
+      ...                 mask_id=1,
+      ...             ),
+      ...         ),
+      ...         ArrayConfig(
+      ...             name="mask2",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask2",
+      ...                 mask_id=2,
+      ...             ),
+      ...         ),
+      ...     ],
+      ... )
+      >>> array = array_config.create_array()
+      >>> array.writable
+      False
+
+      .. rubric:: Notes
+
+      The writable method is used to get whether the array is writable. An array is
+      writable if it can be modified.
+
+
+   .. py:property:: dtype
+      Get the data type of the array
+
+      :returns: The data type of the array
+      :rtype: type
+
+      :raises ValueError: If the array is not writable
+
+      .. rubric:: Examples
+
+      >>> array_config = MergeInstancesArrayConfig(
+      ...     name="logical_or",
+      ...     source_array_configs=[
+      ...         ArrayConfig(
+      ...             name="mask1",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask1",
+      ...                 mask_id=1,
+      ...             ),
+      ...         ),
+      ...         ArrayConfig(
+      ...             name="mask2",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask2",
+      ...                 mask_id=2,
+      ...             ),
+      ...         ),
+      ...     ],
+      ... )
+      >>> array = array_config.create_array()
+      >>> array.dtype
+      <class 'numpy.uint8'>
+
+      .. rubric:: Notes
+
+      The dtype method is used to get the data type of the array. The data type is the
+      type of the data in the array.
+
+
+   .. py:property:: num_channels
+      Get the number of channels in the array
+
+      :returns: The number of channels in the array
+      :rtype: int
+
+      :raises ValueError: If the array is not writable
+
+      .. rubric:: Examples
+
+      >>> array_config = MergeInstancesArrayConfig(
+      ...     name="logical_or",
+      ...     source_array_configs=[
+      ...         ArrayConfig(
+      ...             name="mask1",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask1",
+      ...                 mask_id=1,
+      ...             ),
+      ...         ),
+      ...         ArrayConfig(
+      ...             name="mask2",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask2",
+      ...                 mask_id=2,
+      ...             ),
+      ...         ),
+      ...     ],
+      ... )
+      >>> array = array_config.create_array()
+      >>> array.num_channels
+      1
+
+      .. rubric:: Notes
+
+      The num_channels method is used to get the number of channels in the array. The
+      number of channels is the number of channels in the array.
+
+
+   .. py:property:: data
+      Get the data of the array
+
+      :returns: The data of the array
+      :rtype: np.ndarray
+
+      :raises ValueError: If the array is not writable
+
+      .. rubric:: Examples
+
+      >>> array_config = MergeInstancesArrayConfig(
+      ...     name="logical_or",
+      ...     source_array_configs=[
+      ...         ArrayConfig(
+      ...             name="mask1",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask1",
+      ...                 mask_id=1,
+      ...             ),
+      ...         ),
+      ...         ArrayConfig(
+      ...             name="mask2",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask2",
+      ...                 mask_id=2,
+      ...             ),
+      ...         ),
+      ...     ],
+      ... )
+      >>> array = array_config.create_array()
+      >>> array.data
+      array([[[1, 1, 1, ..., 1, 1, 1],
+              [1, 1, 1, ..., 1, 1, 1],
+              [1, 1, 1, ..., 1, 1, 1],
+              ...,
+              [1, 1, 1, ..., 1, 1, 1],
+              [1, 1, 1, ..., 1, 1, 1],
+              [1, 1, 1, ..., 1, 1, 1]]], dtype=uint8)
+
+      .. rubric:: Notes
+
+      The data method is used to get the data of the array. The data is the content of
+      the array.
+
+
+   .. py:property:: attrs
+      Get the attributes of the array
+
+      :returns: The attributes of the array
+      :rtype: dict
+
+      :raises ValueError: If the array is not writable
+
+      .. rubric:: Examples
+
+      >>> array_config = MergeInstancesArrayConfig(
+      ...     name="logical_or",
+      ...     source_array_configs=[
+      ...         ArrayConfig(
+      ...             name="mask1",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask1",
+      ...                 mask_id=1,
+      ...             ),
+      ...         ),
+      ...         ArrayConfig(
+      ...             name="mask2",
+      ...             array_type=MaskArray,
+      ...             source_array_config=MaskArrayConfig(
+      ...                 name="mask2",
+      ...                 mask_id=2,
+      ...             ),
+      ...         ),
+      ...     ],
+      ... )
+      >>> array = array_config.create_array()
+      >>> array.attrs
+      {'name': 'logical_or'}
+
+      .. rubric:: Notes
+
+      The attrs method is used to get the attributes of the array. The attributes are
+      the metadata of the array.
 
 
 .. py:class:: LogicalOrArrayConfig
-
 
 
 
@@ -39,13 +564,11 @@ Classes
 
    The source_array_config must be an ArrayConfig object.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source_array_config
-      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
-
-      
+      :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
 

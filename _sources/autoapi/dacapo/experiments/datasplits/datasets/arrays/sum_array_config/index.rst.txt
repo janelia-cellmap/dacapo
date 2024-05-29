@@ -1,24 +1,294 @@
-:py:mod:`dacapo.experiments.datasplits.datasets.arrays.sum_array_config`
-========================================================================
+dacapo.experiments.datasplits.datasets.arrays.sum_array_config
+==============================================================
 
 .. py:module:: dacapo.experiments.datasplits.datasets.arrays.sum_array_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.sum_array_config.ArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.sum_array_config.SumArray
+   dacapo.experiments.datasplits.datasets.arrays.sum_array_config.SumArrayConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: ArrayConfig
 
-.. autoapisummary::
+   Base class for array configurations. Each subclass of an
+   `Array` should have a corresponding config class derived from
+   `ArrayConfig`. This class should be used to store the configuration
+   of the array.
 
-   dacapo.experiments.datasplits.datasets.arrays.sum_array_config.SumArrayConfig
+   .. attribute:: name
+
+      A unique name for this array. This will be saved so you
+      and others can find and reuse this array. Keep it short
+      and avoid special characters.
+
+      :type: str
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method is used to check whether this is a valid Array.
+
+   .. note::
+
+      This class is used to create a base class for array configurations. Each subclass of an
+      `Array` should have a corresponding config class derived from `ArrayConfig`.
+      This class should be used to store the configuration of the array.
 
 
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Array
+
+      :returns: A tuple with the first element being a boolean
+                indicating whether the array is valid and the second element being
+                a string with a message explaining why the array is invalid
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: This method is not implemented in this class
+
+      .. rubric:: Examples
+
+      >>> array_config = ArrayConfig(name="array_config")
+      >>> array_config.verify()
+      (True, "No validation for this Array")
+
+      .. note:: This method is used to check whether this is a valid Array.
+
+
+
+.. py:class:: SumArray(array_config)
+
+
+
+   This class provides a sum array. This array is a virtual array that is created by summing
+   multiple source arrays. The source arrays must have the same shape and ROI.
+
+   .. attribute:: name
+
+      str
+      The name of the array.
+
+   .. attribute:: _source_arrays
+
+      List[Array]
+      The source arrays to sum.
+
+   .. attribute:: _source_array
+
+      Array
+      The first source array.
+
+   .. method:: __getitem__(roi
+
+      Roi) -> np.ndarray
+      Get the data for the given region of interest.
+
+   .. method:: _can_neuroglance() -> bool
+
+      
+      Check if neuroglance can be used.
+
+   .. method:: _neuroglancer_source() -> Dict
+
+      
+      Return the source for neuroglance.
+
+   .. method:: _neuroglancer_layer() -> Tuple[neuroglancer.SegmentationLayer, Dict]
+
+      
+      Return the neuroglancer layer.
+
+   .. method:: _source_name() -> str
+
+      
+      Return the source name.
+
+   .. note:: This class is a subclass of Array.
+
+
+   .. py:property:: axes
+      The axes of the array.
+
+      :returns: The axes of the array.
+      :rtype: List[str]
+
+      :raises ValueError: Cannot get a writable view of this array because it is a virtual array created by modifying another array on demand.
+
+      .. rubric:: Examples
+
+      >>> sum_array.axes
+      ['x', 'y', 'z']
+
+      .. note:: This class is a subclass of Array.
+
+
+   .. py:property:: dims
+      :type: int
+
+      The number of dimensions of the array.
+
+      :returns: The number of dimensions of the array.
+      :rtype: int
+
+      :raises ValueError: Cannot get a writable view of this array because it is a virtual array created by modifying another array on demand.
+
+      .. rubric:: Examples
+
+      >>> sum_array.dims
+      3
+
+      .. note:: This class is a subclass of Array.
+
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      The size of each voxel in each dimension.
+
+      :returns: The size of each voxel in each dimension.
+      :rtype: Coordinate
+
+      :raises ValueError: Cannot get a writable view of this array because it is a virtual array created by modifying another array on demand.
+
+      .. rubric:: Examples
+
+      >>> sum_array.voxel_size
+      Coordinate([1, 1, 1])
+
+      .. note:: This class is a subclass of Array.
+
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      The region of interest of the array.
+
+      :param roi: Roi
+                  The region of interest.
+
+      :returns: The region of interest.
+      :rtype: Roi
+
+      :raises ValueError: Cannot get a writable view of this array because it is a virtual array created by modifying another array on demand.
+
+      .. rubric:: Examples
+
+      >>> sum_array.roi
+      Roi(Coordinate([0, 0, 0]), Coordinate([100, 100, 100]))
+
+      .. note:: This class is a subclass of Array.
+
+
+   .. py:property:: writable
+      :type: bool
+
+      Check if the array is writable.
+
+      :param writable: bool
+                       Check if the array is writable.
+
+      :returns: True if the array is writable, otherwise False.
+      :rtype: bool
+
+      :raises ValueError: Cannot get a writable view of this array because it is a virtual array created by modifying another array on demand.
+
+      .. rubric:: Examples
+
+      >>> sum_array.writable
+      False
+
+      .. note:: This class is a subclass of Array.
+
+
+   .. py:property:: dtype
+      The data type of the array.
+
+      :param dtype: np.uint8
+                    The data type of the array.
+
+      :returns: The data type of the array.
+      :rtype: np.uint8
+
+      :raises ValueError: Cannot get a writable view of this array because it is a virtual array created by modifying another array on demand.
+
+      .. rubric:: Examples
+
+      >>> sum_array.dtype
+      np.uint8
+
+      .. note:: This class is a subclass of Array.
+
+
+   .. py:property:: num_channels
+      The number of channels in the array.
+
+      :param num_channels: Optional[int]
+                           The number of channels in the array.
+
+      :returns: The number of channels in the array.
+      :rtype: Optional[int]
+
+      :raises ValueError: Cannot get a writable view of this array because it is a virtual array created by modifying another array on demand.
+
+      .. rubric:: Examples
+
+      >>> sum_array.num_channels
+      None
+
+      .. note:: This class is a subclass of Array.
+
+
+   .. py:property:: data
+      Get the data of the array.
+
+      :param data: np.ndarray
+                   The data of the array.
+
+      :returns: The data of the array.
+      :rtype: np.ndarray
+
+      :raises ValueError: Cannot get a writable view of this array because it is a virtual array created by modifying another array on demand.
+
+      .. rubric:: Examples
+
+      >>> sum_array.data
+      np.array([[[0, 0], [0, 0]], [[0, 0], [0, 0]]])
+
+      .. note:: This class is a subclass of Array.
+
+
+   .. py:property:: attrs
+      Return the attributes of the array.
+
+      :param attrs: Dict
+                    The attributes of the array.
+
+      :returns: The attributes of the array.
+      :rtype: Dict
+
+      :raises ValueError: Cannot get a writable view of this array because it is a virtual array created by modifying another array on demand.
+
+      .. rubric:: Examples
+
+      >>> sum_array.attrs
+      {}
+
+      .. note:: This class is a subclass of Array.
 
 
 .. py:class:: SumArrayConfig
-
 
 
 
@@ -32,13 +302,11 @@ Classes
 
    .. note:: This class is a subclass of ArrayConfig.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source_array_configs
-      :type: List[dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
-
-      
+      :type:  List[dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
 
 

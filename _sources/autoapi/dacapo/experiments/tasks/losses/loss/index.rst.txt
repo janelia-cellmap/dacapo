@@ -1,24 +1,21 @@
-:py:mod:`dacapo.experiments.tasks.losses.loss`
-==============================================
+dacapo.experiments.tasks.losses.loss
+====================================
 
 .. py:module:: dacapo.experiments.tasks.losses.loss
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.experiments.tasks.losses.loss.Loss
 
 
-
+Module Contents
+---------------
 
 .. py:class:: Loss
-
 
 
 
@@ -35,8 +32,10 @@ Classes
       This class is abstract. Subclasses must implement the abstract methods. Once created, the values of its attributes
       cannot be changed.
 
+
    .. py:method:: compute(prediction: torch.Tensor, target: torch.Tensor, weight: Optional[torch.Tensor] = None) -> torch.Tensor
       :abstractmethod:
+
 
       Compute the loss for the given prediction and target. Optionally, if
       given, a loss weight should be considered.

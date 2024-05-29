@@ -53,17 +53,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">dacapo</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="../apply/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.apply</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../options/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.options</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.plot</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../predict/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.predict</span></code></a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.train</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../validate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.validate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apply/index.html">dacapo.apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../options/index.html">dacapo.options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../plot/index.html">dacapo.plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../predict/index.html">dacapo.predict</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">dacapo.train</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../validate/index.html">dacapo.validate</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../index.html#classes">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../index.html#functions">Functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../index.html#package-contents">Package Contents</a></li>
 </ul>
 </li>
@@ -87,8 +89,8 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
-          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a></li>
-      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.train</span></code></li>
+          <li class="breadcrumb-item"><a href="../index.html">dacapo</a></li>
+      <li class="breadcrumb-item active">dacapo.train</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../_sources/autoapi/dacapo/train/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -99,13 +101,39 @@
            <div itemprop="articleBody">
              
   <section id="module-dacapo.train">
-<span id="dacapo-train"></span><h1><a class="reference internal" href="#module-dacapo.train" title="dacapo.train"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.train</span></code></a><a class="headerlink" href="#module-dacapo.train" title="Link to this heading"></a></h1>
-<section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
-<section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<span id="dacapo-train"></span><h1>dacapo.train<a class="headerlink" href="#module-dacapo.train" title="Link to this heading"></a></h1>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.train.logger" title="dacapo.train.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.train.create_compute_context" title="dacapo.train.create_compute_context"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_compute_context</span></code></a>(→ ComputeContext)</p></td>
+<td><p>Create a compute context based on the global DaCapo options.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.train.create_array_store" title="dacapo.train.create_array_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_array_store</span></code></a>()</p></td>
+<td><p>Create an array store based on the global DaCapo options.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.train.create_config_store" title="dacapo.train.create_config_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_config_store</span></code></a>()</p></td>
+<td><p>Create a config store based on the global DaCapo options.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.train.create_stats_store" title="dacapo.train.create_stats_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_stats_store</span></code></a>()</p></td>
+<td><p>Create a statistics store based on the global DaCapo options.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.train.create_weights_store" title="dacapo.train.create_weights_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_weights_store</span></code></a>()</p></td>
+<td><p>Create a weights store based on the global DaCapo options.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.train.validate" title="dacapo.train.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>(run_name, iteration[, num_workers, ...])</p></td>
+<td><p>Validate a run at a given iteration. Loads the weights from a previously</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.train.train" title="dacapo.train.train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train</span></code></a>(run_name)</p></td>
 <td><p>Train a run</p></td>
 </tr>
@@ -115,15 +143,170 @@
 </tbody>
 </table>
 </section>
-<section id="attributes">
-<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.train.logger" title="dacapo.train.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.train.create_compute_context">
+<span class="sig-prename descclassname"><span class="pre">dacapo.train.</span></span><span class="sig-name descname"><span class="pre">create_compute_context</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../compute_context/bsub/index.html#dacapo.compute_context.bsub.ComputeContext" title="dacapo.compute_context.bsub.ComputeContext"><span class="pre">ComputeContext</span></a></span></span><a class="headerlink" href="#dacapo.train.create_compute_context" title="Link to this definition"></a></dt>
+<dd><p>Create a compute context based on the global DaCapo options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The compute context object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../compute_context/bsub/index.html#dacapo.compute_context.bsub.ComputeContext" title="dacapo.compute_context.bsub.ComputeContext">ComputeContext</a></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the store type is unknown.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">context</span> <span class="o">=</span> <span class="n">create_compute_context</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The method is implemented in the module.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.train.create_array_store">
+<span class="sig-prename descclassname"><span class="pre">dacapo.train.</span></span><span class="sig-name descname"><span class="pre">create_array_store</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.train.create_array_store" title="Link to this definition"></a></dt>
+<dd><p>Create an array store based on the global DaCapo options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<a class="reference internal" href="../compute_context/compute_context/index.html#dacapo.compute_context.compute_context.Options" title="dacapo.compute_context.compute_context.Options"><em>Options</em></a>) – The global DaCapo options.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created array store.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../store/array_store/index.html#dacapo.store.array_store.ArrayStore" title="dacapo.store.array_store.ArrayStore">ArrayStore</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the store type is not supported.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">create_array_store</span><span class="p">()</span>
+<span class="go">&lt;dacapo.store.local_array_store.LocalArrayStore object at 0x7f2e4f8e9e80&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, only the LocalArrayStore is supported.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.train.create_config_store">
+<span class="sig-prename descclassname"><span class="pre">dacapo.train.</span></span><span class="sig-name descname"><span class="pre">create_config_store</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.train.create_config_store" title="Link to this definition"></a></dt>
+<dd><p>Create a config store based on the global DaCapo options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The created config store.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../store/config_store/index.html#dacapo.store.config_store.ConfigStore" title="dacapo.store.config_store.ConfigStore">ConfigStore</a></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the store type is not supported.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">create_config_store</span><span class="p">()</span>
+<span class="go">&lt;dacapo.store.file_config_store.FileConfigStore object at 0x7f2e4f8e9e80&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, only the FileConfigStore and MongoConfigStore are supported.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.train.create_stats_store">
+<span class="sig-prename descclassname"><span class="pre">dacapo.train.</span></span><span class="sig-name descname"><span class="pre">create_stats_store</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.train.create_stats_store" title="Link to this definition"></a></dt>
+<dd><p>Create a statistics store based on the global DaCapo options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<a class="reference internal" href="../compute_context/compute_context/index.html#dacapo.compute_context.compute_context.Options" title="dacapo.compute_context.compute_context.Options"><em>Options</em></a>) – The global DaCapo options.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created statistics store.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../store/file_stats_store/index.html#dacapo.store.file_stats_store.StatsStore" title="dacapo.store.file_stats_store.StatsStore">StatsStore</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the store type is not supported.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">create_stats_store</span><span class="p">()</span>
+<span class="go">&lt;dacapo.store.file_stats_store.FileStatsStore object at 0x7f2e4f8e9e80&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, only the FileStatsStore and MongoStatsStore are supported.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.train.create_weights_store">
+<span class="sig-prename descclassname"><span class="pre">dacapo.train.</span></span><span class="sig-name descname"><span class="pre">create_weights_store</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.train.create_weights_store" title="Link to this definition"></a></dt>
+<dd><p>Create a weights store based on the global DaCapo options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<a class="reference internal" href="../compute_context/compute_context/index.html#dacapo.compute_context.compute_context.Options" title="dacapo.compute_context.compute_context.Options"><em>Options</em></a>) – The global DaCapo options.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created weights store.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../store/local_weights_store/index.html#dacapo.store.local_weights_store.WeightsStore" title="dacapo.store.local_weights_store.WeightsStore">WeightsStore</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">create_weights_store</span><span class="p">()</span>
+<span class="go">&lt;dacapo.store.local_weights_store.LocalWeightsStore object at 0x7f2e4f8e9e80&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, only the LocalWeightsStore is supported.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.train.validate">
+<span class="sig-prename descclassname"><span class="pre">dacapo.train.</span></span><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dacapo.experiments.Run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'uint8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.train.validate" title="Link to this definition"></a></dt>
+<dd><p>Validate a run at a given iteration. Loads the weights from a previously
+stored checkpoint. Returns the best parameters and scores for this
+iteration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_name</strong> – The name of the run to validate.</p></li>
+<li><p><strong>iteration</strong> – The iteration to validate.</p></li>
+<li><p><strong>num_workers</strong> – The number of workers to use for validation.</p></li>
+<li><p><strong>output_dtype</strong> – The dtype to use for the output arrays.</p></li>
+<li><p><strong>overwrite</strong> – Whether to overwrite existing output arrays</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The best parameters and scores for this iteration</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the run does not have a validation dataset or the dataset does not have ground truth.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>validate(“my_run”, 1000)</p>
+</dd></dl>
+
 <dl class="py data">
 <dt class="sig sig-object py" id="dacapo.train.logger">
 <span class="sig-prename descclassname"><span class="pre">dacapo.train.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#dacapo.train.logger" title="Link to this definition"></a></dt>
@@ -161,7 +344,6 @@
 </dl>
 </dd></dl>
 
-</section>
 </section>
 </section>
 

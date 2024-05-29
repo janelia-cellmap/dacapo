@@ -1,24 +1,21 @@
-:py:mod:`dacapo.experiments.trainers.gp_augments.augment_config`
-================================================================
+dacapo.experiments.trainers.gp_augments.augment_config
+======================================================
 
 .. py:module:: dacapo.experiments.trainers.gp_augments.augment_config
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.experiments.trainers.gp_augments.augment_config.AugmentConfig
 
 
-
+Module Contents
+---------------
 
 .. py:class:: AugmentConfig
-
 
 
 
@@ -43,8 +40,10 @@ Classes
       
       
 
+
    .. py:method:: node(raw_key: gunpowder.ArrayKey, gt_key: gunpowder.ArrayKey, mask_key: gunpowder.ArrayKey) -> gunpowder.BatchFilter
       :abstractmethod:
+
 
       Get a gunpowder augment node.
 

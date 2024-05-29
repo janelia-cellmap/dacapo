@@ -1,24 +1,527 @@
-:py:mod:`dacapo.experiments.tasks.evaluators.dummy_evaluator`
-=============================================================
+dacapo.experiments.tasks.evaluators.dummy_evaluator
+===================================================
 
 .. py:module:: dacapo.experiments.tasks.evaluators.dummy_evaluator
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.evaluators.dummy_evaluator.Evaluator
+   dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluationScores
+   dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: Evaluator
 
-.. autoapisummary::
 
-   dacapo.experiments.tasks.evaluators.dummy_evaluator.DummyEvaluator
 
+   Base class of all evaluators: An abstract class representing an evaluator that compares and evaluates the output array against the evaluation array.
+
+   An evaluator takes a post-processor's output and compares it against
+   ground-truth. It then returns a set of scores that can be used to
+   determine the quality of the post-processor's output.
+
+   .. attribute:: best_scores
+
+      Dict[OutputIdentifier, BestScore]
+      the best scores for each dataset/post-processing parameter/criterion combination
+
+   .. method:: evaluate(output_array_identifier, evaluation_array)
+
+      
+      Compare and evaluate the output array against the evaluation array.
+
+   .. method:: is_best(dataset, parameter, criterion, score)
+
+      
+      Check if the provided score is the best for this dataset/parameter/criterion combo.
+
+   .. method:: get_overall_best(dataset, criterion)
+
+      
+      Return the best score for the given dataset and criterion.
+
+   .. method:: get_overall_best_parameters(dataset, criterion)
+
+      
+      Return the best parameters for the given dataset and criterion.
+
+   .. method:: compare(score_1, score_2, criterion)
+
+      
+      Compare two scores for the given criterion.
+
+   .. method:: set_best(validation_scores)
+
+      
+      Find the best iteration for each dataset/post_processing_parameter/criterion.
+
+   .. method:: higher_is_better(criterion)
+
+      
+      Return whether higher is better for the given criterion.
+
+   .. method:: bounds(criterion)
+
+      
+      Return the bounds for the given criterion.
+
+   .. method:: store_best(criterion)
+
+      
+      Return whether to store the best score for the given criterion.
+
+   .. note:: The Evaluator class is used to compare and evaluate the output array against the evaluation array.
+
+
+   .. py:method:: evaluate(output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, evaluation_array: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
+      :abstractmethod:
+
+
+      Compares and evaluates the output array against the evaluation array.
+
+      :param output_array_identifier: LocalArrayIdentifier
+                                      The identifier of the output array.
+      :param evaluation_array: Array
+                               The evaluation array.
+
+      :returns:
+
+                EvaluationScores
+                    The evaluation scores.
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> output_array_identifier = LocalArrayIdentifier("output_array")
+      >>> evaluation_array = Array()
+      >>> evaluator.evaluate(output_array_identifier, evaluation_array)
+      EvaluationScores()
+
+      .. note:: This function is used to compare and evaluate the output array against the evaluation array.
+
+
+
+   .. py:property:: best_scores
+      :type: Dict[OutputIdentifier, BestScore]
+
+      The best scores for each dataset/post-processing parameter/criterion combination.
+
+      :returns:
+
+                Dict[OutputIdentifier, BestScore]
+                    the best scores for each dataset/post-processing parameter/criterion combination
+
+      :raises AttributeError: if the best scores are not set
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> evaluator.best_scores
+      {}
+
+      .. note:: This function is used to return the best scores for each dataset/post-processing parameter/criterion combination.
+
+
+   .. py:method:: is_best(dataset: dacapo.experiments.datasplits.datasets.Dataset, parameter: dacapo.experiments.tasks.post_processors.PostProcessorParameters, criterion: str, score: dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores) -> bool
+
+      Check if the provided score is the best for this dataset/parameter/criterion combo.
+
+      :param dataset: Dataset
+                      the dataset
+      :param parameter: PostProcessorParameters
+                        the post-processor parameters
+      :param criterion: str
+                        the criterion
+      :param score: EvaluationScores
+                    the evaluation scores
+
+      :returns:
+
+                bool
+                    whether the provided score is the best for this dataset/parameter/criterion combo
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> dataset = Dataset()
+      >>> parameter = PostProcessorParameters()
+      >>> criterion = "criterion"
+      >>> score = EvaluationScores()
+      >>> evaluator.is_best(dataset, parameter, criterion, score)
+      False
+
+      .. note:: This function is used to check if the provided score is the best for this dataset/parameter/criterion combo.
+
+
+
+   .. py:method:: get_overall_best(dataset: dacapo.experiments.datasplits.datasets.Dataset, criterion: str)
+
+      Return the best score for the given dataset and criterion.
+
+      :param dataset: Dataset
+                      the dataset
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                Optional[float]
+                    the best score for the given dataset and criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> dataset = Dataset()
+      >>> criterion = "criterion"
+      >>> evaluator.get_overall_best(dataset, criterion)
+      None
+
+      .. note:: This function is used to return the best score for the given dataset and criterion.
+
+
+
+   .. py:method:: get_overall_best_parameters(dataset: dacapo.experiments.datasplits.datasets.Dataset, criterion: str)
+
+      Return the best parameters for the given dataset and criterion.
+
+      :param dataset: Dataset
+                      the dataset
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                Optional[PostProcessorParameters]
+                    the best parameters for the given dataset and criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> dataset = Dataset()
+      >>> criterion = "criterion"
+      >>> evaluator.get_overall_best_parameters(dataset, criterion)
+      None
+
+      .. note:: This function is used to return the best parameters for the given dataset and criterion.
+
+
+
+   .. py:method:: compare(score_1, score_2, criterion)
+
+      Compare two scores for the given criterion.
+
+      :param score_1: float
+                      the first score
+      :param score_2: float
+                      the second score
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                bool
+                    whether the first score is better than the second score for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> score_1 = 0.0
+      >>> score_2 = 0.0
+      >>> criterion = "criterion"
+      >>> evaluator.compare(score_1, score_2, criterion)
+      False
+
+      .. note:: This function is used to compare two scores for the given criterion.
+
+
+
+   .. py:method:: set_best(validation_scores: dacapo.experiments.validation_scores.ValidationScores) -> None
+
+      Find the best iteration for each dataset/post_processing_parameter/criterion.
+
+      :param validation_scores: ValidationScores
+                                the validation scores
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> validation_scores = ValidationScores()
+      >>> evaluator.set_best(validation_scores)
+      None
+
+      .. note::
+
+         This function is used to find the best iteration for each dataset/post_processing_parameter/criterion.
+         Typically, this function is called after the validation scores have been computed.
+
+
+
+   .. py:property:: criteria
+      :type: List[str]
+
+      :abstractmethod:
+
+      A list of all criteria for which a model might be "best". i.e. your
+      criteria might be "precision", "recall", and "jaccard". It is unlikely
+      that the best iteration/post processing parameters will be the same
+      for all 3 of these criteria
+
+      :returns:
+
+                List[str]
+                    the evaluation criteria
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> evaluator.criteria
+      []
+
+      .. note:: This function is used to return the evaluation criteria.
+
+
+   .. py:method:: higher_is_better(criterion: str) -> bool
+
+      Wether or not higher is better for this criterion.
+
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                bool
+                    whether higher is better for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> criterion = "criterion"
+      >>> evaluator.higher_is_better(criterion)
+      False
+
+      .. note:: This function is used to determine whether higher is better for the given criterion.
+
+
+
+   .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
+
+      The bounds for this criterion
+
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                Tuple[Union[int, float, None], Union[int, float, None]]
+                    the bounds for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> criterion = "criterion"
+      >>> evaluator.bounds(criterion)
+      (0, 1)
+
+      .. note:: This function is used to return the bounds for the given criterion.
+
+
+
+   .. py:method:: store_best(criterion: str) -> bool
+
+      The bounds for this criterion
+
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                bool
+                    whether to store the best score for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> criterion = "criterion"
+      >>> evaluator.store_best(criterion)
+      False
+
+      .. note:: This function is used to return whether to store the best score for the given criterion.
+
+
+
+   .. py:property:: score
+      :type: dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
+
+      :abstractmethod:
+
+      The evaluation scores.
+
+      :returns:
+
+                EvaluationScores
+                    the evaluation scores
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> evaluator.score
+      EvaluationScores()
+
+      .. note:: This function is used to return the evaluation scores.
+
+
+.. py:class:: DummyEvaluationScores
+
+
+
+   The evaluation scores for the dummy task. The scores include the frizz level and blipp score. A higher frizz level indicates more frizz, while a higher blipp score indicates better performance.
+
+   .. attribute:: frizz_level
+
+      float
+      the frizz level
+
+   .. attribute:: blipp_score
+
+      float
+      the blipp score
+
+   .. method:: higher_is_better(criterion)
+
+      
+      Return whether higher is better for the given criterion.
+
+   .. method:: bounds(criterion)
+
+      
+      Return the bounds for the given criterion.
+
+   .. method:: store_best(criterion)
+
+      
+      Return whether to store the best score for the given criterion.
+
+   .. note:: The DummyEvaluationScores class is used to store the evaluation scores for the dummy task. The class also provides methods to determine whether higher is better for a given criterion, the bounds for a given criterion, and whether to store the best score for a given criterion.
+
+
+   .. py:attribute:: criteria
+      :value: ['frizz_level', 'blipp_score']
+
+
+
+   .. py:attribute:: frizz_level
+      :type:  float
+
+
+   .. py:attribute:: blipp_score
+      :type:  float
+
+
+   .. py:method:: higher_is_better(criterion: str) -> bool
+      :staticmethod:
+
+
+      Return whether higher is better for the given criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether higher is better for this criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> DummyEvaluationScores.higher_is_better("frizz_level")
+      True
+
+      .. note:: This function is used to determine whether higher is better for the given criterion.
+
+
+
+   .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
+      :staticmethod:
+
+
+      Return the bounds for the given criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                Tuple[Union[int, float, None], Union[int, float, None]]
+                    the bounds for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> DummyEvaluationScores.bounds("frizz_level")
+      (0.0, 1.0)
+
+      .. note:: This function is used to return the bounds for the given criterion.
+
+
+
+   .. py:method:: store_best(criterion: str) -> bool
+      :staticmethod:
+
+
+      Return whether to store the best score for the given criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether to store the best score for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> DummyEvaluationScores.store_best("frizz_level")
+      True
+
+      .. note:: This function is used to determine whether to store the best score for the given criterion.
 
 
 
 .. py:class:: DummyEvaluator
-
 
 
 
@@ -41,26 +544,11 @@ Classes
 
    .. note:: The DummyEvaluator class is used to evaluate the performance of a dummy task.
 
-   .. py:property:: score
-      :type: dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores
-
-      Return the evaluation scores.
-
-      :returns: An object of DummyEvaluationScores class, with the evaluation scores.
-      :rtype: DummyEvaluationScores
-
-      .. rubric:: Examples
-
-      >>> dummy_evaluator = DummyEvaluator()
-      >>> dummy_evaluator.score
-      DummyEvaluationScores(frizz_level=0.0, blipp_score=0.0)
-
-      .. note:: This function is used to return the evaluation scores.
 
    .. py:attribute:: criteria
       :value: ['frizz_level', 'blipp_score']
 
-      
+
 
    .. py:method:: evaluate(output_array_identifier, evaluation_dataset)
 
@@ -84,5 +572,22 @@ Classes
 
       .. note:: This function is used to evaluate the output array against the evaluation dataset.
 
+
+
+   .. py:property:: score
+      :type: dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores
+
+      Return the evaluation scores.
+
+      :returns: An object of DummyEvaluationScores class, with the evaluation scores.
+      :rtype: DummyEvaluationScores
+
+      .. rubric:: Examples
+
+      >>> dummy_evaluator = DummyEvaluator()
+      >>> dummy_evaluator.score
+      DummyEvaluationScores(frizz_level=0.0, blipp_score=0.0)
+
+      .. note:: This function is used to return the evaluation scores.
 
 

@@ -1,24 +1,322 @@
-:py:mod:`dacapo.experiments.datasplits.datasets.arrays.numpy_array`
-===================================================================
+dacapo.experiments.datasplits.datasets.arrays.numpy_array
+=========================================================
 
 .. py:module:: dacapo.experiments.datasplits.datasets.arrays.numpy_array
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.numpy_array.Array
+   dacapo.experiments.datasplits.datasets.arrays.numpy_array.NumpyArray
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.experiments.datasplits.datasets.arrays.numpy_array.NumpyArray
+.. py:class:: Array
 
 
+
+   An Array is a multi-dimensional array of data that can be read from and written to. It is
+   defined by a region of interest (ROI) in world units, a voxel size, and a number of spatial
+   dimensions. The data is stored in a numpy array, and can be accessed using numpy-like slicing
+   syntax.
+
+   The Array class is an abstract base class that defines the interface for all Array
+   implementations. It provides a number of properties that must be implemented by subclasses,
+   such as the ROI, voxel size, and data type of the array. It also provides a method for fetching
+   data from the array, which is implemented by slicing the numpy array.
+
+   The Array class also provides a method for checking if the array can be visualized in
+   Neuroglancer, and a method for generating a Neuroglancer layer for the array. These methods are
+   implemented by subclasses that support visualization in Neuroglancer.
+
+   .. attribute:: attrs
+
+      A dictionary of metadata attributes stored on this array.
+
+      :type: Dict[str, Any]
+
+   .. attribute:: axes
+
+      The axes of this dataset as a string of characters, as they are indexed.
+      Permitted characters are:
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+      :type: List[str]
+
+   .. attribute:: dims
+
+      The number of spatial dimensions.
+
+      :type: int
+
+   .. attribute:: voxel_size
+
+      The size of a voxel in physical units.
+
+      :type: Coordinate
+
+   .. attribute:: roi
+
+      The total ROI of this array, in world units.
+
+      :type: Roi
+
+   .. attribute:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+      :type: Any
+
+   .. attribute:: num_channels
+
+      The number of channels provided by this dataset. Should return
+      None if the channel dimension doesn't exist.
+
+      :type: Optional[int]
+
+   .. attribute:: data
+
+      A numpy-like readable and writable view into this array.
+
+      :type: np.ndarray
+
+   .. attribute:: writable
+
+      Can we write to this Array?
+
+      :type: bool
+
+   .. method:: __getitem__(self, roi
+
+      Roi) -> np.ndarray: Get a numpy like readable and writable view into
+      this array.
+
+   .. method:: _can_neuroglance(self) -> bool
+
+      Check if this array can be visualized in Neuroglancer.
+
+   .. method:: _neuroglancer_layer(self)
+
+      Generate a Neuroglancer layer for this array.
+
+   .. method:: _slices(self, roi
+
+      Roi) -> Iterable[slice]: Generate a list of slices for the given ROI.
+
+   .. note::
+
+      This class is used to define the interface for all Array implementations. It provides a
+      number of properties that must be implemented by subclasses, such as the ROI, voxel size, and
+      data type of the array. It also provides a method for fetching data from the array, which is
+      implemented by slicing the numpy array. The Array class also provides a method for checking
+      if the array can be visualized in Neuroglancer, and a method for generating a Neuroglancer
+      layer for the array. These methods are implemented by subclasses that support visualization
+      in Neuroglancer.
+
+
+   .. py:property:: attrs
+      :type: Dict[str, Any]
+
+      :abstractmethod:
+
+      Return a dictionary of metadata attributes stored on this array.
+
+      :returns: A dictionary of metadata attributes stored on this array.
+      :rtype: Dict[str, Any]
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.attrs
+      {}
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: axes
+      :type: List[str]
+
+      :abstractmethod:
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+      :returns: The axes of this dataset as a string of characters, as they are indexed.
+      :rtype: List[str]
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.axes
+      ['z', 'y', 'x']
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: dims
+      :type: int
+
+      :abstractmethod:
+
+      Returns the number of spatial dimensions.
+
+      :returns: The number of spatial dimensions.
+      :rtype: int
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.dims
+      3
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      :abstractmethod:
+
+      The size of a voxel in physical units.
+
+      :returns: The size of a voxel in physical units.
+      :rtype: Coordinate
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.voxel_size
+      Coordinate((1, 1, 1))
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      :abstractmethod:
+
+      The total ROI of this array, in world units.
+
+      :returns: The total ROI of this array, in world units.
+      :rtype: Roi
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.roi
+      Roi(offset=Coordinate((0, 0, 0)), shape=Coordinate((100, 100, 100)))
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: dtype
+      :type: Any
+
+      :abstractmethod:
+
+      The dtype of this array, in numpy dtypes
+
+      :returns: The dtype of this array, in numpy dtypes.
+      :rtype: Any
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.dtype
+      np.dtype('uint8')
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: num_channels
+      :type: Optional[int]
+
+      :abstractmethod:
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+      :returns: The number of channels provided by this dataset.
+      :rtype: Optional[int]
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.num_channels
+      1
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: data
+      :type: numpy.ndarray
+
+      :abstractmethod:
+
+      Get a numpy like readable and writable view into this array.
+
+      :returns: A numpy like readable and writable view into this array.
+      :rtype: np.ndarray
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.data
+      np.ndarray
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: writable
+      :type: bool
+
+      :abstractmethod:
+
+      Can we write to this Array?
+
+      :returns: Can we write to this Array?
+      :rtype: bool
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.writable
+      False
+
+      .. note:: This method must be implemented by the subclass.
 
 
 .. py:class:: NumpyArray(array_config)
-
 
 
 
@@ -54,8 +352,8 @@ Classes
 
    .. note:: This class is a subclass of Array.
 
-   .. py:property:: attrs
 
+   .. py:property:: attrs
       Returns the attributes of the array.
 
       :returns: The attributes of the array.
@@ -71,150 +369,10 @@ Classes
 
       .. note:: This method is a property. It returns the attributes of the array.
 
-   .. py:property:: axes
-
-      Returns the axes of the array.
-
-      :returns: The axes of the array.
-      :rtype: List[str]
-
-      :raises ValueError: If the array does not have axes.
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.axes
-      ['z', 'y', 'x']
-
-      .. note:: This method is a property. It returns the axes of the array.
-
-   .. py:property:: dims
-
-      Returns the number of dimensions of the array.
-
-      :returns: The number of dimensions of the array.
-      :rtype: int
-
-      :raises ValueError: If the array does not have a dimension.
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.dims
-      3
-
-      .. note:: This method is a property. It returns the number of dimensions of the array.
-
-   .. py:property:: voxel_size
-
-      Returns the voxel size of the array.
-
-      :returns: The voxel size of the array.
-      :rtype: Coordinate
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.voxel_size
-      Coordinate((1, 1, 1))
-
-      .. note:: This method is a property. It returns the voxel size of the array.
-
-   .. py:property:: roi
-
-      Returns the region of interest of the array.
-
-      :returns: The region of interest of the array.
-      :rtype: Roi
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.roi
-      Roi((0, 0, 0), (2, 3, 4))
-
-      .. note:: This method is a property. It returns the region of interest of the array.
-
-   .. py:property:: writable
-      :type: bool
-
-      Returns whether the array is writable.
-
-      :returns: Whether the array is writable.
-      :rtype: bool
-
-      :raises ValueError: If the array is not writable.
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.writable
-      True
-
-      .. note:: This method is a property. It returns whether the array is writable.
-
-   .. py:property:: data
-
-      Returns the numpy array.
-
-      :returns: The numpy array.
-      :rtype: np.ndarray
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.data
-      array([[[0., 0., 0., 0.],
-              [0., 0., 0., 0.],
-              [0., 0., 0., 0.]],
-      <BLANKLINE>
-             [[0., 0., 0., 0.],
-              [0., 0., 0., 0.],
-              [0., 0., 0., 0.]]])
-
-      .. note:: This method is a property. It returns the numpy array.
-
-   .. py:property:: dtype
-
-      Returns the data type of the array.
-
-      :returns: The data type of the array.
-      :rtype: np.dtype
-
-      :raises ValueError: If the array does not have a data type.
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.dtype
-      dtype('float64')
-
-      .. note:: This method is a property. It returns the data type of the array.
-
-   .. py:property:: num_channels
-
-      Returns the number of channels in the array.
-
-      :returns: The number of channels in the array.
-      :rtype: int
-
-      :raises ValueError: If the array does not have a channel dimension.
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((1, 2, 3, 4)), Roi((0, 0, 0), (1, 2, 3)), Coordinate((1, 1, 1)), ["b", "c", "z", "y", "x"])
-      >>> array.num_channels
-      1
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.num_channels
-      Traceback (most recent call last):
-      ...
-      ValueError: Array does not have a channel dimension.
-
-      .. note:: This method is a property. It returns the number of channels in the array.
 
    .. py:method:: from_gp_array(array: gunpowder.Array)
       :classmethod:
+
 
       Create a NumpyArray from a Gunpowder Array.
 
@@ -242,8 +400,10 @@ Classes
       .. note:: This method creates a NumpyArray from a Gunpowder Array.
 
 
+
    .. py:method:: from_np_array(array: numpy.ndarray, roi, voxel_size, axes)
       :classmethod:
+
 
       Create a NumpyArray from a numpy array.
 
@@ -275,5 +435,148 @@ Classes
 
       .. note:: This method creates a NumpyArray from a numpy array.
 
+
+
+   .. py:property:: axes
+      Returns the axes of the array.
+
+      :returns: The axes of the array.
+      :rtype: List[str]
+
+      :raises ValueError: If the array does not have axes.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.axes
+      ['z', 'y', 'x']
+
+      .. note:: This method is a property. It returns the axes of the array.
+
+
+   .. py:property:: dims
+      Returns the number of dimensions of the array.
+
+      :returns: The number of dimensions of the array.
+      :rtype: int
+
+      :raises ValueError: If the array does not have a dimension.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.dims
+      3
+
+      .. note:: This method is a property. It returns the number of dimensions of the array.
+
+
+   .. py:property:: voxel_size
+      Returns the voxel size of the array.
+
+      :returns: The voxel size of the array.
+      :rtype: Coordinate
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.voxel_size
+      Coordinate((1, 1, 1))
+
+      .. note:: This method is a property. It returns the voxel size of the array.
+
+
+   .. py:property:: roi
+      Returns the region of interest of the array.
+
+      :returns: The region of interest of the array.
+      :rtype: Roi
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.roi
+      Roi((0, 0, 0), (2, 3, 4))
+
+      .. note:: This method is a property. It returns the region of interest of the array.
+
+
+   .. py:property:: writable
+      :type: bool
+
+      Returns whether the array is writable.
+
+      :returns: Whether the array is writable.
+      :rtype: bool
+
+      :raises ValueError: If the array is not writable.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.writable
+      True
+
+      .. note:: This method is a property. It returns whether the array is writable.
+
+
+   .. py:property:: data
+      Returns the numpy array.
+
+      :returns: The numpy array.
+      :rtype: np.ndarray
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.data
+      array([[[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]],
+      <BLANKLINE>
+             [[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]]])
+
+      .. note:: This method is a property. It returns the numpy array.
+
+
+   .. py:property:: dtype
+      Returns the data type of the array.
+
+      :returns: The data type of the array.
+      :rtype: np.dtype
+
+      :raises ValueError: If the array does not have a data type.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.dtype
+      dtype('float64')
+
+      .. note:: This method is a property. It returns the data type of the array.
+
+
+   .. py:property:: num_channels
+      Returns the number of channels in the array.
+
+      :returns: The number of channels in the array.
+      :rtype: int
+
+      :raises ValueError: If the array does not have a channel dimension.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((1, 2, 3, 4)), Roi((0, 0, 0), (1, 2, 3)), Coordinate((1, 1, 1)), ["b", "c", "z", "y", "x"])
+      >>> array.num_channels
+      1
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.num_channels
+      Traceback (most recent call last):
+      ...
+      ValueError: Array does not have a channel dimension.
+
+      .. note:: This method is a property. It returns the number of channels in the array.
 
 

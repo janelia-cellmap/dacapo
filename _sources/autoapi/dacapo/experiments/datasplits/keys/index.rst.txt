@@ -1,23 +1,20 @@
-:py:mod:`dacapo.experiments.datasplits.keys`
-============================================
+dacapo.experiments.datasplits.keys
+==================================
 
 .. py:module:: dacapo.experiments.datasplits.keys
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   keys/index.rst
+   /autoapi/dacapo/experiments/datasplits/keys/keys/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -26,10 +23,10 @@ Classes
    dacapo.experiments.datasplits.keys.DataKey
 
 
-
+Package Contents
+----------------
 
 .. py:class:: ArrayKey
-
 
 
 
@@ -64,29 +61,28 @@ Classes
 
    This class is a base class and should not be instantiated.
 
+
    .. py:attribute:: RAW
       :value: 'raw'
 
-      
+
 
    .. py:attribute:: GT
       :value: 'gt'
 
-      
+
 
    .. py:attribute:: MASK
       :value: 'mask'
 
-      
+
 
    .. py:attribute:: NON_EMPTY
       :value: 'non_empty_mask'
 
-      
 
 
 .. py:class:: GraphKey
-
 
 
 
@@ -106,14 +102,13 @@ Classes
 
    This class is a base class and should not be instantiated.
 
+
    .. py:attribute:: SPECIFIED_LOCATIONS
       :value: 'specified_locations'
 
-      
 
 
 .. py:class:: DataKey
-
 
 
 

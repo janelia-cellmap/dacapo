@@ -1,24 +1,29 @@
-:py:mod:`dacapo.store.config_store`
-===================================
+dacapo.store.config_store
+=========================
 
 .. py:module:: dacapo.store.config_store
 
 
-Module Contents
----------------
+Exceptions
+----------
+
+.. autoapisummary::
+
+   dacapo.store.config_store.DuplicateNameError
+
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.store.config_store.ConfigStore
 
 
-
+Module Contents
+---------------
 
 .. py:exception:: DuplicateNameError
-
 
 
 
@@ -39,7 +44,6 @@ Classes
 
 
 .. py:class:: ConfigStore
-
 
 
 
@@ -195,43 +199,38 @@ Classes
       configs). Concrete implementations of this class should define how
       these objects are stored and retrieved (e.g., in a database, in files).
 
-   .. py:attribute:: runs
-      :type: Any
 
-      
+   .. py:attribute:: runs
+      :type:  Any
+
 
    .. py:attribute:: datasplits
-      :type: Any
+      :type:  Any
 
-      
 
    .. py:attribute:: datasets
-      :type: Any
+      :type:  Any
 
-      
 
    .. py:attribute:: arrays
-      :type: Any
+      :type:  Any
 
-      
 
    .. py:attribute:: tasks
-      :type: Any
+      :type:  Any
 
-      
 
    .. py:attribute:: trainers
-      :type: Any
+      :type:  Any
 
-      
 
    .. py:attribute:: architectures
-      :type: Any
+      :type:  Any
 
-      
 
    .. py:method:: delete_config(database, config_name: str) -> None
       :abstractmethod:
+
 
       Delete a config from a store.
 
@@ -247,8 +246,10 @@ Classes
       >>> store.delete_config(store.runs, "run1")
 
 
+
    .. py:method:: store_run_config(run_config: dacapo.experiments.run_config.RunConfig) -> None
       :abstractmethod:
+
 
       Store a run config. This should also store the configs that are part
       of the run config (i.e., task, architecture, trainer, and dataset
@@ -265,8 +266,10 @@ Classes
       >>> store.store_run_config(run_config)
 
 
+
    .. py:method:: retrieve_run_config(run_name: str) -> dacapo.experiments.run_config.RunConfig
       :abstractmethod:
+
 
       Retrieve a run config from a run name.
 
@@ -283,8 +286,10 @@ Classes
       >>> run_config = store.retrieve_run_config("run1")
 
 
+
    .. py:method:: retrieve_run_config_names() -> List[str]
       :abstractmethod:
+
 
       Retrieve all run config names.
 
@@ -296,6 +301,7 @@ Classes
       .. rubric:: Examples
 
       >>> run_names = store.retrieve_run_config_names()
+
 
 
    .. py:method:: delete_run_config(run_name: str) -> None
@@ -312,8 +318,10 @@ Classes
       >>> store.delete_run_config("run1")
 
 
+
    .. py:method:: store_task_config(task_config: dacapo.experiments.tasks.task_config.TaskConfig) -> None
       :abstractmethod:
+
 
       Store a task config.
 
@@ -328,8 +336,10 @@ Classes
       >>> store.store_task_config(task_config)
 
 
+
    .. py:method:: retrieve_task_config(task_name: str) -> dacapo.experiments.tasks.task_config.TaskConfig
       :abstractmethod:
+
 
       Retrieve a task config from a task name.
 
@@ -346,8 +356,10 @@ Classes
       >>> task_config = store.retrieve_task_config("task1")
 
 
+
    .. py:method:: retrieve_task_config_names() -> List[str]
       :abstractmethod:
+
 
       Retrieve all task config names.
 
@@ -361,6 +373,7 @@ Classes
       .. rubric:: Examples
 
       >>> task_names = store.retrieve_task_config_names()
+
 
 
    .. py:method:: delete_task_config(task_name: str) -> None
@@ -377,8 +390,10 @@ Classes
       >>> store.delete_task_config("task1")
 
 
+
    .. py:method:: store_architecture_config(architecture_config: dacapo.experiments.architectures.architecture_config.ArchitectureConfig) -> None
       :abstractmethod:
+
 
       Store a architecture config.
 
@@ -394,8 +409,10 @@ Classes
       >>> store.store_architecture_config(architecture_config)
 
 
+
    .. py:method:: retrieve_architecture_config(architecture_name: str) -> dacapo.experiments.architectures.architecture_config.ArchitectureConfig
       :abstractmethod:
+
 
       Retrieve a architecture config from a architecture name.
 
@@ -413,8 +430,10 @@ Classes
       >>> architecture_config = store.retrieve_architecture_config("architecture1")
 
 
+
    .. py:method:: retrieve_architecture_config_names() -> List[str]
       :abstractmethod:
+
 
       Retrieve all architecture config names.
 
@@ -428,6 +447,7 @@ Classes
       .. rubric:: Examples
 
       >>> architecture_names = store.retrieve_architecture_config_names()
+
 
 
    .. py:method:: delete_architecture_config(architecture_name: str) -> None
@@ -445,8 +465,10 @@ Classes
       >>> store.delete_architecture_config("architecture1")
 
 
+
    .. py:method:: store_trainer_config(trainer_config: dacapo.experiments.trainers.trainer_config.TrainerConfig) -> None
       :abstractmethod:
+
 
       Store a trainer config.
 
@@ -461,8 +483,10 @@ Classes
       >>> store.store_trainer_config(trainer_config)
 
 
+
    .. py:method:: retrieve_trainer_config(trainer_name: str) -> None
       :abstractmethod:
+
 
       Retrieve a trainer config from a trainer name.
 
@@ -479,8 +503,10 @@ Classes
       >>> trainer_config = store.retrieve_trainer_config("trainer1")
 
 
+
    .. py:method:: retrieve_trainer_config_names() -> List[str]
       :abstractmethod:
+
 
       Retrieve all trainer config names.
 
@@ -494,6 +520,7 @@ Classes
       .. rubric:: Examples
 
       >>> trainer_names = store.retrieve_trainer_config_names()
+
 
 
    .. py:method:: delete_trainer_config(trainer_name: str) -> None
@@ -510,8 +537,10 @@ Classes
       >>> store.delete_trainer_config("trainer1")
 
 
+
    .. py:method:: store_datasplit_config(datasplit_config: dacapo.experiments.datasplits.datasplit_config.DataSplitConfig) -> None
       :abstractmethod:
+
 
       Store a datasplit config.
 
@@ -526,8 +555,10 @@ Classes
       >>> store.store_datasplit_config(datasplit_config)
 
 
+
    .. py:method:: retrieve_datasplit_config(datasplit_name: str) -> dacapo.experiments.datasplits.datasplit_config.DataSplitConfig
       :abstractmethod:
+
 
       Retrieve a datasplit config from a datasplit name.
 
@@ -544,8 +575,10 @@ Classes
       >>> datasplit_config = store.retrieve_datasplit_config("datasplit1")
 
 
+
    .. py:method:: retrieve_datasplit_config_names() -> List[str]
       :abstractmethod:
+
 
       Retrieve all datasplit names.
 
@@ -561,11 +594,13 @@ Classes
       >>> datasplit_names = store.retrieve_datasplit_config_names()
 
 
+
    .. py:method:: delete_datasplit_config(datasplit_name: str) -> None
 
 
    .. py:method:: store_array_config(array_config: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig) -> None
       :abstractmethod:
+
 
       Store a array config.
 
@@ -580,8 +615,10 @@ Classes
       >>> store.store_array_config(array_config)
 
 
+
    .. py:method:: retrieve_array_config(array_name: str) -> dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
       :abstractmethod:
+
 
       Retrieve a array config from a array name.
 
@@ -598,8 +635,10 @@ Classes
       >>> array_config = store.retrieve_array_config("array1")
 
 
+
    .. py:method:: retrieve_array_config_names() -> List[str]
       :abstractmethod:
+
 
       Retrieve all array names.
 
@@ -613,6 +652,7 @@ Classes
       .. rubric:: Examples
 
       >>> array_names = store.retrieve_array_config_names()
+
 
 
    .. py:method:: delete_array_config(array_name: str) -> None

@@ -1,24 +1,21 @@
-:py:mod:`dacapo.ext`
-====================
+dacapo.ext
+==========
 
 .. py:module:: dacapo.ext
 
 
-Package Contents
-----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.ext.NoSuchModule
 
 
-
+Package Contents
+----------------
 
 .. py:class:: NoSuchModule(name)
-
 
    This class is used to raise an exception when a module is not found.
 

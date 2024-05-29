@@ -1,18 +1,33 @@
-:py:mod:`dacapo.blockwise.relabel_worker`
-=========================================
+dacapo.blockwise.relabel_worker
+===============================
 
 .. py:module:: dacapo.blockwise.relabel_worker
 
 
-Module Contents
----------------
-
-
-Functions
-~~~~~~~~~
+Attributes
+----------
 
 .. autoapisummary::
 
+   dacapo.blockwise.relabel_worker.fit
+   dacapo.blockwise.relabel_worker.read_write_conflict
+   dacapo.blockwise.relabel_worker.path
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.blockwise.relabel_worker.LocalArrayIdentifier
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   dacapo.blockwise.relabel_worker.create_compute_context
    dacapo.blockwise.relabel_worker.cli
    dacapo.blockwise.relabel_worker.start_worker
    dacapo.blockwise.relabel_worker.relabel_in_block
@@ -21,15 +36,51 @@ Functions
    dacapo.blockwise.relabel_worker.spawn_worker
 
 
+Module Contents
+---------------
 
-Attributes
-~~~~~~~~~~
+.. py:function:: create_compute_context() -> ComputeContext
 
-.. autoapisummary::
+   Create a compute context based on the global DaCapo options.
 
-   dacapo.blockwise.relabel_worker.fit
-   dacapo.blockwise.relabel_worker.read_write_conflict
-   dacapo.blockwise.relabel_worker.path
+   :returns: The compute context object.
+   :rtype: ComputeContext
+
+   :raises ValueError: If the store type is unknown.
+
+   .. rubric:: Examples
+
+   >>> context = create_compute_context()
+
+   .. note:: The method is implemented in the module.
+
+
+.. py:class:: LocalArrayIdentifier
+
+   Represents a local array identifier.
+
+   .. attribute:: container
+
+      The path to the container.
+
+      :type: Path
+
+   .. attribute:: dataset
+
+      The dataset name.
+
+      :type: str
+
+   Method:
+       __str__ : Returns the string representation of the identifier.
+
+
+   .. py:attribute:: container
+      :type:  upath.UPath
+
+
+   .. py:attribute:: dataset
+      :type:  str
 
 
 .. py:function:: cli(log_level)
@@ -43,16 +94,12 @@ Attributes
 .. py:data:: fit
    :value: 'shrink'
 
-   
 
 .. py:data:: read_write_conflict
    :value: False
 
-   
 
 .. py:data:: path
-
-   
 
 .. py:function:: start_worker(output_container, output_dataset, tmpdir, return_io_loop=False, *args, **kwargs)
 

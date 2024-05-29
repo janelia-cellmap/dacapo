@@ -1,38 +1,35 @@
-:py:mod:`dacapo.experiments.trainers`
-=====================================
+dacapo.experiments.trainers
+===========================
 
 .. py:module:: dacapo.experiments.trainers
 
 
 Subpackages
 -----------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
 
-   gp_augments/index.rst
-   optimizers/index.rst
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/dacapo/experiments/trainers/gp_augments/index
+   /autoapi/dacapo/experiments/trainers/optimizers/index
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   dummy_trainer/index.rst
-   dummy_trainer_config/index.rst
-   gunpowder_trainer/index.rst
-   gunpowder_trainer_config/index.rst
-   trainer/index.rst
-   trainer_config/index.rst
+   /autoapi/dacapo/experiments/trainers/dummy_trainer/index
+   /autoapi/dacapo/experiments/trainers/dummy_trainer_config/index
+   /autoapi/dacapo/experiments/trainers/gunpowder_trainer/index
+   /autoapi/dacapo/experiments/trainers/gunpowder_trainer_config/index
+   /autoapi/dacapo/experiments/trainers/trainer/index
+   /autoapi/dacapo/experiments/trainers/trainer_config/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -45,10 +42,10 @@ Classes
    dacapo.experiments.trainers.AugmentConfig
 
 
-
+Package Contents
+----------------
 
 .. py:class:: Trainer
-
 
 
 
@@ -98,23 +95,22 @@ Classes
 
    .. note:: The Trainer class is an abstract class that cannot be instantiated directly. It is meant to be subclassed.
 
-   .. py:attribute:: iteration
-      :type: int
 
-      
+   .. py:attribute:: iteration
+      :type:  int
+
 
    .. py:attribute:: batch_size
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: learning_rate
-      :type: float
+      :type:  float
 
-      
 
    .. py:method:: create_optimizer(model: dacapo.experiments.model.Model) -> torch.optim.Optimizer
       :abstractmethod:
+
 
       Creates an optimizer for the model.
 
@@ -133,8 +129,10 @@ Classes
       .. note:: This method must be implemented by the subclass.
 
 
+
    .. py:method:: iterate(num_iterations: int, model: dacapo.experiments.model.Model, optimizer: torch.optim.Optimizer, device: torch.device) -> Iterator[dacapo.experiments.training_iteration_stats.TrainingIterationStats]
       :abstractmethod:
+
 
       Performs a number of training iterations.
 
@@ -160,8 +158,10 @@ Classes
       .. note:: This method must be implemented by the subclass.
 
 
+
    .. py:method:: can_train(datasets: List[dacapo.experiments.datasplits.datasets.Dataset]) -> bool
       :abstractmethod:
+
 
       Checks if the trainer can train with a specific set of datasets.
 
@@ -182,8 +182,10 @@ Classes
       .. note:: This method must be implemented by the subclass.
 
 
+
    .. py:method:: build_batch_provider(datasets: List[dacapo.experiments.datasplits.datasets.Dataset], model: dacapo.experiments.model.Model, task: dacapo.experiments.tasks.task.Task, snapshot_container: dacapo.store.array_store.LocalContainerIdentifier) -> None
       :abstractmethod:
+
 
       Initializes the training pipeline using various components.
 
@@ -210,7 +212,6 @@ Classes
 
 
 .. py:class:: TrainerConfig
-
 
    A class to represent the Trainer Configurations.
 
@@ -242,20 +243,18 @@ Classes
 
    .. note:: The TrainerConfig class is an abstract class that cannot be instantiated directly. It is meant to be subclassed.
 
-   .. py:attribute:: name
-      :type: str
 
-      
+   .. py:attribute:: name
+      :type:  str
+
 
    .. py:attribute:: batch_size
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: learning_rate
-      :type: float
+      :type:  float
 
-      
 
    .. py:method:: verify() -> Tuple[bool, str]
 
@@ -284,7 +283,6 @@ Classes
 
 
 
-
    This is just a dummy trainer config used for testing. None of the
    attributes have any particular meaning. This is just to test the trainer
    and the trainer config.
@@ -302,14 +300,13 @@ Classes
       
       
 
+
    .. py:attribute:: trainer_type
 
-      
 
    .. py:attribute:: mirror_augment
-      :type: bool
+      :type:  bool
 
-      
 
    .. py:method:: verify() -> Tuple[bool, str]
 
@@ -328,7 +325,6 @@ Classes
 
 
 .. py:class:: DummyTrainer(trainer_config)
-
 
 
 
@@ -385,10 +381,11 @@ Classes
 
    .. note:: The iterate method yields TrainingIterationStats.
 
+
    .. py:attribute:: iteration
       :value: 0
 
-      
+
 
    .. py:method:: create_optimizer(model)
 
@@ -403,6 +400,7 @@ Classes
       .. rubric:: Examples
 
       >>> optimizer = create_optimizer(model)
+
 
 
    .. py:method:: iterate(num_iterations: int, model: dacapo.experiments.model.Model, optimizer, device)
@@ -428,6 +426,7 @@ Classes
       >>>     print(stats)
 
 
+
    .. py:method:: build_batch_provider(datasplit, architecture, task, snapshot_container)
 
       Build a batch provider for the given data split, architecture, task, and snapshot container.
@@ -451,6 +450,7 @@ Classes
       >>> batch_provider = build_batch_provider(datasplit, architecture, task, snapshot_container)
 
 
+
    .. py:method:: can_train(datasplit)
 
       Check if the trainer can train on the given data split.
@@ -470,7 +470,6 @@ Classes
 
 
 .. py:class:: GunpowderTrainerConfig
-
 
 
 
@@ -514,38 +513,31 @@ Classes
 
       :type: bool
 
+
    .. py:attribute:: trainer_type
 
-      
 
    .. py:attribute:: num_data_fetchers
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: augments
-      :type: List[dacapo.experiments.trainers.gp_augments.AugmentConfig]
+      :type:  List[dacapo.experiments.trainers.gp_augments.AugmentConfig]
 
-      
 
    .. py:attribute:: snapshot_interval
-      :type: Optional[int]
+      :type:  Optional[int]
 
-      
 
    .. py:attribute:: min_masked
-      :type: Optional[float]
+      :type:  Optional[float]
 
-      
 
    .. py:attribute:: clip_raw
-      :type: bool
-
-      
+      :type:  bool
 
 
 .. py:class:: GunpowderTrainer(trainer_config)
-
 
 
 
@@ -656,10 +648,11 @@ Classes
 
    .. note:: The GunpowderTrainer class is a subclass of the Trainer class. It is used to train a model using gunpowder.
 
+
    .. py:attribute:: iteration
       :value: 0
 
-      
+
 
    .. py:method:: create_optimizer(model)
 
@@ -676,6 +669,7 @@ Classes
       .. rubric:: Examples
 
       >>> optimizer = trainer.create_optimizer(model)
+
 
 
    .. py:method:: build_batch_provider(datasets, model, task, snapshot_container=None)
@@ -696,6 +690,7 @@ Classes
       .. rubric:: Examples
 
       >>> trainer.build_batch_provider(datasets, model, task, snapshot_container)
+
 
 
    .. py:method:: iterate(num_iterations, model, optimizer, device)
@@ -722,6 +717,7 @@ Classes
       >>>     print(iteration_stats)
 
 
+
    .. py:method:: next()
 
       Fetches the next batch of data.
@@ -734,6 +730,7 @@ Classes
       .. rubric:: Examples
 
       >>> raw, gt, target, weight, mask = trainer.next()
+
 
 
    .. py:method:: can_train(datasets) -> bool
@@ -758,7 +755,6 @@ Classes
 
 
 
-
    Base class for gunpowder augment configurations. Each subclass of a `Augment`
    should have a corresponding config class derived from `AugmentConfig`.
 
@@ -780,8 +776,10 @@ Classes
       
       
 
+
    .. py:method:: node(raw_key: gunpowder.ArrayKey, gt_key: gunpowder.ArrayKey, mask_key: gunpowder.ArrayKey) -> gunpowder.BatchFilter
       :abstractmethod:
+
 
       Get a gunpowder augment node.
 

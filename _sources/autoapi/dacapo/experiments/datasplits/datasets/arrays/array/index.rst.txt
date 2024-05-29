@@ -1,24 +1,21 @@
-:py:mod:`dacapo.experiments.datasplits.datasets.arrays.array`
-=============================================================
+dacapo.experiments.datasplits.datasets.arrays.array
+===================================================
 
 .. py:module:: dacapo.experiments.datasplits.datasets.arrays.array
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.experiments.datasplits.datasets.arrays.array.Array
 
 
-
+Module Contents
+---------------
 
 .. py:class:: Array
-
 
 
 
@@ -122,8 +119,10 @@ Classes
       layer for the array. These methods are implemented by subclasses that support visualization
       in Neuroglancer.
 
+
    .. py:property:: attrs
       :type: Dict[str, Any]
+
       :abstractmethod:
 
       Return a dictionary of metadata attributes stored on this array.
@@ -141,8 +140,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: axes
       :type: List[str]
+
       :abstractmethod:
 
       Returns the axes of this dataset as a string of charactes, as they
@@ -165,8 +166,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: dims
       :type: int
+
       :abstractmethod:
 
       Returns the number of spatial dimensions.
@@ -184,8 +187,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
+
       :abstractmethod:
 
       The size of a voxel in physical units.
@@ -203,8 +208,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: roi
       :type: funlib.geometry.Roi
+
       :abstractmethod:
 
       The total ROI of this array, in world units.
@@ -222,8 +229,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: dtype
       :type: Any
+
       :abstractmethod:
 
       The dtype of this array, in numpy dtypes
@@ -241,8 +250,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: num_channels
       :type: Optional[int]
+
       :abstractmethod:
 
       The number of channels provided by this dataset.
@@ -261,8 +272,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: data
       :type: numpy.ndarray
+
       :abstractmethod:
 
       Get a numpy like readable and writable view into this array.
@@ -280,8 +293,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: writable
       :type: bool
+
       :abstractmethod:
 
       Can we write to this Array?

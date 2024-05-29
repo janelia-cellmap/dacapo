@@ -1,32 +1,29 @@
-:py:mod:`dacapo.experiments.tasks.post_processors`
-==================================================
+dacapo.experiments.tasks.post_processors
+========================================
 
 .. py:module:: dacapo.experiments.tasks.post_processors
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   argmax_post_processor/index.rst
-   argmax_post_processor_parameters/index.rst
-   dummy_post_processor/index.rst
-   dummy_post_processor_parameters/index.rst
-   post_processor/index.rst
-   post_processor_parameters/index.rst
-   threshold_post_processor/index.rst
-   threshold_post_processor_parameters/index.rst
-   watershed_post_processor/index.rst
-   watershed_post_processor_parameters/index.rst
+   /autoapi/dacapo/experiments/tasks/post_processors/argmax_post_processor/index
+   /autoapi/dacapo/experiments/tasks/post_processors/argmax_post_processor_parameters/index
+   /autoapi/dacapo/experiments/tasks/post_processors/dummy_post_processor/index
+   /autoapi/dacapo/experiments/tasks/post_processors/dummy_post_processor_parameters/index
+   /autoapi/dacapo/experiments/tasks/post_processors/post_processor/index
+   /autoapi/dacapo/experiments/tasks/post_processors/post_processor_parameters/index
+   /autoapi/dacapo/experiments/tasks/post_processors/threshold_post_processor/index
+   /autoapi/dacapo/experiments/tasks/post_processors/threshold_post_processor_parameters/index
+   /autoapi/dacapo/experiments/tasks/post_processors/watershed_post_processor/index
+   /autoapi/dacapo/experiments/tasks/post_processors/watershed_post_processor_parameters/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -42,10 +39,10 @@ Classes
    dacapo.experiments.tasks.post_processors.WatershedPostProcessorParameters
 
 
-
+Package Contents
+----------------
 
 .. py:class:: DummyPostProcessor(detection_threshold: float)
-
 
 
 
@@ -74,6 +71,7 @@ Classes
 
       This class is abstract. Subclasses must implement the abstract methods. Once
       created, the values of its attributes cannot be changed.
+
 
    .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters]
 
@@ -106,6 +104,7 @@ Classes
          iterable of `PostProcessorParameters` instances.
 
 
+
    .. py:method:: set_prediction(prediction_array_identifier)
 
       Set the prediction array identifier.
@@ -124,6 +123,7 @@ Classes
 
          This method must be implemented in the subclass. It should set the
          `prediction_array_identifier` attribute.
+
 
 
    .. py:method:: process(parameters, output_array_identifier, *args, **kwargs)
@@ -155,7 +155,6 @@ Classes
 
 
 
-
    Parameters for the dummy post-processor. The dummy post-processor will set
    the output to 1 if the input is greater than the minimum size, and 0
    otherwise.
@@ -174,14 +173,12 @@ Classes
       This class is immutable. Once created, the values of its attributes
       cannot be changed.
 
-   .. py:attribute:: min_size
-      :type: int
 
-      
+   .. py:attribute:: min_size
+      :type:  int
 
 
 .. py:class:: PostProcessorParameters
-
 
    Base class for post-processor parameters. Post-processor parameters are
    immutable objects that define the parameters of a post-processor. The
@@ -199,6 +196,11 @@ Classes
 
       This class is immutable. Once created, the values of its attributes
       cannot be changed.
+
+
+   .. py:attribute:: id
+      :type:  int
+
 
    .. py:property:: parameter_names
       :type: List[str]
@@ -220,14 +222,8 @@ Classes
          This method must be implemented in the subclass. It should return a
          list of parameter names.
 
-   .. py:attribute:: id
-      :type: int
-
-      
-
 
 .. py:class:: PostProcessor
-
 
 
 
@@ -262,8 +258,10 @@ Classes
       This class is abstract. Subclasses must implement the abstract methods. Once
       created, the values of its attributes cannot be changed.
 
+
    .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters]
       :abstractmethod:
+
 
       Enumerate all possible parameters of this post-processor.
 
@@ -287,8 +285,10 @@ Classes
          iterable of `PostProcessorParameters` instances.
 
 
+
    .. py:method:: set_prediction(prediction_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier) -> None
       :abstractmethod:
+
 
       Set the prediction array identifier.
 
@@ -308,8 +308,10 @@ Classes
          `prediction_array_identifier` attribute.
 
 
+
    .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters, output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, num_workers: int = 16, chunk_size: funlib.geometry.Coordinate = Coordinate((64, 64, 64))) -> dacapo.experiments.datasplits.datasets.arrays.Array
       :abstractmethod:
+
 
       Convert predictions into the final output.
 
@@ -341,7 +343,6 @@ Classes
 
 
 
-
    A post-processor that applies a threshold to the prediction.
 
    .. attribute:: prediction_array_identifier
@@ -366,6 +367,7 @@ Classes
 
    .. note:: This post-processor applies a threshold to the prediction. The threshold is used to define the segmentation. The prediction array is set using the `set_prediction` method.
 
+
    .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters]
 
       Enumerate all possible parameters of this post-processor.
@@ -383,6 +385,7 @@ Classes
       .. note:: This method should return a generator of instances of ``ThresholdPostProcessorParameters``.
 
 
+
    .. py:method:: set_prediction(prediction_array_identifier)
 
       Set the prediction array.
@@ -397,6 +400,7 @@ Classes
       >>> post_processor.set_prediction(prediction_array_identifier)
 
       .. note:: This method should set the prediction array using the given identifier.
+
 
 
    .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, num_workers: int = 16, block_size: daisy.Coordinate = Coordinate((256, 256, 256))) -> dacapo.experiments.datasplits.datasets.arrays.zarr_array.ZarrArray
@@ -432,7 +436,6 @@ Classes
 
 
 
-
    Parameters for the threshold post-processor. The threshold post-processor
    will set the output to 1 if the input is greater than the threshold, and 0
    otherwise.
@@ -448,14 +451,12 @@ Classes
       This class is immutable. Once created, the values of its attributes
       cannot be changed.
 
-   .. py:attribute:: threshold
-      :type: float
 
-      
+   .. py:attribute:: threshold
+      :type:  float
 
 
 .. py:class:: ArgmaxPostProcessor
-
 
 
 
@@ -484,6 +485,7 @@ Classes
       This class is abstract. Subclasses must implement the abstract methods. Once
       created, the values of its attributes cannot be changed.
 
+
    .. py:method:: enumerate_parameters()
 
       Enumerate all possible parameters of this post-processor. Should
@@ -506,6 +508,7 @@ Classes
          iterable of `PostProcessorParameters` instances.
 
 
+
    .. py:method:: set_prediction(prediction_array_identifier)
 
       Set the prediction array identifier.
@@ -524,6 +527,7 @@ Classes
 
          This method must be implemented in the subclass. It should set the
          `prediction_array_identifier` attribute.
+
 
 
    .. py:method:: process(parameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, num_workers: int = 16, block_size: daisy.Coordinate = Coordinate((256, 256, 256)))
@@ -556,7 +560,6 @@ Classes
 
 
 
-
    Parameters for the argmax post-processor. The argmax post-processor will set
    the output to the index of the maximum value in the input array.
 
@@ -571,7 +574,6 @@ Classes
 
 
 .. py:class:: WatershedPostProcessor(offsets: List[funlib.geometry.Coordinate])
-
 
 
 
@@ -596,6 +598,7 @@ Classes
 
    .. note:: This post-processor uses the `watershed_function.py` script to apply the watershed transformation. The offsets are used to define the neighborhood for the watershed transformation.
 
+
    .. py:method:: enumerate_parameters()
 
       Enumerate all possible parameters of this post-processor. Should
@@ -612,6 +615,7 @@ Classes
       ...     print(parameters)
 
       .. note:: This method should be implemented by the subclass. It should return a generator of instances of ``WatershedPostProcessorParameters``.
+
 
 
    .. py:method:: set_prediction(prediction_array_identifier)
@@ -632,6 +636,7 @@ Classes
 
          This method must be implemented in the subclass. It should set the
          `prediction_array_identifier` attribute.
+
 
 
    .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.watershed_post_processor_parameters.WatershedPostProcessorParameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, num_workers: int = 16, block_size: funlib.geometry.Coordinate = Coordinate((256, 256, 256)))
@@ -661,7 +666,6 @@ Classes
 
 
 .. py:class:: WatershedPostProcessorParameters
-
 
 
 
@@ -697,14 +701,12 @@ Classes
 
    .. note:: This class is used by the ``WatershedPostProcessor`` to define the parameters for the watershed transformation. The offsets are used to define the neighborhood for the watershed transformation.
 
-   .. py:attribute:: bias
-      :type: float
 
-      
+   .. py:attribute:: bias
+      :type:  float
+
 
    .. py:attribute:: context
-      :type: funlib.geometry.Coordinate
-
-      
+      :type:  funlib.geometry.Coordinate
 
 

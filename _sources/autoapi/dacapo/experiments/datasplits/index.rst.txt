@@ -1,39 +1,36 @@
-:py:mod:`dacapo.experiments.datasplits`
-=======================================
+dacapo.experiments.datasplits
+=============================
 
 .. py:module:: dacapo.experiments.datasplits
 
 
 Subpackages
 -----------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
 
-   datasets/index.rst
-   keys/index.rst
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/dacapo/experiments/datasplits/datasets/index
+   /autoapi/dacapo/experiments/datasplits/keys/index
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   datasplit/index.rst
-   datasplit_config/index.rst
-   datasplit_generator/index.rst
-   dummy_datasplit/index.rst
-   dummy_datasplit_config/index.rst
-   train_validate_datasplit/index.rst
-   train_validate_datasplit_config/index.rst
+   /autoapi/dacapo/experiments/datasplits/datasplit/index
+   /autoapi/dacapo/experiments/datasplits/datasplit_config/index
+   /autoapi/dacapo/experiments/datasplits/datasplit_generator/index
+   /autoapi/dacapo/experiments/datasplits/dummy_datasplit/index
+   /autoapi/dacapo/experiments/datasplits/dummy_datasplit_config/index
+   /autoapi/dacapo/experiments/datasplits/train_validate_datasplit/index
+   /autoapi/dacapo/experiments/datasplits/train_validate_datasplit_config/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -46,10 +43,10 @@ Classes
    dacapo.experiments.datasplits.DataSplitGenerator
 
 
-
+Package Contents
+----------------
 
 .. py:class:: DataSplit
-
 
 
 
@@ -76,19 +73,16 @@ Classes
 
    This class is used to split the data into training and validation datasets.
 
-   .. py:attribute:: train
-      :type: List[dacapo.experiments.datasplits.datasets.Dataset]
 
-      
+   .. py:attribute:: train
+      :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
+
 
    .. py:attribute:: validate
-      :type: Optional[List[dacapo.experiments.datasplits.datasets.Dataset]]
-
-      
+      :type:  Optional[List[dacapo.experiments.datasplits.datasets.Dataset]]
 
 
 .. py:class:: DataSplitConfig
-
 
    A class used to create a DataSplit configuration object.
 
@@ -108,10 +102,10 @@ Classes
 
    This class is used to create a DataSplit configuration object.
 
-   .. py:attribute:: name
-      :type: str
 
-      
+   .. py:attribute:: name
+      :type:  str
+
 
    .. py:method:: verify() -> Tuple[bool, str]
 
@@ -141,7 +135,6 @@ Classes
 
 
 
-
    A class for creating a simple train dataset and no validation dataset. It is derived from `DataSplit` class.
    It is used to split the data into training and validation datasets. The training and validation datasets are
    used to train and validate the model respectively.
@@ -165,19 +158,16 @@ Classes
 
    This class is used to split the data into training and validation datasets.
 
-   .. py:attribute:: train
-      :type: List[dacapo.experiments.datasplits.datasets.Dataset]
 
-      
+   .. py:attribute:: train
+      :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
+
 
    .. py:attribute:: validate
-      :type: List[dacapo.experiments.datasplits.datasets.Dataset]
-
-      
+      :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
 
 
 .. py:class:: DummyDataSplitConfig
-
 
 
 
@@ -204,14 +194,13 @@ Classes
 
    This class is used to represent the configuration for Dummy DataSplit.
 
+
    .. py:attribute:: datasplit_type
 
-      
 
    .. py:attribute:: train_config
-      :type: dacapo.experiments.datasplits.datasets.DatasetConfig
+      :type:  dacapo.experiments.datasplits.datasets.DatasetConfig
 
-      
 
    .. py:method:: verify() -> Tuple[bool, str]
 
@@ -234,7 +223,6 @@ Classes
 
 
 .. py:class:: TrainValidateDataSplit(datasplit_config)
-
 
 
 
@@ -263,19 +251,16 @@ Classes
 
    This class is used to split the data into training and validation datasets.
 
-   .. py:attribute:: train
-      :type: List[dacapo.experiments.datasplits.datasets.Dataset]
 
-      
+   .. py:attribute:: train
+      :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
+
 
    .. py:attribute:: validate
-      :type: List[dacapo.experiments.datasplits.datasets.Dataset]
-
-      
+      :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
 
 
 .. py:class:: TrainValidateDataSplitConfig
-
 
 
 
@@ -304,29 +289,28 @@ Classes
 
    This class is used to split the data into training and validation datasets.
 
+
    .. py:attribute:: datasplit_type
 
-      
 
    .. py:attribute:: train_configs
-      :type: List[dacapo.experiments.datasplits.datasets.DatasetConfig]
+      :type:  List[dacapo.experiments.datasplits.datasets.DatasetConfig]
 
-      
 
    .. py:attribute:: validate_configs
-      :type: List[dacapo.experiments.datasplits.datasets.DatasetConfig]
-
-      
+      :type:  List[dacapo.experiments.datasplits.datasets.DatasetConfig]
 
 
-.. py:class:: DataSplitGenerator(name: str, datasets: List[DatasetSpec], input_resolution: funlib.geometry.Coordinate, output_resolution: funlib.geometry.Coordinate, targets: Optional[List[str]] = None, segmentation_type: Union[str, SegmentationType] = 'semantic', max_gt_downsample=32, max_gt_upsample=4, max_raw_training_downsample=16, max_raw_training_upsample=2, max_raw_validation_downsample=8, max_raw_validation_upsample=2, min_training_volume_size=8000, raw_min=0, raw_max=255, classes_separator_caracter='&')
+.. py:class:: DataSplitGenerator(name: str, datasets: List[DatasetSpec], input_resolution: Union[Sequence[int], funlib.geometry.Coordinate], output_resolution: Union[Sequence[int], funlib.geometry.Coordinate], targets: Optional[List[str]] = None, segmentation_type: Union[str, SegmentationType] = 'semantic', max_gt_downsample=32, max_gt_upsample=4, max_raw_training_downsample=16, max_raw_training_upsample=2, max_raw_validation_downsample=8, max_raw_validation_upsample=2, min_training_volume_size=8000, raw_min=0, raw_max=255, classes_separator_caracter='&')
 
+   Generates DataSplitConfig for a given task config and datasets.
 
-   Generates DataSplitConfig for a given task config and datasets. A csv file can be generated
-   from the DataSplitConfig and used to generate the DataSplitConfig again.
+   Class names in gt_dataset should be within [] e.g. [mito&peroxisome&er] for
+   multiple classes or [mito] for one class.
 
-   Currently only supports semantic segmentation.
-   Supports:
+   Currently only supports:
+    - semantic segmentation.
+    Supports:
        - 2D and 3D datasets.
        - Zarr, N5 and OME-Zarr datasets.
        - Multi class targets.
@@ -463,8 +447,8 @@ Classes
    - This class is used to generate the DataSplitConfig for a given task config and datasets.
    - Class names in gt_dataset shoulb be within [] e.g. [mito&peroxisome&er] for mutiple classes or [mito] for one class
 
-   .. py:property:: class_name
 
+   .. py:property:: class_name
       Get the class name.
 
       :param self: obj
@@ -483,6 +467,7 @@ Classes
       .. rubric:: Notes
 
       This function is used to get the class name.
+
 
    .. py:method:: check_class_name(class_name)
 
@@ -508,6 +493,7 @@ Classes
       This function is used to check the class name.
 
 
+
    .. py:method:: compute()
 
       Compute the data split.
@@ -530,8 +516,10 @@ Classes
       This function is used to compute the data split.
 
 
-   .. py:method:: generate_from_csv(csv_path: upath.UPath, input_resolution: funlib.geometry.Coordinate, output_resolution: funlib.geometry.Coordinate, name: Optional[str] = None, **kwargs)
+
+   .. py:method:: generate_from_csv(csv_path: upath.UPath, input_resolution: Union[Sequence[int], funlib.geometry.Coordinate], output_resolution: Union[Sequence[int], funlib.geometry.Coordinate], name: Optional[str] = None, **kwargs)
       :staticmethod:
+
 
       Generate the data split from the CSV file.
 

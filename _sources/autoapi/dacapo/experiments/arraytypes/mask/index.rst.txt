@@ -1,24 +1,74 @@
-:py:mod:`dacapo.experiments.arraytypes.mask`
-============================================
+dacapo.experiments.arraytypes.mask
+==================================
 
 .. py:module:: dacapo.experiments.arraytypes.mask
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.arraytypes.mask.ArrayType
+   dacapo.experiments.arraytypes.mask.Mask
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.experiments.arraytypes.mask.Mask
+.. py:class:: ArrayType
 
 
+
+   The type of data provided by an array. The ArrayType class helps to keep
+   track of the semantic meaning of an Array. Additionally the ArrayType
+   keeps track of metadata that is specific to this datatype such as
+   num_classes for an annotated volume or channel names for intensity
+   arrays. The ArrayType class is an abstract class and should be subclassed
+   to represent different types of arrays.
+
+   .. attribute:: num_classes
+
+      The number of classes in the array.
+
+      :type: int
+
+   .. attribute:: channel_names
+
+      The names of the channels in the array.
+
+      :type: List[str]
+
+   .. method:: interpolatable
+
+      This is an abstract method which should be overridden in each of the subclasses to determine if an array is interpolatable or not.
+
+   .. note:: This class is used to create an ArrayType object which is used to represent the type of data provided by an array.
+
+
+   .. py:property:: interpolatable
+      :type: bool
+
+      :abstractmethod:
+
+      This is an abstract method which should be overridden in each of the subclasses
+      to determine if an array is interpolatable or not.
+
+      :returns: True if the array is interpolatable, False otherwise.
+      :rtype: bool
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> array_type = ArrayType()
+      >>> array_type.interpolatable
+      NotImplementedError
+
+      .. note:: This method is used to check if the array is interpolatable.
 
 
 .. py:class:: Mask
-
 
 
 
@@ -30,6 +80,7 @@ Classes
       It is a method that returns False.
 
    .. note:: This class is used to represent a Mask object in the system.
+
 
    .. py:property:: interpolatable
       :type: bool

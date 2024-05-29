@@ -1,24 +1,175 @@
-:py:mod:`dacapo.experiments.datasplits.train_validate_datasplit_config`
-=======================================================================
+dacapo.experiments.datasplits.train_validate_datasplit_config
+=============================================================
 
 .. py:module:: dacapo.experiments.datasplits.train_validate_datasplit_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplit
+   dacapo.experiments.datasplits.train_validate_datasplit_config.DataSplitConfig
+   dacapo.experiments.datasplits.train_validate_datasplit_config.DatasetConfig
+   dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplitConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: TrainValidateDataSplit(datasplit_config)
 
-.. autoapisummary::
 
-   dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplitConfig
 
+   A DataSplit that contains a list of training and validation datasets. This
+   class is used to split the data into training and validation datasets. The
+   training and validation datasets are used to train and validate the model
+   respectively.
+
+   .. attribute:: train
+
+      list
+      The list of training datasets.
+
+   .. attribute:: validate
+
+      list
+      The list of validation datasets.
+
+   .. method:: __init__(datasplit_config)
+
+      
+      Initializes the TrainValidateDataSplit class with specified config to
+      split the data into training and validation datasets.
+
+   .. rubric:: Notes
+
+   This class is used to split the data into training and validation datasets.
+
+
+   .. py:attribute:: train
+      :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
+
+
+   .. py:attribute:: validate
+      :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
+
+
+.. py:class:: DataSplitConfig
+
+   A class used to create a DataSplit configuration object.
+
+   .. attribute:: name
+
+      str
+      A name for the datasplit. This name will be saved so it can be found
+      and reused easily. It is recommended to keep it short and avoid special
+      characters.
+
+   .. method:: verify() -> Tuple[bool, str]
+
+      
+      Validates if it is a valid data split configuration.
+
+   .. rubric:: Notes
+
+   This class is used to create a DataSplit configuration object.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Validates if the current configuration is a valid data split configuration.
+
+      :returns:
+
+                Tuple[bool, str]
+                    True if the configuration is valid,
+                    False otherwise along with respective validation error message.
+
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> datasplit_config = DataSplitConfig(name="datasplit")
+      >>> datasplit_config.verify()
+      (True, "No validation for this DataSplit")
+
+      .. rubric:: Notes
+
+      This method is used to validate the configuration of DataSplit.
+
+
+
+.. py:class:: DatasetConfig
+
+   A class used to define configuration for datasets. This provides the
+   framework to create a Dataset instance.
+
+   .. attribute:: name
+
+      str (eg: "sample_dataset").
+      A unique identifier to name the dataset.
+      It aids in easy identification and reusability of this dataset.
+      Advised to keep it short and refrain from using special characters.
+
+   .. attribute:: weight
+
+      int (default=1).
+      A numeric value that indicates how frequently this dataset should be
+      sampled in comparison to others. Higher the weight, more frequently it
+      gets sampled.
+
+   .. method:: verify
+
+      
+      Checks and validates the dataset configuration. The specific rules for
+      validation need to be defined by the user.
+
+   .. rubric:: Notes
+
+   This class is used to create a configuration object for datasets.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: weight
+      :type:  int
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Method to verify the dataset configuration.
+
+      Since there is no specific validation logic defined for this DataSet, this
+      method will always return True as default reaction and a message stating
+      the lack of validation.
+
+      :returns: A tuple of boolean value indicating the check (True or False) and
+                message specifying result of validation.
+      :rtype: tuple
+
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> dataset_config = DatasetConfig(name="sample_dataset")
+      >>> dataset_config.verify()
+      (True, "No validation for this DataSet")
+
+      .. rubric:: Notes
+
+      This method is used to validate the configuration of the dataset.
 
 
 
 .. py:class:: TrainValidateDataSplitConfig
-
 
 
 
@@ -47,18 +198,15 @@ Classes
 
    This class is used to split the data into training and validation datasets.
 
+
    .. py:attribute:: datasplit_type
 
-      
 
    .. py:attribute:: train_configs
-      :type: List[dacapo.experiments.datasplits.datasets.DatasetConfig]
+      :type:  List[dacapo.experiments.datasplits.datasets.DatasetConfig]
 
-      
 
    .. py:attribute:: validate_configs
-      :type: List[dacapo.experiments.datasplits.datasets.DatasetConfig]
-
-      
+      :type:  List[dacapo.experiments.datasplits.datasets.DatasetConfig]
 
 

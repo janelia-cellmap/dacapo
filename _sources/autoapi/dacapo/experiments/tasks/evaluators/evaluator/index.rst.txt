@@ -1,24 +1,11 @@
-:py:mod:`dacapo.experiments.tasks.evaluators.evaluator`
-=======================================================
+dacapo.experiments.tasks.evaluators.evaluator
+=============================================
 
 .. py:module:: dacapo.experiments.tasks.evaluators.evaluator
 
 
-Module Contents
----------------
-
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.experiments.tasks.evaluators.evaluator.Evaluator
-
-
-
-
 Attributes
-~~~~~~~~~~
+----------
 
 .. autoapisummary::
 
@@ -28,24 +15,26 @@ Attributes
    dacapo.experiments.tasks.evaluators.evaluator.BestScore
 
 
-.. py:data:: OutputIdentifier
+Classes
+-------
 
-   
+.. autoapisummary::
+
+   dacapo.experiments.tasks.evaluators.evaluator.Evaluator
+
+
+Module Contents
+---------------
+
+.. py:data:: OutputIdentifier
 
 .. py:data:: Iteration
 
-   
-
 .. py:data:: Score
-
-   
 
 .. py:data:: BestScore
 
-   
-
 .. py:class:: Evaluator
-
 
 
 
@@ -107,73 +96,10 @@ Attributes
 
    .. note:: The Evaluator class is used to compare and evaluate the output array against the evaluation array.
 
-   .. py:property:: best_scores
-      :type: Dict[OutputIdentifier, BestScore]
-
-      The best scores for each dataset/post-processing parameter/criterion combination.
-
-      :returns:
-
-                Dict[OutputIdentifier, BestScore]
-                    the best scores for each dataset/post-processing parameter/criterion combination
-
-      :raises AttributeError: if the best scores are not set
-
-      .. rubric:: Examples
-
-      >>> evaluator = Evaluator()
-      >>> evaluator.best_scores
-      {}
-
-      .. note:: This function is used to return the best scores for each dataset/post-processing parameter/criterion combination.
-
-   .. py:property:: criteria
-      :type: List[str]
-      :abstractmethod:
-
-      A list of all criteria for which a model might be "best". i.e. your
-      criteria might be "precision", "recall", and "jaccard". It is unlikely
-      that the best iteration/post processing parameters will be the same
-      for all 3 of these criteria
-
-      :returns:
-
-                List[str]
-                    the evaluation criteria
-
-      :raises NotImplementedError: if the function is not implemented
-
-      .. rubric:: Examples
-
-      >>> evaluator = Evaluator()
-      >>> evaluator.criteria
-      []
-
-      .. note:: This function is used to return the evaluation criteria.
-
-   .. py:property:: score
-      :type: dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
-      :abstractmethod:
-
-      The evaluation scores.
-
-      :returns:
-
-                EvaluationScores
-                    the evaluation scores
-
-      :raises NotImplementedError: if the function is not implemented
-
-      .. rubric:: Examples
-
-      >>> evaluator = Evaluator()
-      >>> evaluator.score
-      EvaluationScores()
-
-      .. note:: This function is used to return the evaluation scores.
 
    .. py:method:: evaluate(output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, evaluation_array: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
       :abstractmethod:
+
 
       Compares and evaluates the output array against the evaluation array.
 
@@ -198,6 +124,28 @@ Attributes
       EvaluationScores()
 
       .. note:: This function is used to compare and evaluate the output array against the evaluation array.
+
+
+
+   .. py:property:: best_scores
+      :type: Dict[OutputIdentifier, BestScore]
+
+      The best scores for each dataset/post-processing parameter/criterion combination.
+
+      :returns:
+
+                Dict[OutputIdentifier, BestScore]
+                    the best scores for each dataset/post-processing parameter/criterion combination
+
+      :raises AttributeError: if the best scores are not set
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> evaluator.best_scores
+      {}
+
+      .. note:: This function is used to return the best scores for each dataset/post-processing parameter/criterion combination.
 
 
    .. py:method:: is_best(dataset: dacapo.experiments.datasplits.datasets.Dataset, parameter: dacapo.experiments.tasks.post_processors.PostProcessorParameters, criterion: str, score: dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores) -> bool
@@ -233,6 +181,7 @@ Attributes
       .. note:: This function is used to check if the provided score is the best for this dataset/parameter/criterion combo.
 
 
+
    .. py:method:: get_overall_best(dataset: dacapo.experiments.datasplits.datasets.Dataset, criterion: str)
 
       Return the best score for the given dataset and criterion.
@@ -260,6 +209,7 @@ Attributes
       .. note:: This function is used to return the best score for the given dataset and criterion.
 
 
+
    .. py:method:: get_overall_best_parameters(dataset: dacapo.experiments.datasplits.datasets.Dataset, criterion: str)
 
       Return the best parameters for the given dataset and criterion.
@@ -285,6 +235,7 @@ Attributes
       None
 
       .. note:: This function is used to return the best parameters for the given dataset and criterion.
+
 
 
    .. py:method:: compare(score_1, score_2, criterion)
@@ -317,6 +268,7 @@ Attributes
       .. note:: This function is used to compare two scores for the given criterion.
 
 
+
    .. py:method:: set_best(validation_scores: dacapo.experiments.validation_scores.ValidationScores) -> None
 
       Find the best iteration for each dataset/post_processing_parameter/criterion.
@@ -337,6 +289,33 @@ Attributes
 
          This function is used to find the best iteration for each dataset/post_processing_parameter/criterion.
          Typically, this function is called after the validation scores have been computed.
+
+
+
+   .. py:property:: criteria
+      :type: List[str]
+
+      :abstractmethod:
+
+      A list of all criteria for which a model might be "best". i.e. your
+      criteria might be "precision", "recall", and "jaccard". It is unlikely
+      that the best iteration/post processing parameters will be the same
+      for all 3 of these criteria
+
+      :returns:
+
+                List[str]
+                    the evaluation criteria
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> evaluator.criteria
+      []
+
+      .. note:: This function is used to return the evaluation criteria.
 
 
    .. py:method:: higher_is_better(criterion: str) -> bool
@@ -363,6 +342,7 @@ Attributes
       .. note:: This function is used to determine whether higher is better for the given criterion.
 
 
+
    .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
 
       The bounds for this criterion
@@ -385,6 +365,7 @@ Attributes
       (0, 1)
 
       .. note:: This function is used to return the bounds for the given criterion.
+
 
 
    .. py:method:: store_best(criterion: str) -> bool
@@ -410,5 +391,28 @@ Attributes
 
       .. note:: This function is used to return whether to store the best score for the given criterion.
 
+
+
+   .. py:property:: score
+      :type: dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
+
+      :abstractmethod:
+
+      The evaluation scores.
+
+      :returns:
+
+                EvaluationScores
+                    the evaluation scores
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> evaluator.score
+      EvaluationScores()
+
+      .. note:: This function is used to return the evaluation scores.
 
 

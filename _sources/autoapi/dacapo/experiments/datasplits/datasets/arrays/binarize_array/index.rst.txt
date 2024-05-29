@@ -1,24 +1,322 @@
-:py:mod:`dacapo.experiments.datasplits.datasets.arrays.binarize_array`
-======================================================================
+dacapo.experiments.datasplits.datasets.arrays.binarize_array
+============================================================
 
 .. py:module:: dacapo.experiments.datasplits.datasets.arrays.binarize_array
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.binarize_array.Array
+   dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.experiments.datasplits.datasets.arrays.binarize_array.BinarizeArray
+.. py:class:: Array
 
 
+
+   An Array is a multi-dimensional array of data that can be read from and written to. It is
+   defined by a region of interest (ROI) in world units, a voxel size, and a number of spatial
+   dimensions. The data is stored in a numpy array, and can be accessed using numpy-like slicing
+   syntax.
+
+   The Array class is an abstract base class that defines the interface for all Array
+   implementations. It provides a number of properties that must be implemented by subclasses,
+   such as the ROI, voxel size, and data type of the array. It also provides a method for fetching
+   data from the array, which is implemented by slicing the numpy array.
+
+   The Array class also provides a method for checking if the array can be visualized in
+   Neuroglancer, and a method for generating a Neuroglancer layer for the array. These methods are
+   implemented by subclasses that support visualization in Neuroglancer.
+
+   .. attribute:: attrs
+
+      A dictionary of metadata attributes stored on this array.
+
+      :type: Dict[str, Any]
+
+   .. attribute:: axes
+
+      The axes of this dataset as a string of characters, as they are indexed.
+      Permitted characters are:
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+      :type: List[str]
+
+   .. attribute:: dims
+
+      The number of spatial dimensions.
+
+      :type: int
+
+   .. attribute:: voxel_size
+
+      The size of a voxel in physical units.
+
+      :type: Coordinate
+
+   .. attribute:: roi
+
+      The total ROI of this array, in world units.
+
+      :type: Roi
+
+   .. attribute:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+      :type: Any
+
+   .. attribute:: num_channels
+
+      The number of channels provided by this dataset. Should return
+      None if the channel dimension doesn't exist.
+
+      :type: Optional[int]
+
+   .. attribute:: data
+
+      A numpy-like readable and writable view into this array.
+
+      :type: np.ndarray
+
+   .. attribute:: writable
+
+      Can we write to this Array?
+
+      :type: bool
+
+   .. method:: __getitem__(self, roi
+
+      Roi) -> np.ndarray: Get a numpy like readable and writable view into
+      this array.
+
+   .. method:: _can_neuroglance(self) -> bool
+
+      Check if this array can be visualized in Neuroglancer.
+
+   .. method:: _neuroglancer_layer(self)
+
+      Generate a Neuroglancer layer for this array.
+
+   .. method:: _slices(self, roi
+
+      Roi) -> Iterable[slice]: Generate a list of slices for the given ROI.
+
+   .. note::
+
+      This class is used to define the interface for all Array implementations. It provides a
+      number of properties that must be implemented by subclasses, such as the ROI, voxel size, and
+      data type of the array. It also provides a method for fetching data from the array, which is
+      implemented by slicing the numpy array. The Array class also provides a method for checking
+      if the array can be visualized in Neuroglancer, and a method for generating a Neuroglancer
+      layer for the array. These methods are implemented by subclasses that support visualization
+      in Neuroglancer.
+
+
+   .. py:property:: attrs
+      :type: Dict[str, Any]
+
+      :abstractmethod:
+
+      Return a dictionary of metadata attributes stored on this array.
+
+      :returns: A dictionary of metadata attributes stored on this array.
+      :rtype: Dict[str, Any]
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.attrs
+      {}
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: axes
+      :type: List[str]
+
+      :abstractmethod:
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+      :returns: The axes of this dataset as a string of characters, as they are indexed.
+      :rtype: List[str]
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.axes
+      ['z', 'y', 'x']
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: dims
+      :type: int
+
+      :abstractmethod:
+
+      Returns the number of spatial dimensions.
+
+      :returns: The number of spatial dimensions.
+      :rtype: int
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.dims
+      3
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      :abstractmethod:
+
+      The size of a voxel in physical units.
+
+      :returns: The size of a voxel in physical units.
+      :rtype: Coordinate
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.voxel_size
+      Coordinate((1, 1, 1))
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      :abstractmethod:
+
+      The total ROI of this array, in world units.
+
+      :returns: The total ROI of this array, in world units.
+      :rtype: Roi
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.roi
+      Roi(offset=Coordinate((0, 0, 0)), shape=Coordinate((100, 100, 100)))
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: dtype
+      :type: Any
+
+      :abstractmethod:
+
+      The dtype of this array, in numpy dtypes
+
+      :returns: The dtype of this array, in numpy dtypes.
+      :rtype: Any
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.dtype
+      np.dtype('uint8')
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: num_channels
+      :type: Optional[int]
+
+      :abstractmethod:
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+      :returns: The number of channels provided by this dataset.
+      :rtype: Optional[int]
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.num_channels
+      1
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: data
+      :type: numpy.ndarray
+
+      :abstractmethod:
+
+      Get a numpy like readable and writable view into this array.
+
+      :returns: A numpy like readable and writable view into this array.
+      :rtype: np.ndarray
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.data
+      np.ndarray
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: writable
+      :type: bool
+
+      :abstractmethod:
+
+      Can we write to this Array?
+
+      :returns: Can we write to this Array?
+      :rtype: bool
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.writable
+      False
+
+      .. note:: This method must be implemented by the subclass.
 
 
 .. py:class:: BinarizeArray(array_config)
-
 
 
 
@@ -94,8 +392,8 @@ Classes
 
    .. note:: This class is used to create a BinarizeArray object which is a wrapper around a ZarrArray containing uint annotations.
 
-   .. py:property:: attrs
 
+   .. py:property:: attrs
       This method returns the attributes of the source array.
 
       :returns: The attributes of the source array.
@@ -109,8 +407,8 @@ Classes
 
       .. note:: This method is used to return the attributes of the source array.
 
-   .. py:property:: axes
 
+   .. py:property:: axes
       This method returns the axes of the source array.
 
       :returns: The axes of the source array.
@@ -123,6 +421,7 @@ Classes
       >>> binarize_array.axes
 
       .. note:: This method is used to return the axes of the source array.
+
 
    .. py:property:: dims
       :type: int
@@ -140,6 +439,7 @@ Classes
 
       .. note:: This method is used to return the dimensions of the source array.
 
+
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
@@ -155,6 +455,7 @@ Classes
       >>> binarize_array.voxel_size
 
       .. note:: This method is used to return the voxel size of the source array.
+
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
@@ -172,6 +473,7 @@ Classes
 
       .. note:: This method is used to return the region of interest of the source array.
 
+
    .. py:property:: writable
       :type: bool
 
@@ -188,8 +490,8 @@ Classes
 
       .. note:: This method is used to return True if the source array is writable.
 
-   .. py:property:: dtype
 
+   .. py:property:: dtype
       This method returns the data type of the source array.
 
       :returns: The data type of the source array.
@@ -202,6 +504,7 @@ Classes
       >>> binarize_array.dtype
 
       .. note:: This method is used to return the data type of the source array.
+
 
    .. py:property:: num_channels
       :type: int
@@ -219,8 +522,8 @@ Classes
 
       .. note:: This method is used to return the number of channels in the source array.
 
-   .. py:property:: data
 
+   .. py:property:: data
       This method returns the data of the source array.
 
       :returns: The data of the source array.
@@ -234,8 +537,8 @@ Classes
 
       .. note:: This method is used to return the data of the source array.
 
-   .. py:property:: channels
 
+   .. py:property:: channels
       This method returns the channel names of the source array.
 
       :returns: The channel names of the source array.

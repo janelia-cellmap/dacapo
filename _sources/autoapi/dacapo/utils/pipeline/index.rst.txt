@@ -1,14 +1,11 @@
-:py:mod:`dacapo.utils.pipeline`
-===============================
+dacapo.utils.pipeline
+=====================
 
 .. py:module:: dacapo.utils.pipeline
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -21,18 +18,18 @@ Classes
    dacapo.utils.pipeline.ZerosSource
 
 
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
    dacapo.utils.pipeline.random_source_pipeline
 
 
+Module Contents
+---------------
 
 .. py:class:: CreatePoints(labels, num_points=(20, 150))
-
 
 
 
@@ -55,6 +52,7 @@ Functions
       Create random points in the label volume.
       
 
+
    .. py:method:: process(batch, request)
 
       Process the batch by creating random points in the label volume.
@@ -73,7 +71,6 @@ Functions
 
 
 .. py:class:: MakeRaw
-
 
 
 
@@ -136,8 +133,8 @@ Functions
       Generate the raw image from the labels.
       
 
-   .. py:class:: Pipeline(raw, labels, gaussian_noise_args: Iterable = (0.5, 0.1), gaussian_noise_lim: float = 0.3, gaussian_blur_args: Iterable = (0.5, 1.5), membrane_like=True, membrane_size=3, inside_value=0.5)
 
+   .. py:class:: Pipeline(raw, labels, gaussian_noise_args: Iterable = (0.5, 0.1), gaussian_noise_lim: float = 0.3, gaussian_blur_args: Iterable = (0.5, 1.5), membrane_like=True, membrane_size=3, inside_value=0.5)
 
 
    .. py:method:: setup()
@@ -149,6 +146,7 @@ Functions
       .. rubric:: Examples
 
       >>> MakeRaw.setup()
+
 
 
    .. py:method:: process(batch, request)
@@ -175,7 +173,6 @@ Functions
 
 
 
-
    A batch filter that performs dilation on labeled points.
 
    .. attribute:: labels
@@ -195,6 +192,7 @@ Functions
       Perform dilation on the labeled points.
       
 
+
    .. py:method:: process(batch, request)
 
       Process the batch by performing dilation on the labeled points.
@@ -213,7 +211,6 @@ Functions
 
 
 .. py:class:: RandomDilateLabels(labels, dilations=[2, 8])
-
 
 
 
@@ -237,6 +234,7 @@ Functions
       
       
 
+
    .. py:method:: process(batch, request)
 
       Process the batch by randomly dilating labels.
@@ -257,7 +255,6 @@ Functions
 
 
 
-
    A batch filter that relabels the labels in a batch.
 
    :param labels: The name of the labels data in the batch.
@@ -270,6 +267,7 @@ Functions
       Process the batch and relabel the labels.
       
       
+
 
    .. py:method:: process(batch, request)
 
@@ -295,7 +293,6 @@ Functions
 
 
 
-
    A batch filter that expands labels by assigning the nearest label to each pixel within a specified distance.
 
    .. attribute:: labels
@@ -316,6 +313,7 @@ Functions
       
       
 
+
    .. py:method:: process(batch, request)
 
       Process the batch by expanding the labels.
@@ -334,7 +332,6 @@ Functions
 
 
 .. py:class:: ZerosSource(key, spec)
-
 
 
 
@@ -362,6 +359,7 @@ Functions
       
       
 
+
    .. py:method:: setup()
 
       Perform any necessary setup before providing batches.
@@ -371,6 +369,7 @@ Functions
       .. rubric:: Examples
 
       >>> ZerosSource.setup()
+
 
 
    .. py:method:: provide(request)

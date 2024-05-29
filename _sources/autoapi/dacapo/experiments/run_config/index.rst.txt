@@ -1,24 +1,171 @@
-:py:mod:`dacapo.experiments.run_config`
-=======================================
+dacapo.experiments.run_config
+=============================
 
 .. py:module:: dacapo.experiments.run_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.run_config.ArchitectureConfig
+   dacapo.experiments.run_config.TrainerConfig
+   dacapo.experiments.run_config.StartConfig
+   dacapo.experiments.run_config.RunConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: ArchitectureConfig
 
-.. autoapisummary::
+   A class to represent the base configurations of any architecture. It is used to define the architecture of a neural network model.
 
-   dacapo.experiments.run_config.RunConfig
+   .. attribute:: name
+
+      str
+      a unique name for the architecture.
+
+   .. method:: verify()
+
+      
+      validates the given architecture.
+
+   .. note:: The class is abstract and requires to implement the abstract methods.
 
 
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      A method to validate an architecture configuration.
+
+      :returns: A tuple of a boolean indicating if the architecture is valid and a message.
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> config = ArchitectureConfig("MyModel")
+      >>> is_valid, message = config.verify()
+      >>> print(is_valid, message)
+
+      .. note:: The method should be implemented in the derived class.
+
+
+
+.. py:class:: TrainerConfig
+
+   A class to represent the Trainer Configurations.
+
+   It is the base class for trainer configurations. Each subclass of a `Trainer`
+   should have a specific config class derived from `TrainerConfig`.
+
+   .. attribute:: name
+
+      A unique name for this trainer.
+
+      :type: str
+
+   .. attribute:: batch_size
+
+      The batch size to be used during training.
+
+      :type: int
+
+   .. attribute:: learning_rate
+
+      The learning rate of the optimizer.
+
+      :type: float
+
+   .. method:: verify() -> Tuple[bool, str]
+
+      
+      Verify whether this TrainerConfig is valid or not.
+
+   .. note:: The TrainerConfig class is an abstract class that cannot be instantiated directly. It is meant to be subclassed.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: batch_size
+      :type:  int
+
+
+   .. py:attribute:: learning_rate
+      :type:  float
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Verify whether this TrainerConfig is valid or not.
+      A TrainerConfig is considered valid if it has a valid batch size and learning rate.
+
+      :returns: A tuple containing a boolean indicating whether the
+                TrainerConfig is valid and a message explaining why.
+      :rtype: tuple
+
+      :raises NotImplementedError: If the method is not implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> valid, message = trainer_config.verify()
+      >>> valid
+      True
+      >>> message
+      "No validation for this Trainer"
+
+      .. note:: This method must be implemented by the subclass.
+
+
+
+.. py:class:: StartConfig
+
+   A class to represent the configuration for running tasks. This class
+   interfaces with the dacapo store to retrieve and load the weights of the
+   starter model used for finetuning.
+
+   .. attribute:: run
+
+      str
+      The run to be used as a starting point for tasks.
+
+   .. attribute:: criterion
+
+      str
+      The criterion to be used for choosing weights from run.
+
+   .. method:: __init__(start_config)
+
+      
+      Initializes the StartConfig class with specified config to run the
+      initialization of weights for a model associated with a specific
+      criterion.
+
+   .. rubric:: Notes
+
+   This class is used to represent the configuration for running tasks.
+
+
+   .. py:attribute:: start_type
+
+
+   .. py:attribute:: run
+      :type:  str
+
+
+   .. py:attribute:: criterion
+      :type:  str
 
 
 .. py:class:: RunConfig
-
 
    A class to represent a configuration of a run that helps to structure all the tasks,
    architecture, training, and datasplit configurations.
@@ -57,49 +204,40 @@ Classes
    start_config : `Optional[StartConfig]`
        A starting point for continued training. It is optional and can be left out.
 
-   .. py:attribute:: task_config
-      :type: dacapo.experiments.tasks.TaskConfig
 
-      
+   .. py:attribute:: task_config
+      :type:  dacapo.experiments.tasks.TaskConfig
+
 
    .. py:attribute:: architecture_config
-      :type: dacapo.experiments.architectures.ArchitectureConfig
+      :type:  dacapo.experiments.architectures.ArchitectureConfig
 
-      
 
    .. py:attribute:: trainer_config
-      :type: dacapo.experiments.trainers.TrainerConfig
+      :type:  dacapo.experiments.trainers.TrainerConfig
 
-      
 
    .. py:attribute:: datasplit_config
-      :type: dacapo.experiments.datasplits.DataSplitConfig
+      :type:  dacapo.experiments.datasplits.DataSplitConfig
 
-      
 
    .. py:attribute:: name
-      :type: str
+      :type:  str
 
-      
 
    .. py:attribute:: repetition
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: num_iterations
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: validation_interval
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: start_config
-      :type: Optional[dacapo.experiments.starts.StartConfig]
-
-      
+      :type:  Optional[dacapo.experiments.starts.StartConfig]
 
 

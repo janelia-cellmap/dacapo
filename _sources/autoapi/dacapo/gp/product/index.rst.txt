@@ -1,24 +1,21 @@
-:py:mod:`dacapo.gp.product`
-===========================
+dacapo.gp.product
+=================
 
 .. py:module:: dacapo.gp.product
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.gp.product.Product
 
 
-
+Module Contents
+---------------
 
 .. py:class:: Product(x1_key: gunpowder.ArrayKey, x2_key: gunpowder.ArrayKey, y_key: gunpowder.ArrayKey)
-
 
 
 
@@ -51,6 +48,7 @@ Classes
        process: Process the Product BatchFilter.
 
 
+
    .. py:method:: setup()
 
       Set up the Product BatchFilter.
@@ -63,6 +61,7 @@ Classes
 
       >>> setup()
       setup()
+
 
 
    .. py:method:: prepare(request)
@@ -81,6 +80,7 @@ Classes
 
       >>> prepare(request)
       prepare(request)
+
 
 
    .. py:method:: process(batch, request)

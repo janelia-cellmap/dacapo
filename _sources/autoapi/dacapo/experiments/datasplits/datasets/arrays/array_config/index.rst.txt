@@ -1,24 +1,21 @@
-:py:mod:`dacapo.experiments.datasplits.datasets.arrays.array_config`
-====================================================================
+dacapo.experiments.datasplits.datasets.arrays.array_config
+==========================================================
 
 .. py:module:: dacapo.experiments.datasplits.datasets.arrays.array_config
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
 
-
+Module Contents
+---------------
 
 .. py:class:: ArrayConfig
-
 
    Base class for array configurations. Each subclass of an
    `Array` should have a corresponding config class derived from
@@ -43,10 +40,10 @@ Classes
       `Array` should have a corresponding config class derived from `ArrayConfig`.
       This class should be used to store the configuration of the array.
 
-   .. py:attribute:: name
-      :type: str
 
-      
+   .. py:attribute:: name
+      :type:  str
+
 
    .. py:method:: verify() -> Tuple[bool, str]
 

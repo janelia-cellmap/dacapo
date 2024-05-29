@@ -1,62 +1,60 @@
-:py:mod:`dacapo`
-================
+dacapo
+======
 
 .. py:module:: dacapo
 
 
 Subpackages
 -----------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
 
-   blockwise/index.rst
-   compute_context/index.rst
-   experiments/index.rst
-   ext/index.rst
-   gp/index.rst
-   store/index.rst
-   utils/index.rst
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/dacapo/blockwise/index
+   /autoapi/dacapo/compute_context/index
+   /autoapi/dacapo/experiments/index
+   /autoapi/dacapo/ext/index
+   /autoapi/dacapo/gp/index
+   /autoapi/dacapo/store/index
+   /autoapi/dacapo/utils/index
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   apply/index.rst
-   options/index.rst
-   plot/index.rst
-   predict/index.rst
-   train/index.rst
-   validate/index.rst
+   /autoapi/dacapo/apply/index
+   /autoapi/dacapo/options/index
+   /autoapi/dacapo/plot/index
+   /autoapi/dacapo/predict/index
+   /autoapi/dacapo/train/index
+   /autoapi/dacapo/validate/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.Options
 
 
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
    dacapo.apply
-   dacapo.train
+   dacapo.validate
+   dacapo.predict
 
 
+Package Contents
+----------------
 
 .. py:class:: Options
-
 
    A class that provides options for configuring DaCapo.
 
@@ -79,8 +77,10 @@ Functions
       Parses options from the configuration file and updates them with the provided kwargs.
       
 
+
    .. py:method:: instance(**kwargs) -> DaCapoConfig
       :classmethod:
+
 
       Returns an instance of the Options class.
 
@@ -95,8 +95,10 @@ Functions
       DaCapoConfig(type='files', runs_base_dir=PosixPath('/home/user/dacapo'), compute_context={'type': 'LocalTorch', 'config': {}}, mongo_db_host=None, mongo_db_name=None)
 
 
+
    .. py:method:: config_file() -> Optional[upath.UPath]
       :classmethod:
+
 
       Returns the path to the configuration file.
 
@@ -159,16 +161,54 @@ Functions
    ... )
 
 
-.. py:function:: train(run_name: str)
+.. py:function:: validate(run_name: str | dacapo.experiments.Run, iteration: int, num_workers: int = 1, output_dtype: str = 'uint8', overwrite: bool = True)
 
-   Train a run
+   Validate a run at a given iteration. Loads the weights from a previously
+   stored checkpoint. Returns the best parameters and scores for this
+   iteration.
 
-   :param run_name: Name of the run to train
+   :param run_name: The name of the run to validate.
+   :param iteration: The iteration to validate.
+   :param num_workers: The number of workers to use for validation.
+   :param output_dtype: The dtype to use for the output arrays.
+   :param overwrite: Whether to overwrite existing output arrays
+
+   :returns: The best parameters and scores for this iteration
+
+   :raises ValueError: If the run does not have a validation dataset or the dataset does not have ground truth.
+
+   .. rubric:: Example
+
+   validate("my_run", 1000)
+
+
+.. py:function:: predict(run_name: str | dacapo.experiments.Run, iteration: int | None, input_container: upath.UPath | str, input_dataset: str, output_path: dacapo.store.local_array_store.LocalArrayIdentifier | upath.UPath | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True)
+
+   Predict with a trained model.
+
+   :param run_name: The name of the run to predict with or the Run object.
+   :type run_name: str or Run
+   :param iteration: The training iteration of the model to use for prediction.
+   :type iteration: int or None
+   :param input_container: The container of the input array.
+   :type input_container: Path | str
+   :param input_dataset: The dataset name of the input array.
+   :type input_dataset: str
+   :param output_path: The path where the prediction array will be stored, or a LocalArryIdentifier for the prediction array.
+   :type output_path: LocalArrayIdentifier | str
+   :param output_roi: The ROI of the output array. If None, the ROI of the input array will be used. Defaults to None.
+   :type output_roi: Optional[Roi | str], optional
+   :param num_workers: The number of workers to use for blockwise prediction. Defaults to 1 for local processing, otherwise 12.
+   :type num_workers: int, optional
+   :param output_dtype: The dtype of the output array. Defaults to np.uint8.
+   :type output_dtype: np.dtype | str, optional
+   :param overwrite: If True, the output array will be overwritten if it already exists. Defaults to True.
+   :type overwrite: bool, optional
 
    :raises ValueError: If run_name is not found in config store
 
    .. rubric:: Examples
 
-   >>> train("run_name")
+   >>> predict("run_name", 100, "input.zarr", "raw", "output.zarr", output_roi="[0:100,0:100,0:100]")
 
 

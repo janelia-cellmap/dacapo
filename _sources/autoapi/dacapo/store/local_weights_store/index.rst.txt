@@ -1,36 +1,535 @@
-:py:mod:`dacapo.store.local_weights_store`
-==========================================
+dacapo.store.local_weights_store
+================================
 
 .. py:module:: dacapo.store.local_weights_store
 
 
-Module Contents
----------------
-
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.store.local_weights_store.LocalWeightsStore
-
-
-
-
 Attributes
-~~~~~~~~~~
+----------
 
 .. autoapisummary::
 
    dacapo.store.local_weights_store.logger
 
 
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.store.local_weights_store.Dataset
+   dacapo.store.local_weights_store.WeightsStore
+   dacapo.store.local_weights_store.Weights
+   dacapo.store.local_weights_store.Run
+   dacapo.store.local_weights_store.LocalWeightsStore
+
+
+Module Contents
+---------------
+
+.. py:class:: Dataset
+
+
+
+   A class to represent a dataset.
+
+   .. attribute:: name
+
+      The name of the dataset.
+
+      :type: str
+
+   .. attribute:: raw
+
+      The raw dataset.
+
+      :type: Array
+
+   .. attribute:: gt
+
+      The ground truth data.
+
+      :type: Array, optional
+
+   .. attribute:: mask
+
+      The mask for the data.
+
+      :type: Array, optional
+
+   .. attribute:: weight
+
+      The weight of the dataset.
+
+      :type: int, optional
+
+   .. attribute:: sample_points
+
+      The list of sample points in the dataset.
+
+      :type: list[Coordinate], optional
+
+   .. method:: __eq__(other)
+
+      
+      Overloaded equality operator for dataset objects.
+
+   .. method:: __hash__()
+
+      
+      Calculates a hash for the dataset.
+
+   .. method:: __repr__()
+
+      
+      Returns the official string representation of the dataset object.
+
+   .. method:: __str__()
+
+      
+      Returns the string representation of the dataset object.
+
+   .. method:: _neuroglancer_layers(prefix="", exclude_layers=None)
+
+      
+      Generates neuroglancer layers for raw, gt and mask if they can be viewed by neuroglance, excluding those in
+      the exclude_layers.
+
+   .. rubric:: Notes
+
+   This class is a base class and should not be instantiated.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: raw
+      :type:  dacapo.experiments.datasplits.datasets.arrays.Array
+
+
+   .. py:attribute:: gt
+      :type:  Optional[dacapo.experiments.datasplits.datasets.arrays.Array]
+
+
+   .. py:attribute:: mask
+      :type:  Optional[dacapo.experiments.datasplits.datasets.arrays.Array]
+
+
+   .. py:attribute:: weight
+      :type:  Optional[int]
+
+
+   .. py:attribute:: sample_points
+      :type:  Optional[List[funlib.geometry.Coordinate]]
+
+
+.. py:class:: WeightsStore
+
+
+
+   Base class for network weight stores.
+
+   .. method:: load_weights(run, iteration)
+
+      Load the weights of the given iteration into the given run.
+
+   .. method:: load_best(run, dataset, criterion)
+
+      Load the best weights for the given run, dataset, and criterion into the given run.
+
+   .. method:: latest_iteration(run)
+
+      Return the latest iteration for which weights are available for the given run.
+
+   .. method:: store_weights(run, iteration)
+
+      Store the network weights of the given run.
+
+   .. method:: retrieve_weights(run, iteration)
+
+      Retrieve the network weights of the given run.
+
+   .. method:: remove(run, iteration)
+
+      Delete the weights associated with a specific run/iteration.
+
+   .. method:: retrieve_best(run, dataset, criterion)
+
+      Retrieve the best weights for the given run, dataset, and criterion.
+      
+
+
+   .. py:method:: load_weights(run: dacapo.experiments.run.Run, iteration: int) -> None
+
+      Load this iterations weights into the given run.
+      :param run: The run to load the weights into.
+      :type run: Run
+      :param iteration: The iteration to load the weights from.
+      :type iteration: int
+
+      :raises ValueError: If the iteration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = WeightsStore()
+      >>> run = Run()
+      >>> iteration = 0
+      >>> store.load_weights(run, iteration)
+
+
+
+   .. py:method:: load_best(run: dacapo.experiments.run.Run, dataset: str, criterion: str) -> None
+
+      Load the best weights for this Run,dataset,criterion into Run.model
+
+      :param run: The run to load the weights into.
+      :type run: Run
+      :param dataset: The dataset to load the weights from.
+      :type dataset: str
+      :param criterion: The criterion to load the weights from.
+      :type criterion: str
+
+      :raises ValueError: If the best iteration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = WeightsStore()
+      >>> run = Run()
+      >>> dataset = 'mnist'
+      >>> criterion = 'accuracy'
+      >>> store.load_best(run, dataset, criterion)
+
+
+
+   .. py:method:: latest_iteration(run: str) -> Optional[int]
+      :abstractmethod:
+
+
+      Return the latest iteration for which weights are available for the
+      given run.
+
+      :param run: The name of the run.
+      :type run: str
+
+      :returns: The latest iteration for which weights are available.
+      :rtype: int
+
+      :raises ValueError: If no weights are available for the given run.
+
+      .. rubric:: Examples
+
+      >>> store = WeightsStore()
+      >>> run = 'run_0'
+      >>> store.latest_iteration(run)
+
+
+
+   .. py:method:: store_weights(run: dacapo.experiments.run.Run, iteration: int) -> None
+      :abstractmethod:
+
+
+      Store the network weights of the given run.
+
+      :param run: The run to store the weights of.
+      :type run: Run
+      :param iteration: The iteration to store the weights for.
+      :type iteration: int
+
+      :raises ValueError: If the iteration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = WeightsStore()
+      >>> run = Run()
+      >>> iteration = 0
+      >>> store.store_weights(run, iteration)
+
+
+
+   .. py:method:: retrieve_weights(run: str, iteration: int) -> Weights
+      :abstractmethod:
+
+
+      Retrieve the network weights of the given run.
+
+      :param run: The name of the run.
+      :type run: str
+      :param iteration: The iteration to retrieve the weights for.
+      :type iteration: int
+
+      :returns: The weights of the given run and iteration.
+      :rtype: Weights
+
+      :raises ValueError: If the weights are not available.
+
+      .. rubric:: Examples
+
+      >>> store = WeightsStore()
+      >>> run = 'run_0'
+      >>> iteration = 0
+      >>> store.retrieve_weights(run, iteration)
+
+
+
+   .. py:method:: remove(run: str, iteration: int) -> None
+      :abstractmethod:
+
+
+      Delete the weights associated with a specific run/iteration
+
+      :param run: The name of the run.
+      :type run: str
+      :param iteration: The iteration to delete the weights for.
+      :type iteration: int
+
+      :raises ValueError: If the weights are not available.
+
+      .. rubric:: Examples
+
+      >>> store = WeightsStore()
+      >>> run = 'run_0'
+      >>> iteration = 0
+      >>> store.remove(run, iteration)
+
+
+
+   .. py:method:: retrieve_best(run: str, dataset: str, criterion: str) -> int
+      :abstractmethod:
+
+
+      Retrieve the best weights for this run/dataset/criterion
+
+      :param run: The name of the run.
+      :type run: str
+      :param dataset: The dataset to retrieve the best weights for.
+      :type dataset: str
+      :param criterion: The criterion to retrieve the best weights for.
+      :type criterion: str
+
+      :returns: The iteration of the best weights.
+      :rtype: int
+
+      :raises ValueError: If the best weights are not available.
+
+      .. rubric:: Examples
+
+      >>> store = WeightsStore()
+      >>> run = 'run_0'
+      >>> dataset = 'mnist'
+      >>> criterion = 'accuracy'
+      >>> store.retrieve_best(run, dataset, criterion)
+
+
+
+.. py:class:: Weights(model_state_dict, optimizer_state_dict)
+
+   A class representing the weights of a model and optimizer.
+
+   .. attribute:: optimizer
+
+      The optimizer's state dictionary.
+
+      :type: OrderedDict[str, torch.Tensor]
+
+   .. attribute:: model
+
+      The model's state dictionary.
+
+      :type: OrderedDict[str, torch.Tensor]
+
+   .. method:: __init__(model_state_dict, optimizer_state_dict)
+
+      Initializes the Weights object with the given model and optimizer state dictionaries.
+      
+
+
+   .. py:attribute:: optimizer
+      :type:  collections.OrderedDict[str, torch.Tensor]
+
+
+   .. py:attribute:: model
+      :type:  collections.OrderedDict[str, torch.Tensor]
+
+
+.. py:class:: Run(run_config, load_starter_model: bool = True)
+
+   Class representing a run in the experiment. A run is a combination of a task, architecture, trainer, datasplit,
+   model, optimizer, training stats, and validation scores. It also contains the name of the run, the number of
+   iterations to train for, and the interval at which to validate. It also contains a start object that can be used to
+   initialize the model with preloaded weights. The run object can be used to move the optimizer to a specified device.
+
+   .. attribute:: name
+
+      The name of the run.
+
+      :type: str
+
+   .. attribute:: train_until
+
+      The number of iterations to train for.
+
+      :type: int
+
+   .. attribute:: validation_interval
+
+      The interval at which to validate.
+
+      :type: int
+
+   .. attribute:: task
+
+      The task object.
+
+      :type: Task
+
+   .. attribute:: architecture
+
+      The architecture object.
+
+      :type: Architecture
+
+   .. attribute:: trainer
+
+      The trainer object.
+
+      :type: Trainer
+
+   .. attribute:: datasplit
+
+      The datasplit object.
+
+      :type: DataSplit
+
+   .. attribute:: model
+
+      The model object.
+
+      :type: Model
+
+   .. attribute:: optimizer
+
+      The optimizer object.
+
+      :type: torch.optim.Optimizer
+
+   .. attribute:: training_stats
+
+      The training stats object.
+
+      :type: TrainingStats
+
+   .. attribute:: validation_scores
+
+      The validation scores object.
+
+      :type: ValidationScores
+
+   .. attribute:: start
+
+      The start object.
+
+      :type: Start
+
+   .. method:: move_optimizer(device
+
+      torch.device, empty_cuda_cache: bool) -> None:
+      Moves the optimizer to the specified device.
+
+   .. method:: get_validation_scores(run_config) -> ValidationScores
+
+      
+      Static method to get the validation scores without initializing model, optimizer, trainer, etc.
+
+   .. note::
+
+      The iteration stats list is structured as follows:
+      - The outer list contains the stats for each iteration.
+      - The inner list contains the stats for each training iteration.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: train_until
+      :type:  int
+
+
+   .. py:attribute:: validation_interval
+      :type:  int
+
+
+   .. py:attribute:: task
+      :type:  dacapo.experiments.tasks.task.Task
+
+
+   .. py:attribute:: architecture
+      :type:  dacapo.experiments.architectures.Architecture
+
+
+   .. py:attribute:: trainer
+      :type:  dacapo.experiments.trainers.Trainer
+
+
+   .. py:attribute:: model
+      :type:  dacapo.experiments.model.Model
+
+
+   .. py:attribute:: optimizer
+      :type:  torch.optim.Optimizer
+
+
+   .. py:attribute:: training_stats
+      :type:  dacapo.experiments.training_stats.TrainingStats
+
+
+   .. py:property:: datasplit
+
+
+   .. py:property:: validation_scores
+
+
+   .. py:method:: get_validation_scores(run_config) -> dacapo.experiments.validation_scores.ValidationScores
+      :staticmethod:
+
+
+      Static method to get the validation scores without initializing model, optimizer, trainer, etc.
+
+      :param run_config: The configuration for the run.
+
+      :returns: The validation scores.
+
+      :raises AssertionError: If the task or datasplit types are not specified in the run_config.
+
+      .. rubric:: Examples
+
+      >>> validation_scores = Run.get_validation_scores(run_config)
+      >>> validation_scores
+      ValidationScores object
+
+
+
+   .. py:method:: move_optimizer(device: torch.device, empty_cuda_cache: bool = False) -> None
+
+      Moves the optimizer to the specified device.
+
+      :param device: The device to move the optimizer to.
+      :param empty_cuda_cache: Whether to empty the CUDA cache after moving the optimizer.
+
+      :raises AssertionError: If the optimizer state is not a dictionary.
+
+      .. rubric:: Examples
+
+      >>> run.move_optimizer(device)
+      >>> run.optimizer
+      Optimizer object
+
+
+
 .. py:data:: logger
 
-   
-
 .. py:class:: LocalWeightsStore(basedir)
-
 
 
 
@@ -84,6 +583,7 @@ Attributes
 
    .. note:: The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
 
+
    .. py:method:: latest_iteration(run: str) -> Optional[int]
 
       Return the latest iteration for which weights are available for the
@@ -103,6 +603,7 @@ Attributes
       .. note:: The iteration is determined by the number of the subdirectories in the "iterations" directory.
 
 
+
    .. py:method:: store_weights(run: dacapo.experiments.run.Run, iteration: int)
 
       Store the network weights of the given run.
@@ -117,6 +618,7 @@ Attributes
       >>> store.store_weights(run, 0)
 
       .. note:: The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
+
 
 
    .. py:method:: retrieve_weights(run: str, iteration: int) -> dacapo.store.weights_store.Weights
@@ -137,6 +639,7 @@ Attributes
       .. note:: The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
 
 
+
    .. py:method:: remove(run: str, iteration: int)
 
       Remove the weights for a specific run and iteration.
@@ -153,6 +656,7 @@ Attributes
       >>> store.remove("run1", 0)
 
       .. note:: The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
+
 
 
    .. py:method:: store_best(run: str, iteration: int, dataset: str, criterion: str)
@@ -177,6 +681,7 @@ Attributes
       >>> store.store_best("run1", 0, "dataset1", "criterion1")
 
       .. note:: The best weights are stored in a json file that contains the iteration number.
+
 
 
    .. py:method:: retrieve_best(run: str, dataset: str | dacapo.experiments.datasplits.datasets.dataset.Dataset, criterion: str) -> int

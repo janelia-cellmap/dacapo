@@ -1,24 +1,137 @@
-:py:mod:`dacapo.experiments.trainers.gp_augments.gamma_config`
-==============================================================
+dacapo.experiments.trainers.gp_augments.gamma_config
+====================================================
 
 .. py:module:: dacapo.experiments.trainers.gp_augments.gamma_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.trainers.gp_augments.gamma_config.AugmentConfig
+   dacapo.experiments.trainers.gp_augments.gamma_config.GammaAugment
+   dacapo.experiments.trainers.gp_augments.gamma_config.GammaAugmentConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: AugmentConfig
 
-.. autoapisummary::
 
-   dacapo.experiments.trainers.gp_augments.gamma_config.GammaAugmentConfig
 
+   Base class for gunpowder augment configurations. Each subclass of a `Augment`
+   should have a corresponding config class derived from `AugmentConfig`.
+
+   .. attribute:: _raw_key
+
+      Key for raw data. Not used in this implementation. Defaults to None.
+
+   .. attribute:: _gt_key
+
+      Key for ground truth data. Not used in this implementation. Defaults to None.
+
+   .. attribute:: _mask_key
+
+      Key for mask data. Not used in this implementation. Defaults to None.
+
+   .. method:: node(_raw_key=None, _gt_key=None, _mask_key=None)
+
+      Get a gp.Augment node.
+      
+      
+
+
+   .. py:method:: node(raw_key: gunpowder.ArrayKey, gt_key: gunpowder.ArrayKey, mask_key: gunpowder.ArrayKey) -> gunpowder.BatchFilter
+      :abstractmethod:
+
+
+      Get a gunpowder augment node.
+
+      :param raw_key: Key for raw data.
+      :type raw_key: gp.ArrayKey
+      :param gt_key: Key for ground truth data.
+      :type gt_key: gp.ArrayKey
+      :param mask_key: Key for mask data.
+      :type mask_key: gp.ArrayKey
+
+      :returns: Augmentation node which can be incorporated in the pipeline.
+      :rtype: gunpowder.BatchFilter
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> node = augment_config.node(raw_key, gt_key, mask_key)
+
+
+
+.. py:class:: GammaAugment(arrays, gamma_min, gamma_max)
+
+
+
+   Class for applying gamma noise augmentation.
+
+   .. attribute:: arrays
+
+      An iterable collection of np arrays to augment
+
+   .. attribute:: gamma_min
+
+      A float representing the lower limit of gamma perturbation
+
+   .. attribute:: gamma_max
+
+      A float representing the upper limit of gamma perturbation
+
+   .. method:: setup()
+
+      Method to configure the internal state of the class
+
+   .. method:: process()
+
+      Method to apply gamma noise to the desired arrays
+
+   .. method:: __augment()
+
+      Private method to perform the actual augmentation
+      
+      
+
+
+   .. py:method:: setup()
+
+      Configuring the internal state by iterating over arrays.
+
+      :raises AssertionError: If the array data type is not float32 or float64
+
+      .. rubric:: Examples
+
+      >>> setup()
+      setup()
+
+
+
+   .. py:method:: process(batch, request)
+
+      Method to apply gamma noise to the desired arrays.
+
+      :param batch: The input batch to be processed.
+      :param request: An object which holds the requested output location.
+
+      :returns: The batch with the gamma noise applied.
+
+      :raises AssertionError: If the array data type is not float32 or float64
+
+      .. rubric:: Examples
+
+      >>> process(batch, request)
+      process(batch, request)
 
 
 
 .. py:class:: GammaAugmentConfig
-
 
 
 
@@ -37,10 +150,10 @@ Classes
       Constructs a node in the augmentation pipeline.
       
 
-   .. py:attribute:: gamma_range
-      :type: Tuple[float, float]
 
-      
+   .. py:attribute:: gamma_range
+      :type:  Tuple[float, float]
+
 
    .. py:method:: node(raw_key: gunpowder.ArrayKey, _gt_key=None, _mask_key=None)
 

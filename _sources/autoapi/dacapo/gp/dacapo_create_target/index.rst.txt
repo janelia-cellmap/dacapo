@@ -1,24 +1,286 @@
-:py:mod:`dacapo.gp.dacapo_create_target`
-========================================
+dacapo.gp.dacapo_create_target
+==============================
 
 .. py:module:: dacapo.gp.dacapo_create_target
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.gp.dacapo_create_target.NumpyArray
+   dacapo.gp.dacapo_create_target.DaCapoTargetFilter
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.gp.dacapo_create_target.DaCapoTargetFilter
+.. py:class:: NumpyArray(array_config)
 
 
+
+   This is just a wrapper for a numpy array to make it fit the DaCapo Array interface.
+
+   .. attribute:: data
+
+      The numpy array.
+
+   .. attribute:: dtype
+
+      The data type of the numpy array.
+
+   .. attribute:: roi
+
+      The region of interest of the numpy array.
+
+   .. attribute:: voxel_size
+
+      The voxel size of the numpy array.
+
+   .. attribute:: axes
+
+      The axes of the numpy array.
+
+   .. method:: from_gp_array
+
+      Create a NumpyArray from a Gunpowder Array.
+
+   .. method:: from_np_array
+
+      Create a NumpyArray from a numpy array.
+
+   .. note:: This class is a subclass of Array.
+
+
+   .. py:property:: attrs
+      Returns the attributes of the array.
+
+      :returns: The attributes of the array.
+      :rtype: dict
+
+      :raises ValueError: If the array does not have attributes.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.attrs
+      {}
+
+      .. note:: This method is a property. It returns the attributes of the array.
+
+
+   .. py:method:: from_gp_array(array: gunpowder.Array)
+      :classmethod:
+
+
+      Create a NumpyArray from a Gunpowder Array.
+
+      :param array: The Gunpowder Array.
+      :type array: gp.Array
+
+      :returns: The NumpyArray.
+      :rtype: NumpyArray
+
+      :raises ValueError: If the array does not have a data type.
+
+      .. rubric:: Examples
+
+      >>> array = gp.Array(data=np.zeros((2, 3, 4)), spec=gp.ArraySpec(roi=Roi((0, 0, 0), (2, 3, 4)), voxel_size=Coordinate((1, 1, 1))))
+      >>> array = NumpyArray.from_gp_array(array)
+      >>> array.data
+      array([[[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]],
+      <BLANKLINE>
+                  [[0., 0., 0., 0.],
+                  [0., 0., 0., 0.],
+                  [0., 0., 0., 0.]]])
+
+      .. note:: This method creates a NumpyArray from a Gunpowder Array.
+
+
+
+   .. py:method:: from_np_array(array: numpy.ndarray, roi, voxel_size, axes)
+      :classmethod:
+
+
+      Create a NumpyArray from a numpy array.
+
+      :param array: The numpy array.
+      :type array: np.ndarray
+      :param roi: The region of interest of the array.
+      :type roi: Roi
+      :param voxel_size: The voxel size of the array.
+      :type voxel_size: Coordinate
+      :param axes: The axes of the array.
+      :type axes: List[str]
+
+      :returns: The NumpyArray.
+      :rtype: NumpyArray
+
+      :raises ValueError: If the array does not have a data type.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.data
+      array([[[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]],
+      <BLANKLINE>
+               [[0., 0., 0., 0.],
+                [0., 0., 0., 0.],
+                [0., 0., 0., 0.]]])
+
+      .. note:: This method creates a NumpyArray from a numpy array.
+
+
+
+   .. py:property:: axes
+      Returns the axes of the array.
+
+      :returns: The axes of the array.
+      :rtype: List[str]
+
+      :raises ValueError: If the array does not have axes.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.axes
+      ['z', 'y', 'x']
+
+      .. note:: This method is a property. It returns the axes of the array.
+
+
+   .. py:property:: dims
+      Returns the number of dimensions of the array.
+
+      :returns: The number of dimensions of the array.
+      :rtype: int
+
+      :raises ValueError: If the array does not have a dimension.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.dims
+      3
+
+      .. note:: This method is a property. It returns the number of dimensions of the array.
+
+
+   .. py:property:: voxel_size
+      Returns the voxel size of the array.
+
+      :returns: The voxel size of the array.
+      :rtype: Coordinate
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.voxel_size
+      Coordinate((1, 1, 1))
+
+      .. note:: This method is a property. It returns the voxel size of the array.
+
+
+   .. py:property:: roi
+      Returns the region of interest of the array.
+
+      :returns: The region of interest of the array.
+      :rtype: Roi
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.roi
+      Roi((0, 0, 0), (2, 3, 4))
+
+      .. note:: This method is a property. It returns the region of interest of the array.
+
+
+   .. py:property:: writable
+      :type: bool
+
+      Returns whether the array is writable.
+
+      :returns: Whether the array is writable.
+      :rtype: bool
+
+      :raises ValueError: If the array is not writable.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.writable
+      True
+
+      .. note:: This method is a property. It returns whether the array is writable.
+
+
+   .. py:property:: data
+      Returns the numpy array.
+
+      :returns: The numpy array.
+      :rtype: np.ndarray
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.data
+      array([[[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]],
+      <BLANKLINE>
+             [[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]]])
+
+      .. note:: This method is a property. It returns the numpy array.
+
+
+   .. py:property:: dtype
+      Returns the data type of the array.
+
+      :returns: The data type of the array.
+      :rtype: np.dtype
+
+      :raises ValueError: If the array does not have a data type.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.dtype
+      dtype('float64')
+
+      .. note:: This method is a property. It returns the data type of the array.
+
+
+   .. py:property:: num_channels
+      Returns the number of channels in the array.
+
+      :returns: The number of channels in the array.
+      :rtype: int
+
+      :raises ValueError: If the array does not have a channel dimension.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((1, 2, 3, 4)), Roi((0, 0, 0), (1, 2, 3)), Coordinate((1, 1, 1)), ["b", "c", "z", "y", "x"])
+      >>> array.num_channels
+      1
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.num_channels
+      Traceback (most recent call last):
+      ...
+      ValueError: Array does not have a channel dimension.
+
+      .. note:: This method is a property. It returns the number of channels in the array.
 
 
 .. py:class:: DaCapoTargetFilter(predictor: dacapo.experiments.tasks.predictors.Predictor, gt_key: gunpowder.ArrayKey, target_key: Optional[gunpowder.ArrayKey] = None, weights_key: Optional[gunpowder.ArrayKey] = None, mask_key: Optional[gunpowder.ArrayKey] = None)
-
 
 
 
@@ -71,6 +333,7 @@ Classes
       This class is a subclass of gunpowder.BatchFilter and is used to
       generate the target from the ground truth.
 
+
    .. py:method:: setup()
 
       Set up the provider. This function sets the provider to provide the
@@ -81,6 +344,7 @@ Classes
       .. rubric:: Examples
 
       >>> target_filter.setup()
+
 
 
    .. py:method:: prepare(request)
@@ -100,6 +364,7 @@ Classes
       >>> request = gp.BatchRequest()
       >>> request[gp.ArrayKey("GT")] = gp.ArraySpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
       >>> target_filter.prepare(request)
+
 
 
    .. py:method:: process(batch, request)

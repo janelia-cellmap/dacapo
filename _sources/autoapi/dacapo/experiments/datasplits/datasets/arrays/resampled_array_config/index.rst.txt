@@ -1,24 +1,348 @@
-:py:mod:`dacapo.experiments.datasplits.datasets.arrays.resampled_array_config`
-==============================================================================
+dacapo.experiments.datasplits.datasets.arrays.resampled_array_config
+====================================================================
 
 .. py:module:: dacapo.experiments.datasplits.datasets.arrays.resampled_array_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArray
+   dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: ArrayConfig
 
-.. autoapisummary::
+   Base class for array configurations. Each subclass of an
+   `Array` should have a corresponding config class derived from
+   `ArrayConfig`. This class should be used to store the configuration
+   of the array.
 
-   dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig
+   .. attribute:: name
+
+      A unique name for this array. This will be saved so you
+      and others can find and reuse this array. Keep it short
+      and avoid special characters.
+
+      :type: str
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method is used to check whether this is a valid Array.
+
+   .. note::
+
+      This class is used to create a base class for array configurations. Each subclass of an
+      `Array` should have a corresponding config class derived from `ArrayConfig`.
+      This class should be used to store the configuration of the array.
 
 
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Array
+
+      :returns: A tuple with the first element being a boolean
+                indicating whether the array is valid and the second element being
+                a string with a message explaining why the array is invalid
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: This method is not implemented in this class
+
+      .. rubric:: Examples
+
+      >>> array_config = ArrayConfig(name="array_config")
+      >>> array_config.verify()
+      (True, "No validation for this Array")
+
+      .. note:: This method is used to check whether this is a valid Array.
+
+
+
+.. py:class:: ResampledArray(array_config)
+
+
+
+   This is a zarr array that is a resampled version of another array.
+
+   Resampling is done by rescaling the source array with the given
+   upsample and downsample factors. The voxel size of the resampled array
+   is the voxel size of the source array divided by the downsample factor
+   and multiplied by the upsample factor.
+
+   .. attribute:: name
+
+      str
+      The name of the array
+
+   .. attribute:: source_array
+
+      Array
+      The source array
+
+   .. attribute:: upsample
+
+      Coordinate
+      The upsample factor for each dimension
+
+   .. attribute:: downsample
+
+      Coordinate
+      The downsample factor for each dimension
+
+   .. attribute:: interp_order
+
+      int
+      The order of the interpolation used for resampling
+
+   .. method:: attrs
+
+      Dict
+      Returns the attributes of the source array
+
+   .. method:: axes
+
+      str
+      Returns the axes of the source array
+
+   .. method:: dims
+
+      int
+      Returns the number of dimensions of the source array
+
+   .. method:: voxel_size
+
+      Coordinate
+      Returns the voxel size of the resampled array
+
+   .. method:: roi
+
+      Roi
+      Returns the region of interest of the resampled array
+
+   .. method:: writable
+
+      bool
+      Returns whether the resampled array is writable
+
+   .. method:: dtype
+
+      np.dtype
+      Returns the data type of the resampled array
+
+   .. method:: num_channels
+
+      int
+      Returns the number of channels of the resampled array
+
+   .. method:: data
+
+      np.ndarray
+      Returns the data of the resampled array
+
+   .. method:: scale
+
+      Tuple[float]
+      Returns the scale of the resampled array
+
+   .. method:: __getitem__(roi
+
+      Roi) -> np.ndarray
+      Returns the data of the resampled array within the given region of interest
+
+   .. method:: _can_neuroglance() -> bool
+
+      
+      Returns whether the source array can be visualized with neuroglance
+
+   .. method:: _neuroglancer_layer() -> Dict
+
+      
+      Returns the neuroglancer layer of the source array
+
+   .. method:: _neuroglancer_source() -> Dict
+
+      
+      Returns the neuroglancer source of the source array
+
+   .. method:: _source_name() -> str
+
+      
+      Returns the name of the source array
+
+   .. note:: This class is a subclass of Array.
+
+
+   .. py:property:: attrs
+      Returns the attributes of the source array.
+
+      :returns: The attributes of the source array
+      :rtype: Dict
+
+      :raises ValueError: If the resampled array is not writable
+
+      .. rubric:: Examples
+
+      >>> resampled_array.attrs
+
+      .. note:: This method returns the attributes of the source array.
+
+
+   .. py:property:: axes
+      Returns the axes of the source array.
+
+      :returns: The axes of the source array
+      :rtype: str
+
+      :raises ValueError: If the resampled array is not writable
+
+      .. rubric:: Examples
+
+      >>> resampled_array.axes
+
+      .. note:: This method returns the axes of the source array.
+
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the number of dimensions of the source array.
+
+      :returns: The number of dimensions of the source array
+      :rtype: int
+
+      :raises ValueError: If the resampled array is not writable
+
+      .. rubric:: Examples
+
+      >>> resampled_array.dims
+
+      .. note:: This method returns the number of dimensions of the source array.
+
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      Returns the voxel size of the resampled array.
+
+      :returns: The voxel size of the resampled array
+      :rtype: Coordinate
+
+      :raises ValueError: If the resampled array is not writable
+
+      .. rubric:: Examples
+
+      >>> resampled_array.voxel_size
+
+      .. note:: This method returns the voxel size of the resampled array.
+
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      Returns the region of interest of the resampled array.
+
+      :returns: The region of interest of the resampled array
+      :rtype: Roi
+
+      :raises ValueError: If the resampled array is not writable
+
+      .. rubric:: Examples
+
+      >>> resampled_array.roi
+
+      .. note:: This method returns the region of interest of the resampled array.
+
+
+   .. py:property:: writable
+      :type: bool
+
+      Returns whether the resampled array is writable.
+
+      :returns: True if the resampled array is writable, False otherwise
+      :rtype: bool
+
+      :raises ValueError: If the resampled array is not writable
+
+      .. rubric:: Examples
+
+      >>> resampled_array.writable
+
+      .. note:: This method returns whether the resampled array is writable.
+
+
+   .. py:property:: dtype
+      Returns the data type of the resampled array.
+
+      :returns: The data type of the resampled array
+      :rtype: np.dtype
+
+      :raises ValueError: If the resampled array is not writable
+
+      .. rubric:: Examples
+
+      >>> resampled_array.dtype
+
+      .. note:: This method returns the data type of the resampled array.
+
+
+   .. py:property:: num_channels
+      :type: int
+
+      Returns the number of channels of the resampled array.
+
+      :returns: The number of channels of the resampled array
+      :rtype: int
+
+      :raises ValueError: If the resampled array is not writable
+
+      .. rubric:: Examples
+
+      >>> resampled_array.num_channels
+
+      .. note:: This method returns the number of channels of the resampled array.
+
+
+   .. py:property:: data
+      Returns the data of the resampled array.
+
+      :returns: The data of the resampled array
+      :rtype: np.ndarray
+
+      :raises ValueError: If the resampled array is not writable
+
+      .. rubric:: Examples
+
+      >>> resampled_array.data
+
+      .. note:: This method returns the data of the resampled array.
+
+
+   .. py:property:: scale
+      Returns the scale of the resampled array.
+
+      :returns: The scale of the resampled array
+      :rtype: Tuple[float]
+
+      :raises ValueError: If the resampled array is not writable
+
+      .. rubric:: Examples
+
+      >>> resampled_array.scale
+
+      .. note:: This method returns the scale of the resampled array.
 
 
 .. py:class:: ResampledArrayConfig
-
 
 
 
@@ -54,28 +378,23 @@ Classes
 
    .. note:: This class is meant to be used with the ArrayDataset class.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source_array_config
-      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+      :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
-      
 
    .. py:attribute:: upsample
-      :type: funlib.geometry.Coordinate
+      :type:  funlib.geometry.Coordinate
 
-      
 
    .. py:attribute:: downsample
-      :type: funlib.geometry.Coordinate
+      :type:  funlib.geometry.Coordinate
 
-      
 
    .. py:attribute:: interp_order
-      :type: bool
-
-      
+      :type:  bool
 
 

@@ -1,14 +1,19 @@
-:py:mod:`dacapo.options`
-========================
+dacapo.options
+==============
 
 .. py:module:: dacapo.options
 
 
-Module Contents
----------------
+Attributes
+----------
+
+.. autoapisummary::
+
+   dacapo.options.logger
+
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -16,22 +21,12 @@ Classes
    dacapo.options.Options
 
 
-
-
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.options.logger
-
+Module Contents
+---------------
 
 .. py:data:: logger
 
-   
-
 .. py:class:: DaCapoConfig
-
 
    Configuration class for DaCapo.
 
@@ -71,30 +66,26 @@ Attributes
       
       
 
-   .. py:attribute:: type
-      :type: str
 
-      
+   .. py:attribute:: type
+      :type:  str
+
 
    .. py:attribute:: runs_base_dir
-      :type: upath.UPath
+      :type:  upath.UPath
 
-      
 
    .. py:attribute:: compute_context
-      :type: dict
+      :type:  dict
 
-      
 
    .. py:attribute:: mongo_db_host
-      :type: Optional[str]
+      :type:  Optional[str]
 
-      
 
    .. py:attribute:: mongo_db_name
-      :type: Optional[str]
+      :type:  Optional[str]
 
-      
 
    .. py:method:: serialize()
 
@@ -112,7 +103,6 @@ Attributes
 
 
 .. py:class:: Options
-
 
    A class that provides options for configuring DaCapo.
 
@@ -135,8 +125,10 @@ Attributes
       Parses options from the configuration file and updates them with the provided kwargs.
       
 
+
    .. py:method:: instance(**kwargs) -> DaCapoConfig
       :classmethod:
+
 
       Returns an instance of the Options class.
 
@@ -151,8 +143,10 @@ Attributes
       DaCapoConfig(type='files', runs_base_dir=PosixPath('/home/user/dacapo'), compute_context={'type': 'LocalTorch', 'config': {}}, mongo_db_host=None, mongo_db_name=None)
 
 
+
    .. py:method:: config_file() -> Optional[upath.UPath]
       :classmethod:
+
 
       Returns the path to the configuration file.
 

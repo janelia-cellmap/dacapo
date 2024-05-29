@@ -1,28 +1,25 @@
-:py:mod:`dacapo.experiments.trainers.gp_augments`
-=================================================
+dacapo.experiments.trainers.gp_augments
+=======================================
 
 .. py:module:: dacapo.experiments.trainers.gp_augments
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   augment_config/index.rst
-   elastic_config/index.rst
-   gamma_config/index.rst
-   intensity_config/index.rst
-   intensity_scale_shift_config/index.rst
-   simple_config/index.rst
+   /autoapi/dacapo/experiments/trainers/gp_augments/augment_config/index
+   /autoapi/dacapo/experiments/trainers/gp_augments/elastic_config/index
+   /autoapi/dacapo/experiments/trainers/gp_augments/gamma_config/index
+   /autoapi/dacapo/experiments/trainers/gp_augments/intensity_config/index
+   /autoapi/dacapo/experiments/trainers/gp_augments/intensity_scale_shift_config/index
+   /autoapi/dacapo/experiments/trainers/gp_augments/simple_config/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -34,10 +31,10 @@ Classes
    dacapo.experiments.trainers.gp_augments.IntensityScaleShiftAugmentConfig
 
 
-
+Package Contents
+----------------
 
 .. py:class:: AugmentConfig
-
 
 
 
@@ -62,8 +59,10 @@ Classes
       
       
 
+
    .. py:method:: node(raw_key: gunpowder.ArrayKey, gt_key: gunpowder.ArrayKey, mask_key: gunpowder.ArrayKey) -> gunpowder.BatchFilter
       :abstractmethod:
+
 
       Get a gunpowder augment node.
 
@@ -86,7 +85,6 @@ Classes
 
 
 .. py:class:: ElasticAugmentConfig
-
 
 
 
@@ -134,30 +132,26 @@ Classes
       
       
 
-   .. py:attribute:: control_point_spacing
-      :type: List[int]
 
-      
+   .. py:attribute:: control_point_spacing
+      :type:  List[int]
+
 
    .. py:attribute:: control_point_displacement_sigma
-      :type: List[float]
+      :type:  List[float]
 
-      
 
    .. py:attribute:: rotation_interval
-      :type: Tuple[float, float]
+      :type:  Tuple[float, float]
 
-      
 
    .. py:attribute:: subsample
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: uniform_3d_rotation
-      :type: bool
+      :type:  bool
 
-      
 
    .. py:method:: node(_raw_key=None, _gt_key=None, _mask_key=None)
 
@@ -186,7 +180,6 @@ Classes
 
 
 
-
    This class is an implementation of AugmentConfig that applies simple augmentations.
 
    :param _raw_key: Key for raw data. Not used in this implementation. Defaults to None.
@@ -198,6 +191,7 @@ Classes
       Get a gp.SimpleAugment node.
 
    .. note:: This class is a subclass of AugmentConfig.
+
 
    .. py:method:: node(_raw_key=None, _gt_key=None, _mask_key=None)
 
@@ -225,7 +219,6 @@ Classes
 
 
 
-
    This class manages the configuration of gamma augmentation for a given dataset.
 
    .. attribute:: gamma_range
@@ -241,10 +234,10 @@ Classes
       Constructs a node in the augmentation pipeline.
       
 
-   .. py:attribute:: gamma_range
-      :type: Tuple[float, float]
 
-      
+   .. py:attribute:: gamma_range
+      :type:  Tuple[float, float]
+
 
    .. py:method:: node(raw_key: gunpowder.ArrayKey, _gt_key=None, _mask_key=None)
 
@@ -269,7 +262,6 @@ Classes
 
 
 .. py:class:: IntensityAugmentConfig
-
 
 
 
@@ -299,20 +291,18 @@ Classes
       
       
 
-   .. py:attribute:: scale
-      :type: Tuple[float, float]
 
-      
+   .. py:attribute:: scale
+      :type:  Tuple[float, float]
+
 
    .. py:attribute:: shift
-      :type: Tuple[float, float]
+      :type:  Tuple[float, float]
 
-      
 
    .. py:attribute:: clip
-      :type: bool
+      :type:  bool
 
-      
 
    .. py:method:: node(raw_key: gunpowder.ArrayKey, _gt_key=None, _mask_key=None)
 
@@ -340,7 +330,6 @@ Classes
 
 
 
-
    This class is an implementation of AugmentConfig that applies intensity scaling and shifting.
 
    .. attribute:: scale
@@ -361,15 +350,14 @@ Classes
 
    .. note:: This class is a subclass of AugmentConfig.
 
-   .. py:attribute:: scale
-      :type: float
 
-      
+   .. py:attribute:: scale
+      :type:  float
+
 
    .. py:attribute:: shift
-      :type: float
+      :type:  float
 
-      
 
    .. py:method:: node(raw_key: gunpowder.ArrayKey, _gt_key=None, _mask_key=None)
 

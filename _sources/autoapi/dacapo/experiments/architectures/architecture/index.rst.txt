@@ -1,24 +1,21 @@
-:py:mod:`dacapo.experiments.architectures.architecture`
-=======================================================
+dacapo.experiments.architectures.architecture
+=============================================
 
 .. py:module:: dacapo.experiments.architectures.architecture
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.experiments.architectures.architecture.Architecture
 
 
-
+Module Contents
+---------------
 
 .. py:class:: Architecture(*args, **kwargs)
-
 
 
 
@@ -61,8 +58,10 @@ Classes
 
    .. note:: The class is abstract and requires to implement the abstract methods.
 
+
    .. py:property:: input_shape
       :type: funlib.geometry.Coordinate
+
       :abstractmethod:
 
       Abstract method to define the spatial input shape for the neural network architecture.
@@ -79,6 +78,7 @@ Classes
       >>> model = MyModel(input_shape)
 
       .. note:: The method should be implemented in the derived class.
+
 
    .. py:property:: eval_shape_increase
       :type: funlib.geometry.Coordinate
@@ -97,8 +97,10 @@ Classes
 
       .. note:: The method is optional and can be overridden in the derived class.
 
+
    .. py:property:: num_in_channels
       :type: int
+
       :abstractmethod:
 
       Abstract method to return number of input channels required by the architecture.
@@ -115,8 +117,10 @@ Classes
 
       .. note:: The method should be implemented in the derived class.
 
+
    .. py:property:: num_out_channels
       :type: int
+
       :abstractmethod:
 
       Abstract method to return the number of output channels provided by the architecture.
@@ -132,6 +136,7 @@ Classes
       >>> model = MyModel(input_shape, num_out_channels)
 
       .. note:: The method should be implemented in the derived class.
+
 
    .. py:property:: dims
       :type: int
@@ -151,6 +156,7 @@ Classes
       3
 
       .. note:: The method is optional and can be overridden in the derived class.
+
 
    .. py:method:: scale(input_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
 

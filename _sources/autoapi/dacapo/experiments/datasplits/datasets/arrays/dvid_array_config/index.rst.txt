@@ -1,24 +1,329 @@
-:py:mod:`dacapo.experiments.datasplits.datasets.arrays.dvid_array_config`
-=========================================================================
+dacapo.experiments.datasplits.datasets.arrays.dvid_array_config
+===============================================================
 
 .. py:module:: dacapo.experiments.datasplits.datasets.arrays.dvid_array_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.dvid_array_config.ArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.dvid_array_config.DVIDArray
+   dacapo.experiments.datasplits.datasets.arrays.dvid_array_config.DVIDArrayConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: ArrayConfig
 
-.. autoapisummary::
+   Base class for array configurations. Each subclass of an
+   `Array` should have a corresponding config class derived from
+   `ArrayConfig`. This class should be used to store the configuration
+   of the array.
 
-   dacapo.experiments.datasplits.datasets.arrays.dvid_array_config.DVIDArrayConfig
+   .. attribute:: name
 
+      A unique name for this array. This will be saved so you
+      and others can find and reuse this array. Keep it short
+      and avoid special characters.
+
+      :type: str
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method is used to check whether this is a valid Array.
+
+   .. note::
+
+      This class is used to create a base class for array configurations. Each subclass of an
+      `Array` should have a corresponding config class derived from `ArrayConfig`.
+      This class should be used to store the configuration of the array.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Array
+
+      :returns: A tuple with the first element being a boolean
+                indicating whether the array is valid and the second element being
+                a string with a message explaining why the array is invalid
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: This method is not implemented in this class
+
+      .. rubric:: Examples
+
+      >>> array_config = ArrayConfig(name="array_config")
+      >>> array_config.verify()
+      (True, "No validation for this Array")
+
+      .. note:: This method is used to check whether this is a valid Array.
+
+
+
+.. py:class:: DVIDArray(array_config)
+
+
+
+   This is a DVID array. It is a wrapper around a DVID array that provides
+   the necessary methods to interact with the array. It is used to fetch data
+   from a DVID server. The source is a tuple of three strings: the server, the UUID,
+   and the data name.
+
+   DVID: data management system for terabyte-sized 3D images
+
+   .. attribute:: name
+
+      The name of the array
+
+      :type: str
+
+   .. attribute:: source
+
+      The source of the array
+
+      :type: tuple[str, str, str]
+
+   .. method:: __getitem__
+
+      Returns the data from the array for a given region of interest
+
+   .. rubric:: Notes
+
+   The source is a tuple of three strings: the server, the UUID, and the data name.
+
+
+   .. py:method:: attrs()
+
+      Returns the attributes of the DVID array
+
+      :returns: The attributes of the DVID array
+      :rtype: dict
+
+      :raises ValueError: If the attributes is not a dictionary
+
+      .. rubric:: Examples
+
+      >>> dvid_array.attrs
+      {'Extended': {'VoxelSize': (1.0, 1.0, 1.0), 'Values': [{'DataType': 'uint64'}]}, 'Extents': {'MinPoint': (0, 0, 0), 'MaxPoint': (100, 100, 100)}}
+
+      .. rubric:: Notes
+
+      The attributes are the same as the source array
+
+
+
+   .. py:property:: axes
+      Returns the axes of the DVID array
+
+      :returns: The axes of the DVID array
+      :rtype: str
+
+      :raises ValueError: If the axes is not a string
+
+      .. rubric:: Examples
+
+      >>> dvid_array.axes
+      'zyx'
+
+      .. rubric:: Notes
+
+      The axes are the same as the source array
+
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the dimensions of the DVID array
+
+      :returns: The dimensions of the DVID array
+      :rtype: int
+
+      :raises ValueError: If the dimensions is not an integer
+
+      .. rubric:: Examples
+
+      >>> dvid_array.dims
+      3
+
+      .. rubric:: Notes
+
+      The dimensions are the same as the source array
+
+
+   .. py:method:: voxel_size() -> funlib.geometry.Coordinate
+
+      Returns the voxel size of the DVID array
+
+      :returns: The voxel size of the DVID array
+      :rtype: Coordinate
+
+      :raises ValueError: If the voxel size is not a Coordinate object
+
+      .. rubric:: Examples
+
+      >>> dvid_array.voxel_size
+      Coordinate(x=1.0, y=1.0, z=1.0)
+
+      .. rubric:: Notes
+
+      The voxel size is the same as the source array
+
+
+
+   .. py:method:: roi() -> funlib.geometry.Roi
+
+      Returns the region of interest of the DVID array
+
+      :returns: The region of interest of the DVID array
+      :rtype: Roi
+
+      :raises ValueError: If the region of interest is not a Roi object
+
+      .. rubric:: Examples
+
+      >>> dvid_array.roi
+      Roi(...)
+
+      .. rubric:: Notes
+
+      The region of interest is the same as the source array
+
+
+
+   .. py:property:: writable
+      :type: bool
+
+      Returns whether the DVID array is writable
+
+      :returns: Whether the DVID array is writable
+      :rtype: bool
+
+      :raises ValueError: If the writable is not a boolean
+
+      .. rubric:: Examples
+
+      >>> dvid_array.writable
+      False
+
+      .. rubric:: Notes
+
+      The writable is the same as the source array
+
+
+   .. py:property:: dtype
+      :type: Any
+
+      Returns the data type of the DVID array
+
+      :returns: The data type of the DVID array
+      :rtype: type
+
+      :raises ValueError: If the data type is not a type
+
+      .. rubric:: Examples
+
+      >>> dvid_array.dtype
+      numpy.uint64
+
+      .. rubric:: Notes
+
+      The data type is the same as the source array
+
+
+   .. py:property:: num_channels
+      :type: Optional[int]
+
+      Returns the number of channels of the DVID array
+
+      :returns: The number of channels of the DVID array
+      :rtype: int
+
+      :raises ValueError: If the number of channels is not an integer
+
+      .. rubric:: Examples
+
+      >>> dvid_array.num_channels
+      1
+
+      .. rubric:: Notes
+
+      The number of channels is the same as the source array
+
+
+   .. py:property:: spatial_axes
+      :type: List[str]
+
+      Returns the spatial axes of the DVID array
+
+      :returns: The spatial axes of the DVID array
+      :rtype: List[str]
+
+      :raises ValueError: If the spatial axes is not a list
+
+      .. rubric:: Examples
+
+      >>> dvid_array.spatial_axes
+      ['z', 'y', 'x']
+
+      .. rubric:: Notes
+
+      The spatial axes are the same as the source array
+
+
+   .. py:property:: data
+      :type: Any
+
+      :abstractmethod:
+
+      Returns the number of channels of the DVID array
+
+      :returns: The number of channels of the DVID array
+      :rtype: int
+
+      :raises ValueError: If the number of channels is not an integer
+
+      .. rubric:: Examples
+
+      >>> dvid_array.num_channels
+      1
+
+      .. rubric:: Notes
+
+      The number of channels is the same as the source array
+
+
+   .. py:method:: add_metadata(metadata: Dict[str, Any]) -> None
+      :abstractmethod:
+
+
+      Adds metadata to the DVID array
+
+      :param metadata: The metadata to add to the DVID array
+      :type metadata: dict
+
+      :returns: None
+
+      :raises ValueError: If the metadata is not a dictionary
+
+      .. rubric:: Examples
+
+      >>> dvid_array.add_metadata({'description': 'This is a DVID array'})
+
+      .. rubric:: Notes
+
+      The metadata is added to the source array
 
 
 
 .. py:class:: DVIDArrayConfig
-
 
 
 
@@ -38,14 +343,13 @@ Classes
 
    The source must be a tuple of strings.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source
-      :type: Tuple[str, str, str]
+      :type:  Tuple[str, str, str]
 
-      
 
    .. py:method:: verify() -> Tuple[bool, str]
 

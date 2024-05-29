@@ -1,24 +1,210 @@
-:py:mod:`dacapo.experiments.datasplits.datasets.dummy_dataset_config`
-=====================================================================
+dacapo.experiments.datasplits.datasets.dummy_dataset_config
+===========================================================
 
 .. py:module:: dacapo.experiments.datasplits.datasets.dummy_dataset_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDataset
+   dacapo.experiments.datasplits.datasets.dummy_dataset_config.DatasetConfig
+   dacapo.experiments.datasplits.datasets.dummy_dataset_config.ArrayConfig
+   dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyArrayConfig
+   dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: DummyDataset(dataset_config)
 
-.. autoapisummary::
 
-   dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig
 
+   DummyDataset is a child class of the Dataset. This class has property 'raw' of Array type and a name.
+
+   .. attribute:: raw
+
+      Array
+      The raw data.
+
+   .. method:: __init__(dataset_config)
+
+      
+      Initializes the array type 'raw' and name for the DummyDataset instance.
+
+   .. rubric:: Notes
+
+   This class is used to create a dataset with raw data.
+
+
+   .. py:attribute:: raw
+      :type:  dacapo.experiments.datasplits.datasets.arrays.Array
+
+
+.. py:class:: DatasetConfig
+
+   A class used to define configuration for datasets. This provides the
+   framework to create a Dataset instance.
+
+   .. attribute:: name
+
+      str (eg: "sample_dataset").
+      A unique identifier to name the dataset.
+      It aids in easy identification and reusability of this dataset.
+      Advised to keep it short and refrain from using special characters.
+
+   .. attribute:: weight
+
+      int (default=1).
+      A numeric value that indicates how frequently this dataset should be
+      sampled in comparison to others. Higher the weight, more frequently it
+      gets sampled.
+
+   .. method:: verify
+
+      
+      Checks and validates the dataset configuration. The specific rules for
+      validation need to be defined by the user.
+
+   .. rubric:: Notes
+
+   This class is used to create a configuration object for datasets.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: weight
+      :type:  int
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Method to verify the dataset configuration.
+
+      Since there is no specific validation logic defined for this DataSet, this
+      method will always return True as default reaction and a message stating
+      the lack of validation.
+
+      :returns: A tuple of boolean value indicating the check (True or False) and
+                message specifying result of validation.
+      :rtype: tuple
+
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> dataset_config = DatasetConfig(name="sample_dataset")
+      >>> dataset_config.verify()
+      (True, "No validation for this DataSet")
+
+      .. rubric:: Notes
+
+      This method is used to validate the configuration of the dataset.
+
+
+
+.. py:class:: ArrayConfig
+
+   Base class for array configurations. Each subclass of an
+   `Array` should have a corresponding config class derived from
+   `ArrayConfig`. This class should be used to store the configuration
+   of the array.
+
+   .. attribute:: name
+
+      A unique name for this array. This will be saved so you
+      and others can find and reuse this array. Keep it short
+      and avoid special characters.
+
+      :type: str
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method is used to check whether this is a valid Array.
+
+   .. note::
+
+      This class is used to create a base class for array configurations. Each subclass of an
+      `Array` should have a corresponding config class derived from `ArrayConfig`.
+      This class should be used to store the configuration of the array.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Array
+
+      :returns: A tuple with the first element being a boolean
+                indicating whether the array is valid and the second element being
+                a string with a message explaining why the array is invalid
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: This method is not implemented in this class
+
+      .. rubric:: Examples
+
+      >>> array_config = ArrayConfig(name="array_config")
+      >>> array_config.verify()
+      (True, "No validation for this Array")
+
+      .. note:: This method is used to check whether this is a valid Array.
+
+
+
+.. py:class:: DummyArrayConfig
+
+
+
+   This is just a dummy array  config used for testing. None of the
+   attributes have any particular meaning. It is used to test the
+   ArrayConfig class.
+
+   .. method:: to_array
+
+      Returns the DummyArray object
+
+   .. method:: verify
+
+      Returns whether the DummyArrayConfig is valid
+
+   .. rubric:: Notes
+
+   The source_array_config must be an ArrayConfig object.
+
+
+   .. py:attribute:: array_type
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Array
+
+      :returns: Whether the Array is valid and a message
+      :rtype: Tuple[bool, str]
+
+      :raises ValueError: If the source is not a tuple of strings
+
+      .. rubric:: Examples
+
+      >>> dummy_array_config = DummyArrayConfig(...)
+      >>> dummy_array_config.verify()
+      (False, "This is a DummyArrayConfig and is never valid")
+
+      .. rubric:: Notes
+
+      The source must be a tuple of strings.
 
 
 
 .. py:class:: DummyDatasetConfig
-
 
 
 
@@ -40,14 +226,13 @@ Classes
 
    This class is used to create a configuration object for the dummy dataset.
 
+
    .. py:attribute:: dataset_type
 
-      
 
    .. py:attribute:: raw_config
-      :type: dacapo.experiments.datasplits.datasets.arrays.ArrayConfig
+      :type:  dacapo.experiments.datasplits.datasets.arrays.ArrayConfig
 
-      
 
    .. py:method:: verify() -> Tuple[bool, str]
 

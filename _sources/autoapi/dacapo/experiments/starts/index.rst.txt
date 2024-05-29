@@ -1,26 +1,23 @@
-:py:mod:`dacapo.experiments.starts`
-===================================
+dacapo.experiments.starts
+=========================
 
 .. py:module:: dacapo.experiments.starts
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   cosem_start/index.rst
-   cosem_start_config/index.rst
-   start/index.rst
-   start_config/index.rst
+   /autoapi/dacapo/experiments/starts/cosem_start/index
+   /autoapi/dacapo/experiments/starts/cosem_start_config/index
+   /autoapi/dacapo/experiments/starts/start/index
+   /autoapi/dacapo/experiments/starts/start_config/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -30,10 +27,10 @@ Classes
    dacapo.experiments.starts.CosemStartConfig
 
 
-
+Package Contents
+----------------
 
 .. py:class:: Start(start_config)
-
 
 
 
@@ -73,6 +70,7 @@ Classes
    This class is used to retrieve and load the weights of the starter
    model used for finetuning from the dacapo store.
 
+
    .. py:method:: initialize_weights(model, new_head=None)
 
       Retrieves the weights from the dacapo store and load them into
@@ -106,7 +104,6 @@ Classes
 
 .. py:class:: StartConfig
 
-
    A class to represent the configuration for running tasks. This class
    interfaces with the dacapo store to retrieve and load the weights of the
    starter model used for finetuning.
@@ -132,23 +129,19 @@ Classes
 
    This class is used to represent the configuration for running tasks.
 
+
    .. py:attribute:: start_type
 
-      
 
    .. py:attribute:: run
-      :type: str
+      :type:  str
 
-      
 
    .. py:attribute:: criterion
-      :type: str
-
-      
+      :type:  str
 
 
 .. py:class:: CosemStart(start_config)
-
 
 
 
@@ -200,6 +193,7 @@ Classes
    This class is used to represent the starting point for tasks. The weights
    of the starter model used for finetuning are loaded from the dacapo store.
 
+
    .. py:method:: check()
 
       Checks if the checkpoint for the specified run and criterion exists.
@@ -215,6 +209,7 @@ Classes
 
       This function is called by the CosemStart class to check if the
       checkpoint for the specified run and criterion exists.
+
 
 
    .. py:method:: initialize_weights(model, new_head=None)
@@ -252,7 +247,6 @@ Classes
 
 
 
-
    Starter for COSEM pretained models. This is a subclass of `StartConfig` and
    should be used to initialize the model with pretrained weights from a previous
    run.
@@ -286,8 +280,7 @@ Classes
 
    This class is used to represent the configuration for running tasks.
 
-   .. py:attribute:: start_type
 
-      
+   .. py:attribute:: start_type
 
 

@@ -1,24 +1,343 @@
-:py:mod:`dacapo.experiments.validation_scores`
-==============================================
+dacapo.experiments.validation_scores
+====================================
 
 .. py:module:: dacapo.experiments.validation_scores
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.validation_scores.ValidationIterationScores
+   dacapo.experiments.validation_scores.EvaluationScores
+   dacapo.experiments.validation_scores.PostProcessorParameters
+   dacapo.experiments.validation_scores.Dataset
+   dacapo.experiments.validation_scores.ValidationScores
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: ValidationIterationScores
 
-.. autoapisummary::
+   A class used to represent the validation iteration scores in an organized structure.
 
-   dacapo.experiments.validation_scores.ValidationScores
+   .. attribute:: iteration
+
+      The iteration associated with these validation scores.
+
+      :type: int
+
+   .. attribute:: scores
+
+      A list of scores per dataset, post processor
+
+      :type: List[List[List[float]]]
+
+   .. attribute:: parameters, and evaluation criterion.
+
+      
+
+   .. note::
+
+      The scores list is structured as follows:
+      - The outer list contains the scores for each dataset.
+      - The middle list contains the scores for each post processor parameter.
+      - The inner list contains the scores for each evaluation criterion.
 
 
+   .. py:attribute:: iteration
+      :type:  int
+
+
+   .. py:attribute:: scores
+      :type:  List[List[List[float]]]
+
+
+.. py:class:: EvaluationScores
+
+   Base class for evaluation scores. This class is used to store the evaluation scores for a task.
+   The scores include the evaluation criteria. The class also provides methods to determine whether higher is better for a given criterion,
+   the bounds for a given criterion, and whether to store the best score for a given criterion.
+
+   .. attribute:: criteria
+
+      List[str]
+      the evaluation criteria
+
+   .. method:: higher_is_better(criterion)
+
+      
+      Return whether higher is better for the given criterion.
+
+   .. method:: bounds(criterion)
+
+      
+      Return the bounds for the given criterion.
+
+   .. method:: store_best(criterion)
+
+      
+      Return whether to store the best score for the given criterion.
+
+   .. note:: The EvaluationScores class is used to store the evaluation scores for a task. All evaluation scores should inherit from this class.
+
+
+   .. py:property:: criteria
+      :type: List[str]
+
+      :abstractmethod:
+
+      The evaluation criteria.
+
+      :returns:
+
+                List[str]
+                    the evaluation criteria
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> evaluation_scores.criteria
+      ["criterion1", "criterion2"]
+
+      .. note:: This function is used to return the evaluation criteria.
+
+
+   .. py:method:: higher_is_better(criterion: str) -> bool
+      :staticmethod:
+
+      :abstractmethod:
+
+
+      Wether or not higher is better for this criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether higher is better for this criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> criterion = "criterion1"
+      >>> evaluation_scores.higher_is_better(criterion)
+      True
+
+      .. note:: This function is used to determine whether higher is better for a given criterion.
+
+
+
+   .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
+      :staticmethod:
+
+      :abstractmethod:
+
+
+      The bounds for this criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                Tuple[Union[int, float, None], Union[int, float, None]]
+                    the bounds for this criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> criterion = "criterion1"
+      >>> evaluation_scores.bounds(criterion)
+      (0, 1)
+
+      .. note:: This function is used to return the bounds for the given criterion.
+
+
+
+   .. py:method:: store_best(criterion: str) -> bool
+      :staticmethod:
+
+      :abstractmethod:
+
+
+      Whether or not to save the best validation block and model
+      weights for this criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether to store the best score for this criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> criterion = "criterion1"
+      >>> evaluation_scores.store_best(criterion)
+      True
+
+      .. note:: This function is used to return whether to store the best score for the given criterion.
+
+
+
+.. py:class:: PostProcessorParameters
+
+   Base class for post-processor parameters. Post-processor parameters are
+   immutable objects that define the parameters of a post-processor. The
+   parameters are used to configure the post-processor.
+
+   .. attribute:: id
+
+      The identifier of the post-processor parameter.
+
+   .. method:: parameter_names
+
+      Get the names of the parameters.
+
+   .. note::
+
+      This class is immutable. Once created, the values of its attributes
+      cannot be changed.
+
+
+   .. py:attribute:: id
+      :type:  int
+
+
+   .. py:property:: parameter_names
+      :type: List[str]
+
+      Get the names of the parameters.
+
+      :returns: A list of parameter names.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> parameters = PostProcessorParameters(0)
+      >>> parameters.parameter_names
+      ["id"]
+
+      .. note::
+
+         This method must be implemented in the subclass. It should return a
+         list of parameter names.
+
+
+.. py:class:: Dataset
+
+
+
+   A class to represent a dataset.
+
+   .. attribute:: name
+
+      The name of the dataset.
+
+      :type: str
+
+   .. attribute:: raw
+
+      The raw dataset.
+
+      :type: Array
+
+   .. attribute:: gt
+
+      The ground truth data.
+
+      :type: Array, optional
+
+   .. attribute:: mask
+
+      The mask for the data.
+
+      :type: Array, optional
+
+   .. attribute:: weight
+
+      The weight of the dataset.
+
+      :type: int, optional
+
+   .. attribute:: sample_points
+
+      The list of sample points in the dataset.
+
+      :type: list[Coordinate], optional
+
+   .. method:: __eq__(other)
+
+      
+      Overloaded equality operator for dataset objects.
+
+   .. method:: __hash__()
+
+      
+      Calculates a hash for the dataset.
+
+   .. method:: __repr__()
+
+      
+      Returns the official string representation of the dataset object.
+
+   .. method:: __str__()
+
+      
+      Returns the string representation of the dataset object.
+
+   .. method:: _neuroglancer_layers(prefix="", exclude_layers=None)
+
+      
+      Generates neuroglancer layers for raw, gt and mask if they can be viewed by neuroglance, excluding those in
+      the exclude_layers.
+
+   .. rubric:: Notes
+
+   This class is a base class and should not be instantiated.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: raw
+      :type:  dacapo.experiments.datasplits.datasets.arrays.Array
+
+
+   .. py:attribute:: gt
+      :type:  Optional[dacapo.experiments.datasplits.datasets.arrays.Array]
+
+
+   .. py:attribute:: mask
+      :type:  Optional[dacapo.experiments.datasplits.datasets.arrays.Array]
+
+
+   .. py:attribute:: weight
+      :type:  Optional[int]
+
+
+   .. py:attribute:: sample_points
+      :type:  Optional[List[funlib.geometry.Coordinate]]
 
 
 .. py:class:: ValidationScores
-
 
    Class representing the validation scores for a set of parameters and datasets.
 
@@ -89,61 +408,22 @@ Classes
    The `scores` attribute is a list of `ValidationIterationScores` objects, each of which
    contains the scores for a single iteration.
 
-   .. py:property:: criteria
-      :type: List[str]
-
-      Get the list of evaluation criteria.
-
-      :returns: The list of evaluation criteria.
-
-      :raises ValueError: If there are no scores.
-
-      .. rubric:: Examples
-
-      >>> validation_scores.criteria
-
-      .. note::
-
-         This property is used to get the list of evaluation criteria. This is useful when you
-         want to know what criteria are being used to evaluate the scores.
-
-   .. py:property:: parameter_names
-      :type: List[str]
-
-      Get the list of parameter names.
-
-      :returns: The list of parameter names.
-
-      :raises ValueError: If there are no scores.
-
-      .. rubric:: Examples
-
-      >>> validation_scores.parameter_names
-
-      .. note::
-
-         This property is used to get the list of parameter names. This is useful when you want
-         to know what parameters are being used to evaluate the scores.
 
    .. py:attribute:: parameters
-      :type: List[dacapo.experiments.tasks.post_processors.PostProcessorParameters]
+      :type:  List[dacapo.experiments.tasks.post_processors.PostProcessorParameters]
 
-      
 
    .. py:attribute:: datasets
-      :type: List[dacapo.experiments.datasplits.datasets.Dataset]
+      :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
 
-      
 
    .. py:attribute:: evaluation_scores
-      :type: dacapo.experiments.tasks.evaluators.EvaluationScores
+      :type:  dacapo.experiments.tasks.evaluators.EvaluationScores
 
-      
 
    .. py:attribute:: scores
-      :type: List[dacapo.experiments.validation_iteration_scores.ValidationIterationScores]
+      :type:  List[dacapo.experiments.validation_iteration_scores.ValidationIterationScores]
 
-      
 
    .. py:method:: subscores(iteration_scores: List[dacapo.experiments.validation_iteration_scores.ValidationIterationScores]) -> ValidationScores
 
@@ -166,6 +446,7 @@ Classes
          that only contains the scores up to a certain iteration.
 
 
+
    .. py:method:: add_iteration_scores(iteration_scores: dacapo.experiments.validation_iteration_scores.ValidationIterationScores) -> None
 
       Add iteration scores to the list of scores.
@@ -182,6 +463,7 @@ Classes
 
          This method is used to add iteration scores to the list of scores. This is useful when
          you want to add scores for a new iteration to the ValidationScores object.
+
 
 
    .. py:method:: delete_after(iteration: int) -> None
@@ -202,6 +484,7 @@ Classes
          you want to delete scores after a certain iteration.
 
 
+
    .. py:method:: validated_until() -> int
 
       Get the number of iterations validated for (the maximum iteration plus one).
@@ -218,6 +501,7 @@ Classes
 
          This method is used to get the number of iterations validated for (the maximum iteration
          plus one). This is useful when you want to know how many iterations have been validated.
+
 
 
    .. py:method:: compare(existing_iteration_scores: List[dacapo.experiments.validation_iteration_scores.ValidationIterationScores]) -> Tuple[bool, int]
@@ -247,6 +531,45 @@ Classes
          existing iteration, just update existing scores with the last overhanging local scores.
 
 
+
+   .. py:property:: criteria
+      :type: List[str]
+
+      Get the list of evaluation criteria.
+
+      :returns: The list of evaluation criteria.
+
+      :raises ValueError: If there are no scores.
+
+      .. rubric:: Examples
+
+      >>> validation_scores.criteria
+
+      .. note::
+
+         This property is used to get the list of evaluation criteria. This is useful when you
+         want to know what criteria are being used to evaluate the scores.
+
+
+   .. py:property:: parameter_names
+      :type: List[str]
+
+      Get the list of parameter names.
+
+      :returns: The list of parameter names.
+
+      :raises ValueError: If there are no scores.
+
+      .. rubric:: Examples
+
+      >>> validation_scores.parameter_names
+
+      .. note::
+
+         This property is used to get the list of parameter names. This is useful when you want
+         to know what parameters are being used to evaluate the scores.
+
+
    .. py:method:: to_xarray() -> xarray.DataArray
 
       Convert the validation scores to an xarray DataArray.
@@ -263,6 +586,7 @@ Classes
 
          This method is used to convert the validation scores to an xarray DataArray. This is
          useful when you want to work with the validation scores as an xarray DataArray.
+
 
 
    .. py:method:: get_best(data: xarray.DataArray, dim: str) -> Tuple[xarray.DataArray, xarray.DataArray]

@@ -1,24 +1,21 @@
-:py:mod:`dacapo.blockwise.blockwise_task`
-=========================================
+dacapo.blockwise.blockwise_task
+===============================
 
 .. py:module:: dacapo.blockwise.blockwise_task
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.blockwise.blockwise_task.DaCapoBlockwiseTask
 
 
-
+Module Contents
+---------------
 
 .. py:class:: DaCapoBlockwiseTask(worker_file: str | upath.UPath, total_roi: daisy.Roi, read_roi: daisy.Roi, write_roi: daisy.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, *args, **kwargs)
-
 
 
 

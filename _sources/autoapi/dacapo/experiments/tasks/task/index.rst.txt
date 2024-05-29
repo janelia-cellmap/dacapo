@@ -1,59 +1,949 @@
-:py:mod:`dacapo.experiments.tasks.task`
-=======================================
+dacapo.experiments.tasks.task
+=============================
 
 .. py:module:: dacapo.experiments.tasks.task
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.task.Predictor
+   dacapo.experiments.tasks.task.Loss
+   dacapo.experiments.tasks.task.Evaluator
+   dacapo.experiments.tasks.task.EvaluationScores
+   dacapo.experiments.tasks.task.PostProcessor
+   dacapo.experiments.tasks.task.PostProcessorParameters
+   dacapo.experiments.tasks.task.Task
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.experiments.tasks.task.Task
+.. py:class:: Predictor
 
 
+
+   A predictor is a class that defines how to train a model to predict a
+   certain output from a certain input.
+
+   A predictor is responsible for creating the model, the target, the weight,
+   and the output array type for a given training architecture.
+
+   .. method:: create_model(self, architecture
+
+      "Architecture") -> "Model": Given a training architecture, create a model for this predictor.
+
+   .. method:: create_target(self, gt
+
+      "Array") -> "Array": Create the target array for training, given a ground-truth array.
+
+   .. method:: create_weight(self, gt
+
+      "Array", target: "Array", mask: "Array", moving_class_counts: Any) -> Tuple["Array", Any]: Create the weight array for training, given a ground-truth and associated target array.
+
+   .. method:: gt_region_for_roi(self, target_spec)
+
+      Report how much spatial context this predictor needs to generate a target for the given ROI.
+
+   .. method:: padding(self, gt_voxel_size
+
+      Coordinate) -> Coordinate: Return the padding needed for the ground-truth array.
+
+   .. rubric:: Notes
+
+   This is a subclass of ABC.
+
+
+   .. py:method:: create_model(architecture: dacapo.experiments.architectures.architecture.Architecture) -> dacapo.experiments.model.Model
+      :abstractmethod:
+
+
+      Given a training architecture, create a model for this predictor.
+      This is usually done by appending extra layers to the output of the
+      architecture to get the output tensor of the architecture into the
+      right shape for this predictor.
+
+      :param architecture: The training architecture.
+
+      :returns: The model.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.create_model(architecture)
+
+
+
+   .. py:method:: create_target(gt: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.datasplits.datasets.arrays.Array
+      :abstractmethod:
+
+
+      Create the target array for training, given a ground-truth array.
+
+      In general, the target is different from the ground-truth.
+
+      The target is the array that is passed to the loss, and hence directly
+      compared to the prediction (i.e., the output of the model). Depending
+      on the predictor, the target can therefore be different from the
+      ground-truth (e.g., an instance segmentation ground-truth would have to
+      be converted into boundaries, if the model is predicting boundaries).
+
+      By default, it is assumed that the spatial dimensions of ground-truth
+      and target are the same.
+
+      If your predictor needs more ground-truth context to create a target
+      (e.g., because it predicts the distance to a boundary, up to a certain
+      threshold), you can request a larger ground-truth region. See method
+      ``gt_region_for_roi``.
+
+      :param gt: The ground-truth array.
+
+      :returns: The target array.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.create_target(gt)
+
+
+
+   .. py:method:: create_weight(gt: dacapo.experiments.datasplits.datasets.arrays.Array, target: dacapo.experiments.datasplits.datasets.arrays.Array, mask: dacapo.experiments.datasplits.datasets.arrays.Array, moving_class_counts: Any) -> Tuple[dacapo.experiments.datasplits.datasets.arrays.Array, Any]
+      :abstractmethod:
+
+
+      Create the weight array for training, given a ground-truth and
+      associated target array.
+
+      :param gt: The ground-truth array.
+      :param target: The target array.
+      :param mask: The mask array.
+      :param moving_class_counts: The moving class counts.
+
+      :returns: The weight array and the moving class counts.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.create_weight(gt, target, mask, moving_class_counts)
+
+
+
+   .. py:property:: output_array_type
+      :abstractmethod:
+
+
+
+   .. py:method:: gt_region_for_roi(target_spec)
+
+      Report how much spatial context this predictor needs to generate a
+      target for the given ROI. By default, uses the same ROI.
+
+      Overwrite this method to request ground-truth in a larger ROI, as
+      needed.
+
+      :param target_spec: The ROI for which the target is requested.
+
+      :returns: The ROI for which the ground-truth is requested.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.gt_region_for_roi(target_spec)
+
+
+
+   .. py:method:: padding(gt_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
+
+      Return the padding needed for the ground-truth array.
+
+      :param gt_voxel_size: The voxel size of the ground-truth array.
+
+      :returns: The padding needed for the ground-truth array.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.padding(gt_voxel_size)
+
+
+
+.. py:class:: Loss
+
+
+
+   A class used to represent a loss function. This class is an abstract class
+   that should be inherited by any loss function class.
+
+   .. method:: compute(prediction, target, weight) -> torch.Tensor
+
+      
+      Function to compute the loss for the provided prediction and target, with respect to the weight.
+
+   .. note::
+
+      This class is abstract. Subclasses must implement the abstract methods. Once created, the values of its attributes
+      cannot be changed.
+
+
+   .. py:method:: compute(prediction: torch.Tensor, target: torch.Tensor, weight: Optional[torch.Tensor] = None) -> torch.Tensor
+      :abstractmethod:
+
+
+      Compute the loss for the given prediction and target. Optionally, if
+      given, a loss weight should be considered.
+
+      All arguments are ``torch`` tensors. The return type should be a
+      ``torch`` scalar that can be used with an optimizer, just as usual when
+      training with ``torch``.
+
+      :param prediction: The predicted tensor.
+      :param target: The target tensor.
+      :param weight: The weight tensor.
+
+      :returns: The computed loss tensor.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> loss = MSELoss()
+      >>> prediction = torch.tensor([1.0, 2.0, 3.0])
+      >>> target = torch.tensor([1.0, 2.0, 3.0])
+      >>> weight = torch.tensor([1.0, 1.0, 1.0])
+      >>> loss.compute(prediction, target, weight)
+      tensor(0.)
+
+      .. note::
+
+         This method must be implemented in the subclass. It should return the
+         computed loss tensor.
+
+
+
+.. py:class:: Evaluator
+
+
+
+   Base class of all evaluators: An abstract class representing an evaluator that compares and evaluates the output array against the evaluation array.
+
+   An evaluator takes a post-processor's output and compares it against
+   ground-truth. It then returns a set of scores that can be used to
+   determine the quality of the post-processor's output.
+
+   .. attribute:: best_scores
+
+      Dict[OutputIdentifier, BestScore]
+      the best scores for each dataset/post-processing parameter/criterion combination
+
+   .. method:: evaluate(output_array_identifier, evaluation_array)
+
+      
+      Compare and evaluate the output array against the evaluation array.
+
+   .. method:: is_best(dataset, parameter, criterion, score)
+
+      
+      Check if the provided score is the best for this dataset/parameter/criterion combo.
+
+   .. method:: get_overall_best(dataset, criterion)
+
+      
+      Return the best score for the given dataset and criterion.
+
+   .. method:: get_overall_best_parameters(dataset, criterion)
+
+      
+      Return the best parameters for the given dataset and criterion.
+
+   .. method:: compare(score_1, score_2, criterion)
+
+      
+      Compare two scores for the given criterion.
+
+   .. method:: set_best(validation_scores)
+
+      
+      Find the best iteration for each dataset/post_processing_parameter/criterion.
+
+   .. method:: higher_is_better(criterion)
+
+      
+      Return whether higher is better for the given criterion.
+
+   .. method:: bounds(criterion)
+
+      
+      Return the bounds for the given criterion.
+
+   .. method:: store_best(criterion)
+
+      
+      Return whether to store the best score for the given criterion.
+
+   .. note:: The Evaluator class is used to compare and evaluate the output array against the evaluation array.
+
+
+   .. py:method:: evaluate(output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, evaluation_array: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
+      :abstractmethod:
+
+
+      Compares and evaluates the output array against the evaluation array.
+
+      :param output_array_identifier: LocalArrayIdentifier
+                                      The identifier of the output array.
+      :param evaluation_array: Array
+                               The evaluation array.
+
+      :returns:
+
+                EvaluationScores
+                    The evaluation scores.
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> output_array_identifier = LocalArrayIdentifier("output_array")
+      >>> evaluation_array = Array()
+      >>> evaluator.evaluate(output_array_identifier, evaluation_array)
+      EvaluationScores()
+
+      .. note:: This function is used to compare and evaluate the output array against the evaluation array.
+
+
+
+   .. py:property:: best_scores
+      :type: Dict[OutputIdentifier, BestScore]
+
+      The best scores for each dataset/post-processing parameter/criterion combination.
+
+      :returns:
+
+                Dict[OutputIdentifier, BestScore]
+                    the best scores for each dataset/post-processing parameter/criterion combination
+
+      :raises AttributeError: if the best scores are not set
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> evaluator.best_scores
+      {}
+
+      .. note:: This function is used to return the best scores for each dataset/post-processing parameter/criterion combination.
+
+
+   .. py:method:: is_best(dataset: dacapo.experiments.datasplits.datasets.Dataset, parameter: dacapo.experiments.tasks.post_processors.PostProcessorParameters, criterion: str, score: dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores) -> bool
+
+      Check if the provided score is the best for this dataset/parameter/criterion combo.
+
+      :param dataset: Dataset
+                      the dataset
+      :param parameter: PostProcessorParameters
+                        the post-processor parameters
+      :param criterion: str
+                        the criterion
+      :param score: EvaluationScores
+                    the evaluation scores
+
+      :returns:
+
+                bool
+                    whether the provided score is the best for this dataset/parameter/criterion combo
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> dataset = Dataset()
+      >>> parameter = PostProcessorParameters()
+      >>> criterion = "criterion"
+      >>> score = EvaluationScores()
+      >>> evaluator.is_best(dataset, parameter, criterion, score)
+      False
+
+      .. note:: This function is used to check if the provided score is the best for this dataset/parameter/criterion combo.
+
+
+
+   .. py:method:: get_overall_best(dataset: dacapo.experiments.datasplits.datasets.Dataset, criterion: str)
+
+      Return the best score for the given dataset and criterion.
+
+      :param dataset: Dataset
+                      the dataset
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                Optional[float]
+                    the best score for the given dataset and criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> dataset = Dataset()
+      >>> criterion = "criterion"
+      >>> evaluator.get_overall_best(dataset, criterion)
+      None
+
+      .. note:: This function is used to return the best score for the given dataset and criterion.
+
+
+
+   .. py:method:: get_overall_best_parameters(dataset: dacapo.experiments.datasplits.datasets.Dataset, criterion: str)
+
+      Return the best parameters for the given dataset and criterion.
+
+      :param dataset: Dataset
+                      the dataset
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                Optional[PostProcessorParameters]
+                    the best parameters for the given dataset and criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> dataset = Dataset()
+      >>> criterion = "criterion"
+      >>> evaluator.get_overall_best_parameters(dataset, criterion)
+      None
+
+      .. note:: This function is used to return the best parameters for the given dataset and criterion.
+
+
+
+   .. py:method:: compare(score_1, score_2, criterion)
+
+      Compare two scores for the given criterion.
+
+      :param score_1: float
+                      the first score
+      :param score_2: float
+                      the second score
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                bool
+                    whether the first score is better than the second score for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> score_1 = 0.0
+      >>> score_2 = 0.0
+      >>> criterion = "criterion"
+      >>> evaluator.compare(score_1, score_2, criterion)
+      False
+
+      .. note:: This function is used to compare two scores for the given criterion.
+
+
+
+   .. py:method:: set_best(validation_scores: dacapo.experiments.validation_scores.ValidationScores) -> None
+
+      Find the best iteration for each dataset/post_processing_parameter/criterion.
+
+      :param validation_scores: ValidationScores
+                                the validation scores
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> validation_scores = ValidationScores()
+      >>> evaluator.set_best(validation_scores)
+      None
+
+      .. note::
+
+         This function is used to find the best iteration for each dataset/post_processing_parameter/criterion.
+         Typically, this function is called after the validation scores have been computed.
+
+
+
+   .. py:property:: criteria
+      :type: List[str]
+
+      :abstractmethod:
+
+      A list of all criteria for which a model might be "best". i.e. your
+      criteria might be "precision", "recall", and "jaccard". It is unlikely
+      that the best iteration/post processing parameters will be the same
+      for all 3 of these criteria
+
+      :returns:
+
+                List[str]
+                    the evaluation criteria
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> evaluator.criteria
+      []
+
+      .. note:: This function is used to return the evaluation criteria.
+
+
+   .. py:method:: higher_is_better(criterion: str) -> bool
+
+      Wether or not higher is better for this criterion.
+
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                bool
+                    whether higher is better for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> criterion = "criterion"
+      >>> evaluator.higher_is_better(criterion)
+      False
+
+      .. note:: This function is used to determine whether higher is better for the given criterion.
+
+
+
+   .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
+
+      The bounds for this criterion
+
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                Tuple[Union[int, float, None], Union[int, float, None]]
+                    the bounds for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> criterion = "criterion"
+      >>> evaluator.bounds(criterion)
+      (0, 1)
+
+      .. note:: This function is used to return the bounds for the given criterion.
+
+
+
+   .. py:method:: store_best(criterion: str) -> bool
+
+      The bounds for this criterion
+
+      :param criterion: str
+                        the criterion
+
+      :returns:
+
+                bool
+                    whether to store the best score for the given criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> criterion = "criterion"
+      >>> evaluator.store_best(criterion)
+      False
+
+      .. note:: This function is used to return whether to store the best score for the given criterion.
+
+
+
+   .. py:property:: score
+      :type: dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
+
+      :abstractmethod:
+
+      The evaluation scores.
+
+      :returns:
+
+                EvaluationScores
+                    the evaluation scores
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluator = Evaluator()
+      >>> evaluator.score
+      EvaluationScores()
+
+      .. note:: This function is used to return the evaluation scores.
+
+
+.. py:class:: EvaluationScores
+
+   Base class for evaluation scores. This class is used to store the evaluation scores for a task.
+   The scores include the evaluation criteria. The class also provides methods to determine whether higher is better for a given criterion,
+   the bounds for a given criterion, and whether to store the best score for a given criterion.
+
+   .. attribute:: criteria
+
+      List[str]
+      the evaluation criteria
+
+   .. method:: higher_is_better(criterion)
+
+      
+      Return whether higher is better for the given criterion.
+
+   .. method:: bounds(criterion)
+
+      
+      Return the bounds for the given criterion.
+
+   .. method:: store_best(criterion)
+
+      
+      Return whether to store the best score for the given criterion.
+
+   .. note:: The EvaluationScores class is used to store the evaluation scores for a task. All evaluation scores should inherit from this class.
+
+
+   .. py:property:: criteria
+      :type: List[str]
+
+      :abstractmethod:
+
+      The evaluation criteria.
+
+      :returns:
+
+                List[str]
+                    the evaluation criteria
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> evaluation_scores.criteria
+      ["criterion1", "criterion2"]
+
+      .. note:: This function is used to return the evaluation criteria.
+
+
+   .. py:method:: higher_is_better(criterion: str) -> bool
+      :staticmethod:
+
+      :abstractmethod:
+
+
+      Wether or not higher is better for this criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether higher is better for this criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> criterion = "criterion1"
+      >>> evaluation_scores.higher_is_better(criterion)
+      True
+
+      .. note:: This function is used to determine whether higher is better for a given criterion.
+
+
+
+   .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
+      :staticmethod:
+
+      :abstractmethod:
+
+
+      The bounds for this criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                Tuple[Union[int, float, None], Union[int, float, None]]
+                    the bounds for this criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> criterion = "criterion1"
+      >>> evaluation_scores.bounds(criterion)
+      (0, 1)
+
+      .. note:: This function is used to return the bounds for the given criterion.
+
+
+
+   .. py:method:: store_best(criterion: str) -> bool
+      :staticmethod:
+
+      :abstractmethod:
+
+
+      Whether or not to save the best validation block and model
+      weights for this criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether to store the best score for this criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> criterion = "criterion1"
+      >>> evaluation_scores.store_best(criterion)
+      True
+
+      .. note:: This function is used to return whether to store the best score for the given criterion.
+
+
+
+.. py:class:: PostProcessor
+
+
+
+   Base class of all post-processors.
+
+   A post-processor takes a model's prediction and converts it into the final
+   output (e.g., per-voxel class probabilities into a semantic segmentation). A
+   post-processor can have multiple parameters, which can be enumerated using
+   the `enumerate_parameters` method. The `process` method takes a set of
+   parameters and applies the post-processing to the prediction.
+
+   .. attribute:: prediction_array_identifier
+
+      The identifier of the array containing the
+      model's prediction.
+
+   .. method:: enumerate_parameters
+
+      Enumerate all possible parameters of this
+      post-processor.
+
+   .. method:: set_prediction
+
+      Set the prediction array identifier.
+
+   .. method:: process
+
+      Convert predictions into the final output.
+
+   .. note::
+
+      This class is abstract. Subclasses must implement the abstract methods. Once
+      created, the values of its attributes cannot be changed.
+
+
+   .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters]
+      :abstractmethod:
+
+
+      Enumerate all possible parameters of this post-processor.
+
+      :returns: An iterable of `PostProcessorParameters` instances.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> post_processor = MyPostProcessor()
+      >>> for parameters in post_processor.enumerate_parameters():
+      ...     print(parameters)
+      MyPostProcessorParameters(param1=0.0, param2=0.0)
+      MyPostProcessorParameters(param1=0.0, param2=1.0)
+      MyPostProcessorParameters(param1=1.0, param2=0.0)
+      MyPostProcessorParameters(param1=1.0, param2=1.0)
+
+      .. note::
+
+         This method must be implemented in the subclass. It should return an
+         iterable of `PostProcessorParameters` instances.
+
+
+
+   .. py:method:: set_prediction(prediction_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier) -> None
+      :abstractmethod:
+
+
+      Set the prediction array identifier.
+
+      :param prediction_array_identifier: The identifier of the array containing
+                                          the model's prediction.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> post_processor = MyPostProcessor()
+      >>> post_processor.set_prediction("prediction")
+
+      .. note::
+
+         This method must be implemented in the subclass. It should set the
+         `prediction_array_identifier` attribute.
+
+
+
+   .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters, output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, num_workers: int = 16, chunk_size: funlib.geometry.Coordinate = Coordinate((64, 64, 64))) -> dacapo.experiments.datasplits.datasets.arrays.Array
+      :abstractmethod:
+
+
+      Convert predictions into the final output.
+
+      :param parameters: The parameters of the post-processor.
+      :param output_array_identifier: The identifier of the array to store the
+                                      output.
+      :param num_workers: The number of workers to use.
+      :param chunk_size: The size of the chunks to process.
+
+      :returns: The output array.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> post_processor = MyPostProcessor()
+      >>> post_processor.set_prediction("prediction")
+      >>> parameters = MyPostProcessorParameters(param1=0.0, param2=0.0)
+      >>> output = post_processor.process(parameters, "output")
+
+      .. note::
+
+         This method must be implemented in the subclass. It should convert the
+         model's prediction into the final output.
+
+
+
+.. py:class:: PostProcessorParameters
+
+   Base class for post-processor parameters. Post-processor parameters are
+   immutable objects that define the parameters of a post-processor. The
+   parameters are used to configure the post-processor.
+
+   .. attribute:: id
+
+      The identifier of the post-processor parameter.
+
+   .. method:: parameter_names
+
+      Get the names of the parameters.
+
+   .. note::
+
+      This class is immutable. Once created, the values of its attributes
+      cannot be changed.
+
+
+   .. py:attribute:: id
+      :type:  int
+
+
+   .. py:property:: parameter_names
+      :type: List[str]
+
+      Get the names of the parameters.
+
+      :returns: A list of parameter names.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> parameters = PostProcessorParameters(0)
+      >>> parameters.parameter_names
+      ["id"]
+
+      .. note::
+
+         This method must be implemented in the subclass. It should return a
+         list of parameter names.
 
 
 .. py:class:: Task
 
 
 
-
    Helper class that provides a standard way to create an ABC using
    inheritance.
 
+
+   .. py:attribute:: predictor
+      :type:  dacapo.experiments.tasks.predictors.Predictor
+
+
+   .. py:attribute:: loss
+      :type:  dacapo.experiments.tasks.losses.Loss
+
+
+   .. py:attribute:: evaluator
+      :type:  dacapo.experiments.tasks.evaluators.Evaluator
+
+
+   .. py:attribute:: post_processor
+      :type:  dacapo.experiments.tasks.post_processors.PostProcessor
+
+
    .. py:property:: parameters
       :type: Iterable[dacapo.experiments.tasks.post_processors.PostProcessorParameters]
+
 
 
    .. py:property:: evaluation_scores
       :type: dacapo.experiments.tasks.evaluators.EvaluationScores
 
 
-   .. py:attribute:: predictor
-      :type: dacapo.experiments.tasks.predictors.Predictor
-
-      
-
-   .. py:attribute:: loss
-      :type: dacapo.experiments.tasks.losses.Loss
-
-      
-
-   .. py:attribute:: evaluator
-      :type: dacapo.experiments.tasks.evaluators.Evaluator
-
-      
-
-   .. py:attribute:: post_processor
-      :type: dacapo.experiments.tasks.post_processors.PostProcessor
-
-      
 
    .. py:method:: create_model(architecture)
-
 
 

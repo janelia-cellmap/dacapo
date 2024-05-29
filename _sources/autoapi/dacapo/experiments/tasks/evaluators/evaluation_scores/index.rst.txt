@@ -1,24 +1,21 @@
-:py:mod:`dacapo.experiments.tasks.evaluators.evaluation_scores`
-===============================================================
+dacapo.experiments.tasks.evaluators.evaluation_scores
+=====================================================
 
 .. py:module:: dacapo.experiments.tasks.evaluators.evaluation_scores
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
 
 
-
+Module Contents
+---------------
 
 .. py:class:: EvaluationScores
-
 
    Base class for evaluation scores. This class is used to store the evaluation scores for a task.
    The scores include the evaluation criteria. The class also provides methods to determine whether higher is better for a given criterion,
@@ -46,8 +43,10 @@ Classes
 
    .. note:: The EvaluationScores class is used to store the evaluation scores for a task. All evaluation scores should inherit from this class.
 
+
    .. py:property:: criteria
       :type: List[str]
+
       :abstractmethod:
 
       The evaluation criteria.
@@ -67,9 +66,12 @@ Classes
 
       .. note:: This function is used to return the evaluation criteria.
 
+
    .. py:method:: higher_is_better(criterion: str) -> bool
       :staticmethod:
+
       :abstractmethod:
+
 
       Wether or not higher is better for this criterion.
 
@@ -93,9 +95,12 @@ Classes
       .. note:: This function is used to determine whether higher is better for a given criterion.
 
 
+
    .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
       :staticmethod:
+
       :abstractmethod:
+
 
       The bounds for this criterion.
 
@@ -119,9 +124,12 @@ Classes
       .. note:: This function is used to return the bounds for the given criterion.
 
 
+
    .. py:method:: store_best(criterion: str) -> bool
       :staticmethod:
+
       :abstractmethod:
+
 
       Whether or not to save the best validation block and model
       weights for this criterion.

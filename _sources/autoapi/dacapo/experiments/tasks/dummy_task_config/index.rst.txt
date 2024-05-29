@@ -1,24 +1,104 @@
-:py:mod:`dacapo.experiments.tasks.dummy_task_config`
-====================================================
+dacapo.experiments.tasks.dummy_task_config
+==========================================
 
 .. py:module:: dacapo.experiments.tasks.dummy_task_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.dummy_task_config.DummyTask
+   dacapo.experiments.tasks.dummy_task_config.TaskConfig
+   dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: DummyTask(task_config)
 
-.. autoapisummary::
 
-   dacapo.experiments.tasks.dummy_task_config.DummyTaskConfig
 
+   A dummy task class that initializes all components (predictor, loss,
+   post-processing, and evaluator) for the dummy task. Primarily used for testing purposes.
+   Inherits from the Task class.
+
+   .. attribute:: predictor
+
+      Object
+      Instance of DummyPredictor class.
+
+   .. attribute:: loss
+
+      Object
+      Instance of DummyLoss class.
+
+   .. attribute:: post_processor
+
+      Object
+      Instance of DummyPostProcessor class.
+
+   .. attribute:: evaluator
+
+      Object
+      Instance of DummyEvaluator class.
+
+   .. method:: __init__(self, task_config)
+
+      
+      Initializes all components for the dummy task.
+
+   .. rubric:: Notes
+
+   This is a subclass of Task.
+
+
+.. py:class:: TaskConfig
+
+   Base class for task configurations. Each subclass of a `Task` should
+   have a corresponding config class derived from `TaskConfig`.
+
+   .. attribute:: name
+
+      A unique name for this task. This will be saved so you and
+      others can find and reuse this task. Keep it short and avoid
+      special characters.
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method verifies the TaskConfig object.
+
+   .. rubric:: Notes
+
+   This is a base class for all task configurations. It is not meant to be
+   used directly.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Task
+
+      :returns:
+
+                A tuple containing a boolean value indicating whether the TaskConfig object is valid
+                    and a string containing the reason why the object is invalid.
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> valid, reason = task_config.verify()
 
 
 
 .. py:class:: DummyTaskConfig
-
 
 
 
@@ -52,19 +132,17 @@ Classes
 
    .. note:: This is a subclass of TaskConfig.
 
+
    .. py:attribute:: task_type
 
-      
 
    .. py:attribute:: embedding_dims
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: detection_threshold
-      :type: float
+      :type:  float
 
-      
 
    .. py:method:: verify() -> Tuple[bool, str]
 

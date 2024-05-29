@@ -1,24 +1,169 @@
-:py:mod:`dacapo.experiments.architectures.dummy_architecture_config`
-====================================================================
+dacapo.experiments.architectures.dummy_architecture_config
+==========================================================
 
 .. py:module:: dacapo.experiments.architectures.dummy_architecture_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.architectures.dummy_architecture_config.DummyArchitecture
+   dacapo.experiments.architectures.dummy_architecture_config.ArchitectureConfig
+   dacapo.experiments.architectures.dummy_architecture_config.DummyArchitectureConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: DummyArchitecture(architecture_config)
 
-.. autoapisummary::
 
-   dacapo.experiments.architectures.dummy_architecture_config.DummyArchitectureConfig
 
+   A class used to represent a dummy architecture layer for a 3D CNN.
+
+   .. attribute:: channels_in
+
+      An integer representing the number of input channels.
+
+   .. attribute:: channels_out
+
+      An integer representing the number of output channels.
+
+   .. attribute:: conv
+
+      A 3D convolution object.
+
+   .. attribute:: input_shape
+
+      A coordinate object representing the shape of the input.
+
+   .. method:: forward(x)
+
+      Performs the forward pass of the network.
+
+   .. method:: num_in_channels()
+
+      Returns the number of input channels for this architecture.
+
+   .. method:: num_out_channels()
+
+      Returns the number of output channels for this architecture.
+
+   .. note:: This class is used to represent a dummy architecture layer for a 3D CNN.
+
+
+   .. py:property:: input_shape
+      Returns the input shape for this architecture.
+
+      :returns: Input shape of the architecture.
+      :rtype: Coordinate
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> dummy_architecture.input_shape
+      Coordinate(x=40, y=20, z=20)
+
+      .. note:: This method is used to return the input shape for this architecture.
+
+
+   .. py:property:: num_in_channels
+      Returns the number of input channels for this architecture.
+
+      :returns: Number of input channels.
+      :rtype: int
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> dummy_architecture.num_in_channels
+      1
+
+      .. note:: This method is used to return the number of input channels for this architecture.
+
+
+   .. py:property:: num_out_channels
+      Returns the number of output channels for this architecture.
+
+      :returns: Number of output channels.
+      :rtype: int
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> dummy_architecture.num_out_channels
+      1
+
+      .. note:: This method is used to return the number of output channels for this architecture.
+
+
+   .. py:method:: forward(x)
+
+      Perform the forward pass of the network.
+
+      :param x: Input tensor.
+
+      :returns: Output tensor after the forward pass.
+      :rtype: Tensor
+
+      :raises NotImplementedError: This method is not implemented in this class.
+
+      .. rubric:: Examples
+
+      >>> dummy_architecture = DummyArchitecture(architecture_config)
+      >>> x = torch.randn(1, 1, 40, 20, 20)
+      >>> dummy_architecture.forward(x)
+
+      .. note:: This method is used to perform the forward pass of the network.
+
+
+
+.. py:class:: ArchitectureConfig
+
+   A class to represent the base configurations of any architecture. It is used to define the architecture of a neural network model.
+
+   .. attribute:: name
+
+      str
+      a unique name for the architecture.
+
+   .. method:: verify()
+
+      
+      validates the given architecture.
+
+   .. note:: The class is abstract and requires to implement the abstract methods.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      A method to validate an architecture configuration.
+
+      :returns: A tuple of a boolean indicating if the architecture is valid and a message.
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: If the method is not implemented in the derived class.
+
+      .. rubric:: Examples
+
+      >>> config = ArchitectureConfig("MyModel")
+      >>> is_valid, message = config.verify()
+      >>> print(is_valid, message)
+
+      .. note:: The method should be implemented in the derived class.
 
 
 
 .. py:class:: DummyArchitectureConfig
-
 
 
 
@@ -54,19 +199,17 @@ Classes
 
    .. note:: This class is used to represent a DummyArchitectureConfig object in the system.
 
+
    .. py:attribute:: architecture_type
 
-      
 
    .. py:attribute:: num_in_channels
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: num_out_channels
-      :type: int
+      :type:  int
 
-      
 
    .. py:method:: verify() -> Tuple[bool, str]
 

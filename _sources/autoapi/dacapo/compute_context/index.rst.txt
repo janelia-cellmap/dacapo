@@ -1,25 +1,22 @@
-:py:mod:`dacapo.compute_context`
-================================
+dacapo.compute_context
+======================
 
 .. py:module:: dacapo.compute_context
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   bsub/index.rst
-   compute_context/index.rst
-   local_torch/index.rst
+   /autoapi/dacapo/compute_context/bsub/index
+   /autoapi/dacapo/compute_context/compute_context/index
+   /autoapi/dacapo/compute_context/local_torch/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -28,23 +25,44 @@ Classes
    dacapo.compute_context.Bsub
 
 
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
    dacapo.compute_context.create_compute_context
 
 
+Package Contents
+----------------
 
 .. py:class:: ComputeContext
 
 
 
+   The ComputeContext class is an abstract base class for defining the context in which computations are to be done.
+   It is inherited from the built-in class `ABC` (Abstract Base Classes). Other classes can inherit this class to define
+   their own specific variations of the context. It requires to implement several property methods, and also includes
+   additional methods related to the context design.
 
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+   .. attribute:: device
+
+      The device on which computations are to be done.
+
+   .. method:: _wrap_command(command)
+
+      Wraps a command in the context specific command.
+
+   .. method:: wrap_command(command)
+
+      Wraps a command in the context specific command and returns it.
+
+   .. method:: execute(command)
+
+      Runs a command in the context specific way.
+
+   .. note:: The class is abstract and requires to implement the abstract methods.
+
 
    .. py:property:: device
       :abstractmethod:
@@ -65,31 +83,6 @@ Functions
 
       .. note:: The method should be implemented in the derived class.
 
-   .. py:attribute:: distribute_workers
-      :type: Optional[bool]
-
-      The ComputeContext class is an abstract base class for defining the context in which computations are to be done.
-      It is inherited from the built-in class `ABC` (Abstract Base Classes). Other classes can inherit this class to define
-      their own specific variations of the context. It requires to implement several property methods, and also includes
-      additional methods related to the context design.
-
-      .. attribute:: device
-
-         The device on which computations are to be done.
-
-      .. method:: _wrap_command(command)
-
-         Wraps a command in the context specific command.
-
-      .. method:: wrap_command(command)
-
-         Wraps a command in the context specific command and returns it.
-
-      .. method:: execute(command)
-
-         Runs a command in the context specific way.
-
-      .. note:: The class is abstract and requires to implement the abstract methods.
 
    .. py:method:: wrap_command(command)
 
@@ -110,6 +103,7 @@ Functions
       >>> wrapped_command = context.wrap_command(command)
 
       .. note:: The method should be implemented in the derived class.
+
 
 
    .. py:method:: execute(command)
@@ -151,7 +145,6 @@ Functions
 
 
 
-
    The LocalTorch class is a subclass of the ComputeContext class.
    It is used to specify the context in which computations are to be done.
    LocalTorch is used to specify that computations are to be done on the local machine using PyTorch.
@@ -182,44 +175,53 @@ Functions
 
    .. note:: The class is a subclass of the ComputeContext class.
 
-   .. py:property:: device
 
+   .. py:attribute:: distribute_workers
+      :type:  Optional[bool]
+
+
+   .. py:attribute:: oom_limit
+      :type:  Optional[float | int]
+
+
+   .. py:property:: device
       A property method that returns the torch device object. It automatically detects and uses "cuda" (GPU) if
       available, else it falls back on using "cpu".
 
       :returns: The torch device object.
       :rtype: torch.device
 
-   .. py:attribute:: oom_limit
-      :type: Optional[float | int]
-
-      
-
 
 .. py:class:: Bsub
 
 
 
+   The ComputeContext class is an abstract base class for defining the context in which computations are to be done.
+   It is inherited from the built-in class `ABC` (Abstract Base Classes). Other classes can inherit this class to define
+   their own specific variations of the context. It requires to implement several property methods, and also includes
+   additional methods related to the context design.
 
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+   .. attribute:: device
 
-   .. py:property:: device
+      The device on which computations are to be done.
 
-      A property method that returns the device on which computations are to be done.
+   .. method:: _wrap_command(command)
 
-      A device can be a CPU, GPU, TPU, etc. It is used to specify the context in which computations are to be done.
+      Wraps a command in the context specific command.
 
-      :returns: The device on which computations are to be done.
-      :rtype: str
+   .. method:: wrap_command(command)
 
-      .. rubric:: Examples
+      Wraps a command in the context specific command and returns it.
 
-      >>> context = Bsub()
-      >>> device = context.device
+   .. method:: execute(command)
+
+      Runs a command in the context specific way.
+
+   .. note:: The class is abstract and requires to implement the abstract methods.
+
 
    .. py:attribute:: distribute_workers
-      :type: Optional[bool]
+      :type:  Optional[bool]
 
       The Bsub class is a subclass of the ComputeContext class. It is used to specify the
       context in which computations are to be done. Bsub is used to specify that
@@ -259,24 +261,34 @@ Functions
 
       .. note:: The class is a subclass of the ComputeContext class.
 
-   .. py:attribute:: queue
-      :type: str
 
-      
+   .. py:attribute:: queue
+      :type:  str
+
 
    .. py:attribute:: num_gpus
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: num_cpus
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: billing
-      :type: Optional[str]
+      :type:  Optional[str]
 
-      
+
+   .. py:property:: device
+      A property method that returns the device on which computations are to be done.
+
+      A device can be a CPU, GPU, TPU, etc. It is used to specify the context in which computations are to be done.
+
+      :returns: The device on which computations are to be done.
+      :rtype: str
+
+      .. rubric:: Examples
+
+      >>> context = Bsub()
+      >>> device = context.device
 
 

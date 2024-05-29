@@ -1,24 +1,72 @@
-:py:mod:`dacapo.experiments.trainers.gp_augments.simple_config`
-===============================================================
+dacapo.experiments.trainers.gp_augments.simple_config
+=====================================================
 
 .. py:module:: dacapo.experiments.trainers.gp_augments.simple_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.trainers.gp_augments.simple_config.AugmentConfig
+   dacapo.experiments.trainers.gp_augments.simple_config.SimpleAugmentConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: AugmentConfig
 
-.. autoapisummary::
 
-   dacapo.experiments.trainers.gp_augments.simple_config.SimpleAugmentConfig
 
+   Base class for gunpowder augment configurations. Each subclass of a `Augment`
+   should have a corresponding config class derived from `AugmentConfig`.
+
+   .. attribute:: _raw_key
+
+      Key for raw data. Not used in this implementation. Defaults to None.
+
+   .. attribute:: _gt_key
+
+      Key for ground truth data. Not used in this implementation. Defaults to None.
+
+   .. attribute:: _mask_key
+
+      Key for mask data. Not used in this implementation. Defaults to None.
+
+   .. method:: node(_raw_key=None, _gt_key=None, _mask_key=None)
+
+      Get a gp.Augment node.
+      
+      
+
+
+   .. py:method:: node(raw_key: gunpowder.ArrayKey, gt_key: gunpowder.ArrayKey, mask_key: gunpowder.ArrayKey) -> gunpowder.BatchFilter
+      :abstractmethod:
+
+
+      Get a gunpowder augment node.
+
+      :param raw_key: Key for raw data.
+      :type raw_key: gp.ArrayKey
+      :param gt_key: Key for ground truth data.
+      :type gt_key: gp.ArrayKey
+      :param mask_key: Key for mask data.
+      :type mask_key: gp.ArrayKey
+
+      :returns: Augmentation node which can be incorporated in the pipeline.
+      :rtype: gunpowder.BatchFilter
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> node = augment_config.node(raw_key, gt_key, mask_key)
 
 
 
 .. py:class:: SimpleAugmentConfig
-
 
 
 
@@ -33,6 +81,7 @@ Classes
       Get a gp.SimpleAugment node.
 
    .. note:: This class is a subclass of AugmentConfig.
+
 
    .. py:method:: node(_raw_key=None, _gt_key=None, _mask_key=None)
 

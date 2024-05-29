@@ -1,28 +1,25 @@
-:py:mod:`dacapo.experiments.architectures`
-==========================================
+dacapo.experiments.architectures
+================================
 
 .. py:module:: dacapo.experiments.architectures
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   architecture/index.rst
-   architecture_config/index.rst
-   cnnectome_unet/index.rst
-   cnnectome_unet_config/index.rst
-   dummy_architecture/index.rst
-   dummy_architecture_config/index.rst
+   /autoapi/dacapo/experiments/architectures/architecture/index
+   /autoapi/dacapo/experiments/architectures/architecture_config/index
+   /autoapi/dacapo/experiments/architectures/cnnectome_unet/index
+   /autoapi/dacapo/experiments/architectures/cnnectome_unet_config/index
+   /autoapi/dacapo/experiments/architectures/dummy_architecture/index
+   /autoapi/dacapo/experiments/architectures/dummy_architecture_config/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -34,10 +31,10 @@ Classes
    dacapo.experiments.architectures.CNNectomeUNet
 
 
-
+Package Contents
+----------------
 
 .. py:class:: Architecture(*args, **kwargs)
-
 
 
 
@@ -80,8 +77,10 @@ Classes
 
    .. note:: The class is abstract and requires to implement the abstract methods.
 
+
    .. py:property:: input_shape
       :type: funlib.geometry.Coordinate
+
       :abstractmethod:
 
       Abstract method to define the spatial input shape for the neural network architecture.
@@ -98,6 +97,7 @@ Classes
       >>> model = MyModel(input_shape)
 
       .. note:: The method should be implemented in the derived class.
+
 
    .. py:property:: eval_shape_increase
       :type: funlib.geometry.Coordinate
@@ -116,8 +116,10 @@ Classes
 
       .. note:: The method is optional and can be overridden in the derived class.
 
+
    .. py:property:: num_in_channels
       :type: int
+
       :abstractmethod:
 
       Abstract method to return number of input channels required by the architecture.
@@ -134,8 +136,10 @@ Classes
 
       .. note:: The method should be implemented in the derived class.
 
+
    .. py:property:: num_out_channels
       :type: int
+
       :abstractmethod:
 
       Abstract method to return the number of output channels provided by the architecture.
@@ -151,6 +155,7 @@ Classes
       >>> model = MyModel(input_shape, num_out_channels)
 
       .. note:: The method should be implemented in the derived class.
+
 
    .. py:property:: dims
       :type: int
@@ -170,6 +175,7 @@ Classes
       3
 
       .. note:: The method is optional and can be overridden in the derived class.
+
 
    .. py:method:: scale(input_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
 
@@ -196,7 +202,6 @@ Classes
 
 .. py:class:: ArchitectureConfig
 
-
    A class to represent the base configurations of any architecture. It is used to define the architecture of a neural network model.
 
    .. attribute:: name
@@ -211,10 +216,10 @@ Classes
 
    .. note:: The class is abstract and requires to implement the abstract methods.
 
-   .. py:attribute:: name
-      :type: str
 
-      
+   .. py:attribute:: name
+      :type:  str
+
 
    .. py:method:: verify() -> Tuple[bool, str]
 
@@ -236,7 +241,6 @@ Classes
 
 
 .. py:class:: DummyArchitectureConfig
-
 
 
 
@@ -272,19 +276,17 @@ Classes
 
    .. note:: This class is used to represent a DummyArchitectureConfig object in the system.
 
+
    .. py:attribute:: architecture_type
 
-      
 
    .. py:attribute:: num_in_channels
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: num_out_channels
-      :type: int
+      :type:  int
 
-      
 
    .. py:method:: verify() -> Tuple[bool, str]
 
@@ -309,7 +311,6 @@ Classes
 
 
 .. py:class:: DummyArchitecture(architecture_config)
-
 
 
 
@@ -345,8 +346,8 @@ Classes
 
    .. note:: This class is used to represent a dummy architecture layer for a 3D CNN.
 
-   .. py:property:: input_shape
 
+   .. py:property:: input_shape
       Returns the input shape for this architecture.
 
       :returns: Input shape of the architecture.
@@ -361,8 +362,8 @@ Classes
 
       .. note:: This method is used to return the input shape for this architecture.
 
-   .. py:property:: num_in_channels
 
+   .. py:property:: num_in_channels
       Returns the number of input channels for this architecture.
 
       :returns: Number of input channels.
@@ -377,8 +378,8 @@ Classes
 
       .. note:: This method is used to return the number of input channels for this architecture.
 
-   .. py:property:: num_out_channels
 
+   .. py:property:: num_out_channels
       Returns the number of output channels for this architecture.
 
       :returns: Number of output channels.
@@ -392,6 +393,7 @@ Classes
       1
 
       .. note:: This method is used to return the number of output channels for this architecture.
+
 
    .. py:method:: forward(x)
 
@@ -415,7 +417,6 @@ Classes
 
 
 .. py:class:: CNNectomeUNetConfig
-
 
 
 
@@ -502,73 +503,59 @@ Classes
 
    Saalfeld, S., Fetter, R., Cardona, A., & Tomancak, P. (2012).
 
+
    .. py:attribute:: architecture_type
 
-      
 
    .. py:attribute:: input_shape
-      :type: funlib.geometry.Coordinate
+      :type:  funlib.geometry.Coordinate
 
-      
 
    .. py:attribute:: fmaps_out
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: fmaps_in
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: num_fmaps
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: fmap_inc_factor
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: downsample_factors
-      :type: List[funlib.geometry.Coordinate]
+      :type:  List[funlib.geometry.Coordinate]
 
-      
 
    .. py:attribute:: kernel_size_down
-      :type: Optional[List[List[funlib.geometry.Coordinate]]]
+      :type:  Optional[List[List[funlib.geometry.Coordinate]]]
 
-      
 
    .. py:attribute:: kernel_size_up
-      :type: Optional[List[List[funlib.geometry.Coordinate]]]
+      :type:  Optional[List[List[funlib.geometry.Coordinate]]]
 
-      
 
    .. py:attribute:: upsample_factors
-      :type: Optional[List[funlib.geometry.Coordinate]]
+      :type:  Optional[List[funlib.geometry.Coordinate]]
 
-      
 
    .. py:attribute:: constant_upsample
-      :type: bool
+      :type:  bool
 
-      
 
    .. py:attribute:: padding
-      :type: str
+      :type:  str
 
-      
 
    .. py:attribute:: use_attention
-      :type: bool
-
-      
+      :type:  bool
 
 
 .. py:class:: CNNectomeUNet(architecture_config)
-
 
 
 
@@ -700,8 +687,8 @@ Classes
            The ``CNNectomeUNetModule`` class is the actual implementation of the
            U-Net architecture.
 
-   .. py:property:: eval_shape_increase
 
+   .. py:property:: eval_shape_increase
       The increase in shape due to the U-Net.
 
       :returns: The increase in shape due to the U-Net.
@@ -715,52 +702,6 @@ Classes
 
       .. note:: The increase in shape should be given as a tuple ``(batch, channels, [length,] depth, height, width)``.
 
-   .. py:property:: input_shape
-
-      Return the input shape of the U-Net.
-
-      :returns: The input shape of the U-Net.
-
-      :raises AttributeError: If the input shape is not given.
-
-      .. rubric:: Examples
-
-      >>> unet.input_shape
-      (1, 1, 128, 128, 128)
-
-      .. note:: The input shape should be given as a tuple ``(batch, channels, [length,] depth, height, width)``.
-
-   .. py:property:: num_in_channels
-      :type: int
-
-      Return the number of input channels.
-
-      :returns: The number of input channels.
-
-      :raises AttributeError: If the number of input channels is not given.
-
-      .. rubric:: Examples
-
-      >>> unet.num_in_channels
-      1
-
-      .. note:: The number of input channels should be given as an integer.
-
-   .. py:property:: num_out_channels
-      :type: int
-
-      Return the number of output channels.
-
-      :returns: The number of output channels.
-
-      :raises AttributeError: If the number of output channels is not given.
-
-      .. rubric:: Examples
-
-      >>> unet.num_out_channels
-      1
-
-      .. note:: The number of output channels should be given as an integer.
 
    .. py:method:: module()
 
@@ -802,6 +743,7 @@ Classes
       .. note:: The U-Net module is an instance of the ``CNNectomeUNetModule`` class.
 
 
+
    .. py:method:: scale(voxel_size)
 
       Scale the voxel size according to the upsampling factors.
@@ -819,6 +761,56 @@ Classes
       (1, 1, 1)
 
       .. note:: The voxel size should be given as a tuple ``(z, y, x)``.
+
+
+
+   .. py:property:: input_shape
+      Return the input shape of the U-Net.
+
+      :returns: The input shape of the U-Net.
+
+      :raises AttributeError: If the input shape is not given.
+
+      .. rubric:: Examples
+
+      >>> unet.input_shape
+      (1, 1, 128, 128, 128)
+
+      .. note:: The input shape should be given as a tuple ``(batch, channels, [length,] depth, height, width)``.
+
+
+   .. py:property:: num_in_channels
+      :type: int
+
+      Return the number of input channels.
+
+      :returns: The number of input channels.
+
+      :raises AttributeError: If the number of input channels is not given.
+
+      .. rubric:: Examples
+
+      >>> unet.num_in_channels
+      1
+
+      .. note:: The number of input channels should be given as an integer.
+
+
+   .. py:property:: num_out_channels
+      :type: int
+
+      Return the number of output channels.
+
+      :returns: The number of output channels.
+
+      :raises AttributeError: If the number of output channels is not given.
+
+      .. rubric:: Examples
+
+      >>> unet.num_out_channels
+      1
+
+      .. note:: The number of output channels should be given as an integer.
 
 
    .. py:method:: forward(x)

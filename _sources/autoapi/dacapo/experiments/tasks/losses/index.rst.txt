@@ -1,27 +1,24 @@
-:py:mod:`dacapo.experiments.tasks.losses`
-=========================================
+dacapo.experiments.tasks.losses
+===============================
 
 .. py:module:: dacapo.experiments.tasks.losses
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   affinities_loss/index.rst
-   dummy_loss/index.rst
-   hot_distance_loss/index.rst
-   loss/index.rst
-   mse_loss/index.rst
+   /autoapi/dacapo/experiments/tasks/losses/affinities_loss/index
+   /autoapi/dacapo/experiments/tasks/losses/dummy_loss/index
+   /autoapi/dacapo/experiments/tasks/losses/hot_distance_loss/index
+   /autoapi/dacapo/experiments/tasks/losses/loss/index
+   /autoapi/dacapo/experiments/tasks/losses/mse_loss/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -32,10 +29,10 @@ Classes
    dacapo.experiments.tasks.losses.HotDistanceLoss
 
 
-
+Package Contents
+----------------
 
 .. py:class:: DummyLoss
-
 
 
 
@@ -57,6 +54,7 @@ Classes
 
       The dummy loss is used to test the training loop and the loss calculation. It is not a real loss function.
       It is used to test the training loop and the loss calculation.
+
 
    .. py:method:: compute(prediction, target, weight=None)
 
@@ -93,7 +91,6 @@ Classes
 
 
 
-
    A class used to represent the Mean Square Error Loss function (MSELoss). This class inherits from the Loss class.
 
    .. method:: compute(prediction, target, weight) -> torch.Tensor
@@ -105,6 +102,7 @@ Classes
 
       This class is abstract. Subclasses must implement the abstract methods. Once created, the values of its attributes
       cannot be changed.
+
 
    .. py:method:: compute(prediction, target, weight)
 
@@ -141,7 +139,6 @@ Classes
 
 
 
-
    A class used to represent a loss function. This class is an abstract class
    that should be inherited by any loss function class.
 
@@ -155,8 +152,10 @@ Classes
       This class is abstract. Subclasses must implement the abstract methods. Once created, the values of its attributes
       cannot be changed.
 
+
    .. py:method:: compute(prediction: torch.Tensor, target: torch.Tensor, weight: Optional[torch.Tensor] = None) -> torch.Tensor
       :abstractmethod:
+
 
       Compute the loss for the given prediction and target. Optionally, if
       given, a loss weight should be considered.
@@ -193,7 +192,6 @@ Classes
 
 
 
-
    A class representing a loss function that calculates the loss between affinities and local shape descriptors (LSDs).
 
    .. attribute:: num_affinities
@@ -212,6 +210,7 @@ Classes
       Calculate the total loss between prediction and target.
 
    .. note:: The AffinitiesLoss class is used to calculate the loss between affinities and local shape descriptors (LSDs).
+
 
    .. py:method:: compute(prediction, target, weight)
 
@@ -248,7 +247,6 @@ Classes
 
 
 
-
    A class used to represent the Hot Distance Loss function. This class inherits from the Loss class. The Hot Distance Loss
    function is used for predicting hot and distance maps at the same time. The first half of the channels are the hot maps,
    the second half are the distance maps. The loss is the sum of the BCELoss for the hot maps and the MSELoss for the distance
@@ -276,6 +274,7 @@ Classes
 
       This class is abstract. Subclasses must implement the abstract methods. Once created, the values of its attributes
       cannot be changed.
+
 
    .. py:method:: compute(prediction, target, weight)
 
@@ -305,6 +304,7 @@ Classes
       tensor(0.)
 
       .. note:: This method must be implemented in the subclass. It should return the computed Hot Distance Loss tensor.
+
 
 
    .. py:method:: hot_loss(prediction, target, weight)
@@ -337,6 +337,7 @@ Classes
       .. note:: This method must be implemented in the subclass. It should return the computed BCELoss tensor.
 
 
+
    .. py:method:: distance_loss(prediction, target, weight)
 
       The Mean Square Error Loss function. This function computes the MSELoss for the distance maps.
@@ -365,6 +366,7 @@ Classes
       tensor(0.)
 
       .. note:: This method must be implemented in the subclass. It should return the computed MSELoss tensor.
+
 
 
    .. py:method:: split(x)

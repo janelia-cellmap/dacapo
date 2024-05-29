@@ -1,15 +1,11 @@
-:py:mod:`dacapo.utils.voi`
-==========================
+dacapo.utils.voi
+================
 
 .. py:module:: dacapo.utils.voi
 
 
-Module Contents
----------------
-
-
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -22,6 +18,8 @@ Functions
    dacapo.utils.voi.xlogx
 
 
+Module Contents
+---------------
 
 .. py:function:: voi(reconstruction, groundtruth, ignore_reconstruction=[], ignore_groundtruth=[0])
 

@@ -1,33 +1,30 @@
-:py:mod:`dacapo.experiments.datasplits.datasets.graphstores`
-============================================================
+dacapo.experiments.datasplits.datasets.graphstores
+==================================================
 
 .. py:module:: dacapo.experiments.datasplits.datasets.graphstores
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   graph_source_config/index.rst
+   /autoapi/dacapo/experiments/datasplits/datasets/graphstores/graph_source_config/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.experiments.datasplits.datasets.graphstores.GraphStoreConfig
 
 
-
+Package Contents
+----------------
 
 .. py:class:: GraphStoreConfig
-
 
    Base class for graph store configurations. Each subclass of a
    `GraphStore` should have a corresponding config class derived from

@@ -1,36 +1,31 @@
-:py:mod:`dacapo.gp.reject_if_empty`
-===================================
+dacapo.gp.reject_if_empty
+=========================
 
 .. py:module:: dacapo.gp.reject_if_empty
 
 
-Module Contents
----------------
-
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.gp.reject_if_empty.RejectIfEmpty
-
-
-
-
 Attributes
-~~~~~~~~~~
+----------
 
 .. autoapisummary::
 
    dacapo.gp.reject_if_empty.logger
 
 
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.gp.reject_if_empty.RejectIfEmpty
+
+
+Module Contents
+---------------
+
 .. py:data:: logger
 
-   
-
 .. py:class:: RejectIfEmpty(gt=None, p=0.5, background=0)
-
 
 
 
@@ -52,6 +47,7 @@ Attributes
        provide: Provide a batch.
 
 
+
    .. py:method:: setup()
 
       Set up the provider.
@@ -62,6 +58,7 @@ Attributes
 
       >>> setup()
       setup()
+
 
 
    .. py:method:: provide(request)

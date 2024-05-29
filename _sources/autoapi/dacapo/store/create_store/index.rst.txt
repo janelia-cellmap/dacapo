@@ -1,15 +1,24 @@
-:py:mod:`dacapo.store.create_store`
-===================================
+dacapo.store.create_store
+=========================
 
 .. py:module:: dacapo.store.create_store
 
 
-Module Contents
----------------
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.store.create_store.LocalArrayStore
+   dacapo.store.create_store.LocalWeightsStore
+   dacapo.store.create_store.MongoConfigStore
+   dacapo.store.create_store.FileConfigStore
+   dacapo.store.create_store.MongoStatsStore
+   dacapo.store.create_store.FileStatsStore
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -17,6 +26,1880 @@ Functions
    dacapo.store.create_store.create_stats_store
    dacapo.store.create_store.create_weights_store
    dacapo.store.create_store.create_array_store
+
+
+Module Contents
+---------------
+
+.. py:class:: LocalArrayStore(basedir)
+
+
+
+   A local array store that uses zarr containers.
+
+   .. attribute:: basedir
+
+      The base directory where the store will write data.
+
+   .. method:: best_validation_array
+
+      Get the array identifier for the best validation array.
+
+   .. method:: validation_prediction_array
+
+      Get the array identifier for a particular validation prediction.
+
+   .. method:: validation_output_array
+
+      Get the array identifier for a particular validation output.
+
+   .. method:: validation_input_arrays
+
+      Get the array identifiers for the validation input raw/gt.
+
+   .. method:: snapshot_container
+
+      Get a container identifier for storage of a snapshot.
+
+   .. method:: validation_container
+
+      Get a container identifier for storage of a validation.
+
+   .. method:: remove
+
+      Remove a dataset from a container.
+      
+      
+
+
+   .. py:method:: best_validation_array(run_name: str, criterion: str, index: Optional[str] = None) -> dacapo.store.array_store.LocalArrayIdentifier
+
+      Get the array identifier for the best validation array.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param criterion: The criterion for the validation array.
+      :type criterion: str
+      :param index: The index of the validation array. Defaults to None.
+      :type index: str, optional
+
+      :returns: The array identifier for the best validation array.
+      :rtype: LocalArrayIdentifier
+
+      :raises ValueError: If the container does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.best_validation_array("run1", "loss")
+
+
+
+   .. py:method:: validation_prediction_array(run_name: str, iteration: int, dataset: str) -> dacapo.store.array_store.LocalArrayIdentifier
+
+      Get the array identifier for a particular validation prediction.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param iteration: The iteration of the validation prediction.
+      :type iteration: int
+      :param dataset: The dataset of the validation prediction.
+      :type dataset: str
+
+      :returns: The array identifier for the validation prediction.
+      :rtype: LocalArrayIdentifier
+
+      :raises ValueError: If the container does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.validation_prediction_array("run1", 0, "train")
+
+
+
+   .. py:method:: validation_output_array(run_name: str, iteration: int, parameters: str, dataset: str) -> dacapo.store.array_store.LocalArrayIdentifier
+
+      Get the array identifier for a particular validation output.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param iteration: The iteration of the validation output.
+      :type iteration: int
+      :param parameters: The parameters of the validation output.
+      :type parameters: str
+      :param dataset: The dataset of the validation output.
+      :type dataset: str
+
+      :returns: The array identifier for the validation output.
+      :rtype: LocalArrayIdentifier
+
+      :raises ValueError: If the container does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.validation_output_array("run1", 0, "params1", "train")
+
+
+
+   .. py:method:: validation_input_arrays(run_name: str, index: Optional[str] = None) -> Tuple[dacapo.store.array_store.LocalArrayIdentifier, dacapo.store.array_store.LocalArrayIdentifier]
+
+      Get the array identifiers for the validation input raw/gt.
+
+      It would be nice to store raw/gt with the validation predictions/outputs.
+      If we don't store these we would have to look up the datasplit config
+      and figure out where to find the inputs for each run. If we write
+      the data then we don't need to search for it.
+      This convenience comes at the cost of some extra memory usage.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param index: The index of the validation input. Defaults to None.
+      :type index: str, optional
+
+      :returns: The array identifiers for the validation input raw/gt.
+      :rtype: Tuple[LocalArrayIdentifier, LocalArrayIdentifier]
+
+      :raises ValueError: If the container does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.validation_input_arrays("run1")
+
+
+
+   .. py:method:: snapshot_container(run_name: str) -> dacapo.store.array_store.LocalContainerIdentifier
+
+      Get a container identifier for storage of a snapshot.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+
+      :returns: The container identifier for the snapshot.
+      :rtype: LocalContainerIdentifier
+
+      :raises ValueError: If the container does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.snapshot_container("run1")
+
+
+
+   .. py:method:: validation_container(run_name: str) -> dacapo.store.array_store.LocalContainerIdentifier
+
+      Get a container identifier for storage of a validation.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+
+      :returns: The container identifier for the validation.
+      :rtype: LocalContainerIdentifier
+
+      :raises ValueError: If the container does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.validation_container("run1")
+
+
+
+   .. py:method:: remove(array_identifier: dacapo.store.array_store.LocalArrayIdentifier) -> None
+
+      Remove a dataset from a container.
+
+      :param array_identifier: The array identifier of the dataset to remove.
+      :type array_identifier: LocalArrayIdentifier
+
+      :raises ValueError: If the container path does not end with '.zarr'.
+
+      .. rubric:: Examples
+
+      >>> store.remove(array_identifier)
+
+
+
+.. py:class:: LocalWeightsStore(basedir)
+
+
+
+   A local store for network weights.
+
+   All weights are stored in a directory structure like this:
+
+       ```
+       basedir
+       ├── run1
+       │   ├── checkpoints
+       │   │   ├── iterations
+       │   │   │   ├── 0
+       │   │   │   ├── 1
+       │   │   │   ├── ...
+       │   ├── dataset1
+       │   │   ├── criterion1.json
+       │   ├── dataset2
+       │   │   ├── criterion2.json
+       ├── run2
+       │   ├── ...
+       ```
+
+   .. attribute:: basedir
+
+      The base directory where the weights are stored.
+
+   .. method:: latest_iteration
+
+      Return the latest iteration for which weights are available for the given run.
+
+   .. method:: store_weights
+
+      Store the network weights of the given run.
+
+   .. method:: retrieve_weights
+
+      Retrieve the network weights of the given run.
+
+   .. method:: remove
+
+      Remove the network weights of the given run.
+
+   .. method:: store_best
+
+      Store the best weights in a easy to find location.
+
+   .. method:: retrieve_best
+
+      Retrieve the best weights of the given run.
+
+   .. note:: The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
+
+
+   .. py:method:: latest_iteration(run: str) -> Optional[int]
+
+      Return the latest iteration for which weights are available for the
+      given run.
+
+      :param run: The name of the run.
+
+      :returns: The latest iteration for which weights are available, or None if no
+                weights are available.
+
+      :raises FileNotFoundError: If the run directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.latest_iteration("run1")
+
+      .. note:: The iteration is determined by the number of the subdirectories in the "iterations" directory.
+
+
+
+   .. py:method:: store_weights(run: dacapo.experiments.run.Run, iteration: int)
+
+      Store the network weights of the given run.
+
+      :param run: The run object.
+      :param iteration: The iteration number.
+
+      :raises FileNotFoundError: If the run directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.store_weights(run, 0)
+
+      .. note:: The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
+
+
+
+   .. py:method:: retrieve_weights(run: str, iteration: int) -> dacapo.store.weights_store.Weights
+
+      Retrieve the network weights of the given run.
+
+      :param run: The name of the run.
+      :param iteration: The iteration number.
+
+      :returns: The network weights.
+
+      :raises FileNotFoundError: If the weights file does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.retrieve_weights("run1", 0)
+
+      .. note:: The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
+
+
+
+   .. py:method:: remove(run: str, iteration: int)
+
+      Remove the weights for a specific run and iteration.
+
+      :param run: The name of the run.
+      :type run: str
+      :param iteration: The iteration number.
+      :type iteration: int
+
+      :raises FileNotFoundError: If the weights file does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.remove("run1", 0)
+
+      .. note:: The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
+
+
+
+   .. py:method:: store_best(run: str, iteration: int, dataset: str, criterion: str)
+
+      Store the best weights in a easy to find location.
+      Symlinks weights from appropriate iteration
+      # TODO: simply store a yaml of dataset/criterion -> iteration/parameter id
+
+      :param run: The name of the run.
+      :type run: str
+      :param iteration: The iteration number.
+      :type iteration: int
+      :param dataset: The name of the dataset.
+      :type dataset: str
+      :param criterion: The criterion for selecting the best weights.
+      :type criterion: str
+
+      :raises FileNotFoundError: If the weights file does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.store_best("run1", 0, "dataset1", "criterion1")
+
+      .. note:: The best weights are stored in a json file that contains the iteration number.
+
+
+
+   .. py:method:: retrieve_best(run: str, dataset: str | dacapo.experiments.datasplits.datasets.dataset.Dataset, criterion: str) -> int
+
+      Retrieve the best weights for a given run, dataset, and criterion.
+
+      :param run: The name of the run.
+      :type run: str
+      :param dataset: The name of the dataset or a Dataset object.
+      :type dataset: str | Dataset
+      :param criterion: The criterion for selecting the best weights.
+      :type criterion: str
+
+      :returns: The iteration number of the best weights.
+      :rtype: int
+
+      :raises FileNotFoundError: If the weights file does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.retrieve_best("run1", "dataset1", "criterion1")
+
+      .. note:: The best weights are stored in a json file that contains the iteration number.
+
+
+
+.. py:class:: MongoConfigStore(db_host, db_name)
+
+
+
+   A MongoDB store for configurations. Used to store and retrieve
+   configurations for runs, tasks, architectures, trainers, and datasets.
+
+   .. attribute:: db_host
+
+      The host of the MongoDB database.
+
+      :type: str
+
+   .. attribute:: db_name
+
+      The name of the MongoDB database.
+
+      :type: str
+
+   .. attribute:: client
+
+      The MongoDB client.
+
+      :type: MongoClient
+
+   .. attribute:: database
+
+      The MongoDB database.
+
+      :type: Database
+
+   .. attribute:: users
+
+      The users collection.
+
+      :type: Collection
+
+   .. attribute:: runs
+
+      The runs collection.
+
+      :type: Collection
+
+   .. attribute:: tasks
+
+      The tasks collection.
+
+      :type: Collection
+
+   .. attribute:: datasplits
+
+      The datasplits collection.
+
+      :type: Collection
+
+   .. attribute:: datasets
+
+      The datasets collection.
+
+      :type: Collection
+
+   .. attribute:: arrays
+
+      The arrays collection.
+
+      :type: Collection
+
+   .. attribute:: architectures
+
+      The architectures collection.
+
+      :type: Collection
+
+   .. attribute:: trainers
+
+      The trainers collection.
+
+      :type: Collection
+
+   .. method:: store_run_config(run_config, ignore)
+
+      Store the run configuration.
+
+   .. method:: retrieve_run_config(run_name)
+
+      Retrieve the run configuration.
+
+   .. method:: delete_run_config(run_name)
+
+      Delete the run configuration.
+
+   .. method:: retrieve_run_config_names(task_names, datasplit_names, architecture_names, trainer_names)
+
+      Retrieve the names of the run configurations.
+
+   .. method:: store_task_config(task_config, ignore)
+
+      Store the task configuration.
+
+   .. method:: retrieve_task_config(task_name)
+
+      Retrieve the task configuration.
+
+   .. method:: retrieve_task_config_names()
+
+      Retrieve the names of the task configurations.
+
+   .. method:: store_architecture_config(architecture_config, ignore)
+
+      Store the architecture configuration.
+
+   .. method:: retrieve_architecture_config(architecture_name)
+
+      Retrieve the architecture configuration.
+
+   .. method:: retrieve_architecture_config_names()
+
+      Retrieve the names of the architecture configurations.
+
+   .. method:: store_trainer_config(trainer_config, ignore)
+
+      Store the trainer configuration.
+
+   .. method:: retrieve_trainer_config(trainer_name)
+
+      Retrieve the trainer configuration.
+
+   .. method:: retrieve_trainer_config_names()
+
+      Retrieve the names of the trainer configurations.
+
+   .. method:: store_datasplit_config(datasplit_config, ignore)
+
+      Store the datasplit configuration.
+
+   .. method:: retrieve_datasplit_config(datasplit_name)
+
+      Retrieve the datasplit configuration.
+
+   .. method:: retrieve_datasplit_config_names()
+
+      Retrieve the names of the datasplit configurations.
+
+   .. method:: store_dataset_config(dataset_config, ignore)
+
+      Store the dataset configuration.
+
+   .. method:: retrieve_dataset_config(dataset_name)
+
+      Retrieve the dataset configuration.
+
+   .. method:: retrieve_dataset_config_names()
+
+      Retrieve the names of the dataset configurations.
+
+   .. method:: store_array_config(array_config, ignore)
+
+      Store the array configuration.
+
+   .. method:: retrieve_array_config(array_name)
+
+      Retrieve the array configuration.
+
+   .. method:: retrieve_array_config_names()
+
+      Retrieve the names of the array configurations.
+
+   .. method:: __save_insert(collection, data, ignore)
+
+      Save or insert a document into a collection.
+
+   .. method:: __same_doc(a, b, ignore)
+
+      Check if two documents are the same.
+
+   .. method:: __init_db()
+
+      Initialize the database.
+
+   .. method:: __open_collections()
+
+      Open the collections.
+
+   .. rubric:: Notes
+
+   The store is initialized with the host and database name.
+
+
+   .. py:method:: delete_config(database, config_name: str) -> None
+
+      Deletes a configuration from the database.
+
+      :param database: The database object.
+      :param config_name: The name of the configuration to delete.
+
+      :raises ValueError: If the configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> config_name = 'config_0'
+      >>> store.delete_config(store.tasks, config_name)
+
+
+
+   .. py:method:: store_run_config(run_config, ignore=None)
+
+      Stores the run configuration in the MongoDB runs collection.
+
+      :param run_config: The run configuration to be stored.
+      :type run_config: dict
+      :param ignore: A list of fields to ignore during the storage process.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If the run configuration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> run_config = {'name': 'run_0'}
+      >>> store.store_run_config(run_config)
+
+
+
+   .. py:method:: retrieve_run_config(run_name)
+
+      Retrieve the run configuration for a given run name.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+
+      :returns: The run configuration for the given run name.
+      :rtype: RunConfig
+
+      :raises ValueError: If the run configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> store.retrieve_run_config(run_name)
+
+
+
+   .. py:method:: delete_run_config(run_name)
+
+      Delete a run configuration from the MongoDB collection.
+
+      :param run_name: The name of the run configuration to delete.
+      :type run_name: str
+
+      :raises ValueError: If the run configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> store.delete_run_config(run_name)
+
+
+
+   .. py:method:: retrieve_run_config_names(task_names=None, datasplit_names=None, architecture_names=None, trainer_names=None)
+
+      Retrieve the names of run configurations based on specified filters.
+
+      :param task_names: List of task names to filter the run configurations. Defaults to None.
+      :type task_names: list, optional
+      :param datasplit_names: List of datasplit names to filter the run configurations. Defaults to None.
+      :type datasplit_names: list, optional
+      :param architecture_names: List of architecture names to filter the run configurations. Defaults to None.
+      :type architecture_names: list, optional
+      :param trainer_names: List of trainer names to filter the run configurations. Defaults to None.
+      :type trainer_names: list, optional
+
+      :returns: A list of run configuration names that match the specified filters.
+      :rtype: list
+
+      :raises ValueError: If the run configurations are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> task_names = ['task_0']
+      >>> datasplit_names = ['datasplit_0']
+      >>> architecture_names = ['architecture_0']
+      >>> trainer_names = ['trainer_0']
+      >>> store.retrieve_run_config_names(task_names, datasplit_names, architecture_names, trainer_names)
+
+
+
+   .. py:method:: store_task_config(task_config, ignore=None)
+
+      Store the task configuration in the MongoDB tasks collection.
+
+      :param task_config: The task configuration to be stored.
+      :type task_config: TaskConfig
+      :param ignore: A list of fields to ignore during the storage process.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If the task configuration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> task_config = TaskConfig(name='task_0')
+      >>> store.store_task_config(task_config)
+
+
+
+   .. py:method:: retrieve_task_config(task_name)
+
+      Retrieve the task configuration for a given task name.
+
+      :param task_name: The name of the task.
+      :type task_name: str
+
+      :returns: The task configuration object.
+      :rtype: TaskConfig
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> task_name = 'task_0'
+      >>> store.retrieve_task_config(task_name)
+
+
+
+   .. py:method:: retrieve_task_config_names()
+
+      Retrieve the names of all task configurations.
+
+      :returns: A list of task configuration names.
+
+      :raises ValueError: If the task configurations are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> store.retrieve_task_config_names()
+
+
+
+   .. py:method:: store_architecture_config(architecture_config, ignore=None)
+
+      Store the architecture configuration in the MongoDB.
+
+      :param architecture_config: The architecture configuration to be stored.
+      :type architecture_config: ArchitectureConfig
+      :param ignore: List of fields to ignore during storage. Defaults to None.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If the architecture configuration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> architecture_config = ArchitectureConfig(name='architecture_0')
+      >>> store.store_architecture_config(architecture_config)
+
+
+
+   .. py:method:: retrieve_architecture_config(architecture_name)
+
+      Retrieve the architecture configuration for the given architecture name.
+
+      :param architecture_name: The name of the architecture.
+      :type architecture_name: str
+
+      :returns: The architecture configuration object.
+      :rtype: ArchitectureConfig
+
+      :raises ValueError: If the architecture configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> architecture_name = 'architecture_0'
+      >>> store.retrieve_architecture_config(architecture_name)
+
+
+
+   .. py:method:: retrieve_architecture_config_names()
+
+      Retrieve the names of all architecture configurations.
+
+      :returns: A list of architecture configuration names.
+
+      :raises ValueError: If the architecture configurations are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> store.retrieve_architecture_config_names()
+
+
+
+   .. py:method:: store_trainer_config(trainer_config, ignore=None)
+
+      Store the trainer configuration in the MongoDB.
+
+      :param trainer_config: The trainer configuration to be stored.
+      :type trainer_config: TrainerConfig
+      :param ignore: List of fields to ignore during storage. Defaults to None.
+      :type ignore: list, optional
+
+      :returns: If the trainer configuration is already stored.
+      :rtype: DuplicateNameError
+
+      :raises DuplicateNameError: If the trainer configuration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> trainer_config = TrainerConfig(name='trainer_0')
+      >>> store.store_trainer_config(trainer_config)
+
+
+
+   .. py:method:: retrieve_trainer_config(trainer_name)
+
+      Retrieve the trainer configuration for the given trainer name.
+
+      :param trainer_name: The name of the trainer.
+      :type trainer_name: str
+
+      :returns: The trainer configuration object.
+      :rtype: TrainerConfig
+
+      :raises ValueError: If the trainer configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> trainer_name = 'trainer_0'
+      >>> store.retrieve_trainer_config(trainer_name)
+
+
+
+   .. py:method:: retrieve_trainer_config_names()
+
+      Retrieve the names of all trainer configurations.
+
+      :param trainer_name: The name of the trainer.
+      :type trainer_name: str
+
+      :returns: The trainer configuration object.
+      :rtype: TrainerConfig
+
+      :raises ValueError: If the trainer configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> trainer_name = 'trainer_0'
+      >>> store.retrieve_trainer_config(trainer_name)
+
+
+
+   .. py:method:: store_datasplit_config(datasplit_config, ignore=None)
+
+      Store the datasplit configuration in the MongoDB.
+
+      :param datasplit_config: The datasplit configuration to be stored.
+      :type datasplit_config: DataSplitConfig
+      :param ignore: List of fields to ignore during storage. Defaults to None.
+      :type ignore: list, optional
+
+      :returns: If the datasplit configuration is already stored.
+      :rtype: DuplicateNameError
+
+      :raises DuplicateNameError: If the datasplit configuration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> datasplit_config = DataSplitConfig(name='datasplit_0')
+      >>> store.store_datasplit_config(datasplit_config)
+
+
+
+   .. py:method:: retrieve_datasplit_config(datasplit_name)
+
+      Retrieve the datasplit configuration for the given datasplit name.
+
+      :param datasplit_name: The name of the datasplit.
+      :type datasplit_name: str
+
+      :returns: The datasplit configuration object.
+      :rtype: DataSplitConfig
+
+      :raises ValueError: If the datasplit configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> datasplit_name = 'datasplit_0'
+      >>> store.retrieve_datasplit_config(datasplit_name)
+
+
+
+   .. py:method:: retrieve_datasplit_config_names()
+
+      Retrieve the names of all datasplit configurations.
+
+      :returns: A list of datasplit configuration names.
+
+      :raises ValueError: If the datasplit configurations are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> store.retrieve_datasplit_config_names()
+
+
+
+   .. py:method:: store_dataset_config(dataset_config, ignore=None)
+
+      Store the dataset configuration in the MongoDB.
+
+      :param dataset_config: The dataset configuration to be stored.
+      :type dataset_config: DatasetConfig
+      :param ignore: List of fields to ignore during storage. Defaults to None.
+      :type ignore: list, optional
+
+      :returns: If the dataset configuration is already stored.
+      :rtype: DuplicateNameError
+
+      :raises DuplicateNameError: If the dataset configuration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> dataset_config = DatasetConfig(name='dataset_0')
+      >>> store.store_dataset_config(dataset_config)
+
+
+
+   .. py:method:: retrieve_dataset_config(dataset_name)
+
+      Retrieve the dataset configuration for the given dataset name.
+
+      :param dataset_name: The name of the dataset.
+      :type dataset_name: str
+
+      :returns: The dataset configuration object.
+      :rtype: DatasetConfig
+
+      :raises ValueError: If the dataset configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> dataset_name = 'dataset_0'
+      >>> store.retrieve_dataset_config(dataset_name)
+
+
+
+   .. py:method:: retrieve_dataset_config_names()
+
+      Retrieve the names of all dataset configurations.
+
+      :returns: A list of dataset configuration names.
+
+      :raises ValueError: If the dataset configurations are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> store.retrieve_dataset_config_names()
+
+
+
+   .. py:method:: store_array_config(array_config, ignore=None)
+
+      Store the array configuration in the MongoDB.
+
+      :param array_config: The array configuration to be stored.
+      :type array_config: ArrayConfig
+      :param ignore: List of fields to ignore during storage. Defaults to None.
+      :type ignore: list, optional
+
+      :returns: If the array configuration is already stored.
+      :rtype: DuplicateNameError
+
+      :raises DuplicateNameError: If the array configuration is already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> array_config = ArrayConfig(name='array_0')
+      >>> store.store_array_config(array_config)
+
+
+
+   .. py:method:: retrieve_array_config(array_name)
+
+      Retrieve the array configuration for the given array name.
+
+      :param array_name: The name of the array.
+      :type array_name: str
+
+      :returns: The array configuration object.
+      :rtype: ArrayConfig
+
+      :raises ValueError: If the array configuration is not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> array_name = 'array_0'
+      >>> store.retrieve_array_config(array_name)
+
+
+
+   .. py:method:: retrieve_array_config_names()
+
+      Retrieve the names of all array configurations.
+
+      :returns: A list of array configuration names.
+
+      :raises ValueError: If the array configurations are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoConfigStore('localhost', 'dacapo')
+      >>> store.retrieve_array_config_names()
+
+
+
+.. py:class:: FileConfigStore(path)
+
+
+
+   A Local File based store for configurations. Used to store and retrieve
+   configurations for runs, tasks, architectures, trainers, and datasplits.
+
+   .. attribute:: path
+
+      The path to the file.
+
+      :type: Path
+
+   .. method:: store_run_config(run_config, ignore=None)
+
+      Stores the run configuration in the file config store.
+
+   .. method:: retrieve_run_config(run_name)
+
+      Retrieve the run configuration for a given run name.
+
+   .. method:: retrieve_run_config_names()
+
+      Retrieve the names of the run configurations.
+
+   .. method:: store_task_config(task_config, ignore=None)
+
+      Stores the task configuration in the file config store.
+
+   .. method:: retrieve_task_config(task_name)
+
+      Retrieve the task configuration for a given task name.
+
+   .. method:: retrieve_task_config_names()
+
+      Retrieve the names of the task configurations.
+
+   .. method:: store_architecture_config(architecture_config, ignore=None)
+
+      Stores the architecture configuration in the file config store.
+
+   .. method:: retrieve_architecture_config(architecture_name)
+
+      Retrieve the architecture configuration for a given architecture name.
+
+   .. method:: retrieve_architecture_config_names()
+
+      Retrieve the names of the architecture configurations.
+
+   .. method:: store_trainer_config(trainer_config, ignore=None)
+
+      Stores the trainer configuration in the file config store.
+
+   .. method:: retrieve_trainer_config(trainer_name)
+
+      Retrieve the trainer configuration for a given trainer name.
+
+   .. method:: retrieve_trainer_config_names()
+
+      Retrieve the names of the trainer configurations.
+
+   .. method:: store_datasplit_config(datasplit_config, ignore=None)
+
+      Stores the datasplit configuration in the file config store.
+
+   .. method:: retrieve_datasplit_config(datasplit_name)
+
+      Retrieve the datasplit configuration for a given datasplit name.
+
+   .. method:: retrieve_datasplit_config_names()
+
+      Retrieve the names of the datasplit configurations.
+
+   .. method:: store_array_config(array_config, ignore=None)
+
+      Stores the array configuration in the file config store.
+
+   .. method:: retrieve_array_config(array_name)
+
+      Retrieve the array configuration for a given array name.
+
+   .. method:: retrieve_array_config_names()
+
+      Retrieve the names of the array configurations.
+
+   .. method:: __save_insert(collection, data, ignore=None)
+
+      Saves the data to the collection.
+
+   .. method:: __load(collection, name)
+
+      Loads the data
+
+   .. rubric:: Notes
+
+   The FileConfigStore is used to store and retrieve configurations for runs, tasks, architectures, trainers, and datasplits.
+   The FileConfigStore is a local file based store for configurations.
+
+
+   .. py:method:: store_run_config(run_config, ignore=None)
+
+      Stores the run configuration in the file config store.
+
+      :param run_config: The run configuration to store.
+      :type run_config: RunConfig
+      :param ignore: A list of keys to ignore when comparing the stored configuration with the new configuration. Defaults to None.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If a configuration with the same name already exists.
+
+      .. rubric:: Examples
+
+      >>> store.store_run_config(run_config)
+
+
+
+   .. py:method:: retrieve_run_config(run_name)
+
+      Retrieve the run configuration for a given run name.
+
+      :param run_name: The name of the run configuration to retrieve.
+      :type run_name: str
+
+      :returns: The run configuration object.
+      :rtype: RunConfig
+
+      :raises KeyError: If the run name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> run_config = store.retrieve_run_config("run1")
+
+
+
+   .. py:method:: retrieve_run_config_names()
+
+      Retrieve the names of the run configurations.
+
+      :returns: A list of run configuration names.
+
+      :raises KeyError: If no run configurations are stored.
+
+      .. rubric:: Examples
+
+      >>> run_names = store.retrieve_run_config_names()
+
+
+
+   .. py:method:: store_task_config(task_config, ignore=None)
+
+      Stores the task configuration in the file config store.
+
+      :param task_config: The task configuration to store.
+      :type task_config: TaskConfig
+      :param ignore: A list of keys to ignore when comparing the stored configuration with the new configuration. Defaults to None.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If a configuration with the same name already exists.
+
+      .. rubric:: Examples
+
+      >>> store.store_task_config(task_config)
+
+
+
+   .. py:method:: retrieve_task_config(task_name)
+
+      Retrieve the task configuration for a given task name.
+
+      :param task_name: The name of the task configuration to retrieve.
+      :type task_name: str
+
+      :returns: The task configuration object.
+      :rtype: TaskConfig
+
+      :raises KeyError: If the task name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> task_config = store.retrieve_task_config("task1")
+
+
+
+   .. py:method:: retrieve_task_config_names()
+
+      Retrieve the names of the task configurations.
+
+      :returns: A list of task configuration names.
+
+      :raises KeyError: If no task configurations are stored.
+
+      .. rubric:: Examples
+
+      >>> task_names = store.retrieve_task_config_names()
+
+
+
+   .. py:method:: store_architecture_config(architecture_config, ignore=None)
+
+      Stores the architecture configuration in the file config store.
+
+      :param architecture_config: The architecture configuration to store.
+      :type architecture_config: ArchitectureConfig
+      :param ignore: A list of keys to ignore when comparing the stored configuration with the new configuration. Defaults to None.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If a configuration with the same name already exists.
+
+      .. rubric:: Examples
+
+      >>> store.store_architecture_config(architecture_config)
+
+
+
+   .. py:method:: retrieve_architecture_config(architecture_name)
+
+      Retrieve the architecture configuration for a given architecture name.
+
+      :param architecture_name: The name of the architecture configuration to retrieve.
+      :type architecture_name: str
+
+      :returns: The architecture configuration object.
+      :rtype: ArchitectureConfig
+
+      :raises KeyError: If the architecture name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> architecture_config = store.retrieve_architecture_config("architecture1")
+
+
+
+   .. py:method:: retrieve_architecture_config_names()
+
+      Retrieve the names of the architecture configurations.
+
+      :returns: A list of architecture configuration names.
+
+      :raises KeyError: If no architecture configurations are stored.
+
+      .. rubric:: Examples
+
+      >>> architecture_names = store.retrieve_architecture_config_names()
+
+
+
+   .. py:method:: store_trainer_config(trainer_config, ignore=None)
+
+      Stores the trainer configuration in the file config store.
+
+      :param trainer_config: The trainer configuration to store.
+      :type trainer_config: TrainerConfig
+      :param ignore: A list of keys to ignore when comparing the stored configuration with the new configuration. Defaults to None.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If a configuration with the same name already exists.
+
+      .. rubric:: Examples
+
+      >>> store.store_trainer_config(trainer_config)
+
+
+
+   .. py:method:: retrieve_trainer_config(trainer_name)
+
+      Retrieve the trainer configuration for a given trainer name.
+
+      :param trainer_name: The name of the trainer configuration to retrieve.
+      :type trainer_name: str
+
+      :returns: The trainer configuration object.
+      :rtype: TrainerConfig
+
+      :raises KeyError: If the trainer name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> trainer_config = store.retrieve_trainer_config("trainer1")
+
+
+
+   .. py:method:: retrieve_trainer_config_names()
+
+      Retrieve the names of the trainer configurations.
+
+      :param trainer_name: The name of the trainer configuration to retrieve.
+      :type trainer_name: str
+
+      :returns: The trainer configuration object.
+      :rtype: TrainerConfig
+
+      :raises KeyError: If the trainer name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> trainer_config = store.retrieve_trainer_config("trainer1")
+
+
+
+   .. py:method:: store_datasplit_config(datasplit_config, ignore=None)
+
+      Stores the datasplit configuration in the file config store.
+
+      :param datasplit_config: The datasplit configuration to store.
+      :type datasplit_config: DataSplitConfig
+      :param ignore: A list of keys to ignore when comparing the stored configuration with the new configuration. Defaults to None.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If a configuration with the same name already exists.
+
+      .. rubric:: Examples
+
+      >>> store.store_datasplit_config(datasplit_config)
+
+
+
+   .. py:method:: retrieve_datasplit_config(datasplit_name)
+
+      Retrieve the datasplit configuration for a given datasplit name.
+
+      :param datasplit_name: The name of the datasplit configuration to retrieve.
+      :type datasplit_name: str
+
+      :returns: The datasplit configuration object.
+      :rtype: DataSplitConfig
+
+      :raises KeyError: If the datasplit name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> datasplit_config = store.retrieve_datasplit_config("datasplit1")
+
+
+
+   .. py:method:: retrieve_datasplit_config_names()
+
+      Retrieve the names of the datasplit configurations.
+
+      :param datasplit_name: The name of the datasplit configuration to retrieve.
+      :type datasplit_name: str
+
+      :returns: The datasplit configuration object.
+      :rtype: DataSplitConfig
+
+      :raises KeyError: If the datasplit name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> datasplit_config = store.retrieve_datasplit_config("datasplit1")
+
+
+
+   .. py:method:: store_array_config(array_config, ignore=None)
+
+      Stores the array configuration in the file config store.
+
+      :param array_config: The array configuration to store.
+      :type array_config: ArrayConfig
+      :param ignore: A list of keys to ignore when comparing the stored configuration with the new configuration. Defaults to None.
+      :type ignore: list, optional
+
+      :raises DuplicateNameError: If a configuration with the same name already exists.
+
+      .. rubric:: Examples
+
+      >>> store.store_array_config(array_config)
+
+
+
+   .. py:method:: retrieve_array_config(array_name)
+
+      Retrieve the array configuration for a given array name.
+
+      :param array_name: The name of the array configuration to retrieve.
+      :type array_name: str
+
+      :returns: The array configuration object.
+      :rtype: ArrayConfig
+
+      :raises KeyError: If the array name does not exist in the store.
+
+      .. rubric:: Examples
+
+      >>> array_config = store.retrieve_array_config("array1")
+
+
+
+   .. py:method:: retrieve_array_config_names()
+
+      Retrieve the names of the array configurations.
+
+      :returns: A list of array configuration names.
+
+      :raises KeyError: If no array configurations are stored.
+
+      .. rubric:: Examples
+
+      >>> array_names = store.retrieve_array_config_names()
+
+
+
+   .. py:property:: users
+      :type: upath.UPath
+
+      Returns the path to the users directory.
+
+      :returns: The path to the users directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the users directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.users
+      Path("path/to/configs/users")
+
+
+   .. py:property:: runs
+      :type: upath.UPath
+
+      Returns the path to the runs directory.
+
+      :returns: The path to the runs directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the runs directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.runs
+      Path("path/to/configs/runs")
+
+
+   .. py:property:: tasks
+      :type: upath.UPath
+
+      Returns the path to the tasks directory.
+
+      :returns: The path to the tasks directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the tasks directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.tasks
+      Path("path/to/configs/tasks")
+
+
+   .. py:property:: datasplits
+      :type: upath.UPath
+
+      Returns the path to the datasplits directory.
+
+      :returns: The path to the datasplits directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the datasplits directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.datasplits
+      Path("path/to/configs/datasplits")
+
+
+   .. py:property:: arrays
+      :type: upath.UPath
+
+      Returns the path to the arrays directory.
+
+      :returns: The path to the arrays directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the arrays directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.arrays
+      Path("path/to/configs/arrays")
+
+
+   .. py:property:: architectures
+      :type: upath.UPath
+
+      Returns the path to the architectures directory.
+
+      :returns: The path to the architectures directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the architectures directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.architectures
+      Path("path/to/configs/architectures")
+
+
+   .. py:property:: trainers
+      :type: upath.UPath
+
+      Returns the path to the trainers directory.
+
+      :returns: The path to the trainers directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the trainers directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.trainers
+      Path("path/to/configs/trainers")
+
+
+   .. py:property:: datasets
+      :type: upath.UPath
+
+      Returns the path to the datasets directory.
+
+      :returns: The path to the datasets directory.
+      :rtype: Path
+
+      :raises FileNotFoundError: If the datasets directory does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.datasets
+      Path("path/to/configs/datasets")
+
+
+   .. py:method:: delete_config(database: upath.UPath, config_name: str) -> None
+
+      Deletes a configuration file from the specified database.
+
+      :param database: The path to the database where the configuration file is stored.
+      :type database: Path
+      :param config_name: The name of the configuration file to be deleted.
+      :type config_name: str
+
+      :raises FileNotFoundError: If the configuration file does not exist.
+
+      .. rubric:: Examples
+
+      >>> store.delete_config(Path("path/to/configs"), "run1")
+
+
+
+.. py:class:: MongoStatsStore(db_host, db_name)
+
+
+
+   A MongoDB store for run statistics. Used to store and retrieve training
+   statistics and validation scores.
+
+   .. attribute:: db_host
+
+      The host of the MongoDB database.
+
+      :type: str
+
+   .. attribute:: db_name
+
+      The name of the MongoDB database.
+
+      :type: str
+
+   .. attribute:: client
+
+      The MongoDB client.
+
+      :type: MongoClient
+
+   .. attribute:: database
+
+      The MongoDB database.
+
+      :type: Database
+
+   .. attribute:: training_stats
+
+      The collection for training statistics.
+
+      :type: Collection
+
+   .. attribute:: validation_scores
+
+      The collection for validation scores.
+
+      :type: Collection
+
+   .. method:: store_training_stats(run_name, stats)
+
+      Store the training stats of a given run.
+
+   .. method:: retrieve_training_stats(run_name)
+
+      Retrieve the training stats for a given run.
+
+   .. method:: store_validation_iteration_scores(run_name, scores)
+
+      Store the validation iteration scores of a given run.
+
+   .. method:: retrieve_validation_iteration_scores(run_name)
+
+      Retrieve the validation iteration scores for a given run.
+
+   .. method:: delete_training_stats(run_name)
+
+      Delete the training stats associated with a specific run.
+
+   .. rubric:: Notes
+
+   The MongoStatsStore uses the 'training_stats' and 'validation_scores' collections to store the statistics.
+
+
+   .. py:method:: store_training_stats(run_name: str, stats: dacapo.experiments.TrainingStats)
+
+      Store the training statistics for a specific run.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param stats: The training statistics to be stored.
+      :type stats: TrainingStats
+
+      :raises ValueError: If the training statistics are already stored.
+
+      .. rubric:: Examples
+
+      >>> store = MongoStatsStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> stats = TrainingStats()
+      >>> store.store_training_stats(run_name, stats)
+
+      .. rubric:: Notes
+
+      The training statistics are stored in the 'training_stats' collection.
+
+
+
+   .. py:method:: retrieve_training_stats(run_name: str, subsample: bool = False) -> dacapo.experiments.TrainingStats
+
+      Retrieve the training statistics for a given run.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param subsample: Whether to subsample the training statistics. Defaults to False.
+      :type subsample: bool, optional
+
+      :returns: The training statistics for the specified run.
+      :rtype: TrainingStats
+
+      :raises ValueError: If the training statistics are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoStatsStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> store.retrieve_training_stats(run_name)
+
+      .. rubric:: Notes
+
+      The training statistics are retrieved from the 'training_stats' collection.
+
+
+
+   .. py:method:: store_validation_iteration_scores(run_name: str, scores: dacapo.experiments.ValidationScores)
+
+      Stores the validation iteration scores for a given run.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param scores: The validation scores to store.
+      :type scores: ValidationScores
+
+      .. rubric:: Examples
+
+      >>> store = MongoStatsStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> scores = ValidationScores()
+      >>> store.store_validation_iteration_scores(run_name, scores)
+
+      .. rubric:: Notes
+
+      The validation iteration scores are stored in the 'validation_scores' collection.
+
+
+
+   .. py:method:: retrieve_validation_iteration_scores(run_name: str, subsample: bool = False, validation_interval: Optional[int] = None) -> List[dacapo.experiments.ValidationIterationScores]
+
+      Retrieve the validation iteration scores for a given run.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param subsample: Whether to subsample the scores. Defaults to False.
+      :type subsample: bool, optional
+      :param validation_interval: The interval at which to retrieve the scores. Defaults to None.
+      :type validation_interval: int, optional
+
+      :returns: A list of validation iteration scores.
+      :rtype: List[ValidationIterationScores]
+
+      :raises ValueError: If the validation iteration scores are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoStatsStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> store.retrieve_validation_iteration_scores(run_name)
+
+      .. rubric:: Notes
+
+      The validation iteration scores are retrieved from the 'validation_scores' collection.
+
+
+
+   .. py:method:: delete_validation_scores(run_name: str) -> None
+
+      Deletes the validation scores for a given run.
+
+      :param run_name: The name of the run for which validation scores should be deleted.
+      :type run_name: str
+
+      :raises ValueError: If the validation scores are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoStatsStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> store.delete_validation_scores(run_name)
+
+      .. rubric:: Notes
+
+      The validation scores are deleted from the 'validation_scores' collection.
+
+
+
+   .. py:method:: delete_training_stats(run_name: str) -> None
+
+      Deletes the training stats for a given run.
+
+      :param run_name: The name of the run for which training stats should be deleted.
+      :type run_name: str
+
+      :raises ValueError: If the training statistics are not available.
+
+      .. rubric:: Examples
+
+      >>> store = MongoStatsStore('localhost', 'dacapo')
+      >>> run_name = 'run_0'
+      >>> store.delete_training_stats(run_name)
+
+      .. rubric:: Notes
+
+      The training statistics are deleted from the 'training_stats' collection.
+
+
+
+.. py:class:: FileStatsStore(path)
+
+
+
+   A File based store for run statistics. Used to store and retrieve training statistics and validation scores.
+
+   The store is organized as follows:
+   - A directory for training statistics, with a subdirectory for each run. Each run directory contains a pickled list of TrainingIterationStats objects.
+   - A directory for validation scores, with a subdirectory for each run. Each run directory contains a pickled list of ValidationIterationScores objects.
+
+   Attributes:
+   - path: The root directory for the store.
+   - training_stats: The directory for training statistics.
+   - validation_scores: The directory for validation scores.
+
+   Methods:
+   - store_training_stats(run_name, stats): Store the training statistics for a run.
+   - retrieve_training_stats(run_name): Retrieve the training statistics for a run.
+   - store_validation_iteration_scores(run_name, scores): Store the validation scores for a run.
+   - retrieve_validation_iteration_scores(run_name): Retrieve the validation scores for a run.
+   - delete_training_stats(run_name): Delete the training statistics for a run.
+
+   Note: The store does not support concurrent access. It is intended for use in single-threaded applications.
+
+
+
+
+   .. py:method:: store_training_stats(run_name, stats)
+
+      Stores the training statistics for a specific run.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param stats: The training statistics to be stored.
+      :type stats: Stats
+
+      :raises ValueError: If the run name is invalid.
+
+      .. rubric:: Examples
+
+      >>> store.store_training_stats("run1", stats)
+
+      .. rubric:: Notes
+
+      - If the training statistics for the given run already exist in the database, the method will compare the
+        existing statistics with the new statistics and update or overwrite them accordingly.
+      - If the new statistics go further than the existing statistics, the method will update the statistics from
+        the last stored iteration.
+      - If the new statistics are behind the existing statistics, the method will overwrite the existing statistics.
+
+
+
+   .. py:method:: retrieve_training_stats(run_name)
+
+      Retrieve the training statistics for a specific run.
+
+      :param run_name: The name of the run for which to retrieve the training statistics.
+      :type run_name: str
+
+      :returns: A dictionary containing the training statistics for the specified run.
+      :rtype: dict
+
+
+
+   .. py:method:: store_validation_iteration_scores(run_name, scores)
+
+      Stores the validation scores for a specific run.
+
+      :param run_name: The name of the run.
+      :type run_name: str
+      :param scores: The validation scores to be stored.
+      :type scores: Scores
+
+      :raises ValueError: If the run name is invalid.
+
+      .. rubric:: Examples
+
+      >>> store.store_validation_iteration_scores("run1", scores)
+
+      .. rubric:: Notes
+
+      - If the validation scores for the given run already exist in the database, the method will compare the
+        existing scores with the new scores and update or overwrite them accordingly.
+      - If the new scores go further than the existing scores, the method will update the scores from
+        the last stored iteration.
+      - If the new scores are behind the existing scores, the method will overwrite the existing scores.
+
+
+
+   .. py:method:: retrieve_validation_iteration_scores(run_name)
+
+      Retrieve the validation iteration scores for a given run.
+
+      :param run_name: The name of the run for which to retrieve the validation iteration scores.
+      :type run_name: str
+
+      :returns: A list of validation iteration scores.
+      :rtype: list
+
+      :raises ValueError: If the run name is invalid.
+
+      .. rubric:: Examples
+
+      >>> store.retrieve_validation_iteration_scores("run1")
+
+
+
+   .. py:method:: delete_training_stats(run_name: str) -> None
+
+      Deletes the training stats for a specific run.
+
+      :param run_name: The name of the run for which to delete the training stats.
+      :type run_name: str
+
+      :raises ValueError: If the run name is invalid.
+
+      .. rubric:: Examples
+
+      >>> store.delete_training_stats("run1")
 
 
 

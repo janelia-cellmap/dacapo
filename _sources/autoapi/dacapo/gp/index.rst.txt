@@ -1,30 +1,27 @@
-:py:mod:`dacapo.gp`
-===================
+dacapo.gp
+=========
 
 .. py:module:: dacapo.gp
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   copy/index.rst
-   dacapo_array_source/index.rst
-   dacapo_create_target/index.rst
-   dacapo_points_source/index.rst
-   elastic_augment_fuse/index.rst
-   gamma_noise/index.rst
-   product/index.rst
-   reject_if_empty/index.rst
+   /autoapi/dacapo/gp/copy/index
+   /autoapi/dacapo/gp/dacapo_array_source/index
+   /autoapi/dacapo/gp/dacapo_create_target/index
+   /autoapi/dacapo/gp/dacapo_points_source/index
+   /autoapi/dacapo/gp/elastic_augment_fuse/index
+   /autoapi/dacapo/gp/gamma_noise/index
+   /autoapi/dacapo/gp/product/index
+   /autoapi/dacapo/gp/reject_if_empty/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -38,10 +35,10 @@ Classes
    dacapo.gp.Product
 
 
-
+Package Contents
+----------------
 
 .. py:class:: DaCapoArraySource(array: dacapo.experiments.datasplits.datasets.arrays.Array, key: gunpowder.ArrayKey)
-
 
 
 
@@ -72,6 +69,7 @@ Classes
       This class is a subclass of gunpowder.BatchProvider and is used to
       serve array data to gunpowder pipelines.
 
+
    .. py:method:: setup()
 
       Adds the key and the array spec to the provider.
@@ -81,6 +79,7 @@ Classes
       .. rubric:: Examples
 
       >>> array_source.setup()
+
 
 
    .. py:method:: provide(request)
@@ -102,7 +101,6 @@ Classes
 
 
 .. py:class:: DaCapoTargetFilter(predictor: dacapo.experiments.tasks.predictors.Predictor, gt_key: gunpowder.ArrayKey, target_key: Optional[gunpowder.ArrayKey] = None, weights_key: Optional[gunpowder.ArrayKey] = None, mask_key: Optional[gunpowder.ArrayKey] = None)
-
 
 
 
@@ -155,6 +153,7 @@ Classes
       This class is a subclass of gunpowder.BatchFilter and is used to
       generate the target from the ground truth.
 
+
    .. py:method:: setup()
 
       Set up the provider. This function sets the provider to provide the
@@ -165,6 +164,7 @@ Classes
       .. rubric:: Examples
 
       >>> target_filter.setup()
+
 
 
    .. py:method:: prepare(request)
@@ -184,6 +184,7 @@ Classes
       >>> request = gp.BatchRequest()
       >>> request[gp.ArrayKey("GT")] = gp.ArraySpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
       >>> target_filter.prepare(request)
+
 
 
    .. py:method:: process(batch, request)
@@ -207,7 +208,6 @@ Classes
 
 
 .. py:class:: GammaAugment(arrays, gamma_min, gamma_max)
-
 
 
 
@@ -239,6 +239,7 @@ Classes
       
       
 
+
    .. py:method:: setup()
 
       Configuring the internal state by iterating over arrays.
@@ -249,6 +250,7 @@ Classes
 
       >>> setup()
       setup()
+
 
 
    .. py:method:: process(batch, request)
@@ -270,7 +272,6 @@ Classes
 
 
 .. py:class:: ElasticAugment(control_point_spacing, control_point_displacement_sigma, rotation_interval, subsample=1, augmentation_probability=1.0, seed=None, uniform_3d_rotation=False)
-
 
 
 
@@ -305,6 +306,7 @@ Classes
    This node is a port of the ElasticAugment node from the original
    `gunpowder <
 
+
    .. py:method:: setup()
 
       Set up the object by calculating the voxel size and spatial dimensions.
@@ -319,6 +321,7 @@ Classes
       .. rubric:: Examples
 
       >>> setup()
+
 
 
    .. py:method:: prepare(request)
@@ -346,6 +349,7 @@ Classes
       8. Updates the upstream request with the modified ROI.
 
 
+
    .. py:method:: process(batch, request)
 
       Process the ElasticAugment node.
@@ -369,7 +373,6 @@ Classes
 
 
 
-
    Reject batches based on the masked-in vs. masked-out ratio.
    .. attribute:: gt
 
@@ -388,6 +391,7 @@ Classes
        provide: Provide a batch.
 
 
+
    .. py:method:: setup()
 
       Set up the provider.
@@ -398,6 +402,7 @@ Classes
 
       >>> setup()
       setup()
+
 
 
    .. py:method:: provide(request)
@@ -418,7 +423,6 @@ Classes
 
 
 .. py:class:: CopyMask(array_key: gunpowder.ArrayKey, copy_key: gunpowder.ArrayKey, drop_channels: bool = False)
-
 
 
 
@@ -459,6 +463,7 @@ Classes
       This class is a subclass of gunpowder.BatchFilter and is used to
       copy a mask into a new key with the option to drop channels via max collapse.
 
+
    .. py:method:: setup()
 
       Sets up the filter by enabling autoskip and providing the copied key.
@@ -468,6 +473,7 @@ Classes
       .. rubric:: Examples
 
       >>> copy_mask.setup()
+
 
 
    .. py:method:: prepare(request)
@@ -486,6 +492,7 @@ Classes
       >>> request = gp.BatchRequest()
       >>> request[self.copy_key] = gp.ArraySpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
       >>> copy_mask.prepare(request)
+
 
 
    .. py:method:: process(batch, request)
@@ -511,7 +518,6 @@ Classes
 
 
 .. py:class:: GraphSource(key: gunpowder.GraphKey, graph: gunpowder.Graph)
-
 
 
 
@@ -546,6 +552,7 @@ Classes
       This class is a subclass of gunpowder.BatchProvider and is used to
       serve graph data to gunpowder pipelines.
 
+
    .. py:method:: setup()
 
       Set up the provider. This function sets the provider to provide the
@@ -556,6 +563,7 @@ Classes
       .. rubric:: Examples
 
       >>> graph_source.setup()
+
 
 
    .. py:method:: provide(request)
@@ -584,7 +592,6 @@ Classes
 
 
 .. py:class:: Product(x1_key: gunpowder.ArrayKey, x2_key: gunpowder.ArrayKey, y_key: gunpowder.ArrayKey)
-
 
 
 
@@ -617,6 +624,7 @@ Classes
        process: Process the Product BatchFilter.
 
 
+
    .. py:method:: setup()
 
       Set up the Product BatchFilter.
@@ -629,6 +637,7 @@ Classes
 
       >>> setup()
       setup()
+
 
 
    .. py:method:: prepare(request)
@@ -647,6 +656,7 @@ Classes
 
       >>> prepare(request)
       prepare(request)
+
 
 
    .. py:method:: process(batch, request)

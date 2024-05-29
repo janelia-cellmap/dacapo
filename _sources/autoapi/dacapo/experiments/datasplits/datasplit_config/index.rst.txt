@@ -1,24 +1,21 @@
-:py:mod:`dacapo.experiments.datasplits.datasplit_config`
-========================================================
+dacapo.experiments.datasplits.datasplit_config
+==============================================
 
 .. py:module:: dacapo.experiments.datasplits.datasplit_config
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.experiments.datasplits.datasplit_config.DataSplitConfig
 
 
-
+Module Contents
+---------------
 
 .. py:class:: DataSplitConfig
-
 
    A class used to create a DataSplit configuration object.
 
@@ -38,10 +35,10 @@ Classes
 
    This class is used to create a DataSplit configuration object.
 
-   .. py:attribute:: name
-      :type: str
 
-      
+   .. py:attribute:: name
+      :type:  str
+
 
    .. py:method:: verify() -> Tuple[bool, str]
 

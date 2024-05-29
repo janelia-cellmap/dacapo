@@ -1,24 +1,21 @@
-:py:mod:`dacapo.experiments.trainers.trainer_config`
-====================================================
+dacapo.experiments.trainers.trainer_config
+==========================================
 
 .. py:module:: dacapo.experiments.trainers.trainer_config
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.experiments.trainers.trainer_config.TrainerConfig
 
 
-
+Module Contents
+---------------
 
 .. py:class:: TrainerConfig
-
 
    A class to represent the Trainer Configurations.
 
@@ -50,20 +47,18 @@ Classes
 
    .. note:: The TrainerConfig class is an abstract class that cannot be instantiated directly. It is meant to be subclassed.
 
-   .. py:attribute:: name
-      :type: str
 
-      
+   .. py:attribute:: name
+      :type:  str
+
 
    .. py:attribute:: batch_size
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: learning_rate
-      :type: float
+      :type:  float
 
-      
 
    .. py:method:: verify() -> Tuple[bool, str]
 

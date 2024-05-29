@@ -1,43 +1,40 @@
-:py:mod:`dacapo.experiments`
-============================
+dacapo.experiments
+==================
 
 .. py:module:: dacapo.experiments
 
 
 Subpackages
 -----------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
 
-   architectures/index.rst
-   arraytypes/index.rst
-   datasplits/index.rst
-   starts/index.rst
-   tasks/index.rst
-   trainers/index.rst
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/dacapo/experiments/architectures/index
+   /autoapi/dacapo/experiments/arraytypes/index
+   /autoapi/dacapo/experiments/datasplits/index
+   /autoapi/dacapo/experiments/starts/index
+   /autoapi/dacapo/experiments/tasks/index
+   /autoapi/dacapo/experiments/trainers/index
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   model/index.rst
-   run/index.rst
-   run_config/index.rst
-   training_iteration_stats/index.rst
-   training_stats/index.rst
-   validation_iteration_scores/index.rst
-   validation_scores/index.rst
+   /autoapi/dacapo/experiments/model/index
+   /autoapi/dacapo/experiments/run/index
+   /autoapi/dacapo/experiments/run_config/index
+   /autoapi/dacapo/experiments/training_iteration_stats/index
+   /autoapi/dacapo/experiments/training_stats/index
+   /autoapi/dacapo/experiments/validation_iteration_scores/index
+   /autoapi/dacapo/experiments/validation_scores/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -49,10 +46,10 @@ Classes
    dacapo.experiments.ValidationScores
 
 
-
+Package Contents
+----------------
 
 .. py:class:: Model(architecture: dacapo.experiments.architectures.architecture.Architecture, prediction_head: torch.nn.Module, eval_activation: torch.nn.Module | None = None)
-
 
 
 
@@ -135,15 +132,14 @@ Classes
 
    .. note:: The output shape is the spatial shape of the model, i.e., not accounting for channels and batch dimensions.
 
-   .. py:attribute:: num_out_channels
-      :type: int
 
-      
+   .. py:attribute:: num_out_channels
+      :type:  int
+
 
    .. py:attribute:: num_in_channels
-      :type: int
+      :type:  int
 
-      
 
    .. py:method:: forward(x)
 
@@ -162,6 +158,7 @@ Classes
       torch.Tensor
 
       .. note:: The eval_activation is only applied during evaluation. This is particularly useful if you want to train with something like BCELossWithLogits, since you want to avoid applying softmax while training, but apply it during evaluation.
+
 
 
    .. py:method:: compute_output_shape(input_shape: funlib.geometry.Coordinate) -> Tuple[int, funlib.geometry.Coordinate]
@@ -187,6 +184,7 @@ Classes
       .. note:: The output shape is the spatial shape of the model, i.e., not accounting for channels and batch dimensions.
 
 
+
    .. py:method:: scale(voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
 
       Scale the model by the given voxel size.
@@ -210,7 +208,6 @@ Classes
 
 
 .. py:class:: RunConfig
-
 
    A class to represent a configuration of a run that helps to structure all the tasks,
    architecture, training, and datasplit configurations.
@@ -249,54 +246,44 @@ Classes
    start_config : `Optional[StartConfig]`
        A starting point for continued training. It is optional and can be left out.
 
-   .. py:attribute:: task_config
-      :type: dacapo.experiments.tasks.TaskConfig
 
-      
+   .. py:attribute:: task_config
+      :type:  dacapo.experiments.tasks.TaskConfig
+
 
    .. py:attribute:: architecture_config
-      :type: dacapo.experiments.architectures.ArchitectureConfig
+      :type:  dacapo.experiments.architectures.ArchitectureConfig
 
-      
 
    .. py:attribute:: trainer_config
-      :type: dacapo.experiments.trainers.TrainerConfig
+      :type:  dacapo.experiments.trainers.TrainerConfig
 
-      
 
    .. py:attribute:: datasplit_config
-      :type: dacapo.experiments.datasplits.DataSplitConfig
+      :type:  dacapo.experiments.datasplits.DataSplitConfig
 
-      
 
    .. py:attribute:: name
-      :type: str
+      :type:  str
 
-      
 
    .. py:attribute:: repetition
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: num_iterations
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: validation_interval
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: start_config
-      :type: Optional[dacapo.experiments.starts.StartConfig]
-
-      
+      :type:  Optional[dacapo.experiments.starts.StartConfig]
 
 
 .. py:class:: TrainingIterationStats
-
 
    A class to represent the training iteration statistics. It contains the loss and time taken for each iteration.
 
@@ -324,24 +311,20 @@ Classes
       - The outer list contains the stats for each iteration.
       - The inner list contains the stats for each training iteration.
 
-   .. py:attribute:: iteration
-      :type: int
 
-      
+   .. py:attribute:: iteration
+      :type:  int
+
 
    .. py:attribute:: loss
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: time
-      :type: float
-
-      
+      :type:  float
 
 
 .. py:class:: TrainingStats
-
 
    A class used to represent Training Statistics. It contains a list of training
    iteration statistics. It also provides methods to add new iteration stats,
@@ -380,10 +363,10 @@ Classes
       - The outer list contains the stats for each iteration.
       - The inner list contains the stats for each training iteration.
 
-   .. py:attribute:: iteration_stats
-      :type: List[dacapo.experiments.training_iteration_stats.TrainingIterationStats]
 
-      
+   .. py:attribute:: iteration_stats
+      :type:  List[dacapo.experiments.training_iteration_stats.TrainingIterationStats]
+
 
    .. py:method:: add_iteration_stats(iteration_stats: dacapo.experiments.training_iteration_stats.TrainingIterationStats) -> None
 
@@ -412,6 +395,7 @@ Classes
          - The inner list contains the stats for each training iteration.
 
 
+
    .. py:method:: delete_after(iteration: int) -> None
 
       Deletes training stats after a specified iteration.
@@ -438,6 +422,7 @@ Classes
          - The inner list contains the stats for each training iteration.
 
 
+
    .. py:method:: trained_until() -> int
 
       The number of iterations trained for (the maximum iteration plus one).
@@ -462,6 +447,7 @@ Classes
          The iteration stats list is structured as follows:
          - The outer list contains the stats for each iteration.
          - The inner list contains the stats for each training iteration.
+
 
 
    .. py:method:: to_xarray() -> xarray.DataArray
@@ -495,7 +481,6 @@ Classes
 
 .. py:class:: ValidationIterationScores
 
-
    A class used to represent the validation iteration scores in an organized structure.
 
    .. attribute:: iteration
@@ -521,19 +506,16 @@ Classes
       - The middle list contains the scores for each post processor parameter.
       - The inner list contains the scores for each evaluation criterion.
 
-   .. py:attribute:: iteration
-      :type: int
 
-      
+   .. py:attribute:: iteration
+      :type:  int
+
 
    .. py:attribute:: scores
-      :type: List[List[List[float]]]
-
-      
+      :type:  List[List[List[float]]]
 
 
 .. py:class:: ValidationScores
-
 
    Class representing the validation scores for a set of parameters and datasets.
 
@@ -604,61 +586,22 @@ Classes
    The `scores` attribute is a list of `ValidationIterationScores` objects, each of which
    contains the scores for a single iteration.
 
-   .. py:property:: criteria
-      :type: List[str]
-
-      Get the list of evaluation criteria.
-
-      :returns: The list of evaluation criteria.
-
-      :raises ValueError: If there are no scores.
-
-      .. rubric:: Examples
-
-      >>> validation_scores.criteria
-
-      .. note::
-
-         This property is used to get the list of evaluation criteria. This is useful when you
-         want to know what criteria are being used to evaluate the scores.
-
-   .. py:property:: parameter_names
-      :type: List[str]
-
-      Get the list of parameter names.
-
-      :returns: The list of parameter names.
-
-      :raises ValueError: If there are no scores.
-
-      .. rubric:: Examples
-
-      >>> validation_scores.parameter_names
-
-      .. note::
-
-         This property is used to get the list of parameter names. This is useful when you want
-         to know what parameters are being used to evaluate the scores.
 
    .. py:attribute:: parameters
-      :type: List[dacapo.experiments.tasks.post_processors.PostProcessorParameters]
+      :type:  List[dacapo.experiments.tasks.post_processors.PostProcessorParameters]
 
-      
 
    .. py:attribute:: datasets
-      :type: List[dacapo.experiments.datasplits.datasets.Dataset]
+      :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
 
-      
 
    .. py:attribute:: evaluation_scores
-      :type: dacapo.experiments.tasks.evaluators.EvaluationScores
+      :type:  dacapo.experiments.tasks.evaluators.EvaluationScores
 
-      
 
    .. py:attribute:: scores
-      :type: List[dacapo.experiments.validation_iteration_scores.ValidationIterationScores]
+      :type:  List[dacapo.experiments.validation_iteration_scores.ValidationIterationScores]
 
-      
 
    .. py:method:: subscores(iteration_scores: List[dacapo.experiments.validation_iteration_scores.ValidationIterationScores]) -> ValidationScores
 
@@ -681,6 +624,7 @@ Classes
          that only contains the scores up to a certain iteration.
 
 
+
    .. py:method:: add_iteration_scores(iteration_scores: dacapo.experiments.validation_iteration_scores.ValidationIterationScores) -> None
 
       Add iteration scores to the list of scores.
@@ -697,6 +641,7 @@ Classes
 
          This method is used to add iteration scores to the list of scores. This is useful when
          you want to add scores for a new iteration to the ValidationScores object.
+
 
 
    .. py:method:: delete_after(iteration: int) -> None
@@ -717,6 +662,7 @@ Classes
          you want to delete scores after a certain iteration.
 
 
+
    .. py:method:: validated_until() -> int
 
       Get the number of iterations validated for (the maximum iteration plus one).
@@ -733,6 +679,7 @@ Classes
 
          This method is used to get the number of iterations validated for (the maximum iteration
          plus one). This is useful when you want to know how many iterations have been validated.
+
 
 
    .. py:method:: compare(existing_iteration_scores: List[dacapo.experiments.validation_iteration_scores.ValidationIterationScores]) -> Tuple[bool, int]
@@ -762,6 +709,45 @@ Classes
          existing iteration, just update existing scores with the last overhanging local scores.
 
 
+
+   .. py:property:: criteria
+      :type: List[str]
+
+      Get the list of evaluation criteria.
+
+      :returns: The list of evaluation criteria.
+
+      :raises ValueError: If there are no scores.
+
+      .. rubric:: Examples
+
+      >>> validation_scores.criteria
+
+      .. note::
+
+         This property is used to get the list of evaluation criteria. This is useful when you
+         want to know what criteria are being used to evaluate the scores.
+
+
+   .. py:property:: parameter_names
+      :type: List[str]
+
+      Get the list of parameter names.
+
+      :returns: The list of parameter names.
+
+      :raises ValueError: If there are no scores.
+
+      .. rubric:: Examples
+
+      >>> validation_scores.parameter_names
+
+      .. note::
+
+         This property is used to get the list of parameter names. This is useful when you want
+         to know what parameters are being used to evaluate the scores.
+
+
    .. py:method:: to_xarray() -> xarray.DataArray
 
       Convert the validation scores to an xarray DataArray.
@@ -778,6 +764,7 @@ Classes
 
          This method is used to convert the validation scores to an xarray DataArray. This is
          useful when you want to work with the validation scores as an xarray DataArray.
+
 
 
    .. py:method:: get_best(data: xarray.DataArray, dim: str) -> Tuple[xarray.DataArray, xarray.DataArray]

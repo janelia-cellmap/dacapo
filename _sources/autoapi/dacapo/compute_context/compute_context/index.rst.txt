@@ -1,27 +1,83 @@
-:py:mod:`dacapo.compute_context.compute_context`
-================================================
+dacapo.compute_context.compute_context
+======================================
 
 .. py:module:: dacapo.compute_context.compute_context
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.compute_context.compute_context.Options
+   dacapo.compute_context.compute_context.ComputeContext
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   dacapo.compute_context.compute_context.create_compute_context
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: Options
 
-.. autoapisummary::
+   A class that provides options for configuring DaCapo.
 
-   dacapo.compute_context.compute_context.ComputeContext
+   This class is designed as a singleton and should be accessed using the `instance` method.
+
+   .. method:: instance
+
+      Returns an instance of the Options class.
+
+   .. method:: config_file
+
+      Returns the path to the configuration file.
+
+   .. method:: __parse_options_from_file
+
+      Parses options from the configuration file.
+
+   .. method:: __parse_options
+
+      Parses options from the configuration file and updates them with the provided kwargs.
+      
+
+
+   .. py:method:: instance(**kwargs) -> DaCapoConfig
+      :classmethod:
+
+
+      Returns an instance of the Options class.
+
+      :param kwargs: Additional keyword arguments to update the options.
+
+      :returns: An instance of the DaCapoConfig class.
+
+      .. rubric:: Examples
+
+      >>> options = Options.instance()
+      >>> options
+      DaCapoConfig(type='files', runs_base_dir=PosixPath('/home/user/dacapo'), compute_context={'type': 'LocalTorch', 'config': {}}, mongo_db_host=None, mongo_db_name=None)
 
 
 
-Functions
-~~~~~~~~~
+   .. py:method:: config_file() -> Optional[upath.UPath]
+      :classmethod:
 
-.. autoapisummary::
 
-   dacapo.compute_context.compute_context.create_compute_context
+      Returns the path to the configuration file.
+
+      :returns: The path to the configuration file if found, otherwise None.
+
+      .. rubric:: Examples
+
+      >>> Options.config_file()
+      PosixPath('/home/user/.config/dacapo/dacapo.yaml')
 
 
 
@@ -29,9 +85,29 @@ Functions
 
 
 
+   The ComputeContext class is an abstract base class for defining the context in which computations are to be done.
+   It is inherited from the built-in class `ABC` (Abstract Base Classes). Other classes can inherit this class to define
+   their own specific variations of the context. It requires to implement several property methods, and also includes
+   additional methods related to the context design.
 
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+   .. attribute:: device
+
+      The device on which computations are to be done.
+
+   .. method:: _wrap_command(command)
+
+      Wraps a command in the context specific command.
+
+   .. method:: wrap_command(command)
+
+      Wraps a command in the context specific command and returns it.
+
+   .. method:: execute(command)
+
+      Runs a command in the context specific way.
+
+   .. note:: The class is abstract and requires to implement the abstract methods.
+
 
    .. py:property:: device
       :abstractmethod:
@@ -52,31 +128,6 @@ Functions
 
       .. note:: The method should be implemented in the derived class.
 
-   .. py:attribute:: distribute_workers
-      :type: Optional[bool]
-
-      The ComputeContext class is an abstract base class for defining the context in which computations are to be done.
-      It is inherited from the built-in class `ABC` (Abstract Base Classes). Other classes can inherit this class to define
-      their own specific variations of the context. It requires to implement several property methods, and also includes
-      additional methods related to the context design.
-
-      .. attribute:: device
-
-         The device on which computations are to be done.
-
-      .. method:: _wrap_command(command)
-
-         Wraps a command in the context specific command.
-
-      .. method:: wrap_command(command)
-
-         Wraps a command in the context specific command and returns it.
-
-      .. method:: execute(command)
-
-         Runs a command in the context specific way.
-
-      .. note:: The class is abstract and requires to implement the abstract methods.
 
    .. py:method:: wrap_command(command)
 
@@ -97,6 +148,7 @@ Functions
       >>> wrapped_command = context.wrap_command(command)
 
       .. note:: The method should be implemented in the derived class.
+
 
 
    .. py:method:: execute(command)

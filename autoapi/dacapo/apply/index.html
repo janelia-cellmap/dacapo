@@ -53,17 +53,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">dacapo</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
-<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.apply</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../options/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.options</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.plot</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../predict/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.predict</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../train/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.train</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../validate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.validate</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">dacapo.apply</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../options/index.html">dacapo.options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../plot/index.html">dacapo.plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../predict/index.html">dacapo.predict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../train/index.html">dacapo.train</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../validate/index.html">dacapo.validate</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../index.html#classes">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../index.html#functions">Functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../index.html#package-contents">Package Contents</a></li>
 </ul>
 </li>
@@ -87,8 +89,8 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
-          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a></li>
-      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.apply</span></code></li>
+          <li class="breadcrumb-item"><a href="../index.html">dacapo</a></li>
+      <li class="breadcrumb-item active">dacapo.apply</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../_sources/autoapi/dacapo/apply/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -99,24 +101,9 @@
            <div itemprop="articleBody">
              
   <section id="module-dacapo.apply">
-<span id="dacapo-apply"></span><h1><a class="reference internal" href="../index.html#dacapo.apply" title="dacapo.apply"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.apply</span></code></a><a class="headerlink" href="#module-dacapo.apply" title="Link to this heading"></a></h1>
-<section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
-<section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.apply.apply" title="dacapo.apply.apply"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply</span></code></a>(run_name, input_container, input_dataset, ...[, ...])</p></td>
-<td><p>Load weights and apply a trained model to a dataset. If iteration is None, the best iteration based on the criterion is used. If roi is None, the whole input dataset is used.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.apply.apply_run" title="dacapo.apply.apply_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_run</span></code></a>(run, iteration, parameters, ...[, roi, ...])</p></td>
-<td><p>Apply the model to a dataset. If roi is None, the whole input dataset is used. Assumes model is already loaded.</p></td>
-</tr>
-</tbody>
-</table>
-</section>
+<span id="dacapo-apply"></span><h1>dacapo.apply<a class="headerlink" href="#module-dacapo.apply" title="Link to this heading"></a></h1>
 <section id="attributes">
-<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.apply.logger" title="dacapo.apply.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
@@ -124,6 +111,1642 @@
 </tr>
 </tbody>
 </table>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.apply.Array" title="dacapo.apply.Array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Array</span></code></a></p></td>
+<td><p>An Array is a multi-dimensional array of data that can be read from and written to. It is</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.apply.Dataset" title="dacapo.apply.Dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dataset</span></code></a></p></td>
+<td><p>A class to represent a dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.apply.Run" title="dacapo.apply.Run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Run</span></code></a></p></td>
+<td><p>Class representing a run in the experiment. A run is a combination of a task, architecture, trainer, datasplit,</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.apply.PostProcessorParameters" title="dacapo.apply.PostProcessorParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PostProcessorParameters</span></code></a></p></td>
+<td><p>Base class for post-processor parameters. Post-processor parameters are</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.apply.LocalArrayIdentifier" title="dacapo.apply.LocalArrayIdentifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocalArrayIdentifier</span></code></a></p></td>
+<td><p>Represents a local array identifier.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.apply.ZarrArray" title="dacapo.apply.ZarrArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ZarrArray</span></code></a></p></td>
+<td><p>This is a zarr array.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.apply.predict" title="dacapo.apply.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(run_name, iteration, input_container, ...[, ...])</p></td>
+<td><p>Predict with a trained model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.apply.create_config_store" title="dacapo.apply.create_config_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_config_store</span></code></a>()</p></td>
+<td><p>Create a config store based on the global DaCapo options.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.apply.create_weights_store" title="dacapo.apply.create_weights_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_weights_store</span></code></a>()</p></td>
+<td><p>Create a weights store based on the global DaCapo options.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.apply.apply" title="dacapo.apply.apply"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply</span></code></a>(run_name, input_container, input_dataset, ...[, ...])</p></td>
+<td><p>Load weights and apply a trained model to a dataset. If iteration is None, the best iteration based on the criterion is used. If roi is None, the whole input dataset is used.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.apply.apply_run" title="dacapo.apply.apply_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_run</span></code></a>(run, iteration, parameters, ...[, roi, ...])</p></td>
+<td><p>Apply the model to a dataset. If roi is None, the whole input dataset is used. Assumes model is already loaded.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.apply.Array">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.apply.</span></span><span class="sig-name descname"><span class="pre">Array</span></span><a class="headerlink" href="#dacapo.apply.Array" title="Link to this definition"></a></dt>
+<dd><p>An Array is a multi-dimensional array of data that can be read from and written to. It is
+defined by a region of interest (ROI) in world units, a voxel size, and a number of spatial
+dimensions. The data is stored in a numpy array, and can be accessed using numpy-like slicing
+syntax.</p>
+<p>The Array class is an abstract base class that defines the interface for all Array
+implementations. It provides a number of properties that must be implemented by subclasses,
+such as the ROI, voxel size, and data type of the array. It also provides a method for fetching
+data from the array, which is implemented by slicing the numpy array.</p>
+<p>The Array class also provides a method for checking if the array can be visualized in
+Neuroglancer, and a method for generating a Neuroglancer layer for the array. These methods are
+implemented by subclasses that support visualization in Neuroglancer.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Array.attrs">
+<span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.apply.Array.attrs" title="Link to this definition"></a></dt>
+<dd><p>A dictionary of metadata attributes stored on this array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Array.axes">
+<span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.apply.Array.axes" title="Link to this definition"></a></dt>
+<dd><p>The axes of this dataset as a string of characters, as they are indexed.
+Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Array.dims">
+<span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#dacapo.apply.Array.dims" title="Link to this definition"></a></dt>
+<dd><p>The number of spatial dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Array.voxel_size">
+<span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#dacapo.apply.Array.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>The size of a voxel in physical units.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Coordinate</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Array.roi">
+<span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#dacapo.apply.Array.roi" title="Link to this definition"></a></dt>
+<dd><p>The total ROI of this array, in world units.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Roi</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Array.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.apply.Array.dtype" title="Link to this definition"></a></dt>
+<dd><p>The dtype of this array, in numpy dtypes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Array.num_channels">
+<span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#dacapo.apply.Array.num_channels" title="Link to this definition"></a></dt>
+<dd><p>The number of channels provided by this dataset. Should return
+None if the channel dimension doesn’t exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Array.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.apply.Array.data" title="Link to this definition"></a></dt>
+<dd><p>A numpy-like readable and writable view into this array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Array.writable">
+<span class="sig-name descname"><span class="pre">writable</span></span><a class="headerlink" href="#dacapo.apply.Array.writable" title="Link to this definition"></a></dt>
+<dd><p>Can we write to this Array?</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__getitem__(self,</span> <span class="pre">roi</span></span></dt>
+<dd><p>Roi) -&gt; np.ndarray: Get a numpy like readable and writable view into
+this array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.Array._can_neuroglance">
+<span class="sig-name descname"><span class="pre">_can_neuroglance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.apply.Array._can_neuroglance" title="Link to this definition"></a></dt>
+<dd><p>Check if this array can be visualized in Neuroglancer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.Array._neuroglancer_layer">
+<span class="sig-name descname"><span class="pre">_neuroglancer_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.Array._neuroglancer_layer" title="Link to this definition"></a></dt>
+<dd><p>Generate a Neuroglancer layer for this array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">_slices(self,</span> <span class="pre">roi</span></span></dt>
+<dd><p>Roi) -&gt; Iterable[slice]: Generate a list of slices for the given ROI.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is used to define the interface for all Array implementations. It provides a
+number of properties that must be implemented by subclasses, such as the ROI, voxel size, and
+data type of the array. It also provides a method for fetching data from the array, which is
+implemented by slicing the numpy array. The Array class also provides a method for checking
+if the array can be visualized in Neuroglancer, and a method for generating a Neuroglancer
+layer for the array. These methods are implemented by subclasses that support visualization
+in Neuroglancer.</p>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>Return a dictionary of metadata attributes stored on this array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary of metadata attributes stored on this array.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict[str, Any]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">attrs</span>
+<span class="go">{}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented by the subclass.</p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>Returns the axes of this dataset as a string of charactes, as they
+are indexed. Permitted characters are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The axes of this dataset as a string of characters, as they are indexed.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[str]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">axes</span>
+<span class="go">[&#39;z&#39;, &#39;y&#39;, &#39;x&#39;]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented by the subclass.</p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>Returns the number of spatial dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The number of spatial dimensions.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">dims</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented by the subclass.</p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id3">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>The size of a voxel in physical units.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The size of a voxel in physical units.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Coordinate</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">voxel_size</span>
+<span class="go">Coordinate((1, 1, 1))</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented by the subclass.</p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id4">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>The total ROI of this array, in world units.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The total ROI of this array, in world units.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Roi</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">roi</span>
+<span class="go">Roi(offset=Coordinate((0, 0, 0)), shape=Coordinate((100, 100, 100)))</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented by the subclass.</p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id5">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>The dtype of this array, in numpy dtypes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The dtype of this array, in numpy dtypes.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">dtype</span>
+<span class="go">np.dtype(&#39;uint8&#39;)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented by the subclass.</p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id6">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>The number of channels provided by this dataset.
+Should return None if the channel dimension doesn’t exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The number of channels provided by this dataset.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional[int]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">num_channels</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented by the subclass.</p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id7">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>Get a numpy like readable and writable view into this array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A numpy like readable and writable view into this array.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">data</span>
+<span class="go">np.ndarray</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented by the subclass.</p>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id8">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p>Can we write to this Array?</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can we write to this Array?</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">writable</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented by the subclass.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.apply.Dataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.apply.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><a class="headerlink" href="#dacapo.apply.Dataset" title="Link to this definition"></a></dt>
+<dd><p>A class to represent a dataset.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Dataset.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.apply.Dataset.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Dataset.raw">
+<span class="sig-name descname"><span class="pre">raw</span></span><a class="headerlink" href="#dacapo.apply.Dataset.raw" title="Link to this definition"></a></dt>
+<dd><p>The raw dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dacapo.apply.Array" title="dacapo.apply.Array">Array</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Dataset.gt">
+<span class="sig-name descname"><span class="pre">gt</span></span><a class="headerlink" href="#dacapo.apply.Dataset.gt" title="Link to this definition"></a></dt>
+<dd><p>The ground truth data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dacapo.apply.Array" title="dacapo.apply.Array">Array</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Dataset.mask">
+<span class="sig-name descname"><span class="pre">mask</span></span><a class="headerlink" href="#dacapo.apply.Dataset.mask" title="Link to this definition"></a></dt>
+<dd><p>The mask for the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dacapo.apply.Array" title="dacapo.apply.Array">Array</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Dataset.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><a class="headerlink" href="#dacapo.apply.Dataset.weight" title="Link to this definition"></a></dt>
+<dd><p>The weight of the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Dataset.sample_points">
+<span class="sig-name descname"><span class="pre">sample_points</span></span><a class="headerlink" href="#dacapo.apply.Dataset.sample_points" title="Link to this definition"></a></dt>
+<dd><p>The list of sample points in the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[Coordinate], optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.Dataset.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.Dataset.__eq__" title="Link to this definition"></a></dt>
+<dd><p>Overloaded equality operator for dataset objects.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.Dataset.__hash__">
+<span class="sig-name descname"><span class="pre">__hash__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.Dataset.__hash__" title="Link to this definition"></a></dt>
+<dd><p>Calculates a hash for the dataset.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.Dataset.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.Dataset.__repr__" title="Link to this definition"></a></dt>
+<dd><p>Returns the official string representation of the dataset object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.Dataset.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.Dataset.__str__" title="Link to this definition"></a></dt>
+<dd><p>Returns the string representation of the dataset object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.Dataset._neuroglancer_layers">
+<span class="sig-name descname"><span class="pre">_neuroglancer_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.Dataset._neuroglancer_layers" title="Link to this definition"></a></dt>
+<dd><p>Generates neuroglancer layers for raw, gt and mask if they can be viewed by neuroglance, excluding those in
+the exclude_layers.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This class is a base class and should not be instantiated.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../experiments/datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></em><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">gt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../experiments/datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">mask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../experiments/datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">sample_points</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">funlib.geometry.Coordinate</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id14" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.apply.Run">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.apply.</span></span><span class="sig-name descname"><span class="pre">Run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_starter_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.Run" title="Link to this definition"></a></dt>
+<dd><p>Class representing a run in the experiment. A run is a combination of a task, architecture, trainer, datasplit,
+model, optimizer, training stats, and validation scores. It also contains the name of the run, the number of
+iterations to train for, and the interval at which to validate. It also contains a start object that can be used to
+initialize the model with preloaded weights. The run object can be used to move the optimizer to a specified device.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Run.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.apply.Run.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Run.train_until">
+<span class="sig-name descname"><span class="pre">train_until</span></span><a class="headerlink" href="#dacapo.apply.Run.train_until" title="Link to this definition"></a></dt>
+<dd><p>The number of iterations to train for.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Run.validation_interval">
+<span class="sig-name descname"><span class="pre">validation_interval</span></span><a class="headerlink" href="#dacapo.apply.Run.validation_interval" title="Link to this definition"></a></dt>
+<dd><p>The interval at which to validate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Run.task">
+<span class="sig-name descname"><span class="pre">task</span></span><a class="headerlink" href="#dacapo.apply.Run.task" title="Link to this definition"></a></dt>
+<dd><p>The task object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../experiments/run/index.html#dacapo.experiments.run.Task" title="dacapo.experiments.run.Task">Task</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Run.architecture">
+<span class="sig-name descname"><span class="pre">architecture</span></span><a class="headerlink" href="#dacapo.apply.Run.architecture" title="Link to this definition"></a></dt>
+<dd><p>The architecture object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../experiments/architectures/architecture/index.html#dacapo.experiments.architectures.architecture.Architecture" title="dacapo.experiments.architectures.architecture.Architecture">Architecture</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Run.trainer">
+<span class="sig-name descname"><span class="pre">trainer</span></span><a class="headerlink" href="#dacapo.apply.Run.trainer" title="Link to this definition"></a></dt>
+<dd><p>The trainer object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../experiments/run/index.html#dacapo.experiments.run.Trainer" title="dacapo.experiments.run.Trainer">Trainer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Run.datasplit">
+<span class="sig-name descname"><span class="pre">datasplit</span></span><a class="headerlink" href="#dacapo.apply.Run.datasplit" title="Link to this definition"></a></dt>
+<dd><p>The datasplit object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../experiments/datasplits/datasplit/index.html#dacapo.experiments.datasplits.datasplit.DataSplit" title="dacapo.experiments.datasplits.datasplit.DataSplit">DataSplit</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Run.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#dacapo.apply.Run.model" title="Link to this definition"></a></dt>
+<dd><p>The model object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../experiments/index.html#dacapo.experiments.Model" title="dacapo.experiments.Model">Model</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Run.optimizer">
+<span class="sig-name descname"><span class="pre">optimizer</span></span><a class="headerlink" href="#dacapo.apply.Run.optimizer" title="Link to this definition"></a></dt>
+<dd><p>The optimizer object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.optim.Optimizer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Run.training_stats">
+<span class="sig-name descname"><span class="pre">training_stats</span></span><a class="headerlink" href="#dacapo.apply.Run.training_stats" title="Link to this definition"></a></dt>
+<dd><p>The training stats object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../experiments/index.html#dacapo.experiments.TrainingStats" title="dacapo.experiments.TrainingStats">TrainingStats</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Run.validation_scores">
+<span class="sig-name descname"><span class="pre">validation_scores</span></span><a class="headerlink" href="#dacapo.apply.Run.validation_scores" title="Link to this definition"></a></dt>
+<dd><p>The validation scores object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../experiments/index.html#dacapo.experiments.ValidationScores" title="dacapo.experiments.ValidationScores">ValidationScores</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.Run.start">
+<span class="sig-name descname"><span class="pre">start</span></span><a class="headerlink" href="#dacapo.apply.Run.start" title="Link to this definition"></a></dt>
+<dd><p>The start object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../experiments/run/index.html#dacapo.experiments.run.Start" title="dacapo.experiments.run.Start">Start</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">move_optimizer(device</span></span></dt>
+<dd><p>torch.device, empty_cuda_cache: bool) -&gt; None:
+Moves the optimizer to the specified device.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.Run.get_validation_scores">
+<span class="sig-name descname"><span class="pre">get_validation_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../experiments/index.html#dacapo.experiments.ValidationScores" title="dacapo.experiments.ValidationScores"><span class="pre">ValidationScores</span></a></span></span><a class="headerlink" href="#dacapo.apply.Run.get_validation_scores" title="Link to this definition"></a></dt>
+<dd><p>Static method to get the validation scores without initializing model, optimizer, trainer, etc.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The iteration stats list is structured as follows:
+- The outer list contains the stats for each iteration.
+- The inner list contains the stats for each training iteration.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">train_until</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">validation_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">task</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../experiments/tasks/task/index.html#dacapo.experiments.tasks.task.Task" title="dacapo.experiments.tasks.task.Task"><span class="pre">dacapo.experiments.tasks.task.Task</span></a></em><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id19">
+<span class="sig-name descname"><span class="pre">architecture</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../experiments/architectures/index.html#dacapo.experiments.architectures.Architecture" title="dacapo.experiments.architectures.Architecture"><span class="pre">dacapo.experiments.architectures.Architecture</span></a></em><a class="headerlink" href="#id19" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id20">
+<span class="sig-name descname"><span class="pre">trainer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../experiments/trainers/index.html#dacapo.experiments.trainers.Trainer" title="dacapo.experiments.trainers.Trainer"><span class="pre">dacapo.experiments.trainers.Trainer</span></a></em><a class="headerlink" href="#id20" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../experiments/model/index.html#dacapo.experiments.model.Model" title="dacapo.experiments.model.Model"><span class="pre">dacapo.experiments.model.Model</span></a></em><a class="headerlink" href="#id21" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id22">
+<span class="sig-name descname"><span class="pre">optimizer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">torch.optim.Optimizer</span></em><a class="headerlink" href="#id22" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id23">
+<span class="sig-name descname"><span class="pre">training_stats</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../experiments/training_stats/index.html#dacapo.experiments.training_stats.TrainingStats" title="dacapo.experiments.training_stats.TrainingStats"><span class="pre">dacapo.experiments.training_stats.TrainingStats</span></a></em><a class="headerlink" href="#id23" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id24">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">datasplit</span></span><a class="headerlink" href="#id24" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id25">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validation_scores</span></span><a class="headerlink" href="#id25" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id26">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_validation_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../experiments/validation_scores/index.html#dacapo.experiments.validation_scores.ValidationScores" title="dacapo.experiments.validation_scores.ValidationScores"><span class="pre">dacapo.experiments.validation_scores.ValidationScores</span></a></span></span><a class="headerlink" href="#id26" title="Link to this definition"></a></dt>
+<dd><p>Static method to get the validation scores without initializing model, optimizer, trainer, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run_config</strong> – The configuration for the run.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The validation scores.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AssertionError</strong> – If the task or datasplit types are not specified in the run_config.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">validation_scores</span> <span class="o">=</span> <span class="n">Run</span><span class="o">.</span><span class="n">get_validation_scores</span><span class="p">(</span><span class="n">run_config</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">validation_scores</span>
+<span class="go">ValidationScores object</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.Run.move_optimizer">
+<span class="sig-name descname"><span class="pre">move_optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">torch.device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_cuda_cache</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.apply.Run.move_optimizer" title="Link to this definition"></a></dt>
+<dd><p>Moves the optimizer to the specified device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>device</strong> – The device to move the optimizer to.</p></li>
+<li><p><strong>empty_cuda_cache</strong> – Whether to empty the CUDA cache after moving the optimizer.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If the optimizer state is not a dictionary.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="o">.</span><span class="n">move_optimizer</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">run</span><span class="o">.</span><span class="n">optimizer</span>
+<span class="go">Optimizer object</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.apply.PostProcessorParameters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.apply.</span></span><span class="sig-name descname"><span class="pre">PostProcessorParameters</span></span><a class="headerlink" href="#dacapo.apply.PostProcessorParameters" title="Link to this definition"></a></dt>
+<dd><p>Base class for post-processor parameters. Post-processor parameters are
+immutable objects that define the parameters of a post-processor. The
+parameters are used to configure the post-processor.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.PostProcessorParameters.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#dacapo.apply.PostProcessorParameters.id" title="Link to this definition"></a></dt>
+<dd><p>The identifier of the post-processor parameter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.PostProcessorParameters.parameter_names">
+<span class="sig-name descname"><span class="pre">parameter_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.PostProcessorParameters.parameter_names" title="Link to this definition"></a></dt>
+<dd><p>Get the names of the parameters.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is immutable. Once created, the values of its attributes
+cannot be changed.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id27">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id27" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id28">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
+<dd><p>Get the names of the parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of parameter names.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span> <span class="o">=</span> <span class="n">PostProcessorParameters</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span><span class="o">.</span><span class="n">parameter_names</span>
+<span class="go">[&quot;id&quot;]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method must be implemented in the subclass. It should return a
+list of parameter names.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.apply.LocalArrayIdentifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.apply.</span></span><span class="sig-name descname"><span class="pre">LocalArrayIdentifier</span></span><a class="headerlink" href="#dacapo.apply.LocalArrayIdentifier" title="Link to this definition"></a></dt>
+<dd><p>Represents a local array identifier.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.LocalArrayIdentifier.container">
+<span class="sig-name descname"><span class="pre">container</span></span><a class="headerlink" href="#dacapo.apply.LocalArrayIdentifier.container" title="Link to this definition"></a></dt>
+<dd><p>The path to the container.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.LocalArrayIdentifier.dataset">
+<span class="sig-name descname"><span class="pre">dataset</span></span><a class="headerlink" href="#dacapo.apply.LocalArrayIdentifier.dataset" title="Link to this definition"></a></dt>
+<dd><p>The dataset name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="simple">
+<dt>Method:</dt><dd><p>__str__ : Returns the string representation of the identifier.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id29">
+<span class="sig-name descname"><span class="pre">container</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">upath.UPath</span></em><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id30">
+<span class="sig-name descname"><span class="pre">dataset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.apply.predict">
+<span class="sig-prename descclassname"><span class="pre">dacapo.apply.</span></span><span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dacapo.experiments.Run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_container</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">upath.UPath</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../store/local_array_store/index.html#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.local_array_store.LocalArrayIdentifier</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">upath.UPath</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Roi</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.dtype</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">np.uint8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.predict" title="Link to this definition"></a></dt>
+<dd><p>Predict with a trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_name</strong> (<em>str</em><em> or </em><a class="reference internal" href="#dacapo.apply.Run" title="dacapo.apply.Run"><em>Run</em></a>) – The name of the run to predict with or the Run object.</p></li>
+<li><p><strong>iteration</strong> (<em>int</em><em> or </em><em>None</em>) – The training iteration of the model to use for prediction.</p></li>
+<li><p><strong>input_container</strong> (<em>Path</em><em> | </em><em>str</em>) – The container of the input array.</p></li>
+<li><p><strong>input_dataset</strong> (<em>str</em>) – The dataset name of the input array.</p></li>
+<li><p><strong>output_path</strong> (<a class="reference internal" href="#dacapo.apply.LocalArrayIdentifier" title="dacapo.apply.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a><em> | </em><em>str</em>) – The path where the prediction array will be stored, or a LocalArryIdentifier for the prediction array.</p></li>
+<li><p><strong>output_roi</strong> (<em>Optional</em><em>[</em><em>Roi</em><em> | </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The ROI of the output array. If None, the ROI of the input array will be used. Defaults to None.</p></li>
+<li><p><strong>num_workers</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of workers to use for blockwise prediction. Defaults to 1 for local processing, otherwise 12.</p></li>
+<li><p><strong>output_dtype</strong> (<em>np.dtype</em><em> | </em><em>str</em><em>, </em><em>optional</em>) – The dtype of the output array. Defaults to np.uint8.</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the output array will be overwritten if it already exists. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If run_name is not found in config store</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;run_name&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;input.zarr&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;output.zarr&quot;</span><span class="p">,</span> <span class="n">output_roi</span><span class="o">=</span><span class="s2">&quot;[0:100,0:100,0:100]&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.apply.</span></span><span class="sig-name descname"><span class="pre">ZarrArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray" title="Link to this definition"></a></dt>
+<dd><p>This is a zarr array.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.apply.ZarrArray.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.file_name">
+<span class="sig-name descname"><span class="pre">file_name</span></span><a class="headerlink" href="#dacapo.apply.ZarrArray.file_name" title="Link to this definition"></a></dt>
+<dd><p>The file name of the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.dataset">
+<span class="sig-name descname"><span class="pre">dataset</span></span><a class="headerlink" href="#dacapo.apply.ZarrArray.dataset" title="Link to this definition"></a></dt>
+<dd><p>The dataset name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray._axes">
+<span class="sig-name descname"><span class="pre">_axes</span></span><a class="headerlink" href="#dacapo.apply.ZarrArray._axes" title="Link to this definition"></a></dt>
+<dd><p>The axes of the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[List[str]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.snap_to_grid">
+<span class="sig-name descname"><span class="pre">snap_to_grid</span></span><a class="headerlink" href="#dacapo.apply.ZarrArray.snap_to_grid" title="Link to this definition"></a></dt>
+<dd><p>The snap to grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Coordinate]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initializes the array type ‘raw’ and name for the DummyDataset instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.__str__" title="Link to this definition"></a></dt>
+<dd><p>Returns the string representation of the ZarrArray.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.__repr__" title="Link to this definition"></a></dt>
+<dd><p>Returns the string representation of the ZarrArray.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.attrs">
+<span class="sig-name descname"><span class="pre">attrs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.attrs" title="Link to this definition"></a></dt>
+<dd><p>Returns the attributes of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.axes">
+<span class="sig-name descname"><span class="pre">axes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the axes of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.dims">
+<span class="sig-name descname"><span class="pre">dims</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.dims" title="Link to this definition"></a></dt>
+<dd><p>Returns the dimensions of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray._daisy_array">
+<span class="sig-name descname"><span class="pre">_daisy_array</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray._daisy_array" title="Link to this definition"></a></dt>
+<dd><p>Returns the daisy array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.voxel_size">
+<span class="sig-name descname"><span class="pre">voxel_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>Returns the voxel size of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.roi">
+<span class="sig-name descname"><span class="pre">roi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.roi" title="Link to this definition"></a></dt>
+<dd><p>Returns the region of interest of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.writable">
+<span class="sig-name descname"><span class="pre">writable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.writable" title="Link to this definition"></a></dt>
+<dd><p>Returns the boolean value of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.dtype" title="Link to this definition"></a></dt>
+<dd><p>Returns the data type of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.num_channels">
+<span class="sig-name descname"><span class="pre">num_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.num_channels" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of channels of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.spatial_axes">
+<span class="sig-name descname"><span class="pre">spatial_axes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.spatial_axes" title="Link to this definition"></a></dt>
+<dd><p>Returns the spatial axes of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.data">
+<span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.data" title="Link to this definition"></a></dt>
+<dd><p>Returns the data of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">roi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.__getitem__" title="Link to this definition"></a></dt>
+<dd><p>Returns the data of the array for the given region of interest.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.__setitem__">
+<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.__setitem__" title="Link to this definition"></a></dt>
+<dd><p>Sets the data of the array for the given region of interest.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.create_from_array_identifier">
+<span class="sig-name descname"><span class="pre">create_from_array_identifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.create_from_array_identifier" title="Link to this definition"></a></dt>
+<dd><p>Creates a new ZarrArray given an array identifier.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.open_from_array_identifier">
+<span class="sig-name descname"><span class="pre">open_from_array_identifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.open_from_array_identifier" title="Link to this definition"></a></dt>
+<dd><p>Opens a new ZarrArray given an array identifier.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray._can_neuroglance">
+<span class="sig-name descname"><span class="pre">_can_neuroglance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray._can_neuroglance" title="Link to this definition"></a></dt>
+<dd><p>Returns the boolean value of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray._neuroglancer_source">
+<span class="sig-name descname"><span class="pre">_neuroglancer_source</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray._neuroglancer_source" title="Link to this definition"></a></dt>
+<dd><p>Returns the neuroglancer source of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray._neuroglancer_layer">
+<span class="sig-name descname"><span class="pre">_neuroglancer_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray._neuroglancer_layer" title="Link to this definition"></a></dt>
+<dd><p>Returns the neuroglancer layer of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray._transform_matrix">
+<span class="sig-name descname"><span class="pre">_transform_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray._transform_matrix" title="Link to this definition"></a></dt>
+<dd><p>Returns the transform matrix of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray._output_dimensions">
+<span class="sig-name descname"><span class="pre">_output_dimensions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray._output_dimensions" title="Link to this definition"></a></dt>
+<dd><p>Returns the output dimensions of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray._source_name">
+<span class="sig-name descname"><span class="pre">_source_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray._source_name" title="Link to this definition"></a></dt>
+<dd><p>Returns the source name of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.add_metadata">
+<span class="sig-name descname"><span class="pre">add_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.ZarrArray.add_metadata" title="Link to this definition"></a></dt>
+<dd><p>Adds metadata to the array.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This class is used to create a zarr array.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.apply.ZarrArray.mode">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mode</span></span><a class="headerlink" href="#dacapo.apply.ZarrArray.mode" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id31">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>attrs</strong> (<em>Any</em>) – The attributes of the array.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The attributes of the array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">attrs</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to return the attributes of the array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id32">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id32" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>axes</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The axes of the array.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The axes of the array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to return the axes of the array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id33">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
+<dd><p>Returns the dimensions of the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dims</strong> (<em>int</em>) – The dimensions of the array.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The dimensions of the array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dims</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to return the dimensions of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id34">
+<span class="sig-name descname"><span class="pre">voxel_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">funlib.geometry.Coordinate</span></span></span><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
+<dd><p>Returns the voxel size of the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>voxel_size</strong> (<em>Coordinate</em>) – The voxel size.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The voxel size of the array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Coordinate</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">voxel_size</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to return the voxel size of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id35">
+<span class="sig-name descname"><span class="pre">roi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">funlib.geometry.Roi</span></span></span><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
+<dd><p>Returns the region of interest of the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>roi</strong> (<em>Roi</em>) – The region of interest.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The region of interest of the array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Roi</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">roi</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to return the region of interest of the array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id36">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id36" title="Link to this definition"></a></dt>
+<dd><p>Returns the boolean value of the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>writable</strong> (<em>bool</em>) – The boolean value of the array.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The boolean value of the array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">writable</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to return the boolean value of the array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id37">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#id37" title="Link to this definition"></a></dt>
+<dd><p>Returns the data type of the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>Any</em>) – The data type of the array.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The data type of the array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dtype</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to return the data type of the array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id38">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id38" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of channels of the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>num_channels</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – The number of channels of the array.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of channels of the array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[int]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">num_channels</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to return the number of channels of the array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id39">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spatial_axes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id39" title="Link to this definition"></a></dt>
+<dd><p>Returns the spatial axes of the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>spatial_axes</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The spatial axes of the array.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The spatial axes of the array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">spatial_axes</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to return the spatial axes of the array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id40">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#id40" title="Link to this definition"></a></dt>
+<dd><p>Returns the data of the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>Any</em>) – The data of the array.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The data of the array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to return the data of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id41">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_from_array_identifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'a'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id41" title="Link to this definition"></a></dt>
+<dd><p>Create a new ZarrArray given an array identifier. It is assumed that
+this array_identifier points to a dataset that does not yet exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array_identifier</strong> (<em>ArrayIdentifier</em>) – The array identifier.</p></li>
+<li><p><strong>axes</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The axes of the array.</p></li>
+<li><p><strong>roi</strong> (<em>Roi</em>) – The region of interest.</p></li>
+<li><p><strong>num_channels</strong> (<em>int</em>) – The number of channels.</p></li>
+<li><p><strong>voxel_size</strong> (<em>Coordinate</em>) – The voxel size.</p></li>
+<li><p><strong>dtype</strong> (<em>Any</em>) – The data type.</p></li>
+<li><p><strong>write_size</strong> (<em>Optional</em><em>[</em><em>Coordinate</em><em>]</em>) – The write size.</p></li>
+<li><p><strong>name</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – The name of the array.</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em>) – The boolean value to overwrite the array.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ZarrArray.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dacapo.apply.ZarrArray" title="dacapo.apply.ZarrArray">ZarrArray</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">create_from_array_identifier</span><span class="p">(</span><span class="n">array_identifier</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">roi</span><span class="p">,</span> <span class="n">num_channels</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">write_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to create a new ZarrArray given an array identifier.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id42">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">open_from_array_identifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id42" title="Link to this definition"></a></dt>
+<dd><p>Opens a new ZarrArray given an array identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array_identifier</strong> (<em>ArrayIdentifier</em>) – The array identifier.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name of the array.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ZarrArray.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dacapo.apply.ZarrArray" title="dacapo.apply.ZarrArray">ZarrArray</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">open_from_array_identifier</span><span class="p">(</span><span class="n">array_identifier</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to open a new ZarrArray given an array identifier.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id43">
+<span class="sig-name descname"><span class="pre">add_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id43" title="Link to this definition"></a></dt>
+<dd><p>Adds metadata to the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>metadata</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The metadata to add to the array.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – </p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">add_metadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to add metadata to the array.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.apply.create_config_store">
+<span class="sig-prename descclassname"><span class="pre">dacapo.apply.</span></span><span class="sig-name descname"><span class="pre">create_config_store</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.create_config_store" title="Link to this definition"></a></dt>
+<dd><p>Create a config store based on the global DaCapo options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The created config store.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../store/config_store/index.html#dacapo.store.config_store.ConfigStore" title="dacapo.store.config_store.ConfigStore">ConfigStore</a></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the store type is not supported.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">create_config_store</span><span class="p">()</span>
+<span class="go">&lt;dacapo.store.file_config_store.FileConfigStore object at 0x7f2e4f8e9e80&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, only the FileConfigStore and MongoConfigStore are supported.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.apply.create_weights_store">
+<span class="sig-prename descclassname"><span class="pre">dacapo.apply.</span></span><span class="sig-name descname"><span class="pre">create_weights_store</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.apply.create_weights_store" title="Link to this definition"></a></dt>
+<dd><p>Create a weights store based on the global DaCapo options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<a class="reference internal" href="../compute_context/compute_context/index.html#dacapo.compute_context.compute_context.Options" title="dacapo.compute_context.compute_context.Options"><em>Options</em></a>) – The global DaCapo options.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created weights store.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../store/local_weights_store/index.html#dacapo.store.local_weights_store.WeightsStore" title="dacapo.store.local_weights_store.WeightsStore">WeightsStore</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">create_weights_store</span><span class="p">()</span>
+<span class="go">&lt;dacapo.store.local_weights_store.LocalWeightsStore object at 0x7f2e4f8e9e80&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, only the LocalWeightsStore is supported.</p>
+</div>
+</dd></dl>
+
 <dl class="py data">
 <dt class="sig sig-object py" id="dacapo.apply.logger">
 <span class="sig-prename descclassname"><span class="pre">dacapo.apply.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#dacapo.apply.logger" title="Link to this definition"></a></dt>
@@ -140,10 +1763,10 @@
 <li><p><strong>input_container</strong> (<em>Path</em><em> | </em><em>str</em>) – Path to the input container.</p></li>
 <li><p><strong>input_dataset</strong> (<em>str</em>) – Name of the input dataset.</p></li>
 <li><p><strong>output_path</strong> (<em>Path</em><em> | </em><em>str</em>) – Path to the output container.</p></li>
-<li><p><strong>validation_dataset</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="../experiments/datasplits/datasets/dataset/index.html#dacapo.experiments.datasplits.datasets.dataset.Dataset" title="dacapo.experiments.datasplits.datasets.dataset.Dataset"><em>Dataset</em></a><em> | </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Validation dataset to use for finding the best parameters. Defaults to None.</p></li>
+<li><p><strong>validation_dataset</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="#dacapo.apply.Dataset" title="dacapo.apply.Dataset"><em>Dataset</em></a><em> | </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Validation dataset to use for finding the best parameters. Defaults to None.</p></li>
 <li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – Criterion to use for finding the best parameters. Defaults to “voi”.</p></li>
 <li><p><strong>iteration</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Iteration to use. If None, the best iteration is used. Defaults to None.</p></li>
-<li><p><strong>parameters</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="../experiments/tasks/post_processors/index.html#dacapo.experiments.tasks.post_processors.PostProcessorParameters" title="dacapo.experiments.tasks.post_processors.PostProcessorParameters"><em>PostProcessorParameters</em></a><em> | </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Post-processor parameters to use. If None, the best parameters are found. Defaults to None.</p></li>
+<li><p><strong>parameters</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="#dacapo.apply.PostProcessorParameters" title="dacapo.apply.PostProcessorParameters"><em>PostProcessorParameters</em></a><em> | </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Post-processor parameters to use. If None, the best parameters are found. Defaults to None.</p></li>
 <li><p><strong>roi</strong> (<em>Optional</em><em>[</em><em>Roi</em><em> | </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Region of interest to use. If None, the whole input dataset is used. Defaults to None.</p></li>
 <li><p><strong>num_workers</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of workers to use. Defaults to 12.</p></li>
 <li><p><strong>output_dtype</strong> (<em>np.dtype</em><em> | </em><em>str</em><em>, </em><em>optional</em>) – Output dtype. Defaults to np.uint8.</p></li>
@@ -182,12 +1805,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>run</strong> (<a class="reference internal" href="../experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run"><em>Run</em></a>) – The run object containing the task and post-processor.</p></li>
+<li><p><strong>run</strong> (<a class="reference internal" href="#dacapo.apply.Run" title="dacapo.apply.Run"><em>Run</em></a>) – The run object containing the task and post-processor.</p></li>
 <li><p><strong>iteration</strong> (<em>int</em>) – The iteration number.</p></li>
-<li><p><strong>parameters</strong> (<a class="reference internal" href="../experiments/tasks/post_processors/index.html#dacapo.experiments.tasks.post_processors.PostProcessorParameters" title="dacapo.experiments.tasks.post_processors.PostProcessorParameters"><em>PostProcessorParameters</em></a>) – The post-processor parameters.</p></li>
-<li><p><strong>input_array_identifier</strong> (<a class="reference internal" href="../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The identifier for the input array.</p></li>
-<li><p><strong>prediction_array_identifier</strong> (<a class="reference internal" href="../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The identifier for the prediction array.</p></li>
-<li><p><strong>output_array_identifier</strong> (<a class="reference internal" href="../store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The identifier for the output array.</p></li>
+<li><p><strong>parameters</strong> (<a class="reference internal" href="#dacapo.apply.PostProcessorParameters" title="dacapo.apply.PostProcessorParameters"><em>PostProcessorParameters</em></a>) – The post-processor parameters.</p></li>
+<li><p><strong>input_array_identifier</strong> (<a class="reference internal" href="#dacapo.apply.LocalArrayIdentifier" title="dacapo.apply.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The identifier for the input array.</p></li>
+<li><p><strong>prediction_array_identifier</strong> (<a class="reference internal" href="#dacapo.apply.LocalArrayIdentifier" title="dacapo.apply.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The identifier for the prediction array.</p></li>
+<li><p><strong>output_array_identifier</strong> (<a class="reference internal" href="#dacapo.apply.LocalArrayIdentifier" title="dacapo.apply.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The identifier for the output array.</p></li>
 <li><p><strong>roi</strong> (<em>Optional</em><em>[</em><em>Roi</em><em>]</em><em>, </em><em>optional</em>) – The region of interest. Defaults to None.</p></li>
 <li><p><strong>num_workers</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of workers for parallel processing. Defaults to 12.</p></li>
 <li><p><strong>output_dtype</strong> (<em>np.dtype</em><em> | </em><em>str</em><em>, </em><em>optional</em>) – The output data type. Defaults to np.uint8.</p></li>
@@ -215,7 +1838,6 @@
 </div>
 </dd></dl>
 
-</section>
 </section>
 </section>
 

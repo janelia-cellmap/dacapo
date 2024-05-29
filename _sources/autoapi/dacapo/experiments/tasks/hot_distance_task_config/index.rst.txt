@@ -1,24 +1,99 @@
-:py:mod:`dacapo.experiments.tasks.hot_distance_task_config`
-===========================================================
+dacapo.experiments.tasks.hot_distance_task_config
+=================================================
 
 .. py:module:: dacapo.experiments.tasks.hot_distance_task_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.hot_distance_task_config.HotDistanceTask
+   dacapo.experiments.tasks.hot_distance_task_config.TaskConfig
+   dacapo.experiments.tasks.hot_distance_task_config.HotDistanceTaskConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: HotDistanceTask(task_config)
 
-.. autoapisummary::
 
-   dacapo.experiments.tasks.hot_distance_task_config.HotDistanceTaskConfig
 
+   A class to represent a hot distance task that use binary prediction and distance prediction.
+
+   Inherits from Task class.
+
+   .. attribute:: predictor
+
+      HotDistancePredictor object.
+
+   .. attribute:: loss
+
+      HotDistanceLoss object.
+
+   .. attribute:: post_processor
+
+      ThresholdPostProcessor object.
+
+   .. attribute:: evaluator
+
+      BinarySegmentationEvaluator object.
+
+   .. method:: __init__(self, task_config)
+
+      Constructs all the necessary attributes for the HotDistanceTask object.
+
+   .. rubric:: Notes
+
+   This is a subclass of Task.
+
+
+.. py:class:: TaskConfig
+
+   Base class for task configurations. Each subclass of a `Task` should
+   have a corresponding config class derived from `TaskConfig`.
+
+   .. attribute:: name
+
+      A unique name for this task. This will be saved so you and
+      others can find and reuse this task. Keep it short and avoid
+      special characters.
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method verifies the TaskConfig object.
+
+   .. rubric:: Notes
+
+   This is a base class for all task configurations. It is not meant to be
+   used directly.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Task
+
+      :returns:
+
+                A tuple containing a boolean value indicating whether the TaskConfig object is valid
+                    and a string containing the reason why the object is invalid.
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> valid, reason = task_config.verify()
 
 
 
 .. py:class:: HotDistanceTaskConfig
-
 
 
 
@@ -70,33 +145,27 @@ Classes
       signal, i.e., one misclassified pixel in an affinity prediction can merge 2
       otherwise very distinct objects, a situation that cannot happen with distances.
 
+
    .. py:attribute:: task_type
 
-      
 
    .. py:attribute:: channels
-      :type: List[str]
+      :type:  List[str]
 
-      
 
    .. py:attribute:: clip_distance
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: tol_distance
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: scale_factor
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: mask_distances
-      :type: bool
-
-      
+      :type:  bool
 
 

@@ -1,36 +1,31 @@
-:py:mod:`dacapo.gp.elastic_augment_fuse`
-========================================
+dacapo.gp.elastic_augment_fuse
+==============================
 
 .. py:module:: dacapo.gp.elastic_augment_fuse
 
 
-Module Contents
----------------
-
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.gp.elastic_augment_fuse.ElasticAugment
-
-
-
-
 Attributes
-~~~~~~~~~~
+----------
 
 .. autoapisummary::
 
    dacapo.gp.elastic_augment_fuse.logger
 
 
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.gp.elastic_augment_fuse.ElasticAugment
+
+
+Module Contents
+---------------
+
 .. py:data:: logger
 
-   
-
 .. py:class:: ElasticAugment(control_point_spacing, control_point_displacement_sigma, rotation_interval, subsample=1, augmentation_probability=1.0, seed=None, uniform_3d_rotation=False)
-
 
 
 
@@ -65,6 +60,7 @@ Attributes
    This node is a port of the ElasticAugment node from the original
    `gunpowder <
 
+
    .. py:method:: setup()
 
       Set up the object by calculating the voxel size and spatial dimensions.
@@ -79,6 +75,7 @@ Attributes
       .. rubric:: Examples
 
       >>> setup()
+
 
 
    .. py:method:: prepare(request)
@@ -104,6 +101,7 @@ Attributes
       6. Clears the existing transformations and target ROIs.
       7. Iterates over each key in the request and prepares it for augmentation.
       8. Updates the upstream request with the modified ROI.
+
 
 
    .. py:method:: process(batch, request)

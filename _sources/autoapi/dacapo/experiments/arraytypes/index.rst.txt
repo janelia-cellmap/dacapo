@@ -1,30 +1,27 @@
-:py:mod:`dacapo.experiments.arraytypes`
-=======================================
+dacapo.experiments.arraytypes
+=============================
 
 .. py:module:: dacapo.experiments.arraytypes
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   annotations/index.rst
-   arraytype/index.rst
-   binary/index.rst
-   distances/index.rst
-   embedding/index.rst
-   intensities/index.rst
-   mask/index.rst
-   probabilities/index.rst
+   /autoapi/dacapo/experiments/arraytypes/annotations/index
+   /autoapi/dacapo/experiments/arraytypes/arraytype/index
+   /autoapi/dacapo/experiments/arraytypes/binary/index
+   /autoapi/dacapo/experiments/arraytypes/distances/index
+   /autoapi/dacapo/experiments/arraytypes/embedding/index
+   /autoapi/dacapo/experiments/arraytypes/intensities/index
+   /autoapi/dacapo/experiments/arraytypes/mask/index
+   /autoapi/dacapo/experiments/arraytypes/probabilities/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -36,10 +33,10 @@ Classes
    dacapo.experiments.arraytypes.ProbabilityArray
 
 
-
+Package Contents
+----------------
 
 .. py:class:: AnnotationArray
-
 
 
 
@@ -59,8 +56,12 @@ Classes
 
    .. note:: This class is used to create an AnnotationArray object which is used to represent an array of class labels.
 
-   .. py:property:: interpolatable
 
+   .. py:attribute:: classes
+      :type:  Dict[int, str]
+
+
+   .. py:property:: interpolatable
       Method to return False.
 
       :returns:
@@ -78,14 +79,8 @@ Classes
 
       .. note:: This method is used to check if the array is interpolatable.
 
-   .. py:attribute:: classes
-      :type: Dict[int, str]
-
-      
-
 
 .. py:class:: IntensitiesArray
-
 
 
 
@@ -119,6 +114,19 @@ Classes
 
    .. note:: This class is used to create an IntensitiesArray object which is used to represent an array of measured intensities.
 
+
+   .. py:attribute:: channels
+      :type:  Dict[int, str]
+
+
+   .. py:attribute:: min
+      :type:  float
+
+
+   .. py:attribute:: max
+      :type:  float
+
+
    .. py:property:: interpolatable
       :type: bool
 
@@ -139,24 +147,8 @@ Classes
 
       .. note:: This method is used to check if the array is interpolatable.
 
-   .. py:attribute:: channels
-      :type: Dict[int, str]
-
-      
-
-   .. py:attribute:: min
-      :type: float
-
-      
-
-   .. py:attribute:: max
-      :type: float
-
-      
-
 
 .. py:class:: DistanceArray
-
 
 
 
@@ -185,6 +177,11 @@ Classes
       This class is used to create a DistanceArray object which is used to represent an array containing signed distances to the nearest boundary voxel for a particular label class.
       The class of each voxel can be determined by simply taking the argmin.
 
+
+   .. py:attribute:: classes
+      :type:  Dict[int, str]
+
+
    .. py:property:: interpolatable
       :type: bool
 
@@ -203,14 +200,8 @@ Classes
 
       .. note:: This method is used to check if the array is interpolatable.
 
-   .. py:attribute:: classes
-      :type: Dict[int, str]
-
-      
-
 
 .. py:class:: Mask
-
 
 
 
@@ -222,6 +213,7 @@ Classes
       It is a method that returns False.
 
    .. note:: This class is used to represent a Mask object in the system.
+
 
    .. py:property:: interpolatable
       :type: bool
@@ -248,7 +240,6 @@ Classes
 
 
 
-
    A generic output of a model that could represent almost anything. Assumed to be
    float, interpolatable, and have sum number of channels. The channels are not
    specified, and the array can be of any shape.
@@ -265,6 +256,11 @@ Classes
       It is a method that returns True.
 
    .. note:: This class is used to represent an EmbeddingArray object in the system.
+
+
+   .. py:attribute:: embedding_dims
+      :type:  int
+
 
    .. py:property:: interpolatable
       :type: bool
@@ -286,14 +282,8 @@ Classes
 
       .. note:: This method is used to check if the array is interpolatable.
 
-   .. py:attribute:: embedding_dims
-      :type: int
-
-      
-
 
 .. py:class:: ProbabilityArray
-
 
 
 
@@ -314,6 +304,11 @@ Classes
       This class is used to create a ProbabilityArray object which is used to represent an array containing probability distributions for each voxel pointed by its coordinate.
       The class of each voxel can be determined by simply taking the argmax.
 
+
+   .. py:attribute:: classes
+      :type:  List[str]
+
+
    .. py:property:: interpolatable
       :type: bool
 
@@ -331,10 +326,5 @@ Classes
       True
 
       .. note:: This method is used to check if the array is interpolatable.
-
-   .. py:attribute:: classes
-      :type: List[str]
-
-      
 
 

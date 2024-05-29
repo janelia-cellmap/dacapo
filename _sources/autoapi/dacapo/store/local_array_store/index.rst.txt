@@ -1,36 +1,255 @@
-:py:mod:`dacapo.store.local_array_store`
-========================================
+dacapo.store.local_array_store
+==============================
 
 .. py:module:: dacapo.store.local_array_store
 
 
-Module Contents
----------------
-
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.store.local_array_store.LocalArrayStore
-
-
-
-
 Attributes
-~~~~~~~~~~
+----------
 
 .. autoapisummary::
 
    dacapo.store.local_array_store.logger
 
 
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.store.local_array_store.ArrayStore
+   dacapo.store.local_array_store.LocalArrayIdentifier
+   dacapo.store.local_array_store.LocalContainerIdentifier
+   dacapo.store.local_array_store.LocalArrayStore
+
+
+Module Contents
+---------------
+
+.. py:class:: ArrayStore
+
+
+
+   Base class for array stores.
+
+   Creates identifiers for the caller to create and write arrays. Provides
+   only rudimentary support for IO itself (currently only to remove
+   arrays).
+
+   .. attribute:: container
+
+      The path to the container.
+
+      :type: Path
+
+   .. attribute:: dataset
+
+      The dataset name.
+
+      :type: str
+
+   Method:
+       __str__ : Returns the string representation of the identifier.
+
+
+
+   .. py:method:: validation_prediction_array(run_name: str, iteration: int, dataset: str) -> LocalArrayIdentifier
+      :abstractmethod:
+
+
+      Get the array identifier for a particular validation prediction.
+
+      :param run_name: The name of the run.
+      :param iteration: The iteration number.
+      :param dataset: The dataset name.
+
+      :returns: The array identifier.
+      :rtype: LocalArrayIdentifier
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> validation_prediction_array('run_name', 1, 'dataset')
+      LocalArrayIdentifier(container=Path('path/to/container'), dataset='dataset')
+
+
+
+   .. py:method:: validation_output_array(run_name: str, iteration: int, parameters: str, dataset: str) -> LocalArrayIdentifier
+      :abstractmethod:
+
+
+      Get the array identifier for a particular validation output.
+
+      :param run_name: The name of the run.
+      :param iteration: The iteration number.
+      :param parameters: The parameters.
+      :param dataset: The dataset name.
+
+      :returns: The array identifier.
+      :rtype: LocalArrayIdentifier
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> validation_output_array('run_name', 1, 'parameters', 'dataset')
+      LocalArrayIdentifier(container=Path('path/to/container'), dataset='dataset')
+
+
+
+   .. py:method:: validation_input_arrays(run_name: str, index: Optional[str] = None) -> Tuple[LocalArrayIdentifier, LocalArrayIdentifier]
+      :abstractmethod:
+
+
+      Get an array identifiers for the validation input raw/gt.
+
+      It would be nice to store raw/gt with the validation predictions/outputs.
+      If we don't store these we would have to look up the datasplit config
+      and figure out where to find the inputs for each run. If we write
+      the data then we don't need to search for it.
+      This convenience comes at the cost of some extra memory usage.
+
+      :param run_name: The name of the run.
+      :param index: The index of the validation input.
+
+      :returns: The array identifiers.
+      :rtype: Tuple[LocalArrayIdentifier, LocalArrayIdentifier]
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> validation_input_arrays('run_name', 'index')
+      (LocalArrayIdentifier(container=Path('path/to/container'), dataset='dataset'), LocalArrayIdentifier(container=Path('path/to/container'), dataset='dataset'))
+
+
+
+   .. py:method:: remove(array_identifier: LocalArrayIdentifier) -> None
+      :abstractmethod:
+
+
+      Remove an array by its identifier.
+
+      :param array_identifier: The array identifier.
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> remove(LocalArrayIdentifier(container=Path('path/to/container'), dataset='dataset'))
+
+
+
+   .. py:method:: snapshot_container(run_name: str) -> LocalContainerIdentifier
+      :abstractmethod:
+
+
+      Get a container identifier for storage of a snapshot.
+
+      :param run_name: The name of the run.
+
+      :returns: The container identifier.
+      :rtype: LocalContainerIdentifier
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> snapshot_container('run_name')
+      LocalContainerIdentifier(container=Path('path/to/container'))
+
+
+
+   .. py:method:: validation_container(run_name: str) -> LocalContainerIdentifier
+      :abstractmethod:
+
+
+      Get a container identifier for storage of a snapshot.
+
+      :param run_name: The name of the run.
+
+      :returns: The container identifier.
+      :rtype: LocalContainerIdentifier
+
+      :raises NotImplementedError: If the method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> validation_container('run_name')
+      LocalContainerIdentifier(container=Path('path/to/container'))
+
+
+
+.. py:class:: LocalArrayIdentifier
+
+   Represents a local array identifier.
+
+   .. attribute:: container
+
+      The path to the container.
+
+      :type: Path
+
+   .. attribute:: dataset
+
+      The dataset name.
+
+      :type: str
+
+   Method:
+       __str__ : Returns the string representation of the identifier.
+
+
+   .. py:attribute:: container
+      :type:  upath.UPath
+
+
+   .. py:attribute:: dataset
+      :type:  str
+
+
+.. py:class:: LocalContainerIdentifier
+
+   Represents a local container identifier.
+
+   .. attribute:: container
+
+      The path to the container.
+
+      :type: Path
+
+   Method:
+       array_identifier : Creates a local array identifier for the given dataset.
+
+
+
+   .. py:attribute:: container
+      :type:  upath.UPath
+
+
+   .. py:method:: array_identifier(dataset) -> LocalArrayIdentifier
+
+      Creates a local array identifier for the given dataset.
+
+      :param dataset: The dataset for which to create the array identifier.
+
+      :returns: The local array identifier.
+      :rtype: LocalArrayIdentifier
+
+      :raises TypeError: If the dataset is not a string.
+
+      .. rubric:: Examples
+
+      >>> container = Path('path/to/container')
+      >>> container.array_identifier('dataset')
+      LocalArrayIdentifier(container=Path('path/to/container'), dataset='dataset')
+
+
+
 .. py:data:: logger
 
-   
-
 .. py:class:: LocalArrayStore(basedir)
-
 
 
 
@@ -70,6 +289,7 @@ Attributes
       
       
 
+
    .. py:method:: best_validation_array(run_name: str, criterion: str, index: Optional[str] = None) -> dacapo.store.array_store.LocalArrayIdentifier
 
       Get the array identifier for the best validation array.
@@ -89,6 +309,7 @@ Attributes
       .. rubric:: Examples
 
       >>> store.best_validation_array("run1", "loss")
+
 
 
    .. py:method:: validation_prediction_array(run_name: str, iteration: int, dataset: str) -> dacapo.store.array_store.LocalArrayIdentifier
@@ -112,6 +333,7 @@ Attributes
       >>> store.validation_prediction_array("run1", 0, "train")
 
 
+
    .. py:method:: validation_output_array(run_name: str, iteration: int, parameters: str, dataset: str) -> dacapo.store.array_store.LocalArrayIdentifier
 
       Get the array identifier for a particular validation output.
@@ -133,6 +355,7 @@ Attributes
       .. rubric:: Examples
 
       >>> store.validation_output_array("run1", 0, "params1", "train")
+
 
 
    .. py:method:: validation_input_arrays(run_name: str, index: Optional[str] = None) -> Tuple[dacapo.store.array_store.LocalArrayIdentifier, dacapo.store.array_store.LocalArrayIdentifier]
@@ -160,6 +383,7 @@ Attributes
       >>> store.validation_input_arrays("run1")
 
 
+
    .. py:method:: snapshot_container(run_name: str) -> dacapo.store.array_store.LocalContainerIdentifier
 
       Get a container identifier for storage of a snapshot.
@@ -177,6 +401,7 @@ Attributes
       >>> store.snapshot_container("run1")
 
 
+
    .. py:method:: validation_container(run_name: str) -> dacapo.store.array_store.LocalContainerIdentifier
 
       Get a container identifier for storage of a validation.
@@ -192,6 +417,7 @@ Attributes
       .. rubric:: Examples
 
       >>> store.validation_container("run1")
+
 
 
    .. py:method:: remove(array_identifier: dacapo.store.array_store.LocalArrayIdentifier) -> None

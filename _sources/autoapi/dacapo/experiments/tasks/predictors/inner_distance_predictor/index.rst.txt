@@ -1,36 +1,739 @@
-:py:mod:`dacapo.experiments.tasks.predictors.inner_distance_predictor`
-======================================================================
+dacapo.experiments.tasks.predictors.inner_distance_predictor
+============================================================
 
 .. py:module:: dacapo.experiments.tasks.predictors.inner_distance_predictor
 
 
-Module Contents
----------------
-
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.experiments.tasks.predictors.inner_distance_predictor.InnerDistancePredictor
-
-
-
-
 Attributes
-~~~~~~~~~~
+----------
 
 .. autoapisummary::
 
    dacapo.experiments.tasks.predictors.inner_distance_predictor.logger
 
 
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.predictors.inner_distance_predictor.Predictor
+   dacapo.experiments.tasks.predictors.inner_distance_predictor.Model
+   dacapo.experiments.tasks.predictors.inner_distance_predictor.DistanceArray
+   dacapo.experiments.tasks.predictors.inner_distance_predictor.NumpyArray
+   dacapo.experiments.tasks.predictors.inner_distance_predictor.InnerDistancePredictor
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.predictors.inner_distance_predictor.balance_weights
+
+
+Module Contents
+---------------
+
+.. py:class:: Predictor
+
+
+
+   A predictor is a class that defines how to train a model to predict a
+   certain output from a certain input.
+
+   A predictor is responsible for creating the model, the target, the weight,
+   and the output array type for a given training architecture.
+
+   .. method:: create_model(self, architecture
+
+      "Architecture") -> "Model": Given a training architecture, create a model for this predictor.
+
+   .. method:: create_target(self, gt
+
+      "Array") -> "Array": Create the target array for training, given a ground-truth array.
+
+   .. method:: create_weight(self, gt
+
+      "Array", target: "Array", mask: "Array", moving_class_counts: Any) -> Tuple["Array", Any]: Create the weight array for training, given a ground-truth and associated target array.
+
+   .. method:: gt_region_for_roi(self, target_spec)
+
+      Report how much spatial context this predictor needs to generate a target for the given ROI.
+
+   .. method:: padding(self, gt_voxel_size
+
+      Coordinate) -> Coordinate: Return the padding needed for the ground-truth array.
+
+   .. rubric:: Notes
+
+   This is a subclass of ABC.
+
+
+   .. py:method:: create_model(architecture: dacapo.experiments.architectures.architecture.Architecture) -> dacapo.experiments.model.Model
+      :abstractmethod:
+
+
+      Given a training architecture, create a model for this predictor.
+      This is usually done by appending extra layers to the output of the
+      architecture to get the output tensor of the architecture into the
+      right shape for this predictor.
+
+      :param architecture: The training architecture.
+
+      :returns: The model.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.create_model(architecture)
+
+
+
+   .. py:method:: create_target(gt: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.datasplits.datasets.arrays.Array
+      :abstractmethod:
+
+
+      Create the target array for training, given a ground-truth array.
+
+      In general, the target is different from the ground-truth.
+
+      The target is the array that is passed to the loss, and hence directly
+      compared to the prediction (i.e., the output of the model). Depending
+      on the predictor, the target can therefore be different from the
+      ground-truth (e.g., an instance segmentation ground-truth would have to
+      be converted into boundaries, if the model is predicting boundaries).
+
+      By default, it is assumed that the spatial dimensions of ground-truth
+      and target are the same.
+
+      If your predictor needs more ground-truth context to create a target
+      (e.g., because it predicts the distance to a boundary, up to a certain
+      threshold), you can request a larger ground-truth region. See method
+      ``gt_region_for_roi``.
+
+      :param gt: The ground-truth array.
+
+      :returns: The target array.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.create_target(gt)
+
+
+
+   .. py:method:: create_weight(gt: dacapo.experiments.datasplits.datasets.arrays.Array, target: dacapo.experiments.datasplits.datasets.arrays.Array, mask: dacapo.experiments.datasplits.datasets.arrays.Array, moving_class_counts: Any) -> Tuple[dacapo.experiments.datasplits.datasets.arrays.Array, Any]
+      :abstractmethod:
+
+
+      Create the weight array for training, given a ground-truth and
+      associated target array.
+
+      :param gt: The ground-truth array.
+      :param target: The target array.
+      :param mask: The mask array.
+      :param moving_class_counts: The moving class counts.
+
+      :returns: The weight array and the moving class counts.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.create_weight(gt, target, mask, moving_class_counts)
+
+
+
+   .. py:property:: output_array_type
+      :abstractmethod:
+
+
+
+   .. py:method:: gt_region_for_roi(target_spec)
+
+      Report how much spatial context this predictor needs to generate a
+      target for the given ROI. By default, uses the same ROI.
+
+      Overwrite this method to request ground-truth in a larger ROI, as
+      needed.
+
+      :param target_spec: The ROI for which the target is requested.
+
+      :returns: The ROI for which the ground-truth is requested.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.gt_region_for_roi(target_spec)
+
+
+
+   .. py:method:: padding(gt_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
+
+      Return the padding needed for the ground-truth array.
+
+      :param gt_voxel_size: The voxel size of the ground-truth array.
+
+      :returns: The padding needed for the ground-truth array.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.padding(gt_voxel_size)
+
+
+
+.. py:class:: Model(architecture: dacapo.experiments.architectures.architecture.Architecture, prediction_head: torch.nn.Module, eval_activation: torch.nn.Module | None = None)
+
+
+
+   A trainable DaCapo model. Consists of an ``Architecture`` and a
+   prediction head. Models are generated by ``Predictor``s.
+
+   May include an optional eval_activation that is only executed when the model
+   is in eval mode. This is particularly useful if you want to train with something
+   like BCELossWithLogits, since you want to avoid applying softmax while training,
+   but apply it during evaluation.
+
+   .. attribute:: architecture
+
+      The architecture of the model.
+
+      :type: Architecture
+
+   .. attribute:: prediction_head
+
+      The prediction head of the model.
+
+      :type: torch.nn.Module
+
+   .. attribute:: chain
+
+      The architecture followed by the prediction head.
+
+      :type: torch.nn.Sequential
+
+   .. attribute:: num_in_channels
+
+      The number of input channels.
+
+      :type: int
+
+   .. attribute:: input_shape
+
+      The shape of the input tensor.
+
+      :type: Coordinate
+
+   .. attribute:: eval_input_shape
+
+      The shape of the input tensor during evaluation.
+
+      :type: Coordinate
+
+   .. attribute:: num_out_channels
+
+      The number of output channels.
+
+      :type: int
+
+   .. attribute:: output_shape
+
+      The shape of the output
+
+      :type: Coordinate
+
+   .. attribute:: eval_activation
+
+      The activation function to apply during evaluation.
+
+      :type: torch.nn.Module | None
+
+   .. method:: forward(x
+
+      torch.Tensor) -> torch.Tensor:
+      Forward pass of the model.
+
+   .. method:: compute_output_shape(input_shape
+
+      Coordinate) -> Tuple[int, Coordinate]:
+      Compute the spatial shape of this model, when fed a tensor of the given spatial shape as input.
+
+   .. method:: scale(voxel_size
+
+      Coordinate) -> Coordinate:
+      Scale the model by the given voxel size.
+
+   .. note:: The output shape is the spatial shape of the model, i.e., not accounting for channels and batch dimensions.
+
+
+   .. py:attribute:: num_out_channels
+      :type:  int
+
+
+   .. py:attribute:: num_in_channels
+      :type:  int
+
+
+   .. py:method:: forward(x)
+
+      Forward pass of the model.
+
+      :param x: The input tensor.
+      :type x: torch.Tensor
+
+      :returns: The output tensor.
+      :rtype: torch.Tensor
+
+      .. rubric:: Examples
+
+      >>> model = Model(architecture, prediction_head)
+      >>> model.forward(x)
+      torch.Tensor
+
+      .. note:: The eval_activation is only applied during evaluation. This is particularly useful if you want to train with something like BCELossWithLogits, since you want to avoid applying softmax while training, but apply it during evaluation.
+
+
+
+   .. py:method:: compute_output_shape(input_shape: funlib.geometry.Coordinate) -> Tuple[int, funlib.geometry.Coordinate]
+
+      Compute the spatial shape (i.e., not accounting for channels and
+      batch dimensions) of this model, when fed a tensor of the given spatial
+      shape as input.
+
+      :param input_shape: The shape of the input tensor.
+      :type input_shape: Coordinate
+
+      :returns: The number of output channels and the spatial shape of the output.
+      :rtype: Tuple[int, Coordinate]
+
+      :raises AssertionError: If the input_shape is not a Coordinate.
+
+      .. rubric:: Examples
+
+      >>> model = Model(architecture, prediction_head)
+      >>> model.compute_output_shape(input_shape)
+      (1, Coordinate(1, 1, 1))
+
+      .. note:: The output shape is the spatial shape of the model, i.e., not accounting for channels and batch dimensions.
+
+
+
+   .. py:method:: scale(voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate
+
+      Scale the model by the given voxel size.
+
+      :param voxel_size: The voxel size to scale the model by.
+      :type voxel_size: Coordinate
+
+      :returns: The scaled model.
+      :rtype: Coordinate
+
+      :raises AssertionError: If the voxel_size is not a Coordinate.
+
+      .. rubric:: Examples
+
+      >>> model = Model(architecture, prediction_head)
+      >>> model.scale(voxel_size)
+      Coordinate(1, 1, 1)
+
+      .. note:: The output shape is the spatial shape of the model, i.e., not accounting for channels and batch dimensions.
+
+
+
+.. py:class:: DistanceArray
+
+
+
+   An array containing signed distances to the nearest boundary voxel for a particular label class.
+   Distances should be positive outside an object and negative inside an object. The distance should be 0 on the boundary.
+   The class of each voxel can be determined by simply taking the argmin. The distance should be in the range [-max, max].
+
+   .. attribute:: classes
+
+      A mapping from channel to class on which distances were calculated.
+
+      :type: Dict[int, str]
+
+   .. attribute:: max
+
+      The maximum possible distance value of your distances.
+
+      :type: float
+
+   .. method:: interpolatable(self) -> bool
+
+      It is a method that returns True.
+
+   .. note::
+
+      This class is used to create a DistanceArray object which is used to represent an array containing signed distances to the nearest boundary voxel for a particular label class.
+      The class of each voxel can be determined by simply taking the argmin.
+
+
+   .. py:attribute:: classes
+      :type:  Dict[int, str]
+
+
+   .. py:property:: interpolatable
+      :type: bool
+
+      Checks if the array is interpolatable. Returns True for this class.
+
+      :returns: True indicating that the data can be interpolated.
+      :rtype: bool
+
+      :raises NotImplementedError: This method is not implemented in this class
+
+      .. rubric:: Examples
+
+      >>> distance_array = DistanceArray(classes={1: "class1"})
+      >>> distance_array.interpolatable
+      True
+
+      .. note:: This method is used to check if the array is interpolatable.
+
+
+.. py:class:: NumpyArray(array_config)
+
+
+
+   This is just a wrapper for a numpy array to make it fit the DaCapo Array interface.
+
+   .. attribute:: data
+
+      The numpy array.
+
+   .. attribute:: dtype
+
+      The data type of the numpy array.
+
+   .. attribute:: roi
+
+      The region of interest of the numpy array.
+
+   .. attribute:: voxel_size
+
+      The voxel size of the numpy array.
+
+   .. attribute:: axes
+
+      The axes of the numpy array.
+
+   .. method:: from_gp_array
+
+      Create a NumpyArray from a Gunpowder Array.
+
+   .. method:: from_np_array
+
+      Create a NumpyArray from a numpy array.
+
+   .. note:: This class is a subclass of Array.
+
+
+   .. py:property:: attrs
+      Returns the attributes of the array.
+
+      :returns: The attributes of the array.
+      :rtype: dict
+
+      :raises ValueError: If the array does not have attributes.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.attrs
+      {}
+
+      .. note:: This method is a property. It returns the attributes of the array.
+
+
+   .. py:method:: from_gp_array(array: gunpowder.Array)
+      :classmethod:
+
+
+      Create a NumpyArray from a Gunpowder Array.
+
+      :param array: The Gunpowder Array.
+      :type array: gp.Array
+
+      :returns: The NumpyArray.
+      :rtype: NumpyArray
+
+      :raises ValueError: If the array does not have a data type.
+
+      .. rubric:: Examples
+
+      >>> array = gp.Array(data=np.zeros((2, 3, 4)), spec=gp.ArraySpec(roi=Roi((0, 0, 0), (2, 3, 4)), voxel_size=Coordinate((1, 1, 1))))
+      >>> array = NumpyArray.from_gp_array(array)
+      >>> array.data
+      array([[[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]],
+      <BLANKLINE>
+                  [[0., 0., 0., 0.],
+                  [0., 0., 0., 0.],
+                  [0., 0., 0., 0.]]])
+
+      .. note:: This method creates a NumpyArray from a Gunpowder Array.
+
+
+
+   .. py:method:: from_np_array(array: numpy.ndarray, roi, voxel_size, axes)
+      :classmethod:
+
+
+      Create a NumpyArray from a numpy array.
+
+      :param array: The numpy array.
+      :type array: np.ndarray
+      :param roi: The region of interest of the array.
+      :type roi: Roi
+      :param voxel_size: The voxel size of the array.
+      :type voxel_size: Coordinate
+      :param axes: The axes of the array.
+      :type axes: List[str]
+
+      :returns: The NumpyArray.
+      :rtype: NumpyArray
+
+      :raises ValueError: If the array does not have a data type.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.data
+      array([[[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]],
+      <BLANKLINE>
+               [[0., 0., 0., 0.],
+                [0., 0., 0., 0.],
+                [0., 0., 0., 0.]]])
+
+      .. note:: This method creates a NumpyArray from a numpy array.
+
+
+
+   .. py:property:: axes
+      Returns the axes of the array.
+
+      :returns: The axes of the array.
+      :rtype: List[str]
+
+      :raises ValueError: If the array does not have axes.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.axes
+      ['z', 'y', 'x']
+
+      .. note:: This method is a property. It returns the axes of the array.
+
+
+   .. py:property:: dims
+      Returns the number of dimensions of the array.
+
+      :returns: The number of dimensions of the array.
+      :rtype: int
+
+      :raises ValueError: If the array does not have a dimension.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.dims
+      3
+
+      .. note:: This method is a property. It returns the number of dimensions of the array.
+
+
+   .. py:property:: voxel_size
+      Returns the voxel size of the array.
+
+      :returns: The voxel size of the array.
+      :rtype: Coordinate
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.voxel_size
+      Coordinate((1, 1, 1))
+
+      .. note:: This method is a property. It returns the voxel size of the array.
+
+
+   .. py:property:: roi
+      Returns the region of interest of the array.
+
+      :returns: The region of interest of the array.
+      :rtype: Roi
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.roi
+      Roi((0, 0, 0), (2, 3, 4))
+
+      .. note:: This method is a property. It returns the region of interest of the array.
+
+
+   .. py:property:: writable
+      :type: bool
+
+      Returns whether the array is writable.
+
+      :returns: Whether the array is writable.
+      :rtype: bool
+
+      :raises ValueError: If the array is not writable.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.writable
+      True
+
+      .. note:: This method is a property. It returns whether the array is writable.
+
+
+   .. py:property:: data
+      Returns the numpy array.
+
+      :returns: The numpy array.
+      :rtype: np.ndarray
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.data
+      array([[[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]],
+      <BLANKLINE>
+             [[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]]])
+
+      .. note:: This method is a property. It returns the numpy array.
+
+
+   .. py:property:: dtype
+      Returns the data type of the array.
+
+      :returns: The data type of the array.
+      :rtype: np.dtype
+
+      :raises ValueError: If the array does not have a data type.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.dtype
+      dtype('float64')
+
+      .. note:: This method is a property. It returns the data type of the array.
+
+
+   .. py:property:: num_channels
+      Returns the number of channels in the array.
+
+      :returns: The number of channels in the array.
+      :rtype: int
+
+      :raises ValueError: If the array does not have a channel dimension.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((1, 2, 3, 4)), Roi((0, 0, 0), (1, 2, 3)), Coordinate((1, 1, 1)), ["b", "c", "z", "y", "x"])
+      >>> array.num_channels
+      1
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.num_channels
+      Traceback (most recent call last):
+      ...
+      ValueError: Array does not have a channel dimension.
+
+      .. note:: This method is a property. It returns the number of channels in the array.
+
+
+.. py:function:: balance_weights(label_data: numpy.ndarray, num_classes: int, masks: List[numpy.ndarray] = list(), slab=None, clipmin: float = 0.05, clipmax: float = 0.95, moving_counts: Optional[List[Dict[int, Tuple[int, int]]]] = None)
+
+   Balances the weights based on the label data and other parameters.
+
+   :param label_data: The label data.
+   :type label_data: np.ndarray
+   :param num_classes: The number of classes.
+   :type num_classes: int
+   :param masks: List of masks. Defaults to an empty list.
+   :type masks: List[np.ndarray], optional
+   :param slab: The slab parameter. Defaults to None.
+   :type slab: optional
+   :param clipmin: The minimum clipping value. Defaults to 0.05.
+   :type clipmin: float, optional
+   :param clipmax: The maximum clipping value. Defaults to 0.95.
+   :type clipmax: float, optional
+   :param moving_counts: List of moving counts. Defaults to None.
+   :type moving_counts: Optional[List[Dict[int, Tuple[int, int]]]], optional
+
+   :returns: The balanced error scale and moving counts.
+   :rtype: Tuple[np.ndarray, List[Dict[int, Tuple[int, int]]]]
+
+   :raises AssertionError: If the number of unique labels is greater than the number of classes.
+   :raises AssertionError: If the minimum label is less than 0 or the maximum label is greater than the number of classes.
+
+   .. rubric:: Examples
+
+   >>> label_data = np.array([[0, 1, 2], [0, 1, 2], [0, 1, 2]])
+   >>> num_classes = 3
+   >>> masks = [np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]])]
+   >>> balance_weights(label_data, num_classes, masks)
+   (array([[0.33333334, 0.33333334, 0.33333334],
+           [0.33333334, 0.33333334, 0.33333334],
+           [0.33333334, 0.33333334, 0.33333334]], dtype=float32),
+    [{0: (3, 9), 1: (3, 9), 2: (3, 9)}])
+
+   .. rubric:: Notes
+
+   The balanced error scale is computed as:
+   error_scale = np.ones(label_data.shape, dtype=np.float32)
+   for mask in masks:
+       error_scale = error_scale * mask
+   slab_ranges = (range(0, m, s) for m, s in zip(error_scale.shape, slab))
+   for ind, start in enumerate(itertools.product(*slab_ranges)):
+       slab_counts = moving_counts[ind]
+       slices = tuple(slice(start[d], start[d] + slab[d]) for d in range(len(slab)))
+       scale_slab = error_scale[slices]
+       labels_slab = label_data[slices]
+       masked_in = scale_slab.sum()
+       classes, counts = np.unique(labels_slab[np.nonzero(scale_slab)], return_counts=True)
+       updated_fracs = []
+       for key, (num, den) in slab_counts.items():
+           slab_counts[key] = (num, den + masked_in)
+       for class_id, num in zip(classes, counts):
+           (old_num, den) = slab_counts[class_id]
+           slab_counts[class_id] = (num + old_num, den)
+           updated_fracs.append(slab_counts[class_id][0] / slab_counts[class_id][1])
+       fracs = np.array(updated_fracs)
+       if clipmin is not None or clipmax is not None:
+           np.clip(fracs, clipmin, clipmax, fracs)
+       total_frac = 1.0
+       w_sparse = total_frac / float(num_classes) / fracs
+       w = np.zeros(num_classes)
+       w[classes] = w_sparse
+       labels_slab = labels_slab.astype(np.int64)
+       scale_slab *= np.take(w, labels_slab)
+
+
 .. py:data:: logger
 
-   
-
 .. py:class:: InnerDistancePredictor(channels: List[str], scale_factor: float)
-
 
 
 
@@ -99,8 +802,8 @@ Attributes
 
    This is a subclass of Predictor.
 
-   .. py:property:: embedding_dims
 
+   .. py:property:: embedding_dims
       Get the number of embedding dimensions.
 
       :returns: The number of embedding dimensions.
@@ -112,17 +815,6 @@ Attributes
 
       >>> embedding_dims = predictor.embedding_dims
 
-   .. py:property:: output_array_type
-
-      Get the output array type.
-
-      :returns: The DistanceArray.
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> predictor.output_array_type
 
    .. py:method:: create_model(architecture)
 
@@ -135,6 +827,7 @@ Attributes
       .. rubric:: Examples
 
       >>> model = predictor.create_model(architecture)
+
 
 
    .. py:method:: create_target(gt)
@@ -150,6 +843,7 @@ Attributes
       .. rubric:: Examples
 
       >>> predictor.create_target(gt)
+
 
 
    .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
@@ -171,6 +865,19 @@ Attributes
       >>> predictor.create_weight(gt, target, mask, moving_class_counts)
 
 
+
+   .. py:property:: output_array_type
+      Get the output array type.
+
+      :returns: The DistanceArray.
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> predictor.output_array_type
+
+
    .. py:method:: process(labels: numpy.ndarray, voxel_size: funlib.geometry.Coordinate, normalize=None, normalize_args=None)
 
       Process the labels array and convert it to signed distances.
@@ -189,6 +896,7 @@ Attributes
       >>> predictor.process(labels, voxel_size, normalize, normalize_args)
 
 
+
    .. py:method:: gt_region_for_roi(target_spec)
 
       Report how much spatial context this predictor needs to generate a
@@ -203,6 +911,7 @@ Attributes
       .. rubric:: Examples
 
       >>> predictor.gt_region_for_roi(target_spec)
+
 
 
    .. py:method:: padding(gt_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate

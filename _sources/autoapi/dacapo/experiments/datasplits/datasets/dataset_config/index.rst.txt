@@ -1,24 +1,21 @@
-:py:mod:`dacapo.experiments.datasplits.datasets.dataset_config`
-===============================================================
+dacapo.experiments.datasplits.datasets.dataset_config
+=====================================================
 
 .. py:module:: dacapo.experiments.datasplits.datasets.dataset_config
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig
 
 
-
+Module Contents
+---------------
 
 .. py:class:: DatasetConfig
-
 
    A class used to define configuration for datasets. This provides the
    framework to create a Dataset instance.
@@ -47,15 +44,14 @@ Classes
 
    This class is used to create a configuration object for datasets.
 
-   .. py:attribute:: name
-      :type: str
 
-      
+   .. py:attribute:: name
+      :type:  str
+
 
    .. py:attribute:: weight
-      :type: int
+      :type:  int
 
-      
 
    .. py:method:: verify() -> Tuple[bool, str]
 

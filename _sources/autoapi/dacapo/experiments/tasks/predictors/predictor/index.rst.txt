@@ -1,24 +1,21 @@
-:py:mod:`dacapo.experiments.tasks.predictors.predictor`
-=======================================================
+dacapo.experiments.tasks.predictors.predictor
+=============================================
 
 .. py:module:: dacapo.experiments.tasks.predictors.predictor
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.experiments.tasks.predictors.predictor.Predictor
 
 
-
+Module Contents
+---------------
 
 .. py:class:: Predictor
-
 
 
 
@@ -52,12 +49,10 @@ Classes
 
    This is a subclass of ABC.
 
-   .. py:property:: output_array_type
-      :abstractmethod:
-
 
    .. py:method:: create_model(architecture: dacapo.experiments.architectures.architecture.Architecture) -> dacapo.experiments.model.Model
       :abstractmethod:
+
 
       Given a training architecture, create a model for this predictor.
       This is usually done by appending extra layers to the output of the
@@ -75,8 +70,10 @@ Classes
       >>> predictor.create_model(architecture)
 
 
+
    .. py:method:: create_target(gt: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.datasplits.datasets.arrays.Array
       :abstractmethod:
+
 
       Create the target array for training, given a ground-truth array.
 
@@ -107,8 +104,10 @@ Classes
       >>> predictor.create_target(gt)
 
 
+
    .. py:method:: create_weight(gt: dacapo.experiments.datasplits.datasets.arrays.Array, target: dacapo.experiments.datasplits.datasets.arrays.Array, mask: dacapo.experiments.datasplits.datasets.arrays.Array, moving_class_counts: Any) -> Tuple[dacapo.experiments.datasplits.datasets.arrays.Array, Any]
       :abstractmethod:
+
 
       Create the weight array for training, given a ground-truth and
       associated target array.
@@ -125,6 +124,12 @@ Classes
       .. rubric:: Examples
 
       >>> predictor.create_weight(gt, target, mask, moving_class_counts)
+
+
+
+   .. py:property:: output_array_type
+      :abstractmethod:
+
 
 
    .. py:method:: gt_region_for_roi(target_spec)
@@ -144,6 +149,7 @@ Classes
       .. rubric:: Examples
 
       >>> predictor.gt_region_for_roi(target_spec)
+
 
 
    .. py:method:: padding(gt_voxel_size: funlib.geometry.Coordinate) -> funlib.geometry.Coordinate

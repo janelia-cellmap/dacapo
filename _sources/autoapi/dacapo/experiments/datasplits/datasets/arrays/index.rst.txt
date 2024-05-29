@@ -1,53 +1,50 @@
-:py:mod:`dacapo.experiments.datasplits.datasets.arrays`
-=======================================================
+dacapo.experiments.datasplits.datasets.arrays
+=============================================
 
 .. py:module:: dacapo.experiments.datasplits.datasets.arrays
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   array/index.rst
-   array_config/index.rst
-   binarize_array/index.rst
-   binarize_array_config/index.rst
-   concat_array/index.rst
-   concat_array_config/index.rst
-   crop_array/index.rst
-   crop_array_config/index.rst
-   dummy_array/index.rst
-   dummy_array_config/index.rst
-   dvid_array/index.rst
-   dvid_array_config/index.rst
-   intensity_array/index.rst
-   intensity_array_config/index.rst
-   logical_or_array/index.rst
-   logical_or_array_config/index.rst
-   merge_instances_array/index.rst
-   merge_instances_array_config/index.rst
-   missing_annotations_mask/index.rst
-   missing_annotations_mask_config/index.rst
-   numpy_array/index.rst
-   ones_array/index.rst
-   ones_array_config/index.rst
-   resampled_array/index.rst
-   resampled_array_config/index.rst
-   sum_array/index.rst
-   sum_array_config/index.rst
-   tiff_array/index.rst
-   tiff_array_config/index.rst
-   zarr_array/index.rst
-   zarr_array_config/index.rst
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/array_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/binarize_array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/binarize_array_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/concat_array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/concat_array_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/crop_array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/crop_array_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/dummy_array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/dummy_array_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/dvid_array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/dvid_array_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/intensity_array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/intensity_array_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/logical_or_array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/logical_or_array_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/merge_instances_array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/merge_instances_array_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/missing_annotations_mask/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/missing_annotations_mask_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/numpy_array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/ones_array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/ones_array_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/resampled_array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/resampled_array_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/sum_array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/sum_array_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/tiff_array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/tiff_array_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/zarr_array/index
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/zarr_array_config/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -82,10 +79,10 @@ Classes
    dacapo.experiments.datasplits.datasets.arrays.NumpyArray
 
 
-
+Package Contents
+----------------
 
 .. py:class:: Array
-
 
 
 
@@ -189,8 +186,10 @@ Classes
       layer for the array. These methods are implemented by subclasses that support visualization
       in Neuroglancer.
 
+
    .. py:property:: attrs
       :type: Dict[str, Any]
+
       :abstractmethod:
 
       Return a dictionary of metadata attributes stored on this array.
@@ -208,8 +207,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: axes
       :type: List[str]
+
       :abstractmethod:
 
       Returns the axes of this dataset as a string of charactes, as they
@@ -232,8 +233,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: dims
       :type: int
+
       :abstractmethod:
 
       Returns the number of spatial dimensions.
@@ -251,8 +254,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
+
       :abstractmethod:
 
       The size of a voxel in physical units.
@@ -270,8 +275,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: roi
       :type: funlib.geometry.Roi
+
       :abstractmethod:
 
       The total ROI of this array, in world units.
@@ -289,8 +296,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: dtype
       :type: Any
+
       :abstractmethod:
 
       The dtype of this array, in numpy dtypes
@@ -308,8 +317,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: num_channels
       :type: Optional[int]
+
       :abstractmethod:
 
       The number of channels provided by this dataset.
@@ -328,8 +339,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: data
       :type: numpy.ndarray
+
       :abstractmethod:
 
       Get a numpy like readable and writable view into this array.
@@ -347,8 +360,10 @@ Classes
 
       .. note:: This method must be implemented by the subclass.
 
+
    .. py:property:: writable
       :type: bool
+
       :abstractmethod:
 
       Can we write to this Array?
@@ -368,7 +383,6 @@ Classes
 
 
 .. py:class:: ArrayConfig
-
 
    Base class for array configurations. Each subclass of an
    `Array` should have a corresponding config class derived from
@@ -393,10 +407,10 @@ Classes
       `Array` should have a corresponding config class derived from `ArrayConfig`.
       This class should be used to store the configuration of the array.
 
-   .. py:attribute:: name
-      :type: str
 
-      
+   .. py:attribute:: name
+      :type:  str
+
 
    .. py:method:: verify() -> Tuple[bool, str]
 
@@ -423,7 +437,6 @@ Classes
 
 
 
-
    This is just a dummy array for testing. It has a shape of (100, 50, 50) and is filled with zeros.
 
    .. attribute:: array_config
@@ -442,8 +455,8 @@ Classes
    The min and max values are used to normalize the intensities.
    All intensities are converted to float32.
 
-   .. py:property:: attrs
 
+   .. py:property:: attrs
       Returns the attributes of the source array
 
       :returns: The attributes of the source array
@@ -456,8 +469,8 @@ Classes
       >>> intensities_array.attrs
       {'resolution': (1.0, 1.0, 1.0), 'unit': 'micrometer'}
 
-   .. py:property:: axes
 
+   .. py:property:: axes
       Returns the axes of the source array
 
       :returns: The axes of the source array
@@ -474,8 +487,8 @@ Classes
 
       The axes are the same as the source array
 
-   .. py:property:: dims
 
+   .. py:property:: dims
       Returns the number of dimensions of the source array
 
       :returns: The number of dimensions of the source array
@@ -492,8 +505,8 @@ Classes
 
       The dims are the same as the source array
 
-   .. py:property:: voxel_size
 
+   .. py:property:: voxel_size
       Returns the voxel size of the source array
 
       :returns: The voxel size of the source array
@@ -510,8 +523,8 @@ Classes
 
       The voxel size is the same as the source array
 
-   .. py:property:: roi
 
+   .. py:property:: roi
       Returns the region of interest of the source array
 
       :returns: The region of interest of the source array
@@ -527,6 +540,7 @@ Classes
       .. rubric:: Notes
 
       The roi is the same as the source array
+
 
    .. py:property:: writable
       :type: bool
@@ -545,8 +559,8 @@ Classes
 
       The array is always writable
 
-   .. py:property:: data
 
+   .. py:property:: data
       Returns the data of the source array
 
       :returns: The data of the source array
@@ -569,8 +583,8 @@ Classes
 
       The data is the same as the source array
 
-   .. py:property:: dtype
 
+   .. py:property:: dtype
       Returns the data type of the array
 
       :returns: The data type of the array
@@ -587,8 +601,8 @@ Classes
 
       The data type is the same as the source array
 
-   .. py:property:: num_channels
 
+   .. py:property:: num_channels
       Returns the number of channels in the source array
 
       :returns: The number of channels in the source array
@@ -610,7 +624,6 @@ Classes
 
 
 
-
    This is just a dummy array  config used for testing. None of the
    attributes have any particular meaning. It is used to test the
    ArrayConfig class.
@@ -627,9 +640,9 @@ Classes
 
    The source_array_config must be an ArrayConfig object.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:method:: verify() -> Tuple[bool, str]
 
@@ -653,7 +666,6 @@ Classes
 
 
 .. py:class:: ZarrArray(array_config)
-
 
 
 
@@ -818,11 +830,11 @@ Classes
 
    This class is used to create a zarr array.
 
+
    .. py:property:: mode
 
 
    .. py:property:: attrs
-
       Returns the attributes of the array.
 
       :param attrs: The attributes of the array.
@@ -841,8 +853,8 @@ Classes
 
       This method is used to return the attributes of the array.
 
-   .. py:property:: axes
 
+   .. py:property:: axes
       Returns the axes of the array.
 
       :param axes: The axes of the array.
@@ -860,6 +872,7 @@ Classes
       .. rubric:: Notes
 
       This method is used to return the axes of the array.
+
 
    .. py:property:: dims
       :type: int
@@ -882,110 +895,6 @@ Classes
 
       This method is used to return the dimensions of the array.
 
-   .. py:property:: writable
-      :type: bool
-
-      Returns the boolean value of the array.
-
-      :param writable: The boolean value of the array.
-      :type writable: bool
-
-      :returns: The boolean value of the array.
-      :rtype: bool
-
-      :raises NotImplementedError:
-
-      .. rubric:: Examples
-
-      >>> writable()
-
-      .. rubric:: Notes
-
-      This method is used to return the boolean value of the array.
-
-   .. py:property:: dtype
-      :type: Any
-
-      Returns the data type of the array.
-
-      :param dtype: The data type of the array.
-      :type dtype: Any
-
-      :returns: The data type of the array.
-      :rtype: Any
-
-      :raises NotImplementedError:
-
-      .. rubric:: Examples
-
-      >>> dtype()
-
-      .. rubric:: Notes
-
-      This method is used to return the data type of the array.
-
-   .. py:property:: num_channels
-      :type: Optional[int]
-
-      Returns the number of channels of the array.
-
-      :param num_channels: The number of channels of the array.
-      :type num_channels: Optional[int]
-
-      :returns: The number of channels of the array.
-      :rtype: Optional[int]
-
-      :raises NotImplementedError:
-
-      .. rubric:: Examples
-
-      >>> num_channels()
-
-      .. rubric:: Notes
-
-      This method is used to return the number of channels of the array.
-
-   .. py:property:: spatial_axes
-      :type: List[str]
-
-      Returns the spatial axes of the array.
-
-      :param spatial_axes: The spatial axes of the array.
-      :type spatial_axes: List[str]
-
-      :returns: The spatial axes of the array.
-      :rtype: List[str]
-
-      :raises NotImplementedError:
-
-      .. rubric:: Examples
-
-      >>> spatial_axes()
-
-      .. rubric:: Notes
-
-      This method is used to return the spatial axes of the array.
-
-   .. py:property:: data
-      :type: Any
-
-      Returns the data of the array.
-
-      :param data: The data of the array.
-      :type data: Any
-
-      :returns: The data of the array.
-      :rtype: Any
-
-      :raises NotImplementedError:
-
-      .. rubric:: Examples
-
-      >>> data()
-
-      .. rubric:: Notes
-
-      This method is used to return the data of the array.
 
    .. py:method:: voxel_size() -> funlib.geometry.Coordinate
 
@@ -1006,6 +915,7 @@ Classes
       .. rubric:: Notes
 
       This method is used to return the voxel size of the array.
+
 
 
    .. py:method:: roi() -> funlib.geometry.Roi
@@ -1029,8 +939,120 @@ Classes
       This method is used to return the region of interest of the array.
 
 
+
+   .. py:property:: writable
+      :type: bool
+
+      Returns the boolean value of the array.
+
+      :param writable: The boolean value of the array.
+      :type writable: bool
+
+      :returns: The boolean value of the array.
+      :rtype: bool
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> writable()
+
+      .. rubric:: Notes
+
+      This method is used to return the boolean value of the array.
+
+
+   .. py:property:: dtype
+      :type: Any
+
+      Returns the data type of the array.
+
+      :param dtype: The data type of the array.
+      :type dtype: Any
+
+      :returns: The data type of the array.
+      :rtype: Any
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> dtype()
+
+      .. rubric:: Notes
+
+      This method is used to return the data type of the array.
+
+
+   .. py:property:: num_channels
+      :type: Optional[int]
+
+      Returns the number of channels of the array.
+
+      :param num_channels: The number of channels of the array.
+      :type num_channels: Optional[int]
+
+      :returns: The number of channels of the array.
+      :rtype: Optional[int]
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> num_channels()
+
+      .. rubric:: Notes
+
+      This method is used to return the number of channels of the array.
+
+
+   .. py:property:: spatial_axes
+      :type: List[str]
+
+      Returns the spatial axes of the array.
+
+      :param spatial_axes: The spatial axes of the array.
+      :type spatial_axes: List[str]
+
+      :returns: The spatial axes of the array.
+      :rtype: List[str]
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> spatial_axes()
+
+      .. rubric:: Notes
+
+      This method is used to return the spatial axes of the array.
+
+
+   .. py:property:: data
+      :type: Any
+
+      Returns the data of the array.
+
+      :param data: The data of the array.
+      :type data: Any
+
+      :returns: The data of the array.
+      :rtype: Any
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> data()
+
+      .. rubric:: Notes
+
+      This method is used to return the data of the array.
+
+
    .. py:method:: create_from_array_identifier(array_identifier, axes, roi, num_channels, voxel_size, dtype, mode='a', write_size=None, name=None, overwrite=False)
       :classmethod:
+
 
       Create a new ZarrArray given an array identifier. It is assumed that
       this array_identifier points to a dataset that does not yet exist.
@@ -1068,8 +1090,10 @@ Classes
       This method is used to create a new ZarrArray given an array identifier.
 
 
+
    .. py:method:: open_from_array_identifier(array_identifier, name='')
       :classmethod:
+
 
       Opens a new ZarrArray given an array identifier.
 
@@ -1092,6 +1116,7 @@ Classes
       This method is used to open a new ZarrArray given an array identifier.
 
 
+
    .. py:method:: add_metadata(metadata: Dict[str, Any]) -> None
 
       Adds metadata to the array.
@@ -1112,7 +1137,6 @@ Classes
 
 
 .. py:class:: ZarrArrayConfig
-
 
 
 
@@ -1150,29 +1174,25 @@ Classes
 
    .. note:: This class is a subclass of ArrayConfig.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: file_name
-      :type: upath.UPath
+      :type:  upath.UPath
 
-      
 
    .. py:attribute:: dataset
-      :type: str
+      :type:  str
 
-      
 
    .. py:attribute:: snap_to_grid
-      :type: Optional[funlib.geometry.Coordinate]
+      :type:  Optional[funlib.geometry.Coordinate]
 
-      
 
    .. py:attribute:: mode
-      :type: Optional[str]
+      :type:  Optional[str]
 
-      
 
    .. py:method:: verify() -> Tuple[bool, str]
 
@@ -1200,7 +1220,6 @@ Classes
 
 
 .. py:class:: BinarizeArray(array_config)
-
 
 
 
@@ -1276,8 +1295,8 @@ Classes
 
    .. note:: This class is used to create a BinarizeArray object which is a wrapper around a ZarrArray containing uint annotations.
 
-   .. py:property:: attrs
 
+   .. py:property:: attrs
       This method returns the attributes of the source array.
 
       :returns: The attributes of the source array.
@@ -1291,8 +1310,8 @@ Classes
 
       .. note:: This method is used to return the attributes of the source array.
 
-   .. py:property:: axes
 
+   .. py:property:: axes
       This method returns the axes of the source array.
 
       :returns: The axes of the source array.
@@ -1305,6 +1324,7 @@ Classes
       >>> binarize_array.axes
 
       .. note:: This method is used to return the axes of the source array.
+
 
    .. py:property:: dims
       :type: int
@@ -1322,6 +1342,7 @@ Classes
 
       .. note:: This method is used to return the dimensions of the source array.
 
+
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
@@ -1337,6 +1358,7 @@ Classes
       >>> binarize_array.voxel_size
 
       .. note:: This method is used to return the voxel size of the source array.
+
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
@@ -1354,6 +1376,7 @@ Classes
 
       .. note:: This method is used to return the region of interest of the source array.
 
+
    .. py:property:: writable
       :type: bool
 
@@ -1370,8 +1393,8 @@ Classes
 
       .. note:: This method is used to return True if the source array is writable.
 
-   .. py:property:: dtype
 
+   .. py:property:: dtype
       This method returns the data type of the source array.
 
       :returns: The data type of the source array.
@@ -1384,6 +1407,7 @@ Classes
       >>> binarize_array.dtype
 
       .. note:: This method is used to return the data type of the source array.
+
 
    .. py:property:: num_channels
       :type: int
@@ -1401,8 +1425,8 @@ Classes
 
       .. note:: This method is used to return the number of channels in the source array.
 
-   .. py:property:: data
 
+   .. py:property:: data
       This method returns the data of the source array.
 
       :returns: The data of the source array.
@@ -1416,8 +1440,8 @@ Classes
 
       .. note:: This method is used to return the data of the source array.
 
-   .. py:property:: channels
 
+   .. py:property:: channels
       This method returns the channel names of the source array.
 
       :returns: The channel names of the source array.
@@ -1433,7 +1457,6 @@ Classes
 
 
 .. py:class:: BinarizeArrayConfig
-
 
 
 
@@ -1465,28 +1488,23 @@ Classes
       This class is used to create a BinarizeArray object which is used to turn an Annotated dataset into a multi class binary classification problem.
       Each class will be binarized into a separate channel.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source_array_config
-      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+      :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
-      
 
    .. py:attribute:: groupings
-      :type: List[Tuple[str, List[int]]]
+      :type:  List[Tuple[str, List[int]]]
 
-      
 
    .. py:attribute:: background
-      :type: int
-
-      
+      :type:  int
 
 
 .. py:class:: ResampledArray(array_config)
-
 
 
 
@@ -1599,8 +1617,8 @@ Classes
 
    .. note:: This class is a subclass of Array.
 
-   .. py:property:: attrs
 
+   .. py:property:: attrs
       Returns the attributes of the source array.
 
       :returns: The attributes of the source array
@@ -1614,8 +1632,8 @@ Classes
 
       .. note:: This method returns the attributes of the source array.
 
-   .. py:property:: axes
 
+   .. py:property:: axes
       Returns the axes of the source array.
 
       :returns: The axes of the source array
@@ -1628,6 +1646,7 @@ Classes
       >>> resampled_array.axes
 
       .. note:: This method returns the axes of the source array.
+
 
    .. py:property:: dims
       :type: int
@@ -1645,6 +1664,7 @@ Classes
 
       .. note:: This method returns the number of dimensions of the source array.
 
+
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
@@ -1660,6 +1680,7 @@ Classes
       >>> resampled_array.voxel_size
 
       .. note:: This method returns the voxel size of the resampled array.
+
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
@@ -1677,6 +1698,7 @@ Classes
 
       .. note:: This method returns the region of interest of the resampled array.
 
+
    .. py:property:: writable
       :type: bool
 
@@ -1693,8 +1715,8 @@ Classes
 
       .. note:: This method returns whether the resampled array is writable.
 
-   .. py:property:: dtype
 
+   .. py:property:: dtype
       Returns the data type of the resampled array.
 
       :returns: The data type of the resampled array
@@ -1707,6 +1729,7 @@ Classes
       >>> resampled_array.dtype
 
       .. note:: This method returns the data type of the resampled array.
+
 
    .. py:property:: num_channels
       :type: int
@@ -1724,8 +1747,8 @@ Classes
 
       .. note:: This method returns the number of channels of the resampled array.
 
-   .. py:property:: data
 
+   .. py:property:: data
       Returns the data of the resampled array.
 
       :returns: The data of the resampled array
@@ -1739,8 +1762,8 @@ Classes
 
       .. note:: This method returns the data of the resampled array.
 
-   .. py:property:: scale
 
+   .. py:property:: scale
       Returns the scale of the resampled array.
 
       :returns: The scale of the resampled array
@@ -1756,7 +1779,6 @@ Classes
 
 
 .. py:class:: ResampledArrayConfig
-
 
 
 
@@ -1792,33 +1814,27 @@ Classes
 
    .. note:: This class is meant to be used with the ArrayDataset class.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source_array_config
-      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+      :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
-      
 
    .. py:attribute:: upsample
-      :type: funlib.geometry.Coordinate
+      :type:  funlib.geometry.Coordinate
 
-      
 
    .. py:attribute:: downsample
-      :type: funlib.geometry.Coordinate
+      :type:  funlib.geometry.Coordinate
 
-      
 
    .. py:attribute:: interp_order
-      :type: bool
-
-      
+      :type:  bool
 
 
 .. py:class:: IntensitiesArray(array_config)
-
 
 
 
@@ -1855,8 +1871,8 @@ Classes
    The min and max values are used to normalize the intensities.
    All intensities are converted to float32.
 
-   .. py:property:: attrs
 
+   .. py:property:: attrs
       Returns the attributes of the source array
 
       :returns: The attributes of the source array
@@ -1873,8 +1889,8 @@ Classes
 
       The attributes are the same as the source array
 
-   .. py:property:: axes
 
+   .. py:property:: axes
       Returns the axes of the source array
 
       :returns: The axes of the source array
@@ -1890,6 +1906,7 @@ Classes
       .. rubric:: Notes
 
       The axes are the same as the source array
+
 
    .. py:property:: dims
       :type: int
@@ -1910,6 +1927,7 @@ Classes
 
       The dimensions are the same as the source array
 
+
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
@@ -1928,6 +1946,7 @@ Classes
       .. rubric:: Notes
 
       The voxel size is the same as the source array
+
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
@@ -1948,6 +1967,7 @@ Classes
 
       The region of interest is the same as the source array
 
+
    .. py:property:: writable
       :type: bool
 
@@ -1967,8 +1987,8 @@ Classes
 
       The array is not writable because it is a virtual array created by modifying another array on demand.
 
-   .. py:property:: dtype
 
+   .. py:property:: dtype
       Returns the data type of the array
 
       :returns: The data type of the array
@@ -1984,6 +2004,7 @@ Classes
       .. rubric:: Notes
 
       The data type is always float32
+
 
    .. py:property:: num_channels
       :type: int
@@ -2004,8 +2025,8 @@ Classes
 
       The number of channels is the same as the source array
 
-   .. py:property:: data
 
+   .. py:property:: data
       Returns the data of the source array
 
       :returns: The data of the source array
@@ -2024,7 +2045,6 @@ Classes
 
 
 .. py:class:: IntensitiesArrayConfig
-
 
 
 
@@ -2058,28 +2078,23 @@ Classes
 
    The source_array_config must be an ArrayConfig object.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source_array_config
-      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+      :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
-      
 
    .. py:attribute:: min
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: max
-      :type: float
-
-      
+      :type:  float
 
 
 .. py:class:: MissingAnnotationsMask(array_config)
-
 
 
 
@@ -2108,8 +2123,8 @@ Classes
       BinarizeArray class to mask out annotations that are present but
       not annotated.
 
-   .. py:property:: axes
 
+   .. py:property:: axes
       Returns the axes of the source array
 
       :returns: Axes of the source array
@@ -2126,6 +2141,7 @@ Classes
       .. rubric:: Notes
 
       This is a helper function for the BinarizeArray class
+
 
    .. py:property:: dims
       :type: int
@@ -2147,6 +2163,7 @@ Classes
 
       This is a helper function for the BinarizeArray class
 
+
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
@@ -2166,6 +2183,7 @@ Classes
       .. rubric:: Notes
 
       This is a helper function for the BinarizeArray class
+
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
@@ -2187,6 +2205,7 @@ Classes
 
       This is a helper function for the BinarizeArray class
 
+
    .. py:property:: writable
       :type: bool
 
@@ -2207,8 +2226,8 @@ Classes
 
       This is a helper function for the BinarizeArray class
 
-   .. py:property:: dtype
 
+   .. py:property:: dtype
       Returns the data type of the source array
 
       :returns: Data type of the source array
@@ -2225,6 +2244,7 @@ Classes
       .. rubric:: Notes
 
       This is a helper function for the BinarizeArray class
+
 
    .. py:property:: num_channels
       :type: int
@@ -2246,8 +2266,8 @@ Classes
 
       This is a helper function for the BinarizeArray class
 
-   .. py:property:: data
 
+   .. py:property:: data
       Returns the data of the source array
 
       :returns: Data of the source array
@@ -2265,8 +2285,8 @@ Classes
 
       This is a helper function for the BinarizeArray class
 
-   .. py:property:: attrs
 
+   .. py:property:: attrs
       Returns the attributes of the source array
 
       :returns: Attributes of the source array
@@ -2284,8 +2304,8 @@ Classes
 
       This is a helper function for the BinarizeArray class
 
-   .. py:property:: channels
 
+   .. py:property:: channels
       Returns the names of the channels
 
       :returns: Names of the channels
@@ -2308,7 +2328,6 @@ Classes
 
 
 
-
    This config class provides the necessary configuration for turning an Annotated dataset into a
    multi class binary classification problem
 
@@ -2328,23 +2347,19 @@ Classes
       The output array will have a channel dimension equal to the number of groups.
       Each channel will be a binary mask of the ids in the groupings list.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source_array_config
-      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+      :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
-      
 
    .. py:attribute:: groupings
-      :type: List[Tuple[str, List[int]]]
-
-      
+      :type:  List[Tuple[str, List[int]]]
 
 
 .. py:class:: OnesArray(array_config)
-
 
 
 
@@ -2408,271 +2423,10 @@ Classes
       `like` method to create a new OnesArray with the same metadata as
       another array.
 
-   .. py:property:: attrs
-
-      Get the attributes of the array.
-
-      :returns: An empty dictionary.
-
-      .. rubric:: Examples
-
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
-      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
-      >>> import numpy as np
-      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
-      >>> ones_array.attrs
-      {}
-
-      .. rubric:: Notes
-
-      This method is used to get the attributes of the array. The attributes
-      are stored as key-value pairs in a dictionary. This method returns an
-      empty dictionary because the OnesArray does not have any attributes.
-
-   .. py:property:: source_array
-      :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
-
-      Get the source array that this array is based on.
-
-      :returns: The source array.
-
-      :raises RuntimeError: If the source array is not specified.
-
-      .. rubric:: Examples
-
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
-      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
-      >>> import numpy as np
-      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
-      >>> ones_array.source_array
-      NumpyArray(data=array([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]]), voxel_size=(1.0, 1.0, 1.0), roi=Roi((0, 0, 0), (10, 10, 10)), num_channels=1)
-
-      .. rubric:: Notes
-
-      This method is used to get the source array that this array is based on.
-      The source array is the array that the OnesArray is created from. This
-      method returns the source array that was specified when the OnesArray
-      was created.
-
-   .. py:property:: axes
-
-      Get the axes of the array.
-
-      :returns: The axes of the array.
-
-      :raises RuntimeError: If the axes are not specified.
-
-      .. rubric:: Examples
-
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
-      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
-      >>> import numpy as np
-      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
-      >>> ones_array.axes
-      'zyx'
-
-      .. rubric:: Notes
-
-      This method is used to get the axes of the array. The axes are the
-      order of the dimensions of the array. This method returns the axes of
-      the array that was specified when the OnesArray was created.
-
-   .. py:property:: dims
-
-      Get the dimensions of the array.
-
-      :returns: The dimensions of the array.
-
-      :raises RuntimeError: If the dimensions are not specified.
-
-      .. rubric:: Examples
-
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
-      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
-      >>> import numpy as np
-      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
-      >>> ones_array.dims
-      (10, 10, 10)
-
-      .. rubric:: Notes
-
-      This method is used to get the dimensions of the array. The dimensions
-      are the size of the array along each axis. This method returns the
-      dimensions of the array that was specified when the OnesArray was created.
-
-   .. py:property:: voxel_size
-
-      Get the voxel size of the array.
-
-      :returns: The voxel size of the array.
-
-      :raises RuntimeError: If the voxel size is not specified.
-
-      .. rubric:: Examples
-
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
-      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
-      >>> import numpy as np
-      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
-      >>> ones_array.voxel_size
-      (1.0, 1.0, 1.0)
-
-      .. rubric:: Notes
-
-      This method is used to get the voxel size of the array. The voxel size
-      is the size of each voxel in the array. This method returns the voxel
-      size of the array that was specified when the OnesArray was created.
-
-   .. py:property:: roi
-
-      Get the region of interest of the array.
-
-      :returns: The region of interest of the array.
-
-      :raises RuntimeError: If the region of interest is not specified.
-
-      .. rubric:: Examples
-
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
-      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
-      >>> from funlib.geometry import Roi
-      >>> import numpy as np
-      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
-      >>> ones_array.roi
-      Roi((0, 0, 0), (10, 10, 10))
-
-      .. rubric:: Notes
-
-      This method is used to get the region of interest of the array. The
-      region of interest is the region of the array that contains the data.
-      This method returns the region of interest of the array that was specified
-      when the OnesArray was created.
-
-   .. py:property:: writable
-      :type: bool
-
-      Check if the array is writable.
-
-      :returns: False.
-
-      :raises RuntimeError: If the writability of the array is not specified.
-
-      .. rubric:: Examples
-
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
-      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
-      >>> import numpy as np
-      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
-      >>> ones_array.writable
-      False
-
-      .. rubric:: Notes
-
-      This method is used to check if the array is writable. An array is
-      writable if it can be modified in place. This method returns False
-      because the OnesArray is read-only and cannot be modified.
-
-   .. py:property:: data
-
-      Get the data of the array.
-
-      :returns: The data of the array.
-
-      :raises RuntimeError: If the data is not specified.
-
-      .. rubric:: Examples
-
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
-      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
-      >>> import numpy as np
-      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
-      >>> ones_array.data
-      array([[[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]])
-
-      .. rubric:: Notes
-
-      This method is used to get the data of the array. The data is the
-      values that are stored in the array. This method returns a subarray
-      of the array with all values set to 1.
-
-   .. py:property:: dtype
-
-      Get the data type of the array.
-
-      :returns: The data type of the array.
-
-      :raises RuntimeError: If the data type is not specified.
-
-      .. rubric:: Examples
-
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
-      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
-      >>> import numpy as np
-      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
-      >>> ones_array.dtype
-      <class 'numpy.bool_'>
-
-      .. rubric:: Notes
-
-      This method is used to get the data type of the array. The data type
-      is the type of the values that are stored in the array. This method
-      returns the data type of the array that was specified when the OnesArray
-      was created.
-
-   .. py:property:: num_channels
-
-      Get the number of channels of the array.
-
-      :returns: The number of channels of the array.
-
-      :raises RuntimeError: If the number of channels is not specified.
-
-      .. rubric:: Examples
-
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
-      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
-      >>> import numpy as np
-      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
-      >>> ones_array.num_channels
-      1
-
-      .. rubric:: Notes
-
-      This method is used to get the number of channels of the array. The
-      number of channels is the number of values that are stored at each
-      voxel in the array. This method returns the number of channels of the
-      array that was specified when the OnesArray was created.
 
    .. py:method:: like(array: dacapo.experiments.datasplits.datasets.arrays.array.Array)
       :classmethod:
+
 
       Create a new OnesArray with the same metadata as another array.
 
@@ -2709,8 +2463,272 @@ Classes
 
 
 
-.. py:class:: OnesArrayConfig
+   .. py:property:: attrs
+      Get the attributes of the array.
 
+      :returns: An empty dictionary.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.attrs
+      {}
+
+      .. rubric:: Notes
+
+      This method is used to get the attributes of the array. The attributes
+      are stored as key-value pairs in a dictionary. This method returns an
+      empty dictionary because the OnesArray does not have any attributes.
+
+
+   .. py:property:: source_array
+      :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
+
+      Get the source array that this array is based on.
+
+      :returns: The source array.
+
+      :raises RuntimeError: If the source array is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.source_array
+      NumpyArray(data=array([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]]), voxel_size=(1.0, 1.0, 1.0), roi=Roi((0, 0, 0), (10, 10, 10)), num_channels=1)
+
+      .. rubric:: Notes
+
+      This method is used to get the source array that this array is based on.
+      The source array is the array that the OnesArray is created from. This
+      method returns the source array that was specified when the OnesArray
+      was created.
+
+
+   .. py:property:: axes
+      Get the axes of the array.
+
+      :returns: The axes of the array.
+
+      :raises RuntimeError: If the axes are not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.axes
+      'zyx'
+
+      .. rubric:: Notes
+
+      This method is used to get the axes of the array. The axes are the
+      order of the dimensions of the array. This method returns the axes of
+      the array that was specified when the OnesArray was created.
+
+
+   .. py:property:: dims
+      Get the dimensions of the array.
+
+      :returns: The dimensions of the array.
+
+      :raises RuntimeError: If the dimensions are not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.dims
+      (10, 10, 10)
+
+      .. rubric:: Notes
+
+      This method is used to get the dimensions of the array. The dimensions
+      are the size of the array along each axis. This method returns the
+      dimensions of the array that was specified when the OnesArray was created.
+
+
+   .. py:property:: voxel_size
+      Get the voxel size of the array.
+
+      :returns: The voxel size of the array.
+
+      :raises RuntimeError: If the voxel size is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.voxel_size
+      (1.0, 1.0, 1.0)
+
+      .. rubric:: Notes
+
+      This method is used to get the voxel size of the array. The voxel size
+      is the size of each voxel in the array. This method returns the voxel
+      size of the array that was specified when the OnesArray was created.
+
+
+   .. py:property:: roi
+      Get the region of interest of the array.
+
+      :returns: The region of interest of the array.
+
+      :raises RuntimeError: If the region of interest is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> from funlib.geometry import Roi
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.roi
+      Roi((0, 0, 0), (10, 10, 10))
+
+      .. rubric:: Notes
+
+      This method is used to get the region of interest of the array. The
+      region of interest is the region of the array that contains the data.
+      This method returns the region of interest of the array that was specified
+      when the OnesArray was created.
+
+
+   .. py:property:: writable
+      :type: bool
+
+      Check if the array is writable.
+
+      :returns: False.
+
+      :raises RuntimeError: If the writability of the array is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.writable
+      False
+
+      .. rubric:: Notes
+
+      This method is used to check if the array is writable. An array is
+      writable if it can be modified in place. This method returns False
+      because the OnesArray is read-only and cannot be modified.
+
+
+   .. py:property:: data
+      Get the data of the array.
+
+      :returns: The data of the array.
+
+      :raises RuntimeError: If the data is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.data
+      array([[[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]])
+
+      .. rubric:: Notes
+
+      This method is used to get the data of the array. The data is the
+      values that are stored in the array. This method returns a subarray
+      of the array with all values set to 1.
+
+
+   .. py:property:: dtype
+      Get the data type of the array.
+
+      :returns: The data type of the array.
+
+      :raises RuntimeError: If the data type is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.dtype
+      <class 'numpy.bool_'>
+
+      .. rubric:: Notes
+
+      This method is used to get the data type of the array. The data type
+      is the type of the values that are stored in the array. This method
+      returns the data type of the array that was specified when the OnesArray
+      was created.
+
+
+   .. py:property:: num_channels
+      Get the number of channels of the array.
+
+      :returns: The number of channels of the array.
+
+      :raises RuntimeError: If the number of channels is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.num_channels
+      1
+
+      .. rubric:: Notes
+
+      This method is used to get the number of channels of the array. The
+      number of channels is the number of values that are stored at each
+      voxel in the array. This method returns the number of channels of the
+      array that was specified when the OnesArray was created.
+
+
+.. py:class:: OnesArrayConfig
 
 
 
@@ -2730,18 +2748,15 @@ Classes
 
    .. note:: This class is a subclass of ArrayConfig.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source_array_config
-      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
-
-      
+      :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
 
 .. py:class:: ConcatArray(array_config)
-
 
 
 
@@ -2786,8 +2801,8 @@ Classes
       This class is a subclass of Array and inherits all its attributes
       and methods. The only difference is that the array_type is ConcatArray.
 
-   .. py:property:: attrs
 
+   .. py:property:: attrs
       Return the attributes of the ConcatArray as a dictionary.
 
       :returns: The attributes of the ConcatArray.
@@ -2811,6 +2826,7 @@ Classes
       {'axes': 'cxyz', 'roi': Roi(...), 'voxel_size': (1, 1, 1)}
 
       .. note:: The `source_arrays` are expected to have the same attributes.
+
 
    .. py:property:: source_arrays
       :type: Dict[str, dacapo.experiments.datasplits.datasets.arrays.array.Array]
@@ -2839,6 +2855,7 @@ Classes
 
       .. note:: The `source_arrays` are expected to have the same shape and ROI.
 
+
    .. py:property:: source_array
       :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
 
@@ -2866,8 +2883,8 @@ Classes
 
       .. note:: The `source_array` is expected to have the same shape and ROI.
 
-   .. py:property:: axes
 
+   .. py:property:: axes
       Return the axes of the ConcatArray.
 
       :returns: The axes of the ConcatArray.
@@ -2892,8 +2909,8 @@ Classes
 
       .. note:: The `source_arrays` are expected to have the same axes.
 
-   .. py:property:: dims
 
+   .. py:property:: dims
       Return the dimensions of the ConcatArray.
 
       :returns: The dimensions of the ConcatArray.
@@ -2918,8 +2935,8 @@ Classes
 
       .. note:: The `source_arrays` are expected to have the same dimensions.
 
-   .. py:property:: voxel_size
 
+   .. py:property:: voxel_size
       Return the voxel size of the ConcatArray.
 
       :returns: The voxel size of the ConcatArray.
@@ -2944,8 +2961,8 @@ Classes
 
       .. note:: The `source_arrays` are expected to have the same voxel size.
 
-   .. py:property:: roi
 
+   .. py:property:: roi
       Return the ROI of the ConcatArray.
 
       :returns: The ROI of the ConcatArray.
@@ -2969,6 +2986,7 @@ Classes
       Roi(...)
 
       .. note:: The `source_arrays` are expected to have the same ROI.
+
 
    .. py:property:: writable
       :type: bool
@@ -2997,8 +3015,8 @@ Classes
 
       .. note:: The ConcatArray is not writable.
 
-   .. py:property:: data
 
+   .. py:property:: data
       Return the data of the ConcatArray.
 
       :returns: The data of the ConcatArray.
@@ -3023,8 +3041,8 @@ Classes
 
       .. note:: The ConcatArray is not writable.
 
-   .. py:property:: dtype
 
+   .. py:property:: dtype
       Return the data type of the ConcatArray.
 
       :returns: The data type of the ConcatArray.
@@ -3049,8 +3067,8 @@ Classes
 
       .. note:: The `source_arrays` are expected to have the same data type.
 
-   .. py:property:: num_channels
 
+   .. py:property:: num_channels
       Return the number of channels of the ConcatArray.
 
       :returns: The number of channels of the ConcatArray.
@@ -3077,7 +3095,6 @@ Classes
 
 
 .. py:class:: ConcatArrayConfig
-
 
 
 
@@ -3114,28 +3131,23 @@ Classes
       This class is used to create a ConcatArray object which is used to read data from the source array and then return a np.ones_like() version of the data.
       The source array is a dictionary with the key being the channel and the value being the array.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: channels
-      :type: List[str]
+      :type:  List[str]
 
-      
 
    .. py:attribute:: source_array_configs
-      :type: Dict[str, dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
+      :type:  Dict[str, dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
 
-      
 
    .. py:attribute:: default_config
-      :type: Optional[dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
-
-      
+      :type:  Optional[dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
 
 
 .. py:class:: LogicalOrArray(array_config)
-
 
 
 
@@ -3226,8 +3238,8 @@ Classes
    The LogicalOrArray class is used to create a LogicalOrArray. The LogicalOrArray
    class is a subclass of the Array class.
 
-   .. py:property:: axes
 
+   .. py:property:: axes
       Get the axes of the array
 
       :returns: The axes of the array
@@ -3266,6 +3278,7 @@ Classes
 
       The axes method is used to get the axes of the array. The axes are the dimensions
       of the array.
+
 
    .. py:property:: dims
       :type: int
@@ -3309,6 +3322,7 @@ Classes
       The dims method is used to get the number of dimensions of the array. The number
       of dimensions is the number of axes of the array.
 
+
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
@@ -3350,6 +3364,7 @@ Classes
 
       The voxel_size method is used to get the voxel size of the array. The voxel size
       is the size of a voxel in the array.
+
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
@@ -3393,6 +3408,7 @@ Classes
       The roi method is used to get the region of interest of the array. The region of
       interest is the shape and offset of the array.
 
+
    .. py:property:: writable
       :type: bool
 
@@ -3435,8 +3451,8 @@ Classes
       The writable method is used to get whether the array is writable. An array is
       writable if it can be modified.
 
-   .. py:property:: dtype
 
+   .. py:property:: dtype
       Get the data type of the array
 
       :returns: The data type of the array
@@ -3476,8 +3492,8 @@ Classes
       The dtype method is used to get the data type of the array. The data type is the
       type of the data in the array.
 
-   .. py:property:: num_channels
 
+   .. py:property:: num_channels
       Get the number of channels in the array
 
       :returns: The number of channels in the array
@@ -3517,8 +3533,8 @@ Classes
       The num_channels method is used to get the number of channels in the array. The
       number of channels is the number of channels in the array.
 
-   .. py:property:: data
 
+   .. py:property:: data
       Get the data of the array
 
       :returns: The data of the array
@@ -3564,8 +3580,8 @@ Classes
       The data method is used to get the data of the array. The data is the content of
       the array.
 
-   .. py:property:: attrs
 
+   .. py:property:: attrs
       Get the attributes of the array
 
       :returns: The attributes of the array
@@ -3610,7 +3626,6 @@ Classes
 
 
 
-
    This config class takes a source array and performs a logical or over the channels.
    Good for union multiple masks.
 
@@ -3628,18 +3643,15 @@ Classes
 
    The source_array_config must be an ArrayConfig object.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source_array_config
-      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
-
-      
+      :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
 
 .. py:class:: CropArray(array_config)
-
 
 
 
@@ -3726,8 +3738,8 @@ Classes
 
    .. note:: This class is a subclass of Array.
 
-   .. py:property:: attrs
 
+   .. py:property:: attrs
       Returns the attributes of the source array.
 
       :returns: The attributes of the source array.
@@ -3751,8 +3763,8 @@ Classes
 
       .. note:: The attributes are empty because the source array is not modified.
 
-   .. py:property:: axes
 
+   .. py:property:: axes
       Returns the axes of the source array.
 
       :returns: The axes of the source array.
@@ -3775,6 +3787,7 @@ Classes
       'zyx'
 
       .. note:: The axes are 'zyx' because the source array is not modified.
+
 
    .. py:property:: dims
       :type: int
@@ -3806,6 +3819,7 @@ Classes
          The number of dimensions is 3 because the source array is not
          modified.
 
+
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
@@ -3835,6 +3849,7 @@ Classes
 
          The voxel size is (1.0, 1.0, 1.0) because the source array is not
          modified.
+
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
@@ -3866,6 +3881,7 @@ Classes
          The region of interest is (0, 0, 0) with shape (10, 10, 10)
          because the source array is not modified.
 
+
    .. py:property:: writable
       :type: bool
 
@@ -3896,8 +3912,8 @@ Classes
          The array is not writable because it is a virtual array created by
          modifying another array on demand.
 
-   .. py:property:: dtype
 
+   .. py:property:: dtype
       Returns the data type of the source array.
 
       :returns: The data type of the source array.
@@ -3921,6 +3937,7 @@ Classes
       numpy.dtype('uint8')
 
       .. note:: The data type is uint8 because the source array is not modified.
+
 
    .. py:property:: num_channels
       :type: int
@@ -3952,8 +3969,8 @@ Classes
          The number of channels is 1 because the source array is not
          modified.
 
-   .. py:property:: data
 
+   .. py:property:: data
       Returns the data of the source array.
 
       :returns: The data of the source array.
@@ -3986,8 +4003,8 @@ Classes
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
              [[0, 0, 0, 0, 0, 0, 0, 0, 0
 
-   .. py:property:: channels
 
+   .. py:property:: channels
       Returns the channels of the source array.
 
       :returns: The channels of the source array.
@@ -4014,7 +4031,6 @@ Classes
 
 
 .. py:class:: CropArrayConfig
-
 
 
 
@@ -4055,23 +4071,19 @@ Classes
       This class is a subclass of ArrayConfig and inherits all its attributes
       and methods. The only difference is that the array_type is CropArray.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source_array_config
-      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+      :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
-      
 
    .. py:attribute:: roi
-      :type: funlib.geometry.Roi
-
-      
+      :type:  funlib.geometry.Roi
 
 
 .. py:class:: MergeInstancesArray(array_config)
-
 
 
 
@@ -4118,8 +4130,8 @@ Classes
       This array is not writable
       Source arrays must have the same shape.
 
-   .. py:property:: axes
 
+   .. py:property:: axes
       Returns the axes of the array
 
       :returns: The axes of the array
@@ -4155,6 +4167,7 @@ Classes
       ```
 
       .. note:: This example shows how to get the axes of the array
+
 
    .. py:property:: dims
       :type: int
@@ -4195,6 +4208,7 @@ Classes
 
       .. note:: This example shows how to get the number of dimensions of the array
 
+
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
@@ -4233,6 +4247,7 @@ Classes
       ```
 
       .. note:: This example shows how to get the voxel size of the array
+
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
@@ -4273,6 +4288,7 @@ Classes
 
       .. note:: This example shows how to get the region of interest of the array
 
+
    .. py:property:: writable
       :type: bool
 
@@ -4312,8 +4328,8 @@ Classes
 
       .. note:: This example shows how to check if the array is writable
 
-   .. py:property:: dtype
 
+   .. py:property:: dtype
       Returns the data type of the array
 
       :returns: The data type of the array
@@ -4350,8 +4366,8 @@ Classes
 
       .. note:: This example shows how to get the data type of the array
 
-   .. py:property:: num_channels
 
+   .. py:property:: num_channels
       Returns the number of channels of the array
 
       :returns: The number of channels of the array
@@ -4388,8 +4404,8 @@ Classes
 
       .. note:: This example shows how to get the number of channels of the array
 
-   .. py:property:: data
 
+   .. py:property:: data
       Returns the data of the array
 
       :returns: The data of the array
@@ -4426,8 +4442,8 @@ Classes
 
       .. note:: This example shows how to get the data of the array
 
-   .. py:property:: attrs
 
+   .. py:property:: attrs
       Returns the attributes of the array
 
       :returns: The attributes of the array
@@ -4469,7 +4485,6 @@ Classes
 
 
 
-
    Configuration for an array that merges instances from multiple arrays
    into a single array. The instances are merged by taking the union of the
    instances in the source arrays.
@@ -4488,18 +4503,15 @@ Classes
 
    The MergeInstancesArrayConfig class is used to create a MergeInstancesArray
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source_array_configs
-      :type: List[dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
-
-      
+      :type:  List[dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
 
 
 .. py:class:: DVIDArray(array_config)
-
 
 
 
@@ -4530,8 +4542,28 @@ Classes
 
    The source is a tuple of three strings: the server, the UUID, and the data name.
 
-   .. py:property:: axes
 
+   .. py:method:: attrs()
+
+      Returns the attributes of the DVID array
+
+      :returns: The attributes of the DVID array
+      :rtype: dict
+
+      :raises ValueError: If the attributes is not a dictionary
+
+      .. rubric:: Examples
+
+      >>> dvid_array.attrs
+      {'Extended': {'VoxelSize': (1.0, 1.0, 1.0), 'Values': [{'DataType': 'uint64'}]}, 'Extents': {'MinPoint': (0, 0, 0), 'MaxPoint': (100, 100, 100)}}
+
+      .. rubric:: Notes
+
+      The attributes are the same as the source array
+
+
+
+   .. py:property:: axes
       Returns the axes of the DVID array
 
       :returns: The axes of the DVID array
@@ -4547,6 +4579,7 @@ Classes
       .. rubric:: Notes
 
       The axes are the same as the source array
+
 
    .. py:property:: dims
       :type: int
@@ -4566,120 +4599,6 @@ Classes
       .. rubric:: Notes
 
       The dimensions are the same as the source array
-
-   .. py:property:: writable
-      :type: bool
-
-      Returns whether the DVID array is writable
-
-      :returns: Whether the DVID array is writable
-      :rtype: bool
-
-      :raises ValueError: If the writable is not a boolean
-
-      .. rubric:: Examples
-
-      >>> dvid_array.writable
-      False
-
-      .. rubric:: Notes
-
-      The writable is the same as the source array
-
-   .. py:property:: dtype
-      :type: Any
-
-      Returns the data type of the DVID array
-
-      :returns: The data type of the DVID array
-      :rtype: type
-
-      :raises ValueError: If the data type is not a type
-
-      .. rubric:: Examples
-
-      >>> dvid_array.dtype
-      numpy.uint64
-
-      .. rubric:: Notes
-
-      The data type is the same as the source array
-
-   .. py:property:: num_channels
-      :type: Optional[int]
-
-      Returns the number of channels of the DVID array
-
-      :returns: The number of channels of the DVID array
-      :rtype: int
-
-      :raises ValueError: If the number of channels is not an integer
-
-      .. rubric:: Examples
-
-      >>> dvid_array.num_channels
-      1
-
-      .. rubric:: Notes
-
-      The number of channels is the same as the source array
-
-   .. py:property:: spatial_axes
-      :type: List[str]
-
-      Returns the spatial axes of the DVID array
-
-      :returns: The spatial axes of the DVID array
-      :rtype: List[str]
-
-      :raises ValueError: If the spatial axes is not a list
-
-      .. rubric:: Examples
-
-      >>> dvid_array.spatial_axes
-      ['z', 'y', 'x']
-
-      .. rubric:: Notes
-
-      The spatial axes are the same as the source array
-
-   .. py:property:: data
-      :type: Any
-      :abstractmethod:
-
-      Returns the number of channels of the DVID array
-
-      :returns: The number of channels of the DVID array
-      :rtype: int
-
-      :raises ValueError: If the number of channels is not an integer
-
-      .. rubric:: Examples
-
-      >>> dvid_array.num_channels
-      1
-
-      .. rubric:: Notes
-
-      The number of channels is the same as the source array
-
-   .. py:method:: attrs()
-
-      Returns the attributes of the DVID array
-
-      :returns: The attributes of the DVID array
-      :rtype: dict
-
-      :raises ValueError: If the attributes is not a dictionary
-
-      .. rubric:: Examples
-
-      >>> dvid_array.attrs
-      {'Extended': {'VoxelSize': (1.0, 1.0, 1.0), 'Values': [{'DataType': 'uint64'}]}, 'Extents': {'MinPoint': (0, 0, 0), 'MaxPoint': (100, 100, 100)}}
-
-      .. rubric:: Notes
-
-      The attributes are the same as the source array
 
 
    .. py:method:: voxel_size() -> funlib.geometry.Coordinate
@@ -4701,6 +4620,7 @@ Classes
       The voxel size is the same as the source array
 
 
+
    .. py:method:: roi() -> funlib.geometry.Roi
 
       Returns the region of interest of the DVID array
@@ -4720,8 +4640,112 @@ Classes
       The region of interest is the same as the source array
 
 
+
+   .. py:property:: writable
+      :type: bool
+
+      Returns whether the DVID array is writable
+
+      :returns: Whether the DVID array is writable
+      :rtype: bool
+
+      :raises ValueError: If the writable is not a boolean
+
+      .. rubric:: Examples
+
+      >>> dvid_array.writable
+      False
+
+      .. rubric:: Notes
+
+      The writable is the same as the source array
+
+
+   .. py:property:: dtype
+      :type: Any
+
+      Returns the data type of the DVID array
+
+      :returns: The data type of the DVID array
+      :rtype: type
+
+      :raises ValueError: If the data type is not a type
+
+      .. rubric:: Examples
+
+      >>> dvid_array.dtype
+      numpy.uint64
+
+      .. rubric:: Notes
+
+      The data type is the same as the source array
+
+
+   .. py:property:: num_channels
+      :type: Optional[int]
+
+      Returns the number of channels of the DVID array
+
+      :returns: The number of channels of the DVID array
+      :rtype: int
+
+      :raises ValueError: If the number of channels is not an integer
+
+      .. rubric:: Examples
+
+      >>> dvid_array.num_channels
+      1
+
+      .. rubric:: Notes
+
+      The number of channels is the same as the source array
+
+
+   .. py:property:: spatial_axes
+      :type: List[str]
+
+      Returns the spatial axes of the DVID array
+
+      :returns: The spatial axes of the DVID array
+      :rtype: List[str]
+
+      :raises ValueError: If the spatial axes is not a list
+
+      .. rubric:: Examples
+
+      >>> dvid_array.spatial_axes
+      ['z', 'y', 'x']
+
+      .. rubric:: Notes
+
+      The spatial axes are the same as the source array
+
+
+   .. py:property:: data
+      :type: Any
+
+      :abstractmethod:
+
+      Returns the number of channels of the DVID array
+
+      :returns: The number of channels of the DVID array
+      :rtype: int
+
+      :raises ValueError: If the number of channels is not an integer
+
+      .. rubric:: Examples
+
+      >>> dvid_array.num_channels
+      1
+
+      .. rubric:: Notes
+
+      The number of channels is the same as the source array
+
+
    .. py:method:: add_metadata(metadata: Dict[str, Any]) -> None
       :abstractmethod:
+
 
       Adds metadata to the DVID array
 
@@ -4746,7 +4770,6 @@ Classes
 
 
 
-
    This config class provides the necessary configuration for a DVID array. It takes a source string and returns the DVIDArray object.
 
    .. attribute:: source
@@ -4763,14 +4786,13 @@ Classes
 
    The source must be a tuple of strings.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source
-      :type: Tuple[str, str, str]
+      :type:  Tuple[str, str, str]
 
-      
 
    .. py:method:: verify() -> Tuple[bool, str]
 
@@ -4794,7 +4816,6 @@ Classes
 
 
 .. py:class:: SumArray(array_config)
-
 
 
 
@@ -4843,8 +4864,8 @@ Classes
 
    .. note:: This class is a subclass of Array.
 
-   .. py:property:: axes
 
+   .. py:property:: axes
       The axes of the array.
 
       :returns: The axes of the array.
@@ -4858,6 +4879,7 @@ Classes
       ['x', 'y', 'z']
 
       .. note:: This class is a subclass of Array.
+
 
    .. py:property:: dims
       :type: int
@@ -4876,6 +4898,7 @@ Classes
 
       .. note:: This class is a subclass of Array.
 
+
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
@@ -4892,6 +4915,7 @@ Classes
       Coordinate([1, 1, 1])
 
       .. note:: This class is a subclass of Array.
+
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
@@ -4913,6 +4937,7 @@ Classes
 
       .. note:: This class is a subclass of Array.
 
+
    .. py:property:: writable
       :type: bool
 
@@ -4933,8 +4958,8 @@ Classes
 
       .. note:: This class is a subclass of Array.
 
-   .. py:property:: dtype
 
+   .. py:property:: dtype
       The data type of the array.
 
       :param dtype: np.uint8
@@ -4952,8 +4977,8 @@ Classes
 
       .. note:: This class is a subclass of Array.
 
-   .. py:property:: num_channels
 
+   .. py:property:: num_channels
       The number of channels in the array.
 
       :param num_channels: Optional[int]
@@ -4971,8 +4996,8 @@ Classes
 
       .. note:: This class is a subclass of Array.
 
-   .. py:property:: data
 
+   .. py:property:: data
       Get the data of the array.
 
       :param data: np.ndarray
@@ -4990,8 +5015,8 @@ Classes
 
       .. note:: This class is a subclass of Array.
 
-   .. py:property:: attrs
 
+   .. py:property:: attrs
       Return the attributes of the array.
 
       :param attrs: Dict
@@ -5014,7 +5039,6 @@ Classes
 
 
 
-
    This config class provides the necessary configuration for a sum
    array.
 
@@ -5025,18 +5049,15 @@ Classes
 
    .. note:: This class is a subclass of ArrayConfig.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source_array_configs
-      :type: List[dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
-
-      
+      :type:  List[dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
 
 
 .. py:class:: NumpyArray(array_config)
-
 
 
 
@@ -5072,8 +5093,8 @@ Classes
 
    .. note:: This class is a subclass of Array.
 
-   .. py:property:: attrs
 
+   .. py:property:: attrs
       Returns the attributes of the array.
 
       :returns: The attributes of the array.
@@ -5089,150 +5110,10 @@ Classes
 
       .. note:: This method is a property. It returns the attributes of the array.
 
-   .. py:property:: axes
-
-      Returns the axes of the array.
-
-      :returns: The axes of the array.
-      :rtype: List[str]
-
-      :raises ValueError: If the array does not have axes.
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.axes
-      ['z', 'y', 'x']
-
-      .. note:: This method is a property. It returns the axes of the array.
-
-   .. py:property:: dims
-
-      Returns the number of dimensions of the array.
-
-      :returns: The number of dimensions of the array.
-      :rtype: int
-
-      :raises ValueError: If the array does not have a dimension.
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.dims
-      3
-
-      .. note:: This method is a property. It returns the number of dimensions of the array.
-
-   .. py:property:: voxel_size
-
-      Returns the voxel size of the array.
-
-      :returns: The voxel size of the array.
-      :rtype: Coordinate
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.voxel_size
-      Coordinate((1, 1, 1))
-
-      .. note:: This method is a property. It returns the voxel size of the array.
-
-   .. py:property:: roi
-
-      Returns the region of interest of the array.
-
-      :returns: The region of interest of the array.
-      :rtype: Roi
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.roi
-      Roi((0, 0, 0), (2, 3, 4))
-
-      .. note:: This method is a property. It returns the region of interest of the array.
-
-   .. py:property:: writable
-      :type: bool
-
-      Returns whether the array is writable.
-
-      :returns: Whether the array is writable.
-      :rtype: bool
-
-      :raises ValueError: If the array is not writable.
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.writable
-      True
-
-      .. note:: This method is a property. It returns whether the array is writable.
-
-   .. py:property:: data
-
-      Returns the numpy array.
-
-      :returns: The numpy array.
-      :rtype: np.ndarray
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.data
-      array([[[0., 0., 0., 0.],
-              [0., 0., 0., 0.],
-              [0., 0., 0., 0.]],
-      <BLANKLINE>
-             [[0., 0., 0., 0.],
-              [0., 0., 0., 0.],
-              [0., 0., 0., 0.]]])
-
-      .. note:: This method is a property. It returns the numpy array.
-
-   .. py:property:: dtype
-
-      Returns the data type of the array.
-
-      :returns: The data type of the array.
-      :rtype: np.dtype
-
-      :raises ValueError: If the array does not have a data type.
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.dtype
-      dtype('float64')
-
-      .. note:: This method is a property. It returns the data type of the array.
-
-   .. py:property:: num_channels
-
-      Returns the number of channels in the array.
-
-      :returns: The number of channels in the array.
-      :rtype: int
-
-      :raises ValueError: If the array does not have a channel dimension.
-
-      .. rubric:: Examples
-
-      >>> array = NumpyArray.from_np_array(np.zeros((1, 2, 3, 4)), Roi((0, 0, 0), (1, 2, 3)), Coordinate((1, 1, 1)), ["b", "c", "z", "y", "x"])
-      >>> array.num_channels
-      1
-      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
-      >>> array.num_channels
-      Traceback (most recent call last):
-      ...
-      ValueError: Array does not have a channel dimension.
-
-      .. note:: This method is a property. It returns the number of channels in the array.
 
    .. py:method:: from_gp_array(array: gunpowder.Array)
       :classmethod:
+
 
       Create a NumpyArray from a Gunpowder Array.
 
@@ -5260,8 +5141,10 @@ Classes
       .. note:: This method creates a NumpyArray from a Gunpowder Array.
 
 
+
    .. py:method:: from_np_array(array: numpy.ndarray, roi, voxel_size, axes)
       :classmethod:
+
 
       Create a NumpyArray from a numpy array.
 
@@ -5293,5 +5176,148 @@ Classes
 
       .. note:: This method creates a NumpyArray from a numpy array.
 
+
+
+   .. py:property:: axes
+      Returns the axes of the array.
+
+      :returns: The axes of the array.
+      :rtype: List[str]
+
+      :raises ValueError: If the array does not have axes.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.axes
+      ['z', 'y', 'x']
+
+      .. note:: This method is a property. It returns the axes of the array.
+
+
+   .. py:property:: dims
+      Returns the number of dimensions of the array.
+
+      :returns: The number of dimensions of the array.
+      :rtype: int
+
+      :raises ValueError: If the array does not have a dimension.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.dims
+      3
+
+      .. note:: This method is a property. It returns the number of dimensions of the array.
+
+
+   .. py:property:: voxel_size
+      Returns the voxel size of the array.
+
+      :returns: The voxel size of the array.
+      :rtype: Coordinate
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.voxel_size
+      Coordinate((1, 1, 1))
+
+      .. note:: This method is a property. It returns the voxel size of the array.
+
+
+   .. py:property:: roi
+      Returns the region of interest of the array.
+
+      :returns: The region of interest of the array.
+      :rtype: Roi
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.roi
+      Roi((0, 0, 0), (2, 3, 4))
+
+      .. note:: This method is a property. It returns the region of interest of the array.
+
+
+   .. py:property:: writable
+      :type: bool
+
+      Returns whether the array is writable.
+
+      :returns: Whether the array is writable.
+      :rtype: bool
+
+      :raises ValueError: If the array is not writable.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.writable
+      True
+
+      .. note:: This method is a property. It returns whether the array is writable.
+
+
+   .. py:property:: data
+      Returns the numpy array.
+
+      :returns: The numpy array.
+      :rtype: np.ndarray
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.data
+      array([[[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]],
+      <BLANKLINE>
+             [[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]]])
+
+      .. note:: This method is a property. It returns the numpy array.
+
+
+   .. py:property:: dtype
+      Returns the data type of the array.
+
+      :returns: The data type of the array.
+      :rtype: np.dtype
+
+      :raises ValueError: If the array does not have a data type.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.dtype
+      dtype('float64')
+
+      .. note:: This method is a property. It returns the data type of the array.
+
+
+   .. py:property:: num_channels
+      Returns the number of channels in the array.
+
+      :returns: The number of channels in the array.
+      :rtype: int
+
+      :raises ValueError: If the array does not have a channel dimension.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((1, 2, 3, 4)), Roi((0, 0, 0), (1, 2, 3)), Coordinate((1, 1, 1)), ["b", "c", "z", "y", "x"])
+      >>> array.num_channels
+      1
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.num_channels
+      Traceback (most recent call last):
+      ...
+      ValueError: Array does not have a channel dimension.
+
+      .. note:: This method is a property. It returns the number of channels in the array.
 
 

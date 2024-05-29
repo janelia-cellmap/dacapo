@@ -1,36 +1,1779 @@
-:py:mod:`dacapo.experiments.trainers.gunpowder_trainer`
-=======================================================
+dacapo.experiments.trainers.gunpowder_trainer
+=============================================
 
 .. py:module:: dacapo.experiments.trainers.gunpowder_trainer
 
 
-Module Contents
----------------
-
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.experiments.trainers.gunpowder_trainer.GunpowderTrainer
-
-
-
-
 Attributes
-~~~~~~~~~~
+----------
 
 .. autoapisummary::
 
    dacapo.experiments.trainers.gunpowder_trainer.logger
 
 
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.trainers.gunpowder_trainer.TrainingIterationStats
+   dacapo.experiments.trainers.gunpowder_trainer.Trainer
+   dacapo.experiments.trainers.gunpowder_trainer.DaCapoArraySource
+   dacapo.experiments.trainers.gunpowder_trainer.GraphSource
+   dacapo.experiments.trainers.gunpowder_trainer.DaCapoTargetFilter
+   dacapo.experiments.trainers.gunpowder_trainer.CopyMask
+   dacapo.experiments.trainers.gunpowder_trainer.Product
+   dacapo.experiments.trainers.gunpowder_trainer.NumpyArray
+   dacapo.experiments.trainers.gunpowder_trainer.ZarrArray
+   dacapo.experiments.trainers.gunpowder_trainer.OnesArray
+   dacapo.experiments.trainers.gunpowder_trainer.GunpowderTrainer
+
+
+Module Contents
+---------------
+
+.. py:class:: TrainingIterationStats
+
+   A class to represent the training iteration statistics. It contains the loss and time taken for each iteration.
+
+   .. attribute:: iteration
+
+      The iteration that produced these stats.
+
+      :type: int
+
+   .. attribute:: loss
+
+      The loss value of this iteration.
+
+      :type: float
+
+   .. attribute:: time
+
+      The time it took to process this iteration.
+
+      :type: float
+
+   .. note::
+
+      The iteration stats list is structured as follows:
+      - The outer list contains the stats for each iteration.
+      - The inner list contains the stats for each training iteration.
+
+
+   .. py:attribute:: iteration
+      :type:  int
+
+
+   .. py:attribute:: loss
+      :type:  float
+
+
+   .. py:attribute:: time
+      :type:  float
+
+
+.. py:class:: Trainer
+
+
+
+   Trainer Abstract Base Class
+
+   This serves as the blueprint for any trainer classes in the dacapo library.
+   It defines essential methods that every subclass must implement for effective
+   training of a neural network model.
+
+   .. attribute:: iteration
+
+      The number of training iterations.
+
+      :type: int
+
+   .. attribute:: batch_size
+
+      The size of the training batch.
+
+      :type: int
+
+   .. attribute:: learning_rate
+
+      The learning rate for the optimizer.
+
+      :type: float
+
+   .. method:: create_optimizer(model
+
+      Model) -> torch.optim.Optimizer:
+      Creates an optimizer for the model.
+
+   .. method:: iterate(num_iterations
+
+      int, model: Model, optimizer: torch.optim.Optimizer, device: torch.device) -> Iterator[TrainingIterationStats]:
+      Performs a number of training iterations.
+
+   .. method:: can_train(datasets
+
+      List[Dataset]) -> bool:
+      Checks if the trainer can train with a specific set of datasets.
+
+   .. method:: build_batch_provider(datasets
+
+      List[Dataset], model: Model, task: Task, snapshot_container: LocalContainerIdentifier) -> None:
+      Initializes the training pipeline using various components.
+
+   .. note:: The Trainer class is an abstract class that cannot be instantiated directly. It is meant to be subclassed.
+
+
+   .. py:attribute:: iteration
+      :type:  int
+
+
+   .. py:attribute:: batch_size
+      :type:  int
+
+
+   .. py:attribute:: learning_rate
+      :type:  float
+
+
+   .. py:method:: create_optimizer(model: dacapo.experiments.model.Model) -> torch.optim.Optimizer
+      :abstractmethod:
+
+
+      Creates an optimizer for the model.
+
+      :param model: The model for which the optimizer will be created.
+      :type model: Model
+
+      :returns: The optimizer created for the model.
+      :rtype: torch.optim.Optimizer
+
+      :raises NotImplementedError: If the method is not implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> optimizer = trainer.create_optimizer(model)
+
+      .. note:: This method must be implemented by the subclass.
+
+
+
+   .. py:method:: iterate(num_iterations: int, model: dacapo.experiments.model.Model, optimizer: torch.optim.Optimizer, device: torch.device) -> Iterator[dacapo.experiments.training_iteration_stats.TrainingIterationStats]
+      :abstractmethod:
+
+
+      Performs a number of training iterations.
+
+      :param num_iterations: Number of training iterations.
+      :type num_iterations: int
+      :param model: The model to be trained.
+      :type model: Model
+      :param optimizer: The optimizer for the model.
+      :type optimizer: torch.optim.Optimizer
+      :param device: The device (GPU/CPU) where the model will be trained.
+      :type device: torch.device
+
+      :returns: An iterator of the training statistics.
+      :rtype: Iterator[TrainingIterationStats]
+
+      :raises NotImplementedError: If the method is not implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> for iteration_stats in trainer.iterate(num_iterations, model, optimizer, device):
+      >>>     print(iteration_stats)
+
+      .. note:: This method must be implemented by the subclass.
+
+
+
+   .. py:method:: can_train(datasets: List[dacapo.experiments.datasplits.datasets.Dataset]) -> bool
+      :abstractmethod:
+
+
+      Checks if the trainer can train with a specific set of datasets.
+
+      Some trainers may have specific requirements for their training datasets.
+
+      :param datasets: The training datasets.
+      :type datasets: List[Dataset]
+
+      :returns: True if the trainer can train on the given datasets, False otherwise.
+      :rtype: bool
+
+      :raises NotImplementedError: If the method is not implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> can_train = trainer.can_train(datasets)
+
+      .. note:: This method must be implemented by the subclass.
+
+
+
+   .. py:method:: build_batch_provider(datasets: List[dacapo.experiments.datasplits.datasets.Dataset], model: dacapo.experiments.model.Model, task: dacapo.experiments.tasks.task.Task, snapshot_container: dacapo.store.array_store.LocalContainerIdentifier) -> None
+      :abstractmethod:
+
+
+      Initializes the training pipeline using various components.
+
+      This method uses the datasets, model, task, and snapshot_container to set up the
+      training pipeline.
+
+      :param datasets: The datasets to pull data from.
+      :type datasets: List[Dataset]
+      :param model: The model to inform the pipeline of required input/output sizes.
+      :type model: Model
+      :param task: The task to transform ground truth into target.
+      :type task: Task
+      :param snapshot_container: Defines where snapshots will be saved.
+      :type snapshot_container: LocalContainerIdentifier
+
+      :raises NotImplementedError: If the method is not implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> trainer.build_batch_provider(datasets, model, task, snapshot_container)
+
+      .. note:: This method must be implemented by the subclass.
+
+
+
+.. py:class:: DaCapoArraySource(array: dacapo.experiments.datasplits.datasets.arrays.Array, key: gunpowder.ArrayKey)
+
+
+
+   A DaCapo Array source node
+
+   .. attribute:: array
+
+      The array to be served.
+
+      :type: Array
+
+   .. attribute:: key
+
+      The key of the array to be served.
+
+      :type: gp.ArrayKey
+
+   .. method:: setup()
+
+      Set up the provider.
+
+   .. method:: provide(request)
+
+      Provides the array for the requested ROI.
+
+   .. note::
+
+      This class is a subclass of gunpowder.BatchProvider and is used to
+      serve array data to gunpowder pipelines.
+
+
+   .. py:method:: setup()
+
+      Adds the key and the array spec to the provider.
+
+      :raises RuntimeError: If the key is already provided.
+
+      .. rubric:: Examples
+
+      >>> array_source.setup()
+
+
+
+   .. py:method:: provide(request)
+
+      Provides data based on the given request.
+
+      :param request: The request for data
+      :type request: gp.BatchRequest
+
+      :returns: The batch containing the provided data
+      :rtype: gp.Batch
+
+      :raises ValueError: If the input data contains NaN values
+
+      .. rubric:: Examples
+
+      >>> array_source.provide(request)
+
+
+
+.. py:class:: GraphSource(key: gunpowder.GraphKey, graph: gunpowder.Graph)
+
+
+
+   A provider for serving graph data in gunpowder pipelines.
+
+   The Graph Source loads a single graph to serve to the pipeline based on
+   ROI requests it receives.
+
+   .. attribute:: key
+
+      The key of the graph to be served.
+
+      :type: gp.GraphKey
+
+   .. attribute:: graph
+
+      The graph to be served.
+
+      :type: gp.Graph
+
+   .. method:: setup()
+
+      Set up the provider.
+
+   .. method:: provide(request)
+
+      Provides the graph for the requested ROI.
+      
+
+   .. note::
+
+      This class is a subclass of gunpowder.BatchProvider and is used to
+      serve graph data to gunpowder pipelines.
+
+
+   .. py:method:: setup()
+
+      Set up the provider. This function sets the provider to provide the
+      graph with the given key.
+
+      :raises RuntimeError: If the key is already provided.
+
+      .. rubric:: Examples
+
+      >>> graph_source.setup()
+
+
+
+   .. py:method:: provide(request)
+
+      Provides the graph for the requested ROI.
+
+      This method will be passively called by gunpowder to get a batch.
+      Depending on the request we provide a subgraph of our data, or nothing
+      at all.
+
+      :param request: BatchRequest with the same ROI for
+      :type request: gp.BatchRequest
+      :param each requested array and graph.:
+
+      :returns: The graph contained in a Batch.
+      :rtype: outputs (gp.Batch)
+
+      :raises KeyError: If the requested key is not in the request.
+
+      .. rubric:: Examples
+
+      >>> request = gp.BatchRequest()
+      >>> request[gp.GraphKey("GRAPH")] = gp.GraphSpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
+      >>> graph_source.provide(request)
+
+
+
+.. py:class:: DaCapoTargetFilter(predictor: dacapo.experiments.tasks.predictors.Predictor, gt_key: gunpowder.ArrayKey, target_key: Optional[gunpowder.ArrayKey] = None, weights_key: Optional[gunpowder.ArrayKey] = None, mask_key: Optional[gunpowder.ArrayKey] = None)
+
+
+
+   A Gunpowder node for generating the target from the ground truth
+
+   .. attribute:: Predictor
+
+      The DaCapo Predictor to use to transform gt into target
+
+      :type: Predictor
+
+   .. attribute:: gt
+
+      The dataset to use for generating the target.
+
+      :type: ``Array``
+
+   .. attribute:: target_key
+
+      The key with which to provide the target.
+
+      :type: ``gp.ArrayKey``
+
+   .. attribute:: weights_key
+
+      The key with which to provide the weights.
+
+      :type: ``gp.ArrayKey``
+
+   .. attribute:: mask_key
+
+      The key with which to provide the mask.
+
+      :type: ``gp.ArrayKey``
+
+   .. method:: setup()
+
+      Set up the provider.
+
+   .. method:: prepare(request)
+
+      Prepare the request.
+
+   .. method:: process(batch, request)
+
+      Process the batch.
+
+   .. note::
+
+      This class is a subclass of gunpowder.BatchFilter and is used to
+      generate the target from the ground truth.
+
+
+   .. py:method:: setup()
+
+      Set up the provider. This function sets the provider to provide the
+      target with the given key.
+
+      :raises RuntimeError: If the key is already provided.
+
+      .. rubric:: Examples
+
+      >>> target_filter.setup()
+
+
+
+   .. py:method:: prepare(request)
+
+      Prepare the request.
+
+      :param request: The request to prepare.
+      :type request: gp.BatchRequest
+
+      :returns: The dependencies.
+      :rtype: deps (gp.BatchRequest)
+
+      :raises NotImplementedError: If the target_key is not provided.
+
+      .. rubric:: Examples
+
+      >>> request = gp.BatchRequest()
+      >>> request[gp.ArrayKey("GT")] = gp.ArraySpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
+      >>> target_filter.prepare(request)
+
+
+
+   .. py:method:: process(batch, request)
+
+      Process the batch.
+
+      :param batch: The batch to process.
+      :type batch: gp.Batch
+      :param request: The request to process.
+      :type request: gp.BatchRequest
+
+      :returns: The output batch.
+      :rtype: output (gp.Batch)
+
+      .. rubric:: Examples
+
+      >>> request = gp.BatchRequest()
+      >>> request[gp.ArrayKey("GT")] = gp.ArraySpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
+      >>> target_filter.process(batch, request)
+
+
+
+.. py:class:: CopyMask(array_key: gunpowder.ArrayKey, copy_key: gunpowder.ArrayKey, drop_channels: bool = False)
+
+
+
+   A class to copy a mask into a new key with the option to drop channels via max collapse.
+
+   .. attribute:: array_key
+
+      Original key of the array from where the mask will be copied.
+
+      :type: gp.ArrayKey
+
+   .. attribute:: copy_key
+
+      New key where the copied mask will reside.
+
+      :type: gp.ArrayKey
+
+   .. attribute:: drop_channels
+
+      If True, channels will be dropped via a max collapse.
+
+      :type: bool
+
+   .. method:: setup
+
+      Sets up the filter by enabling autoskip and providing the copied key.
+
+   .. method:: prepare
+
+      Prepares the filter by copying the request of copy_key into a dependency.
+
+   .. method:: process
+
+      Processes the batch by copying the mask from the array_key to the copy_key.
+
+   .. note::
+
+      This class is a subclass of gunpowder.BatchFilter and is used to
+      copy a mask into a new key with the option to drop channels via max collapse.
+
+
+   .. py:method:: setup()
+
+      Sets up the filter by enabling autoskip and providing the copied key.
+
+      :raises RuntimeError: If the key is already provided.
+
+      .. rubric:: Examples
+
+      >>> copy_mask.setup()
+
+
+
+   .. py:method:: prepare(request)
+
+      Prepares the filter by copying the request of copy_key into a dependency.
+
+      :param request: The request to prepare.
+
+      :returns: The prepared dependencies.
+      :rtype: deps
+
+      :raises NotImplementedError: If the copy_key is not provided.
+
+      .. rubric:: Examples
+
+      >>> request = gp.BatchRequest()
+      >>> request[self.copy_key] = gp.ArraySpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
+      >>> copy_mask.prepare(request)
+
+
+
+   .. py:method:: process(batch, request)
+
+      Processes the batch by copying the mask from the array_key to the copy_key.
+
+      If "drop_channels" attribute is True, it performs max collapse.
+
+      :param batch: The batch to process.
+      :param request: The request for processing.
+
+      :returns: The processed outputs.
+      :rtype: outputs
+
+      :raises KeyError: If the requested key is not in the request.
+
+      .. rubric:: Examples
+
+      >>> request = gp.BatchRequest()
+      >>> request[gp.ArrayKey("ARRAY")] = gp.ArraySpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
+      >>> copy_mask.process(batch, request)
+
+
+
+.. py:class:: Product(x1_key: gunpowder.ArrayKey, x2_key: gunpowder.ArrayKey, y_key: gunpowder.ArrayKey)
+
+
+
+   A BatchFilter that multiplies two input arrays and produces an output array.
+
+   .. attribute:: x1_key
+
+      The key of the first input array.
+
+      :type: :class:`ArrayKey`
+
+   .. attribute:: x2_key
+
+      The key of the second input array.
+
+      :type: :class:`ArrayKey`
+
+   .. attribute:: y_key
+
+      The key of the output array.
+
+      :type: :class:`ArrayKey`
+
+   Provides:
+       y_key (gp.ArrayKey): The key of the output array.
+   Method:
+       __init__: Initialize the Product BatchFilter.
+       setup: Set up the Product BatchFilter.
+       prepare: Prepare the Product BatchFilter.
+       process: Process the Product BatchFilter.
+
+
+
+   .. py:method:: setup()
+
+      Set up the Product BatchFilter.
+
+      Enables autoskip and specifies the output array.
+
+      :raises AssertionError: If the input arrays are not provided.
+
+      .. rubric:: Examples
+
+      >>> setup()
+      setup()
+
+
+
+   .. py:method:: prepare(request)
+
+      Prepare the Product BatchFilter.
+
+      :param request: The batch request.
+      :type request: gp.BatchRequest
+
+      :returns: The dependencies.
+      :rtype: gp.BatchRequest
+
+      :raises AssertionError: If the input arrays are not provided.
+
+      .. rubric:: Examples
+
+      >>> prepare(request)
+      prepare(request)
+
+
+
+   .. py:method:: process(batch, request)
+
+      Process the Product BatchFilter.
+
+      :param batch: The input batch.
+      :type batch: gp.Batch
+      :param request: The batch request.
+      :type request: gp.BatchRequest
+
+      :returns: The output batch.
+      :rtype: gp.Batch
+
+      :raises AssertionError: If the input arrays are not provided.
+
+      .. rubric:: Examples
+
+      >>> process(batch, request)
+      process(batch, request)
+
+
+
+.. py:class:: NumpyArray(array_config)
+
+
+
+   This is just a wrapper for a numpy array to make it fit the DaCapo Array interface.
+
+   .. attribute:: data
+
+      The numpy array.
+
+   .. attribute:: dtype
+
+      The data type of the numpy array.
+
+   .. attribute:: roi
+
+      The region of interest of the numpy array.
+
+   .. attribute:: voxel_size
+
+      The voxel size of the numpy array.
+
+   .. attribute:: axes
+
+      The axes of the numpy array.
+
+   .. method:: from_gp_array
+
+      Create a NumpyArray from a Gunpowder Array.
+
+   .. method:: from_np_array
+
+      Create a NumpyArray from a numpy array.
+
+   .. note:: This class is a subclass of Array.
+
+
+   .. py:property:: attrs
+      Returns the attributes of the array.
+
+      :returns: The attributes of the array.
+      :rtype: dict
+
+      :raises ValueError: If the array does not have attributes.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.attrs
+      {}
+
+      .. note:: This method is a property. It returns the attributes of the array.
+
+
+   .. py:method:: from_gp_array(array: gunpowder.Array)
+      :classmethod:
+
+
+      Create a NumpyArray from a Gunpowder Array.
+
+      :param array: The Gunpowder Array.
+      :type array: gp.Array
+
+      :returns: The NumpyArray.
+      :rtype: NumpyArray
+
+      :raises ValueError: If the array does not have a data type.
+
+      .. rubric:: Examples
+
+      >>> array = gp.Array(data=np.zeros((2, 3, 4)), spec=gp.ArraySpec(roi=Roi((0, 0, 0), (2, 3, 4)), voxel_size=Coordinate((1, 1, 1))))
+      >>> array = NumpyArray.from_gp_array(array)
+      >>> array.data
+      array([[[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]],
+      <BLANKLINE>
+                  [[0., 0., 0., 0.],
+                  [0., 0., 0., 0.],
+                  [0., 0., 0., 0.]]])
+
+      .. note:: This method creates a NumpyArray from a Gunpowder Array.
+
+
+
+   .. py:method:: from_np_array(array: numpy.ndarray, roi, voxel_size, axes)
+      :classmethod:
+
+
+      Create a NumpyArray from a numpy array.
+
+      :param array: The numpy array.
+      :type array: np.ndarray
+      :param roi: The region of interest of the array.
+      :type roi: Roi
+      :param voxel_size: The voxel size of the array.
+      :type voxel_size: Coordinate
+      :param axes: The axes of the array.
+      :type axes: List[str]
+
+      :returns: The NumpyArray.
+      :rtype: NumpyArray
+
+      :raises ValueError: If the array does not have a data type.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.data
+      array([[[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]],
+      <BLANKLINE>
+               [[0., 0., 0., 0.],
+                [0., 0., 0., 0.],
+                [0., 0., 0., 0.]]])
+
+      .. note:: This method creates a NumpyArray from a numpy array.
+
+
+
+   .. py:property:: axes
+      Returns the axes of the array.
+
+      :returns: The axes of the array.
+      :rtype: List[str]
+
+      :raises ValueError: If the array does not have axes.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.axes
+      ['z', 'y', 'x']
+
+      .. note:: This method is a property. It returns the axes of the array.
+
+
+   .. py:property:: dims
+      Returns the number of dimensions of the array.
+
+      :returns: The number of dimensions of the array.
+      :rtype: int
+
+      :raises ValueError: If the array does not have a dimension.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.dims
+      3
+
+      .. note:: This method is a property. It returns the number of dimensions of the array.
+
+
+   .. py:property:: voxel_size
+      Returns the voxel size of the array.
+
+      :returns: The voxel size of the array.
+      :rtype: Coordinate
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.voxel_size
+      Coordinate((1, 1, 1))
+
+      .. note:: This method is a property. It returns the voxel size of the array.
+
+
+   .. py:property:: roi
+      Returns the region of interest of the array.
+
+      :returns: The region of interest of the array.
+      :rtype: Roi
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.roi
+      Roi((0, 0, 0), (2, 3, 4))
+
+      .. note:: This method is a property. It returns the region of interest of the array.
+
+
+   .. py:property:: writable
+      :type: bool
+
+      Returns whether the array is writable.
+
+      :returns: Whether the array is writable.
+      :rtype: bool
+
+      :raises ValueError: If the array is not writable.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.writable
+      True
+
+      .. note:: This method is a property. It returns whether the array is writable.
+
+
+   .. py:property:: data
+      Returns the numpy array.
+
+      :returns: The numpy array.
+      :rtype: np.ndarray
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.data
+      array([[[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]],
+      <BLANKLINE>
+             [[0., 0., 0., 0.],
+              [0., 0., 0., 0.],
+              [0., 0., 0., 0.]]])
+
+      .. note:: This method is a property. It returns the numpy array.
+
+
+   .. py:property:: dtype
+      Returns the data type of the array.
+
+      :returns: The data type of the array.
+      :rtype: np.dtype
+
+      :raises ValueError: If the array does not have a data type.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.dtype
+      dtype('float64')
+
+      .. note:: This method is a property. It returns the data type of the array.
+
+
+   .. py:property:: num_channels
+      Returns the number of channels in the array.
+
+      :returns: The number of channels in the array.
+      :rtype: int
+
+      :raises ValueError: If the array does not have a channel dimension.
+
+      .. rubric:: Examples
+
+      >>> array = NumpyArray.from_np_array(np.zeros((1, 2, 3, 4)), Roi((0, 0, 0), (1, 2, 3)), Coordinate((1, 1, 1)), ["b", "c", "z", "y", "x"])
+      >>> array.num_channels
+      1
+      >>> array = NumpyArray.from_np_array(np.zeros((2, 3, 4)), Roi((0, 0, 0), (2, 3, 4)), Coordinate((1, 1, 1)), ["z", "y", "x"])
+      >>> array.num_channels
+      Traceback (most recent call last):
+      ...
+      ValueError: Array does not have a channel dimension.
+
+      .. note:: This method is a property. It returns the number of channels in the array.
+
+
+.. py:class:: ZarrArray(array_config)
+
+
+
+   This is a zarr array.
+
+   .. attribute:: name
+
+      The name of the array.
+
+      :type: str
+
+   .. attribute:: file_name
+
+      The file name of the array.
+
+      :type: Path
+
+   .. attribute:: dataset
+
+      The dataset name.
+
+      :type: str
+
+   .. attribute:: _axes
+
+      The axes of the array.
+
+      :type: Optional[List[str]]
+
+   .. attribute:: snap_to_grid
+
+      The snap to grid.
+
+      :type: Optional[Coordinate]
+
+   .. method:: __init__(array_config)
+
+      
+      Initializes the array type 'raw' and name for the DummyDataset instance.
+
+   .. method:: __str__()
+
+      
+      Returns the string representation of the ZarrArray.
+
+   .. method:: __repr__()
+
+      
+      Returns the string representation of the ZarrArray.
+
+   .. method:: attrs()
+
+      
+      Returns the attributes of the array.
+
+   .. method:: axes()
+
+      
+      Returns the axes of the array.
+
+   .. method:: dims()
+
+      
+      Returns the dimensions of the array.
+
+   .. method:: _daisy_array()
+
+      
+      Returns the daisy array.
+
+   .. method:: voxel_size()
+
+      
+      Returns the voxel size of the array.
+
+   .. method:: roi()
+
+      
+      Returns the region of interest of the array.
+
+   .. method:: writable()
+
+      
+      Returns the boolean value of the array.
+
+   .. method:: dtype()
+
+      
+      Returns the data type of the array.
+
+   .. method:: num_channels()
+
+      
+      Returns the number of channels of the array.
+
+   .. method:: spatial_axes()
+
+      
+      Returns the spatial axes of the array.
+
+   .. method:: data()
+
+      
+      Returns the data of the array.
+
+   .. method:: __getitem__(roi)
+
+      
+      Returns the data of the array for the given region of interest.
+
+   .. method:: __setitem__(roi, value)
+
+      
+      Sets the data of the array for the given region of interest.
+
+   .. method:: create_from_array_identifier(array_identifier, axes, roi, num_channels, voxel_size, dtype, write_size=None, name=None, overwrite=False)
+
+      
+      Creates a new ZarrArray given an array identifier.
+
+   .. method:: open_from_array_identifier(array_identifier, name="")
+
+      
+      Opens a new ZarrArray given an array identifier.
+
+   .. method:: _can_neuroglance()
+
+      
+      Returns the boolean value of the array.
+
+   .. method:: _neuroglancer_source()
+
+      
+      Returns the neuroglancer source of the array.
+
+   .. method:: _neuroglancer_layer()
+
+      
+      Returns the neuroglancer layer of the array.
+
+   .. method:: _transform_matrix()
+
+      
+      Returns the transform matrix of the array.
+
+   .. method:: _output_dimensions()
+
+      
+      Returns the output dimensions of the array.
+
+   .. method:: _source_name()
+
+      
+      Returns the source name of the array.
+
+   .. method:: add_metadata(metadata)
+
+      
+      Adds metadata to the array.
+
+   .. rubric:: Notes
+
+   This class is used to create a zarr array.
+
+
+   .. py:property:: mode
+
+
+   .. py:property:: attrs
+      Returns the attributes of the array.
+
+      :param attrs: The attributes of the array.
+      :type attrs: Any
+
+      :returns: The attributes of the array.
+      :rtype: Any
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> attrs()
+
+      .. rubric:: Notes
+
+      This method is used to return the attributes of the array.
+
+
+   .. py:property:: axes
+      Returns the axes of the array.
+
+      :param axes: The axes of the array.
+      :type axes: List[str]
+
+      :returns: The axes of the array.
+      :rtype: List[str]
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> axes()
+
+      .. rubric:: Notes
+
+      This method is used to return the axes of the array.
+
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the dimensions of the array.
+
+      :param dims: The dimensions of the array.
+      :type dims: int
+
+      :returns: The dimensions of the array.
+      :rtype: int
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> dims()
+
+      .. rubric:: Notes
+
+      This method is used to return the dimensions of the array.
+
+
+   .. py:method:: voxel_size() -> funlib.geometry.Coordinate
+
+      Returns the voxel size of the array.
+
+      :param voxel_size: The voxel size.
+      :type voxel_size: Coordinate
+
+      :returns: The voxel size of the array.
+      :rtype: Coordinate
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> voxel_size()
+
+      .. rubric:: Notes
+
+      This method is used to return the voxel size of the array.
+
+
+
+   .. py:method:: roi() -> funlib.geometry.Roi
+
+      Returns the region of interest of the array.
+
+      :param roi: The region of interest.
+      :type roi: Roi
+
+      :returns: The region of interest of the array.
+      :rtype: Roi
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> roi()
+
+      .. rubric:: Notes
+
+      This method is used to return the region of interest of the array.
+
+
+
+   .. py:property:: writable
+      :type: bool
+
+      Returns the boolean value of the array.
+
+      :param writable: The boolean value of the array.
+      :type writable: bool
+
+      :returns: The boolean value of the array.
+      :rtype: bool
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> writable()
+
+      .. rubric:: Notes
+
+      This method is used to return the boolean value of the array.
+
+
+   .. py:property:: dtype
+      :type: Any
+
+      Returns the data type of the array.
+
+      :param dtype: The data type of the array.
+      :type dtype: Any
+
+      :returns: The data type of the array.
+      :rtype: Any
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> dtype()
+
+      .. rubric:: Notes
+
+      This method is used to return the data type of the array.
+
+
+   .. py:property:: num_channels
+      :type: Optional[int]
+
+      Returns the number of channels of the array.
+
+      :param num_channels: The number of channels of the array.
+      :type num_channels: Optional[int]
+
+      :returns: The number of channels of the array.
+      :rtype: Optional[int]
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> num_channels()
+
+      .. rubric:: Notes
+
+      This method is used to return the number of channels of the array.
+
+
+   .. py:property:: spatial_axes
+      :type: List[str]
+
+      Returns the spatial axes of the array.
+
+      :param spatial_axes: The spatial axes of the array.
+      :type spatial_axes: List[str]
+
+      :returns: The spatial axes of the array.
+      :rtype: List[str]
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> spatial_axes()
+
+      .. rubric:: Notes
+
+      This method is used to return the spatial axes of the array.
+
+
+   .. py:property:: data
+      :type: Any
+
+      Returns the data of the array.
+
+      :param data: The data of the array.
+      :type data: Any
+
+      :returns: The data of the array.
+      :rtype: Any
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> data()
+
+      .. rubric:: Notes
+
+      This method is used to return the data of the array.
+
+
+   .. py:method:: create_from_array_identifier(array_identifier, axes, roi, num_channels, voxel_size, dtype, mode='a', write_size=None, name=None, overwrite=False)
+      :classmethod:
+
+
+      Create a new ZarrArray given an array identifier. It is assumed that
+      this array_identifier points to a dataset that does not yet exist.
+
+      :param array_identifier: The array identifier.
+      :type array_identifier: ArrayIdentifier
+      :param axes: The axes of the array.
+      :type axes: List[str]
+      :param roi: The region of interest.
+      :type roi: Roi
+      :param num_channels: The number of channels.
+      :type num_channels: int
+      :param voxel_size: The voxel size.
+      :type voxel_size: Coordinate
+      :param dtype: The data type.
+      :type dtype: Any
+      :param write_size: The write size.
+      :type write_size: Optional[Coordinate]
+      :param name: The name of the array.
+      :type name: Optional[str]
+      :param overwrite: The boolean value to overwrite the array.
+      :type overwrite: bool
+
+      :returns: The ZarrArray.
+      :rtype: ZarrArray
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> create_from_array_identifier(array_identifier, axes, roi, num_channels, voxel_size, dtype, write_size=None, name=None, overwrite=False)
+
+      .. rubric:: Notes
+
+      This method is used to create a new ZarrArray given an array identifier.
+
+
+
+   .. py:method:: open_from_array_identifier(array_identifier, name='')
+      :classmethod:
+
+
+      Opens a new ZarrArray given an array identifier.
+
+      :param array_identifier: The array identifier.
+      :type array_identifier: ArrayIdentifier
+      :param name: The name of the array.
+      :type name: str
+
+      :returns: The ZarrArray.
+      :rtype: ZarrArray
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> open_from_array_identifier(array_identifier, name="")
+
+      .. rubric:: Notes
+
+      This method is used to open a new ZarrArray given an array identifier.
+
+
+
+   .. py:method:: add_metadata(metadata: Dict[str, Any]) -> None
+
+      Adds metadata to the array.
+
+      :param metadata: The metadata to add to the array.
+      :type metadata: Dict[str, Any]
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> add_metadata(metadata)
+
+      .. rubric:: Notes
+
+      This method is used to add metadata to the array.
+
+
+
+.. py:class:: OnesArray(array_config)
+
+
+
+   This is a wrapper around another `source_array` that simply provides ones
+   with the same metadata as the `source_array`.
+
+   This is useful for creating a mask array that is the same size as the
+   original array, but with all values set to 1.
+
+   .. attribute:: source_array
+
+      The source array that this array is based on.
+
+   .. method:: like
+
+      Create a new OnesArray with the same metadata as another array.
+
+   .. method:: attrs
+
+      Get the attributes of the array.
+
+   .. method:: axes
+
+      Get the axes of the array.
+
+   .. method:: dims
+
+      Get the dimensions of the array.
+
+   .. method:: voxel_size
+
+      Get the voxel size of the array.
+
+   .. method:: roi
+
+      Get the region of interest of the array.
+
+   .. method:: writable
+
+      Check if the array is writable.
+
+   .. method:: data
+
+      Get the data of the array.
+
+   .. method:: dtype
+
+      Get the data type of the array.
+
+   .. method:: num_channels
+
+      Get the number of channels of the array.
+
+   .. method:: __getitem__
+
+      Get a subarray of the array.
+
+   .. note::
+
+      This class is not meant to be instantiated directly. Instead, use the
+      `like` method to create a new OnesArray with the same metadata as
+      another array.
+
+
+   .. py:method:: like(array: dacapo.experiments.datasplits.datasets.arrays.array.Array)
+      :classmethod:
+
+
+      Create a new OnesArray with the same metadata as another array.
+
+      :param array: The source array.
+
+      :returns: The new OnesArray with the same metadata as the source array.
+
+      :raises RuntimeError: If the source array is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray.like(source_array)
+      >>> ones_array.source_array
+      NumpyArray(data=array([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]]), voxel_size=(1.0, 1.0, 1.0), roi=Roi((0, 0, 0), (10, 10, 10)), num_channels=1)
+
+      .. rubric:: Notes
+
+      This class is not meant to be instantiated directly. Instead, use the
+      `like` method to create a new OnesArray with the same metadata as
+      another array.
+
+
+
+   .. py:property:: attrs
+      Get the attributes of the array.
+
+      :returns: An empty dictionary.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.attrs
+      {}
+
+      .. rubric:: Notes
+
+      This method is used to get the attributes of the array. The attributes
+      are stored as key-value pairs in a dictionary. This method returns an
+      empty dictionary because the OnesArray does not have any attributes.
+
+
+   .. py:property:: source_array
+      :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
+
+      Get the source array that this array is based on.
+
+      :returns: The source array.
+
+      :raises RuntimeError: If the source array is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.source_array
+      NumpyArray(data=array([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+                              [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]]), voxel_size=(1.0, 1.0, 1.0), roi=Roi((0, 0, 0), (10, 10, 10)), num_channels=1)
+
+      .. rubric:: Notes
+
+      This method is used to get the source array that this array is based on.
+      The source array is the array that the OnesArray is created from. This
+      method returns the source array that was specified when the OnesArray
+      was created.
+
+
+   .. py:property:: axes
+      Get the axes of the array.
+
+      :returns: The axes of the array.
+
+      :raises RuntimeError: If the axes are not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.axes
+      'zyx'
+
+      .. rubric:: Notes
+
+      This method is used to get the axes of the array. The axes are the
+      order of the dimensions of the array. This method returns the axes of
+      the array that was specified when the OnesArray was created.
+
+
+   .. py:property:: dims
+      Get the dimensions of the array.
+
+      :returns: The dimensions of the array.
+
+      :raises RuntimeError: If the dimensions are not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.dims
+      (10, 10, 10)
+
+      .. rubric:: Notes
+
+      This method is used to get the dimensions of the array. The dimensions
+      are the size of the array along each axis. This method returns the
+      dimensions of the array that was specified when the OnesArray was created.
+
+
+   .. py:property:: voxel_size
+      Get the voxel size of the array.
+
+      :returns: The voxel size of the array.
+
+      :raises RuntimeError: If the voxel size is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.voxel_size
+      (1.0, 1.0, 1.0)
+
+      .. rubric:: Notes
+
+      This method is used to get the voxel size of the array. The voxel size
+      is the size of each voxel in the array. This method returns the voxel
+      size of the array that was specified when the OnesArray was created.
+
+
+   .. py:property:: roi
+      Get the region of interest of the array.
+
+      :returns: The region of interest of the array.
+
+      :raises RuntimeError: If the region of interest is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> from funlib.geometry import Roi
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.roi
+      Roi((0, 0, 0), (10, 10, 10))
+
+      .. rubric:: Notes
+
+      This method is used to get the region of interest of the array. The
+      region of interest is the region of the array that contains the data.
+      This method returns the region of interest of the array that was specified
+      when the OnesArray was created.
+
+
+   .. py:property:: writable
+      :type: bool
+
+      Check if the array is writable.
+
+      :returns: False.
+
+      :raises RuntimeError: If the writability of the array is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.writable
+      False
+
+      .. rubric:: Notes
+
+      This method is used to check if the array is writable. An array is
+      writable if it can be modified in place. This method returns False
+      because the OnesArray is read-only and cannot be modified.
+
+
+   .. py:property:: data
+      Get the data of the array.
+
+      :returns: The data of the array.
+
+      :raises RuntimeError: If the data is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.data
+      array([[[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]])
+
+      .. rubric:: Notes
+
+      This method is used to get the data of the array. The data is the
+      values that are stored in the array. This method returns a subarray
+      of the array with all values set to 1.
+
+
+   .. py:property:: dtype
+      Get the data type of the array.
+
+      :returns: The data type of the array.
+
+      :raises RuntimeError: If the data type is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.dtype
+      <class 'numpy.bool_'>
+
+      .. rubric:: Notes
+
+      This method is used to get the data type of the array. The data type
+      is the type of the values that are stored in the array. This method
+      returns the data type of the array that was specified when the OnesArray
+      was created.
+
+
+   .. py:property:: num_channels
+      Get the number of channels of the array.
+
+      :returns: The number of channels of the array.
+
+      :raises RuntimeError: If the number of channels is not specified.
+
+      .. rubric:: Examples
+
+      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+      >>> import numpy as np
+      >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
+      >>> ones_array = OnesArray(source_array)
+      >>> ones_array.num_channels
+      1
+
+      .. rubric:: Notes
+
+      This method is used to get the number of channels of the array. The
+      number of channels is the number of values that are stored at each
+      voxel in the array. This method returns the number of channels of the
+      array that was specified when the OnesArray was created.
+
+
 .. py:data:: logger
 
-   
-
 .. py:class:: GunpowderTrainer(trainer_config)
-
 
 
 
@@ -141,10 +1884,11 @@ Attributes
 
    .. note:: The GunpowderTrainer class is a subclass of the Trainer class. It is used to train a model using gunpowder.
 
+
    .. py:attribute:: iteration
       :value: 0
 
-      
+
 
    .. py:method:: create_optimizer(model)
 
@@ -161,6 +1905,7 @@ Attributes
       .. rubric:: Examples
 
       >>> optimizer = trainer.create_optimizer(model)
+
 
 
    .. py:method:: build_batch_provider(datasets, model, task, snapshot_container=None)
@@ -181,6 +1926,7 @@ Attributes
       .. rubric:: Examples
 
       >>> trainer.build_batch_provider(datasets, model, task, snapshot_container)
+
 
 
    .. py:method:: iterate(num_iterations, model, optimizer, device)
@@ -207,6 +1953,7 @@ Attributes
       >>>     print(iteration_stats)
 
 
+
    .. py:method:: next()
 
       Fetches the next batch of data.
@@ -219,6 +1966,7 @@ Attributes
       .. rubric:: Examples
 
       >>> raw, gt, target, weight, mask = trainer.next()
+
 
 
    .. py:method:: can_train(datasets) -> bool

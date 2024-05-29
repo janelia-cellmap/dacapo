@@ -1,24 +1,304 @@
-:py:mod:`dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config`
-=======================================================================================
+dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config
+=============================================================================
 
 .. py:module:: dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.ArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.MissingAnnotationsMask
+   dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.MissingAnnotationsMaskConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: ArrayConfig
 
-.. autoapisummary::
+   Base class for array configurations. Each subclass of an
+   `Array` should have a corresponding config class derived from
+   `ArrayConfig`. This class should be used to store the configuration
+   of the array.
 
-   dacapo.experiments.datasplits.datasets.arrays.missing_annotations_mask_config.MissingAnnotationsMaskConfig
+   .. attribute:: name
+
+      A unique name for this array. This will be saved so you
+      and others can find and reuse this array. Keep it short
+      and avoid special characters.
+
+      :type: str
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method is used to check whether this is a valid Array.
+
+   .. note::
+
+      This class is used to create a base class for array configurations. Each subclass of an
+      `Array` should have a corresponding config class derived from `ArrayConfig`.
+      This class should be used to store the configuration of the array.
 
 
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Array
+
+      :returns: A tuple with the first element being a boolean
+                indicating whether the array is valid and the second element being
+                a string with a message explaining why the array is invalid
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: This method is not implemented in this class
+
+      .. rubric:: Examples
+
+      >>> array_config = ArrayConfig(name="array_config")
+      >>> array_config.verify()
+      (True, "No validation for this Array")
+
+      .. note:: This method is used to check whether this is a valid Array.
+
+
+
+.. py:class:: MissingAnnotationsMask(array_config)
+
+
+
+   This is wrapper around a ZarrArray containing uint annotations.
+   Complementary to the BinarizeArray class where we convert labels
+   into individual channels for training, we may find crops where a
+   specific label is present, but not annotated. In that case you
+   might want to avoid training specific channels for specific
+   training volumes.
+   See package fibsem_tools for appropriate metadata format for indicating
+   presence of labels in your ground truth.
+   "https://github.com/janelia-cosem/fibsem-tools"
+
+   .. attribute:: array_config
+
+      A BinarizeArrayConfig object
+
+   .. method:: __getitem__(roi
+
+      Roi) -> np.ndarray: Returns a binary mask of the
+      annotations that are present but not annotated.
+
+   .. note::
+
+      This class is not meant to be used directly. It is used by the
+      BinarizeArray class to mask out annotations that are present but
+      not annotated.
+
+
+   .. py:property:: axes
+      Returns the axes of the source array
+
+      :returns: Axes of the source array
+      :rtype: list
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.axes
+      ['x', 'y', 'z']
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
+
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the number of dimensions of the source array
+
+      :returns: Number of dimensions of the source array
+      :rtype: int
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.dims
+      3
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
+
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      Returns the voxel size of the source array
+
+      :returns: Voxel size of the source array
+      :rtype: Coordinate
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.voxel_size
+      Coordinate(x=4, y=4, z=40)
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
+
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      Returns the region of interest of the source array
+
+      :returns: Region of interest of the source array
+      :rtype: Roi
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.roi
+      Roi(offset=(0, 0, 0), shape=(100, 100, 100))
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
+
+
+   .. py:property:: writable
+      :type: bool
+
+      Returns whether the source array is writable
+
+      :returns: Whether the source array is writable
+      :rtype: bool
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.writable
+      False
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
+
+
+   .. py:property:: dtype
+      Returns the data type of the source array
+
+      :returns: Data type of the source array
+      :rtype: np.dtype
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.dtype
+      np.uint8
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
+
+
+   .. py:property:: num_channels
+      :type: int
+
+      Returns the number of channels
+
+      :returns: Number of channels
+      :rtype: int
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.num_channels
+      2
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
+
+
+   .. py:property:: data
+      Returns the data of the source array
+
+      :returns: Data of the source array
+      :rtype: np.ndarray
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.data
+      np.ndarray(...)
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
+
+
+   .. py:property:: attrs
+      Returns the attributes of the source array
+
+      :returns: Attributes of the source array
+      :rtype: dict
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.attrs
+      {'name': 'source_array', 'resolution': [4, 4, 40]}
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
+
+
+   .. py:property:: channels
+      Returns the names of the channels
+
+      :returns: Names of the channels
+      :rtype: Generator[str]
+
+      :raises ValueError: If the source array does not have a name
+
+      .. rubric:: Examples
+
+      >>> source_array = ZarrArray(ZarrArrayConfig(...))
+      >>> source_array.channels
+      Generator['channel1', 'channel2', ...]
+
+      .. rubric:: Notes
+
+      This is a helper function for the BinarizeArray class
 
 
 .. py:class:: MissingAnnotationsMaskConfig
-
 
 
 
@@ -41,18 +321,15 @@ Classes
       The output array will have a channel dimension equal to the number of groups.
       Each channel will be a binary mask of the ids in the groupings list.
 
+
    .. py:attribute:: array_type
 
-      
 
    .. py:attribute:: source_array_config
-      :type: dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+      :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
-      
 
    .. py:attribute:: groupings
-      :type: List[Tuple[str, List[int]]]
-
-      
+      :type:  List[Tuple[str, List[int]]]
 
 

@@ -1,24 +1,156 @@
-:py:mod:`dacapo.experiments.datasplits.train_validate_datasplit`
-================================================================
+dacapo.experiments.datasplits.train_validate_datasplit
+======================================================
 
 .. py:module:: dacapo.experiments.datasplits.train_validate_datasplit
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.train_validate_datasplit.DataSplit
+   dacapo.experiments.datasplits.train_validate_datasplit.Dataset
+   dacapo.experiments.datasplits.train_validate_datasplit.TrainValidateDataSplit
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.experiments.datasplits.train_validate_datasplit.TrainValidateDataSplit
+.. py:class:: DataSplit
 
 
+
+   A class for creating a simple train dataset and no validation dataset. It is derived from `DataSplit` class.
+   It is used to split the data into training and validation datasets. The training and validation datasets are
+   used to train and validate the model respectively.
+
+   .. attribute:: train
+
+      list
+      The list containing training datasets. In this class, it contains only one dataset for training.
+
+   .. attribute:: validate
+
+      list
+      The list containing validation datasets. In this class, it is an empty list as no validation dataset is set.
+
+   .. method:: __init__(self, datasplit_config)
+
+      
+      The constructor for DummyDataSplit class. It initialises a list with training datasets according to the input configuration.
+
+   .. rubric:: Notes
+
+   This class is used to split the data into training and validation datasets.
+
+
+   .. py:attribute:: train
+      :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
+
+
+   .. py:attribute:: validate
+      :type:  Optional[List[dacapo.experiments.datasplits.datasets.Dataset]]
+
+
+.. py:class:: Dataset
+
+
+
+   A class to represent a dataset.
+
+   .. attribute:: name
+
+      The name of the dataset.
+
+      :type: str
+
+   .. attribute:: raw
+
+      The raw dataset.
+
+      :type: Array
+
+   .. attribute:: gt
+
+      The ground truth data.
+
+      :type: Array, optional
+
+   .. attribute:: mask
+
+      The mask for the data.
+
+      :type: Array, optional
+
+   .. attribute:: weight
+
+      The weight of the dataset.
+
+      :type: int, optional
+
+   .. attribute:: sample_points
+
+      The list of sample points in the dataset.
+
+      :type: list[Coordinate], optional
+
+   .. method:: __eq__(other)
+
+      
+      Overloaded equality operator for dataset objects.
+
+   .. method:: __hash__()
+
+      
+      Calculates a hash for the dataset.
+
+   .. method:: __repr__()
+
+      
+      Returns the official string representation of the dataset object.
+
+   .. method:: __str__()
+
+      
+      Returns the string representation of the dataset object.
+
+   .. method:: _neuroglancer_layers(prefix="", exclude_layers=None)
+
+      
+      Generates neuroglancer layers for raw, gt and mask if they can be viewed by neuroglance, excluding those in
+      the exclude_layers.
+
+   .. rubric:: Notes
+
+   This class is a base class and should not be instantiated.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: raw
+      :type:  dacapo.experiments.datasplits.datasets.arrays.Array
+
+
+   .. py:attribute:: gt
+      :type:  Optional[dacapo.experiments.datasplits.datasets.arrays.Array]
+
+
+   .. py:attribute:: mask
+      :type:  Optional[dacapo.experiments.datasplits.datasets.arrays.Array]
+
+
+   .. py:attribute:: weight
+      :type:  Optional[int]
+
+
+   .. py:attribute:: sample_points
+      :type:  Optional[List[funlib.geometry.Coordinate]]
 
 
 .. py:class:: TrainValidateDataSplit(datasplit_config)
-
 
 
 
@@ -47,14 +179,12 @@ Classes
 
    This class is used to split the data into training and validation datasets.
 
-   .. py:attribute:: train
-      :type: List[dacapo.experiments.datasplits.datasets.Dataset]
 
-      
+   .. py:attribute:: train
+      :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
+
 
    .. py:attribute:: validate
-      :type: List[dacapo.experiments.datasplits.datasets.Dataset]
-
-      
+      :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
 
 

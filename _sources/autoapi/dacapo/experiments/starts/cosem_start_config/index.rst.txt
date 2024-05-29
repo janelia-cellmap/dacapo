@@ -1,24 +1,164 @@
-:py:mod:`dacapo.experiments.starts.cosem_start_config`
-======================================================
+dacapo.experiments.starts.cosem_start_config
+============================================
 
 .. py:module:: dacapo.experiments.starts.cosem_start_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.starts.cosem_start_config.CosemStart
+   dacapo.experiments.starts.cosem_start_config.StartConfig
+   dacapo.experiments.starts.cosem_start_config.CosemStartConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.experiments.starts.cosem_start_config.CosemStartConfig
+.. py:class:: CosemStart(start_config)
 
 
+
+   A class to represent the starting point for tasks. This class inherits
+   from the Start class and is used to load the weights of the starter model
+   used for finetuning. The weights are loaded from the dacapo store for the
+   specified run and criterion.
+
+   .. attribute:: run
+
+      str
+      The run to be used as a starting point for tasks.
+
+   .. attribute:: criterion
+
+      str
+      The criterion to be used for choosing weights from run.
+
+   .. attribute:: name
+
+      str
+      The name of the run and criterion.
+
+   .. attribute:: channels
+
+      list
+      The classes_channels of the model.
+
+   .. method:: __init__(start_config)
+
+      
+      Initializes the CosemStart class with specified config to run the
+      initialization of weights for a model associated with a specific
+      criterion.
+
+   .. method:: check()
+
+      
+      Checks if the checkpoint for the specified run and criterion exists.
+
+   .. method:: initialize_weights(model, new_head=None)
+
+      
+      Retrieves the weights from the dacapo store and load them into
+      the model.
+
+   .. rubric:: Notes
+
+   This class is used to represent the starting point for tasks. The weights
+   of the starter model used for finetuning are loaded from the dacapo store.
+
+
+   .. py:method:: check()
+
+      Checks if the checkpoint for the specified run and criterion exists.
+
+      :raises Exception: If the checkpoint does not exist, an Exception is thrown which
+          is logged and handled by training the model without head matching.
+
+      .. rubric:: Examples
+
+      >>> check()
+
+      .. rubric:: Notes
+
+      This function is called by the CosemStart class to check if the
+      checkpoint for the specified run and criterion exists.
+
+
+
+   .. py:method:: initialize_weights(model, new_head=None)
+
+      Retrieves the weights from the dacapo store and load them into
+      the model.
+
+      :param model: obj
+                    The model to which the weights are to be loaded.
+      :param new_head: list
+                       The labels of the new head.
+
+      :returns:
+
+                obj
+                    The model with the weights loaded from the dacapo store.
+      :rtype: model
+
+      :raises RuntimeError: If weights of a non-existing or mismatched layer are being
+          loaded, a RuntimeError exception is thrown which is logged
+          and handled by loading only the common layers from weights.
+
+      .. rubric:: Examples
+
+      >>> model = initialize_weights(model, new_head)
+
+      .. rubric:: Notes
+
+      This function is called by the CosemStart class to retrieve the weights
+      from the dacapo store and load them into the model.
+
+
+
+.. py:class:: StartConfig
+
+   A class to represent the configuration for running tasks. This class
+   interfaces with the dacapo store to retrieve and load the weights of the
+   starter model used for finetuning.
+
+   .. attribute:: run
+
+      str
+      The run to be used as a starting point for tasks.
+
+   .. attribute:: criterion
+
+      str
+      The criterion to be used for choosing weights from run.
+
+   .. method:: __init__(start_config)
+
+      
+      Initializes the StartConfig class with specified config to run the
+      initialization of weights for a model associated with a specific
+      criterion.
+
+   .. rubric:: Notes
+
+   This class is used to represent the configuration for running tasks.
+
+
+   .. py:attribute:: start_type
+
+
+   .. py:attribute:: run
+      :type:  str
+
+
+   .. py:attribute:: criterion
+      :type:  str
 
 
 .. py:class:: CosemStartConfig
-
 
 
 
@@ -55,8 +195,7 @@ Classes
 
    This class is used to represent the configuration for running tasks.
 
-   .. py:attribute:: start_type
 
-      
+   .. py:attribute:: start_type
 
 

@@ -1,50 +1,47 @@
-:py:mod:`dacapo.experiments.tasks`
-==================================
+dacapo.experiments.tasks
+========================
 
 .. py:module:: dacapo.experiments.tasks
 
 
 Subpackages
 -----------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
 
-   evaluators/index.rst
-   losses/index.rst
-   post_processors/index.rst
-   predictors/index.rst
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/dacapo/experiments/tasks/evaluators/index
+   /autoapi/dacapo/experiments/tasks/losses/index
+   /autoapi/dacapo/experiments/tasks/post_processors/index
+   /autoapi/dacapo/experiments/tasks/predictors/index
 
 
 Submodules
 ----------
+
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   affinities_task/index.rst
-   affinities_task_config/index.rst
-   distance_task/index.rst
-   distance_task_config/index.rst
-   dummy_task/index.rst
-   dummy_task_config/index.rst
-   hot_distance_task/index.rst
-   hot_distance_task_config/index.rst
-   inner_distance_task/index.rst
-   inner_distance_task_config/index.rst
-   one_hot_task/index.rst
-   one_hot_task_config/index.rst
-   pretrained_task/index.rst
-   pretrained_task_config/index.rst
-   task/index.rst
-   task_config/index.rst
+   /autoapi/dacapo/experiments/tasks/affinities_task/index
+   /autoapi/dacapo/experiments/tasks/affinities_task_config/index
+   /autoapi/dacapo/experiments/tasks/distance_task/index
+   /autoapi/dacapo/experiments/tasks/distance_task_config/index
+   /autoapi/dacapo/experiments/tasks/dummy_task/index
+   /autoapi/dacapo/experiments/tasks/dummy_task_config/index
+   /autoapi/dacapo/experiments/tasks/hot_distance_task/index
+   /autoapi/dacapo/experiments/tasks/hot_distance_task_config/index
+   /autoapi/dacapo/experiments/tasks/inner_distance_task/index
+   /autoapi/dacapo/experiments/tasks/inner_distance_task_config/index
+   /autoapi/dacapo/experiments/tasks/one_hot_task/index
+   /autoapi/dacapo/experiments/tasks/one_hot_task_config/index
+   /autoapi/dacapo/experiments/tasks/pretrained_task/index
+   /autoapi/dacapo/experiments/tasks/pretrained_task_config/index
+   /autoapi/dacapo/experiments/tasks/task/index
+   /autoapi/dacapo/experiments/tasks/task_config/index
 
-
-Package Contents
-----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -66,50 +63,47 @@ Classes
    dacapo.experiments.tasks.HotDistanceTask
 
 
-
+Package Contents
+----------------
 
 .. py:class:: Task
-
 
 
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
 
+
+   .. py:attribute:: predictor
+      :type:  dacapo.experiments.tasks.predictors.Predictor
+
+
+   .. py:attribute:: loss
+      :type:  dacapo.experiments.tasks.losses.Loss
+
+
+   .. py:attribute:: evaluator
+      :type:  dacapo.experiments.tasks.evaluators.Evaluator
+
+
+   .. py:attribute:: post_processor
+      :type:  dacapo.experiments.tasks.post_processors.PostProcessor
+
+
    .. py:property:: parameters
       :type: Iterable[dacapo.experiments.tasks.post_processors.PostProcessorParameters]
+
 
 
    .. py:property:: evaluation_scores
       :type: dacapo.experiments.tasks.evaluators.EvaluationScores
 
 
-   .. py:attribute:: predictor
-      :type: dacapo.experiments.tasks.predictors.Predictor
-
-      
-
-   .. py:attribute:: loss
-      :type: dacapo.experiments.tasks.losses.Loss
-
-      
-
-   .. py:attribute:: evaluator
-      :type: dacapo.experiments.tasks.evaluators.Evaluator
-
-      
-
-   .. py:attribute:: post_processor
-      :type: dacapo.experiments.tasks.post_processors.PostProcessor
-
-      
 
    .. py:method:: create_model(architecture)
 
 
-
 .. py:class:: TaskConfig
-
 
    Base class for task configurations. Each subclass of a `Task` should
    have a corresponding config class derived from `TaskConfig`.
@@ -129,10 +123,10 @@ Classes
    This is a base class for all task configurations. It is not meant to be
    used directly.
 
-   .. py:attribute:: name
-      :type: str
 
-      
+   .. py:attribute:: name
+      :type:  str
+
 
    .. py:method:: verify() -> Tuple[bool, str]
 
@@ -153,7 +147,6 @@ Classes
 
 
 .. py:class:: DummyTaskConfig
-
 
 
 
@@ -187,19 +180,17 @@ Classes
 
    .. note:: This is a subclass of TaskConfig.
 
+
    .. py:attribute:: task_type
 
-      
 
    .. py:attribute:: embedding_dims
-      :type: int
+      :type:  int
 
-      
 
    .. py:attribute:: detection_threshold
-      :type: float
+      :type:  float
 
-      
 
    .. py:method:: verify() -> Tuple[bool, str]
 
@@ -220,7 +211,6 @@ Classes
 
 
 .. py:class:: DummyTask(task_config)
-
 
 
 
@@ -259,7 +249,6 @@ Classes
 
 
 .. py:class:: DistanceTaskConfig
-
 
 
 
@@ -310,48 +299,39 @@ Classes
 
    This is a subclass of TaskConfig.
 
+
    .. py:attribute:: task_type
 
-      
 
    .. py:attribute:: channels
-      :type: List[str]
+      :type:  List[str]
 
-      
 
    .. py:attribute:: clip_distance
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: tol_distance
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: scale_factor
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: mask_distances
-      :type: bool
+      :type:  bool
 
-      
 
    .. py:attribute:: clipmin
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: clipmax
-      :type: float
-
-      
+      :type:  float
 
 
 .. py:class:: DistanceTask(task_config)
-
 
 
 
@@ -392,7 +372,6 @@ Classes
 
 
 
-
    Class that derives from the TaskConfig to perform one hot prediction tasks.
 
    .. attribute:: task_type
@@ -410,18 +389,15 @@ Classes
 
    .. note:: The class of each voxel is simply the argmax over the vector of output probabilities.
 
+
    .. py:attribute:: task_type
 
-      
 
    .. py:attribute:: classes
-      :type: List[str]
-
-      
+      :type:  List[str]
 
 
 .. py:class:: OneHotTask(task_config)
-
 
 
 
@@ -448,7 +424,6 @@ Classes
 
 
 
-
    Configuration for a task that uses a pretrained model. The model is loaded from a file
    and the weights are loaded from a file.
 
@@ -472,23 +447,19 @@ Classes
 
    This is a subclass of TaskConfig.
 
+
    .. py:attribute:: task_type
 
-      
 
    .. py:attribute:: sub_task_config
-      :type: dacapo.experiments.tasks.task_config.TaskConfig
+      :type:  dacapo.experiments.tasks.task_config.TaskConfig
 
-      
 
    .. py:attribute:: weights
-      :type: upath.UPath
-
-      
+      :type:  upath.UPath
 
 
 .. py:class:: PretrainedTask(task_config)
-
 
 
 
@@ -509,6 +480,7 @@ Classes
 
    This is a base class for all tasks that use pretrained models.
 
+
    .. py:method:: create_model(architecture)
 
       Create a model using the given architecture.
@@ -528,7 +500,6 @@ Classes
 
 
 .. py:class:: AffinitiesTaskConfig
-
 
 
 
@@ -575,53 +546,43 @@ Classes
 
    This is a subclass of TaskConfig.
 
+
    .. py:attribute:: task_type
 
-      
 
    .. py:attribute:: neighborhood
-      :type: List[funlib.geometry.Coordinate]
+      :type:  List[funlib.geometry.Coordinate]
 
-      
 
    .. py:attribute:: lsds
-      :type: bool
+      :type:  bool
 
-      
 
    .. py:attribute:: lsds_to_affs_weight_ratio
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: affs_weight_clipmin
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: affs_weight_clipmax
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: lsd_weight_clipmin
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: lsd_weight_clipmax
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: background_as_object
-      :type: bool
-
-      
+      :type:  bool
 
 
 .. py:class:: AffinitiesTask(task_config)
-
 
 
 
@@ -658,7 +619,6 @@ Classes
 
 
 
-
    This is a Distance task config used for generating and
    evaluating signed distance transforms as a way of generating
    segmentations.
@@ -688,33 +648,27 @@ Classes
 
    This is a subclass of TaskConfig.
 
+
    .. py:attribute:: task_type
 
-      
 
    .. py:attribute:: channels
-      :type: List[str]
+      :type:  List[str]
 
-      
 
    .. py:attribute:: clip_distance
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: tol_distance
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: scale_factor
-      :type: float
-
-      
+      :type:  float
 
 
 .. py:class:: InnerDistanceTask(task_config)
-
 
 
 
@@ -751,7 +705,6 @@ Classes
 
 
 .. py:class:: HotDistanceTaskConfig
-
 
 
 
@@ -803,38 +756,31 @@ Classes
       signal, i.e., one misclassified pixel in an affinity prediction can merge 2
       otherwise very distinct objects, a situation that cannot happen with distances.
 
+
    .. py:attribute:: task_type
 
-      
 
    .. py:attribute:: channels
-      :type: List[str]
+      :type:  List[str]
 
-      
 
    .. py:attribute:: clip_distance
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: tol_distance
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: scale_factor
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: mask_distances
-      :type: bool
-
-      
+      :type:  bool
 
 
 .. py:class:: HotDistanceTask(task_config)
-
 
 
 

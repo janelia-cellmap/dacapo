@@ -1,24 +1,99 @@
-:py:mod:`dacapo.experiments.tasks.affinities_task_config`
-=========================================================
+dacapo.experiments.tasks.affinities_task_config
+===============================================
 
 .. py:module:: dacapo.experiments.tasks.affinities_task_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.affinities_task_config.AffinitiesTask
+   dacapo.experiments.tasks.affinities_task_config.TaskConfig
+   dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: AffinitiesTask(task_config)
 
-.. autoapisummary::
 
-   dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig
 
+   This is a task for generating voxel affinities. It uses an `AffinitiesPredictor` for prediction,
+   an `AffinitiesLoss` for loss calculation, a `WatershedPostProcessor` for post-processing, and an
+   `InstanceEvaluator` for evaluation.
+
+   .. attribute:: predictor
+
+      AffinitiesPredictor object
+
+   .. attribute:: loss
+
+      AffinitiesLoss object
+
+   .. attribute:: post_processor
+
+      WatershedPostProcessor object
+
+   .. attribute:: evaluator
+
+      InstanceEvaluator object
+
+   .. method:: __init__(self, task_config)
+
+      Initializes all components for the affinities task.
+
+   .. rubric:: Notes
+
+   This is a subclass of Task.
+
+
+.. py:class:: TaskConfig
+
+   Base class for task configurations. Each subclass of a `Task` should
+   have a corresponding config class derived from `TaskConfig`.
+
+   .. attribute:: name
+
+      A unique name for this task. This will be saved so you and
+      others can find and reuse this task. Keep it short and avoid
+      special characters.
+
+   .. method:: verify(self) -> Tuple[bool, str]
+
+      This method verifies the TaskConfig object.
+
+   .. rubric:: Notes
+
+   This is a base class for all task configurations. It is not meant to be
+   used directly.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:method:: verify() -> Tuple[bool, str]
+
+      Check whether this is a valid Task
+
+      :returns:
+
+                A tuple containing a boolean value indicating whether the TaskConfig object is valid
+                    and a string containing the reason why the object is invalid.
+      :rtype: Tuple[bool, str]
+
+      :raises NotImplementedError: This method is not implemented.
+
+      .. rubric:: Examples
+
+      >>> valid, reason = task_config.verify()
 
 
 
 .. py:class:: AffinitiesTaskConfig
-
 
 
 
@@ -65,48 +140,39 @@ Classes
 
    This is a subclass of TaskConfig.
 
+
    .. py:attribute:: task_type
 
-      
 
    .. py:attribute:: neighborhood
-      :type: List[funlib.geometry.Coordinate]
+      :type:  List[funlib.geometry.Coordinate]
 
-      
 
    .. py:attribute:: lsds
-      :type: bool
+      :type:  bool
 
-      
 
    .. py:attribute:: lsds_to_affs_weight_ratio
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: affs_weight_clipmin
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: affs_weight_clipmax
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: lsd_weight_clipmin
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: lsd_weight_clipmax
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: background_as_object
-      :type: bool
-
-      
+      :type:  bool
 
 

@@ -53,18 +53,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">dacapo</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="../../blockwise/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.blockwise</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../compute_context/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.compute_context</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../experiments/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.experiments</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../ext/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.ext</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../gp/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.gp</span></code></a></li>
-<li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.utils</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../blockwise/index.html">dacapo.blockwise</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../compute_context/index.html">dacapo.compute_context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../experiments/index.html">dacapo.experiments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ext/index.html">dacapo.ext</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../gp/index.html">dacapo.gp</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html">dacapo.store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/index.html">dacapo.utils</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../index.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#classes">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#functions">Functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../index.html#package-contents">Package Contents</a></li>
 </ul>
 </li>
@@ -88,9 +90,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
-          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo</span></code></a></li>
-          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store</span></code></a></li>
-      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.config_store</span></code></li>
+          <li class="breadcrumb-item"><a href="../../index.html">dacapo</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">dacapo.store</a></li>
+      <li class="breadcrumb-item active">dacapo.store.config_store</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../../_sources/autoapi/dacapo/store/config_store/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -101,11 +103,19 @@
            <div itemprop="articleBody">
              
   <section id="module-dacapo.store.config_store">
-<span id="dacapo-store-config-store"></span><h1><a class="reference internal" href="#module-dacapo.store.config_store" title="dacapo.store.config_store"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dacapo.store.config_store</span></code></a><a class="headerlink" href="#module-dacapo.store.config_store" title="Link to this heading"></a></h1>
-<section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<span id="dacapo-store-config-store"></span><h1>dacapo.store.config_store<a class="headerlink" href="#module-dacapo.store.config_store" title="Link to this heading"></a></h1>
+<section id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.config_store.DuplicateNameError" title="dacapo.store.config_store.DuplicateNameError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DuplicateNameError</span></code></a></p></td>
+<td><p>Exception raised when trying to store a config with a name that already</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.config_store.ConfigStore" title="dacapo.store.config_store.ConfigStore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConfigStore</span></code></a></p></td>
@@ -113,6 +123,9 @@
 </tr>
 </tbody>
 </table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <dl class="py exception">
 <dt class="sig sig-object py" id="dacapo.store.config_store.DuplicateNameError">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.config_store.</span></span><span class="sig-name descname"><span class="pre">DuplicateNameError</span></span><a class="headerlink" href="#dacapo.store.config_store.DuplicateNameError" title="Link to this definition"></a></dt>
@@ -522,7 +535,7 @@ exists.</p>
 <dd><p>Store a task config.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>task_config</strong> (<a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.TaskConfig" title="dacapo.experiments.tasks.TaskConfig"><em>TaskConfig</em></a>) – The task config to store.</p>
+<dd class="field-odd"><p><strong>task_config</strong> (<a class="reference internal" href="../../experiments/datasplits/datasplit_generator/index.html#dacapo.experiments.datasplits.datasplit_generator.TaskConfig" title="dacapo.experiments.datasplits.datasplit_generator.TaskConfig"><em>TaskConfig</em></a>) – The task config to store.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#dacapo.store.config_store.DuplicateNameError" title="dacapo.store.config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If a task config with the same name already
@@ -547,7 +560,7 @@ exists.</p>
 <dd class="field-even"><p>The task config with the given name.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.TaskConfig" title="dacapo.experiments.tasks.TaskConfig">TaskConfig</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/datasplits/datasplit_generator/index.html#dacapo.experiments.datasplits.datasplit_generator.TaskConfig" title="dacapo.experiments.datasplits.datasplit_generator.TaskConfig">TaskConfig</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>KeyError</strong> – If the task config does not exist.</p>
@@ -695,7 +708,7 @@ delete.</p>
 <dd><p>Store a trainer config.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>trainer_config</strong> (<a class="reference internal" href="../../experiments/trainers/index.html#dacapo.experiments.trainers.TrainerConfig" title="dacapo.experiments.trainers.TrainerConfig"><em>TrainerConfig</em></a>) – The trainer config to store.</p>
+<dd class="field-odd"><p><strong>trainer_config</strong> (<a class="reference internal" href="../../experiments/run_config/index.html#dacapo.experiments.run_config.TrainerConfig" title="dacapo.experiments.run_config.TrainerConfig"><em>TrainerConfig</em></a>) – The trainer config to store.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#dacapo.store.config_store.DuplicateNameError" title="dacapo.store.config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If a trainer config with the same name already
@@ -720,7 +733,7 @@ exists.</p>
 <dd class="field-even"><p>The trainer config with the given name.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../../experiments/trainers/index.html#dacapo.experiments.trainers.TrainerConfig" title="dacapo.experiments.trainers.TrainerConfig">TrainerConfig</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/run_config/index.html#dacapo.experiments.run_config.TrainerConfig" title="dacapo.experiments.run_config.TrainerConfig">TrainerConfig</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>KeyError</strong> – If the trainer config does not exist.</p>
@@ -933,7 +946,6 @@ exists.</p>
 
 </dd></dl>
 
-</section>
 </section>
 </section>
 

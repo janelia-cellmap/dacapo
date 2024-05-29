@@ -1,15 +1,27 @@
-:py:mod:`dacapo.blockwise.scheduler`
-====================================
+dacapo.blockwise.scheduler
+==========================
 
 .. py:module:: dacapo.blockwise.scheduler
 
 
-Module Contents
----------------
+Attributes
+----------
+
+.. autoapisummary::
+
+   dacapo.blockwise.scheduler.logger
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.blockwise.scheduler.DaCapoBlockwiseTask
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -17,18 +29,78 @@ Functions
    dacapo.blockwise.scheduler.segment_blockwise
 
 
+Module Contents
+---------------
 
-Attributes
-~~~~~~~~~~
+.. py:class:: DaCapoBlockwiseTask(worker_file: str | upath.UPath, total_roi: daisy.Roi, read_roi: daisy.Roi, write_roi: daisy.Roi, num_workers: int = 16, max_retries: int = 2, timeout=None, upstream_tasks=None, *args, **kwargs)
 
-.. autoapisummary::
 
-   dacapo.blockwise.scheduler.logger
+
+   A task to run a blockwise worker function. This task is used to run a
+   blockwise worker function on a given ROI.
+
+   .. attribute:: worker_file
+
+      The path to the worker file.
+
+      :type: str | Path
+
+   .. attribute:: total_roi
+
+      The ROI to process.
+
+      :type: Roi
+
+   .. attribute:: read_roi
+
+      The ROI to read from for a block.
+
+      :type: Roi
+
+   .. attribute:: write_roi
+
+      The ROI to write to for a block.
+
+      :type: Roi
+
+   .. attribute:: num_workers
+
+      The number of workers to use.
+
+      :type: int
+
+   .. attribute:: max_retries
+
+      The maximum number of times a task will be retried if failed
+      (either due to failed post check or application crashes or network
+      failure)
+
+      :type: int
+
+   .. attribute:: timeout
+
+      The timeout for the task.
+
+   .. attribute:: upstream_tasks
+
+      The upstream tasks.
+
+   .. attribute:: \*args
+
+      Additional positional arguments to pass to ``worker_function``.
+
+   .. attribute:: \*\*kwargs
+
+      Additional keyword arguments to pass to ``worker_function``.
+
+   .. method:: __init__
+
+      
+      Initialize the task.
+      
 
 
 .. py:data:: logger
-
-   
 
 .. py:function:: run_blockwise(worker_file: str | upath.UPath, total_roi: funlib.geometry.Roi, read_roi: funlib.geometry.Roi, write_roi: funlib.geometry.Roi, num_workers: int = 16, max_retries: int = 1, timeout=None, upstream_tasks=None, *args, **kwargs)
 

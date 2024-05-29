@@ -1,24 +1,162 @@
-:py:mod:`dacapo.experiments.tasks.evaluators.dummy_evaluation_scores`
-=====================================================================
+dacapo.experiments.tasks.evaluators.dummy_evaluation_scores
+===========================================================
 
 .. py:module:: dacapo.experiments.tasks.evaluators.dummy_evaluation_scores
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.EvaluationScores
+   dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores
 
 
 Module Contents
 ---------------
 
-Classes
-~~~~~~~
+.. py:class:: EvaluationScores
 
-.. autoapisummary::
+   Base class for evaluation scores. This class is used to store the evaluation scores for a task.
+   The scores include the evaluation criteria. The class also provides methods to determine whether higher is better for a given criterion,
+   the bounds for a given criterion, and whether to store the best score for a given criterion.
 
-   dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores
+   .. attribute:: criteria
 
+      List[str]
+      the evaluation criteria
+
+   .. method:: higher_is_better(criterion)
+
+      
+      Return whether higher is better for the given criterion.
+
+   .. method:: bounds(criterion)
+
+      
+      Return the bounds for the given criterion.
+
+   .. method:: store_best(criterion)
+
+      
+      Return whether to store the best score for the given criterion.
+
+   .. note:: The EvaluationScores class is used to store the evaluation scores for a task. All evaluation scores should inherit from this class.
+
+
+   .. py:property:: criteria
+      :type: List[str]
+
+      :abstractmethod:
+
+      The evaluation criteria.
+
+      :returns:
+
+                List[str]
+                    the evaluation criteria
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> evaluation_scores.criteria
+      ["criterion1", "criterion2"]
+
+      .. note:: This function is used to return the evaluation criteria.
+
+
+   .. py:method:: higher_is_better(criterion: str) -> bool
+      :staticmethod:
+
+      :abstractmethod:
+
+
+      Wether or not higher is better for this criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether higher is better for this criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> criterion = "criterion1"
+      >>> evaluation_scores.higher_is_better(criterion)
+      True
+
+      .. note:: This function is used to determine whether higher is better for a given criterion.
+
+
+
+   .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
+      :staticmethod:
+
+      :abstractmethod:
+
+
+      The bounds for this criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                Tuple[Union[int, float, None], Union[int, float, None]]
+                    the bounds for this criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> criterion = "criterion1"
+      >>> evaluation_scores.bounds(criterion)
+      (0, 1)
+
+      .. note:: This function is used to return the bounds for the given criterion.
+
+
+
+   .. py:method:: store_best(criterion: str) -> bool
+      :staticmethod:
+
+      :abstractmethod:
+
+
+      Whether or not to save the best validation block and model
+      weights for this criterion.
+
+      :param criterion: str
+                        the evaluation criterion
+
+      :returns:
+
+                bool
+                    whether to store the best score for this criterion
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> criterion = "criterion1"
+      >>> evaluation_scores.store_best(criterion)
+      True
+
+      .. note:: This function is used to return whether to store the best score for the given criterion.
 
 
 
 .. py:class:: DummyEvaluationScores
-
 
 
 
@@ -51,23 +189,23 @@ Classes
 
    .. note:: The DummyEvaluationScores class is used to store the evaluation scores for the dummy task. The class also provides methods to determine whether higher is better for a given criterion, the bounds for a given criterion, and whether to store the best score for a given criterion.
 
+
    .. py:attribute:: criteria
       :value: ['frizz_level', 'blipp_score']
 
-      
+
 
    .. py:attribute:: frizz_level
-      :type: float
+      :type:  float
 
-      
 
    .. py:attribute:: blipp_score
-      :type: float
+      :type:  float
 
-      
 
    .. py:method:: higher_is_better(criterion: str) -> bool
       :staticmethod:
+
 
       Return whether higher is better for the given criterion.
 
@@ -89,8 +227,10 @@ Classes
       .. note:: This function is used to determine whether higher is better for the given criterion.
 
 
+
    .. py:method:: bounds(criterion: str) -> Tuple[Union[int, float, None], Union[int, float, None]]
       :staticmethod:
+
 
       Return the bounds for the given criterion.
 
@@ -112,8 +252,10 @@ Classes
       .. note:: This function is used to return the bounds for the given criterion.
 
 
+
    .. py:method:: store_best(criterion: str) -> bool
       :staticmethod:
+
 
       Return whether to store the best score for the given criterion.
 

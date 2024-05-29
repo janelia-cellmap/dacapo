@@ -1,34 +1,1227 @@
-:py:mod:`dacapo.apply`
-======================
+dacapo.apply
+============
 
 .. py:module:: dacapo.apply
 
 
-Module Contents
----------------
-
-
-Functions
-~~~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.apply.apply
-   dacapo.apply.apply_run
-
-
-
 Attributes
-~~~~~~~~~~
+----------
 
 .. autoapisummary::
 
    dacapo.apply.logger
 
 
-.. py:data:: logger
+Classes
+-------
 
-   
+.. autoapisummary::
+
+   dacapo.apply.Array
+   dacapo.apply.Dataset
+   dacapo.apply.Run
+   dacapo.apply.PostProcessorParameters
+   dacapo.apply.LocalArrayIdentifier
+   dacapo.apply.ZarrArray
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   dacapo.apply.predict
+   dacapo.apply.create_config_store
+   dacapo.apply.create_weights_store
+   dacapo.apply.apply
+   dacapo.apply.apply_run
+
+
+Module Contents
+---------------
+
+.. py:class:: Array
+
+
+
+   An Array is a multi-dimensional array of data that can be read from and written to. It is
+   defined by a region of interest (ROI) in world units, a voxel size, and a number of spatial
+   dimensions. The data is stored in a numpy array, and can be accessed using numpy-like slicing
+   syntax.
+
+   The Array class is an abstract base class that defines the interface for all Array
+   implementations. It provides a number of properties that must be implemented by subclasses,
+   such as the ROI, voxel size, and data type of the array. It also provides a method for fetching
+   data from the array, which is implemented by slicing the numpy array.
+
+   The Array class also provides a method for checking if the array can be visualized in
+   Neuroglancer, and a method for generating a Neuroglancer layer for the array. These methods are
+   implemented by subclasses that support visualization in Neuroglancer.
+
+   .. attribute:: attrs
+
+      A dictionary of metadata attributes stored on this array.
+
+      :type: Dict[str, Any]
+
+   .. attribute:: axes
+
+      The axes of this dataset as a string of characters, as they are indexed.
+      Permitted characters are:
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+      :type: List[str]
+
+   .. attribute:: dims
+
+      The number of spatial dimensions.
+
+      :type: int
+
+   .. attribute:: voxel_size
+
+      The size of a voxel in physical units.
+
+      :type: Coordinate
+
+   .. attribute:: roi
+
+      The total ROI of this array, in world units.
+
+      :type: Roi
+
+   .. attribute:: dtype
+
+      The dtype of this array, in numpy dtypes
+
+      :type: Any
+
+   .. attribute:: num_channels
+
+      The number of channels provided by this dataset. Should return
+      None if the channel dimension doesn't exist.
+
+      :type: Optional[int]
+
+   .. attribute:: data
+
+      A numpy-like readable and writable view into this array.
+
+      :type: np.ndarray
+
+   .. attribute:: writable
+
+      Can we write to this Array?
+
+      :type: bool
+
+   .. method:: __getitem__(self, roi
+
+      Roi) -> np.ndarray: Get a numpy like readable and writable view into
+      this array.
+
+   .. method:: _can_neuroglance(self) -> bool
+
+      Check if this array can be visualized in Neuroglancer.
+
+   .. method:: _neuroglancer_layer(self)
+
+      Generate a Neuroglancer layer for this array.
+
+   .. method:: _slices(self, roi
+
+      Roi) -> Iterable[slice]: Generate a list of slices for the given ROI.
+
+   .. note::
+
+      This class is used to define the interface for all Array implementations. It provides a
+      number of properties that must be implemented by subclasses, such as the ROI, voxel size, and
+      data type of the array. It also provides a method for fetching data from the array, which is
+      implemented by slicing the numpy array. The Array class also provides a method for checking
+      if the array can be visualized in Neuroglancer, and a method for generating a Neuroglancer
+      layer for the array. These methods are implemented by subclasses that support visualization
+      in Neuroglancer.
+
+
+   .. py:property:: attrs
+      :type: Dict[str, Any]
+
+      :abstractmethod:
+
+      Return a dictionary of metadata attributes stored on this array.
+
+      :returns: A dictionary of metadata attributes stored on this array.
+      :rtype: Dict[str, Any]
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.attrs
+      {}
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: axes
+      :type: List[str]
+
+      :abstractmethod:
+
+      Returns the axes of this dataset as a string of charactes, as they
+      are indexed. Permitted characters are:
+
+          * ``zyx`` for spatial dimensions
+          * ``c`` for channels
+          * ``s`` for samples
+
+      :returns: The axes of this dataset as a string of characters, as they are indexed.
+      :rtype: List[str]
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.axes
+      ['z', 'y', 'x']
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: dims
+      :type: int
+
+      :abstractmethod:
+
+      Returns the number of spatial dimensions.
+
+      :returns: The number of spatial dimensions.
+      :rtype: int
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.dims
+      3
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: voxel_size
+      :type: funlib.geometry.Coordinate
+
+      :abstractmethod:
+
+      The size of a voxel in physical units.
+
+      :returns: The size of a voxel in physical units.
+      :rtype: Coordinate
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.voxel_size
+      Coordinate((1, 1, 1))
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: roi
+      :type: funlib.geometry.Roi
+
+      :abstractmethod:
+
+      The total ROI of this array, in world units.
+
+      :returns: The total ROI of this array, in world units.
+      :rtype: Roi
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.roi
+      Roi(offset=Coordinate((0, 0, 0)), shape=Coordinate((100, 100, 100)))
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: dtype
+      :type: Any
+
+      :abstractmethod:
+
+      The dtype of this array, in numpy dtypes
+
+      :returns: The dtype of this array, in numpy dtypes.
+      :rtype: Any
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.dtype
+      np.dtype('uint8')
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: num_channels
+      :type: Optional[int]
+
+      :abstractmethod:
+
+      The number of channels provided by this dataset.
+      Should return None if the channel dimension doesn't exist.
+
+      :returns: The number of channels provided by this dataset.
+      :rtype: Optional[int]
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.num_channels
+      1
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: data
+      :type: numpy.ndarray
+
+      :abstractmethod:
+
+      Get a numpy like readable and writable view into this array.
+
+      :returns: A numpy like readable and writable view into this array.
+      :rtype: np.ndarray
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.data
+      np.ndarray
+
+      .. note:: This method must be implemented by the subclass.
+
+
+   .. py:property:: writable
+      :type: bool
+
+      :abstractmethod:
+
+      Can we write to this Array?
+
+      :returns: Can we write to this Array?
+      :rtype: bool
+
+      :raises NotImplementedError: This method must be implemented by the subclass.
+
+      .. rubric:: Examples
+
+      >>> array = Array()
+      >>> array.writable
+      False
+
+      .. note:: This method must be implemented by the subclass.
+
+
+.. py:class:: Dataset
+
+
+
+   A class to represent a dataset.
+
+   .. attribute:: name
+
+      The name of the dataset.
+
+      :type: str
+
+   .. attribute:: raw
+
+      The raw dataset.
+
+      :type: Array
+
+   .. attribute:: gt
+
+      The ground truth data.
+
+      :type: Array, optional
+
+   .. attribute:: mask
+
+      The mask for the data.
+
+      :type: Array, optional
+
+   .. attribute:: weight
+
+      The weight of the dataset.
+
+      :type: int, optional
+
+   .. attribute:: sample_points
+
+      The list of sample points in the dataset.
+
+      :type: list[Coordinate], optional
+
+   .. method:: __eq__(other)
+
+      
+      Overloaded equality operator for dataset objects.
+
+   .. method:: __hash__()
+
+      
+      Calculates a hash for the dataset.
+
+   .. method:: __repr__()
+
+      
+      Returns the official string representation of the dataset object.
+
+   .. method:: __str__()
+
+      
+      Returns the string representation of the dataset object.
+
+   .. method:: _neuroglancer_layers(prefix="", exclude_layers=None)
+
+      
+      Generates neuroglancer layers for raw, gt and mask if they can be viewed by neuroglance, excluding those in
+      the exclude_layers.
+
+   .. rubric:: Notes
+
+   This class is a base class and should not be instantiated.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: raw
+      :type:  dacapo.experiments.datasplits.datasets.arrays.Array
+
+
+   .. py:attribute:: gt
+      :type:  Optional[dacapo.experiments.datasplits.datasets.arrays.Array]
+
+
+   .. py:attribute:: mask
+      :type:  Optional[dacapo.experiments.datasplits.datasets.arrays.Array]
+
+
+   .. py:attribute:: weight
+      :type:  Optional[int]
+
+
+   .. py:attribute:: sample_points
+      :type:  Optional[List[funlib.geometry.Coordinate]]
+
+
+.. py:class:: Run(run_config, load_starter_model: bool = True)
+
+   Class representing a run in the experiment. A run is a combination of a task, architecture, trainer, datasplit,
+   model, optimizer, training stats, and validation scores. It also contains the name of the run, the number of
+   iterations to train for, and the interval at which to validate. It also contains a start object that can be used to
+   initialize the model with preloaded weights. The run object can be used to move the optimizer to a specified device.
+
+   .. attribute:: name
+
+      The name of the run.
+
+      :type: str
+
+   .. attribute:: train_until
+
+      The number of iterations to train for.
+
+      :type: int
+
+   .. attribute:: validation_interval
+
+      The interval at which to validate.
+
+      :type: int
+
+   .. attribute:: task
+
+      The task object.
+
+      :type: Task
+
+   .. attribute:: architecture
+
+      The architecture object.
+
+      :type: Architecture
+
+   .. attribute:: trainer
+
+      The trainer object.
+
+      :type: Trainer
+
+   .. attribute:: datasplit
+
+      The datasplit object.
+
+      :type: DataSplit
+
+   .. attribute:: model
+
+      The model object.
+
+      :type: Model
+
+   .. attribute:: optimizer
+
+      The optimizer object.
+
+      :type: torch.optim.Optimizer
+
+   .. attribute:: training_stats
+
+      The training stats object.
+
+      :type: TrainingStats
+
+   .. attribute:: validation_scores
+
+      The validation scores object.
+
+      :type: ValidationScores
+
+   .. attribute:: start
+
+      The start object.
+
+      :type: Start
+
+   .. method:: move_optimizer(device
+
+      torch.device, empty_cuda_cache: bool) -> None:
+      Moves the optimizer to the specified device.
+
+   .. method:: get_validation_scores(run_config) -> ValidationScores
+
+      
+      Static method to get the validation scores without initializing model, optimizer, trainer, etc.
+
+   .. note::
+
+      The iteration stats list is structured as follows:
+      - The outer list contains the stats for each iteration.
+      - The inner list contains the stats for each training iteration.
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: train_until
+      :type:  int
+
+
+   .. py:attribute:: validation_interval
+      :type:  int
+
+
+   .. py:attribute:: task
+      :type:  dacapo.experiments.tasks.task.Task
+
+
+   .. py:attribute:: architecture
+      :type:  dacapo.experiments.architectures.Architecture
+
+
+   .. py:attribute:: trainer
+      :type:  dacapo.experiments.trainers.Trainer
+
+
+   .. py:attribute:: model
+      :type:  dacapo.experiments.model.Model
+
+
+   .. py:attribute:: optimizer
+      :type:  torch.optim.Optimizer
+
+
+   .. py:attribute:: training_stats
+      :type:  dacapo.experiments.training_stats.TrainingStats
+
+
+   .. py:property:: datasplit
+
+
+   .. py:property:: validation_scores
+
+
+   .. py:method:: get_validation_scores(run_config) -> dacapo.experiments.validation_scores.ValidationScores
+      :staticmethod:
+
+
+      Static method to get the validation scores without initializing model, optimizer, trainer, etc.
+
+      :param run_config: The configuration for the run.
+
+      :returns: The validation scores.
+
+      :raises AssertionError: If the task or datasplit types are not specified in the run_config.
+
+      .. rubric:: Examples
+
+      >>> validation_scores = Run.get_validation_scores(run_config)
+      >>> validation_scores
+      ValidationScores object
+
+
+
+   .. py:method:: move_optimizer(device: torch.device, empty_cuda_cache: bool = False) -> None
+
+      Moves the optimizer to the specified device.
+
+      :param device: The device to move the optimizer to.
+      :param empty_cuda_cache: Whether to empty the CUDA cache after moving the optimizer.
+
+      :raises AssertionError: If the optimizer state is not a dictionary.
+
+      .. rubric:: Examples
+
+      >>> run.move_optimizer(device)
+      >>> run.optimizer
+      Optimizer object
+
+
+
+.. py:class:: PostProcessorParameters
+
+   Base class for post-processor parameters. Post-processor parameters are
+   immutable objects that define the parameters of a post-processor. The
+   parameters are used to configure the post-processor.
+
+   .. attribute:: id
+
+      The identifier of the post-processor parameter.
+
+   .. method:: parameter_names
+
+      Get the names of the parameters.
+
+   .. note::
+
+      This class is immutable. Once created, the values of its attributes
+      cannot be changed.
+
+
+   .. py:attribute:: id
+      :type:  int
+
+
+   .. py:property:: parameter_names
+      :type: List[str]
+
+      Get the names of the parameters.
+
+      :returns: A list of parameter names.
+
+      :raises NotImplementedError: If the method is not implemented in the subclass.
+
+      .. rubric:: Examples
+
+      >>> parameters = PostProcessorParameters(0)
+      >>> parameters.parameter_names
+      ["id"]
+
+      .. note::
+
+         This method must be implemented in the subclass. It should return a
+         list of parameter names.
+
+
+.. py:class:: LocalArrayIdentifier
+
+   Represents a local array identifier.
+
+   .. attribute:: container
+
+      The path to the container.
+
+      :type: Path
+
+   .. attribute:: dataset
+
+      The dataset name.
+
+      :type: str
+
+   Method:
+       __str__ : Returns the string representation of the identifier.
+
+
+   .. py:attribute:: container
+      :type:  upath.UPath
+
+
+   .. py:attribute:: dataset
+      :type:  str
+
+
+.. py:function:: predict(run_name: str | dacapo.experiments.Run, iteration: int | None, input_container: upath.UPath | str, input_dataset: str, output_path: dacapo.store.local_array_store.LocalArrayIdentifier | upath.UPath | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True)
+
+   Predict with a trained model.
+
+   :param run_name: The name of the run to predict with or the Run object.
+   :type run_name: str or Run
+   :param iteration: The training iteration of the model to use for prediction.
+   :type iteration: int or None
+   :param input_container: The container of the input array.
+   :type input_container: Path | str
+   :param input_dataset: The dataset name of the input array.
+   :type input_dataset: str
+   :param output_path: The path where the prediction array will be stored, or a LocalArryIdentifier for the prediction array.
+   :type output_path: LocalArrayIdentifier | str
+   :param output_roi: The ROI of the output array. If None, the ROI of the input array will be used. Defaults to None.
+   :type output_roi: Optional[Roi | str], optional
+   :param num_workers: The number of workers to use for blockwise prediction. Defaults to 1 for local processing, otherwise 12.
+   :type num_workers: int, optional
+   :param output_dtype: The dtype of the output array. Defaults to np.uint8.
+   :type output_dtype: np.dtype | str, optional
+   :param overwrite: If True, the output array will be overwritten if it already exists. Defaults to True.
+   :type overwrite: bool, optional
+
+   :raises ValueError: If run_name is not found in config store
+
+   .. rubric:: Examples
+
+   >>> predict("run_name", 100, "input.zarr", "raw", "output.zarr", output_roi="[0:100,0:100,0:100]")
+
+
+.. py:class:: ZarrArray(array_config)
+
+
+
+   This is a zarr array.
+
+   .. attribute:: name
+
+      The name of the array.
+
+      :type: str
+
+   .. attribute:: file_name
+
+      The file name of the array.
+
+      :type: Path
+
+   .. attribute:: dataset
+
+      The dataset name.
+
+      :type: str
+
+   .. attribute:: _axes
+
+      The axes of the array.
+
+      :type: Optional[List[str]]
+
+   .. attribute:: snap_to_grid
+
+      The snap to grid.
+
+      :type: Optional[Coordinate]
+
+   .. method:: __init__(array_config)
+
+      
+      Initializes the array type 'raw' and name for the DummyDataset instance.
+
+   .. method:: __str__()
+
+      
+      Returns the string representation of the ZarrArray.
+
+   .. method:: __repr__()
+
+      
+      Returns the string representation of the ZarrArray.
+
+   .. method:: attrs()
+
+      
+      Returns the attributes of the array.
+
+   .. method:: axes()
+
+      
+      Returns the axes of the array.
+
+   .. method:: dims()
+
+      
+      Returns the dimensions of the array.
+
+   .. method:: _daisy_array()
+
+      
+      Returns the daisy array.
+
+   .. method:: voxel_size()
+
+      
+      Returns the voxel size of the array.
+
+   .. method:: roi()
+
+      
+      Returns the region of interest of the array.
+
+   .. method:: writable()
+
+      
+      Returns the boolean value of the array.
+
+   .. method:: dtype()
+
+      
+      Returns the data type of the array.
+
+   .. method:: num_channels()
+
+      
+      Returns the number of channels of the array.
+
+   .. method:: spatial_axes()
+
+      
+      Returns the spatial axes of the array.
+
+   .. method:: data()
+
+      
+      Returns the data of the array.
+
+   .. method:: __getitem__(roi)
+
+      
+      Returns the data of the array for the given region of interest.
+
+   .. method:: __setitem__(roi, value)
+
+      
+      Sets the data of the array for the given region of interest.
+
+   .. method:: create_from_array_identifier(array_identifier, axes, roi, num_channels, voxel_size, dtype, write_size=None, name=None, overwrite=False)
+
+      
+      Creates a new ZarrArray given an array identifier.
+
+   .. method:: open_from_array_identifier(array_identifier, name="")
+
+      
+      Opens a new ZarrArray given an array identifier.
+
+   .. method:: _can_neuroglance()
+
+      
+      Returns the boolean value of the array.
+
+   .. method:: _neuroglancer_source()
+
+      
+      Returns the neuroglancer source of the array.
+
+   .. method:: _neuroglancer_layer()
+
+      
+      Returns the neuroglancer layer of the array.
+
+   .. method:: _transform_matrix()
+
+      
+      Returns the transform matrix of the array.
+
+   .. method:: _output_dimensions()
+
+      
+      Returns the output dimensions of the array.
+
+   .. method:: _source_name()
+
+      
+      Returns the source name of the array.
+
+   .. method:: add_metadata(metadata)
+
+      
+      Adds metadata to the array.
+
+   .. rubric:: Notes
+
+   This class is used to create a zarr array.
+
+
+   .. py:property:: mode
+
+
+   .. py:property:: attrs
+      Returns the attributes of the array.
+
+      :param attrs: The attributes of the array.
+      :type attrs: Any
+
+      :returns: The attributes of the array.
+      :rtype: Any
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> attrs()
+
+      .. rubric:: Notes
+
+      This method is used to return the attributes of the array.
+
+
+   .. py:property:: axes
+      Returns the axes of the array.
+
+      :param axes: The axes of the array.
+      :type axes: List[str]
+
+      :returns: The axes of the array.
+      :rtype: List[str]
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> axes()
+
+      .. rubric:: Notes
+
+      This method is used to return the axes of the array.
+
+
+   .. py:property:: dims
+      :type: int
+
+      Returns the dimensions of the array.
+
+      :param dims: The dimensions of the array.
+      :type dims: int
+
+      :returns: The dimensions of the array.
+      :rtype: int
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> dims()
+
+      .. rubric:: Notes
+
+      This method is used to return the dimensions of the array.
+
+
+   .. py:method:: voxel_size() -> funlib.geometry.Coordinate
+
+      Returns the voxel size of the array.
+
+      :param voxel_size: The voxel size.
+      :type voxel_size: Coordinate
+
+      :returns: The voxel size of the array.
+      :rtype: Coordinate
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> voxel_size()
+
+      .. rubric:: Notes
+
+      This method is used to return the voxel size of the array.
+
+
+
+   .. py:method:: roi() -> funlib.geometry.Roi
+
+      Returns the region of interest of the array.
+
+      :param roi: The region of interest.
+      :type roi: Roi
+
+      :returns: The region of interest of the array.
+      :rtype: Roi
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> roi()
+
+      .. rubric:: Notes
+
+      This method is used to return the region of interest of the array.
+
+
+
+   .. py:property:: writable
+      :type: bool
+
+      Returns the boolean value of the array.
+
+      :param writable: The boolean value of the array.
+      :type writable: bool
+
+      :returns: The boolean value of the array.
+      :rtype: bool
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> writable()
+
+      .. rubric:: Notes
+
+      This method is used to return the boolean value of the array.
+
+
+   .. py:property:: dtype
+      :type: Any
+
+      Returns the data type of the array.
+
+      :param dtype: The data type of the array.
+      :type dtype: Any
+
+      :returns: The data type of the array.
+      :rtype: Any
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> dtype()
+
+      .. rubric:: Notes
+
+      This method is used to return the data type of the array.
+
+
+   .. py:property:: num_channels
+      :type: Optional[int]
+
+      Returns the number of channels of the array.
+
+      :param num_channels: The number of channels of the array.
+      :type num_channels: Optional[int]
+
+      :returns: The number of channels of the array.
+      :rtype: Optional[int]
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> num_channels()
+
+      .. rubric:: Notes
+
+      This method is used to return the number of channels of the array.
+
+
+   .. py:property:: spatial_axes
+      :type: List[str]
+
+      Returns the spatial axes of the array.
+
+      :param spatial_axes: The spatial axes of the array.
+      :type spatial_axes: List[str]
+
+      :returns: The spatial axes of the array.
+      :rtype: List[str]
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> spatial_axes()
+
+      .. rubric:: Notes
+
+      This method is used to return the spatial axes of the array.
+
+
+   .. py:property:: data
+      :type: Any
+
+      Returns the data of the array.
+
+      :param data: The data of the array.
+      :type data: Any
+
+      :returns: The data of the array.
+      :rtype: Any
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> data()
+
+      .. rubric:: Notes
+
+      This method is used to return the data of the array.
+
+
+   .. py:method:: create_from_array_identifier(array_identifier, axes, roi, num_channels, voxel_size, dtype, mode='a', write_size=None, name=None, overwrite=False)
+      :classmethod:
+
+
+      Create a new ZarrArray given an array identifier. It is assumed that
+      this array_identifier points to a dataset that does not yet exist.
+
+      :param array_identifier: The array identifier.
+      :type array_identifier: ArrayIdentifier
+      :param axes: The axes of the array.
+      :type axes: List[str]
+      :param roi: The region of interest.
+      :type roi: Roi
+      :param num_channels: The number of channels.
+      :type num_channels: int
+      :param voxel_size: The voxel size.
+      :type voxel_size: Coordinate
+      :param dtype: The data type.
+      :type dtype: Any
+      :param write_size: The write size.
+      :type write_size: Optional[Coordinate]
+      :param name: The name of the array.
+      :type name: Optional[str]
+      :param overwrite: The boolean value to overwrite the array.
+      :type overwrite: bool
+
+      :returns: The ZarrArray.
+      :rtype: ZarrArray
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> create_from_array_identifier(array_identifier, axes, roi, num_channels, voxel_size, dtype, write_size=None, name=None, overwrite=False)
+
+      .. rubric:: Notes
+
+      This method is used to create a new ZarrArray given an array identifier.
+
+
+
+   .. py:method:: open_from_array_identifier(array_identifier, name='')
+      :classmethod:
+
+
+      Opens a new ZarrArray given an array identifier.
+
+      :param array_identifier: The array identifier.
+      :type array_identifier: ArrayIdentifier
+      :param name: The name of the array.
+      :type name: str
+
+      :returns: The ZarrArray.
+      :rtype: ZarrArray
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> open_from_array_identifier(array_identifier, name="")
+
+      .. rubric:: Notes
+
+      This method is used to open a new ZarrArray given an array identifier.
+
+
+
+   .. py:method:: add_metadata(metadata: Dict[str, Any]) -> None
+
+      Adds metadata to the array.
+
+      :param metadata: The metadata to add to the array.
+      :type metadata: Dict[str, Any]
+
+      :raises NotImplementedError:
+
+      .. rubric:: Examples
+
+      >>> add_metadata(metadata)
+
+      .. rubric:: Notes
+
+      This method is used to add metadata to the array.
+
+
+
+.. py:function:: create_config_store()
+
+   Create a config store based on the global DaCapo options.
+
+   :returns: The created config store.
+   :rtype: ConfigStore
+
+   :raises ValueError: If the store type is not supported.
+
+   .. rubric:: Examples
+
+   >>> create_config_store()
+   <dacapo.store.file_config_store.FileConfigStore object at 0x7f2e4f8e9e80>
+
+   .. note:: Currently, only the FileConfigStore and MongoConfigStore are supported.
+
+
+.. py:function:: create_weights_store()
+
+   Create a weights store based on the global DaCapo options.
+
+   :param options: The global DaCapo options.
+   :type options: Options
+
+   :returns: The created weights store.
+   :rtype: WeightsStore
+
+   .. rubric:: Examples
+
+   >>> create_weights_store()
+   <dacapo.store.local_weights_store.LocalWeightsStore object at 0x7f2e4f8e9e80>
+
+   .. note:: Currently, only the LocalWeightsStore is supported.
+
+
+.. py:data:: logger
 
 .. py:function:: apply(run_name: str, input_container: upath.UPath | str, input_dataset: str, output_path: upath.UPath | str, validation_dataset: Optional[dacapo.experiments.datasplits.datasets.dataset.Dataset | str] = None, criterion: str = 'voi', iteration: Optional[int] = None, parameters: Optional[dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters | str] = None, roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True, file_format: str = 'zarr')
 

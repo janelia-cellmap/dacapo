@@ -1,36 +1,31 @@
-:py:mod:`dacapo.gp.gamma_noise`
-===============================
+dacapo.gp.gamma_noise
+=====================
 
 .. py:module:: dacapo.gp.gamma_noise
 
 
-Module Contents
----------------
-
-Classes
-~~~~~~~
-
-.. autoapisummary::
-
-   dacapo.gp.gamma_noise.GammaAugment
-
-
-
-
 Attributes
-~~~~~~~~~~
+----------
 
 .. autoapisummary::
 
    dacapo.gp.gamma_noise.logger
 
 
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.gp.gamma_noise.GammaAugment
+
+
+Module Contents
+---------------
+
 .. py:data:: logger
 
-   
-
 .. py:class:: GammaAugment(arrays, gamma_min, gamma_max)
-
 
 
 
@@ -62,6 +57,7 @@ Attributes
       
       
 
+
    .. py:method:: setup()
 
       Configuring the internal state by iterating over arrays.
@@ -72,6 +68,7 @@ Attributes
 
       >>> setup()
       setup()
+
 
 
    .. py:method:: process(batch, request)

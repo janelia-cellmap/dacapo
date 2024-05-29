@@ -1,24 +1,21 @@
-:py:mod:`dacapo.gp.copy`
-========================
+dacapo.gp.copy
+==============
 
 .. py:module:: dacapo.gp.copy
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.gp.copy.CopyMask
 
 
-
+Module Contents
+---------------
 
 .. py:class:: CopyMask(array_key: gunpowder.ArrayKey, copy_key: gunpowder.ArrayKey, drop_channels: bool = False)
-
 
 
 
@@ -59,6 +56,7 @@ Classes
       This class is a subclass of gunpowder.BatchFilter and is used to
       copy a mask into a new key with the option to drop channels via max collapse.
 
+
    .. py:method:: setup()
 
       Sets up the filter by enabling autoskip and providing the copied key.
@@ -68,6 +66,7 @@ Classes
       .. rubric:: Examples
 
       >>> copy_mask.setup()
+
 
 
    .. py:method:: prepare(request)
@@ -86,6 +85,7 @@ Classes
       >>> request = gp.BatchRequest()
       >>> request[self.copy_key] = gp.ArraySpec(roi=gp.Roi((0, 0, 0), (1, 1, 1)))
       >>> copy_mask.prepare(request)
+
 
 
    .. py:method:: process(batch, request)

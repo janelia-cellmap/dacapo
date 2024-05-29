@@ -1,24 +1,21 @@
-:py:mod:`dacapo.experiments.tasks.post_processors.post_processor`
-=================================================================
+dacapo.experiments.tasks.post_processors.post_processor
+=======================================================
 
 .. py:module:: dacapo.experiments.tasks.post_processors.post_processor
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.experiments.tasks.post_processors.post_processor.PostProcessor
 
 
-
+Module Contents
+---------------
 
 .. py:class:: PostProcessor
-
 
 
 
@@ -53,8 +50,10 @@ Classes
       This class is abstract. Subclasses must implement the abstract methods. Once
       created, the values of its attributes cannot be changed.
 
+
    .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters]
       :abstractmethod:
+
 
       Enumerate all possible parameters of this post-processor.
 
@@ -78,8 +77,10 @@ Classes
          iterable of `PostProcessorParameters` instances.
 
 
+
    .. py:method:: set_prediction(prediction_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier) -> None
       :abstractmethod:
+
 
       Set the prediction array identifier.
 
@@ -99,8 +100,10 @@ Classes
          `prediction_array_identifier` attribute.
 
 
+
    .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.post_processor_parameters.PostProcessorParameters, output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, num_workers: int = 16, chunk_size: funlib.geometry.Coordinate = Coordinate((64, 64, 64))) -> dacapo.experiments.datasplits.datasets.arrays.Array
       :abstractmethod:
+
 
       Convert predictions into the final output.
 

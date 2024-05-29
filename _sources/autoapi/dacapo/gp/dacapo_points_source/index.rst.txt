@@ -1,24 +1,21 @@
-:py:mod:`dacapo.gp.dacapo_points_source`
-========================================
+dacapo.gp.dacapo_points_source
+==============================
 
 .. py:module:: dacapo.gp.dacapo_points_source
 
 
-Module Contents
----------------
-
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
    dacapo.gp.dacapo_points_source.GraphSource
 
 
-
+Module Contents
+---------------
 
 .. py:class:: GraphSource(key: gunpowder.GraphKey, graph: gunpowder.Graph)
-
 
 
 
@@ -53,6 +50,7 @@ Classes
       This class is a subclass of gunpowder.BatchProvider and is used to
       serve graph data to gunpowder pipelines.
 
+
    .. py:method:: setup()
 
       Set up the provider. This function sets the provider to provide the
@@ -63,6 +61,7 @@ Classes
       .. rubric:: Examples
 
       >>> graph_source.setup()
+
 
 
    .. py:method:: provide(request)
