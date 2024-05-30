@@ -70,7 +70,7 @@ def cli(log_level):
 )
 @click.option("-od", "--output_dataset", required=True, type=str)
 def start_worker(
-    run_name: str| Run,
+    run_name: str | Run,
     iteration: int | None,
     input_container: Path | str,
     input_dataset: str,
@@ -87,11 +87,10 @@ def start_worker(
         output_dataset=output_dataset,
         return_io_loop=return_io_loop,
     )
-        
 
 
 def start_worker_fn(
-    run_name: str| Run,
+    run_name: str | Run,
     iteration: int | None,
     input_container: Path | str,
     input_dataset: str,
@@ -99,7 +98,6 @@ def start_worker_fn(
     output_dataset: str,
     return_io_loop: bool,
 ):
-
     """
     Start a worker to apply a trained model to a dataset.
 
@@ -115,7 +113,7 @@ def start_worker_fn(
     device = compute_context.device
 
     # retrieving run
-    logger.error(f"run_name: {run_name} {type(run_name)}" )
+    logger.error(f"run_name: {run_name} {type(run_name)}")
     if isinstance(run_name, Run):
         run = run_name
         run_name = run.name
@@ -234,7 +232,7 @@ def start_worker_fn(
 
 
 def spawn_worker(
-    run_name: str| Run,
+    run_name: str | Run,
     iteration: int | None,
     input_array_identifier: "LocalArrayIdentifier",
     output_array_identifier: "LocalArrayIdentifier",
@@ -253,10 +251,10 @@ def spawn_worker(
     compute_context = create_compute_context()
     if not compute_context.distribute_workers:
         return start_worker_fn(
-            run_name= run_name,
+            run_name=run_name,
             iteration=iteration,
-            input_container= input_array_identifier.container,
-            input_dataset= input_array_identifier.dataset,
+            input_container=input_array_identifier.container,
+            input_dataset=input_array_identifier.dataset,
             output_container=output_array_identifier.container,
             output_dataset=output_array_identifier.dataset,
             return_io_loop=True,
