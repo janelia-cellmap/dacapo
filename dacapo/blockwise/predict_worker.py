@@ -96,7 +96,7 @@ def start_worker_fn(
     input_dataset: str,
     output_container: Path | str,
     output_dataset: str,
-    return_io_loop: bool,
+    return_io_loop: Optional[bool] = False,
 ):
     """
     Start a worker to apply a trained model to a dataset.
