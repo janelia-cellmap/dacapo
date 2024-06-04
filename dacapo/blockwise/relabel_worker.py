@@ -47,8 +47,20 @@ def start_worker(
     output_dataset,
     tmpdir,
     return_io_loop=False,
-    *args,
-    **kwargs,
+):
+    return start_worker_fn(
+        output_container=output_container,
+        output_dataset=output_dataset,
+        tmpdir=tmpdir,
+        return_io_loop=return_io_loop,
+    )
+
+
+def start_worker_fn(
+    output_container,
+    output_dataset,
+    tmpdir,
+    return_io_loop=False,
 ):
     """
     Start the relabel worker.
@@ -145,8 +157,6 @@ def read_cross_block_merges(tmpdir):
 def spawn_worker(
     output_array_identifier: LocalArrayIdentifier,
     tmpdir: str,
-    *args,
-    **kwargs,
 ):
     """
     Spawn a worker to predict on a given dataset.
@@ -160,7 +170,7 @@ def spawn_worker(
     compute_context = create_compute_context()
 
     if not compute_context.distribute_workers:
-        return start_worker(
+        return start_worker_fn(
             output_array_identifier.container,
             output_array_identifier.dataset,
             tmpdir,

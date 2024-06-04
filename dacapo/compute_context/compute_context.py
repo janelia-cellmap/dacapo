@@ -7,6 +7,12 @@ from dacapo import Options, compute_context
 
 
 class ComputeContext(ABC):
+    distribute_workers: Optional[bool] = attr.ib(
+        default=False,
+        metadata={
+            "help_text": "Whether to distribute the workers across multiple nodes or processes."
+        },
+    )
     """
     The ComputeContext class is an abstract base class for defining the context in which computations are to be done.
     It is inherited from the built-in class `ABC` (Abstract Base Classes). Other classes can inherit this class to define
