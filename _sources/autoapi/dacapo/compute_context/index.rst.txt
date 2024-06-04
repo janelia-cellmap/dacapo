@@ -40,28 +40,35 @@ Package Contents
 
 
 
-   The ComputeContext class is an abstract base class for defining the context in which computations are to be done.
-   It is inherited from the built-in class `ABC` (Abstract Base Classes). Other classes can inherit this class to define
-   their own specific variations of the context. It requires to implement several property methods, and also includes
-   additional methods related to the context design.
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
 
-   .. attribute:: device
 
-      The device on which computations are to be done.
+   .. py:attribute:: distribute_workers
+      :type:  Optional[bool]
 
-   .. method:: _wrap_command(command)
+      The ComputeContext class is an abstract base class for defining the context in which computations are to be done.
+      It is inherited from the built-in class `ABC` (Abstract Base Classes). Other classes can inherit this class to define
+      their own specific variations of the context. It requires to implement several property methods, and also includes
+      additional methods related to the context design.
 
-      Wraps a command in the context specific command.
+      .. attribute:: device
 
-   .. method:: wrap_command(command)
+         The device on which computations are to be done.
 
-      Wraps a command in the context specific command and returns it.
+      .. method:: _wrap_command(command)
 
-   .. method:: execute(command)
+         Wraps a command in the context specific command.
 
-      Runs a command in the context specific way.
+      .. method:: wrap_command(command)
 
-   .. note:: The class is abstract and requires to implement the abstract methods.
+         Wraps a command in the context specific command and returns it.
+
+      .. method:: execute(command)
+
+         Runs a command in the context specific way.
+
+      .. note:: The class is abstract and requires to implement the abstract methods.
 
 
    .. py:property:: device
@@ -196,28 +203,8 @@ Package Contents
 
 
 
-   The ComputeContext class is an abstract base class for defining the context in which computations are to be done.
-   It is inherited from the built-in class `ABC` (Abstract Base Classes). Other classes can inherit this class to define
-   their own specific variations of the context. It requires to implement several property methods, and also includes
-   additional methods related to the context design.
-
-   .. attribute:: device
-
-      The device on which computations are to be done.
-
-   .. method:: _wrap_command(command)
-
-      Wraps a command in the context specific command.
-
-   .. method:: wrap_command(command)
-
-      Wraps a command in the context specific command and returns it.
-
-   .. method:: execute(command)
-
-      Runs a command in the context specific way.
-
-   .. note:: The class is abstract and requires to implement the abstract methods.
+   Helper class that provides a standard way to create an ABC using
+   inheritance.
 
 
    .. py:attribute:: distribute_workers

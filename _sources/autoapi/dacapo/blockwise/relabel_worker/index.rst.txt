@@ -30,6 +30,7 @@ Functions
    dacapo.blockwise.relabel_worker.create_compute_context
    dacapo.blockwise.relabel_worker.cli
    dacapo.blockwise.relabel_worker.start_worker
+   dacapo.blockwise.relabel_worker.start_worker_fn
    dacapo.blockwise.relabel_worker.relabel_in_block
    dacapo.blockwise.relabel_worker.find_components
    dacapo.blockwise.relabel_worker.read_cross_block_merges
@@ -101,7 +102,9 @@ Module Contents
 
 .. py:data:: path
 
-.. py:function:: start_worker(output_container, output_dataset, tmpdir, return_io_loop=False, *args, **kwargs)
+.. py:function:: start_worker(output_container, output_dataset, tmpdir, return_io_loop=False)
+
+.. py:function:: start_worker_fn(output_container, output_dataset, tmpdir, return_io_loop=False)
 
    Start the relabel worker.
 
@@ -151,7 +154,7 @@ Module Contents
    :rtype: Tuple[np.ndarray, np.ndarray]
 
 
-.. py:function:: spawn_worker(output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, tmpdir: str, *args, **kwargs)
+.. py:function:: spawn_worker(output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, tmpdir: str)
 
    Spawn a worker to predict on a given dataset.
 

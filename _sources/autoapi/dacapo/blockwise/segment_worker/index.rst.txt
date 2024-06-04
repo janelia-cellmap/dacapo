@@ -32,6 +32,7 @@ Functions
    dacapo.blockwise.segment_worker.create_compute_context
    dacapo.blockwise.segment_worker.cli
    dacapo.blockwise.segment_worker.start_worker
+   dacapo.blockwise.segment_worker.start_worker_fn
    dacapo.blockwise.segment_worker.spawn_worker
 
 
@@ -573,7 +574,9 @@ Module Contents
 
 .. py:data:: path
 
-.. py:function:: start_worker(input_container: str, input_dataset: str, output_container: str, output_dataset: str, tmpdir: str, function_path: str, return_io_loop: bool = False)
+.. py:function:: start_worker(input_container: str | upath.UPath, input_dataset: str, output_container: str | upath.UPath, output_dataset: str, tmpdir: str | upath.UPath, function_path: str | upath.UPath, return_io_loop: bool = False)
+
+.. py:function:: start_worker_fn(input_container: str | upath.UPath, input_dataset: str, output_container: str | upath.UPath, output_dataset: str, tmpdir: str | upath.UPath, function_path: str | upath.UPath, return_io_loop: bool = False)
 
    Start a worker to run a segment function on a given dataset.
 

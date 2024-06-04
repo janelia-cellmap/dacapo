@@ -32,6 +32,7 @@ Functions
    dacapo.blockwise.threshold_worker.create_compute_context
    dacapo.blockwise.threshold_worker.cli
    dacapo.blockwise.threshold_worker.start_worker
+   dacapo.blockwise.threshold_worker.start_worker_fn
    dacapo.blockwise.threshold_worker.spawn_worker
 
 
@@ -570,6 +571,8 @@ Module Contents
 .. py:function:: cli(log_level)
 
 .. py:function:: start_worker(input_container: upath.UPath | str, input_dataset: str, output_container: upath.UPath | str, output_dataset: str, threshold: float = 0.0, return_io_loop: bool = False)
+
+.. py:function:: start_worker_fn(input_container: upath.UPath | str, input_dataset: str, output_container: upath.UPath | str, output_dataset: str, threshold: float = 0.0, return_io_loop: bool = False)
 
    Start the threshold worker.
 

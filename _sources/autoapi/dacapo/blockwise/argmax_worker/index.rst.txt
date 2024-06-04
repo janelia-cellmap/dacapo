@@ -32,6 +32,7 @@ Functions
    dacapo.blockwise.argmax_worker.create_compute_context
    dacapo.blockwise.argmax_worker.cli
    dacapo.blockwise.argmax_worker.start_worker
+   dacapo.blockwise.argmax_worker.start_worker_fn
    dacapo.blockwise.argmax_worker.spawn_worker
 
 
@@ -576,6 +577,8 @@ Module Contents
 
 
 .. py:function:: start_worker(input_container: upath.UPath | str, input_dataset: str, output_container: upath.UPath | str, output_dataset: str, return_io_loop: bool = False)
+
+.. py:function:: start_worker_fn(input_container: upath.UPath | str, input_dataset: str, output_container: upath.UPath | str, output_dataset: str, return_io_loop: bool = False)
 
    Start the threshold worker.
 
