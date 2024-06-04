@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.INFO)
     "run_config",
     [
         lf("distance_run"),
-        # lf("onehot_run"),
+        lf("onehot_run"),
     ],
 )
 def test_validate(
