@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWS EC2 Setup Guide &mdash; DaCapo  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="autoapi/index.html" />
+    <link rel="prev" title="Docker Configuration for JupyterHub-Dacapo" href="docker.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DaCapo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">DaCapo API:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">AWS EC2 Setup Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-docker-image-on-aws-ec2">Running Docker Image on AWS EC2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#s3-access-configuration">S3 Access Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#storing-checkpoints-and-experiments-data-in-s3">Storing Checkpoints and Experiments Data in S3</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">CLI</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DaCapo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">AWS EC2 Setup Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/aws.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="aws-ec2-setup-guide">
+<h1>AWS EC2 Setup Guide<a class="headerlink" href="#aws-ec2-setup-guide" title="Link to this heading"></a></h1>
+<p>This guide will help you to run your Docker image on an AWS EC2 instance and set up S3 access for storing data.</p>
+<section id="running-docker-image-on-aws-ec2">
+<h2>Running Docker Image on AWS EC2<a class="headerlink" href="#running-docker-image-on-aws-ec2" title="Link to this heading"></a></h2>
+<p>To run your Docker image on an AWS EC2 instance, follow these steps:</p>
+<ol class="arabic">
+<li><p><strong>Create Key Pair</strong> (if you don’t have one already):
+<code class="docutils literal notranslate"><span class="pre">`bash</span>
+<span class="pre">aws</span> <span class="pre">ec2</span> <span class="pre">create-key-pair</span> <span class="pre">--key-name</span> <span class="pre">MyKeyPair</span> <span class="pre">--query</span> <span class="pre">'KeyMaterial'</span> <span class="pre">--output</span> <span class="pre">text</span> <span class="pre">&gt;</span> <span class="pre">MyKeyPair.pem</span>
+<span class="pre">chmod</span> <span class="pre">400</span> <span class="pre">MyKeyPair.pem</span>
+<span class="pre">`</span></code></p></li>
+<li><p><strong>Create a Security Group</strong> (if you don’t have one already):
+<code class="docutils literal notranslate"><span class="pre">`bash</span>
+<span class="pre">aws</span> <span class="pre">ec2</span> <span class="pre">create-security-group</span> <span class="pre">--group-name</span> <span class="pre">my-security-group</span> <span class="pre">--description</span> <span class="pre">&quot;My</span> <span class="pre">security</span> <span class="pre">group&quot;</span>
+<span class="pre">`</span></code></p></li>
+<li><p><strong>Authorize Inbound Traffic for the Security Group</strong>:
+<code class="docutils literal notranslate"><span class="pre">`bash</span>
+<span class="pre">aws</span> <span class="pre">ec2</span> <span class="pre">authorize-security-group-ingress</span> <span class="pre">--group-name</span> <span class="pre">my-security-group</span> <span class="pre">--protocol</span> <span class="pre">tcp</span> <span class="pre">--port</span> <span class="pre">22</span> <span class="pre">--cidr</span> <span class="pre">0.0.0.0/0</span>
+<span class="pre">aws</span> <span class="pre">ec2</span> <span class="pre">authorize-security-group-ingress</span> <span class="pre">--group-name</span> <span class="pre">my-security-group</span> <span class="pre">--protocol</span> <span class="pre">tcp</span> <span class="pre">--port</span> <span class="pre">80</span> <span class="pre">--cidr</span> <span class="pre">0.0.0.0/0</span>
+<span class="pre">`</span></code></p></li>
+<li><p><strong>Run EC2 Instance with Docker Image</strong>:
+Use the following script to launch an EC2 instance, pull your Docker image from DockerHub, and run it with port forwarding:</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a>bash
+aws ec2 run-instances </p>
+<blockquote>
+<div><p>–image-id ami-0b8956f13d7bdfe7b –count 1 –instance-type p3.2xlarge –key-name &lt;YOUR_KEY_PAIR&gt; –security-groups &lt;YOUR_SECURITY_GROUP&gt; –user-data ‘#!/bin/bash
+yum update -y
+amazon-linux-extras install docker -y
+service docker start
+docker pull mzouink/dacapo:0.3.0
+docker run -d -p 80:8000 mzouink/dacapo:0.3.0’</p>
+</div></blockquote>
+<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+<p>Replace <cite>&lt;YOUR_KEY_PAIR&gt;</cite> with the name of your key pair and <cite>&lt;YOUR_SECURITY_GROUP&gt;</cite> with the name of your security group.</p>
+</li>
+</ol>
+</section>
+<section id="s3-access-configuration">
+<h2>S3 Access Configuration<a class="headerlink" href="#s3-access-configuration" title="Link to this heading"></a></h2>
+<p>You can work locally using S3 data by setting the <cite>AWS_ACCESS_KEY_ID</cite> and <cite>AWS_SECRET_ACCESS_KEY</cite> environment variables. You can also set the <cite>AWS_REGION</cite> environment variable to specify the region to use. If you are using a profile, you can set the <cite>AWS_PROFILE</cite> environment variable to specify the profile to use.</p>
+<p>To configure AWS CLI, use the following command:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`bash</span>
+<span class="pre">aws</span> <span class="pre">configure</span>
+<span class="pre">`</span></code></p>
+</section>
+<section id="storing-checkpoints-and-experiments-data-in-s3">
+<h2>Storing Checkpoints and Experiments Data in S3<a class="headerlink" href="#storing-checkpoints-and-experiments-data-in-s3" title="Link to this heading"></a></h2>
+<p>To store checkpoints and experiments data in S3, modify the <cite>dacapo.yaml</cite> file to include the following:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`yaml</span>
+<span class="pre">runs_base_dir:</span> <span class="pre">&quot;s3://dacapotest&quot;</span>
+<span class="pre">`</span></code></p>
+<p>This setup will help you run your Docker image on AWS EC2 and configure S3 access for storing checkpoints and experiment data.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="docker.html" class="btn btn-neutral float-left" title="Docker Configuration for JupyterHub-Dacapo" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="autoapi/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Caroline Malin-Mayor, Jeff Rhoades, Marwan Zouinkhi, William Patton, David Ackerman, Jan Funke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
