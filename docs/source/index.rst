@@ -11,6 +11,7 @@
    install
    tutorial
    docker
+   aws
    autoapi/index
    cli
 
