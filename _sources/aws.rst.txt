@@ -1,3 +1,9 @@
+.. automodule:: dacapo
+
+.. contents::
+  :depth: 1
+  :local:
+  
 AWS EC2 Setup Guide
 ===================
 
