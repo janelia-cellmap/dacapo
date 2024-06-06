@@ -97,36 +97,51 @@
 <section id="running-docker-image-on-aws-ec2">
 <h2>Running Docker Image on AWS EC2<a class="headerlink" href="#running-docker-image-on-aws-ec2" title="Link to this heading"></a></h2>
 <p>To run your Docker image on an AWS EC2 instance, follow these steps:</p>
-<p>1. <strong>Create Key Pair</strong> (if you don’t have one already):
-.. code-block:: bash</p>
-<blockquote>
-<div><p>aws ec2 create-key-pair –key-name MyKeyPair –query ‘KeyMaterial’ –output text &gt; MyKeyPair.pem
-chmod 400 MyKeyPair.pem</p>
-</div></blockquote>
-<p>2. <strong>Create a Security Group</strong> (if you don’t have one already):
-.. code-block:: bash</p>
-<blockquote>
-<div><p>aws ec2 create-security-group –group-name my-security-group –description “My security group”</p>
-</div></blockquote>
-<p>3. <strong>Authorize Inbound Traffic for the Security Group</strong>:
-.. code-block:: bash</p>
-<blockquote>
-<div><p>aws ec2 authorize-security-group-ingress –group-name my-security-group –protocol tcp –port 22 –cidr 0.0.0.0/0
-aws ec2 authorize-security-group-ingress –group-name my-security-group –protocol tcp –port 80 –cidr 0.0.0.0/0</p>
-</div></blockquote>
-<ol class="arabic simple" start="4">
-<li><p><strong>Run EC2 Instance with Docker Image</strong>:
-Use the following script to launch an EC2 instance, pull your Docker image from DockerHub, and run it with port forwarding:</p></li>
+<ol class="arabic simple">
+<li><p><strong>Create Key Pair</strong> (if you don’t have one already):</p></li>
 </ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>aws<span class="w"> </span>ec2<span class="w"> </span>create-key-pair<span class="w"> </span>--key-name<span class="w"> </span>MyKeyPair<span class="w"> </span>--query<span class="w"> </span><span class="s1">&#39;KeyMaterial&#39;</span><span class="w"> </span>--output<span class="w"> </span>text<span class="w"> </span>&gt;<span class="w"> </span>MyKeyPair.pem
+chmod<span class="w"> </span><span class="m">400</span><span class="w"> </span>MyKeyPair.pem
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Create a Security Group</strong> (if you don’t have one already):</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>aws<span class="w"> </span>ec2<span class="w"> </span>create-security-group<span class="w"> </span>--group-name<span class="w"> </span>my-security-group<span class="w"> </span>--description<span class="w"> </span><span class="s2">&quot;My security group&quot;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p><strong>Authorize Inbound Traffic for the Security Group</strong>:</p></li>
+</ol>
+<ol class="arabic" start="4">
+<li><p><strong>Run EC2 Instance with Docker Image</strong>:</p>
+<p>Use the following script to launch an EC2 instance, pull your Docker image from DockerHub, and run it with port forwarding:</p>
+</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>aws<span class="w"> </span>ec2<span class="w"> </span>run-instances<span class="w">      </span>--image-id<span class="w"> </span>ami-0b8956f13d7bdfe7b<span class="w">      </span>--count<span class="w"> </span><span class="m">1</span><span class="w">      </span>--instance-type<span class="w"> </span>p3.2xlarge<span class="w">      </span>--key-name<span class="w"> </span>&lt;YOUR_KEY_PAIR&gt;<span class="w">      </span>--security-groups<span class="w"> </span>&lt;YOUR_SECURITY_GROUP&gt;<span class="w">      </span>--user-data<span class="w"> </span><span class="s1">&#39;#!/bin/bash</span>
+<span class="s1">  yum update -y</span>
+<span class="s1">  amazon-linux-extras install docker -y</span>
+<span class="s1">  service docker start</span>
+<span class="s1">  docker pull mzouink/dacapo:0.3.0</span>
+<span class="s1">  docker run -d -p 80:8000 mzouink/dacapo:0.3.0&#39;</span>
+</pre></div>
+</div>
+<p>Replace <cite>&lt;YOUR_KEY_PAIR&gt;</cite> with the name of your key pair and <cite>&lt;YOUR_SECURITY_GROUP&gt;</cite> with the name of your security group.</p>
 </section>
 <section id="s3-access-configuration">
 <h2>S3 Access Configuration<a class="headerlink" href="#s3-access-configuration" title="Link to this heading"></a></h2>
 <p>You can work locally using S3 data by setting the <cite>AWS_ACCESS_KEY_ID</cite> and <cite>AWS_SECRET_ACCESS_KEY</cite> environment variables. You can also set the <cite>AWS_REGION</cite> environment variable to specify the region to use. If you are using a profile, you can set the <cite>AWS_PROFILE</cite> environment variable to specify the profile to use.</p>
 <p>To configure AWS CLI, use the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>aws<span class="w"> </span>configure
+</pre></div>
+</div>
 </section>
 <section id="storing-checkpoints-and-experiments-data-in-s3">
 <h2>Storing Checkpoints and Experiments Data in S3<a class="headerlink" href="#storing-checkpoints-and-experiments-data-in-s3" title="Link to this heading"></a></h2>
 <p>To store checkpoints and experiments data in S3, modify the <cite>dacapo.yaml</cite> file to include the following:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runs_base_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;s3://dacapotest&quot;</span>
+</pre></div>
+</div>
 <p>This setup will help you run your Docker image on AWS EC2 and configure S3 access for storing checkpoints and experiment data.</p>
 </section>
 </section>
