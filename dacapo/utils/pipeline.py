@@ -83,45 +83,44 @@ class MakeRaw(gp.BatchFilter):
         process: Generate the raw image from the labels.
     """
 
-    class Pipeline:
-        def __init__(
-            self,
-            raw,
-            labels,
-            gaussian_noise_args: Iterable = (0.5, 0.1),
-            gaussian_noise_lim: float = 0.3,
-            gaussian_blur_args: Iterable = (0.5, 1.5),
-            membrane_like=True,
-            membrane_size=3,
-            inside_value=0.5,
-        ):
-            """
-            Initialize the Pipeline object.
+    def __init__(
+        self,
+        raw,
+        labels,
+        gaussian_noise_args: Iterable = (0.5, 0.1),
+        gaussian_noise_lim: float = 0.3,
+        gaussian_blur_args: Iterable = (0.5, 1.5),
+        membrane_like=True,
+        membrane_size=3,
+        inside_value=0.5,
+    ):
+        """
+        Initialize the Pipeline object.
 
-            Args:
-                raw: The raw data.
-                labels: The labels data.
-                gaussian_noise_args: Tuple of two floats representing the mean and standard deviation
-                    of the Gaussian noise to be added to the data. Default is (0.5, 0.1).
-                gaussian_noise_lim: The limit of the Gaussian noise. Default is 0.3.
-                gaussian_blur_args: Tuple of two floats representing the mean and standard deviation
-                    of the Gaussian blur to be applied to the data. Default is (0.5, 1.5).
-                membrane_like: Boolean indicating whether to apply membrane-like transformation to the data.
-                    Default is True.
-                membrane_size: The size of the membrane. Default is 3.
-                inside_value: The value to be assigned to the inside of the membrane. Default is 0.5.
-            Examples:
-                >>> Pipeline(raw="RAW", labels="LABELS", gaussian_noise_args=(0.5, 0.1), gaussian_noise_lim=0.3,
-                >>>          gaussian_blur_args=(0.5, 1.5), membrane_like=True, membrane_size=3, inside_value=0.5)
-            """
-            self.raw = raw
-            self.labels = labels
-            self.gaussian_noise_args = gaussian_noise_args
-            self.gaussian_noise_lim = gaussian_noise_lim
-            self.gaussian_blur_args = gaussian_blur_args
-            self.membrane_like = membrane_like
-            self.membrane_size = membrane_size
-            self.inside_value = inside_value
+        Args:
+            raw: The raw data.
+            labels: The labels data.
+            gaussian_noise_args: Tuple of two floats representing the mean and standard deviation
+                of the Gaussian noise to be added to the data. Default is (0.5, 0.1).
+            gaussian_noise_lim: The limit of the Gaussian noise. Default is 0.3.
+            gaussian_blur_args: Tuple of two floats representing the mean and standard deviation
+                of the Gaussian blur to be applied to the data. Default is (0.5, 1.5).
+            membrane_like: Boolean indicating whether to apply membrane-like transformation to the data.
+                Default is True.
+            membrane_size: The size of the membrane. Default is 3.
+            inside_value: The value to be assigned to the inside of the membrane. Default is 0.5.
+        Examples:
+            >>> Pipeline(raw="RAW", labels="LABELS", gaussian_noise_args=(0.5, 0.1), gaussian_noise_lim=0.3,
+            >>>          gaussian_blur_args=(0.5, 1.5), membrane_like=True, membrane_size=3, inside_value=0.5)
+        """
+        self.raw = raw
+        self.labels = labels
+        self.gaussian_noise_args = gaussian_noise_args
+        self.gaussian_noise_lim = gaussian_noise_lim
+        self.gaussian_blur_args = gaussian_blur_args
+        self.membrane_like = membrane_like
+        self.membrane_size = membrane_size
+        self.inside_value = inside_value
 
     def setup(self):
         """
