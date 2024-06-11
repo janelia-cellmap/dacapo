@@ -87,6 +87,7 @@ class FileStatsStore(StatsStore):
                     )
                 else:
                     # current stats are behind DB--drop DB
+                    existing_stats = None
                     logger.warning(
                         f"Overwriting previous training stats for run {run_name}"
                     )
@@ -94,7 +95,7 @@ class FileStatsStore(StatsStore):
 
         # store all new stats
         self.__store_training_stats(
-            stats, store_from_iteration, stats.trained_until(), run_name
+            existing_stats, stats, store_from_iteration, stats.trained_until(), run_name
         )
 
     def retrieve_training_stats(self, run_name):
@@ -174,11 +175,12 @@ class FileStatsStore(StatsStore):
         """
         self.__delete_training_stats(run_name)
 
-    def __store_training_stats(self, stats, begin, end, run_name):
+    def __store_training_stats(self, existing_stats, stats, begin, end, run_name):
         """
         Store the training statistics for a specific run.
 
         Args:
+            existing_stats (Stats): The statistics object containing the training stats that are already stored.
             stats (Stats): The statistics object containing the training stats.
             begin (int): The starting index of the iteration stats to store.
             end (int): The ending index of the iteration stats to store.
@@ -190,10 +192,15 @@ class FileStatsStore(StatsStore):
 
         """
         docs = converter.unstructure(stats.iteration_stats[begin:end])
-        for doc in docs:
-            doc.update({"run_name": run_name})
 
         if docs:
+            if existing_stats:
+                # prepend existing stats to new stats
+                docs = converter.unstructure(existing_stats.iteration_stats) + docs
+
+            for doc in docs:
+                doc.update({"run_name": run_name})
+
             file_store = self.training_stats / run_name
             with file_store.open("wb") as fd:
                 pickle.dump(docs, fd)
