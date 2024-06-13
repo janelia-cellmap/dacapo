@@ -721,7 +721,9 @@ class DataSplitGenerator:
         train_dataset_configs = []
         validation_dataset_configs = []
         for dataset in self.datasets:
-            raw_config, gt_config, mask_config = self.__generate_semantic_seg_dataset_crop(dataset)
+            raw_config, gt_config, mask_config = (
+                self.__generate_semantic_seg_dataset_crop(dataset)
+            )
             if dataset.dataset_type == DatasetType.train:
                 train_dataset_configs.append(
                     RawGTDatasetConfig(
@@ -835,23 +837,22 @@ class DataSplitGenerator:
             #     groupings=[(current_class_name, [])],
             # )
             organelle_arrays[current_class_name] = gt_config
-        
+
         if self.targets is None:
             targets_str = "_".join(classes)
             current_targets = classes
         else:
             current_targets = self.targets
             targets_str = "_".join(self.targets)
-        
+
         target_images = {}
         target_masks = {}
-        
 
         missing_classes = [c for c in current_targets if c not in classes]
         found_classes = [c for c in current_targets if c in classes]
         for t in found_classes:
             target_images[t] = organelle_arrays[t]
-        
+
         if len(missing_classes) > 0:
             if not self.use_negative_class:
                 raise ValueError(
@@ -865,9 +866,9 @@ class DataSplitGenerator:
                 # generate negative class
                 if len(organelle_arrays) > 1:
                     found_gt_config = ConcatArrayConfig(
-                    name=f"{dataset}_{current_class_name}_{self.output_resolution[0]}nm_gt",
-                    channels=list(organelle_arrays.keys()),
-                    source_array_configs=organelle_arrays,
+                        name=f"{dataset}_{current_class_name}_{self.output_resolution[0]}nm_gt",
+                        channels=list(organelle_arrays.keys()),
+                        source_array_configs=organelle_arrays,
                     )
                     missing_mask_config = LogicalOrArrayConfig(
                         name=f"{dataset}_{current_class_name}_{self.output_resolution[0]}nm_labelled_voxels",
@@ -883,16 +884,13 @@ class DataSplitGenerator:
                 for t in missing_classes:
                     target_images[t] = missing_gt_config
                     target_masks[t] = missing_mask_config
-            
+
         for t in found_classes:
             target_masks[t] = ConstantArrayConfig(
                 name=f"{dataset}_{t}_{self.output_resolution[0]}nm_labelled_voxels",
                 source_array_config=target_images[t],
                 constant=1,
             )
-
-        
-
 
         if len(target_images) > 1:
             gt_config = ConcatArrayConfig(

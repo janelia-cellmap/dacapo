@@ -617,10 +617,10 @@ class LogicalOrArray(Array):
             neuroglancer.LocalVolume: The combined neuroglancer source.
         """
         source_array_volume = self._source_array._neuroglancer_source()
-        if isinstance(source_array_volume,list):
+        if isinstance(source_array_volume, list):
             source_array_volume = source_array_volume[0]
         result_data = self._neuroglancer_source()
-        
+
         return neuroglancer.LocalVolume(
             data=result_data,
             dimensions=source_array_volume.dimensions,
@@ -641,7 +641,9 @@ class LogicalOrArray(Array):
             This method is used to return the neuroglancer layer for the source array.
         """
         # layer = neuroglancer.SegmentationLayer(source=self._neuroglancer_source())
-        return neuroglancer.SegmentationLayer(source=self._combined_neuroglancer_source())
+        return neuroglancer.SegmentationLayer(
+            source=self._combined_neuroglancer_source()
+        )
 
     def _source_name(self):
         """
@@ -683,4 +685,4 @@ class LogicalOrArray(Array):
         name = self._source_array._source_name()
         if isinstance(name, list):
             name = "_".join(name)
-        return "logical_or"+name
+        return "logical_or" + name

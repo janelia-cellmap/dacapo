@@ -404,7 +404,10 @@ class ConstantArray(Array):
             specified by the region of interest. This method returns a subarray
             of the array with all values set to 1.
         """
-        return np.ones_like(self.source_array.__getitem__(roi), dtype=bool) * self._constant
+        return (
+            np.ones_like(self.source_array.__getitem__(roi), dtype=bool)
+            * self._constant
+        )
 
     def _can_neuroglance(self):
         """
@@ -436,7 +439,7 @@ class ConstantArray(Array):
         """
         # return self._source_array._neuroglancer_source()
         return np.ones_like(self.source_array.data, dtype=np.uint64) * self._constant
-    
+
     def _combined_neuroglancer_source(self) -> neuroglancer.LocalVolume:
         """
         Combines dimensions and metadata from self._source_array._neuroglancer_source()
@@ -447,7 +450,7 @@ class ConstantArray(Array):
         """
         source_array_volume = self._source_array._neuroglancer_source()
         result_data = self._neuroglancer_source()
-        
+
         return neuroglancer.LocalVolume(
             data=result_data,
             dimensions=source_array_volume.dimensions,
@@ -468,7 +471,9 @@ class ConstantArray(Array):
             This method is used to return the neuroglancer layer for the source array.
         """
         # layer = neuroglancer.SegmentationLayer(source=self._neuroglancer_source())
-        return neuroglancer.SegmentationLayer(source=self._combined_neuroglancer_source())
+        return neuroglancer.SegmentationLayer(
+            source=self._combined_neuroglancer_source()
+        )
 
     def _source_name(self):
         """

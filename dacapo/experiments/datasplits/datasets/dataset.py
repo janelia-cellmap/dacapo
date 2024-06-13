@@ -137,10 +137,7 @@ class Dataset(ABC):
             and self.raw._source_name() not in exclude_layers
         ):
             layers[self.raw._source_name()] = self.raw._neuroglancer_layer()
-        if (
-            self.gt is not None
-            and self.gt._can_neuroglance()
-        ):
+        if self.gt is not None and self.gt._can_neuroglance():
             new_layers = self.gt._neuroglancer_layer()
             if isinstance(new_layers, list):
                 names = self.gt._source_name()
@@ -149,10 +146,7 @@ class Dataset(ABC):
                         layers[name] = layer
             elif self.gt._source_name() not in exclude_layers:
                 layers[self.gt._source_name()] = new_layers
-        if (
-            self.mask is not None
-            and self.mask._can_neuroglance()
-        ):
+        if self.mask is not None and self.mask._can_neuroglance():
             new_layers = self.mask._neuroglancer_layer()
             if isinstance(new_layers, list):
                 names = self.mask._source_name()
@@ -160,5 +154,5 @@ class Dataset(ABC):
                     if name not in exclude_layers:
                         layers[name] = layer
             elif self.gt._source_name() not in exclude_layers:
-                layers["mask_"+self.mask._source_name()] = new_layers
+                layers["mask_" + self.mask._source_name()] = new_layers
         return layers

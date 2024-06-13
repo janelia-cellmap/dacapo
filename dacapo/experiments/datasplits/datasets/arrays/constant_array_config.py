@@ -27,7 +27,6 @@ class ConstantArrayConfig(ArrayConfig):
         metadata={"help_text": "The Array that you want to copy and fill with ones."}
     )
 
-    constant : int = attr.ib(
-        metadata={"help_text": "The constant value to fill the array with."},
-        default=1
+    constant: int = attr.ib(
+        metadata={"help_text": "The constant value to fill the array with."}, default=1
     )

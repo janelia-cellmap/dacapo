@@ -8,6 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class OnesArray(Array):
     """
     This is a wrapper around another `source_array` that simply provides ones

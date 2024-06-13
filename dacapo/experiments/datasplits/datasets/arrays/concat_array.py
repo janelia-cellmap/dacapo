@@ -473,7 +473,12 @@ class ConcatArray(Array):
         Note:
             This method is used to return True if the source array can be visualized in neuroglance.
         """
-        return any([source_array._can_neuroglance() for source_array in self.source_arrays.values()])
+        return any(
+            [
+                source_array._can_neuroglance()
+                for source_array in self.source_arrays.values()
+            ]
+        )
 
     def _neuroglancer_source(self):
         """
@@ -489,7 +494,10 @@ class ConcatArray(Array):
             This method is used to return the source array for neuroglancer.
         """
         # return self._source_array._neuroglancer_source()
-        return [source_array._neuroglancer_source() for source_array in self.source_arrays.values()]
+        return [
+            source_array._neuroglancer_source()
+            for source_array in self.source_arrays.values()
+        ]
 
     def _neuroglancer_layer(self):
         """
@@ -505,7 +513,11 @@ class ConcatArray(Array):
             This method is used to return the neuroglancer layer for the source array.
         """
         # layer = neuroglancer.SegmentationLayer(source=self._neuroglancer_source())
-        return [source_array._neuroglancer_layer() for source_array in self.source_arrays.values() if source_array._can_neuroglance()]
+        return [
+            source_array._neuroglancer_layer()
+            for source_array in self.source_arrays.values()
+            if source_array._can_neuroglance()
+        ]
 
     def _source_name(self):
         """
@@ -521,4 +533,8 @@ class ConcatArray(Array):
             This method is used to return the name of the source array.
         """
         # return self._source_array._source_name()
-        return [source_array._source_name() for source_array in self.source_arrays.values() if source_array._can_neuroglance()]
+        return [
+            source_array._source_name()
+            for source_array in self.source_arrays.values()
+            if source_array._can_neuroglance()
+        ]
