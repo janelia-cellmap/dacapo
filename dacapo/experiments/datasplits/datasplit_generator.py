@@ -13,6 +13,8 @@ from dacapo.experiments.datasplits.datasets.arrays import (
     BinarizeArrayConfig,
     IntensitiesArrayConfig,
     ConcatArrayConfig,
+    LogicalOrArrayConfig,
+    ConstantArrayConfig,
 )
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
 from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
@@ -477,6 +479,7 @@ class DataSplitGenerator:
         raw_min=0,
         raw_max=255,
         classes_separator_caracter="&",
+        use_negative_class=False,
     ):
         """
         Initializes the DataSplitGenerator class with the specified:
@@ -565,6 +568,12 @@ class DataSplitGenerator:
         self.raw_min = raw_min
         self.raw_max = raw_max
         self.classes_separator_caracter = classes_separator_caracter
+        self.use_negative_class = use_negative_class
+        if use_negative_class:
+            if targets is None:
+                raise ValueError(
+                    "use_negative_class=True requires targets to be specified."
+                )
 
     def __str__(self) -> str:
         """
@@ -712,13 +721,14 @@ class DataSplitGenerator:
         train_dataset_configs = []
         validation_dataset_configs = []
         for dataset in self.datasets:
-            raw_config, gt_config = self.__generate_semantic_seg_dataset_crop(dataset)
+            raw_config, gt_config, mask_config = self.__generate_semantic_seg_dataset_crop(dataset)
             if dataset.dataset_type == DatasetType.train:
                 train_dataset_configs.append(
                     RawGTDatasetConfig(
                         name=f"{dataset}_{self.class_name}_{self.output_resolution[0]}nm",
                         raw_config=raw_config,
                         gt_config=gt_config,
+                        mask_config=mask_config,
                     )
                 )
             else:
@@ -727,6 +737,7 @@ class DataSplitGenerator:
                         name=f"{dataset}_{self.class_name}_{self.output_resolution[0]}nm",
                         raw_config=raw_config,
                         gt_config=gt_config,
+                        mask_config=mask_config,
                     )
                 )
         if type(self.class_name) == list:
@@ -794,7 +805,10 @@ class DataSplitGenerator:
             max=self.raw_max,
         )
         organelle_arrays = {}
-        classes_datasets, classes = self.check_class_name(gt_dataset)
+        # classes_datasets, classes = self.check_class_name(gt_dataset)
+        classes_datasets, classes = format_class_name(
+            gt_dataset, self.classes_separator_caracter
+        )
         for current_class_dataset, current_class_name in zip(classes_datasets, classes):
             if not (gt_path / current_class_dataset).exists():
                 raise FileNotFoundError(
@@ -815,26 +829,90 @@ class DataSplitGenerator:
                     self.output_resolution,
                     "gt",
                 )
-            gt_config = BinarizeArrayConfig(
-                f"{dataset}_{current_class_name}_{self.output_resolution[0]}nm_binarized",
-                source_array_config=gt_config,
-                groupings=[(current_class_name, [])],
-            )
+            # gt_config = BinarizeArrayConfig(
+            #     f"{dataset}_{current_class_name}_{self.output_resolution[0]}nm_binarized",
+            #     source_array_config=gt_config,
+            #     groupings=[(current_class_name, [])],
+            # )
             organelle_arrays[current_class_name] = gt_config
+        
         if self.targets is None:
             targets_str = "_".join(classes)
             current_targets = classes
         else:
             current_targets = self.targets
             targets_str = "_".join(self.targets)
-        if len(organelle_arrays) > 1:
+        
+        target_images = {}
+        target_masks = {}
+        
+
+        missing_classes = [c for c in current_targets if c not in classes]
+        found_classes = [c for c in current_targets if c in classes]
+        for t in found_classes:
+            target_images[t] = organelle_arrays[t]
+        
+        if len(missing_classes) > 0:
+            if not self.use_negative_class:
+                raise ValueError(
+                    f"Missing classes found, {str(missing_classes)}, please specify use_negative_class=True to generate the missing classes."
+                )
+            else:
+                if len(organelle_arrays) == 0:
+                    raise ValueError(
+                        f"No target classes found, please specify targets to generate the negative classes."
+                    )
+                # generate negative class
+                if len(organelle_arrays) > 1:
+                    found_gt_config = ConcatArrayConfig(
+                    name=f"{dataset}_{current_class_name}_{self.output_resolution[0]}nm_gt",
+                    channels=list(organelle_arrays.keys()),
+                    source_array_configs=organelle_arrays,
+                    )
+                    missing_mask_config = LogicalOrArrayConfig(
+                        name=f"{dataset}_{current_class_name}_{self.output_resolution[0]}nm_labelled_voxels",
+                        source_array_config=found_gt_config,
+                    )
+                else:
+                    missing_mask_config = list(organelle_arrays.values())[0]
+                missing_gt_config = ConstantArrayConfig(
+                    name=f"{dataset}_{current_class_name}_{self.output_resolution[0]}nm_gt",
+                    source_array_config=list(organelle_arrays.values())[0],
+                    constant=0,
+                )
+                for t in missing_classes:
+                    target_images[t] = missing_gt_config
+                    target_masks[t] = missing_mask_config
+            
+        for t in found_classes:
+            target_masks[t] = ConstantArrayConfig(
+                name=f"{dataset}_{t}_{self.output_resolution[0]}nm_labelled_voxels",
+                source_array_config=target_images[t],
+                constant=1,
+            )
+
+        
+
+
+        if len(target_images) > 1:
             gt_config = ConcatArrayConfig(
                 name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_gt",
                 channels=[organelle for organelle in current_targets],
-                source_array_configs={k: gt for k, gt in organelle_arrays.items()},
+                # source_array_configs={k: gt for k, gt in target_images.items()},
+                source_array_configs={k: target_images[k] for k in current_targets},
             )
+            mask_config = ConcatArrayConfig(
+                name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_mask",
+                channels=[organelle for organelle in current_targets],
+                # source_array_configs={k: mask for k, mask in target_masks.items()},
+                # to be sure to have the same order
+                source_array_configs={k: target_masks[k] for k in current_targets},
+            )
+        else:
+            gt_config = list(target_images.values())[0]
+            mask_config = list(target_masks.values())[0]
 
-        return raw_config, gt_config
+        return raw_config, gt_config, mask_config
 
     # @staticmethod
     # def generate_csv(datasets: List[DatasetSpec], csv_path: Path):

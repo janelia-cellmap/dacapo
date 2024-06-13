@@ -140,13 +140,25 @@ class Dataset(ABC):
         if (
             self.gt is not None
             and self.gt._can_neuroglance()
-            and self.gt._source_name() not in exclude_layers
         ):
-            layers[self.gt._source_name()] = self.gt._neuroglancer_layer()
+            new_layers = self.gt._neuroglancer_layer()
+            if isinstance(new_layers, list):
+                names = self.gt._source_name()
+                for name, layer in zip(names, new_layers):
+                    if name not in exclude_layers:
+                        layers[name] = layer
+            elif self.gt._source_name() not in exclude_layers:
+                layers[self.gt._source_name()] = new_layers
         if (
             self.mask is not None
             and self.mask._can_neuroglance()
-            and self.mask._source_name() not in exclude_layers
         ):
-            layers[self.mask._source_name()] = self.mask._neuroglancer_layer()
+            new_layers = self.mask._neuroglancer_layer()
+            if isinstance(new_layers, list):
+                names = self.mask._source_name()
+                for name, layer in zip(names, new_layers):
+                    if name not in exclude_layers:
+                        layers[name] = layer
+            elif self.gt._source_name() not in exclude_layers:
+                layers["mask_"+self.mask._source_name()] = new_layers
         return layers

@@ -600,52 +600,48 @@ class LogicalOrArray(Array):
             The _neuroglancer_source method is used to get the neuroglancer source of the array.
             The neuroglancer source is the source that is displayed in the neuroglancer viewer.
         """
+        # source_arrays
+        if hassattr(self._source_array, "source_arrays"):
+            source_arrays = list(self._source_array.source_arrays)
+            # apply logical or
+            mask = np.logical_or.reduce(source_arrays)
+            return mask
         return self._source_array._neuroglancer_source()
+
+    def _combined_neuroglancer_source(self) -> neuroglancer.LocalVolume:
+        """
+        Combines dimensions and metadata from self._source_array._neuroglancer_source()
+        with data from self._neuroglancer_source().
+
+        Returns:
+            neuroglancer.LocalVolume: The combined neuroglancer source.
+        """
+        source_array_volume = self._source_array._neuroglancer_source()
+        if isinstance(source_array_volume,list):
+            source_array_volume = source_array_volume[0]
+        result_data = self._neuroglancer_source()
+        
+        return neuroglancer.LocalVolume(
+            data=result_data,
+            dimensions=source_array_volume.dimensions,
+            voxel_offset=source_array_volume.voxel_offset,
+        )
 
     def _neuroglancer_layer(self):
         """
-        Get the neuroglancer layer of the array
+        This method returns the neuroglancer layer for the source array.
 
         Returns:
-            Tuple[neuroglancer.Layer, dict]: The neuroglancer layer of the array
+            neuroglancer.SegmentationLayer: The neuroglancer layer for the source array.
         Raises:
-            ValueError: If the array is not writable
+            ValueError: If the source array is not writable.
         Examples:
-            >>> array_config = MergeInstancesArrayConfig(
-            ...     name="logical_or",
-            ...     source_array_configs=[
-            ...         ArrayConfig(
-            ...             name="mask1",
-            ...             array_type=MaskArray,
-            ...             source_array_config=MaskArrayConfig(
-            ...                 name="mask1",
-            ...                 mask_id=1,
-            ...             ),
-            ...         ),
-            ...         ArrayConfig(
-            ...             name="mask2",
-            ...             array_type=MaskArray,
-            ...             source_array_config=MaskArrayConfig(
-            ...                 name="mask2",
-            ...                 mask_id=2,
-            ...             ),
-            ...         ),
-            ...     ],
-            ... )
-            >>> array = array_config.create_array()
-            >>> array._neuroglancer_layer()
-            (SegmentationLayer(source='precomputed://https://mybucket.storage.googleapis.com/path/to/logical_or'), {'visible': False})
-        Notes:
-            The _neuroglancer_layer method is used to get the neuroglancer layer of the array.
-            The neuroglancer layer is the layer that is displayed in the neuroglancer viewer.
+            >>> binarize_array._neuroglancer_layer()
+        Note:
+            This method is used to return the neuroglancer layer for the source array.
         """
-        # Generates an Segmentation layer
-
-        layer = neuroglancer.SegmentationLayer(source=self._neuroglancer_source())
-        kwargs = {
-            "visible": False,
-        }
-        return layer, kwargs
+        # layer = neuroglancer.SegmentationLayer(source=self._neuroglancer_source())
+        return neuroglancer.SegmentationLayer(source=self._combined_neuroglancer_source())
 
     def _source_name(self):
         """
@@ -684,4 +680,7 @@ class LogicalOrArray(Array):
             The _source_name method is used to get the name of the source array. The name
             of the source array is the name of the array that is being modified.
         """
-        return self._source_array._source_name()
+        name = self._source_array._source_name()
+        if isinstance(name, list):
+            name = "_".join(name)
+        return "logical_or"+name
