@@ -721,9 +721,11 @@ class DataSplitGenerator:
         train_dataset_configs = []
         validation_dataset_configs = []
         for dataset in self.datasets:
-            raw_config, gt_config, mask_config = (
-                self.__generate_semantic_seg_dataset_crop(dataset)
-            )
+            (
+                raw_config,
+                gt_config,
+                mask_config,
+            ) = self.__generate_semantic_seg_dataset_crop(dataset)
             if dataset.dataset_type == DatasetType.train:
                 train_dataset_configs.append(
                     RawGTDatasetConfig(
