@@ -94,7 +94,7 @@ def predict(
     input_size = input_voxel_size * input_shape
     output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
     num_out_channels = model.num_out_channels
-    del model
+    # del model
 
     # calculate input and output rois
 
@@ -149,7 +149,7 @@ def predict(
         max_retries=2,  # TODO: make this an option
         timeout=None,  # TODO: make this an option
         ######
-        run_name=run_name,
+        run_name=run,
         iteration=iteration,
         input_array_identifier=input_array_identifier,
         output_array_identifier=output_array_identifier,
