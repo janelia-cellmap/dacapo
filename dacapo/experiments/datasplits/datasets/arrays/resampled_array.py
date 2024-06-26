@@ -236,10 +236,11 @@ class ResampledArray(Array):
         Note:
             This method returns the data of the resampled array.
         """
-        raise ValueError(
-            "Cannot get a writable view of this array because it is a virtual "
-            "array created by modifying another array on demand."
-        )
+        return self._source_array.data
+        # raise ValueError(
+        #     "Cannot get a writable view of this array because it is a virtual "
+        #     "array created by modifying another array on demand."
+        # )
 
     @property
     def scale(self):
