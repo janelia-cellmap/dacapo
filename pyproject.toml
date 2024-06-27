@@ -38,7 +38,7 @@ dependencies = [
         "lazy-property",
         "neuroglancer",
         "torch",
-        "fibsem_tools",
+        "fibsem_tools<=6.3",
         "attrs",
         "bokeh",
         "numpy-indexed>=0.3.7",
