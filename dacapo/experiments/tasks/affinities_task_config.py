@@ -10,8 +10,23 @@ from typing import List
 
 @attr.s
 class AffinitiesTaskConfig(TaskConfig):
-    """This is a Affinities task config used for generating and
+    """
+    This is a Affinities task config used for generating and
     evaluating voxel affinities for instance segmentations.
+
+    Attributes:
+        neighborhood: A list of Coordinate objects.
+        lsds: Whether or not to train lsds along with your affinities.
+        lsds_to_affs_weight_ratio: If training with lsds, set how much they should be weighted compared to affs.
+        affs_weight_clipmin: The minimum value for affinities weights.
+        affs_weight_clipmax: The maximum value for affinities weights.
+        lsd_weight_clipmin: The minimum value for lsds weights.
+        lsd_weight_clipmax: The maximum value for lsds weights.
+        background_as_object: Whether to treat the background as a separate object.
+    Methods:
+        verify(self) -> Tuple[bool, str]: This method verifies the AffinitiesTaskConfig
+    Notes:
+        This is a subclass of TaskConfig.
     """
 
     task_type = AffinitiesTask
@@ -30,23 +45,35 @@ class AffinitiesTaskConfig(TaskConfig):
             "It has been shown that lsds as an auxiliary task can help affinity predictions."
         },
     )
-    num_voxels: int = attr.ib(
-        default=20,
-        metadata={
-            "help_text": "The number of voxels to use for the gaussian sigma when computing lsds."
-        },
-    )
-    downsample_lsds: int = attr.ib(
+    lsds_to_affs_weight_ratio: float = attr.ib(
         default=1,
         metadata={
-            "help_text": "The amount to downsample the lsds. "
-            "This is useful for speeding up training and inference."
+            "help_text": "If training with lsds, set how much they should be weighted compared to affs."
         },
     )
-    grow_boundary_iterations: int = attr.ib(
-        default=0,
+    affs_weight_clipmin: float = attr.ib(
+        default=0.05,
+        metadata={"help_text": "The minimum value for affinities weights."},
+    )
+    affs_weight_clipmax: float = attr.ib(
+        default=0.95,
+        metadata={"help_text": "The maximum value for affinities weights."},
+    )
+    lsd_weight_clipmin: float = attr.ib(
+        default=0.05,
+        metadata={"help_text": "The minimum value for lsds weights."},
+    )
+    lsd_weight_clipmax: float = attr.ib(
+        default=0.95,
+        metadata={"help_text": "The maximum value for lsds weights."},
+    )
+    background_as_object: bool = attr.ib(
+        default=False,
         metadata={
-            "help_text": "The number of iterations to run the grow boundaries algorithm. "
-            "This is useful for refining the boundaries of the affinities, and reducing merging of adjacent objects."
+            "help_text": (
+                "Whether to treat the background as a separate object. "
+                "If set to false background should get an affinity near 0. If "
+                "set to true, the background should also have high affinity with other background."
+            )
         },
     )

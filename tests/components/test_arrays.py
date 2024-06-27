@@ -1,17 +1,17 @@
 from ..fixtures import *
 
-from dacapo.store import create_config_store
+from dacapo.store.create_store import create_config_store
 
 import pytest
-from pytest_lazyfixture import lazy_fixture
+from pytest_lazy_fixtures import lf
 
 
 @pytest.mark.parametrize(
     "array_config",
     [
-        lazy_fixture("cellmap_array"),
-        lazy_fixture("zarr_array"),
-        lazy_fixture("dummy_array"),
+        lf("cellmap_array"),
+        lf("zarr_array"),
+        lf("dummy_array"),
     ],
 )
 def test_array_api(options, array_config):
