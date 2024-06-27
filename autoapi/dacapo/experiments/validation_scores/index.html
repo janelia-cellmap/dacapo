@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dacapo.experiments.validation_scores &mdash; DaCapo  documentation</title>
@@ -109,18 +109,6 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.validation_scores.ValidationIterationScores" title="dacapo.experiments.validation_scores.ValidationIterationScores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ValidationIterationScores</span></code></a></p></td>
-<td><p>A class used to represent the validation iteration scores in an organized structure.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.validation_scores.EvaluationScores" title="dacapo.experiments.validation_scores.EvaluationScores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EvaluationScores</span></code></a></p></td>
-<td><p>Base class for evaluation scores. This class is used to store the evaluation scores for a task.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.validation_scores.PostProcessorParameters" title="dacapo.experiments.validation_scores.PostProcessorParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PostProcessorParameters</span></code></a></p></td>
-<td><p>Base class for post-processor parameters. Post-processor parameters are</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.validation_scores.Dataset" title="dacapo.experiments.validation_scores.Dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dataset</span></code></a></p></td>
-<td><p>A class to represent a dataset.</p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.validation_scores.ValidationScores" title="dacapo.experiments.validation_scores.ValidationScores"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ValidationScores</span></code></a></p></td>
 <td><p>Class representing the validation scores for a set of parameters and datasets.</p></td>
 </tr>
@@ -129,427 +117,6 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.ValidationIterationScores">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.validation_scores.</span></span><span class="sig-name descname"><span class="pre">ValidationIterationScores</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.ValidationIterationScores" title="Link to this definition"></a></dt>
-<dd><p>A class used to represent the validation iteration scores in an organized structure.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.ValidationIterationScores.iteration">
-<span class="sig-name descname"><span class="pre">iteration</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.ValidationIterationScores.iteration" title="Link to this definition"></a></dt>
-<dd><p>The iteration associated with these validation scores.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.ValidationIterationScores.scores">
-<span class="sig-name descname"><span class="pre">scores</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.ValidationIterationScores.scores" title="Link to this definition"></a></dt>
-<dd><p>A list of scores per dataset, post processor</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[List[List[float]]]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">parameters,</span> <span class="pre">and</span> <span class="pre">evaluation</span> <span class="pre">criterion.</span></span></dt>
-<dd></dd></dl>
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The scores list is structured as follows:
-- The outer list contains the scores for each dataset.
-- The middle list contains the scores for each post processor parameter.
-- The inner list contains the scores for each evaluation criterion.</p>
-</div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">iteration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">scores</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.EvaluationScores">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.validation_scores.</span></span><span class="sig-name descname"><span class="pre">EvaluationScores</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.EvaluationScores" title="Link to this definition"></a></dt>
-<dd><p>Base class for evaluation scores. This class is used to store the evaluation scores for a task.
-The scores include the evaluation criteria. The class also provides methods to determine whether higher is better for a given criterion,
-the bounds for a given criterion, and whether to store the best score for a given criterion.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.EvaluationScores.criteria">
-<span class="sig-name descname"><span class="pre">criteria</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.EvaluationScores.criteria" title="Link to this definition"></a></dt>
-<dd><p>List[str]
-the evaluation criteria</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.EvaluationScores.higher_is_better">
-<span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.validation_scores.EvaluationScores.higher_is_better" title="Link to this definition"></a></dt>
-<dd><p>Return whether higher is better for the given criterion.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.EvaluationScores.bounds">
-<span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.validation_scores.EvaluationScores.bounds" title="Link to this definition"></a></dt>
-<dd><p>Return the bounds for the given criterion.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.EvaluationScores.store_best">
-<span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.validation_scores.EvaluationScores.store_best" title="Link to this definition"></a></dt>
-<dd><p>Return whether to store the best score for the given criterion.</p>
-</dd></dl>
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The EvaluationScores class is used to store the evaluation scores for a task. All evaluation scores should inherit from this class.</p>
-</div>
-<dl class="py property">
-<dt class="sig sig-object py" id="id2">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-<p>The evaluation criteria.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>List[str]</dt><dd><p>the evaluation criteria</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – if the function is not implemented</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_scores</span> <span class="o">=</span> <span class="n">EvaluationScores</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_scores</span><span class="o">.</span><span class="n">criteria</span>
-<span class="go">[&quot;criterion1&quot;, &quot;criterion2&quot;]</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This function is used to return the evaluation criteria.</p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id3">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-<p>Wether or not higher is better for this criterion.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>criterion</strong> – str
-the evaluation criterion</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>bool</dt><dd><p>whether higher is better for this criterion</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – if the function is not implemented</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_scores</span> <span class="o">=</span> <span class="n">EvaluationScores</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">criterion</span> <span class="o">=</span> <span class="s2">&quot;criterion1&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_scores</span><span class="o">.</span><span class="n">higher_is_better</span><span class="p">(</span><span class="n">criterion</span><span class="p">)</span>
-<span class="go">True</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This function is used to determine whether higher is better for a given criterion.</p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id4">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-<p>The bounds for this criterion.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>criterion</strong> – str
-the evaluation criterion</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>Tuple[Union[int, float, None], Union[int, float, None]]</dt><dd><p>the bounds for this criterion</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – if the function is not implemented</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_scores</span> <span class="o">=</span> <span class="n">EvaluationScores</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">criterion</span> <span class="o">=</span> <span class="s2">&quot;criterion1&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_scores</span><span class="o">.</span><span class="n">bounds</span><span class="p">(</span><span class="n">criterion</span><span class="p">)</span>
-<span class="go">(0, 1)</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This function is used to return the bounds for the given criterion.</p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id5">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-<p>Whether or not to save the best validation block and model
-weights for this criterion.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>criterion</strong> – str
-the evaluation criterion</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>bool</dt><dd><p>whether to store the best score for this criterion</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – if the function is not implemented</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_scores</span> <span class="o">=</span> <span class="n">EvaluationScores</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">criterion</span> <span class="o">=</span> <span class="s2">&quot;criterion1&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_scores</span><span class="o">.</span><span class="n">store_best</span><span class="p">(</span><span class="n">criterion</span><span class="p">)</span>
-<span class="go">True</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This function is used to return whether to store the best score for the given criterion.</p>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.PostProcessorParameters">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.validation_scores.</span></span><span class="sig-name descname"><span class="pre">PostProcessorParameters</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.PostProcessorParameters" title="Link to this definition"></a></dt>
-<dd><p>Base class for post-processor parameters. Post-processor parameters are
-immutable objects that define the parameters of a post-processor. The
-parameters are used to configure the post-processor.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.PostProcessorParameters.id">
-<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.PostProcessorParameters.id" title="Link to this definition"></a></dt>
-<dd><p>The identifier of the post-processor parameter.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.PostProcessorParameters.parameter_names">
-<span class="sig-name descname"><span class="pre">parameter_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.validation_scores.PostProcessorParameters.parameter_names" title="Link to this definition"></a></dt>
-<dd><p>Get the names of the parameters.</p>
-</dd></dl>
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This class is immutable. Once created, the values of its attributes
-cannot be changed.</p>
-</div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id6">
-<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="id7">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
-<dd><p>Get the names of the parameters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A list of parameter names.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span> <span class="o">=</span> <span class="n">PostProcessorParameters</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span><span class="o">.</span><span class="n">parameter_names</span>
-<span class="go">[&quot;id&quot;]</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method must be implemented in the subclass. It should return a
-list of parameter names.</p>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.Dataset">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.validation_scores.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.Dataset" title="Link to this definition"></a></dt>
-<dd><p>A class to represent a dataset.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.Dataset.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.Dataset.name" title="Link to this definition"></a></dt>
-<dd><p>The name of the dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.Dataset.raw">
-<span class="sig-name descname"><span class="pre">raw</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.Dataset.raw" title="Link to this definition"></a></dt>
-<dd><p>The raw dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../../apply/index.html#dacapo.apply.Array" title="dacapo.apply.Array">Array</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.Dataset.gt">
-<span class="sig-name descname"><span class="pre">gt</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.Dataset.gt" title="Link to this definition"></a></dt>
-<dd><p>The ground truth data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../../apply/index.html#dacapo.apply.Array" title="dacapo.apply.Array">Array</a>, optional</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.Dataset.mask">
-<span class="sig-name descname"><span class="pre">mask</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.Dataset.mask" title="Link to this definition"></a></dt>
-<dd><p>The mask for the data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../../apply/index.html#dacapo.apply.Array" title="dacapo.apply.Array">Array</a>, optional</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.Dataset.weight">
-<span class="sig-name descname"><span class="pre">weight</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.Dataset.weight" title="Link to this definition"></a></dt>
-<dd><p>The weight of the dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int, optional</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.Dataset.sample_points">
-<span class="sig-name descname"><span class="pre">sample_points</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.Dataset.sample_points" title="Link to this definition"></a></dt>
-<dd><p>The list of sample points in the dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list[Coordinate], optional</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.Dataset.__eq__">
-<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.validation_scores.Dataset.__eq__" title="Link to this definition"></a></dt>
-<dd><p>Overloaded equality operator for dataset objects.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.Dataset.__hash__">
-<span class="sig-name descname"><span class="pre">__hash__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.validation_scores.Dataset.__hash__" title="Link to this definition"></a></dt>
-<dd><p>Calculates a hash for the dataset.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.Dataset.__repr__">
-<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.validation_scores.Dataset.__repr__" title="Link to this definition"></a></dt>
-<dd><p>Returns the official string representation of the dataset object.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.Dataset.__str__">
-<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.validation_scores.Dataset.__str__" title="Link to this definition"></a></dt>
-<dd><p>Returns the string representation of the dataset object.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.validation_scores.Dataset._neuroglancer_layers">
-<span class="sig-name descname"><span class="pre">_neuroglancer_layers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.validation_scores.Dataset._neuroglancer_layers" title="Link to this definition"></a></dt>
-<dd><p>Generates neuroglancer layers for raw, gt and mask if they can be viewed by neuroglance, excluding those in
-the exclude_layers.</p>
-</dd></dl>
-
-<p class="rubric">Notes</p>
-<p>This class is a base class and should not be instantiated.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id8">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id9">
-<span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></em><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id10">
-<span class="sig-name descname"><span class="pre">gt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id11">
-<span class="sig-name descname"><span class="pre">mask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id12">
-<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id13">
-<span class="sig-name descname"><span class="pre">sample_points</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">funlib.geometry.Coordinate</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.validation_scores.ValidationScores">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.validation_scores.</span></span><span class="sig-name descname"><span class="pre">ValidationScores</span></span><a class="headerlink" href="#dacapo.experiments.validation_scores.ValidationScores" title="Link to this definition"></a></dt>
@@ -560,7 +127,7 @@ the exclude_layers.</p>
 <dd><p>The list of parameters that are being evaluated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[<a class="reference internal" href="#dacapo.experiments.validation_scores.PostProcessorParameters" title="dacapo.experiments.validation_scores.PostProcessorParameters">PostProcessorParameters</a>]</p>
+<dd class="field-odd"><p>List[<a class="reference internal" href="../tasks/post_processors/index.html#dacapo.experiments.tasks.post_processors.PostProcessorParameters" title="dacapo.experiments.tasks.post_processors.PostProcessorParameters">PostProcessorParameters</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -571,7 +138,7 @@ the exclude_layers.</p>
 <dd><p>The datasets that will be evaluated at each iteration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[<a class="reference internal" href="#dacapo.experiments.validation_scores.Dataset" title="dacapo.experiments.validation_scores.Dataset">Dataset</a>]</p>
+<dd class="field-odd"><p>List[<a class="reference internal" href="../datasplits/datasets/dataset/index.html#dacapo.experiments.datasplits.datasets.dataset.Dataset" title="dacapo.experiments.datasplits.datasets.dataset.Dataset">Dataset</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -583,7 +150,7 @@ the exclude_layers.</p>
 <cite>PostProcessorParameters</cite> and <cite>Dataset</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.experiments.validation_scores.EvaluationScores" title="dacapo.experiments.validation_scores.EvaluationScores">EvaluationScores</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../tasks/evaluators/evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores" title="dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores">EvaluationScores</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -595,7 +162,7 @@ the exclude_layers.</p>
 post-processing parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[<a class="reference internal" href="#dacapo.experiments.validation_scores.ValidationIterationScores" title="dacapo.experiments.validation_scores.ValidationIterationScores">ValidationIterationScores</a>]</p>
+<dd class="field-odd"><p>List[<a class="reference internal" href="../index.html#dacapo.experiments.ValidationIterationScores" title="dacapo.experiments.ValidationIterationScores">ValidationIterationScores</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -658,28 +225,28 @@ post-processing parameters.</p>
 <p>The <cite>scores</cite> attribute is a list of <cite>ValidationIterationScores</cite> objects, each of which
 contains the scores for a single iteration.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id14">
-<span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../tasks/post_processors/index.html#dacapo.experiments.tasks.post_processors.PostProcessorParameters" title="dacapo.experiments.tasks.post_processors.PostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.PostProcessorParameters</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id14" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../tasks/post_processors/index.html#dacapo.experiments.tasks.post_processors.PostProcessorParameters" title="dacapo.experiments.tasks.post_processors.PostProcessorParameters"><span class="pre">dacapo.experiments.tasks.post_processors.PostProcessorParameters</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id15">
-<span class="sig-name descname"><span class="pre">datasets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../datasplits/datasets/index.html#dacapo.experiments.datasplits.datasets.Dataset" title="dacapo.experiments.datasplits.datasets.Dataset"><span class="pre">dacapo.experiments.datasplits.datasets.Dataset</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">datasets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../datasplits/datasets/index.html#dacapo.experiments.datasplits.datasets.Dataset" title="dacapo.experiments.datasplits.datasets.Dataset"><span class="pre">dacapo.experiments.datasplits.datasets.Dataset</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id16">
-<span class="sig-name descname"><span class="pre">evaluation_scores</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../tasks/evaluators/index.html#dacapo.experiments.tasks.evaluators.EvaluationScores" title="dacapo.experiments.tasks.evaluators.EvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.EvaluationScores</span></a></em><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">evaluation_scores</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../tasks/evaluators/index.html#dacapo.experiments.tasks.evaluators.EvaluationScores" title="dacapo.experiments.tasks.evaluators.EvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.EvaluationScores</span></a></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id17">
-<span class="sig-name descname"><span class="pre">scores</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../validation_iteration_scores/index.html#dacapo.experiments.validation_iteration_scores.ValidationIterationScores" title="dacapo.experiments.validation_iteration_scores.ValidationIterationScores"><span class="pre">dacapo.experiments.validation_iteration_scores.ValidationIterationScores</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">scores</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../validation_iteration_scores/index.html#dacapo.experiments.validation_iteration_scores.ValidationIterationScores" title="dacapo.experiments.validation_iteration_scores.ValidationIterationScores"><span class="pre">dacapo.experiments.validation_iteration_scores.ValidationIterationScores</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id18">
-<span class="sig-name descname"><span class="pre">subscores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../validation_iteration_scores/index.html#dacapo.experiments.validation_iteration_scores.ValidationIterationScores" title="dacapo.experiments.validation_iteration_scores.ValidationIterationScores"><span class="pre">dacapo.experiments.validation_iteration_scores.ValidationIterationScores</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dacapo.experiments.validation_scores.ValidationScores" title="dacapo.experiments.validation_scores.ValidationScores"><span class="pre">ValidationScores</span></a></span></span><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">subscores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../validation_iteration_scores/index.html#dacapo.experiments.validation_iteration_scores.ValidationIterationScores" title="dacapo.experiments.validation_iteration_scores.ValidationIterationScores"><span class="pre">dacapo.experiments.validation_iteration_scores.ValidationIterationScores</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dacapo.experiments.validation_scores.ValidationScores" title="dacapo.experiments.validation_scores.ValidationScores"><span class="pre">ValidationScores</span></a></span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
 <dd><p>Create a new ValidationScores object with a subset of the iteration scores.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -705,8 +272,8 @@ that only contains the scores up to a certain iteration.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id19">
-<span class="sig-name descname"><span class="pre">add_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../validation_iteration_scores/index.html#dacapo.experiments.validation_iteration_scores.ValidationIterationScores" title="dacapo.experiments.validation_iteration_scores.ValidationIterationScores"><span class="pre">dacapo.experiments.validation_iteration_scores.ValidationIterationScores</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id19" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">add_iteration_scores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../validation_iteration_scores/index.html#dacapo.experiments.validation_iteration_scores.ValidationIterationScores" title="dacapo.experiments.validation_iteration_scores.ValidationIterationScores"><span class="pre">dacapo.experiments.validation_iteration_scores.ValidationIterationScores</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
 <dd><p>Add iteration scores to the list of scores.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -728,8 +295,8 @@ you want to add scores for a new iteration to the ValidationScores object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id20">
-<span class="sig-name descname"><span class="pre">delete_after</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id20" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">delete_after</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
 <dd><p>Delete scores after a specified iteration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -751,8 +318,8 @@ you want to delete scores after a certain iteration.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id21">
-<span class="sig-name descname"><span class="pre">validated_until</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#id21" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">validated_until</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
 <dd><p>Get the number of iterations validated for (the maximum iteration plus one).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -774,8 +341,8 @@ plus one). This is useful when you want to know how many iterations have been va
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id22">
-<span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">existing_iteration_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../validation_iteration_scores/index.html#dacapo.experiments.validation_iteration_scores.ValidationIterationScores" title="dacapo.experiments.validation_iteration_scores.ValidationIterationScores"><span class="pre">dacapo.experiments.validation_iteration_scores.ValidationIterationScores</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id22" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">existing_iteration_scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../validation_iteration_scores/index.html#dacapo.experiments.validation_iteration_scores.ValidationIterationScores" title="dacapo.experiments.validation_iteration_scores.ValidationIterationScores"><span class="pre">dacapo.experiments.validation_iteration_scores.ValidationIterationScores</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
 <dd><p>Compare iteration stats provided from elsewhere to scores we have saved locally.
 Local scores take priority. If local scores are at a lower iteration than the
 existing ones, delete the existing ones and replace with local.
@@ -807,8 +374,8 @@ existing iteration, just update existing scores with the last overhanging local 
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id23">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id23" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id9">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
 <dd><p>Get the list of evaluation criteria.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -830,8 +397,8 @@ want to know what criteria are being used to evaluate the scores.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id24">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id24" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id10">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
 <dd><p>Get the list of parameter names.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -853,8 +420,8 @@ to know what parameters are being used to evaluate the scores.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id25">
-<span class="sig-name descname"><span class="pre">to_xarray</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xarray.DataArray</span></span></span><a class="headerlink" href="#id25" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">to_xarray</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">xarray.DataArray</span></span></span><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
 <dd><p>Convert the validation scores to an xarray DataArray.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -876,8 +443,8 @@ useful when you want to work with the validation scores as an xarray DataArray.<
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id26">
-<span class="sig-name descname"><span class="pre">get_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xarray.DataArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">xarray.DataArray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">xarray.DataArray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id26" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">get_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xarray.DataArray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">xarray.DataArray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">xarray.DataArray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
 <dd><p>Compute the Best scores along dimension “dim” per criterion.
 Returns both the index associated with the best value, and the
 best value in two separate arrays.</p>

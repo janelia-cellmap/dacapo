@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dacapo.store.local_array_store &mdash; DaCapo  documentation</title>
@@ -119,16 +119,7 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.local_array_store.ArrayStore" title="dacapo.store.local_array_store.ArrayStore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArrayStore</span></code></a></p></td>
-<td><p>Base class for array stores.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocalArrayIdentifier</span></code></a></p></td>
-<td><p>Represents a local array identifier.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.local_array_store.LocalContainerIdentifier" title="dacapo.store.local_array_store.LocalContainerIdentifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocalContainerIdentifier</span></code></a></p></td>
-<td><p>Represents a local container identifier.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayStore" title="dacapo.store.local_array_store.LocalArrayStore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocalArrayStore</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayStore" title="dacapo.store.local_array_store.LocalArrayStore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocalArrayStore</span></code></a></p></td>
 <td><p>A local array store that uses zarr containers.</p></td>
 </tr>
 </tbody>
@@ -136,295 +127,6 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.ArrayStore">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.local_array_store.</span></span><span class="sig-name descname"><span class="pre">ArrayStore</span></span><a class="headerlink" href="#dacapo.store.local_array_store.ArrayStore" title="Link to this definition"></a></dt>
-<dd><p>Base class for array stores.</p>
-<p>Creates identifiers for the caller to create and write arrays. Provides
-only rudimentary support for IO itself (currently only to remove
-arrays).</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.ArrayStore.container">
-<span class="sig-name descname"><span class="pre">container</span></span><a class="headerlink" href="#dacapo.store.local_array_store.ArrayStore.container" title="Link to this definition"></a></dt>
-<dd><p>The path to the container.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Path</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.ArrayStore.dataset">
-<span class="sig-name descname"><span class="pre">dataset</span></span><a class="headerlink" href="#dacapo.store.local_array_store.ArrayStore.dataset" title="Link to this definition"></a></dt>
-<dd><p>The dataset name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="simple">
-<dt>Method:</dt><dd><p>__str__ : Returns the string representation of the identifier.</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.ArrayStore.validation_prediction_array">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validation_prediction_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier"><span class="pre">LocalArrayIdentifier</span></a></span></span><a class="headerlink" href="#dacapo.store.local_array_store.ArrayStore.validation_prediction_array" title="Link to this definition"></a></dt>
-<dd><p>Get the array identifier for a particular validation prediction.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>run_name</strong> – The name of the run.</p></li>
-<li><p><strong>iteration</strong> – The iteration number.</p></li>
-<li><p><strong>dataset</strong> – The dataset name.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The array identifier.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier">LocalArrayIdentifier</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">validation_prediction_array</span><span class="p">(</span><span class="s1">&#39;run_name&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;dataset&#39;</span><span class="p">)</span>
-<span class="go">LocalArrayIdentifier(container=Path(&#39;path/to/container&#39;), dataset=&#39;dataset&#39;)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.ArrayStore.validation_output_array">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validation_output_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier"><span class="pre">LocalArrayIdentifier</span></a></span></span><a class="headerlink" href="#dacapo.store.local_array_store.ArrayStore.validation_output_array" title="Link to this definition"></a></dt>
-<dd><p>Get the array identifier for a particular validation output.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>run_name</strong> – The name of the run.</p></li>
-<li><p><strong>iteration</strong> – The iteration number.</p></li>
-<li><p><strong>parameters</strong> – The parameters.</p></li>
-<li><p><strong>dataset</strong> – The dataset name.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The array identifier.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier">LocalArrayIdentifier</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">validation_output_array</span><span class="p">(</span><span class="s1">&#39;run_name&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;parameters&#39;</span><span class="p">,</span> <span class="s1">&#39;dataset&#39;</span><span class="p">)</span>
-<span class="go">LocalArrayIdentifier(container=Path(&#39;path/to/container&#39;), dataset=&#39;dataset&#39;)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.ArrayStore.validation_input_arrays">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validation_input_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier"><span class="pre">LocalArrayIdentifier</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier"><span class="pre">LocalArrayIdentifier</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.store.local_array_store.ArrayStore.validation_input_arrays" title="Link to this definition"></a></dt>
-<dd><p>Get an array identifiers for the validation input raw/gt.</p>
-<p>It would be nice to store raw/gt with the validation predictions/outputs.
-If we don’t store these we would have to look up the datasplit config
-and figure out where to find the inputs for each run. If we write
-the data then we don’t need to search for it.
-This convenience comes at the cost of some extra memory usage.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>run_name</strong> – The name of the run.</p></li>
-<li><p><strong>index</strong> – The index of the validation input.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The array identifiers.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Tuple[<a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier">LocalArrayIdentifier</a>, <a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier">LocalArrayIdentifier</a>]</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">validation_input_arrays</span><span class="p">(</span><span class="s1">&#39;run_name&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">)</span>
-<span class="go">(LocalArrayIdentifier(container=Path(&#39;path/to/container&#39;), dataset=&#39;dataset&#39;), LocalArrayIdentifier(container=Path(&#39;path/to/container&#39;), dataset=&#39;dataset&#39;))</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.ArrayStore.remove">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier"><span class="pre">LocalArrayIdentifier</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#dacapo.store.local_array_store.ArrayStore.remove" title="Link to this definition"></a></dt>
-<dd><p>Remove an array by its identifier.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>array_identifier</strong> – The array identifier.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">remove</span><span class="p">(</span><span class="n">LocalArrayIdentifier</span><span class="p">(</span><span class="n">container</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;path/to/container&#39;</span><span class="p">),</span> <span class="n">dataset</span><span class="o">=</span><span class="s1">&#39;dataset&#39;</span><span class="p">))</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.ArrayStore.snapshot_container">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">snapshot_container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dacapo.store.local_array_store.LocalContainerIdentifier" title="dacapo.store.local_array_store.LocalContainerIdentifier"><span class="pre">LocalContainerIdentifier</span></a></span></span><a class="headerlink" href="#dacapo.store.local_array_store.ArrayStore.snapshot_container" title="Link to this definition"></a></dt>
-<dd><p>Get a container identifier for storage of a snapshot.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>run_name</strong> – The name of the run.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The container identifier.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.local_array_store.LocalContainerIdentifier" title="dacapo.store.local_array_store.LocalContainerIdentifier">LocalContainerIdentifier</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">snapshot_container</span><span class="p">(</span><span class="s1">&#39;run_name&#39;</span><span class="p">)</span>
-<span class="go">LocalContainerIdentifier(container=Path(&#39;path/to/container&#39;))</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.ArrayStore.validation_container">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validation_container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dacapo.store.local_array_store.LocalContainerIdentifier" title="dacapo.store.local_array_store.LocalContainerIdentifier"><span class="pre">LocalContainerIdentifier</span></a></span></span><a class="headerlink" href="#dacapo.store.local_array_store.ArrayStore.validation_container" title="Link to this definition"></a></dt>
-<dd><p>Get a container identifier for storage of a snapshot.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>run_name</strong> – The name of the run.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The container identifier.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.local_array_store.LocalContainerIdentifier" title="dacapo.store.local_array_store.LocalContainerIdentifier">LocalContainerIdentifier</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">validation_container</span><span class="p">(</span><span class="s1">&#39;run_name&#39;</span><span class="p">)</span>
-<span class="go">LocalContainerIdentifier(container=Path(&#39;path/to/container&#39;))</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.LocalArrayIdentifier">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.local_array_store.</span></span><span class="sig-name descname"><span class="pre">LocalArrayIdentifier</span></span><a class="headerlink" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="Link to this definition"></a></dt>
-<dd><p>Represents a local array identifier.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.LocalArrayIdentifier.container">
-<span class="sig-name descname"><span class="pre">container</span></span><a class="headerlink" href="#dacapo.store.local_array_store.LocalArrayIdentifier.container" title="Link to this definition"></a></dt>
-<dd><p>The path to the container.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Path</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.LocalArrayIdentifier.dataset">
-<span class="sig-name descname"><span class="pre">dataset</span></span><a class="headerlink" href="#dacapo.store.local_array_store.LocalArrayIdentifier.dataset" title="Link to this definition"></a></dt>
-<dd><p>The dataset name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="simple">
-<dt>Method:</dt><dd><p>__str__ : Returns the string representation of the identifier.</p>
-</dd>
-</dl>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">container</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">upath.UPath</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">dataset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.LocalContainerIdentifier">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.local_array_store.</span></span><span class="sig-name descname"><span class="pre">LocalContainerIdentifier</span></span><a class="headerlink" href="#dacapo.store.local_array_store.LocalContainerIdentifier" title="Link to this definition"></a></dt>
-<dd><p>Represents a local container identifier.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.LocalContainerIdentifier.container">
-<span class="sig-name descname"><span class="pre">container</span></span><a class="headerlink" href="#dacapo.store.local_array_store.LocalContainerIdentifier.container" title="Link to this definition"></a></dt>
-<dd><p>The path to the container.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Path</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="simple">
-<dt>Method:</dt><dd><p>array_identifier : Creates a local array identifier for the given dataset.</p>
-</dd>
-</dl>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">container</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">upath.UPath</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.local_array_store.LocalContainerIdentifier.array_identifier">
-<span class="sig-name descname"><span class="pre">array_identifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier"><span class="pre">LocalArrayIdentifier</span></a></span></span><a class="headerlink" href="#dacapo.store.local_array_store.LocalContainerIdentifier.array_identifier" title="Link to this definition"></a></dt>
-<dd><p>Creates a local array identifier for the given dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>dataset</strong> – The dataset for which to create the array identifier.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The local array identifier.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier">LocalArrayIdentifier</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>TypeError</strong> – If the dataset is not a string.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">container</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;path/to/container&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">container</span><span class="o">.</span><span class="n">array_identifier</span><span class="p">(</span><span class="s1">&#39;dataset&#39;</span><span class="p">)</span>
-<span class="go">LocalArrayIdentifier(container=Path(&#39;path/to/container&#39;), dataset=&#39;dataset&#39;)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py data">
 <dt class="sig sig-object py" id="dacapo.store.local_array_store.logger">
 <span class="sig-prename descclassname"><span class="pre">dacapo.store.local_array_store.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#dacapo.store.local_array_store.logger" title="Link to this definition"></a></dt>
@@ -483,8 +185,8 @@ This convenience comes at the cost of some extra memory usage.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">best_validation_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">best_validation_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd><p>Get the array identifier for the best validation array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -498,7 +200,7 @@ This convenience comes at the cost of some extra memory usage.</p>
 <dd class="field-even"><p>The array identifier for the best validation array.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier">LocalArrayIdentifier</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier">LocalArrayIdentifier</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the container does not exist.</p>
@@ -511,8 +213,8 @@ This convenience comes at the cost of some extra memory usage.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">validation_prediction_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">validation_prediction_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd><p>Get the array identifier for a particular validation prediction.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -526,7 +228,7 @@ This convenience comes at the cost of some extra memory usage.</p>
 <dd class="field-even"><p>The array identifier for the validation prediction.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier">LocalArrayIdentifier</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier">LocalArrayIdentifier</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the container does not exist.</p>
@@ -539,8 +241,8 @@ This convenience comes at the cost of some extra memory usage.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">validation_output_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">validation_output_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd><p>Get the array identifier for a particular validation output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -555,7 +257,7 @@ This convenience comes at the cost of some extra memory usage.</p>
 <dd class="field-even"><p>The array identifier for the validation output.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier">LocalArrayIdentifier</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier">LocalArrayIdentifier</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the container does not exist.</p>
@@ -568,8 +270,8 @@ This convenience comes at the cost of some extra memory usage.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id6">
-<span class="sig-name descname"><span class="pre">validation_input_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">validation_input_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
 <dd><p>Get the array identifiers for the validation input raw/gt.</p>
 <p>It would be nice to store raw/gt with the validation predictions/outputs.
 If we don’t store these we would have to look up the datasplit config
@@ -587,7 +289,7 @@ This convenience comes at the cost of some extra memory usage.</p>
 <dd class="field-even"><p>The array identifiers for the validation input raw/gt.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Tuple[<a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier">LocalArrayIdentifier</a>, <a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier">LocalArrayIdentifier</a>]</p>
+<dd class="field-odd"><p>Tuple[<a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier">LocalArrayIdentifier</a>, <a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier">LocalArrayIdentifier</a>]</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the container does not exist.</p>
@@ -600,8 +302,8 @@ This convenience comes at the cost of some extra memory usage.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id7">
-<span class="sig-name descname"><span class="pre">snapshot_container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalContainerIdentifier" title="dacapo.store.array_store.LocalContainerIdentifier"><span class="pre">dacapo.store.array_store.LocalContainerIdentifier</span></a></span></span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">snapshot_container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalContainerIdentifier" title="dacapo.store.array_store.LocalContainerIdentifier"><span class="pre">dacapo.store.array_store.LocalContainerIdentifier</span></a></span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
 <dd><p>Get a container identifier for storage of a snapshot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -611,7 +313,7 @@ This convenience comes at the cost of some extra memory usage.</p>
 <dd class="field-even"><p>The container identifier for the snapshot.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.local_array_store.LocalContainerIdentifier" title="dacapo.store.local_array_store.LocalContainerIdentifier">LocalContainerIdentifier</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalContainerIdentifier" title="dacapo.store.array_store.LocalContainerIdentifier">LocalContainerIdentifier</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the container does not exist.</p>
@@ -624,8 +326,8 @@ This convenience comes at the cost of some extra memory usage.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id8">
-<span class="sig-name descname"><span class="pre">validation_container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalContainerIdentifier" title="dacapo.store.array_store.LocalContainerIdentifier"><span class="pre">dacapo.store.array_store.LocalContainerIdentifier</span></a></span></span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">validation_container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalContainerIdentifier" title="dacapo.store.array_store.LocalContainerIdentifier"><span class="pre">dacapo.store.array_store.LocalContainerIdentifier</span></a></span></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
 <dd><p>Get a container identifier for storage of a validation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -635,7 +337,7 @@ This convenience comes at the cost of some extra memory usage.</p>
 <dd class="field-even"><p>The container identifier for the validation.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.local_array_store.LocalContainerIdentifier" title="dacapo.store.local_array_store.LocalContainerIdentifier">LocalContainerIdentifier</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalContainerIdentifier" title="dacapo.store.array_store.LocalContainerIdentifier">LocalContainerIdentifier</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the container does not exist.</p>
@@ -648,12 +350,12 @@ This convenience comes at the cost of some extra memory usage.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id9">
-<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><span class="pre">dacapo.store.array_store.LocalArrayIdentifier</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
 <dd><p>Remove a dataset from a container.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>array_identifier</strong> (<a class="reference internal" href="#dacapo.store.local_array_store.LocalArrayIdentifier" title="dacapo.store.local_array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The array identifier of the dataset to remove.</p>
+<dd class="field-odd"><p><strong>array_identifier</strong> (<a class="reference internal" href="../array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a>) – The array identifier of the dataset to remove.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the container path does not end with ‘.zarr’.</p>

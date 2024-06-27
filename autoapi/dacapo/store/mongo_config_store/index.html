@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dacapo.store.mongo_config_store &mdash; DaCapo  documentation</title>
@@ -109,21 +109,8 @@
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.mongo_config_store.converter" title="dacapo.store.mongo_config_store.converter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">converter</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.mongo_config_store.logger" title="dacapo.store.mongo_config_store.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
 <td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.store.mongo_config_store.logger" title="dacapo.store.mongo_config_store.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="exceptions">
-<h2>Exceptions<a class="headerlink" href="#exceptions" title="Link to this heading"></a></h2>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DuplicateNameError</span></code></a></p></td>
-<td><p>Exception raised when trying to store a config with a name that already</p></td>
 </tr>
 </tbody>
 </table>
@@ -132,30 +119,6 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.mongo_config_store.ConfigStore" title="dacapo.store.mongo_config_store.ConfigStore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConfigStore</span></code></a></p></td>
-<td><p>Base class for configuration stores.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.store.mongo_config_store.RunConfig" title="dacapo.store.mongo_config_store.RunConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RunConfig</span></code></a></p></td>
-<td><p>A class to represent a configuration of a run that helps to structure all the tasks,</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.mongo_config_store.ArchitectureConfig" title="dacapo.store.mongo_config_store.ArchitectureConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArchitectureConfig</span></code></a></p></td>
-<td><p>A class to represent the base configurations of any architecture. It is used to define the architecture of a neural network model.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DataSplitConfig" title="dacapo.store.mongo_config_store.DataSplitConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataSplitConfig</span></code></a></p></td>
-<td><p>A class used to create a DataSplit configuration object.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DatasetConfig" title="dacapo.store.mongo_config_store.DatasetConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DatasetConfig</span></code></a></p></td>
-<td><p>A class used to define configuration for datasets. This provides the</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.store.mongo_config_store.ArrayConfig" title="dacapo.store.mongo_config_store.ArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArrayConfig</span></code></a></p></td>
-<td><p>Base class for array configurations. Each subclass of an</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.mongo_config_store.TaskConfig" title="dacapo.store.mongo_config_store.TaskConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TaskConfig</span></code></a></p></td>
-<td><p>Base class for task configurations. Each subclass of a <cite>Task</cite> should</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.store.mongo_config_store.TrainerConfig" title="dacapo.store.mongo_config_store.TrainerConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainerConfig</span></code></a></p></td>
-<td><p>A class to represent the Trainer Configurations.</p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.store.mongo_config_store.MongoConfigStore" title="dacapo.store.mongo_config_store.MongoConfigStore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MongoConfigStore</span></code></a></p></td>
 <td><p>A MongoDB store for configurations. Used to store and retrieve</p></td>
 </tr>
@@ -164,1312 +127,6 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.mongo_config_store.</span></span><span class="sig-name descname"><span class="pre">ConfigStore</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore" title="Link to this definition"></a></dt>
-<dd><p>Base class for configuration stores.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.runs">
-<span class="sig-name descname"><span class="pre">runs</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.runs" title="Link to this definition"></a></dt>
-<dd><p>The runs store.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Any</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.datasplits">
-<span class="sig-name descname"><span class="pre">datasplits</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.datasplits" title="Link to this definition"></a></dt>
-<dd><p>The datasplits store.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Any</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.datasets">
-<span class="sig-name descname"><span class="pre">datasets</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.datasets" title="Link to this definition"></a></dt>
-<dd><p>The datasets store.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Any</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.arrays">
-<span class="sig-name descname"><span class="pre">arrays</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.arrays" title="Link to this definition"></a></dt>
-<dd><p>The arrays store.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Any</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.tasks">
-<span class="sig-name descname"><span class="pre">tasks</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.tasks" title="Link to this definition"></a></dt>
-<dd><p>The tasks store.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Any</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.trainers">
-<span class="sig-name descname"><span class="pre">trainers</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.trainers" title="Link to this definition"></a></dt>
-<dd><p>The trainers store.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Any</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.architectures">
-<span class="sig-name descname"><span class="pre">architectures</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.architectures" title="Link to this definition"></a></dt>
-<dd><p>The architectures store.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Any</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.delete_config">
-<span class="sig-name descname"><span class="pre">delete_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.delete_config" title="Link to this definition"></a></dt>
-<dd><p>Delete a config from a store.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.store_run_config">
-<span class="sig-name descname"><span class="pre">store_run_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.store_run_config" title="Link to this definition"></a></dt>
-<dd><p>Store a run config.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.retrieve_run_config">
-<span class="sig-name descname"><span class="pre">retrieve_run_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.retrieve_run_config" title="Link to this definition"></a></dt>
-<dd><p>Retrieve a run config from a run name.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.retrieve_run_config_names">
-<span class="sig-name descname"><span class="pre">retrieve_run_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.retrieve_run_config_names" title="Link to this definition"></a></dt>
-<dd><p>Retrieve all run config names.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.delete_run_config">
-<span class="sig-name descname"><span class="pre">delete_run_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.delete_run_config" title="Link to this definition"></a></dt>
-<dd><p>Delete a run config.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.store_task_config">
-<span class="sig-name descname"><span class="pre">store_task_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.store_task_config" title="Link to this definition"></a></dt>
-<dd><p>Store a task config.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.retrieve_task_config">
-<span class="sig-name descname"><span class="pre">retrieve_task_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.retrieve_task_config" title="Link to this definition"></a></dt>
-<dd><p>Retrieve a task config from a task name.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.retrieve_task_config_names">
-<span class="sig-name descname"><span class="pre">retrieve_task_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.retrieve_task_config_names" title="Link to this definition"></a></dt>
-<dd><p>Retrieve all task config names.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.delete_task_config">
-<span class="sig-name descname"><span class="pre">delete_task_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.delete_task_config" title="Link to this definition"></a></dt>
-<dd><p>Delete a task config.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.store_architecture_config">
-<span class="sig-name descname"><span class="pre">store_architecture_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.store_architecture_config" title="Link to this definition"></a></dt>
-<dd><p>Store a architecture config.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.retrieve_architecture_config">
-<span class="sig-name descname"><span class="pre">retrieve_architecture_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.retrieve_architecture_config" title="Link to this definition"></a></dt>
-<dd><p>Retrieve a architecture config from a architecture name.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.retrieve_architecture_config_names">
-<span class="sig-name descname"><span class="pre">retrieve_architecture_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.retrieve_architecture_config_names" title="Link to this definition"></a></dt>
-<dd><p>Retrieve all architecture config names.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.delete_architecture_config">
-<span class="sig-name descname"><span class="pre">delete_architecture_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.delete_architecture_config" title="Link to this definition"></a></dt>
-<dd><p>Delete a architecture config.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.store_trainer_config">
-<span class="sig-name descname"><span class="pre">store_trainer_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.store_trainer_config" title="Link to this definition"></a></dt>
-<dd><p>Store a trainer config.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.retrieve_trainer_config">
-<span class="sig-name descname"><span class="pre">retrieve_trainer_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.retrieve_trainer_config" title="Link to this definition"></a></dt>
-<dd><p>Retrieve a trainer config from a trainer name.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.retrieve_trainer_config_names">
-<span class="sig-name descname"><span class="pre">retrieve_trainer_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.retrieve_trainer_config_names" title="Link to this definition"></a></dt>
-<dd><p>Retrieve all trainer config names.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.delete_trainer_config">
-<span class="sig-name descname"><span class="pre">delete_trainer_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.delete_trainer_config" title="Link to this definition"></a></dt>
-<dd><p>Delete a trainer config.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.store_datasplit_config">
-<span class="sig-name descname"><span class="pre">store_datasplit_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.store_datasplit_config" title="Link to this definition"></a></dt>
-<dd><p>Store a datasplit config.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.retrieve_datasplit_config">
-<span class="sig-name descname"><span class="pre">retrieve_datasplit_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.retrieve_datasplit_config" title="Link to this definition"></a></dt>
-<dd><p>Retrieve a datasplit config from a datasplit name.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.retrieve_datasplit_config_names">
-<span class="sig-name descname"><span class="pre">retrieve_datasplit_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.retrieve_datasplit_config_names" title="Link to this definition"></a></dt>
-<dd><p>Retrieve all datasplit names.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.delete_datasplit_config">
-<span class="sig-name descname"><span class="pre">delete_datasplit_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.delete_datasplit_config" title="Link to this definition"></a></dt>
-<dd><p>Delete a datasplit config.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.store_array_config">
-<span class="sig-name descname"><span class="pre">store_array_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.store_array_config" title="Link to this definition"></a></dt>
-<dd><p>Store a array config.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.retrieve_array_config">
-<span class="sig-name descname"><span class="pre">retrieve_array_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.retrieve_array_config" title="Link to this definition"></a></dt>
-<dd><p>Retrieve a array config from a array name.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.retrieve_array_config_names">
-<span class="sig-name descname"><span class="pre">retrieve_array_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.retrieve_array_config_names" title="Link to this definition"></a></dt>
-<dd><p>Retrieve all array names.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ConfigStore.delete_array_config">
-<span class="sig-name descname"><span class="pre">delete_array_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ConfigStore.delete_array_config" title="Link to this definition"></a></dt>
-<dd><p>Delete a array config.</p>
-</dd></dl>
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This class is an abstract base class for configuration stores. It
-defines the interface for storing and retrieving configuration objects
-(e.g., run, task, architecture, trainer, datasplit, dataset, array
-configs). Concrete implementations of this class should define how
-these objects are stored and retrieved (e.g., in a database, in files).</p>
-</div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">runs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">datasplits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">datasets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">arrays</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">tasks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">trainers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id6">
-<span class="sig-name descname"><span class="pre">architectures</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id7">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
-<dd><p>Delete a config from a store.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>database</strong> (<em>Any</em>) – The store to delete the config from.</p></li>
-<li><p><strong>config_name</strong> (<em>str</em>) – The name of the config to delete.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If the config does not exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">delete_config</span><span class="p">(</span><span class="n">store</span><span class="o">.</span><span class="n">runs</span><span class="p">,</span> <span class="s2">&quot;run1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id8">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_run_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/run_config/index.html#dacapo.experiments.run_config.RunConfig" title="dacapo.experiments.run_config.RunConfig"><span class="pre">dacapo.experiments.run_config.RunConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
-<dd><p>Store a run config. This should also store the configs that are part
-of the run config (i.e., task, architecture, trainer, and dataset
-config).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>run_config</strong> (<a class="reference internal" href="#dacapo.store.mongo_config_store.RunConfig" title="dacapo.store.mongo_config_store.RunConfig"><em>RunConfig</em></a>) – The run config to store.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If a run config with the same name already
-exists.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">store_run_config</span><span class="p">(</span><span class="n">run_config</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id9">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_run_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/run_config/index.html#dacapo.experiments.run_config.RunConfig" title="dacapo.experiments.run_config.RunConfig"><span class="pre">dacapo.experiments.run_config.RunConfig</span></a></span></span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
-<dd><p>Retrieve a run config from a run name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>run_name</strong> (<em>str</em>) – The name of the run config to retrieve.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The run config with the given name.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.RunConfig" title="dacapo.store.mongo_config_store.RunConfig">RunConfig</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If the run config does not exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run_config</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">retrieve_run_config</span><span class="p">(</span><span class="s2">&quot;run1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id10">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_run_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
-<dd><p>Retrieve all run config names.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The names of all run configs.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>List[str]</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>KeyError</strong> – If no run configs exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run_names</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">retrieve_run_config_names</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id11">
-<span class="sig-name descname"><span class="pre">delete_run_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
-<dd><p>Delete a run config from the store.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>run_name</strong> (<em>str</em>) – The name of the run config to delete.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If the run config does not exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">delete_run_config</span><span class="p">(</span><span class="s2">&quot;run1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id12">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_task_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/tasks/task_config/index.html#dacapo.experiments.tasks.task_config.TaskConfig" title="dacapo.experiments.tasks.task_config.TaskConfig"><span class="pre">dacapo.experiments.tasks.task_config.TaskConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
-<dd><p>Store a task config.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>task_config</strong> (<a class="reference internal" href="#dacapo.store.mongo_config_store.TaskConfig" title="dacapo.store.mongo_config_store.TaskConfig"><em>TaskConfig</em></a>) – The task config to store.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If a task config with the same name already
-exists.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">store_task_config</span><span class="p">(</span><span class="n">task_config</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id13">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_task_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/task_config/index.html#dacapo.experiments.tasks.task_config.TaskConfig" title="dacapo.experiments.tasks.task_config.TaskConfig"><span class="pre">dacapo.experiments.tasks.task_config.TaskConfig</span></a></span></span><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
-<dd><p>Retrieve a task config from a task name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>task_name</strong> (<em>str</em>) – The name of the task config to retrieve.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The task config with the given name.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.TaskConfig" title="dacapo.store.mongo_config_store.TaskConfig">TaskConfig</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If the task config does not exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">task_config</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">retrieve_task_config</span><span class="p">(</span><span class="s2">&quot;task1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id14">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_task_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id14" title="Link to this definition"></a></dt>
-<dd><p>Retrieve all task config names.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>List</strong><strong>[</strong><strong>str</strong><strong>]</strong> – The names of all task configs.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The names of all task configs.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[str]</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If no task configs exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">task_names</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">retrieve_task_config_names</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id15">
-<span class="sig-name descname"><span class="pre">delete_task_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
-<dd><p>Delete a task config from the store.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>task_name</strong> (<em>str</em>) – The name of the task config to delete.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If the task config does not exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">delete_task_config</span><span class="p">(</span><span class="s2">&quot;task1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id16">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_architecture_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/architectures/architecture_config/index.html#dacapo.experiments.architectures.architecture_config.ArchitectureConfig" title="dacapo.experiments.architectures.architecture_config.ArchitectureConfig"><span class="pre">dacapo.experiments.architectures.architecture_config.ArchitectureConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
-<dd><p>Store a architecture config.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>architecture_config</strong> (<a class="reference internal" href="#dacapo.store.mongo_config_store.ArchitectureConfig" title="dacapo.store.mongo_config_store.ArchitectureConfig"><em>ArchitectureConfig</em></a>) – The architecture config
-to store.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If a architecture config with the same name
-already exists.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">store_architecture_config</span><span class="p">(</span><span class="n">architecture_config</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id17">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_architecture_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/architectures/architecture_config/index.html#dacapo.experiments.architectures.architecture_config.ArchitectureConfig" title="dacapo.experiments.architectures.architecture_config.ArchitectureConfig"><span class="pre">dacapo.experiments.architectures.architecture_config.ArchitectureConfig</span></a></span></span><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
-<dd><p>Retrieve a architecture config from a architecture name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>architecture_name</strong> (<em>str</em>) – The name of the architecture config to
-retrieve.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The architecture config with the given name.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.ArchitectureConfig" title="dacapo.store.mongo_config_store.ArchitectureConfig">ArchitectureConfig</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If the architecture config does not exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">architecture_config</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">retrieve_architecture_config</span><span class="p">(</span><span class="s2">&quot;architecture1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id18">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_architecture_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
-<dd><p>Retrieve all architecture config names.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>List</strong><strong>[</strong><strong>str</strong><strong>]</strong> – The names of all architecture configs.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The names of all architecture configs.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[str]</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If no architecture configs exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">architecture_names</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">retrieve_architecture_config_names</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id19">
-<span class="sig-name descname"><span class="pre">delete_architecture_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id19" title="Link to this definition"></a></dt>
-<dd><p>Delete a architecture config from the store.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>architecture_name</strong> (<em>str</em>) – The name of the architecture config to
-delete.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If the architecture config does not exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">delete_architecture_config</span><span class="p">(</span><span class="s2">&quot;architecture1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id20">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_trainer_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/trainers/trainer_config/index.html#dacapo.experiments.trainers.trainer_config.TrainerConfig" title="dacapo.experiments.trainers.trainer_config.TrainerConfig"><span class="pre">dacapo.experiments.trainers.trainer_config.TrainerConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id20" title="Link to this definition"></a></dt>
-<dd><p>Store a trainer config.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>trainer_config</strong> (<a class="reference internal" href="#dacapo.store.mongo_config_store.TrainerConfig" title="dacapo.store.mongo_config_store.TrainerConfig"><em>TrainerConfig</em></a>) – The trainer config to store.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If a trainer config with the same name already
-exists.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">store_trainer_config</span><span class="p">(</span><span class="n">trainer_config</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id21">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_trainer_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id21" title="Link to this definition"></a></dt>
-<dd><p>Retrieve a trainer config from a trainer name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>trainer_name</strong> (<em>str</em>) – The name of the trainer config to retrieve.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The trainer config with the given name.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.TrainerConfig" title="dacapo.store.mongo_config_store.TrainerConfig">TrainerConfig</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If the trainer config does not exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">trainer_config</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">retrieve_trainer_config</span><span class="p">(</span><span class="s2">&quot;trainer1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id22">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_trainer_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id22" title="Link to this definition"></a></dt>
-<dd><p>Retrieve all trainer config names.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>List</strong><strong>[</strong><strong>str</strong><strong>]</strong> – The names of all trainer configs.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The names of all trainer configs.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[str]</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If no trainer configs exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">trainer_names</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">retrieve_trainer_config_names</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id23">
-<span class="sig-name descname"><span class="pre">delete_trainer_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id23" title="Link to this definition"></a></dt>
-<dd><p>Delete a trainer config from the store.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>trainer_name</strong> (<em>str</em>) – The name of the trainer config to delete.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If the trainer config does not exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">delete_trainer_config</span><span class="p">(</span><span class="s2">&quot;trainer1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id24">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_datasplit_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/datasplits/datasplit_config/index.html#dacapo.experiments.datasplits.datasplit_config.DataSplitConfig" title="dacapo.experiments.datasplits.datasplit_config.DataSplitConfig"><span class="pre">dacapo.experiments.datasplits.datasplit_config.DataSplitConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id24" title="Link to this definition"></a></dt>
-<dd><p>Store a datasplit config.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>datasplit_config</strong> (<a class="reference internal" href="#dacapo.store.mongo_config_store.DataSplitConfig" title="dacapo.store.mongo_config_store.DataSplitConfig"><em>DataSplitConfig</em></a>) – The datasplit config to store.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If a datasplit config with the same name already
-exists.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">store_datasplit_config</span><span class="p">(</span><span class="n">datasplit_config</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id25">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_datasplit_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/datasplits/datasplit_config/index.html#dacapo.experiments.datasplits.datasplit_config.DataSplitConfig" title="dacapo.experiments.datasplits.datasplit_config.DataSplitConfig"><span class="pre">dacapo.experiments.datasplits.datasplit_config.DataSplitConfig</span></a></span></span><a class="headerlink" href="#id25" title="Link to this definition"></a></dt>
-<dd><p>Retrieve a datasplit config from a datasplit name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>datasplit_name</strong> (<em>str</em>) – The name of the datasplit config to retrieve.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The datasplit config with the given name.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DataSplitConfig" title="dacapo.store.mongo_config_store.DataSplitConfig">DataSplitConfig</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If the datasplit config does not exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">datasplit_config</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">retrieve_datasplit_config</span><span class="p">(</span><span class="s2">&quot;datasplit1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id26">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_datasplit_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id26" title="Link to this definition"></a></dt>
-<dd><p>Retrieve all datasplit names.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>List</strong><strong>[</strong><strong>str</strong><strong>]</strong> – The names of all datasplit configs.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The names of all datasplit configs.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[str]</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If no datasplit configs exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">datasplit_names</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">retrieve_datasplit_config_names</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id27">
-<span class="sig-name descname"><span class="pre">delete_datasplit_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id27" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id28">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_array_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../experiments/datasplits/datasets/arrays/array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
-<dd><p>Store a array config.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>array_config</strong> (<a class="reference internal" href="#dacapo.store.mongo_config_store.ArrayConfig" title="dacapo.store.mongo_config_store.ArrayConfig"><em>ArrayConfig</em></a>) – The array config to store.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If a array config with the same name already
-exists.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">store_array_config</span><span class="p">(</span><span class="n">array_config</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id29">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_array_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/datasplits/datasets/arrays/array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></span></span><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
-<dd><p>Retrieve a array config from a array name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>array_name</strong> (<em>str</em>) – The name of the array config to retrieve.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The array config with the given name.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.ArrayConfig" title="dacapo.store.mongo_config_store.ArrayConfig">ArrayConfig</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If the array config does not exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_config</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">retrieve_array_config</span><span class="p">(</span><span class="s2">&quot;array1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id30">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_array_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
-<dd><p>Retrieve all array names.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>List</strong><strong>[</strong><strong>str</strong><strong>]</strong> – The names of all array configs.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The names of all array configs.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[str]</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If no array configs exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_names</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">retrieve_array_config_names</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id31">
-<span class="sig-name descname"><span class="pre">delete_array_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></span><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
-<dd><p>Delete a array config from the store.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>array_name</strong> (<em>str</em>) – The name of the array config to delete.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>KeyError</strong> – If the array config does not exist.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">delete_array_config</span><span class="p">(</span><span class="s2">&quot;array1&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.DuplicateNameError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.mongo_config_store.</span></span><span class="sig-name descname"><span class="pre">DuplicateNameError</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="Link to this definition"></a></dt>
-<dd><p>Exception raised when trying to store a config with a name that already
-exists.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.DuplicateNameError.message">
-<span class="sig-name descname"><span class="pre">message</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.DuplicateNameError.message" title="Link to this definition"></a></dt>
-<dd><p>The error message.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.DuplicateNameError.__str__">
-<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.DuplicateNameError.__str__" title="Link to this definition"></a></dt>
-<dd><p>Return the error message.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.converter">
-<span class="sig-prename descclassname"><span class="pre">dacapo.store.mongo_config_store.</span></span><span class="sig-name descname"><span class="pre">converter</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.converter" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.RunConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.mongo_config_store.</span></span><span class="sig-name descname"><span class="pre">RunConfig</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.RunConfig" title="Link to this definition"></a></dt>
-<dd><p>A class to represent a configuration of a run that helps to structure all the tasks,
-architecture, training, and datasplit configurations.</p>
-<p>…</p>
-<section id="id32">
-<h3>Attributes:<a class="headerlink" href="#id32" title="Link to this heading"></a></h3>
-<dl>
-<dt>task_config: <cite>TaskConfig</cite></dt><dd><p>A config defining the Task to run that includes deciding the output of the model and
-different methods to achieve the goal.</p>
-</dd>
-<dt>architecture_config: <cite>ArchitectureConfig</cite></dt><dd><p>A config that defines the backbone architecture of the model. It impacts the model’s
-performance significantly.</p>
-</dd>
-<dt>trainer_config: <cite>TrainerConfig</cite></dt><dd><p>Defines how batches are generated and passed for training the model along with defining
-configurations like batch size, learning rate, number of cpu workers and snapshot logging.</p>
-</dd>
-<dt>datasplit_config: <cite>DataSplitConfig</cite></dt><dd><p>Configures the data available for the model during training or validation phases.</p>
-</dd>
-<dt>name: str</dt><dd><p>A unique name for this run to distinguish it.</p>
-</dd>
-<dt>repetition: int</dt><dd><p>The repetition number of this run.</p>
-</dd>
-<dt>num_iterations: int</dt><dd><p>The total number of iterations to train for during this run.</p>
-</dd>
-<dt>validation_interval: int</dt><dd><p>Specifies how often to perform validation during the run. It defaults to 1000.</p>
-</dd>
-<dt>start_config<span class="classifier"><cite>Optional[StartConfig]</cite></span></dt><dd><p>A starting point for continued training. It is optional and can be left out.</p>
-</dd>
-</dl>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.RunConfig.task_config">
-<span class="sig-name descname"><span class="pre">task_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.TaskConfig" title="dacapo.experiments.tasks.TaskConfig"><span class="pre">dacapo.experiments.tasks.TaskConfig</span></a></em><a class="headerlink" href="#dacapo.store.mongo_config_store.RunConfig.task_config" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.RunConfig.architecture_config">
-<span class="sig-name descname"><span class="pre">architecture_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/architectures/index.html#dacapo.experiments.architectures.ArchitectureConfig" title="dacapo.experiments.architectures.ArchitectureConfig"><span class="pre">dacapo.experiments.architectures.ArchitectureConfig</span></a></em><a class="headerlink" href="#dacapo.store.mongo_config_store.RunConfig.architecture_config" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.RunConfig.trainer_config">
-<span class="sig-name descname"><span class="pre">trainer_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/trainers/index.html#dacapo.experiments.trainers.TrainerConfig" title="dacapo.experiments.trainers.TrainerConfig"><span class="pre">dacapo.experiments.trainers.TrainerConfig</span></a></em><a class="headerlink" href="#dacapo.store.mongo_config_store.RunConfig.trainer_config" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.RunConfig.datasplit_config">
-<span class="sig-name descname"><span class="pre">datasplit_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/datasplits/index.html#dacapo.experiments.datasplits.DataSplitConfig" title="dacapo.experiments.datasplits.DataSplitConfig"><span class="pre">dacapo.experiments.datasplits.DataSplitConfig</span></a></em><a class="headerlink" href="#dacapo.store.mongo_config_store.RunConfig.datasplit_config" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.RunConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.store.mongo_config_store.RunConfig.name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.RunConfig.repetition">
-<span class="sig-name descname"><span class="pre">repetition</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.store.mongo_config_store.RunConfig.repetition" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.RunConfig.num_iterations">
-<span class="sig-name descname"><span class="pre">num_iterations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.store.mongo_config_store.RunConfig.num_iterations" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.RunConfig.validation_interval">
-<span class="sig-name descname"><span class="pre">validation_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.store.mongo_config_store.RunConfig.validation_interval" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.RunConfig.start_config">
-<span class="sig-name descname"><span class="pre">start_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/starts/index.html#dacapo.experiments.starts.StartConfig" title="dacapo.experiments.starts.StartConfig"><span class="pre">dacapo.experiments.starts.StartConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#dacapo.store.mongo_config_store.RunConfig.start_config" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</section>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ArchitectureConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.mongo_config_store.</span></span><span class="sig-name descname"><span class="pre">ArchitectureConfig</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.ArchitectureConfig" title="Link to this definition"></a></dt>
-<dd><p>A class to represent the base configurations of any architecture. It is used to define the architecture of a neural network model.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ArchitectureConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.ArchitectureConfig.name" title="Link to this definition"></a></dt>
-<dd><p>str
-a unique name for the architecture.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ArchitectureConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.ArchitectureConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>validates the given architecture.</p>
-</dd></dl>
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The class is abstract and requires to implement the abstract methods.</p>
-</div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id33">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id34">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
-<dd><p>A method to validate an architecture configuration.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A tuple of a boolean indicating if the architecture is valid and a message.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Tuple[bool, str]</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the method is not implemented in the derived class.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">ArchitectureConfig</span><span class="p">(</span><span class="s2">&quot;MyModel&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">is_valid</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">is_valid</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The method should be implemented in the derived class.</p>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.DataSplitConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.mongo_config_store.</span></span><span class="sig-name descname"><span class="pre">DataSplitConfig</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.DataSplitConfig" title="Link to this definition"></a></dt>
-<dd><p>A class used to create a DataSplit configuration object.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.DataSplitConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.DataSplitConfig.name" title="Link to this definition"></a></dt>
-<dd><p>str
-A name for the datasplit. This name will be saved so it can be found
-and reused easily. It is recommended to keep it short and avoid special
-characters.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.DataSplitConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.DataSplitConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>Validates if it is a valid data split configuration.</p>
-</dd></dl>
-
-<p class="rubric">Notes</p>
-<p>This class is used to create a DataSplit configuration object.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id35">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id36">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id36" title="Link to this definition"></a></dt>
-<dd><p>Validates if the current configuration is a valid data split configuration.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>Tuple[bool, str]</dt><dd><p>True if the configuration is valid,
-False otherwise along with respective validation error message.</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the derived class.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">datasplit_config</span> <span class="o">=</span> <span class="n">DataSplitConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;datasplit&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">datasplit_config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
-<span class="go">(True, &quot;No validation for this DataSplit&quot;)</span>
-</pre></div>
-</div>
-<p class="rubric">Notes</p>
-<p>This method is used to validate the configuration of DataSplit.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.DatasetConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.mongo_config_store.</span></span><span class="sig-name descname"><span class="pre">DatasetConfig</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.DatasetConfig" title="Link to this definition"></a></dt>
-<dd><p>A class used to define configuration for datasets. This provides the
-framework to create a Dataset instance.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.DatasetConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.DatasetConfig.name" title="Link to this definition"></a></dt>
-<dd><p>str (eg: “sample_dataset”).
-A unique identifier to name the dataset.
-It aids in easy identification and reusability of this dataset.
-Advised to keep it short and refrain from using special characters.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.DatasetConfig.weight">
-<span class="sig-name descname"><span class="pre">weight</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.DatasetConfig.weight" title="Link to this definition"></a></dt>
-<dd><p>int (default=1).
-A numeric value that indicates how frequently this dataset should be
-sampled in comparison to others. Higher the weight, more frequently it
-gets sampled.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.DatasetConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.store.mongo_config_store.DatasetConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>Checks and validates the dataset configuration. The specific rules for
-validation need to be defined by the user.</p>
-</dd></dl>
-
-<p class="rubric">Notes</p>
-<p>This class is used to create a configuration object for datasets.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id37">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id37" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id38">
-<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id38" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id39">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id39" title="Link to this definition"></a></dt>
-<dd><p>Method to verify the dataset configuration.</p>
-<p>Since there is no specific validation logic defined for this DataSet, this
-method will always return True as default reaction and a message stating
-the lack of validation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A tuple of boolean value indicating the check (True or False) and
-message specifying result of validation.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the method is not implemented in the derived class.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dataset_config</span> <span class="o">=</span> <span class="n">DatasetConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;sample_dataset&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset_config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
-<span class="go">(True, &quot;No validation for this DataSet&quot;)</span>
-</pre></div>
-</div>
-<p class="rubric">Notes</p>
-<p>This method is used to validate the configuration of the dataset.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ArrayConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.mongo_config_store.</span></span><span class="sig-name descname"><span class="pre">ArrayConfig</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.ArrayConfig" title="Link to this definition"></a></dt>
-<dd><p>Base class for array configurations. Each subclass of an
-<cite>Array</cite> should have a corresponding config class derived from
-<cite>ArrayConfig</cite>. This class should be used to store the configuration
-of the array.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ArrayConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.ArrayConfig.name" title="Link to this definition"></a></dt>
-<dd><p>A unique name for this array. This will be saved so you
-and others can find and reuse this array. Keep it short
-and avoid special characters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.ArrayConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.ArrayConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>This method is used to check whether this is a valid Array.</p>
-</dd></dl>
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This class is used to create a base class for array configurations. Each subclass of an
-<cite>Array</cite> should have a corresponding config class derived from <cite>ArrayConfig</cite>.
-This class should be used to store the configuration of the array.</p>
-</div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id40">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id40" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id41">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id41" title="Link to this definition"></a></dt>
-<dd><p>Check whether this is a valid Array</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A tuple with the first element being a boolean
-indicating whether the array is valid and the second element being
-a string with a message explaining why the array is invalid</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Tuple[bool, str]</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method is not implemented in this class</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_config</span> <span class="o">=</span> <span class="n">ArrayConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;array_config&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">array_config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
-<span class="go">(True, &quot;No validation for this Array&quot;)</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method is used to check whether this is a valid Array.</p>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.TaskConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.mongo_config_store.</span></span><span class="sig-name descname"><span class="pre">TaskConfig</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.TaskConfig" title="Link to this definition"></a></dt>
-<dd><p>Base class for task configurations. Each subclass of a <cite>Task</cite> should
-have a corresponding config class derived from <cite>TaskConfig</cite>.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.TaskConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.TaskConfig.name" title="Link to this definition"></a></dt>
-<dd><p>A unique name for this task. This will be saved so you and
-others can find and reuse this task. Keep it short and avoid
-special characters.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.TaskConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.TaskConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>This method verifies the TaskConfig object.</p>
-</dd></dl>
-
-<p class="rubric">Notes</p>
-<p>This is a base class for all task configurations. It is not meant to be
-used directly.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id42">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id42" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id43">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id43" title="Link to this definition"></a></dt>
-<dd><p>Check whether this is a valid Task</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>A tuple containing a boolean value indicating whether the TaskConfig object is valid</dt><dd><p>and a string containing the reason why the object is invalid.</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Tuple[bool, str]</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method is not implemented.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">valid</span><span class="p">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="n">task_config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.TrainerConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.store.mongo_config_store.</span></span><span class="sig-name descname"><span class="pre">TrainerConfig</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.TrainerConfig" title="Link to this definition"></a></dt>
-<dd><p>A class to represent the Trainer Configurations.</p>
-<p>It is the base class for trainer configurations. Each subclass of a <cite>Trainer</cite>
-should have a specific config class derived from <cite>TrainerConfig</cite>.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.TrainerConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.TrainerConfig.name" title="Link to this definition"></a></dt>
-<dd><p>A unique name for this trainer.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.TrainerConfig.batch_size">
-<span class="sig-name descname"><span class="pre">batch_size</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.TrainerConfig.batch_size" title="Link to this definition"></a></dt>
-<dd><p>The batch size to be used during training.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.TrainerConfig.learning_rate">
-<span class="sig-name descname"><span class="pre">learning_rate</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.TrainerConfig.learning_rate" title="Link to this definition"></a></dt>
-<dd><p>The learning rate of the optimizer.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.store.mongo_config_store.TrainerConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.TrainerConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>Verify whether this TrainerConfig is valid or not.</p>
-</dd></dl>
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The TrainerConfig class is an abstract class that cannot be instantiated directly. It is meant to be subclassed.</p>
-</div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id44">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id44" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id45">
-<span class="sig-name descname"><span class="pre">batch_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id45" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id46">
-<span class="sig-name descname"><span class="pre">learning_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id46" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id47">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id47" title="Link to this definition"></a></dt>
-<dd><p>Verify whether this TrainerConfig is valid or not.
-A TrainerConfig is considered valid if it has a valid batch size and learning rate.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A tuple containing a boolean indicating whether the
-TrainerConfig is valid and a message explaining why.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the method is not implemented by the subclass.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">valid</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="n">trainer_config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">valid</span>
-<span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">message</span>
-<span class="go">&quot;No validation for this Trainer&quot;</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method must be implemented by the subclass.</p>
-</div>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py data">
 <dt class="sig sig-object py" id="dacapo.store.mongo_config_store.logger">
 <span class="sig-prename descclassname"><span class="pre">dacapo.store.mongo_config_store.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#dacapo.store.mongo_config_store.logger" title="Link to this definition"></a></dt>
@@ -1794,8 +451,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id48">
-<span class="sig-name descname"><span class="pre">store_run_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id48" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">store_run_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd><p>Stores the run configuration in the MongoDB runs collection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1805,7 +462,7 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If the run configuration is already stored.</p>
+<dd class="field-even"><p><a class="reference internal" href="../config_store/index.html#dacapo.store.config_store.DuplicateNameError" title="dacapo.store.config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If the run configuration is already stored.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -1817,8 +474,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id49">
-<span class="sig-name descname"><span class="pre">retrieve_run_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id49" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">retrieve_run_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the run configuration for a given run name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1828,7 +485,7 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 <dd class="field-even"><p>The run configuration for the given run name.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.RunConfig" title="dacapo.store.mongo_config_store.RunConfig">RunConfig</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/index.html#dacapo.experiments.RunConfig" title="dacapo.experiments.RunConfig">RunConfig</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the run configuration is not available.</p>
@@ -1843,8 +500,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id50">
-<span class="sig-name descname"><span class="pre">delete_run_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id50" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">delete_run_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd><p>Delete a run configuration from the MongoDB collection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1863,8 +520,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id51">
-<span class="sig-name descname"><span class="pre">retrieve_run_config_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasplit_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">architecture_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainer_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id51" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">retrieve_run_config_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasplit_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">architecture_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trainer_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the names of run configurations based on specified filters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1897,18 +554,18 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id52">
-<span class="sig-name descname"><span class="pre">store_task_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id52" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">store_task_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
 <dd><p>Store the task configuration in the MongoDB tasks collection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>task_config</strong> (<a class="reference internal" href="#dacapo.store.mongo_config_store.TaskConfig" title="dacapo.store.mongo_config_store.TaskConfig"><em>TaskConfig</em></a>) – The task configuration to be stored.</p></li>
+<li><p><strong>task_config</strong> (<a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.TaskConfig" title="dacapo.experiments.tasks.TaskConfig"><em>TaskConfig</em></a>) – The task configuration to be stored.</p></li>
 <li><p><strong>ignore</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of fields to ignore during the storage process.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If the task configuration is already stored.</p>
+<dd class="field-even"><p><a class="reference internal" href="../config_store/index.html#dacapo.store.config_store.DuplicateNameError" title="dacapo.store.config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If the task configuration is already stored.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -1920,8 +577,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id53">
-<span class="sig-name descname"><span class="pre">retrieve_task_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id53" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">retrieve_task_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the task configuration for a given task name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1931,7 +588,7 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 <dd class="field-even"><p>The task configuration object.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.TaskConfig" title="dacapo.store.mongo_config_store.TaskConfig">TaskConfig</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/tasks/index.html#dacapo.experiments.tasks.TaskConfig" title="dacapo.experiments.tasks.TaskConfig">TaskConfig</a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -1943,8 +600,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id54">
-<span class="sig-name descname"><span class="pre">retrieve_task_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id54" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">retrieve_task_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the names of all task configurations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1962,18 +619,18 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id55">
-<span class="sig-name descname"><span class="pre">store_architecture_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id55" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">store_architecture_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
 <dd><p>Store the architecture configuration in the MongoDB.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>architecture_config</strong> (<a class="reference internal" href="#dacapo.store.mongo_config_store.ArchitectureConfig" title="dacapo.store.mongo_config_store.ArchitectureConfig"><em>ArchitectureConfig</em></a>) – The architecture configuration to be stored.</p></li>
+<li><p><strong>architecture_config</strong> (<a class="reference internal" href="../../experiments/architectures/architecture_config/index.html#dacapo.experiments.architectures.architecture_config.ArchitectureConfig" title="dacapo.experiments.architectures.architecture_config.ArchitectureConfig"><em>ArchitectureConfig</em></a>) – The architecture configuration to be stored.</p></li>
 <li><p><strong>ignore</strong> (<em>list</em><em>, </em><em>optional</em>) – List of fields to ignore during storage. Defaults to None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If the architecture configuration is already stored.</p>
+<dd class="field-even"><p><a class="reference internal" href="../config_store/index.html#dacapo.store.config_store.DuplicateNameError" title="dacapo.store.config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If the architecture configuration is already stored.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -1985,8 +642,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id56">
-<span class="sig-name descname"><span class="pre">retrieve_architecture_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id56" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">retrieve_architecture_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">architecture_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the architecture configuration for the given architecture name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1996,7 +653,7 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 <dd class="field-even"><p>The architecture configuration object.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.ArchitectureConfig" title="dacapo.store.mongo_config_store.ArchitectureConfig">ArchitectureConfig</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/architectures/architecture_config/index.html#dacapo.experiments.architectures.architecture_config.ArchitectureConfig" title="dacapo.experiments.architectures.architecture_config.ArchitectureConfig">ArchitectureConfig</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the architecture configuration is not available.</p>
@@ -2011,8 +668,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id57">
-<span class="sig-name descname"><span class="pre">retrieve_architecture_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id57" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">retrieve_architecture_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the names of all architecture configurations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -2030,13 +687,13 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id58">
-<span class="sig-name descname"><span class="pre">store_trainer_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id58" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">store_trainer_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
 <dd><p>Store the trainer configuration in the MongoDB.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>trainer_config</strong> (<a class="reference internal" href="#dacapo.store.mongo_config_store.TrainerConfig" title="dacapo.store.mongo_config_store.TrainerConfig"><em>TrainerConfig</em></a>) – The trainer configuration to be stored.</p></li>
+<li><p><strong>trainer_config</strong> (<a class="reference internal" href="../../experiments/trainers/index.html#dacapo.experiments.trainers.TrainerConfig" title="dacapo.experiments.trainers.TrainerConfig"><em>TrainerConfig</em></a>) – The trainer configuration to be stored.</p></li>
 <li><p><strong>ignore</strong> (<em>list</em><em>, </em><em>optional</em>) – List of fields to ignore during storage. Defaults to None.</p></li>
 </ul>
 </dd>
@@ -2044,10 +701,10 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 <dd class="field-even"><p>If the trainer configuration is already stored.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError">DuplicateNameError</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../config_store/index.html#dacapo.store.config_store.DuplicateNameError" title="dacapo.store.config_store.DuplicateNameError">DuplicateNameError</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If the trainer configuration is already stored.</p>
+<dd class="field-even"><p><a class="reference internal" href="../config_store/index.html#dacapo.store.config_store.DuplicateNameError" title="dacapo.store.config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If the trainer configuration is already stored.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -2059,8 +716,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id59">
-<span class="sig-name descname"><span class="pre">retrieve_trainer_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id59" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">retrieve_trainer_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainer_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the trainer configuration for the given trainer name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2070,7 +727,7 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 <dd class="field-even"><p>The trainer configuration object.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.TrainerConfig" title="dacapo.store.mongo_config_store.TrainerConfig">TrainerConfig</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/trainers/index.html#dacapo.experiments.trainers.TrainerConfig" title="dacapo.experiments.trainers.TrainerConfig">TrainerConfig</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the trainer configuration is not available.</p>
@@ -2085,8 +742,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id60">
-<span class="sig-name descname"><span class="pre">retrieve_trainer_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id60" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">retrieve_trainer_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the names of all trainer configurations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2096,7 +753,7 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 <dd class="field-even"><p>The trainer configuration object.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.TrainerConfig" title="dacapo.store.mongo_config_store.TrainerConfig">TrainerConfig</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/trainers/index.html#dacapo.experiments.trainers.TrainerConfig" title="dacapo.experiments.trainers.TrainerConfig">TrainerConfig</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the trainer configuration is not available.</p>
@@ -2111,13 +768,13 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id61">
-<span class="sig-name descname"><span class="pre">store_datasplit_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id61" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">store_datasplit_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
 <dd><p>Store the datasplit configuration in the MongoDB.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>datasplit_config</strong> (<a class="reference internal" href="#dacapo.store.mongo_config_store.DataSplitConfig" title="dacapo.store.mongo_config_store.DataSplitConfig"><em>DataSplitConfig</em></a>) – The datasplit configuration to be stored.</p></li>
+<li><p><strong>datasplit_config</strong> (<a class="reference internal" href="../../experiments/datasplits/datasplit_config/index.html#dacapo.experiments.datasplits.datasplit_config.DataSplitConfig" title="dacapo.experiments.datasplits.datasplit_config.DataSplitConfig"><em>DataSplitConfig</em></a>) – The datasplit configuration to be stored.</p></li>
 <li><p><strong>ignore</strong> (<em>list</em><em>, </em><em>optional</em>) – List of fields to ignore during storage. Defaults to None.</p></li>
 </ul>
 </dd>
@@ -2125,10 +782,10 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 <dd class="field-even"><p>If the datasplit configuration is already stored.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError">DuplicateNameError</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../config_store/index.html#dacapo.store.config_store.DuplicateNameError" title="dacapo.store.config_store.DuplicateNameError">DuplicateNameError</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If the datasplit configuration is already stored.</p>
+<dd class="field-even"><p><a class="reference internal" href="../config_store/index.html#dacapo.store.config_store.DuplicateNameError" title="dacapo.store.config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If the datasplit configuration is already stored.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -2140,8 +797,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id62">
-<span class="sig-name descname"><span class="pre">retrieve_datasplit_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id62" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">retrieve_datasplit_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id14" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the datasplit configuration for the given datasplit name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2151,7 +808,7 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 <dd class="field-even"><p>The datasplit configuration object.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DataSplitConfig" title="dacapo.store.mongo_config_store.DataSplitConfig">DataSplitConfig</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/datasplits/datasplit_config/index.html#dacapo.experiments.datasplits.datasplit_config.DataSplitConfig" title="dacapo.experiments.datasplits.datasplit_config.DataSplitConfig">DataSplitConfig</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the datasplit configuration is not available.</p>
@@ -2166,8 +823,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id63">
-<span class="sig-name descname"><span class="pre">retrieve_datasplit_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id63" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">retrieve_datasplit_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the names of all datasplit configurations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -2185,13 +842,13 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id64">
-<span class="sig-name descname"><span class="pre">store_dataset_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id64" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">store_dataset_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
 <dd><p>Store the dataset configuration in the MongoDB.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset_config</strong> (<a class="reference internal" href="#dacapo.store.mongo_config_store.DatasetConfig" title="dacapo.store.mongo_config_store.DatasetConfig"><em>DatasetConfig</em></a>) – The dataset configuration to be stored.</p></li>
+<li><p><strong>dataset_config</strong> (<a class="reference internal" href="../../experiments/datasplits/datasets/dataset_config/index.html#dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig" title="dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig"><em>DatasetConfig</em></a>) – The dataset configuration to be stored.</p></li>
 <li><p><strong>ignore</strong> (<em>list</em><em>, </em><em>optional</em>) – List of fields to ignore during storage. Defaults to None.</p></li>
 </ul>
 </dd>
@@ -2199,10 +856,10 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 <dd class="field-even"><p>If the dataset configuration is already stored.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError">DuplicateNameError</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../config_store/index.html#dacapo.store.config_store.DuplicateNameError" title="dacapo.store.config_store.DuplicateNameError">DuplicateNameError</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If the dataset configuration is already stored.</p>
+<dd class="field-even"><p><a class="reference internal" href="../config_store/index.html#dacapo.store.config_store.DuplicateNameError" title="dacapo.store.config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If the dataset configuration is already stored.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -2214,8 +871,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id65">
-<span class="sig-name descname"><span class="pre">retrieve_dataset_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id65" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">retrieve_dataset_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the dataset configuration for the given dataset name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2225,7 +882,7 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 <dd class="field-even"><p>The dataset configuration object.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DatasetConfig" title="dacapo.store.mongo_config_store.DatasetConfig">DatasetConfig</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/datasplits/datasets/dataset_config/index.html#dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig" title="dacapo.experiments.datasplits.datasets.dataset_config.DatasetConfig">DatasetConfig</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the dataset configuration is not available.</p>
@@ -2240,8 +897,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id66">
-<span class="sig-name descname"><span class="pre">retrieve_dataset_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id66" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">retrieve_dataset_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the names of all dataset configurations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -2259,13 +916,13 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id67">
-<span class="sig-name descname"><span class="pre">store_array_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id67" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id19">
+<span class="sig-name descname"><span class="pre">store_array_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id19" title="Link to this definition"></a></dt>
 <dd><p>Store the array configuration in the MongoDB.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array_config</strong> (<a class="reference internal" href="#dacapo.store.mongo_config_store.ArrayConfig" title="dacapo.store.mongo_config_store.ArrayConfig"><em>ArrayConfig</em></a>) – The array configuration to be stored.</p></li>
+<li><p><strong>array_config</strong> (<a class="reference internal" href="../../experiments/datasplits/datasets/arrays/array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><em>ArrayConfig</em></a>) – The array configuration to be stored.</p></li>
 <li><p><strong>ignore</strong> (<em>list</em><em>, </em><em>optional</em>) – List of fields to ignore during storage. Defaults to None.</p></li>
 </ul>
 </dd>
@@ -2273,10 +930,10 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 <dd class="field-even"><p>If the array configuration is already stored.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError">DuplicateNameError</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../config_store/index.html#dacapo.store.config_store.DuplicateNameError" title="dacapo.store.config_store.DuplicateNameError">DuplicateNameError</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.DuplicateNameError" title="dacapo.store.mongo_config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If the array configuration is already stored.</p>
+<dd class="field-even"><p><a class="reference internal" href="../config_store/index.html#dacapo.store.config_store.DuplicateNameError" title="dacapo.store.config_store.DuplicateNameError"><strong>DuplicateNameError</strong></a> – If the array configuration is already stored.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -2288,8 +945,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id68">
-<span class="sig-name descname"><span class="pre">retrieve_array_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id68" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id20">
+<span class="sig-name descname"><span class="pre">retrieve_array_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id20" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the array configuration for the given array name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2299,7 +956,7 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 <dd class="field-even"><p>The array configuration object.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.store.mongo_config_store.ArrayConfig" title="dacapo.store.mongo_config_store.ArrayConfig">ArrayConfig</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../../experiments/datasplits/datasets/arrays/array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig">ArrayConfig</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the array configuration is not available.</p>
@@ -2314,8 +971,8 @@ configurations for runs, tasks, architectures, trainers, and datasets.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id69">
-<span class="sig-name descname"><span class="pre">retrieve_array_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id69" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">retrieve_array_config_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id21" title="Link to this definition"></a></dt>
 <dd><p>Retrieve the names of all array configurations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>

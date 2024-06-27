@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dacapo.experiments.datasplits.train_validate_datasplit_config &mdash; DaCapo  documentation</title>
@@ -110,16 +110,7 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplit" title="dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainValidateDataSplit</span></code></a></p></td>
-<td><p>A DataSplit that contains a list of training and validation datasets. This</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.DataSplitConfig" title="dacapo.experiments.datasplits.train_validate_datasplit_config.DataSplitConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataSplitConfig</span></code></a></p></td>
-<td><p>A class used to create a DataSplit configuration object.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.DatasetConfig" title="dacapo.experiments.datasplits.train_validate_datasplit_config.DatasetConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DatasetConfig</span></code></a></p></td>
-<td><p>A class used to define configuration for datasets. This provides the</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplitConfig" title="dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplitConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainValidateDataSplitConfig</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplitConfig" title="dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplitConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainValidateDataSplitConfig</span></code></a></p></td>
 <td><p>This is the standard Train/Validate DataSplit config. It contains a list of</p></td>
 </tr>
 </tbody>
@@ -127,176 +118,6 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplit">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.train_validate_datasplit_config.</span></span><span class="sig-name descname"><span class="pre">TrainValidateDataSplit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplit" title="Link to this definition"></a></dt>
-<dd><p>A DataSplit that contains a list of training and validation datasets. This
-class is used to split the data into training and validation datasets. The
-training and validation datasets are used to train and validate the model
-respectively.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplit.train">
-<span class="sig-name descname"><span class="pre">train</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplit.train" title="Link to this definition"></a></dt>
-<dd><p>list
-The list of training datasets.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplit.validate">
-<span class="sig-name descname"><span class="pre">validate</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplit.validate" title="Link to this definition"></a></dt>
-<dd><p>list
-The list of validation datasets.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplit.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplit.__init__" title="Link to this definition"></a></dt>
-<dd><p>Initializes the TrainValidateDataSplit class with specified config to
-split the data into training and validation datasets.</p>
-</dd></dl>
-
-<p class="rubric">Notes</p>
-<p>This class is used to split the data into training and validation datasets.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">train</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../datasets/index.html#dacapo.experiments.datasplits.datasets.Dataset" title="dacapo.experiments.datasplits.datasets.Dataset"><span class="pre">dacapo.experiments.datasplits.datasets.Dataset</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">validate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../datasets/index.html#dacapo.experiments.datasplits.datasets.Dataset" title="dacapo.experiments.datasplits.datasets.Dataset"><span class="pre">dacapo.experiments.datasplits.datasets.Dataset</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.train_validate_datasplit_config.DataSplitConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.train_validate_datasplit_config.</span></span><span class="sig-name descname"><span class="pre">DataSplitConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.DataSplitConfig" title="Link to this definition"></a></dt>
-<dd><p>A class used to create a DataSplit configuration object.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.train_validate_datasplit_config.DataSplitConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.DataSplitConfig.name" title="Link to this definition"></a></dt>
-<dd><p>str
-A name for the datasplit. This name will be saved so it can be found
-and reused easily. It is recommended to keep it short and avoid special
-characters.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.train_validate_datasplit_config.DataSplitConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.DataSplitConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>Validates if it is a valid data split configuration.</p>
-</dd></dl>
-
-<p class="rubric">Notes</p>
-<p>This class is used to create a DataSplit configuration object.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
-<dd><p>Validates if the current configuration is a valid data split configuration.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>Tuple[bool, str]</dt><dd><p>True if the configuration is valid,
-False otherwise along with respective validation error message.</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the derived class.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">datasplit_config</span> <span class="o">=</span> <span class="n">DataSplitConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;datasplit&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">datasplit_config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
-<span class="go">(True, &quot;No validation for this DataSplit&quot;)</span>
-</pre></div>
-</div>
-<p class="rubric">Notes</p>
-<p>This method is used to validate the configuration of DataSplit.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.train_validate_datasplit_config.DatasetConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.train_validate_datasplit_config.</span></span><span class="sig-name descname"><span class="pre">DatasetConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.DatasetConfig" title="Link to this definition"></a></dt>
-<dd><p>A class used to define configuration for datasets. This provides the
-framework to create a Dataset instance.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.train_validate_datasplit_config.DatasetConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.DatasetConfig.name" title="Link to this definition"></a></dt>
-<dd><p>str (eg: “sample_dataset”).
-A unique identifier to name the dataset.
-It aids in easy identification and reusability of this dataset.
-Advised to keep it short and refrain from using special characters.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.train_validate_datasplit_config.DatasetConfig.weight">
-<span class="sig-name descname"><span class="pre">weight</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.DatasetConfig.weight" title="Link to this definition"></a></dt>
-<dd><p>int (default=1).
-A numeric value that indicates how frequently this dataset should be
-sampled in comparison to others. Higher the weight, more frequently it
-gets sampled.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.train_validate_datasplit_config.DatasetConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.DatasetConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>Checks and validates the dataset configuration. The specific rules for
-validation need to be defined by the user.</p>
-</dd></dl>
-
-<p class="rubric">Notes</p>
-<p>This class is used to create a configuration object for datasets.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id6">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
-<dd><p>Method to verify the dataset configuration.</p>
-<p>Since there is no specific validation logic defined for this DataSet, this
-method will always return True as default reaction and a message stating
-the lack of validation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A tuple of boolean value indicating the check (True or False) and
-message specifying result of validation.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the method is not implemented in the derived class.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dataset_config</span> <span class="o">=</span> <span class="n">DatasetConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;sample_dataset&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset_config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
-<span class="go">(True, &quot;No validation for this DataSet&quot;)</span>
-</pre></div>
-</div>
-<p class="rubric">Notes</p>
-<p>This method is used to validate the configuration of the dataset.</p>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplitConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.train_validate_datasplit_config.</span></span><span class="sig-name descname"><span class="pre">TrainValidateDataSplitConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.train_validate_datasplit_config.TrainValidateDataSplitConfig" title="Link to this definition"></a></dt>
@@ -333,13 +154,13 @@ split the data into training and validation datasets.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id7">
-<span class="sig-name descname"><span class="pre">train_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../datasets/index.html#dacapo.experiments.datasplits.datasets.DatasetConfig" title="dacapo.experiments.datasplits.datasets.DatasetConfig"><span class="pre">dacapo.experiments.datasplits.datasets.DatasetConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">train_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../datasets/index.html#dacapo.experiments.datasplits.datasets.DatasetConfig" title="dacapo.experiments.datasplits.datasets.DatasetConfig"><span class="pre">dacapo.experiments.datasplits.datasets.DatasetConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id8">
-<span class="sig-name descname"><span class="pre">validate_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../datasets/index.html#dacapo.experiments.datasplits.datasets.DatasetConfig" title="dacapo.experiments.datasplits.datasets.DatasetConfig"><span class="pre">dacapo.experiments.datasplits.datasets.DatasetConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">validate_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../datasets/index.html#dacapo.experiments.datasplits.datasets.DatasetConfig" title="dacapo.experiments.datasplits.datasets.DatasetConfig"><span class="pre">dacapo.experiments.datasplits.datasets.DatasetConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

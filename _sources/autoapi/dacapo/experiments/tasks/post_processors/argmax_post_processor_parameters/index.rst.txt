@@ -9,57 +9,11 @@ Classes
 
 .. autoapisummary::
 
-   dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.PostProcessorParameters
    dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.ArgmaxPostProcessorParameters
 
 
 Module Contents
 ---------------
-
-.. py:class:: PostProcessorParameters
-
-   Base class for post-processor parameters. Post-processor parameters are
-   immutable objects that define the parameters of a post-processor. The
-   parameters are used to configure the post-processor.
-
-   .. attribute:: id
-
-      The identifier of the post-processor parameter.
-
-   .. method:: parameter_names
-
-      Get the names of the parameters.
-
-   .. note::
-
-      This class is immutable. Once created, the values of its attributes
-      cannot be changed.
-
-
-   .. py:attribute:: id
-      :type:  int
-
-
-   .. py:property:: parameter_names
-      :type: List[str]
-
-      Get the names of the parameters.
-
-      :returns: A list of parameter names.
-
-      :raises NotImplementedError: If the method is not implemented in the subclass.
-
-      .. rubric:: Examples
-
-      >>> parameters = PostProcessorParameters(0)
-      >>> parameters.parameter_names
-      ["id"]
-
-      .. note::
-
-         This method must be implemented in the subclass. It should return a
-         list of parameter names.
-
 
 .. py:class:: ArgmaxPostProcessorParameters
 

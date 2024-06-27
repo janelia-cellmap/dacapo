@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dacapo.experiments.datasplits.datasets.arrays.resampled_array &mdash; DaCapo  documentation</title>
@@ -112,10 +112,7 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array" title="dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Array</span></code></a></p></td>
-<td><p>An Array is a multi-dimensional array of data that can be read from and written to. It is</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.ResampledArray" title="dacapo.experiments.datasplits.datasets.arrays.resampled_array.ResampledArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResampledArray</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.ResampledArray" title="dacapo.experiments.datasplits.datasets.arrays.resampled_array.ResampledArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResampledArray</span></code></a></p></td>
 <td><p>This is a zarr array that is a resampled version of another array.</p></td>
 </tr>
 </tbody>
@@ -123,453 +120,6 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.resampled_array.</span></span><span class="sig-name descname"><span class="pre">Array</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array" title="Link to this definition"></a></dt>
-<dd><p>An Array is a multi-dimensional array of data that can be read from and written to. It is
-defined by a region of interest (ROI) in world units, a voxel size, and a number of spatial
-dimensions. The data is stored in a numpy array, and can be accessed using numpy-like slicing
-syntax.</p>
-<p>The Array class is an abstract base class that defines the interface for all Array
-implementations. It provides a number of properties that must be implemented by subclasses,
-such as the ROI, voxel size, and data type of the array. It also provides a method for fetching
-data from the array, which is implemented by slicing the numpy array.</p>
-<p>The Array class also provides a method for checking if the array can be visualized in
-Neuroglancer, and a method for generating a Neuroglancer layer for the array. These methods are
-implemented by subclasses that support visualization in Neuroglancer.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.attrs">
-<span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.attrs" title="Link to this definition"></a></dt>
-<dd><p>A dictionary of metadata attributes stored on this array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[str, Any]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.axes">
-<span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.axes" title="Link to this definition"></a></dt>
-<dd><p>The axes of this dataset as a string of characters, as they are indexed.
-Permitted characters are:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
-</ul>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[str]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.dims">
-<span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.dims" title="Link to this definition"></a></dt>
-<dd><p>The number of spatial dimensions.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.voxel_size">
-<span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.voxel_size" title="Link to this definition"></a></dt>
-<dd><p>The size of a voxel in physical units.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Coordinate</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.roi">
-<span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.roi" title="Link to this definition"></a></dt>
-<dd><p>The total ROI of this array, in world units.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Roi</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.dtype">
-<span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.dtype" title="Link to this definition"></a></dt>
-<dd><p>The dtype of this array, in numpy dtypes</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Any</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.num_channels">
-<span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.num_channels" title="Link to this definition"></a></dt>
-<dd><p>The number of channels provided by this dataset. Should return
-None if the channel dimension doesn’t exist.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optional[int]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.data">
-<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.data" title="Link to this definition"></a></dt>
-<dd><p>A numpy-like readable and writable view into this array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.writable">
-<span class="sig-name descname"><span class="pre">writable</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array.writable" title="Link to this definition"></a></dt>
-<dd><p>Can we write to this Array?</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">__getitem__(self,</span> <span class="pre">roi</span></span></dt>
-<dd><p>Roi) -&gt; np.ndarray: Get a numpy like readable and writable view into
-this array.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array._can_neuroglance">
-<span class="sig-name descname"><span class="pre">_can_neuroglance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array._can_neuroglance" title="Link to this definition"></a></dt>
-<dd><p>Check if this array can be visualized in Neuroglancer.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array._neuroglancer_layer">
-<span class="sig-name descname"><span class="pre">_neuroglancer_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.Array._neuroglancer_layer" title="Link to this definition"></a></dt>
-<dd><p>Generate a Neuroglancer layer for this array.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">_slices(self,</span> <span class="pre">roi</span></span></dt>
-<dd><p>Roi) -&gt; Iterable[slice]: Generate a list of slices for the given ROI.</p>
-</dd></dl>
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This class is used to define the interface for all Array implementations. It provides a
-number of properties that must be implemented by subclasses, such as the ROI, voxel size, and
-data type of the array. It also provides a method for fetching data from the array, which is
-implemented by slicing the numpy array. The Array class also provides a method for checking
-if the array can be visualized in Neuroglancer, and a method for generating a Neuroglancer
-layer for the array. These methods are implemented by subclasses that support visualization
-in Neuroglancer.</p>
-</div>
-<dl class="py property">
-<dt class="sig sig-object py" id="id0">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-<p>Return a dictionary of metadata attributes stored on this array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A dictionary of metadata attributes stored on this array.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[str, Any]</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">attrs</span>
-<span class="go">{}</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method must be implemented by the subclass.</p>
-</div>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="id1">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-<p>Returns the axes of this dataset as a string of charactes, as they
-are indexed. Permitted characters are:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">zyx</span></code> for spatial dimensions</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code> for channels</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code> for samples</p></li>
-</ul>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The axes of this dataset as a string of characters, as they are indexed.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>List[str]</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">axes</span>
-<span class="go">[&#39;z&#39;, &#39;y&#39;, &#39;x&#39;]</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method must be implemented by the subclass.</p>
-</div>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="id2">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-<p>Returns the number of spatial dimensions.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The number of spatial dimensions.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>int</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">dims</span>
-<span class="go">3</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method must be implemented by the subclass.</p>
-</div>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="id3">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-<p>The size of a voxel in physical units.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The size of a voxel in physical units.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Coordinate</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">voxel_size</span>
-<span class="go">Coordinate((1, 1, 1))</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method must be implemented by the subclass.</p>
-</div>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="id4">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-<p>The total ROI of this array, in world units.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The total ROI of this array, in world units.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Roi</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">roi</span>
-<span class="go">Roi(offset=Coordinate((0, 0, 0)), shape=Coordinate((100, 100, 100)))</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method must be implemented by the subclass.</p>
-</div>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="id5">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-<p>The dtype of this array, in numpy dtypes</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The dtype of this array, in numpy dtypes.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Any</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">dtype</span>
-<span class="go">np.dtype(&#39;uint8&#39;)</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method must be implemented by the subclass.</p>
-</div>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="id6">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-<p>The number of channels provided by this dataset.
-Should return None if the channel dimension doesn’t exist.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The number of channels provided by this dataset.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Optional[int]</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">num_channels</span>
-<span class="go">1</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method must be implemented by the subclass.</p>
-</div>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="id7">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-<p>Get a numpy like readable and writable view into this array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A numpy like readable and writable view into this array.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>np.ndarray</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">data</span>
-<span class="go">np.ndarray</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method must be implemented by the subclass.</p>
-</div>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="id8">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Abstractmethod<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-</dl>
-<p>Can we write to this Array?</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Can we write to this Array?</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>bool</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method must be implemented by the subclass.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">Array</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">writable</span>
-<span class="go">False</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method must be implemented by the subclass.</p>
-</div>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.resampled_array.ResampledArray">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.resampled_array.</span></span><span class="sig-name descname"><span class="pre">ResampledArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.resampled_array.ResampledArray" title="Link to this definition"></a></dt>
@@ -719,8 +269,8 @@ Returns the data of the resampled array within the given region of interest</p>
 <p>This class is a subclass of Array.</p>
 </div>
 <dl class="py property">
-<dt class="sig sig-object py" id="id9">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -745,8 +295,8 @@ Returns the data of the resampled array within the given region of interest</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id10">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -771,8 +321,8 @@ Returns the data of the resampled array within the given region of interest</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id11">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd><p>Returns the number of dimensions of the source array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -796,8 +346,8 @@ Returns the data of the resampled array within the given region of interest</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id12">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id3">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
 <dd><p>Returns the voxel size of the resampled array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -821,8 +371,8 @@ Returns the data of the resampled array within the given region of interest</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id13">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id4">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
 <dd><p>Returns the region of interest of the resampled array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -846,8 +396,8 @@ Returns the data of the resampled array within the given region of interest</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id14">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id14" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id5">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
 <dd><p>Returns whether the resampled array is writable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -871,8 +421,8 @@ Returns the data of the resampled array within the given region of interest</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id15">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id6">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">resampled</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -897,8 +447,8 @@ Returns the data of the resampled array within the given region of interest</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id16">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id7">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
 <dd><p>Returns the number of channels of the resampled array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -922,8 +472,8 @@ Returns the data of the resampled array within the given region of interest</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id17">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id8">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">resampled</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -948,8 +498,8 @@ Returns the data of the resampled array within the given region of interest</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id18">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scale</span></span><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id9">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scale</span></span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">scale</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">resampled</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">

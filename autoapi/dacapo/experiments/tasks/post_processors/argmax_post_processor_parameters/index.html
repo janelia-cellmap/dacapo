@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters &mdash; DaCapo  documentation</title>
@@ -111,10 +111,7 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.PostProcessorParameters" title="dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.PostProcessorParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PostProcessorParameters</span></code></a></p></td>
-<td><p>Base class for post-processor parameters. Post-processor parameters are</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.ArgmaxPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.ArgmaxPostProcessorParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArgmaxPostProcessorParameters</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.ArgmaxPostProcessorParameters" title="dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.ArgmaxPostProcessorParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArgmaxPostProcessorParameters</span></code></a></p></td>
 <td><p>Parameters for the argmax post-processor. The argmax post-processor will set</p></td>
 </tr>
 </tbody>
@@ -122,61 +119,6 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.PostProcessorParameters">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.</span></span><span class="sig-name descname"><span class="pre">PostProcessorParameters</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.PostProcessorParameters" title="Link to this definition"></a></dt>
-<dd><p>Base class for post-processor parameters. Post-processor parameters are
-immutable objects that define the parameters of a post-processor. The
-parameters are used to configure the post-processor.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.PostProcessorParameters.id">
-<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.PostProcessorParameters.id" title="Link to this definition"></a></dt>
-<dd><p>The identifier of the post-processor parameter.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.PostProcessorParameters.parameter_names">
-<span class="sig-name descname"><span class="pre">parameter_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.PostProcessorParameters.parameter_names" title="Link to this definition"></a></dt>
-<dd><p>Get the names of the parameters.</p>
-</dd></dl>
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This class is immutable. Once created, the values of its attributes
-cannot be changed.</p>
-</div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="id1">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parameter_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd><p>Get the names of the parameters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A list of parameter names.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – If the method is not implemented in the subclass.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span> <span class="o">=</span> <span class="n">PostProcessorParameters</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">parameters</span><span class="o">.</span><span class="n">parameter_names</span>
-<span class="go">[&quot;id&quot;]</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method must be implemented in the subclass. It should return a
-list of parameter names.</p>
-</div>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.ArgmaxPostProcessorParameters">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.</span></span><span class="sig-name descname"><span class="pre">ArgmaxPostProcessorParameters</span></span><a class="headerlink" href="#dacapo.experiments.tasks.post_processors.argmax_post_processor_parameters.ArgmaxPostProcessorParameters" title="Link to this definition"></a></dt>

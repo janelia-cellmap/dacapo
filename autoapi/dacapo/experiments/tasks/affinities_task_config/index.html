@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dacapo.experiments.tasks.affinities_task_config &mdash; DaCapo  documentation</title>
@@ -110,12 +110,6 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTask" title="dacapo.experiments.tasks.affinities_task_config.AffinitiesTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AffinitiesTask</span></code></a></p></td>
-<td><p>This is a task for generating voxel affinities. It uses an <cite>AffinitiesPredictor</cite> for prediction,</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.affinities_task_config.TaskConfig" title="dacapo.experiments.tasks.affinities_task_config.TaskConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TaskConfig</span></code></a></p></td>
-<td><p>Base class for task configurations. Each subclass of a <cite>Task</cite> should</p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig" title="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AffinitiesTaskConfig</span></code></a></p></td>
 <td><p>This is a Affinities task config used for generating and</p></td>
 </tr>
@@ -124,100 +118,6 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTask">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.affinities_task_config.</span></span><span class="sig-name descname"><span class="pre">AffinitiesTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTask" title="Link to this definition"></a></dt>
-<dd><p>This is a task for generating voxel affinities. It uses an <cite>AffinitiesPredictor</cite> for prediction,
-an <cite>AffinitiesLoss</cite> for loss calculation, a <cite>WatershedPostProcessor</cite> for post-processing, and an
-<cite>InstanceEvaluator</cite> for evaluation.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTask.predictor">
-<span class="sig-name descname"><span class="pre">predictor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTask.predictor" title="Link to this definition"></a></dt>
-<dd><p>AffinitiesPredictor object</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTask.loss">
-<span class="sig-name descname"><span class="pre">loss</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTask.loss" title="Link to this definition"></a></dt>
-<dd><p>AffinitiesLoss object</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTask.post_processor">
-<span class="sig-name descname"><span class="pre">post_processor</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTask.post_processor" title="Link to this definition"></a></dt>
-<dd><p>WatershedPostProcessor object</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTask.evaluator">
-<span class="sig-name descname"><span class="pre">evaluator</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTask.evaluator" title="Link to this definition"></a></dt>
-<dd><p>InstanceEvaluator object</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTask.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTask.__init__" title="Link to this definition"></a></dt>
-<dd><p>Initializes all components for the affinities task.</p>
-</dd></dl>
-
-<p class="rubric">Notes</p>
-<p>This is a subclass of Task.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.TaskConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.affinities_task_config.</span></span><span class="sig-name descname"><span class="pre">TaskConfig</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.TaskConfig" title="Link to this definition"></a></dt>
-<dd><p>Base class for task configurations. Each subclass of a <cite>Task</cite> should
-have a corresponding config class derived from <cite>TaskConfig</cite>.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.TaskConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.TaskConfig.name" title="Link to this definition"></a></dt>
-<dd><p>A unique name for this task. This will be saved so you and
-others can find and reuse this task. Keep it short and avoid
-special characters.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.TaskConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.TaskConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>This method verifies the TaskConfig object.</p>
-</dd></dl>
-
-<p class="rubric">Notes</p>
-<p>This is a base class for all task configurations. It is not meant to be
-used directly.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd><p>Check whether this is a valid Task</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>A tuple containing a boolean value indicating whether the TaskConfig object is valid</dt><dd><p>and a string containing the reason why the object is invalid.</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Tuple[bool, str]</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method is not implemented.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">valid</span><span class="p">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="n">task_config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.affinities_task_config.</span></span><span class="sig-name descname"><span class="pre">AffinitiesTaskConfig</span></span><a class="headerlink" href="#dacapo.experiments.tasks.affinities_task_config.AffinitiesTaskConfig" title="Link to this definition"></a></dt>
@@ -285,43 +185,43 @@ evaluating voxel affinities for instance segmentations.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">neighborhood</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">funlib.geometry.Coordinate</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">lsds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">neighborhood</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">funlib.geometry.Coordinate</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">lsds_to_affs_weight_ratio</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">lsds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">affs_weight_clipmin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">lsds_to_affs_weight_ratio</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">affs_weight_clipmax</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">affs_weight_clipmin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">lsd_weight_clipmin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id6">
-<span class="sig-name descname"><span class="pre">affs_weight_clipmax</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">lsd_weight_clipmax</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id7">
-<span class="sig-name descname"><span class="pre">lsd_weight_clipmin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id8">
-<span class="sig-name descname"><span class="pre">lsd_weight_clipmax</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id9">
-<span class="sig-name descname"><span class="pre">background_as_object</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">background_as_object</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

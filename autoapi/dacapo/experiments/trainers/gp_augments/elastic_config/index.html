@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dacapo.experiments.trainers.gp_augments.elastic_config &mdash; DaCapo  documentation</title>
@@ -111,12 +111,6 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.gp_augments.elastic_config.AugmentConfig" title="dacapo.experiments.trainers.gp_augments.elastic_config.AugmentConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AugmentConfig</span></code></a></p></td>
-<td><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugment" title="dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ElasticAugment</span></code></a></p></td>
-<td><p>Elasticly deform a batch. Requests larger batches upstream to avoid data</p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugmentConfig" title="dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugmentConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ElasticAugmentConfig</span></code></a></p></td>
 <td><p>A class that holds the configuration details for the elastic augmentations.</p></td>
 </tr>
@@ -125,174 +119,6 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.elastic_config.AugmentConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.trainers.gp_augments.elastic_config.</span></span><span class="sig-name descname"><span class="pre">AugmentConfig</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.elastic_config.AugmentConfig" title="Link to this definition"></a></dt>
-<dd><p>Base class for gunpowder augment configurations. Each subclass of a <cite>Augment</cite>
-should have a corresponding config class derived from <cite>AugmentConfig</cite>.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.elastic_config.AugmentConfig._raw_key">
-<span class="sig-name descname"><span class="pre">_raw_key</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.elastic_config.AugmentConfig._raw_key" title="Link to this definition"></a></dt>
-<dd><p>Key for raw data. Not used in this implementation. Defaults to None.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.elastic_config.AugmentConfig._gt_key">
-<span class="sig-name descname"><span class="pre">_gt_key</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.elastic_config.AugmentConfig._gt_key" title="Link to this definition"></a></dt>
-<dd><p>Key for ground truth data. Not used in this implementation. Defaults to None.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.elastic_config.AugmentConfig._mask_key">
-<span class="sig-name descname"><span class="pre">_mask_key</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.elastic_config.AugmentConfig._mask_key" title="Link to this definition"></a></dt>
-<dd><p>Key for mask data. Not used in this implementation. Defaults to None.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.elastic_config.AugmentConfig.node">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_raw_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_gt_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mask_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.elastic_config.AugmentConfig.node" title="Link to this definition"></a></dt>
-<dd><p>Get a gp.Augment node.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id0">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gt_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.ArrayKey</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">gunpowder.BatchFilter</span></span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd><p>Get a gunpowder augment node.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>raw_key</strong> (<em>gp.ArrayKey</em>) – Key for raw data.</p></li>
-<li><p><strong>gt_key</strong> (<em>gp.ArrayKey</em>) – Key for ground truth data.</p></li>
-<li><p><strong>mask_key</strong> (<em>gp.ArrayKey</em>) – Key for mask data.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Augmentation node which can be incorporated in the pipeline.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>gunpowder.BatchFilter</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – This method is not implemented.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">node</span> <span class="o">=</span> <span class="n">augment_config</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">raw_key</span><span class="p">,</span> <span class="n">gt_key</span><span class="p">,</span> <span class="n">mask_key</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugment">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.trainers.gp_augments.elastic_config.</span></span><span class="sig-name descname"><span class="pre">ElasticAugment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_point_spacing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_point_displacement_sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_interval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augmentation_probability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uniform_3d_rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugment" title="Link to this definition"></a></dt>
-<dd><p>Elasticly deform a batch. Requests larger batches upstream to avoid data
-loss due to rotation and jitter.
-:param control_point_spacing: Distance between control points for the elastic deformation, in voxels per dimension.
-:type control_point_spacing: tuple of int
-:param control_point_displacement_sigma: Standard deviation of control point displacement distribution, in world coordinates.
-:type control_point_displacement_sigma: tuple of float
-:param rotation_interval: Interval to randomly sample rotation angles from (0, 2PI).
-:type rotation_interval: tuple of two float
-:param subsample: Instead of creating an elastic transformation on the full resolution, create one sub-sampled by the given factor, and linearly interpolate to obtain the full resolution transformation. This can significantly speed up this node, at the expense of having visible piecewise linear deformations for large factors. Usually, a factor of 4 can safely be used without noticeable changes. However, the default is 1 (i.e., no sub-sampling).
-:type subsample: int
-:param seed: Set random state for reproducible results (tests only, do not use in production code!!)
-:type seed: int
-:param augmentation_probability: Probability to apply the augmentation.
-:type augmentation_probability: float
-:param uniform_3d_rotation: Use a uniform 3D rotation instead of a rotation around a random axis.
-:type uniform_3d_rotation: bool</p>
-<dl class="simple">
-<dt>Provides:</dt><dd><ul class="simple">
-<li><p>The arrays in the batch, deformed.</p></li>
-</ul>
-</dd>
-<dt>Requests:</dt><dd><ul class="simple">
-<li><p>The arrays in the batch, enlarged such that the deformed ROI fits into
-the enlarged input ROI.</p></li>
-</ul>
-</dd>
-<dt>Method:</dt><dd><p>setup: Set up the ElasticAugment node.
-prepare: Prepare the ElasticAugment node.
-process: Process the ElasticAugment node.</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>This node is a port of the ElasticAugment node from the original
-<a href="#id1"><span class="problematic" id="id2">`</span></a>gunpowder &lt;</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugment.setup">
-<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugment.setup" title="Link to this definition"></a></dt>
-<dd><p>Set up the object by calculating the voxel size and spatial dimensions.</p>
-<p>This method calculates the voxel size by finding the minimum value for each axis
-from the voxel sizes of all array specs. It then sets the <cite>voxel_size</cite> attribute
-of the object. The spatial dimensions are also set based on the dimensions of the
-voxel size.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>AssertionError</strong> – If the voxel size is not a Coordinate object.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">setup</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugment.prepare">
-<span class="sig-name descname"><span class="pre">prepare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugment.prepare" title="Link to this definition"></a></dt>
-<dd><p>Prepares the request for augmentation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – The request object containing the data to be augmented.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>AssertionError</strong> – If the key in the request is not an ArrayKey or GraphKey.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">prepare</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="rubric">Notes</p>
-<p>This method prepares the request for augmentation by performing the following steps:
-1. Logs the preparation details, including the transformation voxel size.
-2. Calculates the master ROI based on the total ROI.
-3. Generates a uniform random sample and determines whether to perform augmentation based on the augmentation probability.
-4. If augmentation is not required, logs the decision and returns.
-5. Snaps the master ROI to the grid based on the voxel size and calculates the master transformation.
-6. Clears the existing transformations and target ROIs.
-7. Iterates over each key in the request and prepares it for augmentation.
-8. Updates the upstream request with the modified ROI.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugment.process">
-<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugment.process" title="Link to this definition"></a></dt>
-<dd><p>Process the ElasticAugment node.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>batch</strong> – The batch object containing the data to be processed.</p></li>
-<li><p><strong>request</strong> – The request object specifying the data to be processed.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>AssertionError</strong> – If the key in the request is not an ArrayKey or GraphKey.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">process</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
-</pre></div>
-</div>
-<p class="rubric">Notes</p>
-<p>This method applies the transformation to the data in the batch and restores the original ROIs.</p>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugmentConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.trainers.gp_augments.elastic_config.</span></span><span class="sig-name descname"><span class="pre">ElasticAugmentConfig</span></span><a class="headerlink" href="#dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugmentConfig" title="Link to this definition"></a></dt>
@@ -365,33 +191,33 @@ configuration details.</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">control_point_spacing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">control_point_displacement_sigma</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">rotation_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">control_point_spacing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">subsample</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">control_point_displacement_sigma</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">rotation_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id6">
-<span class="sig-name descname"><span class="pre">subsample</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id7">
-<span class="sig-name descname"><span class="pre">uniform_3d_rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">uniform_3d_rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id8">
-<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_raw_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_gt_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mask_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_raw_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_gt_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mask_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
 <dd><p>Returns the object of ElasticAugment with the given configuration details.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -410,7 +236,7 @@ configuration details.</p>
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugment" title="dacapo.experiments.trainers.gp_augments.elastic_config.ElasticAugment">ElasticAugment</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="../../../../gp/elastic_augment_fuse/index.html#dacapo.gp.elastic_augment_fuse.ElasticAugment" title="dacapo.gp.elastic_augment_fuse.ElasticAugment">ElasticAugment</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>NotImplementedError</strong> – This method is not implemented.</p>

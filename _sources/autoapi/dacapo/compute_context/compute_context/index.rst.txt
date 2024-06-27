@@ -9,7 +9,6 @@ Classes
 
 .. autoapisummary::
 
-   dacapo.compute_context.compute_context.Options
    dacapo.compute_context.compute_context.ComputeContext
 
 
@@ -23,63 +22,6 @@ Functions
 
 Module Contents
 ---------------
-
-.. py:class:: Options
-
-   A class that provides options for configuring DaCapo.
-
-   This class is designed as a singleton and should be accessed using the `instance` method.
-
-   .. method:: instance
-
-      Returns an instance of the Options class.
-
-   .. method:: config_file
-
-      Returns the path to the configuration file.
-
-   .. method:: __parse_options_from_file
-
-      Parses options from the configuration file.
-
-   .. method:: __parse_options
-
-      Parses options from the configuration file and updates them with the provided kwargs.
-      
-
-
-   .. py:method:: instance(**kwargs) -> DaCapoConfig
-      :classmethod:
-
-
-      Returns an instance of the Options class.
-
-      :param kwargs: Additional keyword arguments to update the options.
-
-      :returns: An instance of the DaCapoConfig class.
-
-      .. rubric:: Examples
-
-      >>> options = Options.instance()
-      >>> options
-      DaCapoConfig(type='files', runs_base_dir=PosixPath('/home/user/dacapo'), compute_context={'type': 'LocalTorch', 'config': {}}, mongo_db_host=None, mongo_db_name=None)
-
-
-
-   .. py:method:: config_file() -> Optional[upath.UPath]
-      :classmethod:
-
-
-      Returns the path to the configuration file.
-
-      :returns: The path to the configuration file if found, otherwise None.
-
-      .. rubric:: Examples
-
-      >>> Options.config_file()
-      PosixPath('/home/user/.config/dacapo/dacapo.yaml')
-
-
 
 .. py:class:: ComputeContext
 

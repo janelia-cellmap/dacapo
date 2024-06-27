@@ -14,20 +14,11 @@ Attributes
    dacapo.blockwise.relabel_worker.path
 
 
-Classes
--------
-
-.. autoapisummary::
-
-   dacapo.blockwise.relabel_worker.LocalArrayIdentifier
-
-
 Functions
 ---------
 
 .. autoapisummary::
 
-   dacapo.blockwise.relabel_worker.create_compute_context
    dacapo.blockwise.relabel_worker.cli
    dacapo.blockwise.relabel_worker.start_worker
    dacapo.blockwise.relabel_worker.start_worker_fn
@@ -39,50 +30,6 @@ Functions
 
 Module Contents
 ---------------
-
-.. py:function:: create_compute_context() -> ComputeContext
-
-   Create a compute context based on the global DaCapo options.
-
-   :returns: The compute context object.
-   :rtype: ComputeContext
-
-   :raises ValueError: If the store type is unknown.
-
-   .. rubric:: Examples
-
-   >>> context = create_compute_context()
-
-   .. note:: The method is implemented in the module.
-
-
-.. py:class:: LocalArrayIdentifier
-
-   Represents a local array identifier.
-
-   .. attribute:: container
-
-      The path to the container.
-
-      :type: Path
-
-   .. attribute:: dataset
-
-      The dataset name.
-
-      :type: str
-
-   Method:
-       __str__ : Returns the string representation of the identifier.
-
-
-   .. py:attribute:: container
-      :type:  upath.UPath
-
-
-   .. py:attribute:: dataset
-      :type:  str
-
 
 .. py:function:: cli(log_level)
 

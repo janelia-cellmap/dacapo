@@ -9,65 +9,11 @@ Classes
 
 .. autoapisummary::
 
-   dacapo.experiments.tasks.losses.hot_distance_loss.Loss
    dacapo.experiments.tasks.losses.hot_distance_loss.HotDistanceLoss
 
 
 Module Contents
 ---------------
-
-.. py:class:: Loss
-
-
-
-   A class used to represent a loss function. This class is an abstract class
-   that should be inherited by any loss function class.
-
-   .. method:: compute(prediction, target, weight) -> torch.Tensor
-
-      
-      Function to compute the loss for the provided prediction and target, with respect to the weight.
-
-   .. note::
-
-      This class is abstract. Subclasses must implement the abstract methods. Once created, the values of its attributes
-      cannot be changed.
-
-
-   .. py:method:: compute(prediction: torch.Tensor, target: torch.Tensor, weight: Optional[torch.Tensor] = None) -> torch.Tensor
-      :abstractmethod:
-
-
-      Compute the loss for the given prediction and target. Optionally, if
-      given, a loss weight should be considered.
-
-      All arguments are ``torch`` tensors. The return type should be a
-      ``torch`` scalar that can be used with an optimizer, just as usual when
-      training with ``torch``.
-
-      :param prediction: The predicted tensor.
-      :param target: The target tensor.
-      :param weight: The weight tensor.
-
-      :returns: The computed loss tensor.
-
-      :raises NotImplementedError: If the method is not implemented in the subclass.
-
-      .. rubric:: Examples
-
-      >>> loss = MSELoss()
-      >>> prediction = torch.tensor([1.0, 2.0, 3.0])
-      >>> target = torch.tensor([1.0, 2.0, 3.0])
-      >>> weight = torch.tensor([1.0, 1.0, 1.0])
-      >>> loss.compute(prediction, target, weight)
-      tensor(0.)
-
-      .. note::
-
-         This method must be implemented in the subclass. It should return the
-         computed loss tensor.
-
-
 
 .. py:class:: HotDistanceLoss
 

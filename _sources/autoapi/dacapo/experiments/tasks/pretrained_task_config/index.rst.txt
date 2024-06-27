@@ -9,96 +9,11 @@ Classes
 
 .. autoapisummary::
 
-   dacapo.experiments.tasks.pretrained_task_config.PretrainedTask
-   dacapo.experiments.tasks.pretrained_task_config.TaskConfig
    dacapo.experiments.tasks.pretrained_task_config.PretrainedTaskConfig
 
 
 Module Contents
 ---------------
-
-.. py:class:: PretrainedTask(task_config)
-
-
-
-   A task that uses a pretrained model. The model is loaded from a file
-   and the weights are loaded from a file.
-
-   .. attribute:: weights
-
-      The path to the weights file.
-
-      :type: Path
-
-   .. method:: create_model(self, architecture) -> Model
-
-      This method creates a model using the given architecture.
-
-   .. rubric:: Notes
-
-   This is a base class for all tasks that use pretrained models.
-
-
-   .. py:method:: create_model(architecture)
-
-      Create a model using the given architecture.
-
-      :param architecture: The architecture of the model.
-      :type architecture: str
-
-      :returns: The model created using the given architecture.
-      :rtype: Model
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> model = task.create_model(architecture)
-
-
-
-.. py:class:: TaskConfig
-
-   Base class for task configurations. Each subclass of a `Task` should
-   have a corresponding config class derived from `TaskConfig`.
-
-   .. attribute:: name
-
-      A unique name for this task. This will be saved so you and
-      others can find and reuse this task. Keep it short and avoid
-      special characters.
-
-   .. method:: verify(self) -> Tuple[bool, str]
-
-      This method verifies the TaskConfig object.
-
-   .. rubric:: Notes
-
-   This is a base class for all task configurations. It is not meant to be
-   used directly.
-
-
-   .. py:attribute:: name
-      :type:  str
-
-
-   .. py:method:: verify() -> Tuple[bool, str]
-
-      Check whether this is a valid Task
-
-      :returns:
-
-                A tuple containing a boolean value indicating whether the TaskConfig object is valid
-                    and a string containing the reason why the object is invalid.
-      :rtype: Tuple[bool, str]
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> valid, reason = task_config.verify()
-
-
 
 .. py:class:: PretrainedTaskConfig
 

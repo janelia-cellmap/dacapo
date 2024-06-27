@@ -17,7 +17,6 @@ Classes
 
 .. autoapisummary::
 
-   dacapo.experiments.starts.cosem_start.Start
    dacapo.experiments.starts.cosem_start.CosemStart
 
 
@@ -31,78 +30,6 @@ Functions
 
 Module Contents
 ---------------
-
-.. py:class:: Start(start_config)
-
-
-
-   This class interfaces with the dacapo store to retrieve and load the
-   weights of the starter model used for finetuning.
-
-   .. attribute:: run
-
-      str
-      The specified run to retrieve weights for the model.
-
-   .. attribute:: criterion
-
-      str
-      The policy that was used to decide when to store the weights.
-
-   .. attribute:: channels
-
-      int
-      The number of channels in the input data.
-
-   .. method:: __init__(start_config)
-
-      
-      Initializes the Start class with specified config to run the
-      initialization of weights for a model associated with a specific
-      criterion.
-
-   .. method:: initialize_weights(model, new_head=None)
-
-      
-      Retrieves the weights from the dacapo store and load them into
-      the model.
-
-   .. rubric:: Notes
-
-   This class is used to retrieve and load the weights of the starter
-   model used for finetuning from the dacapo store.
-
-
-   .. py:method:: initialize_weights(model, new_head=None)
-
-      Retrieves the weights from the dacapo store and load them into
-      the model.
-
-      :param model: obj
-                    The model to which the weights are to be loaded.
-      :param new_head: list
-                       The labels of the new head.
-
-      :returns:
-
-                obj
-                    The model with the weights loaded from the dacapo store.
-      :rtype: model
-
-      :raises RuntimeError: If weights of a non-existing or mismatched layer are being
-          loaded, a RuntimeError exception is thrown which is logged
-          and handled by loading only the common layers from weights.
-
-      .. rubric:: Examples
-
-      >>> model = start.initialize_weights(model, new_head)
-
-      .. rubric:: Notes
-
-      This function is called by the Start class to retrieve the weights
-      from the dacapo store and load them into the model.
-
-
 
 .. py:data:: logger
 

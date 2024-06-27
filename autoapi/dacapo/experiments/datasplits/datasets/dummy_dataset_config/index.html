@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dacapo.experiments.datasplits.datasets.dummy_dataset_config &mdash; DaCapo  documentation</title>
@@ -111,18 +111,6 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDataset" title="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyDataset</span></code></a></p></td>
-<td><p>DummyDataset is a child class of the Dataset. This class has property 'raw' of Array type and a name.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DatasetConfig" title="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DatasetConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DatasetConfig</span></code></a></p></td>
-<td><p>A class used to define configuration for datasets. This provides the</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.dummy_dataset_config.ArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArrayConfig</span></code></a></p></td>
-<td><p>Base class for array configurations. Each subclass of an</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyArrayConfig" title="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyArrayConfig</span></code></a></p></td>
-<td><p>This is just a dummy array  config used for testing. None of the</p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig" title="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DummyDatasetConfig</span></code></a></p></td>
 <td><p>A dummy configuration class for test datasets.</p></td>
 </tr>
@@ -131,225 +119,6 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDataset">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.dummy_dataset_config.</span></span><span class="sig-name descname"><span class="pre">DummyDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDataset" title="Link to this definition"></a></dt>
-<dd><p>DummyDataset is a child class of the Dataset. This class has property ‘raw’ of Array type and a name.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDataset.raw">
-<span class="sig-name descname"><span class="pre">raw</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDataset.raw" title="Link to this definition"></a></dt>
-<dd><p>Array
-The raw data.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDataset.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDataset.__init__" title="Link to this definition"></a></dt>
-<dd><p>Initializes the array type ‘raw’ and name for the DummyDataset instance.</p>
-</dd></dl>
-
-<p class="rubric">Notes</p>
-<p>This class is used to create a dataset with raw data.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DatasetConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.dummy_dataset_config.</span></span><span class="sig-name descname"><span class="pre">DatasetConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DatasetConfig" title="Link to this definition"></a></dt>
-<dd><p>A class used to define configuration for datasets. This provides the
-framework to create a Dataset instance.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DatasetConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DatasetConfig.name" title="Link to this definition"></a></dt>
-<dd><p>str (eg: “sample_dataset”).
-A unique identifier to name the dataset.
-It aids in easy identification and reusability of this dataset.
-Advised to keep it short and refrain from using special characters.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DatasetConfig.weight">
-<span class="sig-name descname"><span class="pre">weight</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DatasetConfig.weight" title="Link to this definition"></a></dt>
-<dd><p>int (default=1).
-A numeric value that indicates how frequently this dataset should be
-sampled in comparison to others. Higher the weight, more frequently it
-gets sampled.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DatasetConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DatasetConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>Checks and validates the dataset configuration. The specific rules for
-validation need to be defined by the user.</p>
-</dd></dl>
-
-<p class="rubric">Notes</p>
-<p>This class is used to create a configuration object for datasets.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
-<dd><p>Method to verify the dataset configuration.</p>
-<p>Since there is no specific validation logic defined for this DataSet, this
-method will always return True as default reaction and a message stating
-the lack of validation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A tuple of boolean value indicating the check (True or False) and
-message specifying result of validation.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the method is not implemented in the derived class.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dataset_config</span> <span class="o">=</span> <span class="n">DatasetConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;sample_dataset&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset_config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
-<span class="go">(True, &quot;No validation for this DataSet&quot;)</span>
-</pre></div>
-</div>
-<p class="rubric">Notes</p>
-<p>This method is used to validate the configuration of the dataset.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.ArrayConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.dummy_dataset_config.</span></span><span class="sig-name descname"><span class="pre">ArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.ArrayConfig" title="Link to this definition"></a></dt>
-<dd><p>Base class for array configurations. Each subclass of an
-<cite>Array</cite> should have a corresponding config class derived from
-<cite>ArrayConfig</cite>. This class should be used to store the configuration
-of the array.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.ArrayConfig.name">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.ArrayConfig.name" title="Link to this definition"></a></dt>
-<dd><p>A unique name for this array. This will be saved so you
-and others can find and reuse this array. Keep it short
-and avoid special characters.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.ArrayConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.ArrayConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>This method is used to check whether this is a valid Array.</p>
-</dd></dl>
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This class is used to create a base class for array configurations. Each subclass of an
-<cite>Array</cite> should have a corresponding config class derived from <cite>ArrayConfig</cite>.
-This class should be used to store the configuration of the array.</p>
-</div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
-<dd><p>Check whether this is a valid Array</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A tuple with the first element being a boolean
-indicating whether the array is valid and the second element being
-a string with a message explaining why the array is invalid</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Tuple[bool, str]</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – This method is not implemented in this class</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_config</span> <span class="o">=</span> <span class="n">ArrayConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;array_config&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">array_config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
-<span class="go">(True, &quot;No validation for this Array&quot;)</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method is used to check whether this is a valid Array.</p>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyArrayConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.dummy_dataset_config.</span></span><span class="sig-name descname"><span class="pre">DummyArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyArrayConfig" title="Link to this definition"></a></dt>
-<dd><p>This is just a dummy array  config used for testing. None of the
-attributes have any particular meaning. It is used to test the
-ArrayConfig class.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyArrayConfig.to_array">
-<span class="sig-name descname"><span class="pre">to_array</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyArrayConfig.to_array" title="Link to this definition"></a></dt>
-<dd><p>Returns the DummyArray object</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyArrayConfig.verify">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyArrayConfig.verify" title="Link to this definition"></a></dt>
-<dd><p>Returns whether the DummyArrayConfig is valid</p>
-</dd></dl>
-
-<p class="rubric">Notes</p>
-<p>The source_array_config must be an ArrayConfig object.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyArrayConfig.array_type">
-<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyArrayConfig.array_type" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id6">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
-<dd><p>Check whether this is a valid Array</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Whether the Array is valid and a message</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Tuple[bool, str]</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ValueError</strong> – If the source is not a tuple of strings</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dummy_array_config</span> <span class="o">=</span> <span class="n">DummyArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dummy_array_config</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
-<span class="go">(False, &quot;This is a DummyArrayConfig and is never valid&quot;)</span>
-</pre></div>
-</div>
-<p class="rubric">Notes</p>
-<p>The source must be a tuple of strings.</p>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.dummy_dataset_config.</span></span><span class="sig-name descname"><span class="pre">DummyDatasetConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.dummy_dataset_config.DummyDatasetConfig" title="Link to this definition"></a></dt>
@@ -375,18 +144,18 @@ ArrayConfig class.</p>
 <p class="rubric">Notes</p>
 <p>This class is used to create a configuration object for the dummy dataset.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id7">
-<span class="sig-name descname"><span class="pre">dataset_type</span></span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">dataset_type</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id8">
-<span class="sig-name descname"><span class="pre">raw_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.ArrayConfig</span></a></em><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">raw_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.ArrayConfig</span></a></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id9">
-<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd><p>A dummy method that always indicates the dataset config is not valid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dacapo.experiments.trainers &mdash; DaCapo  documentation</title>
@@ -313,7 +313,7 @@ Initializes the training pipeline using various components.</p>
 <p>Some trainers may have specific requirements for their training datasets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="../../apply/index.html#dacapo.apply.Dataset" title="dacapo.apply.Dataset"><em>Dataset</em></a><em>]</em>) – The training datasets.</p>
+<dd class="field-odd"><p><strong>datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="../datasplits/datasets/dataset/index.html#dacapo.experiments.datasplits.datasets.dataset.Dataset" title="dacapo.experiments.datasplits.datasets.dataset.Dataset"><em>Dataset</em></a><em>]</em>) – The training datasets.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if the trainer can train on the given datasets, False otherwise.</p>
@@ -344,9 +344,9 @@ training pipeline.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="../../apply/index.html#dacapo.apply.Dataset" title="dacapo.apply.Dataset"><em>Dataset</em></a><em>]</em>) – The datasets to pull data from.</p></li>
+<li><p><strong>datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="../datasplits/datasets/dataset/index.html#dacapo.experiments.datasplits.datasets.dataset.Dataset" title="dacapo.experiments.datasplits.datasets.dataset.Dataset"><em>Dataset</em></a><em>]</em>) – The datasets to pull data from.</p></li>
 <li><p><strong>model</strong> (<a class="reference internal" href="../index.html#dacapo.experiments.Model" title="dacapo.experiments.Model"><em>Model</em></a>) – The model to inform the pipeline of required input/output sizes.</p></li>
-<li><p><strong>task</strong> (<a class="reference internal" href="../run/index.html#dacapo.experiments.run.Task" title="dacapo.experiments.run.Task"><em>Task</em></a>) – The task to transform ground truth into target.</p></li>
+<li><p><strong>task</strong> (<a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.Task" title="dacapo.experiments.tasks.Task"><em>Task</em></a>) – The task to transform ground truth into target.</p></li>
 <li><p><strong>snapshot_container</strong> (<a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalContainerIdentifier" title="dacapo.store.array_store.LocalContainerIdentifier"><em>LocalContainerIdentifier</em></a>) – Defines where snapshots will be saved.</p></li>
 </ul>
 </dd>
@@ -669,7 +669,7 @@ contains methods to enter and exit the context manager. The iterate method yield
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>datasplit</strong> (<a class="reference internal" href="../datasplits/datasplit/index.html#dacapo.experiments.datasplits.datasplit.DataSplit" title="dacapo.experiments.datasplits.datasplit.DataSplit"><em>DataSplit</em></a>) – The data split to use.</p></li>
 <li><p><strong>architecture</strong> (<a class="reference internal" href="../architectures/architecture/index.html#dacapo.experiments.architectures.architecture.Architecture" title="dacapo.experiments.architectures.architecture.Architecture"><em>Architecture</em></a>) – The architecture to use.</p></li>
-<li><p><strong>task</strong> (<a class="reference internal" href="../run/index.html#dacapo.experiments.run.Task" title="dacapo.experiments.run.Task"><em>Task</em></a>) – The task to perform.</p></li>
+<li><p><strong>task</strong> (<a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.Task" title="dacapo.experiments.tasks.Task"><em>Task</em></a>) – The task to perform.</p></li>
 <li><p><strong>snapshot_container</strong> (<em>SnapshotContainer</em>) – The snapshot container to use.</p></li>
 </ul>
 </dd>
@@ -1028,9 +1028,9 @@ Checks if the trainer can train with a specific set of datasets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="../../apply/index.html#dacapo.apply.Dataset" title="dacapo.apply.Dataset"><em>Dataset</em></a><em>]</em>) – The list of datasets.</p></li>
+<li><p><strong>datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="../datasplits/datasets/dataset/index.html#dacapo.experiments.datasplits.datasets.dataset.Dataset" title="dacapo.experiments.datasplits.datasets.dataset.Dataset"><em>Dataset</em></a><em>]</em>) – The list of datasets.</p></li>
 <li><p><strong>model</strong> (<a class="reference internal" href="../index.html#dacapo.experiments.Model" title="dacapo.experiments.Model"><em>Model</em></a>) – The model to be trained.</p></li>
-<li><p><strong>task</strong> (<a class="reference internal" href="../run/index.html#dacapo.experiments.run.Task" title="dacapo.experiments.run.Task"><em>Task</em></a>) – The task to be performed.</p></li>
+<li><p><strong>task</strong> (<a class="reference internal" href="../tasks/index.html#dacapo.experiments.tasks.Task" title="dacapo.experiments.tasks.Task"><em>Task</em></a>) – The task to be performed.</p></li>
 <li><p><strong>snapshot_container</strong> (<a class="reference internal" href="../../store/array_store/index.html#dacapo.store.array_store.LocalContainerIdentifier" title="dacapo.store.array_store.LocalContainerIdentifier"><em>LocalContainerIdentifier</em></a>) – The snapshot container.</p></li>
 </ul>
 </dd>
@@ -1101,7 +1101,7 @@ Checks if the trainer can train with a specific set of datasets.</p>
 <dd><p>Checks if the trainer can train with a specific set of datasets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="../../apply/index.html#dacapo.apply.Dataset" title="dacapo.apply.Dataset"><em>Dataset</em></a><em>]</em>) – The list of datasets.</p>
+<dd class="field-odd"><p><strong>datasets</strong> (<em>List</em><em>[</em><a class="reference internal" href="../datasplits/datasets/dataset/index.html#dacapo.experiments.datasplits.datasets.dataset.Dataset" title="dacapo.experiments.datasplits.datasets.dataset.Dataset"><em>Dataset</em></a><em>]</em>) – The list of datasets.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if the trainer can train with the datasets, False otherwise.</p>

@@ -15,7 +15,7 @@ Classes
 Module Contents
 ---------------
 
-.. py:class:: Architecture(*args, **kwargs)
+.. py:class:: Architecture
 
 
 
