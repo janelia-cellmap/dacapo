@@ -653,7 +653,7 @@ class DataSplitGenerator:
 
         """
         datasets, classes = format_class_name(
-            class_name, self.classes_separator_caracter
+            class_name, self.classes_separator_caracter, self.targets
         )
         if self.class_name is None:
             self.class_name = classes
@@ -893,7 +893,7 @@ class DataSplitGenerator:
         )
 
 
-def format_class_name(class_name, separator_character="&"):
+def format_class_name(class_name, separator_character="&", targets=None):
     """
     Format the class name.
 
@@ -919,4 +919,8 @@ def format_class_name(class_name, separator_character="&"):
         base_class_name = class_name.split("[")[0]
         return [f"{base_class_name}{c}" for c in classes], classes
     else:
-        raise ValueError(f"Invalid class name {class_name} missing '[' and ']'")
+        if targets is None:
+            raise ValueError(f"Invalid class name {class_name} missing '[' and ']'")
+        if len(targets) > 1:
+            raise ValueError(f"Invalid class name {class_name} missing '[' and ']'")
+        return [class_name], [targets[0]]
