@@ -13,7 +13,7 @@
 # --config_path: Path to the config yaml file.
 
 
-dacapo segment-blockwise \
+dacapo cli segment-blockwise \
 -sf segment_function.py \
 -rr "[256,256,256]" \
 -wr "[256,256,256]" \
