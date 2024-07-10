@@ -19,7 +19,6 @@ from .merge_instances_array_config import (
 )  # noqa
 from .dvid_array_config import DVIDArray, DVIDArrayConfig
 from .sum_array_config import SumArray, SumArrayConfig
-from .rescaled_array_config import RescaledArray, RescaledArrayConfig
 
 # nonconfigurable arrays (helpers)
 from .numpy_array import NumpyArray  # noqa
