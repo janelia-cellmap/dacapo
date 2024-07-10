@@ -1,22 +1,24 @@
 import logging
 
 import scipy.ndimage
+import yaml
 
 logger = logging.getLogger(__file__)
 
 
-def segment_function(input_array, block, **steps):
+def segment_function(input_array, block, config_path):
     """
     Segment a 3D block using a small numpy-based post-processing script.
 
     Args:
         input_array (np.ndarray): The 3D array to segment.
         block (daisy.Block): The block object.
-        **steps (dict): The steps to apply to the segmentation.
+        config_path (str): The path to the configuration yaml file.
     Returns:
         np.ndarray: The segmented 3D array.
     """
     data = input_array.to_ndarray(block.read_roi)
+    steps = yaml.load(config_path, Loader=yaml.FullLoader)
 
     # Apply the segmentation function here
     for step, params in steps.items():
