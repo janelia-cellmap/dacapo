@@ -41,7 +41,7 @@ Module Contents
    :param input_array: The 3D array to segment.
    :type input_array: np.ndarray
    :param block: The block object.
-   :type block: dask.array.core.Block
+   :type block: daisy.Block
    :param \*\*parameters: Parameters for the empanada-napari segmenter.
 
    :returns: The segmented 3D array.
