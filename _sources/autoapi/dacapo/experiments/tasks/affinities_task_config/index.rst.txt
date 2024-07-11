@@ -30,6 +30,14 @@ Module Contents
 
       Whether or not to train lsds along with your affinities.
 
+   .. attribute:: num_lsd_voxels
+
+      The number of voxels to use for the lsd center of mass calculation.
+
+   .. attribute:: downsample_lsds
+
+      The factor by which to downsample the lsds.
+
    .. attribute:: lsds_to_affs_weight_ratio
 
       If training with lsds, set how much they should be weighted compared to affs.
@@ -72,6 +80,14 @@ Module Contents
 
    .. py:attribute:: lsds
       :type:  bool
+
+
+   .. py:attribute:: num_lsd_voxels
+      :type:  int
+
+
+   .. py:attribute:: downsample_lsds
+      :type:  int
 
 
    .. py:attribute:: lsds_to_affs_weight_ratio
