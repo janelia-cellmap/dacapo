@@ -75,6 +75,10 @@ def resize_if_needed(
 
     raw_upsample = raw_voxel_size / target_resolution
     raw_downsample = target_resolution / raw_voxel_size
+    assert len(target_resolution) == zarr_array.dims, (
+        f"Target resolution {target_resolution} and raw voxel size {raw_voxel_size} "
+        f"have different dimensions {zarr_array.dims}"
+    )
     if any([u > 1 or d > 1 for u, d in zip(raw_upsample, raw_downsample)]):
         return ResampledArrayConfig(
             name=f"{extra_str}_{array_config.name}_{array_config.dataset}_resampled",

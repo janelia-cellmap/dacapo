@@ -47,7 +47,7 @@ def train(run_name: str):
     return train_run(run)
 
 
-def train_run(run: Run):
+def train_run(run: Run, validate=True):
     """
     Train a run
 
@@ -184,30 +184,31 @@ def train_run(run: Run):
 
             stats_store.store_training_stats(run.name, run.training_stats)
             weights_store.store_weights(run, iteration_stats.iteration + 1)
-            try:
-                # launch validation in a separate thread to avoid blocking training
-                if compute_context.distribute_workers:
-                    validate_thread = threading.Thread(
-                        target=validate,
-                        args=(run, iteration_stats.iteration + 1),
-                        name=f"validate_{run.name}_{iteration_stats.iteration + 1}",
-                        daemon=True,
-                    )
-                    validate_thread.start()
-                else:
-                    validate(
-                        run,
-                        iteration_stats.iteration + 1,
-                    )
+            if validate:
+                try:
+                    # launch validation in a separate thread to avoid blocking training
+                    if compute_context.distribute_workers:
+                        validate_thread = threading.Thread(
+                            target=validate,
+                            args=(run, iteration_stats.iteration + 1),
+                            name=f"validate_{run.name}_{iteration_stats.iteration + 1}",
+                            daemon=True,
+                        )
+                        validate_thread.start()
+                    else:
+                        validate(
+                            run,
+                            iteration_stats.iteration + 1,
+                        )
 
-                stats_store.store_validation_iteration_scores(
-                    run.name, run.validation_scores
-                )
-            except Exception as e:
-                logger.error(
-                    f"Validation failed for run {run.name} at iteration "
-                    f"{iteration_stats.iteration + 1}.",
-                    exc_info=e,
-                )
+                    stats_store.store_validation_iteration_scores(
+                        run.name, run.validation_scores
+                    )
+                except Exception as e:
+                    logger.error(
+                        f"Validation failed for run {run.name} at iteration "
+                        f"{iteration_stats.iteration + 1}.",
+                        exc_info=e,
+                    )
 
     print(f"Trained until {trained_until}. Finished.")
