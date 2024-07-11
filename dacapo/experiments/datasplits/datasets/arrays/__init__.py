@@ -6,7 +6,6 @@ from .dummy_array_config import DummyArray, DummyArrayConfig  # noqa
 from .zarr_array_config import ZarrArray, ZarrArrayConfig  # noqa
 from .binarize_array_config import BinarizeArray, BinarizeArrayConfig  # noqa
 from .resampled_array_config import ResampledArray, ResampledArrayConfig  # noqa
-from .rescaled_array_config import RescaledArray, RescaledArrayConfig  # noqa
 from .intensity_array_config import IntensitiesArray, IntensitiesArrayConfig  # noqa
 from .missing_annotations_mask import MissingAnnotationsMask  # noqa
 from .missing_annotations_mask_config import MissingAnnotationsMaskConfig  # noqa
