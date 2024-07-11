@@ -26,9 +26,7 @@ class RescaledArrayConfig(ArrayConfig):
         metadata={"help_text": "The Array that you want to upsample or downsample."}
     )
 
-    target_voxel_size: tuple = attr.ib(
-        metadata={"help_text": "The target voxel size."}
-    )
+    target_voxel_size: tuple = attr.ib(metadata={"help_text": "The target voxel size."})
     interp_order: bool = attr.ib(
         metadata={"help_text": "The order of the interpolation."}
     )
