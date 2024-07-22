@@ -147,6 +147,7 @@ class Options:
         ]
         for path in options_files:
             if path.exists():
+                os.environ["OPTIONS_FILE"] = str(path)
                 return path
         return None
 
