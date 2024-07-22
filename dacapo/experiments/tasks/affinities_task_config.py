@@ -17,6 +17,8 @@ class AffinitiesTaskConfig(TaskConfig):
     Attributes:
         neighborhood: A list of Coordinate objects.
         lsds: Whether or not to train lsds along with your affinities.
+        num_lsd_voxels: The number of voxels to use for the lsd center of mass calculation.
+        downsample_lsds: The factor by which to downsample the lsds.
         lsds_to_affs_weight_ratio: If training with lsds, set how much they should be weighted compared to affs.
         affs_weight_clipmin: The minimum value for affinities weights.
         affs_weight_clipmax: The maximum value for affinities weights.
@@ -43,6 +45,19 @@ class AffinitiesTaskConfig(TaskConfig):
         metadata={
             "help_text": "Whether or not to train lsds along with your affinities. "
             "It has been shown that lsds as an auxiliary task can help affinity predictions."
+        },
+    )
+    num_lsd_voxels: int = attr.ib(
+        default=10,
+        metadata={
+            "help_text": "The number of voxels to use for the lsd center of mass calculation."
+        },
+    )
+    downsample_lsds: int = attr.ib(
+        default=1,
+        metadata={
+            "help_text": "The factor by which to downsample the lsds. "
+            "This can be useful to reduce the computational cost of training."
         },
     )
     lsds_to_affs_weight_ratio: float = attr.ib(
