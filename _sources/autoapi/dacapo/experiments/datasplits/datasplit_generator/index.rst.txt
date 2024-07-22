@@ -608,7 +608,7 @@ Module Contents
 
 
 
-.. py:function:: format_class_name(class_name, separator_character='&')
+.. py:function:: format_class_name(class_name, separator_character='&', targets=None)
 
    Format the class name.
 

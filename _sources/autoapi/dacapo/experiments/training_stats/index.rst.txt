@@ -4,6 +4,14 @@ dacapo.experiments.training_stats
 .. py:module:: dacapo.experiments.training_stats
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   dacapo.experiments.training_stats.logger
+
+
 Classes
 -------
 
@@ -14,6 +22,8 @@ Classes
 
 Module Contents
 ---------------
+
+.. py:data:: logger
 
 .. py:class:: TrainingStats
 

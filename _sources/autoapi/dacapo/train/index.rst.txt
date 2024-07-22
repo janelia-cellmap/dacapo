@@ -39,7 +39,7 @@ Module Contents
    >>> train("run_name")
 
 
-.. py:function:: train_run(run: dacapo.experiments.Run)
+.. py:function:: train_run(run: dacapo.experiments.Run, do_validate=True)
 
    Train a run
 
