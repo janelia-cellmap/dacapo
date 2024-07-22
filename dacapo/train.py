@@ -47,7 +47,7 @@ def train(run_name: str):
     return train_run(run)
 
 
-def train_run(run: Run, validate=True):
+def train_run(run: Run, do_validate=True):
     """
     Train a run
 
@@ -184,7 +184,7 @@ def train_run(run: Run, validate=True):
 
             stats_store.store_training_stats(run.name, run.training_stats)
             weights_store.store_weights(run, iteration_stats.iteration + 1)
-            if validate:
+            if do_validate:
                 try:
                     # launch validation in a separate thread to avoid blocking training
                     if compute_context.distribute_workers:

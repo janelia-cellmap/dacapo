@@ -113,7 +113,6 @@ def start_worker_fn(
     device = compute_context.device
 
     # retrieving run
-    logger.error(f"run_name: {run_name} {type(run_name)}")
     if isinstance(run_name, Run):
         run = run_name
         run_name = run.name
