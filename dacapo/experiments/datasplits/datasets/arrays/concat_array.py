@@ -459,3 +459,82 @@ class ConcatArray(Array):
                 f"Concatenated array has only one channel: {self.name} {concatenated.shape}"
             )
         return concatenated
+
+    def _can_neuroglance(self):
+        """
+        This method returns True if the source array can be visualized in neuroglance.
+
+        Returns:
+            bool: True if the source array can be visualized in neuroglance.
+        Raises:
+            ValueError: If the source array is not writable.
+        Examples:
+            >>> binarize_array._can_neuroglance()
+        Note:
+            This method is used to return True if the source array can be visualized in neuroglance.
+        """
+        return any(
+            [
+                source_array._can_neuroglance()
+                for source_array in self.source_arrays.values()
+            ]
+        )
+
+    def _neuroglancer_source(self):
+        """
+        This method returns the source array for neuroglancer.
+
+        Returns:
+            neuroglancer.LocalVolume: The source array for neuroglancer.
+        Raises:
+            ValueError: If the source array is not writable.
+        Examples:
+            >>> binarize_array._neuroglancer_source()
+        Note:
+            This method is used to return the source array for neuroglancer.
+        """
+        # return self._source_array._neuroglancer_source()
+        return [
+            source_array._neuroglancer_source()
+            for source_array in self.source_arrays.values()
+        ]
+
+    def _neuroglancer_layer(self):
+        """
+        This method returns the neuroglancer layer for the source array.
+
+        Returns:
+            neuroglancer.SegmentationLayer: The neuroglancer layer for the source array.
+        Raises:
+            ValueError: If the source array is not writable.
+        Examples:
+            >>> binarize_array._neuroglancer_layer()
+        Note:
+            This method is used to return the neuroglancer layer for the source array.
+        """
+        # layer = neuroglancer.SegmentationLayer(source=self._neuroglancer_source())
+        return [
+            source_array._neuroglancer_layer()
+            for source_array in self.source_arrays.values()
+            if source_array._can_neuroglance()
+        ]
+
+    def _source_name(self):
+        """
+        This method returns the name of the source array.
+
+        Returns:
+            str: The name of the source array.
+        Raises:
+            ValueError: If the source array is not writable.
+        Examples:
+            >>> binarize_array._source_name()
+        Note:
+            This method is used to return the name of the source array.
+        """
+        # return self._source_array._source_name()
+        return [
+            source_array._source_name()
+            for source_array in self.source_arrays.values()
+            if source_array._can_neuroglance()
+        ]

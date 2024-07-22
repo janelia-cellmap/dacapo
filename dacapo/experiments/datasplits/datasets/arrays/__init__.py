@@ -22,3 +22,4 @@ from .sum_array_config import SumArray, SumArrayConfig
 
 # nonconfigurable arrays (helpers)
 from .numpy_array import NumpyArray  # noqa
+from .constant_array_config import ConstantArray, ConstantArrayConfig  # noqa
