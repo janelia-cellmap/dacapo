@@ -1,15 +1,7 @@
-dacapo.experiments.datasplits.datasets.arrays.ones_array
-========================================================
+dacapo.experiments.datasplits.datasets.arrays.constant_array
+============================================================
 
-.. py:module:: dacapo.experiments.datasplits.datasets.arrays.ones_array
-
-
-Attributes
-----------
-
-.. autoapisummary::
-
-   dacapo.experiments.datasplits.datasets.arrays.ones_array.logger
+.. py:module:: dacapo.experiments.datasplits.datasets.arrays.constant_array
 
 
 Classes
@@ -17,19 +9,17 @@ Classes
 
 .. autoapisummary::
 
-   dacapo.experiments.datasplits.datasets.arrays.ones_array.OnesArray
+   dacapo.experiments.datasplits.datasets.arrays.constant_array.ConstantArray
 
 
 Module Contents
 ---------------
 
-.. py:data:: logger
-
-.. py:class:: OnesArray(array_config)
+.. py:class:: ConstantArray(array_config)
 
 
 
-   This is a wrapper around another `source_array` that simply provides ones
+   This is a wrapper around another `source_array` that simply provides constant value
    with the same metadata as the `source_array`.
 
    This is useful for creating a mask array that is the same size as the
@@ -41,7 +31,7 @@ Module Contents
 
    .. method:: like
 
-      Create a new OnesArray with the same metadata as another array.
+      Create a new ConstantArray with the same metadata as another array.
 
    .. method:: attrs
 
@@ -86,7 +76,7 @@ Module Contents
    .. note::
 
       This class is not meant to be instantiated directly. Instead, use the
-      `like` method to create a new OnesArray with the same metadata as
+      `like` method to create a new ConstantArray with the same metadata as
       another array.
 
 
@@ -94,21 +84,21 @@ Module Contents
       :classmethod:
 
 
-      Create a new OnesArray with the same metadata as another array.
+      Create a new ConstantArray with the same metadata as another array.
 
       :param array: The source array.
 
-      :returns: The new OnesArray with the same metadata as the source array.
+      :returns: The new ConstantArray with the same metadata as the source array.
 
       :raises RuntimeError: If the source array is not specified.
 
       .. rubric:: Examples
 
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ConstantArray
       >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
       >>> import numpy as np
       >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray.like(source_array)
+      >>> ones_array = ConstantArray.like(source_array)
       >>> ones_array.source_array
       NumpyArray(data=array([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
                               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
@@ -124,7 +114,7 @@ Module Contents
       .. rubric:: Notes
 
       This class is not meant to be instantiated directly. Instead, use the
-      `like` method to create a new OnesArray with the same metadata as
+      `like` method to create a new ConstantArray with the same metadata as
       another array.
 
 
@@ -136,11 +126,11 @@ Module Contents
 
       .. rubric:: Examples
 
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ConstantArray
       >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
       >>> import numpy as np
       >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
+      >>> ones_array = ConstantArray(source_array)
       >>> ones_array.attrs
       {}
 
@@ -148,7 +138,7 @@ Module Contents
 
       This method is used to get the attributes of the array. The attributes
       are stored as key-value pairs in a dictionary. This method returns an
-      empty dictionary because the OnesArray does not have any attributes.
+      empty dictionary because the ConstantArray does not have any attributes.
 
 
    .. py:property:: source_array
@@ -162,11 +152,11 @@ Module Contents
 
       .. rubric:: Examples
 
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ConstantArray
       >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
       >>> import numpy as np
       >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
+      >>> ones_array = ConstantArray(source_array)
       >>> ones_array.source_array
       NumpyArray(data=array([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
                               [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
@@ -182,8 +172,8 @@ Module Contents
       .. rubric:: Notes
 
       This method is used to get the source array that this array is based on.
-      The source array is the array that the OnesArray is created from. This
-      method returns the source array that was specified when the OnesArray
+      The source array is the array that the ConstantArray is created from. This
+      method returns the source array that was specified when the ConstantArray
       was created.
 
 
@@ -196,11 +186,11 @@ Module Contents
 
       .. rubric:: Examples
 
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ConstantArray
       >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
       >>> import numpy as np
       >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
+      >>> ones_array = ConstantArray(source_array)
       >>> ones_array.axes
       'zyx'
 
@@ -208,7 +198,7 @@ Module Contents
 
       This method is used to get the axes of the array. The axes are the
       order of the dimensions of the array. This method returns the axes of
-      the array that was specified when the OnesArray was created.
+      the array that was specified when the ConstantArray was created.
 
 
    .. py:property:: dims
@@ -220,11 +210,11 @@ Module Contents
 
       .. rubric:: Examples
 
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ConstantArray
       >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
       >>> import numpy as np
       >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
+      >>> ones_array = ConstantArray(source_array)
       >>> ones_array.dims
       (10, 10, 10)
 
@@ -232,7 +222,7 @@ Module Contents
 
       This method is used to get the dimensions of the array. The dimensions
       are the size of the array along each axis. This method returns the
-      dimensions of the array that was specified when the OnesArray was created.
+      dimensions of the array that was specified when the ConstantArray was created.
 
 
    .. py:property:: voxel_size
@@ -244,11 +234,11 @@ Module Contents
 
       .. rubric:: Examples
 
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ConstantArray
       >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
       >>> import numpy as np
       >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
+      >>> ones_array = ConstantArray(source_array)
       >>> ones_array.voxel_size
       (1.0, 1.0, 1.0)
 
@@ -256,7 +246,7 @@ Module Contents
 
       This method is used to get the voxel size of the array. The voxel size
       is the size of each voxel in the array. This method returns the voxel
-      size of the array that was specified when the OnesArray was created.
+      size of the array that was specified when the ConstantArray was created.
 
 
    .. py:property:: roi
@@ -268,12 +258,12 @@ Module Contents
 
       .. rubric:: Examples
 
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ConstantArray
       >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
       >>> from funlib.geometry import Roi
       >>> import numpy as np
       >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
+      >>> ones_array = ConstantArray(source_array)
       >>> ones_array.roi
       Roi((0, 0, 0), (10, 10, 10))
 
@@ -282,7 +272,7 @@ Module Contents
       This method is used to get the region of interest of the array. The
       region of interest is the region of the array that contains the data.
       This method returns the region of interest of the array that was specified
-      when the OnesArray was created.
+      when the ConstantArray was created.
 
 
    .. py:property:: writable
@@ -296,11 +286,11 @@ Module Contents
 
       .. rubric:: Examples
 
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ConstantArray
       >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
       >>> import numpy as np
       >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
+      >>> ones_array = ConstantArray(source_array)
       >>> ones_array.writable
       False
 
@@ -308,7 +298,7 @@ Module Contents
 
       This method is used to check if the array is writable. An array is
       writable if it can be modified in place. This method returns False
-      because the OnesArray is read-only and cannot be modified.
+      because the ConstantArray is read-only and cannot be modified.
 
 
    .. py:property:: data
@@ -320,11 +310,11 @@ Module Contents
 
       .. rubric:: Examples
 
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ConstantArray
       >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
       >>> import numpy as np
       >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
+      >>> ones_array = ConstantArray(source_array)
       >>> ones_array.data
       array([[[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
               [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -353,11 +343,11 @@ Module Contents
 
       .. rubric:: Examples
 
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ConstantArray
       >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
       >>> import numpy as np
       >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
+      >>> ones_array = ConstantArray(source_array)
       >>> ones_array.dtype
       <class 'numpy.bool_'>
 
@@ -365,7 +355,7 @@ Module Contents
 
       This method is used to get the data type of the array. The data type
       is the type of the values that are stored in the array. This method
-      returns the data type of the array that was specified when the OnesArray
+      returns the data type of the array that was specified when the ConstantArray
       was created.
 
 
@@ -378,11 +368,11 @@ Module Contents
 
       .. rubric:: Examples
 
-      >>> from dacapo.experiments.datasplits.datasets.arrays import OnesArray
+      >>> from dacapo.experiments.datasplits.datasets.arrays import ConstantArray
       >>> from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
       >>> import numpy as np
       >>> source_array = NumpyArray(np.zeros((10, 10, 10)))
-      >>> ones_array = OnesArray(source_array)
+      >>> ones_array = ConstantArray(source_array)
       >>> ones_array.num_channels
       1
 
@@ -391,6 +381,6 @@ Module Contents
       This method is used to get the number of channels of the array. The
       number of channels is the number of values that are stored at each
       voxel in the array. This method returns the number of channels of the
-      array that was specified when the OnesArray was created.
+      array that was specified when the ConstantArray was created.
 
 

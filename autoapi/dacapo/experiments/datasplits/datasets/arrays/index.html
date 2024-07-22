@@ -117,6 +117,8 @@
 <li class="toctree-l1"><a class="reference internal" href="binarize_array_config/index.html">dacapo.experiments.datasplits.datasets.arrays.binarize_array_config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concat_array/index.html">dacapo.experiments.datasplits.datasets.arrays.concat_array</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concat_array_config/index.html">dacapo.experiments.datasplits.datasets.arrays.concat_array_config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constant_array/index.html">dacapo.experiments.datasplits.datasets.arrays.constant_array</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constant_array_config/index.html">dacapo.experiments.datasplits.datasets.arrays.constant_array_config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="crop_array/index.html">dacapo.experiments.datasplits.datasets.arrays.crop_array</a></li>
 <li class="toctree-l1"><a class="reference internal" href="crop_array_config/index.html">dacapo.experiments.datasplits.datasets.arrays.crop_array_config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dummy_array/index.html">dacapo.experiments.datasplits.datasets.arrays.dummy_array</a></li>
@@ -235,6 +237,12 @@
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NumpyArray</span></code></a></p></td>
 <td><p>This is just a wrapper for a numpy array to make it fit the DaCapo Array interface.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArray" title="dacapo.experiments.datasplits.datasets.arrays.ConstantArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConstantArray</span></code></a></p></td>
+<td><p>This is a wrapper around another <cite>source_array</cite> that simply provides constant value</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.ConstantArrayConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConstantArrayConfig</span></code></a></p></td>
+<td><p>This array read data from the source array and then return a np.ones_like() version.</p></td>
 </tr>
 </tbody>
 </table>
@@ -7274,6 +7282,481 @@ The Array of masks from which to take the union</p>
 <p>This method is a property. It returns the number of channels in the array.</p>
 </div>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">ConstantArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArray" title="Link to this definition"></a></dt>
+<dd><p>This is a wrapper around another <cite>source_array</cite> that simply provides constant value
+with the same metadata as the <cite>source_array</cite>.</p>
+<p>This is useful for creating a mask array that is the same size as the
+original array, but with all values set to 1.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArray.source_array">
+<span class="sig-name descname"><span class="pre">source_array</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArray.source_array" title="Link to this definition"></a></dt>
+<dd><p>The source array that this array is based on.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArray.like">
+<span class="sig-name descname"><span class="pre">like</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArray.like" title="Link to this definition"></a></dt>
+<dd><p>Create a new ConstantArray with the same metadata as another array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArray.attrs">
+<span class="sig-name descname"><span class="pre">attrs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArray.attrs" title="Link to this definition"></a></dt>
+<dd><p>Get the attributes of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArray.axes">
+<span class="sig-name descname"><span class="pre">axes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArray.axes" title="Link to this definition"></a></dt>
+<dd><p>Get the axes of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArray.dims">
+<span class="sig-name descname"><span class="pre">dims</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArray.dims" title="Link to this definition"></a></dt>
+<dd><p>Get the dimensions of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArray.voxel_size">
+<span class="sig-name descname"><span class="pre">voxel_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArray.voxel_size" title="Link to this definition"></a></dt>
+<dd><p>Get the voxel size of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArray.roi">
+<span class="sig-name descname"><span class="pre">roi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArray.roi" title="Link to this definition"></a></dt>
+<dd><p>Get the region of interest of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArray.writable">
+<span class="sig-name descname"><span class="pre">writable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArray.writable" title="Link to this definition"></a></dt>
+<dd><p>Check if the array is writable.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArray.data">
+<span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArray.data" title="Link to this definition"></a></dt>
+<dd><p>Get the data of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArray.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArray.dtype" title="Link to this definition"></a></dt>
+<dd><p>Get the data type of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArray.num_channels">
+<span class="sig-name descname"><span class="pre">num_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArray.num_channels" title="Link to this definition"></a></dt>
+<dd><p>Get the number of channels of the array.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArray.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArray.__getitem__" title="Link to this definition"></a></dt>
+<dd><p>Get a subarray of the array.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is not meant to be instantiated directly. Instead, use the
+<cite>like</cite> method to create a new ConstantArray with the same metadata as
+another array.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id192">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">like</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array.Array</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id192" title="Link to this definition"></a></dt>
+<dd><p>Create a new ConstantArray with the same metadata as another array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>array</strong> – The source array.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new ConstantArray with the same metadata as the source array.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If the source array is not specified.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">ConstantArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">NumpyArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">NumpyArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span> <span class="o">=</span> <span class="n">ConstantArray</span><span class="o">.</span><span class="n">like</span><span class="p">(</span><span class="n">source_array</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span><span class="o">.</span><span class="n">source_array</span>
+<span class="go">NumpyArray(data=array([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]]), voxel_size=(1.0, 1.0, 1.0), roi=Roi((0, 0, 0), (10, 10, 10)), num_channels=1)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This class is not meant to be instantiated directly. Instead, use the
+<cite>like</cite> method to create a new ConstantArray with the same metadata as
+another array.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id193">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id193" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An empty dictionary.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">ConstantArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">NumpyArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">NumpyArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span> <span class="o">=</span> <span class="n">ConstantArray</span><span class="p">(</span><span class="n">source_array</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span><span class="o">.</span><span class="n">attrs</span>
+<span class="go">{}</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to get the attributes of the array. The attributes
+are stored as key-value pairs in a dictionary. This method returns an
+empty dictionary because the ConstantArray does not have any attributes.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id194">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source_array</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array.Array</span></a></em><a class="headerlink" href="#id194" title="Link to this definition"></a></dt>
+<dd><p>Get the source array that this array is based on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The source array.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the source array is not specified.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">ConstantArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">NumpyArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">NumpyArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span> <span class="o">=</span> <span class="n">ConstantArray</span><span class="p">(</span><span class="n">source_array</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span><span class="o">.</span><span class="n">source_array</span>
+<span class="go">NumpyArray(data=array([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],</span>
+<span class="go">                        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]]), voxel_size=(1.0, 1.0, 1.0), roi=Roi((0, 0, 0), (10, 10, 10)), num_channels=1)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to get the source array that this array is based on.
+The source array is the array that the ConstantArray is created from. This
+method returns the source array that was specified when the ConstantArray
+was created.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id195">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id195" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The axes of the array.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the axes are not specified.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">ConstantArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">NumpyArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">NumpyArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span> <span class="o">=</span> <span class="n">ConstantArray</span><span class="p">(</span><span class="n">source_array</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span><span class="o">.</span><span class="n">axes</span>
+<span class="go">&#39;zyx&#39;</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to get the axes of the array. The axes are the
+order of the dimensions of the array. This method returns the axes of
+the array that was specified when the ConstantArray was created.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id196">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#id196" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">dimensions</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The dimensions of the array.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the dimensions are not specified.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">ConstantArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">NumpyArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">NumpyArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span> <span class="o">=</span> <span class="n">ConstantArray</span><span class="p">(</span><span class="n">source_array</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span><span class="o">.</span><span class="n">dims</span>
+<span class="go">(10, 10, 10)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to get the dimensions of the array. The dimensions
+are the size of the array along each axis. This method returns the
+dimensions of the array that was specified when the ConstantArray was created.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id197">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#id197" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">voxel</span> <span class="pre">size</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The voxel size of the array.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the voxel size is not specified.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">ConstantArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">NumpyArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">NumpyArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span> <span class="o">=</span> <span class="n">ConstantArray</span><span class="p">(</span><span class="n">source_array</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span><span class="o">.</span><span class="n">voxel_size</span>
+<span class="go">(1.0, 1.0, 1.0)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to get the voxel size of the array. The voxel size
+is the size of each voxel in the array. This method returns the voxel
+size of the array that was specified when the ConstantArray was created.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id198">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#id198" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">region</span> <span class="pre">of</span> <span class="pre">interest</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The region of interest of the array.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the region of interest is not specified.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">ConstantArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">NumpyArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">funlib.geometry</span> <span class="kn">import</span> <span class="n">Roi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">NumpyArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span> <span class="o">=</span> <span class="n">ConstantArray</span><span class="p">(</span><span class="n">source_array</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span><span class="o">.</span><span class="n">roi</span>
+<span class="go">Roi((0, 0, 0), (10, 10, 10))</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to get the region of interest of the array. The
+region of interest is the region of the array that contains the data.
+This method returns the region of interest of the array that was specified
+when the ConstantArray was created.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id199">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id199" title="Link to this definition"></a></dt>
+<dd><p>Check if the array is writable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>False.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the writability of the array is not specified.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">ConstantArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">NumpyArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">NumpyArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span> <span class="o">=</span> <span class="n">ConstantArray</span><span class="p">(</span><span class="n">source_array</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span><span class="o">.</span><span class="n">writable</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to check if the array is writable. An array is
+writable if it can be modified in place. This method returns False
+because the ConstantArray is read-only and cannot be modified.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id200">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id200" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The data of the array.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the data is not specified.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">ConstantArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">NumpyArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">NumpyArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span> <span class="o">=</span> <span class="n">ConstantArray</span><span class="p">(</span><span class="n">source_array</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span><span class="o">.</span><span class="n">data</span>
+<span class="go">array([[[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],</span>
+<span class="go">        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],</span>
+<span class="go">        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],</span>
+<span class="go">        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],</span>
+<span class="go">        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],</span>
+<span class="go">        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],</span>
+<span class="go">        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],</span>
+<span class="go">        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],</span>
+<span class="go">        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],</span>
+<span class="go">        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]])</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to get the data of the array. The data is the
+values that are stored in the array. This method returns a subarray
+of the array with all values set to 1.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id201">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id201" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The data type of the array.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the data type is not specified.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">ConstantArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">NumpyArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">NumpyArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span> <span class="o">=</span> <span class="n">ConstantArray</span><span class="p">(</span><span class="n">source_array</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span><span class="o">.</span><span class="n">dtype</span>
+<span class="go">&lt;class &#39;numpy.bool_&#39;&gt;</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to get the data type of the array. The data type
+is the type of the values that are stored in the array. This method
+returns the data type of the array that was specified when the ConstantArray
+was created.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id202">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#id202" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">channels</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The number of channels of the array.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the number of channels is not specified.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">ConstantArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="n">NumpyArray</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_array</span> <span class="o">=</span> <span class="n">NumpyArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span> <span class="o">=</span> <span class="n">ConstantArray</span><span class="p">(</span><span class="n">source_array</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ones_array</span><span class="o">.</span><span class="n">num_channels</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>This method is used to get the number of channels of the array. The
+number of channels is the number of values that are stored at each
+voxel in the array. This method returns the number of channels of the
+array that was specified when the ConstantArray was created.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArrayConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.</span></span><span class="sig-name descname"><span class="pre">ConstantArrayConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArrayConfig" title="Link to this definition"></a></dt>
+<dd><p>This array read data from the source array and then return a np.ones_like() version.</p>
+<p>This is useful for creating a mask array from a source array. For example, if you have a
+2D array of data and you want to create a mask array that is the same shape as the data
+array, you can use this class to create the mask array.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArrayConfig.source_array_config">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArrayConfig.source_array_config" title="Link to this definition"></a></dt>
+<dd><p>The source array that you want to copy and fill with ones.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArrayConfig.create_array">
+<span class="sig-name descname"><span class="pre">create_array</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArrayConfig.create_array" title="Link to this definition"></a></dt>
+<dd><p>Create the array.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This class is a subclass of ArrayConfig.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArrayConfig.array_type">
+<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArrayConfig.array_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id203">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#id203" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConstantArrayConfig.constant">
+<span class="sig-name descname"><span class="pre">constant</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConstantArrayConfig.constant" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

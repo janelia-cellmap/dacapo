@@ -311,7 +311,7 @@ Module Contents
    This function is used to generate the dataset specification from the CSV file.
 
 
-.. py:class:: DataSplitGenerator(name: str, datasets: List[DatasetSpec], input_resolution: Union[Sequence[int], funlib.geometry.Coordinate], output_resolution: Union[Sequence[int], funlib.geometry.Coordinate], targets: Optional[List[str]] = None, segmentation_type: Union[str, SegmentationType] = 'semantic', max_gt_downsample=32, max_gt_upsample=4, max_raw_training_downsample=16, max_raw_training_upsample=2, max_raw_validation_downsample=8, max_raw_validation_upsample=2, min_training_volume_size=8000, raw_min=0, raw_max=255, classes_separator_caracter='&')
+.. py:class:: DataSplitGenerator(name: str, datasets: List[DatasetSpec], input_resolution: Union[Sequence[int], funlib.geometry.Coordinate], output_resolution: Union[Sequence[int], funlib.geometry.Coordinate], targets: Optional[List[str]] = None, segmentation_type: Union[str, SegmentationType] = 'semantic', max_gt_downsample=32, max_gt_upsample=4, max_raw_training_downsample=16, max_raw_training_upsample=2, max_raw_validation_downsample=8, max_raw_validation_upsample=2, min_training_volume_size=8000, raw_min=0, raw_max=255, classes_separator_caracter='&', use_negative_class=False)
 
    Generates DataSplitConfig for a given task config and datasets.
 
@@ -504,6 +504,9 @@ Module Contents
 
 
    .. py:attribute:: classes_separator_caracter
+
+
+   .. py:attribute:: use_negative_class
 
 
    .. py:property:: class_name
