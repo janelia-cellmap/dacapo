@@ -92,6 +92,12 @@ Module Contents
    .. note:: This class is used to create a BinarizeArray object which is a wrapper around a ZarrArray containing uint annotations.
 
 
+   .. py:attribute:: name
+
+
+   .. py:attribute:: background
+
+
    .. py:property:: attrs
       This method returns the attributes of the source array.
 

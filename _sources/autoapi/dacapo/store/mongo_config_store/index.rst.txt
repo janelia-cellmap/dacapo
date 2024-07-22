@@ -213,6 +213,18 @@ Module Contents
    The store is initialized with the host and database name.
 
 
+   .. py:attribute:: db_host
+
+
+   .. py:attribute:: db_name
+
+
+   .. py:attribute:: client
+
+
+   .. py:attribute:: database
+
+
    .. py:method:: delete_config(database, config_name: str) -> None
 
       Deletes a configuration from the database.

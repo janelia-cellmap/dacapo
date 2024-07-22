@@ -347,6 +347,15 @@ Package Contents
    .. note:: This class is used to represent a dummy architecture layer for a 3D CNN.
 
 
+   .. py:attribute:: channels_in
+
+
+   .. py:attribute:: channels_out
+
+
+   .. py:attribute:: conv
+
+
    .. py:property:: input_shape
       Returns the input shape for this architecture.
 
@@ -686,6 +695,45 @@ Package Contents
            This class is a wrapper around the ``CNNectomeUNetModule`` class.
            The ``CNNectomeUNetModule`` class is the actual implementation of the
            U-Net architecture.
+
+
+   .. py:attribute:: fmaps_out
+
+
+   .. py:attribute:: fmaps_in
+
+
+   .. py:attribute:: num_fmaps
+
+
+   .. py:attribute:: fmap_inc_factor
+
+
+   .. py:attribute:: downsample_factors
+
+
+   .. py:attribute:: kernel_size_down
+
+
+   .. py:attribute:: kernel_size_up
+
+
+   .. py:attribute:: constant_upsample
+
+
+   .. py:attribute:: padding
+
+
+   .. py:attribute:: upsample_factors
+
+
+   .. py:attribute:: upsample_factors
+
+
+   .. py:attribute:: use_attention
+
+
+   .. py:attribute:: unet
 
 
    .. py:property:: eval_shape_increase

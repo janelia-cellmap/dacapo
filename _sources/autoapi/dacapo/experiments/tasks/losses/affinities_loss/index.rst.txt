@@ -39,6 +39,12 @@ Module Contents
    .. note:: The AffinitiesLoss class is used to calculate the loss between affinities and local shape descriptors (LSDs).
 
 
+   .. py:attribute:: num_affinities
+
+
+   .. py:attribute:: lsds_to_affs_weight_ratio
+
+
    .. py:method:: compute(prediction, target, weight)
 
       Method to calculate the total loss between affinities and LSDs.

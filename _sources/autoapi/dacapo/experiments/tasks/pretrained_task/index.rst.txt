@@ -37,6 +37,24 @@ Module Contents
    This is a base class for all tasks that use pretrained models.
 
 
+   .. py:attribute:: sub_task
+
+
+   .. py:attribute:: weights
+
+
+   .. py:attribute:: predictor
+
+
+   .. py:attribute:: loss
+
+
+   .. py:attribute:: post_processor
+
+
+   .. py:attribute:: evaluator
+
+
    .. py:method:: create_model(architecture)
 
       Create a model using the given architecture.

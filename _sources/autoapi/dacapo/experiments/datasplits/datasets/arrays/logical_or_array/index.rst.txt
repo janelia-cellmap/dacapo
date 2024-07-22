@@ -107,6 +107,9 @@ Module Contents
    class is a subclass of the Array class.
 
 
+   .. py:attribute:: name
+
+
    .. py:property:: axes
       Get the axes of the array
 

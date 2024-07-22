@@ -116,6 +116,39 @@ Module Contents
    The clipmax argument is used to determine the maximum value to clip the weights to.
 
 
+   .. py:attribute:: channels
+
+
+   .. py:attribute:: norm
+      :value: 'tanh'
+
+
+
+   .. py:attribute:: dt_scale_factor
+
+
+   .. py:attribute:: mask_distances
+
+
+   .. py:attribute:: max_distance
+
+
+   .. py:attribute:: epsilon
+      :value: 0.05
+
+
+
+   .. py:attribute:: threshold
+      :value: 0.8
+
+
+
+   .. py:attribute:: clipmin
+
+
+   .. py:attribute:: clipmax
+
+
    .. py:property:: embedding_dims
       Get the number of embedding dimensions.
 

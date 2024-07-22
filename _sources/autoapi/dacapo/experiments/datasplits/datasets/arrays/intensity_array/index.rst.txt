@@ -53,6 +53,9 @@ Module Contents
    All intensities are converted to float32.
 
 
+   .. py:attribute:: name
+
+
    .. py:property:: attrs
       Returns the attributes of the source array
 

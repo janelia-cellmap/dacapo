@@ -40,3 +40,9 @@ Module Contents
       :type:  dacapo.experiments.datasplits.datasets.arrays.Array
 
 
+   .. py:attribute:: name
+
+
+   .. py:attribute:: raw
+
+

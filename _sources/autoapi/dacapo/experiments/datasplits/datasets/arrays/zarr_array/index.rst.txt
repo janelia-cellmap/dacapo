@@ -191,6 +191,18 @@ Module Contents
    This class is used to create a zarr array.
 
 
+   .. py:attribute:: name
+
+
+   .. py:attribute:: file_name
+
+
+   .. py:attribute:: dataset
+
+
+   .. py:attribute:: snap_to_grid
+
+
    .. py:property:: mode
 
 

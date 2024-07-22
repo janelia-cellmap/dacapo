@@ -61,6 +61,38 @@ Module Contents
    `gunpowder <
 
 
+   .. py:attribute:: control_point_spacing
+
+
+   .. py:attribute:: control_point_displacement_sigma
+
+
+   .. py:attribute:: rotation_start
+
+
+   .. py:attribute:: rotation_max_amount
+
+
+   .. py:attribute:: subsample
+
+
+   .. py:attribute:: augmentation_probability
+
+
+   .. py:attribute:: uniform_3d_rotation
+
+
+   .. py:attribute:: do_augment
+      :value: False
+
+
+
+   .. py:attribute:: transformations
+
+
+   .. py:attribute:: target_rois
+
+
    .. py:method:: setup()
 
       Set up the object by calculating the voxel size and spatial dimensions.

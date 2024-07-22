@@ -52,6 +52,15 @@ Module Contents
    .. note:: This class is used to represent a dummy architecture layer for a 3D CNN.
 
 
+   .. py:attribute:: channels_in
+
+
+   .. py:attribute:: channels_out
+
+
+   .. py:attribute:: conv
+
+
    .. py:property:: input_shape
       Returns the input shape for this architecture.
 

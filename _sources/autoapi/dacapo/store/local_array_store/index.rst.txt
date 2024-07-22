@@ -66,6 +66,9 @@ Module Contents
       
 
 
+   .. py:attribute:: basedir
+
+
    .. py:method:: best_validation_array(run_name: str, criterion: str, index: Optional[str] = None) -> dacapo.store.array_store.LocalArrayIdentifier
 
       Get the array identifier for the best validation array.

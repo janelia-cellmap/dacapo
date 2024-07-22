@@ -52,6 +52,9 @@ Module Contents
 
 
 
+   .. py:attribute:: path
+
+
    .. py:method:: store_training_stats(run_name, stats)
 
       Stores the training statistics for a specific run.

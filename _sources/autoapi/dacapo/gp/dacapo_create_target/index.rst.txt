@@ -69,6 +69,26 @@ Module Contents
       generate the target from the ground truth.
 
 
+   .. py:attribute:: predictor
+
+
+   .. py:attribute:: gt_key
+
+
+   .. py:attribute:: target_key
+
+
+   .. py:attribute:: weights_key
+
+
+   .. py:attribute:: mask_key
+
+
+   .. py:attribute:: moving_counts
+      :value: None
+
+
+
    .. py:method:: setup()
 
       Set up the provider. This function sets the provider to provide the

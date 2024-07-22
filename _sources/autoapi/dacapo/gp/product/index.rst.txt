@@ -49,6 +49,15 @@ Module Contents
 
 
 
+   .. py:attribute:: x1_key
+
+
+   .. py:attribute:: x2_key
+
+
+   .. py:attribute:: y_key
+
+
    .. py:method:: setup()
 
       Set up the Product BatchFilter.

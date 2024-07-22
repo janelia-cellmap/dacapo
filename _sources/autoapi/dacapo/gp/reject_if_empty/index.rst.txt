@@ -48,6 +48,17 @@ Module Contents
 
 
 
+   .. py:attribute:: gt
+
+
+   .. py:attribute:: p
+
+
+   .. py:attribute:: background
+      :value: 0
+
+
+
    .. py:method:: setup()
 
       Set up the provider.

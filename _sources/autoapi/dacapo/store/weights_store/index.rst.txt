@@ -46,6 +46,12 @@ Module Contents
       :type:  collections.OrderedDict[str, torch.Tensor]
 
 
+   .. py:attribute:: model
+
+
+   .. py:attribute:: optimizer
+
+
 .. py:class:: WeightsStore
 
 

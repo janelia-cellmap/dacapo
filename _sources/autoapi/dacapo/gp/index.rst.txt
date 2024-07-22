@@ -70,6 +70,15 @@ Package Contents
       serve array data to gunpowder pipelines.
 
 
+   .. py:attribute:: array
+
+
+   .. py:attribute:: array_spec
+
+
+   .. py:attribute:: key
+
+
    .. py:method:: setup()
 
       Adds the key and the array spec to the provider.
@@ -152,6 +161,26 @@ Package Contents
 
       This class is a subclass of gunpowder.BatchFilter and is used to
       generate the target from the ground truth.
+
+
+   .. py:attribute:: predictor
+
+
+   .. py:attribute:: gt_key
+
+
+   .. py:attribute:: target_key
+
+
+   .. py:attribute:: weights_key
+
+
+   .. py:attribute:: mask_key
+
+
+   .. py:attribute:: moving_counts
+      :value: None
+
 
 
    .. py:method:: setup()
@@ -240,6 +269,15 @@ Package Contents
       
 
 
+   .. py:attribute:: arrays
+
+
+   .. py:attribute:: gamma_min
+
+
+   .. py:attribute:: gamma_max
+
+
    .. py:method:: setup()
 
       Configuring the internal state by iterating over arrays.
@@ -305,6 +343,38 @@ Package Contents
 
    This node is a port of the ElasticAugment node from the original
    `gunpowder <
+
+
+   .. py:attribute:: control_point_spacing
+
+
+   .. py:attribute:: control_point_displacement_sigma
+
+
+   .. py:attribute:: rotation_start
+
+
+   .. py:attribute:: rotation_max_amount
+
+
+   .. py:attribute:: subsample
+
+
+   .. py:attribute:: augmentation_probability
+
+
+   .. py:attribute:: uniform_3d_rotation
+
+
+   .. py:attribute:: do_augment
+      :value: False
+
+
+
+   .. py:attribute:: transformations
+
+
+   .. py:attribute:: target_rois
 
 
    .. py:method:: setup()
@@ -392,6 +462,17 @@ Package Contents
 
 
 
+   .. py:attribute:: gt
+
+
+   .. py:attribute:: p
+
+
+   .. py:attribute:: background
+      :value: 0
+
+
+
    .. py:method:: setup()
 
       Set up the provider.
@@ -462,6 +543,15 @@ Package Contents
 
       This class is a subclass of gunpowder.BatchFilter and is used to
       copy a mask into a new key with the option to drop channels via max collapse.
+
+
+   .. py:attribute:: array_key
+
+
+   .. py:attribute:: copy_key
+
+
+   .. py:attribute:: drop_channels
 
 
    .. py:method:: setup()
@@ -553,6 +643,12 @@ Package Contents
       serve graph data to gunpowder pipelines.
 
 
+   .. py:attribute:: key
+
+
+   .. py:attribute:: graph
+
+
    .. py:method:: setup()
 
       Set up the provider. This function sets the provider to provide the
@@ -623,6 +719,15 @@ Package Contents
        prepare: Prepare the Product BatchFilter.
        process: Process the Product BatchFilter.
 
+
+
+   .. py:attribute:: x1_key
+
+
+   .. py:attribute:: x2_key
+
+
+   .. py:attribute:: y_key
 
 
    .. py:method:: setup()

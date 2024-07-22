@@ -72,3 +72,21 @@ Module Contents
       :type:  Optional[List[funlib.geometry.Coordinate]]
 
 
+   .. py:attribute:: name
+
+
+   .. py:attribute:: raw
+
+
+   .. py:attribute:: gt
+
+
+   .. py:attribute:: mask
+
+
+   .. py:attribute:: sample_points
+
+
+   .. py:attribute:: weight
+
+

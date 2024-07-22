@@ -129,6 +129,18 @@ Module Contents
    .. note:: This class is a subclass of Array.
 
 
+   .. py:attribute:: name
+
+
+   .. py:attribute:: upsample
+
+
+   .. py:attribute:: downsample
+
+
+   .. py:attribute:: interp_order
+
+
    .. py:property:: attrs
       Returns the attributes of the source array.
 

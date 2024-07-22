@@ -152,12 +152,12 @@
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.</span></span><span class="sig-name descname"><span class="pre">BinarySegmentationEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clip_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.BinarySegmentationEvaluator" title="Link to this definition"></a></dt>
 <dd><p>Given a binary segmentation, compute various metrics to determine their similarity. The metrics include:
-- Dice coefficient: 2 * <a href="#id40"><span class="problematic" id="id41">|A ∩ B|</span></a> / <a href="#id42"><span class="problematic" id="id43">|A|</span></a> + <a href="#id44"><span class="problematic" id="id45">|B|</span></a> ; where A and B are the binary segmentations
-- Jaccard coefficient: <a href="#id46"><span class="problematic" id="id47">|A ∩ B|</span></a> / <a href="#id48"><span class="problematic" id="id49">|A ∪ B|</span></a> ; where A and B are the binary segmentations
+- Dice coefficient: 2 * <a href="#id55"><span class="problematic" id="id56">|A ∩ B|</span></a> / <a href="#id57"><span class="problematic" id="id58">|A|</span></a> + <a href="#id59"><span class="problematic" id="id60">|B|</span></a> ; where A and B are the binary segmentations
+- Jaccard coefficient: <a href="#id61"><span class="problematic" id="id62">|A ∩ B|</span></a> / <a href="#id63"><span class="problematic" id="id64">|A ∪ B|</span></a> ; where A and B are the binary segmentations
 - Hausdorff distance: max(h(A, B), h(B, A)) ; where h(A, B) is the Hausdorff distance between A and B
-- False negative rate: <a href="#id50"><span class="problematic" id="id51">|A - B|</span></a> / <a href="#id52"><span class="problematic" id="id53">|A|</span></a> ; where A and B are the binary segmentations
-- False positive rate: <a href="#id54"><span class="problematic" id="id55">|B - A|</span></a> / <a href="#id56"><span class="problematic" id="id57">|B|</span></a> ; where A and B are the binary segmentations
-- False discovery rate: <a href="#id58"><span class="problematic" id="id59">|B - A|</span></a> / <a href="#id60"><span class="problematic" id="id61">|A|</span></a> ; where A and B are the binary segmentations
+- False negative rate: <a href="#id65"><span class="problematic" id="id66">|A - B|</span></a> / <a href="#id67"><span class="problematic" id="id68">|A|</span></a> ; where A and B are the binary segmentations
+- False positive rate: <a href="#id69"><span class="problematic" id="id70">|B - A|</span></a> / <a href="#id71"><span class="problematic" id="id72">|B|</span></a> ; where A and B are the binary segmentations
+- False discovery rate: <a href="#id73"><span class="problematic" id="id74">|B - A|</span></a> / <a href="#id75"><span class="problematic" id="id76">|A|</span></a> ; where A and B are the binary segmentations
 - VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality
 - Mean false distance: 0.5 * (mean false positive distance + mean false negative distance)
 - Mean false negative distance: mean distance of false negatives
@@ -226,9 +226,29 @@ Criteria are the evaluation criteria.</p>
 <span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['jaccard',</span> <span class="pre">'voi']</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">clip_distance</span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">tol_distance</span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">criteria</span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
 <dd><p>Evaluate the output array against the evaluation array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -265,8 +285,8 @@ the evaluation array</p></li>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id2">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id6">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Return</span> <span class="pre">the</span> <span class="pre">evaluation</span> <span class="pre">scores.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -299,12 +319,12 @@ the evaluation array</p></li>
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.</span></span><span class="sig-name descname"><span class="pre">ArrayEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">truth_binary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_binary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truth_empty</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_empty</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator" title="Link to this definition"></a></dt>
 <dd><p>Given a binary segmentation, compute various metrics to determine their similarity. The metrics include:
-- Dice coefficient: 2 * <a href="#id62"><span class="problematic" id="id63">|A ∩ B|</span></a> / <a href="#id64"><span class="problematic" id="id65">|A|</span></a> + <a href="#id66"><span class="problematic" id="id67">|B|</span></a> ; where A and B are the binary segmentations
-- Jaccard coefficient: <a href="#id68"><span class="problematic" id="id69">|A ∩ B|</span></a> / <a href="#id70"><span class="problematic" id="id71">|A ∪ B|</span></a> ; where A and B are the binary segmentations
+- Dice coefficient: 2 * <a href="#id77"><span class="problematic" id="id78">|A ∩ B|</span></a> / <a href="#id79"><span class="problematic" id="id80">|A|</span></a> + <a href="#id81"><span class="problematic" id="id82">|B|</span></a> ; where A and B are the binary segmentations
+- Jaccard coefficient: <a href="#id83"><span class="problematic" id="id84">|A ∩ B|</span></a> / <a href="#id85"><span class="problematic" id="id86">|A ∪ B|</span></a> ; where A and B are the binary segmentations
 - Hausdorff distance: max(h(A, B), h(B, A)) ; where h(A, B) is the Hausdorff distance between A and B
-- False negative rate: <a href="#id72"><span class="problematic" id="id73">|A - B|</span></a> / <a href="#id74"><span class="problematic" id="id75">|A|</span></a> ; where A and B are the binary segmentations
-- False positive rate: <a href="#id76"><span class="problematic" id="id77">|B - A|</span></a> / <a href="#id78"><span class="problematic" id="id79">|B|</span></a> ; where A and B are the binary segmentations
-- False discovery rate: <a href="#id80"><span class="problematic" id="id81">|B - A|</span></a> / <a href="#id82"><span class="problematic" id="id83">|A|</span></a> ; where A and B are the binary segmentations
+- False negative rate: <a href="#id87"><span class="problematic" id="id88">|A - B|</span></a> / <a href="#id89"><span class="problematic" id="id90">|A|</span></a> ; where A and B are the binary segmentations
+- False positive rate: <a href="#id91"><span class="problematic" id="id92">|B - A|</span></a> / <a href="#id93"><span class="problematic" id="id94">|B|</span></a> ; where A and B are the binary segmentations
+- False discovery rate: <a href="#id95"><span class="problematic" id="id96">|B - A|</span></a> / <a href="#id97"><span class="problematic" id="id98">|A|</span></a> ; where A and B are the binary segmentations
 - VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality
 - Mean false distance: 0.5 * (mean false positive distance + mean false negative distance)
 - Mean false negative distance: mean distance of false negatives
@@ -492,6 +512,36 @@ the resolution</p>
 The class provides methods to evaluate the truth binary segmentation against the test binary segmentation.
 All evaluation scores should inherit from this class.</p>
 </div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">truth</span></span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">test</span></span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">truth_empty</span></span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">test_empty</span></span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">cremieval</span></span><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">resolution</span></span><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.truth_itk">
 <span class="sig-name descname"><span class="pre">truth_itk</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.ArrayEvaluator.truth_itk" title="Link to this definition"></a></dt>
@@ -590,8 +640,8 @@ the test binary segmentation as a SimpleITK image</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">dice</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">dice</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
 <dd><p>The Dice coefficient.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -626,8 +676,8 @@ the test binary segmentation as a SimpleITK image</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">jaccard</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">jaccard</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id14" title="Link to this definition"></a></dt>
 <dd><p>The Jaccard coefficient.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -662,8 +712,8 @@ the test binary segmentation as a SimpleITK image</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">hausdorff</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id15">
+<span class="sig-name descname"><span class="pre">hausdorff</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
 <dd><p>The Hausdorff distance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -694,8 +744,8 @@ Otherwise, it calculates the Hausdorff distance using the HausdorffDistanceImage
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id6">
-<span class="sig-name descname"><span class="pre">false_negative_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id16">
+<span class="sig-name descname"><span class="pre">false_negative_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
 <dd><p>The false negative rate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -725,8 +775,8 @@ Otherwise, it calculates the Hausdorff distance using the HausdorffDistanceImage
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id7">
-<span class="sig-name descname"><span class="pre">false_positive_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">false_positive_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
 <dd><p>The false positive rate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -761,8 +811,8 @@ the test binary segmentation as a SimpleITK image</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id8">
-<span class="sig-name descname"><span class="pre">false_discovery_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">false_discovery_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
 <dd><p>Calculate the false discovery rate (FDR) for the binary segmentation evaluation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -790,8 +840,8 @@ If either the ground truth or the predicted segmentation is empty, the FDR is se
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id9">
-<span class="sig-name descname"><span class="pre">precision</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id19">
+<span class="sig-name descname"><span class="pre">precision</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id19" title="Link to this definition"></a></dt>
 <dd><p>Calculate the precision of the binary segmentation evaluation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -819,8 +869,8 @@ If either the ground truth or the predicted values are empty, the precision valu
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id10">
-<span class="sig-name descname"><span class="pre">recall</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id20">
+<span class="sig-name descname"><span class="pre">recall</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id20" title="Link to this definition"></a></dt>
 <dd><p>Calculate the recall metric for binary segmentation evaluation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -847,8 +897,8 @@ It is calculated as the ratio of true positives to the total number of actual po
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id11">
-<span class="sig-name descname"><span class="pre">f1_score</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">f1_score</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id21" title="Link to this definition"></a></dt>
 <dd><p>Calculate the F1 score for binary segmentation evaluation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -876,8 +926,8 @@ It is a measure of the balance between precision and recall, providing a single 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id12">
-<span class="sig-name descname"><span class="pre">voi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id22">
+<span class="sig-name descname"><span class="pre">voi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id22" title="Link to this definition"></a></dt>
 <dd><p>Calculate the Variation of Information (VOI) for binary segmentation evaluation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -910,8 +960,8 @@ If either the ground truth or the predicted values are empty, the VOI will be Na
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id13">
-<span class="sig-name descname"><span class="pre">mean_false_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id23">
+<span class="sig-name descname"><span class="pre">mean_false_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id23" title="Link to this definition"></a></dt>
 <dd><p>Calculate the mean false distance between the ground truth and the test results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -945,8 +995,8 @@ the test binary segmentation</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id14">
-<span class="sig-name descname"><span class="pre">mean_false_negative_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id14" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id24">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id24" title="Link to this definition"></a></dt>
 <dd><p>Calculate the mean false negative distance between the ground truth and the test results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -977,8 +1027,8 @@ the test binary segmentation</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id15">
-<span class="sig-name descname"><span class="pre">mean_false_positive_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id25">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id25" title="Link to this definition"></a></dt>
 <dd><p>Calculate the mean false positive distance.</p>
 <p>This method calculates the mean false positive distance between the ground truth and the test results.
 If either the ground truth or the test results are empty, the method returns NaN.</p>
@@ -1013,8 +1063,8 @@ binary segmentation algorithms.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id16">
-<span class="sig-name descname"><span class="pre">mean_false_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id26">
+<span class="sig-name descname"><span class="pre">mean_false_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id26" title="Link to this definition"></a></dt>
 <dd><p>Calculate the mean false distance (clipped) between the ground truth and the test results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1045,8 +1095,8 @@ the test binary segmentation</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id17">
-<span class="sig-name descname"><span class="pre">mean_false_negative_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id27">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id27" title="Link to this definition"></a></dt>
 <dd><p>Calculate the mean false negative distance, with clipping.</p>
 <p>This method calculates the mean false negative distance between the ground truth and the test results.
 The distance is clipped to avoid extreme values.</p>
@@ -1082,8 +1132,8 @@ the test binary segmentation</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id18">
-<span class="sig-name descname"><span class="pre">mean_false_positive_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id28">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
 <dd><p>Calculate the mean false positive distance, with clipping.</p>
 <p>This method calculates the mean false positive distance between the ground truth and the test results,
 taking into account any clipping that may have been applied.</p>
@@ -1120,8 +1170,8 @@ in the test results and the corresponding ground truth pixels.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id19">
-<span class="sig-name descname"><span class="pre">false_positive_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id19" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id29">
+<span class="sig-name descname"><span class="pre">false_positive_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
 <dd><p>Calculate the false positive rate with tolerance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1153,8 +1203,8 @@ If either the truth or test data is empty, it returns NaN.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id20">
-<span class="sig-name descname"><span class="pre">false_negative_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id20" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id30">
+<span class="sig-name descname"><span class="pre">false_negative_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
 <dd><p>Calculate the false negative rate with tolerance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1182,8 +1232,8 @@ the test binary segmentation</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id21">
-<span class="sig-name descname"><span class="pre">precision_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id21" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id31">
+<span class="sig-name descname"><span class="pre">precision_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
 <dd><p>Calculate the precision with tolerance.</p>
 <p>This method calculates the precision with tolerance by comparing the truth and test data.
 Precision is the ratio of true positives to the sum of true positives and false positives.
@@ -1220,8 +1270,8 @@ the test binary segmentation</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id22">
-<span class="sig-name descname"><span class="pre">recall_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id22" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id32">
+<span class="sig-name descname"><span class="pre">recall_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id32" title="Link to this definition"></a></dt>
 <dd><p>Calculate the recall with tolerance for the binary segmentation evaluator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1244,8 +1294,8 @@ the test binary segmentation</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id23">
-<span class="sig-name descname"><span class="pre">f1_score_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id23" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id33">
+<span class="sig-name descname"><span class="pre">f1_score_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
 <dd><p>Calculate the F1 score with tolerance.</p>
 <p>This method calculates the F1 score with tolerance between the ground truth and the test results.
 If either the ground truth or the test results are empty, the function returns NaN.</p>
@@ -1427,6 +1477,31 @@ the tolerance distance</p>
 <li><p>All evaluation scores should inherit from this class.</p></li>
 </ul>
 </div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id34">
+<span class="sig-name descname"><span class="pre">test</span></span><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id35">
+<span class="sig-name descname"><span class="pre">truth</span></span><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id36">
+<span class="sig-name descname"><span class="pre">sampling</span></span><a class="headerlink" href="#id36" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id37">
+<span class="sig-name descname"><span class="pre">clip_distance</span></span><a class="headerlink" href="#id37" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id38">
+<span class="sig-name descname"><span class="pre">tol_distance</span></span><a class="headerlink" href="#id38" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test_mask">
 <span class="sig-name descname"><span class="pre">test_mask</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.binary_segmentation_evaluator.CremiEvaluator.test_mask" title="Link to this definition"></a></dt>
@@ -1566,8 +1641,8 @@ result = test_edt(test_mask, sampling)
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id24">
-<span class="sig-name descname"><span class="pre">false_positive_distances</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id24" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id39">
+<span class="sig-name descname"><span class="pre">false_positive_distances</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id39" title="Link to this definition"></a></dt>
 <dd><p>Calculate the distances of false positive pixels from the ground truth segmentation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1598,8 +1673,8 @@ The ground truth segmentation is stored in the <cite>truth_edt</cite> attribute,
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id25">
-<span class="sig-name descname"><span class="pre">false_positives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id25" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id40">
+<span class="sig-name descname"><span class="pre">false_positives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id40" title="Link to this definition"></a></dt>
 <dd><p>Calculate the number of false positives with a given tolerance distance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1631,8 +1706,8 @@ The ground truth segmentation is stored in the <cite>truth_edt</cite> attribute,
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id26">
-<span class="sig-name descname"><span class="pre">false_positive_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id26" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id41">
+<span class="sig-name descname"><span class="pre">false_positive_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id41" title="Link to this definition"></a></dt>
 <dd><p>Calculate the false positive rate with tolerance.</p>
 <p>This method calculates the false positive rate by dividing the number of false positives with tolerance
 by the number of condition negatives.</p>
@@ -1666,8 +1741,8 @@ with respect to the total number of condition negatives. It is commonly used in 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id27">
-<span class="sig-name descname"><span class="pre">false_negatives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id27" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id42">
+<span class="sig-name descname"><span class="pre">false_negatives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id42" title="Link to this definition"></a></dt>
 <dd><p>Calculate the number of false negatives with tolerance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1700,8 +1775,8 @@ The tolerance distance is used to determine whether a false negative is within a
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id28">
-<span class="sig-name descname"><span class="pre">false_negative_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id43">
+<span class="sig-name descname"><span class="pre">false_negative_rate_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id43" title="Link to this definition"></a></dt>
 <dd><p>Calculate the false negative rate with tolerance.</p>
 <p>This method calculates the false negative rate by dividing the number of false negatives
 with tolerance by the number of condition positives.</p>
@@ -1735,8 +1810,8 @@ that are incorrectly classified as negatives, considering a certain tolerance le
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id29">
-<span class="sig-name descname"><span class="pre">true_positives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id44">
+<span class="sig-name descname"><span class="pre">true_positives_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id44" title="Link to this definition"></a></dt>
 <dd><p>Calculate the number of true positives with tolerance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1773,8 +1848,8 @@ The tolerance distance is used to determine whether a true positive is within an
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id30">
-<span class="sig-name descname"><span class="pre">precision_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id45">
+<span class="sig-name descname"><span class="pre">precision_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id45" title="Link to this definition"></a></dt>
 <dd><p>Calculate the precision with tolerance.</p>
 <p>This method calculates the precision with tolerance by dividing the number of true positives
 with tolerance by the sum of true positives with tolerance and false positives with tolerance.</p>
@@ -1813,8 +1888,8 @@ If the sum of true positives with tolerance and false positives with tolerance i
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id31">
-<span class="sig-name descname"><span class="pre">recall_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id46">
+<span class="sig-name descname"><span class="pre">recall_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id46" title="Link to this definition"></a></dt>
 <dd><p>A measure of the ability of a binary classifier to identify all positive samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1846,8 +1921,8 @@ If the sum of true positives with tolerance and false positives with tolerance i
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id32">
-<span class="sig-name descname"><span class="pre">f1_score_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id32" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id47">
+<span class="sig-name descname"><span class="pre">f1_score_with_tolerance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id47" title="Link to this definition"></a></dt>
 <dd><p>Calculate the F1 score with tolerance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1884,8 +1959,8 @@ If both recall_with_tolerance and precision_with_tolerance are 0, the F1 score w
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id33">
-<span class="sig-name descname"><span class="pre">mean_false_positive_distances_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id48">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distances_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id48" title="Link to this definition"></a></dt>
 <dd><p>Calculate the mean of the false positive distances, clipped to a maximum distance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1919,8 +1994,8 @@ If both recall_with_tolerance and precision_with_tolerance are 0, the F1 score w
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id34">
-<span class="sig-name descname"><span class="pre">mean_false_negative_distances_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id49">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distances_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id49" title="Link to this definition"></a></dt>
 <dd><p>Calculate the mean of the false negative distances, clipped to a maximum distance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1954,8 +2029,8 @@ If both recall_with_tolerance and precision_with_tolerance are 0, the F1 score w
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id35">
-<span class="sig-name descname"><span class="pre">mean_false_positive_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id50">
+<span class="sig-name descname"><span class="pre">mean_false_positive_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id50" title="Link to this definition"></a></dt>
 <dd><p>Calculate the mean false positive distance.</p>
 <p>This method calculates the mean distance between the false positive points and the ground truth points.</p>
 <dl class="field-list simple">
@@ -1986,8 +2061,8 @@ If both recall_with_tolerance and precision_with_tolerance are 0, the F1 score w
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id36">
-<span class="sig-name descname"><span class="pre">false_negative_distances</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id36" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id51">
+<span class="sig-name descname"><span class="pre">false_negative_distances</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id51" title="Link to this definition"></a></dt>
 <dd><p>Calculate the distances of false negative pixels from the ground truth mask.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2017,8 +2092,8 @@ If both recall_with_tolerance and precision_with_tolerance are 0, the F1 score w
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id37">
-<span class="sig-name descname"><span class="pre">mean_false_negative_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id37" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id52">
+<span class="sig-name descname"><span class="pre">mean_false_negative_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id52" title="Link to this definition"></a></dt>
 <dd><p>Calculate the mean false negative distance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2048,8 +2123,8 @@ If both recall_with_tolerance and precision_with_tolerance are 0, the F1 score w
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id38">
-<span class="sig-name descname"><span class="pre">mean_false_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id38" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id53">
+<span class="sig-name descname"><span class="pre">mean_false_distance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id53" title="Link to this definition"></a></dt>
 <dd><p>Calculate the mean false distance.</p>
 <p>This method calculates the mean false distance by taking the average of the mean false positive distance
 and the mean false negative distance.</p>
@@ -2084,8 +2159,8 @@ It provides a measure of the average distance between false positive and false n
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id39">
-<span class="sig-name descname"><span class="pre">mean_false_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id39" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id54">
+<span class="sig-name descname"><span class="pre">mean_false_distance_clipped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#id54" title="Link to this definition"></a></dt>
 <dd><p>Calculates the mean false distance clipped.</p>
 <p>This method calculates the mean false distance clipped by taking the average of the mean false positive distances
 clipped and the mean false negative distances clipped.</p>

@@ -78,6 +78,15 @@ Module Contents
 
 
 
+   .. py:attribute:: learning_rate
+
+
+   .. py:attribute:: batch_size
+
+
+   .. py:attribute:: mirror_augment
+
+
    .. py:method:: create_optimizer(model)
 
       Create an optimizer for the given model.

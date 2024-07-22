@@ -51,3 +51,15 @@ Module Contents
    This is a subclass of Task.
 
 
+   .. py:attribute:: predictor
+
+
+   .. py:attribute:: loss
+
+
+   .. py:attribute:: post_processor
+
+
+   .. py:attribute:: evaluator
+
+

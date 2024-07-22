@@ -38,3 +38,15 @@ Module Contents
    This is a base class for all tasks that use one-hot predictors.
 
 
+   .. py:attribute:: predictor
+
+
+   .. py:attribute:: loss
+
+
+   .. py:attribute:: post_processor
+
+
+   .. py:attribute:: evaluator
+
+

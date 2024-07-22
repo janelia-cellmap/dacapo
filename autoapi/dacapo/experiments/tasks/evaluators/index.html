@@ -1234,12 +1234,12 @@ the criterion</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.</span></span><span class="sig-name descname"><span class="pre">BinarySegmentationEvaluationScores</span></span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluationScores" title="Link to this definition"></a></dt>
 <dd><p>Class representing evaluation scores for binary segmentation tasks.</p>
 <p>The metrics include:
-- Dice coefficient: 2 * <a href="#id56"><span class="problematic" id="id57">|A ∩ B|</span></a> / <a href="#id58"><span class="problematic" id="id59">|A|</span></a> + <a href="#id60"><span class="problematic" id="id61">|B|</span></a> ; where A and B are the binary segmentations
-- Jaccard coefficient: <a href="#id62"><span class="problematic" id="id63">|A ∩ B|</span></a> / <a href="#id64"><span class="problematic" id="id65">|A ∪ B|</span></a> ; where A and B are the binary segmentations
+- Dice coefficient: 2 * <a href="#id60"><span class="problematic" id="id61">|A ∩ B|</span></a> / <a href="#id62"><span class="problematic" id="id63">|A|</span></a> + <a href="#id64"><span class="problematic" id="id65">|B|</span></a> ; where A and B are the binary segmentations
+- Jaccard coefficient: <a href="#id66"><span class="problematic" id="id67">|A ∩ B|</span></a> / <a href="#id68"><span class="problematic" id="id69">|A ∪ B|</span></a> ; where A and B are the binary segmentations
 - Hausdorff distance: max(h(A, B), h(B, A)) ; where h(A, B) is the Hausdorff distance between A and B
-- False negative rate: <a href="#id66"><span class="problematic" id="id67">|A - B|</span></a> / <a href="#id68"><span class="problematic" id="id69">|A|</span></a> ; where A and B are the binary segmentations
-- False positive rate: <a href="#id70"><span class="problematic" id="id71">|B - A|</span></a> / <a href="#id72"><span class="problematic" id="id73">|B|</span></a> ; where A and B are the binary segmentations
-- False discovery rate: <a href="#id74"><span class="problematic" id="id75">|B - A|</span></a> / <a href="#id76"><span class="problematic" id="id77">|A|</span></a> ; where A and B are the binary segmentations
+- False negative rate: <a href="#id70"><span class="problematic" id="id71">|A - B|</span></a> / <a href="#id72"><span class="problematic" id="id73">|A|</span></a> ; where A and B are the binary segmentations
+- False positive rate: <a href="#id74"><span class="problematic" id="id75">|B - A|</span></a> / <a href="#id76"><span class="problematic" id="id77">|B|</span></a> ; where A and B are the binary segmentations
+- False discovery rate: <a href="#id78"><span class="problematic" id="id79">|B - A|</span></a> / <a href="#id80"><span class="problematic" id="id81">|A|</span></a> ; where A and B are the binary segmentations
 - VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality
 - Mean false distance: 0.5 * (mean false positive distance + mean false negative distance)
 - Mean false negative distance: mean distance of false negatives
@@ -1707,12 +1707,12 @@ the criterion</p>
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.evaluators.</span></span><span class="sig-name descname"><span class="pre">BinarySegmentationEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clip_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.evaluators.BinarySegmentationEvaluator" title="Link to this definition"></a></dt>
 <dd><p>Given a binary segmentation, compute various metrics to determine their similarity. The metrics include:
-- Dice coefficient: 2 * <a href="#id78"><span class="problematic" id="id79">|A ∩ B|</span></a> / <a href="#id80"><span class="problematic" id="id81">|A|</span></a> + <a href="#id82"><span class="problematic" id="id83">|B|</span></a> ; where A and B are the binary segmentations
-- Jaccard coefficient: <a href="#id84"><span class="problematic" id="id85">|A ∩ B|</span></a> / <a href="#id86"><span class="problematic" id="id87">|A ∪ B|</span></a> ; where A and B are the binary segmentations
+- Dice coefficient: 2 * <a href="#id82"><span class="problematic" id="id83">|A ∩ B|</span></a> / <a href="#id84"><span class="problematic" id="id85">|A|</span></a> + <a href="#id86"><span class="problematic" id="id87">|B|</span></a> ; where A and B are the binary segmentations
+- Jaccard coefficient: <a href="#id88"><span class="problematic" id="id89">|A ∩ B|</span></a> / <a href="#id90"><span class="problematic" id="id91">|A ∪ B|</span></a> ; where A and B are the binary segmentations
 - Hausdorff distance: max(h(A, B), h(B, A)) ; where h(A, B) is the Hausdorff distance between A and B
-- False negative rate: <a href="#id88"><span class="problematic" id="id89">|A - B|</span></a> / <a href="#id90"><span class="problematic" id="id91">|A|</span></a> ; where A and B are the binary segmentations
-- False positive rate: <a href="#id92"><span class="problematic" id="id93">|B - A|</span></a> / <a href="#id94"><span class="problematic" id="id95">|B|</span></a> ; where A and B are the binary segmentations
-- False discovery rate: <a href="#id96"><span class="problematic" id="id97">|B - A|</span></a> / <a href="#id98"><span class="problematic" id="id99">|A|</span></a> ; where A and B are the binary segmentations
+- False negative rate: <a href="#id92"><span class="problematic" id="id93">|A - B|</span></a> / <a href="#id94"><span class="problematic" id="id95">|A|</span></a> ; where A and B are the binary segmentations
+- False positive rate: <a href="#id96"><span class="problematic" id="id97">|B - A|</span></a> / <a href="#id98"><span class="problematic" id="id99">|B|</span></a> ; where A and B are the binary segmentations
+- False discovery rate: <a href="#id100"><span class="problematic" id="id101">|B - A|</span></a> / <a href="#id102"><span class="problematic" id="id103">|A|</span></a> ; where A and B are the binary segmentations
 - VOI: Variation of Information; split and merge errors combined into a single measure of segmentation quality
 - Mean false distance: 0.5 * (mean false positive distance + mean false negative distance)
 - Mean false negative distance: mean distance of false negatives
@@ -1781,9 +1781,29 @@ Criteria are the evaluation criteria.</p>
 <span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['jaccard',</span> <span class="pre">'voi']</span></em><a class="headerlink" href="#id44" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt class="sig sig-object py" id="id45">
-<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id45" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">clip_distance</span></span><a class="headerlink" href="#id45" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id46">
+<span class="sig-name descname"><span class="pre">tol_distance</span></span><a class="headerlink" href="#id46" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id47">
+<span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#id47" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id48">
+<span class="sig-name descname"><span class="pre">criteria</span></span><a class="headerlink" href="#id48" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id49">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id49" title="Link to this definition"></a></dt>
 <dd><p>Evaluate the output array against the evaluation array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1820,8 +1840,8 @@ the evaluation array</p></li>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id46">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><a class="headerlink" href="#id46" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id50">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><a class="headerlink" href="#id50" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Return</span> <span class="pre">the</span> <span class="pre">evaluation</span> <span class="pre">scores.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -1903,18 +1923,18 @@ the variation of information (VOI)</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id47">
-<span class="sig-name descname"><span class="pre">voi_split</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id47" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id51">
+<span class="sig-name descname"><span class="pre">voi_split</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id51" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id48">
-<span class="sig-name descname"><span class="pre">voi_merge</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id48" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id52">
+<span class="sig-name descname"><span class="pre">voi_merge</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#id52" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id49">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voi</span></span><a class="headerlink" href="#id49" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id53">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voi</span></span><a class="headerlink" href="#id53" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Return</span> <span class="pre">the</span> <span class="pre">average</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">VOI</span> <span class="pre">split</span> <span class="pre">and</span> <span class="pre">VOI</span> <span class="pre">merge.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -1942,8 +1962,8 @@ the variation of information (VOI)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id50">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#id50" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id54">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">higher_is_better</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#id54" title="Link to this definition"></a></dt>
 <dd><p>Return whether higher is better for the given criterion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1973,8 +1993,8 @@ the evaluation criterion</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id51">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id51" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id55">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#id55" title="Link to this definition"></a></dt>
 <dd><p>Return the bounds for the given criterion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2004,8 +2024,8 @@ the evaluation criterion</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id52">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#id52" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id56">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">store_best</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#id56" title="Link to this definition"></a></dt>
 <dd><p>Return whether to store the best score for the given criterion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2064,13 +2084,13 @@ the evaluation criteria</p>
 <p>The InstanceEvaluator class is used to evaluate the performance of an instance segmentation task.</p>
 </div>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id53">
-<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['voi_merge',</span> <span class="pre">'voi_split',</span> <span class="pre">'voi']</span></em><a class="headerlink" href="#id53" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id57">
+<span class="sig-name descname"><span class="pre">criteria</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['voi_merge',</span> <span class="pre">'voi_split',</span> <span class="pre">'voi']</span></em><a class="headerlink" href="#id57" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id54">
-<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id54" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id58">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id58" title="Link to this definition"></a></dt>
 <dd><p>Evaluate the output array against the evaluation array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2107,8 +2127,8 @@ the evaluation array</p></li>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id55">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="instance_evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores" title="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores</span></a></em><a class="headerlink" href="#id55" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id59">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="instance_evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores" title="dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores</span></a></em><a class="headerlink" href="#id59" title="Link to this definition"></a></dt>
 <dd><p>Return the evaluation scores.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>

@@ -248,6 +248,18 @@ Package Contents
    This is a subclass of Task.
 
 
+   .. py:attribute:: predictor
+
+
+   .. py:attribute:: loss
+
+
+   .. py:attribute:: post_processor
+
+
+   .. py:attribute:: evaluator
+
+
 .. py:class:: DistanceTaskConfig
 
 
@@ -368,6 +380,18 @@ Package Contents
    This is a subclass of Task.
 
 
+   .. py:attribute:: predictor
+
+
+   .. py:attribute:: loss
+
+
+   .. py:attribute:: post_processor
+
+
+   .. py:attribute:: evaluator
+
+
 .. py:class:: OneHotTaskConfig
 
 
@@ -418,6 +442,18 @@ Package Contents
    .. rubric:: Notes
 
    This is a base class for all tasks that use one-hot predictors.
+
+
+   .. py:attribute:: predictor
+
+
+   .. py:attribute:: loss
+
+
+   .. py:attribute:: post_processor
+
+
+   .. py:attribute:: evaluator
 
 
 .. py:class:: PretrainedTaskConfig
@@ -479,6 +515,24 @@ Package Contents
    .. rubric:: Notes
 
    This is a base class for all tasks that use pretrained models.
+
+
+   .. py:attribute:: sub_task
+
+
+   .. py:attribute:: weights
+
+
+   .. py:attribute:: predictor
+
+
+   .. py:attribute:: loss
+
+
+   .. py:attribute:: post_processor
+
+
+   .. py:attribute:: evaluator
 
 
    .. py:method:: create_model(architecture)
@@ -631,6 +685,18 @@ Package Contents
    This is a subclass of Task.
 
 
+   .. py:attribute:: predictor
+
+
+   .. py:attribute:: loss
+
+
+   .. py:attribute:: post_processor
+
+
+   .. py:attribute:: evaluator
+
+
 .. py:class:: InnerDistanceTaskConfig
 
 
@@ -718,6 +784,18 @@ Package Contents
    .. rubric:: Notes
 
    This is a subclass of Task.
+
+
+   .. py:attribute:: predictor
+
+
+   .. py:attribute:: loss
+
+
+   .. py:attribute:: post_processor
+
+
+   .. py:attribute:: evaluator
 
 
 .. py:class:: HotDistanceTaskConfig
@@ -827,5 +905,17 @@ Package Contents
    .. rubric:: Notes
 
    This is a subclass of Task.
+
+
+   .. py:attribute:: predictor
+
+
+   .. py:attribute:: loss
+
+
+   .. py:attribute:: post_processor
+
+
+   .. py:attribute:: evaluator
 
 

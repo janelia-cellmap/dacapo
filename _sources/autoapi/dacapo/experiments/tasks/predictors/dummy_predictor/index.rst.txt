@@ -52,6 +52,9 @@ Module Contents
    This is a subclass of Predictor.
 
 
+   .. py:attribute:: embedding_dims
+
+
    .. py:method:: create_model(architecture)
 
       Creates a model using the given architecture.

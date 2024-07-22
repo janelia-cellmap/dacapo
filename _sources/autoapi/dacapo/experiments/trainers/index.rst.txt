@@ -387,6 +387,15 @@ Package Contents
 
 
 
+   .. py:attribute:: learning_rate
+
+
+   .. py:attribute:: batch_size
+
+
+   .. py:attribute:: mirror_augment
+
+
    .. py:method:: create_optimizer(model)
 
       Create an optimizer for the given model.
@@ -651,6 +660,42 @@ Package Contents
 
    .. py:attribute:: iteration
       :value: 0
+
+
+
+   .. py:attribute:: learning_rate
+
+
+   .. py:attribute:: batch_size
+
+
+   .. py:attribute:: num_data_fetchers
+
+
+   .. py:attribute:: print_profiling
+      :value: 100
+
+
+
+   .. py:attribute:: snapshot_iteration
+
+
+   .. py:attribute:: min_masked
+
+
+   .. py:attribute:: augments
+
+
+   .. py:attribute:: mask_integral_downsample_factor
+      :value: 4
+
+
+
+   .. py:attribute:: clip_raw
+
+
+   .. py:attribute:: scheduler
+      :value: None
 
 
 

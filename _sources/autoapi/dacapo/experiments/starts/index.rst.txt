@@ -71,6 +71,11 @@ Package Contents
    model used for finetuning from the dacapo store.
 
 
+   .. py:attribute:: channels
+      :value: None
+
+
+
    .. py:method:: initialize_weights(model, new_head=None)
 
       Retrieves the weights from the dacapo store and load them into
@@ -192,6 +197,18 @@ Package Contents
 
    This class is used to represent the starting point for tasks. The weights
    of the starter model used for finetuning are loaded from the dacapo store.
+
+
+   .. py:attribute:: run
+
+
+   .. py:attribute:: criterion
+
+
+   .. py:attribute:: name
+
+
+   .. py:attribute:: channels
 
 
    .. py:method:: check()

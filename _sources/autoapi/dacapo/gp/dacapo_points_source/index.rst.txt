@@ -51,6 +51,12 @@ Module Contents
       serve graph data to gunpowder pipelines.
 
 
+   .. py:attribute:: key
+
+
+   .. py:attribute:: graph
+
+
    .. py:method:: setup()
 
       Set up the provider. This function sets the provider to provide the

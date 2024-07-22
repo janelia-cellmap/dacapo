@@ -141,6 +141,27 @@ Package Contents
       :type:  int
 
 
+   .. py:attribute:: architecture
+
+
+   .. py:attribute:: prediction_head
+
+
+   .. py:attribute:: chain
+
+
+   .. py:attribute:: num_in_channels
+
+
+   .. py:attribute:: input_shape
+
+
+   .. py:attribute:: eval_input_shape
+
+
+   .. py:attribute:: eval_activation
+
+
    .. py:method:: forward(x)
 
       Forward pass of the model.

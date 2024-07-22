@@ -118,6 +118,18 @@ Module Contents
    of the starter model used for finetuning are loaded from the dacapo store.
 
 
+   .. py:attribute:: run
+
+
+   .. py:attribute:: criterion
+
+
+   .. py:attribute:: name
+
+
+   .. py:attribute:: channels
+
+
    .. py:method:: check()
 
       Checks if the checkpoint for the specified run and criterion exists.

@@ -46,6 +46,9 @@ Module Contents
       created, the values of its attributes cannot be changed.
 
 
+   .. py:attribute:: detection_threshold
+
+
    .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters]
 
       Enumerate all possible parameters of this post-processor. Should

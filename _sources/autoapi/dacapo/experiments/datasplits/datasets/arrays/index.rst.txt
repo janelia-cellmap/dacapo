@@ -831,6 +831,18 @@ Package Contents
    This class is used to create a zarr array.
 
 
+   .. py:attribute:: name
+
+
+   .. py:attribute:: file_name
+
+
+   .. py:attribute:: dataset
+
+
+   .. py:attribute:: snap_to_grid
+
+
    .. py:property:: mode
 
 
@@ -1296,6 +1308,12 @@ Package Contents
    .. note:: This class is used to create a BinarizeArray object which is a wrapper around a ZarrArray containing uint annotations.
 
 
+   .. py:attribute:: name
+
+
+   .. py:attribute:: background
+
+
    .. py:property:: attrs
       This method returns the attributes of the source array.
 
@@ -1618,6 +1636,18 @@ Package Contents
    .. note:: This class is a subclass of Array.
 
 
+   .. py:attribute:: name
+
+
+   .. py:attribute:: upsample
+
+
+   .. py:attribute:: downsample
+
+
+   .. py:attribute:: interp_order
+
+
    .. py:property:: attrs
       Returns the attributes of the source array.
 
@@ -1872,6 +1902,9 @@ Package Contents
    All intensities are converted to float32.
 
 
+   .. py:attribute:: name
+
+
    .. py:property:: attrs
       Returns the attributes of the source array
 
@@ -2122,6 +2155,9 @@ Package Contents
       This class is not meant to be used directly. It is used by the
       BinarizeArray class to mask out annotations that are present but
       not annotated.
+
+
+   .. py:attribute:: name
 
 
    .. py:property:: axes
@@ -2802,6 +2838,18 @@ Package Contents
       and methods. The only difference is that the array_type is ConcatArray.
 
 
+   .. py:attribute:: name
+
+
+   .. py:attribute:: channels
+
+
+   .. py:attribute:: source_arrays
+
+
+   .. py:attribute:: default_array
+
+
    .. py:property:: attrs
       Return the attributes of the ConcatArray as a dictionary.
 
@@ -3237,6 +3285,9 @@ Package Contents
 
    The LogicalOrArray class is used to create a LogicalOrArray. The LogicalOrArray
    class is a subclass of the Array class.
+
+
+   .. py:attribute:: name
 
 
    .. py:property:: axes
@@ -3739,6 +3790,12 @@ Package Contents
    .. note:: This class is a subclass of Array.
 
 
+   .. py:attribute:: name
+
+
+   .. py:attribute:: crop_roi
+
+
    .. py:property:: attrs
       Returns the attributes of the source array.
 
@@ -4129,6 +4186,9 @@ Package Contents
 
       This array is not writable
       Source arrays must have the same shape.
+
+
+   .. py:attribute:: name
 
 
    .. py:property:: axes
@@ -4543,6 +4603,14 @@ Package Contents
    The source is a tuple of three strings: the server, the UUID, and the data name.
 
 
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: source
+      :type:  tuple[str, str, str]
+
+
    .. py:method:: attrs()
 
       Returns the attributes of the DVID array
@@ -4863,6 +4931,9 @@ Package Contents
       Return the source name.
 
    .. note:: This class is a subclass of Array.
+
+
+   .. py:attribute:: name
 
 
    .. py:property:: axes

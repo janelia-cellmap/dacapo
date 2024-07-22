@@ -103,6 +103,12 @@ Module Contents
    .. note:: This class is a subclass of Array.
 
 
+   .. py:attribute:: name
+
+
+   .. py:attribute:: crop_roi
+
+
    .. py:property:: attrs
       Returns the attributes of the source array.
 

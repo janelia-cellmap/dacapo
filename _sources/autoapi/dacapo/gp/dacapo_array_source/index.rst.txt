@@ -47,6 +47,15 @@ Module Contents
       serve array data to gunpowder pipelines.
 
 
+   .. py:attribute:: array
+
+
+   .. py:attribute:: array_spec
+
+
+   .. py:attribute:: key
+
+
    .. py:method:: setup()
 
       Adds the key and the array spec to the provider.

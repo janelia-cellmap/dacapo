@@ -65,6 +65,9 @@ Module Contents
    .. note:: This class is a subclass of Array.
 
 
+   .. py:attribute:: name
+
+
    .. py:property:: axes
       The axes of the array.
 

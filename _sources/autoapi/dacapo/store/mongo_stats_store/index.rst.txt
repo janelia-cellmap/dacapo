@@ -93,6 +93,18 @@ Module Contents
    The MongoStatsStore uses the 'training_stats' and 'validation_scores' collections to store the statistics.
 
 
+   .. py:attribute:: db_host
+
+
+   .. py:attribute:: db_name
+
+
+   .. py:attribute:: client
+
+
+   .. py:attribute:: database
+
+
    .. py:method:: store_training_stats(run_name: str, stats: dacapo.experiments.TrainingStats)
 
       Store the training statistics for a specific run.

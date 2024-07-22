@@ -80,6 +80,9 @@ Module Contents
    .. note:: The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
 
 
+   .. py:attribute:: basedir
+
+
    .. py:method:: latest_iteration(run: str) -> Optional[int]
 
       Return the latest iteration for which weights are available for the

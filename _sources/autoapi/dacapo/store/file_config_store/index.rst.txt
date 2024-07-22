@@ -124,6 +124,9 @@ Module Contents
    The FileConfigStore is a local file based store for configurations.
 
 
+   .. py:attribute:: path
+
+
    .. py:method:: store_run_config(run_config, ignore=None)
 
       Stores the run configuration in the file config store.

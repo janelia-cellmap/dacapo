@@ -73,6 +73,9 @@ Package Contents
       created, the values of its attributes cannot be changed.
 
 
+   .. py:attribute:: detection_threshold
+
+
    .. py:method:: enumerate_parameters() -> Iterable[dacapo.experiments.tasks.post_processors.dummy_post_processor_parameters.DummyPostProcessorParameters]
 
       Enumerate all possible parameters of this post-processor. Should
@@ -597,6 +600,9 @@ Package Contents
       Process the prediction with the given parameters.
 
    .. note:: This post-processor uses the `watershed_function.py` script to apply the watershed transformation. The offsets are used to define the neighborhood for the watershed transformation.
+
+
+   .. py:attribute:: offsets
 
 
    .. py:method:: enumerate_parameters()

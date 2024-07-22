@@ -63,6 +63,9 @@ Module Contents
       Source arrays must have the same shape.
 
 
+   .. py:attribute:: name
+
+
    .. py:property:: axes
       Returns the axes of the array
 

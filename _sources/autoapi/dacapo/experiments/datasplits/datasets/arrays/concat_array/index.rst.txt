@@ -71,6 +71,18 @@ Module Contents
       and methods. The only difference is that the array_type is ConcatArray.
 
 
+   .. py:attribute:: name
+
+
+   .. py:attribute:: channels
+
+
+   .. py:attribute:: source_arrays
+
+
+   .. py:attribute:: default_array
+
+
    .. py:property:: attrs
       Return the attributes of the ConcatArray as a dictionary.
 

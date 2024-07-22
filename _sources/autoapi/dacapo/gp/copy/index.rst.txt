@@ -57,6 +57,15 @@ Module Contents
       copy a mask into a new key with the option to drop channels via max collapse.
 
 
+   .. py:attribute:: array_key
+
+
+   .. py:attribute:: copy_key
+
+
+   .. py:attribute:: drop_channels
+
+
    .. py:method:: setup()
 
       Sets up the filter by enabling autoskip and providing the copied key.

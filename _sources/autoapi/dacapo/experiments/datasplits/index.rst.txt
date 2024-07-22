@@ -167,6 +167,14 @@ Package Contents
       :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
 
 
+   .. py:attribute:: train
+
+
+   .. py:attribute:: validate
+      :value: []
+
+
+
 .. py:class:: DummyDataSplitConfig
 
 
@@ -258,6 +266,12 @@ Package Contents
 
    .. py:attribute:: validate
       :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
+
+
+   .. py:attribute:: train
+
+
+   .. py:attribute:: validate
 
 
 .. py:class:: TrainValidateDataSplitConfig
@@ -446,6 +460,54 @@ Package Contents
 
    - This class is used to generate the DataSplitConfig for a given task config and datasets.
    - Class names in gt_dataset shoulb be within [] e.g. [mito&peroxisome&er] for mutiple classes or [mito] for one class
+
+
+   .. py:attribute:: name
+
+
+   .. py:attribute:: datasets
+
+
+   .. py:attribute:: input_resolution
+
+
+   .. py:attribute:: output_resolution
+
+
+   .. py:attribute:: targets
+
+
+   .. py:attribute:: segmentation_type
+
+
+   .. py:attribute:: max_gt_downsample
+
+
+   .. py:attribute:: max_gt_upsample
+
+
+   .. py:attribute:: max_raw_training_downsample
+
+
+   .. py:attribute:: max_raw_training_upsample
+
+
+   .. py:attribute:: max_raw_validation_downsample
+
+
+   .. py:attribute:: max_raw_validation_upsample
+
+
+   .. py:attribute:: min_training_volume_size
+
+
+   .. py:attribute:: raw_min
+
+
+   .. py:attribute:: raw_max
+
+
+   .. py:attribute:: classes_separator_caracter
 
 
    .. py:property:: class_name

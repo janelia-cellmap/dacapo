@@ -58,6 +58,15 @@ Module Contents
       
 
 
+   .. py:attribute:: arrays
+
+
+   .. py:attribute:: gamma_min
+
+
+   .. py:attribute:: gamma_max
+
+
    .. py:method:: setup()
 
       Configuring the internal state by iterating over arrays.

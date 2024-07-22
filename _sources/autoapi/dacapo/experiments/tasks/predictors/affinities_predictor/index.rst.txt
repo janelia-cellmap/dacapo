@@ -149,6 +149,33 @@ Module Contents
    This is a subclass of Predictor.
 
 
+   .. py:attribute:: neighborhood
+
+
+   .. py:attribute:: lsds
+
+
+   .. py:attribute:: num_voxels
+
+
+   .. py:attribute:: grow_boundary_iterations
+
+
+   .. py:attribute:: affs_weight_clipmin
+
+
+   .. py:attribute:: affs_weight_clipmax
+
+
+   .. py:attribute:: lsd_weight_clipmin
+
+
+   .. py:attribute:: lsd_weight_clipmax
+
+
+   .. py:attribute:: background_as_object
+
+
    .. py:method:: extractor(voxel_size)
 
       Get the LSD extractor.

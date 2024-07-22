@@ -153,6 +153,45 @@ Module Contents
            U-Net architecture.
 
 
+   .. py:attribute:: fmaps_out
+
+
+   .. py:attribute:: fmaps_in
+
+
+   .. py:attribute:: num_fmaps
+
+
+   .. py:attribute:: fmap_inc_factor
+
+
+   .. py:attribute:: downsample_factors
+
+
+   .. py:attribute:: kernel_size_down
+
+
+   .. py:attribute:: kernel_size_up
+
+
+   .. py:attribute:: constant_upsample
+
+
+   .. py:attribute:: padding
+
+
+   .. py:attribute:: upsample_factors
+
+
+   .. py:attribute:: upsample_factors
+
+
+   .. py:attribute:: use_attention
+
+
+   .. py:attribute:: unet
+
+
    .. py:property:: eval_shape_increase
       The increase in shape due to the U-Net.
 
@@ -407,6 +446,61 @@ Module Contents
    .. note:: The input tensor should be given as a 5D tensor.
 
 
+   .. py:attribute:: num_levels
+
+
+   .. py:attribute:: num_heads
+
+
+   .. py:attribute:: in_channels
+
+
+   .. py:attribute:: out_channels
+
+
+   .. py:attribute:: upsample_channel_contraction
+
+
+   .. py:attribute:: dims
+
+
+   .. py:attribute:: use_attention
+
+
+   .. py:attribute:: kernel_size_down
+
+
+   .. py:attribute:: kernel_size_up
+
+
+   .. py:attribute:: crop_factors
+      :value: []
+
+
+
+   .. py:attribute:: factor_product
+      :value: None
+
+
+
+   .. py:attribute:: crop_factors
+
+
+   .. py:attribute:: l_conv
+
+
+   .. py:attribute:: dims
+
+
+   .. py:attribute:: l_down
+
+
+   .. py:attribute:: r_up
+
+
+   .. py:attribute:: r_conv
+
+
    .. py:method:: rec_forward(level, f_in)
 
       Recursive forward pass of the U-Net.
@@ -502,6 +596,14 @@ Module Contents
    .. note:: The input tensor should be given as a 5D tensor.
 
 
+   .. py:attribute:: layers
+      :value: []
+
+
+
+   .. py:attribute:: conv_pass
+
+
    .. py:method:: forward(x)
 
       Forward pass of the ConvPass module.
@@ -550,6 +652,18 @@ Module Contents
       Downsample the input tensor.
 
    .. note:: The input tensor should be given as a 5D tensor.
+
+
+   .. py:attribute:: dims
+
+
+   .. py:attribute:: downsample_factor
+
+
+   .. py:attribute:: pool
+
+
+   .. py:attribute:: down
 
 
    .. py:method:: forward(x)
@@ -615,6 +729,20 @@ Module Contents
       Forward pass of the Upsample module.
 
    .. note:: The input tensor should be given as a 5D tensor.
+
+
+   .. py:attribute:: crop_factor
+
+
+   .. py:attribute:: next_conv_kernel_sizes
+
+
+   .. py:attribute:: dims
+
+
+   .. py:attribute:: layers
+      :value: []
+
 
 
    .. py:method:: crop_to_factor(x, factor, kernel_sizes)
@@ -765,6 +893,30 @@ Module Contents
               Forward pass of the Attention Block.
       Note:
           The AttentionBlockModule is an instance of the ``torch.nn.Module`` class.
+
+
+   .. py:attribute:: dims
+
+
+   .. py:attribute:: kernel_sizes
+
+
+   .. py:attribute:: W_g
+
+
+   .. py:attribute:: W_x
+
+
+   .. py:attribute:: psi
+
+
+   .. py:attribute:: up_mode
+
+
+   .. py:attribute:: up
+
+
+   .. py:attribute:: relu
 
 
    .. py:method:: calculate_and_apply_padding(smaller_tensor, larger_tensor)

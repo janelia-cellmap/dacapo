@@ -73,6 +73,9 @@ Package Contents
    This is a subclass of Predictor.
 
 
+   .. py:attribute:: embedding_dims
+
+
    .. py:method:: create_model(architecture)
 
       Creates a model using the given architecture.
@@ -229,6 +232,39 @@ Package Contents
    The mask_distances argument is used to determine whether to mask distances.
    The clipmin argument is used to determine the minimum value to clip the weights to.
    The clipmax argument is used to determine the maximum value to clip the weights to.
+
+
+   .. py:attribute:: channels
+
+
+   .. py:attribute:: norm
+      :value: 'tanh'
+
+
+
+   .. py:attribute:: dt_scale_factor
+
+
+   .. py:attribute:: mask_distances
+
+
+   .. py:attribute:: max_distance
+
+
+   .. py:attribute:: epsilon
+      :value: 0.05
+
+
+
+   .. py:attribute:: threshold
+      :value: 0.8
+
+
+
+   .. py:attribute:: clipmin
+
+
+   .. py:attribute:: clipmax
 
 
    .. py:property:: embedding_dims
@@ -433,6 +469,9 @@ Package Contents
    .. rubric:: Notes
 
    This is a subclass of Predictor.
+
+
+   .. py:attribute:: classes
 
 
    .. py:property:: embedding_dims
@@ -824,6 +863,33 @@ Package Contents
    This is a subclass of Predictor.
 
 
+   .. py:attribute:: neighborhood
+
+
+   .. py:attribute:: lsds
+
+
+   .. py:attribute:: num_voxels
+
+
+   .. py:attribute:: grow_boundary_iterations
+
+
+   .. py:attribute:: affs_weight_clipmin
+
+
+   .. py:attribute:: affs_weight_clipmax
+
+
+   .. py:attribute:: lsd_weight_clipmin
+
+
+   .. py:attribute:: lsd_weight_clipmax
+
+
+   .. py:attribute:: background_as_object
+
+
    .. py:method:: extractor(voxel_size)
 
       Get the LSD extractor.
@@ -1053,6 +1119,30 @@ Package Contents
    This is a subclass of Predictor.
 
 
+   .. py:attribute:: channels
+
+
+   .. py:attribute:: norm
+      :value: 'tanh'
+
+
+
+   .. py:attribute:: dt_scale_factor
+
+
+   .. py:attribute:: max_distance
+
+
+   .. py:attribute:: epsilon
+      :value: 0.05
+
+
+
+   .. py:attribute:: threshold
+      :value: 0.8
+
+
+
    .. py:property:: embedding_dims
       Get the number of embedding dimensions.
 
@@ -1259,6 +1349,33 @@ Package Contents
    .. rubric:: Notes
 
    This is a subclass of Predictor.
+
+
+   .. py:attribute:: channels
+
+
+   .. py:attribute:: norm
+      :value: 'tanh'
+
+
+
+   .. py:attribute:: dt_scale_factor
+
+
+   .. py:attribute:: mask_distances
+
+
+   .. py:attribute:: max_distance
+
+
+   .. py:attribute:: epsilon
+      :value: 0.05
+
+
+
+   .. py:attribute:: threshold
+      :value: 0.8
+
 
 
    .. py:property:: embedding_dims

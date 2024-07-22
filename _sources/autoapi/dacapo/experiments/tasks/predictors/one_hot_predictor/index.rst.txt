@@ -66,6 +66,9 @@ Module Contents
    This is a subclass of Predictor.
 
 
+   .. py:attribute:: classes
+
+
    .. py:property:: embedding_dims
       Get the number of embedding dimensions.
 

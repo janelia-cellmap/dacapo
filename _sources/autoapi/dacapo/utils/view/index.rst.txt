@@ -170,6 +170,35 @@ Module Contents
       
 
 
+   .. py:attribute:: run
+      :type:  dacapo.experiments.run.Run
+
+
+   .. py:attribute:: score
+      :type:  float
+
+
+   .. py:attribute:: iteration
+      :type:  int
+      :value: 0
+
+
+
+   .. py:attribute:: parameter
+      :type:  Optional[str]
+      :value: None
+
+
+
+   .. py:attribute:: validation_parameters
+
+
+   .. py:attribute:: array_store
+
+
+   .. py:attribute:: stats_store
+
+
    .. py:method:: get_ds(iteration, validation_dataset)
 
       Retrieves the dataset object associated with the best score.
@@ -309,6 +338,16 @@ Module Contents
 
       Stop the viewer.
       
+
+
+   .. py:attribute:: run
+      :type:  dacapo.experiments.run.Run
+
+
+   .. py:attribute:: best_score
+
+
+   .. py:attribute:: embedded
 
 
    .. py:method:: updated_neuroglancer_layer(layer_name, ds)

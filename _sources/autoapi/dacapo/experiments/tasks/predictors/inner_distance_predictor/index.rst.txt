@@ -95,6 +95,30 @@ Module Contents
    This is a subclass of Predictor.
 
 
+   .. py:attribute:: channels
+
+
+   .. py:attribute:: norm
+      :value: 'tanh'
+
+
+
+   .. py:attribute:: dt_scale_factor
+
+
+   .. py:attribute:: max_distance
+
+
+   .. py:attribute:: epsilon
+      :value: 0.05
+
+
+
+   .. py:attribute:: threshold
+      :value: 0.8
+
+
+
    .. py:property:: embedding_dims
       Get the number of embedding dimensions.
 

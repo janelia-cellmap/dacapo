@@ -104,6 +104,18 @@ Module Contents
 
 
 
+   .. py:attribute:: clip_distance
+
+
+   .. py:attribute:: tol_distance
+
+
+   .. py:attribute:: channels
+
+
+   .. py:attribute:: criteria
+
+
    .. py:method:: evaluate(output_array_identifier, evaluation_array)
 
       Evaluate the output array against the evaluation array.
@@ -314,6 +326,24 @@ Module Contents
       The ArrayEvaluator class is used to evaluate the performance of a binary segmentation task.
       The class provides methods to evaluate the truth binary segmentation against the test binary segmentation.
       All evaluation scores should inherit from this class.
+
+
+   .. py:attribute:: truth
+
+
+   .. py:attribute:: test
+
+
+   .. py:attribute:: truth_empty
+
+
+   .. py:attribute:: test_empty
+
+
+   .. py:attribute:: cremieval
+
+
+   .. py:attribute:: resolution
 
 
    .. py:method:: truth_itk()
@@ -1024,6 +1054,21 @@ Module Contents
       - Toleration distance is used to determine the tolerance level for the evaluation.
       - Clip distance is used to clip the distance values to avoid extreme values.
       - All evaluation scores should inherit from this class.
+
+
+   .. py:attribute:: test
+
+
+   .. py:attribute:: truth
+
+
+   .. py:attribute:: sampling
+
+
+   .. py:attribute:: clip_distance
+
+
+   .. py:attribute:: tol_distance
 
 
    .. py:method:: test_mask()

@@ -60,6 +60,14 @@ Module Contents
    The source is a tuple of three strings: the server, the UUID, and the data name.
 
 
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: source
+      :type:  tuple[str, str, str]
+
+
    .. py:method:: attrs()
 
       Returns the attributes of the DVID array

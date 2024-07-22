@@ -45,6 +45,9 @@ Module Contents
       not annotated.
 
 
+   .. py:attribute:: name
+
+
    .. py:property:: axes
       Returns the axes of the source array
 
