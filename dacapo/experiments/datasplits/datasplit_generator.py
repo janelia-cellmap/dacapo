@@ -75,6 +75,10 @@ def resize_if_needed(
 
     raw_upsample = raw_voxel_size / target_resolution
     raw_downsample = target_resolution / raw_voxel_size
+    assert len(target_resolution) == zarr_array.dims, (
+        f"Target resolution {target_resolution} and raw voxel size {raw_voxel_size} "
+        f"have different dimensions {zarr_array.dims}"
+    )
     if any([u > 1 or d > 1 for u, d in zip(raw_upsample, raw_downsample)]):
         return ResampledArrayConfig(
             name=f"{extra_str}_{array_config.name}_{array_config.dataset}_resampled",
@@ -653,7 +657,7 @@ class DataSplitGenerator:
 
         """
         datasets, classes = format_class_name(
-            class_name, self.classes_separator_caracter
+            class_name, self.classes_separator_caracter, self.targets
         )
         if self.class_name is None:
             self.class_name = classes
@@ -893,7 +897,7 @@ class DataSplitGenerator:
         )
 
 
-def format_class_name(class_name, separator_character="&"):
+def format_class_name(class_name, separator_character="&", targets=None):
     """
     Format the class name.
 
@@ -919,4 +923,8 @@ def format_class_name(class_name, separator_character="&"):
         base_class_name = class_name.split("[")[0]
         return [f"{base_class_name}{c}" for c in classes], classes
     else:
-        raise ValueError(f"Invalid class name {class_name} missing '[' and ']'")
+        if targets is None:
+            raise ValueError(f"Invalid class name {class_name} missing '[' and ']'")
+        if len(targets) > 1:
+            raise ValueError(f"Invalid class name {class_name} missing '[' and ']'")
+        return [class_name], [targets[0]]
