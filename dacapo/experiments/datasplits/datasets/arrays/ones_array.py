@@ -71,6 +71,7 @@ class OnesArray(Array):
             `like` method to create a new OnesArray with the same metadata as
             another array.
         """
+        logger.warning("OnesArray is deprecated. Use ConstantArray instead.")
         self._source_array = array_config.source_array_config.array_type(
             array_config.source_array_config
         )
@@ -406,5 +407,4 @@ class OnesArray(Array):
             specified by the region of interest. This method returns a subarray
             of the array with all values set to 1.
         """
-        logger.warning("OnesArray is deprecated. Use ConstantArray instead.")
         return np.ones_like(self.source_array.__getitem__(roi), dtype=bool)
