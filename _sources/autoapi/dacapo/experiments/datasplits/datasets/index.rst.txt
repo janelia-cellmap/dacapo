@@ -233,9 +233,6 @@ Package Contents
    .. py:attribute:: name
 
 
-   .. py:attribute:: raw
-
-
 .. py:class:: DummyDatasetConfig
 
 
@@ -344,18 +341,6 @@ Package Contents
 
 
    .. py:attribute:: name
-
-
-   .. py:attribute:: raw
-
-
-   .. py:attribute:: gt
-
-
-   .. py:attribute:: mask
-
-
-   .. py:attribute:: sample_points
 
 
    .. py:attribute:: weight

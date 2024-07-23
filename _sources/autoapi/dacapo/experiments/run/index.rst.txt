@@ -147,15 +147,6 @@ Module Contents
       :type:  dacapo.experiments.training_stats.TrainingStats
 
 
-   .. py:attribute:: name
-
-
-   .. py:attribute:: train_until
-
-
-   .. py:attribute:: validation_interval
-
-
    .. py:attribute:: task_type
 
 
@@ -166,24 +157,6 @@ Module Contents
 
 
    .. py:attribute:: datasplit_type
-
-
-   .. py:attribute:: task
-
-
-   .. py:attribute:: architecture
-
-
-   .. py:attribute:: trainer
-
-
-   .. py:attribute:: model
-
-
-   .. py:attribute:: optimizer
-
-
-   .. py:attribute:: training_stats
 
 
    .. py:attribute:: start

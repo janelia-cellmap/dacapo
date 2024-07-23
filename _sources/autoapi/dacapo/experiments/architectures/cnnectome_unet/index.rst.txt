@@ -183,9 +183,6 @@ Module Contents
    .. py:attribute:: upsample_factors
 
 
-   .. py:attribute:: upsample_factors
-
-
    .. py:attribute:: use_attention
 
 
@@ -483,13 +480,7 @@ Module Contents
 
 
 
-   .. py:attribute:: crop_factors
-
-
    .. py:attribute:: l_conv
-
-
-   .. py:attribute:: dims
 
 
    .. py:attribute:: l_down

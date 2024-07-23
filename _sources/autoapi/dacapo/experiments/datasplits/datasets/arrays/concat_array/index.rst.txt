@@ -77,7 +77,32 @@ Module Contents
    .. py:attribute:: channels
 
 
-   .. py:attribute:: source_arrays
+   .. py:property:: source_arrays
+      :type: Dict[str, dacapo.experiments.datasplits.datasets.arrays.array.Array]
+
+      Return the source arrays of the ConcatArray.
+
+      :returns: The source arrays of the ConcatArray.
+      :rtype: Dict[str, Array]
+
+      :raises AssertionError: If the source arrays are empty.
+
+      .. rubric:: Examples
+
+      >>> config = ConcatArrayConfig(
+      ...     name="my_concat_array",
+      ...     channels=["A", "B"],
+      ...     source_array_configs={
+      ...         "A": ArrayConfig(...),
+      ...         "B": ArrayConfig(...),
+      ...     },
+      ...     default_config=ArrayConfig(...),
+      ... )
+      >>> array = ConcatArray(config)
+      >>> array.source_arrays
+      {'A': Array(...), 'B': Array(...)}
+
+      .. note:: The `source_arrays` are expected to have the same shape and ROI.
 
 
    .. py:attribute:: default_array
@@ -107,34 +132,6 @@ Module Contents
       {'axes': 'cxyz', 'roi': Roi(...), 'voxel_size': (1, 1, 1)}
 
       .. note:: The `source_arrays` are expected to have the same attributes.
-
-
-   .. py:property:: source_arrays
-      :type: Dict[str, dacapo.experiments.datasplits.datasets.arrays.array.Array]
-
-      Return the source arrays of the ConcatArray.
-
-      :returns: The source arrays of the ConcatArray.
-      :rtype: Dict[str, Array]
-
-      :raises AssertionError: If the source arrays are empty.
-
-      .. rubric:: Examples
-
-      >>> config = ConcatArrayConfig(
-      ...     name="my_concat_array",
-      ...     channels=["A", "B"],
-      ...     source_array_configs={
-      ...         "A": ArrayConfig(...),
-      ...         "B": ArrayConfig(...),
-      ...     },
-      ...     default_config=ArrayConfig(...),
-      ... )
-      >>> array = ConcatArray(config)
-      >>> array.source_arrays
-      {'A': Array(...), 'B': Array(...)}
-
-      .. note:: The `source_arrays` are expected to have the same shape and ROI.
 
 
    .. py:property:: source_array

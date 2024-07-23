@@ -53,9 +53,3 @@ Module Contents
       :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
 
 
-   .. py:attribute:: train
-
-
-   .. py:attribute:: validate
-
-

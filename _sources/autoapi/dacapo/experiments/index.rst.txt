@@ -150,9 +150,6 @@ Package Contents
    .. py:attribute:: chain
 
 
-   .. py:attribute:: num_in_channels
-
-
    .. py:attribute:: input_shape
 
 

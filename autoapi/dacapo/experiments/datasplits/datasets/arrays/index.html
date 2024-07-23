@@ -3930,10 +3930,41 @@ and methods. The only difference is that the array_type is ConcatArray.</p>
 <span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#id74" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="py property">
 <dt class="sig sig-object py" id="id75">
-<span class="sig-name descname"><span class="pre">source_arrays</span></span><a class="headerlink" href="#id75" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source_arrays</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array.Array</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id75" title="Link to this definition"></a></dt>
+<dd><p>Return the source arrays of the ConcatArray.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The source arrays of the ConcatArray.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict[str, <a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array">Array</a>]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AssertionError</strong> – If the source arrays are empty.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">ConcatArrayConfig</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my_concat_array&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">channels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">source_array_configs</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="n">ArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="n">ArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="p">},</span>
+<span class="gp">... </span>    <span class="n">default_config</span><span class="o">=</span><span class="n">ArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">ConcatArray</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">source_arrays</span>
+<span class="go">{&#39;A&#39;: Array(...), &#39;B&#39;: Array(...)}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <cite>source_arrays</cite> are expected to have the same shape and ROI.</p>
+</div>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id76">
@@ -3974,42 +4005,6 @@ and methods. The only difference is that the array_type is ConcatArray.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The <cite>source_arrays</cite> are expected to have the same attributes.</p>
-</div>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="id77">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source_arrays</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array.Array</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id77" title="Link to this definition"></a></dt>
-<dd><p>Return the source arrays of the ConcatArray.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The source arrays of the ConcatArray.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[str, <a class="reference internal" href="#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array">Array</a>]</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>AssertionError</strong> – If the source arrays are empty.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">ConcatArrayConfig</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;my_concat_array&quot;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">channels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">source_array_configs</span><span class="o">=</span><span class="p">{</span>
-<span class="gp">... </span>        <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="n">ArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
-<span class="gp">... </span>        <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="n">ArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
-<span class="gp">... </span>    <span class="p">},</span>
-<span class="gp">... </span>    <span class="n">default_config</span><span class="o">=</span><span class="n">ArrayConfig</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">ConcatArray</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span><span class="o">.</span><span class="n">source_arrays</span>
-<span class="go">{&#39;A&#39;: Array(...), &#39;B&#39;: Array(...)}</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The <cite>source_arrays</cite> are expected to have the same shape and ROI.</p>
 </div>
 </dd></dl>
 
@@ -4406,18 +4401,18 @@ The source array is a dictionary with the key being the channel and the value be
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="id77">
+<span class="sig-name descname"><span class="pre">channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id77" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="id78">
-<span class="sig-name descname"><span class="pre">channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id78" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">source_array_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id78" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id79">
-<span class="sig-name descname"><span class="pre">source_array_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id79" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id80">
-<span class="sig-name descname"><span class="pre">default_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id80" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">default_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id79" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -4542,13 +4537,13 @@ Get the name of the source array</p>
 <p>The LogicalOrArray class is used to create a LogicalOrArray. The LogicalOrArray
 class is a subclass of the Array class.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id81">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#id81" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id80">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#id80" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id82">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id82" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id81">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id81" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
 <dd><dl class="field-list simple">
@@ -4595,8 +4590,8 @@ of the array.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id83">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id83" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id82">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id82" title="Link to this definition"></a></dt>
 <dd><p>Get the number of dimensions of the array</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -4642,8 +4637,8 @@ of dimensions is the number of axes of the array.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id84">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#id84" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id83">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#id83" title="Link to this definition"></a></dt>
 <dd><p>Get the voxel size of the array</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -4689,8 +4684,8 @@ is the size of a voxel in the array.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id85">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#id85" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id84">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#id84" title="Link to this definition"></a></dt>
 <dd><p>Get the region of interest of the array</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -4736,8 +4731,8 @@ interest is the shape and offset of the array.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id86">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id86" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id85">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id85" title="Link to this definition"></a></dt>
 <dd><p>Get whether the array is writable</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -4783,8 +4778,8 @@ writable if it can be modified.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id87">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id87" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id86">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id86" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
 <dd><dl class="field-list simple">
@@ -4831,8 +4826,8 @@ type of the data in the array.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id88">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#id88" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id87">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#id87" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">channels</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
 <dd><dl class="field-list simple">
@@ -4879,8 +4874,8 @@ number of channels is the number of channels in the array.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id89">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id89" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id88">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id88" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
 <dd><dl class="field-list simple">
@@ -4933,8 +4928,8 @@ the array.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id90">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id90" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id89">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id89" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
 <dd><dl class="field-list simple">
@@ -5012,8 +5007,8 @@ Good for union multiple masks.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id91">
-<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#id91" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id90">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#id90" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -5142,18 +5137,18 @@ Neuroglancer.</p>
 <p>This class is a subclass of Array.</p>
 </div>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id92">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#id92" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id91">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#id91" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id93">
-<span class="sig-name descname"><span class="pre">crop_roi</span></span><a class="headerlink" href="#id93" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id92">
+<span class="sig-name descname"><span class="pre">crop_roi</span></span><a class="headerlink" href="#id92" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id94">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id94" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id93">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id93" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -5186,8 +5181,8 @@ Neuroglancer.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id95">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id95" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id94">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id94" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -5220,8 +5215,8 @@ Neuroglancer.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id96">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id96" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id95">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id95" title="Link to this definition"></a></dt>
 <dd><p>Returns the number of dimensions of the source array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -5255,8 +5250,8 @@ modified.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id97">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#id97" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id96">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Coordinate</span></em><a class="headerlink" href="#id96" title="Link to this definition"></a></dt>
 <dd><p>Returns the voxel size of the source array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -5290,8 +5285,8 @@ modified.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id98">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#id98" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id97">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#id97" title="Link to this definition"></a></dt>
 <dd><p>Returns the region of interest of the source array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -5325,8 +5320,8 @@ because the source array is not modified.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id99">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id99" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id98">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id98" title="Link to this definition"></a></dt>
 <dd><p>Returns whether the array is writable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -5360,8 +5355,8 @@ modifying another array on demand.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id100">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id100" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id99">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id99" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -5395,8 +5390,8 @@ region of interest of the source array.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id101">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id101" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id100">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id100" title="Link to this definition"></a></dt>
 <dd><p>Returns the number of channels of the source array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -5430,8 +5425,8 @@ modified.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id102">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id102" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id101">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id101" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -5471,8 +5466,8 @@ region of interest of the source array.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id103">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#id103" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id102">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#id102" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">channels</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -5567,13 +5562,13 @@ and methods. The only difference is that the array_type is CropArray.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id104">
-<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#id104" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id103">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#id103" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id105">
-<span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#id105" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id104">
+<span class="sig-name descname"><span class="pre">roi</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.geometry.Roi</span></em><a class="headerlink" href="#id104" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -5634,8 +5629,8 @@ Returns a numpy array with the requested region of interest</p>
 Source arrays must have the same shape.</p>
 </div>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id106">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#id106" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id105">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#id105" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
@@ -5655,7 +5650,7 @@ Source arrays must have the same shape.</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<p><a href="#id107"><span class="problematic" id="id108">``</span></a><a href="#id109"><span class="problematic" id="id110">`</span></a>python
+<p><a href="#id106"><span class="problematic" id="id107">``</span></a><a href="#id108"><span class="problematic" id="id109">`</span></a>python
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArray
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArrayConfig
 from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
@@ -5686,7 +5681,7 @@ path=”path/to/array2.h5”,</p>
 <p>)
 array = MergeInstancesArray(array_config)
 axes = array.axes
-<a href="#id111"><span class="problematic" id="id112">``</span></a><a href="#id113"><span class="problematic" id="id114">`</span></a></p>
+<a href="#id110"><span class="problematic" id="id111">``</span></a><a href="#id112"><span class="problematic" id="id113">`</span></a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This example shows how to get the axes of the array</p>
@@ -5709,7 +5704,7 @@ axes = array.axes
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<p><a href="#id115"><span class="problematic" id="id116">``</span></a><a href="#id117"><span class="problematic" id="id118">`</span></a>python
+<p><a href="#id114"><span class="problematic" id="id115">``</span></a><a href="#id116"><span class="problematic" id="id117">`</span></a>python
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArray
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArrayConfig
 from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
@@ -5740,7 +5735,7 @@ path=”path/to/array2.h5”,</p>
 <p>)
 array = MergeInstancesArray(array_config)
 dims = array.dims
-<a href="#id119"><span class="problematic" id="id120">``</span></a><a href="#id121"><span class="problematic" id="id122">`</span></a></p>
+<a href="#id118"><span class="problematic" id="id119">``</span></a><a href="#id120"><span class="problematic" id="id121">`</span></a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This example shows how to get the number of dimensions of the array</p>
@@ -5763,7 +5758,7 @@ dims = array.dims
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<p><a href="#id123"><span class="problematic" id="id124">``</span></a><a href="#id125"><span class="problematic" id="id126">`</span></a>python
+<p><a href="#id122"><span class="problematic" id="id123">``</span></a><a href="#id124"><span class="problematic" id="id125">`</span></a>python
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArray
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArrayConfig
 from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
@@ -5794,7 +5789,7 @@ path=”path/to/array2.h5”,</p>
 <p>)
 array = MergeInstancesArray(array_config)
 voxel_size = array.voxel_size
-<a href="#id127"><span class="problematic" id="id128">``</span></a><a href="#id129"><span class="problematic" id="id130">`</span></a></p>
+<a href="#id126"><span class="problematic" id="id127">``</span></a><a href="#id128"><span class="problematic" id="id129">`</span></a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This example shows how to get the voxel size of the array</p>
@@ -5817,7 +5812,7 @@ voxel_size = array.voxel_size
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<p><a href="#id131"><span class="problematic" id="id132">``</span></a><a href="#id133"><span class="problematic" id="id134">`</span></a>python
+<p><a href="#id130"><span class="problematic" id="id131">``</span></a><a href="#id132"><span class="problematic" id="id133">`</span></a>python
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArray
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArrayConfig
 from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
@@ -5848,7 +5843,7 @@ path=”path/to/array2.h5”,</p>
 <p>)
 array = MergeInstancesArray(array_config)
 roi = array.roi
-<a href="#id135"><span class="problematic" id="id136">``</span></a><a href="#id137"><span class="problematic" id="id138">`</span></a></p>
+<a href="#id134"><span class="problematic" id="id135">``</span></a><a href="#id136"><span class="problematic" id="id137">`</span></a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This example shows how to get the region of interest of the array</p>
@@ -5871,7 +5866,7 @@ roi = array.roi
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<p><a href="#id139"><span class="problematic" id="id140">``</span></a><a href="#id141"><span class="problematic" id="id142">`</span></a>python
+<p><a href="#id138"><span class="problematic" id="id139">``</span></a><a href="#id140"><span class="problematic" id="id141">`</span></a>python
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArray
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArrayConfig
 from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
@@ -5902,7 +5897,7 @@ path=”path/to/array2.h5”,</p>
 <p>)
 array = MergeInstancesArray(array_config)
 writable = array.writable
-<a href="#id143"><span class="problematic" id="id144">``</span></a><a href="#id145"><span class="problematic" id="id146">`</span></a></p>
+<a href="#id142"><span class="problematic" id="id143">``</span></a><a href="#id144"><span class="problematic" id="id145">`</span></a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This example shows how to check if the array is writable</p>
@@ -5926,7 +5921,7 @@ writable = array.writable
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<p><a href="#id147"><span class="problematic" id="id148">``</span></a><a href="#id149"><span class="problematic" id="id150">`</span></a>python
+<p><a href="#id146"><span class="problematic" id="id147">``</span></a><a href="#id148"><span class="problematic" id="id149">`</span></a>python
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArray
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArrayConfig
 from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
@@ -5957,7 +5952,7 @@ path=”path/to/array2.h5”,</p>
 <p>)
 array = MergeInstancesArray(array_config)
 dtype = array.dtype
-<a href="#id151"><span class="problematic" id="id152">``</span></a><a href="#id153"><span class="problematic" id="id154">`</span></a></p>
+<a href="#id150"><span class="problematic" id="id151">``</span></a><a href="#id152"><span class="problematic" id="id153">`</span></a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This example shows how to get the data type of the array</p>
@@ -5981,7 +5976,7 @@ dtype = array.dtype
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<p><a href="#id155"><span class="problematic" id="id156">``</span></a><a href="#id157"><span class="problematic" id="id158">`</span></a>python
+<p><a href="#id154"><span class="problematic" id="id155">``</span></a><a href="#id156"><span class="problematic" id="id157">`</span></a>python
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArray
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArrayConfig
 from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
@@ -6012,7 +6007,7 @@ path=”path/to/array2.h5”,</p>
 <p>)
 array = MergeInstancesArray(array_config)
 num_channels = array.num_channels
-<a href="#id159"><span class="problematic" id="id160">``</span></a><a href="#id161"><span class="problematic" id="id162">`</span></a></p>
+<a href="#id158"><span class="problematic" id="id159">``</span></a><a href="#id160"><span class="problematic" id="id161">`</span></a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This example shows how to get the number of channels of the array</p>
@@ -6036,7 +6031,7 @@ num_channels = array.num_channels
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<p><a href="#id163"><span class="problematic" id="id164">``</span></a><a href="#id165"><span class="problematic" id="id166">`</span></a>python
+<p><a href="#id162"><span class="problematic" id="id163">``</span></a><a href="#id164"><span class="problematic" id="id165">`</span></a>python
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArray
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArrayConfig
 from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
@@ -6067,7 +6062,7 @@ path=”path/to/array2.h5”,</p>
 <p>)
 array = MergeInstancesArray(array_config)
 data = array.data
-<a href="#id167"><span class="problematic" id="id168">``</span></a><a href="#id169"><span class="problematic" id="id170">`</span></a></p>
+<a href="#id166"><span class="problematic" id="id167">``</span></a><a href="#id168"><span class="problematic" id="id169">`</span></a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This example shows how to get the data of the array</p>
@@ -6091,7 +6086,7 @@ data = array.data
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<p><a href="#id171"><span class="problematic" id="id172">``</span></a><a href="#id173"><span class="problematic" id="id174">`</span></a>python
+<p><a href="#id170"><span class="problematic" id="id171">``</span></a><a href="#id172"><span class="problematic" id="id173">`</span></a>python
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArray
 from dacapo.experiments.datasplits.datasets.arrays import MergeInstancesArrayConfig
 from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
@@ -6122,7 +6117,7 @@ path=”path/to/array2.h5”,</p>
 <p>)
 array = MergeInstancesArray(array_config)
 attributes = array.attrs
-<a href="#id175"><span class="problematic" id="id176">``</span></a><a href="#id177"><span class="problematic" id="id178">`</span></a></p>
+<a href="#id174"><span class="problematic" id="id175">``</span></a><a href="#id176"><span class="problematic" id="id177">`</span></a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This example shows how to get the attributes of the array</p>
@@ -6159,8 +6154,8 @@ Create a MergeInstancesArray instance from the configuration</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id179">
-<span class="sig-name descname"><span class="pre">source_array_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id179" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id178">
+<span class="sig-name descname"><span class="pre">source_array_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id178" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -6204,13 +6199,13 @@ and the data name.</p>
 <p class="rubric">Notes</p>
 <p>The source is a tuple of three strings: the server, the UUID, and the data name.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id180">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id180" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id179">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id179" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id181">
-<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id181" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id180">
+<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id180" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -6512,8 +6507,8 @@ and the data name.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id182">
-<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id182" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id181">
+<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id181" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -6605,8 +6600,8 @@ Get the data for the given region of interest.</p>
 <p>This class is a subclass of Array.</p>
 </div>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id183">
-<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#id183" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id182">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#id182" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
@@ -6896,8 +6891,8 @@ The Array of masks from which to take the union</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id184">
-<span class="sig-name descname"><span class="pre">source_array_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id184" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id183">
+<span class="sig-name descname"><span class="pre">source_array_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id183" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -6981,8 +6976,8 @@ The Array of masks from which to take the union</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id185">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_gp_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.Array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id185" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id184">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_gp_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">gunpowder.Array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id184" title="Link to this definition"></a></dt>
 <dd><p>Create a NumpyArray from a Gunpowder Array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -7018,8 +7013,8 @@ The Array of masks from which to take the union</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id186">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_np_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id186" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id185">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_np_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voxel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id185" title="Link to this definition"></a></dt>
 <dd><p>Create a NumpyArray from a numpy array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -7059,8 +7054,8 @@ The Array of masks from which to take the union</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id187">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id187" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id186">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id186" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -7115,8 +7110,8 @@ The Array of masks from which to take the union</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id188">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#id188" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id187">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#id187" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">voxel</span> <span class="pre">size</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -7140,8 +7135,8 @@ The Array of masks from which to take the union</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id189">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#id189" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id188">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#id188" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">region</span> <span class="pre">of</span> <span class="pre">interest</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -7192,8 +7187,8 @@ The Array of masks from which to take the union</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id190">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id190" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id189">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id189" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">numpy</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -7223,8 +7218,8 @@ The Array of masks from which to take the union</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id191">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id191" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id190">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id190" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -7371,8 +7366,8 @@ original array, but with all values set to 1.</p>
 another array.</p>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="id192">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">like</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array.Array</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id192" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id191">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">like</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array.Array</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id191" title="Link to this definition"></a></dt>
 <dd><p>Create a new ConstantArray with the same metadata as another array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -7411,8 +7406,8 @@ another array.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id193">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id193" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id192">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id192" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -7437,8 +7432,8 @@ empty dictionary because the ConstantArray does not have any attributes.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id194">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source_array</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array.Array</span></a></em><a class="headerlink" href="#id194" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id193">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source_array</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array/index.html#dacapo.experiments.datasplits.datasets.arrays.array.Array" title="dacapo.experiments.datasplits.datasets.arrays.array.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array.Array</span></a></em><a class="headerlink" href="#id193" title="Link to this definition"></a></dt>
 <dd><p>Get the source array that this array is based on.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -7475,8 +7470,8 @@ was created.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id195">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id195" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id194">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id194" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -7504,8 +7499,8 @@ the array that was specified when the ConstantArray was created.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id196">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#id196" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id195">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#id195" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">dimensions</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -7533,8 +7528,8 @@ dimensions of the array that was specified when the ConstantArray was created.</
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id197">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#id197" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id196">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#id196" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">voxel</span> <span class="pre">size</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -7562,8 +7557,8 @@ size of the array that was specified when the ConstantArray was created.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id198">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#id198" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id197">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#id197" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">region</span> <span class="pre">of</span> <span class="pre">interest</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -7593,8 +7588,8 @@ when the ConstantArray was created.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id199">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id199" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id198">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">writable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#id198" title="Link to this definition"></a></dt>
 <dd><p>Check if the array is writable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -7621,8 +7616,8 @@ because the ConstantArray is read-only and cannot be modified.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id200">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id200" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id199">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id199" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -7659,8 +7654,8 @@ of the array with all values set to 1.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id201">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id201" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id200">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id200" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -7689,8 +7684,8 @@ was created.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id202">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#id202" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id201">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#id201" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">channels</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
 <dd><dl class="field-list simple">
@@ -7749,8 +7744,8 @@ array, you can use this class to create the mask array.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id203">
-<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#id203" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id202">
+<span class="sig-name descname"><span class="pre">source_array_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="array_config/index.html#dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig" title="dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig</span></a></em><a class="headerlink" href="#id202" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">

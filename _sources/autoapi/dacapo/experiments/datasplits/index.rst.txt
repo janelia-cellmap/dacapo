@@ -167,14 +167,6 @@ Package Contents
       :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
 
 
-   .. py:attribute:: train
-
-
-   .. py:attribute:: validate
-      :value: []
-
-
-
 .. py:class:: DummyDataSplitConfig
 
 
@@ -266,12 +258,6 @@ Package Contents
 
    .. py:attribute:: validate
       :type:  List[dacapo.experiments.datasplits.datasets.Dataset]
-
-
-   .. py:attribute:: train
-
-
-   .. py:attribute:: validate
 
 
 .. py:class:: TrainValidateDataSplitConfig

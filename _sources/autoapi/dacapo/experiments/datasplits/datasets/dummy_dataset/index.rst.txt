@@ -43,6 +43,3 @@ Module Contents
    .. py:attribute:: name
 
 
-   .. py:attribute:: raw
-
-

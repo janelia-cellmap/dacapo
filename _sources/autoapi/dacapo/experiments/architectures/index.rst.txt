@@ -727,9 +727,6 @@ Package Contents
    .. py:attribute:: upsample_factors
 
 
-   .. py:attribute:: upsample_factors
-
-
    .. py:attribute:: use_attention
 
 

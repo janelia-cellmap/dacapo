@@ -113,9 +113,6 @@ Module Contents
    .. py:attribute:: channels
 
 
-   .. py:attribute:: criteria
-
-
    .. py:method:: evaluate(output_array_identifier, evaluation_array)
 
       Evaluate the output array against the evaluation array.
