@@ -72,14 +72,13 @@ def predict(
             output_container, f"prediction_{run_name}_{iteration}"
         )
 
-    # get the model's input and output size
     compute_context = create_compute_context()
     if isinstance(compute_context, LocalTorch):
         num_workers = 1
 
     model = run.model.eval()
 
-    if iteration is not None:
+    if iteration is not None and not compute_context.distribute_workers:
         # create weights store
         weights_store = create_weights_store()
 

@@ -121,7 +121,7 @@ def start_worker_fn(
         run_config = config_store.retrieve_run_config(run_name)
         run = Run(run_config)
 
-    if iteration is not None:
+    if iteration is not None and compute_context.distribute_workers:
         # create weights store
         weights_store = create_weights_store()
 
