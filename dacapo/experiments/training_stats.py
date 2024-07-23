@@ -5,6 +5,9 @@ import numpy as np
 
 from typing import List
 import attr
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @attr.s
@@ -62,9 +65,11 @@ class TrainingStats:
             - The inner list contains the stats for each training iteration.
         """
         if len(self.iteration_stats) > 0:
-            assert (
-                iteration_stats.iteration == self.iteration_stats[-1].iteration + 1
-            ), f"Expected iteration {self.iteration_stats[-1].iteration + 1}, got {iteration_stats.iteration}"
+            if iteration_stats.iteration <= self.iteration_stats[-1].iteration:
+                logger.error(
+                    f"Expected iteration {self.iteration_stats[-1].iteration + 1}, got {iteration_stats.iteration}. will remove stats after {iteration_stats.iteration-1}"
+                )
+                self.delete_after(iteration_stats.iteration - 1)
 
         self.iteration_stats.append(iteration_stats)
 

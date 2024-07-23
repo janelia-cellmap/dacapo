@@ -212,3 +212,6 @@ class Run:
                     state[k] = v.to(device)
         if empty_cuda_cache:
             torch.cuda.empty_cache()
+
+    def __str__(self):
+        return self.name
