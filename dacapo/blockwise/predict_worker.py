@@ -33,8 +33,11 @@ def is_global_run_set(run_name) -> bool:
     if found:
         found = global_vars.current_run.name == run_name
         if not found:
-            logger.error(f"Found global run {global_vars.current_run.name} but looking for {run_name}")
+            logger.error(
+                f"Found global run {global_vars.current_run.name} but looking for {run_name}"
+            )
     return found
+
 
 @click.group()
 @click.option(
@@ -118,6 +121,7 @@ def start_worker_fn(
         output_container (Path | str): The output container.
         output_dataset (str): The output dataset.
     """
+
     def io_loop():
         daisy_client = daisy.Client()
 
@@ -143,7 +147,9 @@ def start_worker_fn(
             )
 
         # get arrays
-        input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
+        input_array_identifier = LocalArrayIdentifier(
+            Path(input_container), input_dataset
+        )
         raw_array = ZarrArray.open_from_array_identifier(input_array_identifier)
 
         output_array_identifier = LocalArrayIdentifier(
@@ -207,7 +213,6 @@ def start_worker_fn(
             voxel_size=output_voxel_size,
         )
 
-
         while True:
             with daisy_client.acquire_block() as block:
                 if block is None:
@@ -260,7 +265,6 @@ def spawn_worker(
     """
     compute_context = create_compute_context()
 
-    
     if not compute_context.distribute_workers:
         return start_worker_fn(
             run_name=run_name,
