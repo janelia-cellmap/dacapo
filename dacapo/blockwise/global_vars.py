@@ -1,0 +1,2 @@
+current_run = None
+
