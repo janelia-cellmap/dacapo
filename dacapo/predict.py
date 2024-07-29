@@ -138,7 +138,6 @@ def predict(
 
     global_vars.current_run = run
 
-
     # run blockwise prediction
     worker_file = str(Path(Path(dacapo.blockwise.__file__).parent, "predict_worker.py"))
     print("Running blockwise prediction with worker_file: ", worker_file)
