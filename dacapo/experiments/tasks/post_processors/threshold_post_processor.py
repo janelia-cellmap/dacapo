@@ -68,7 +68,7 @@ class ThresholdPostProcessor(PostProcessor):
         self,
         parameters: "ThresholdPostProcessorParameters",  # type: ignore[override]
         output_array_identifier: "LocalArrayIdentifier",
-        num_workers: int = 16,
+        num_workers: int = 12,
         block_size: Coordinate = Coordinate((256, 256, 256)),
     ) -> ZarrArray:
         """
@@ -122,7 +122,7 @@ class ThresholdPostProcessor(PostProcessor):
 
         read_roi = Roi((0, 0, 0), write_size[-self.prediction_array.dims :])
         # run blockwise post-processing
-        run_blockwise(
+        sucess = run_blockwise(
             worker_file=str(
                 Path(Path(dacapo.blockwise.__file__).parent, "threshold_worker.py")
             ),
@@ -137,5 +137,8 @@ class ThresholdPostProcessor(PostProcessor):
             output_array_identifier=output_array_identifier,
             threshold=parameters.threshold,
         )
+
+        if not sucess:
+            raise RuntimeError("Blockwise post-processing failed.")
 
         return output_array

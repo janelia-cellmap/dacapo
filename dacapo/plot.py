@@ -3,9 +3,8 @@ from bokeh.embed.standalone import json_item
 from dacapo.store.create_store import create_config_store, create_stats_store
 from dacapo.experiments.run import Run
 
-from bokeh.palettes import Category20 as palette
-import bokeh.layouts
-import bokeh.plotting
+from dacapo.plotting.plot_handler import PlotHandler, RunInfo
+from bokeh.plotting.matplot_plot_handler import MatplotPlotHandler
 import numpy as np
 
 from collections import namedtuple
@@ -104,7 +103,7 @@ def get_runs_info(
             run_config.trainer_config.name,
             run_config.datasplit_config.name,
             (
-                stats_store.retrieve_training_stats(run_config_name, subsample=True)
+                stats_store.retrieve_training_stats(run_config_name)
                 if plot_loss
                 else None
             ),
@@ -159,7 +158,7 @@ def plot_runs(
         tools="pan, wheel_zoom, reset, save, hover",
         x_axis_label="iterations",
         tooltips=loss_tooltips,
-        plot_width=2048,
+        # plot_width=2048,
     )
     loss_figure.background_fill_color = "#efefef"
 
@@ -202,7 +201,7 @@ def plot_runs(
                 tools="pan, wheel_zoom, reset, save, hover",
                 x_axis_label="iterations",
                 tooltips=validation_tooltips,
-                plot_width=2048,
+                # plot_width=2048,
             )
             validation_figure.background_fill_color = "#efefef"
             validation_figures[dataset.name] = validation_figure
@@ -226,7 +225,7 @@ def plot_runs(
         x_axis_label="model size",
         y_axis_label="best validation",
         tooltips=summary_tooltips,
-        plot_width=2048,
+        # plot_width=2048,
     )
     summary_figure.background_fill_color = "#efefef"
 
@@ -297,24 +296,24 @@ def plot_runs(
                     "run": [run.name] * len(x),
                 }
                 # TODO: get_best: higher_is_better is not true for all scores
-                best_parameters, best_scores = run.validation_scores.get_best(
-                    dataset_data, dim="parameters"
-                )
+                # best_parameters, best_scores = run.validation_scores.get_best(
+                #     dataset_data, dim="parameters"
+                # )
 
-                source_dict.update(
-                    {
-                        name: np.array(
-                            [
-                                getattr(best_parameter, name)
-                                for best_parameter in best_parameters.values
-                            ]
-                        )
-                        for name in run.validation_scores.parameter_names
-                    }
-                )
-                source_dict.update(
-                    {run.validation_score_name: np.array(best_scores.values)}
-                )
+                # source_dict.update(
+                #     {
+                #         name: np.array(
+                #             [
+                #                 getattr(best_parameter, name)
+                #                 for best_parameter in best_parameters.values
+                #             ]
+                #         )
+                #         for name in run.validation_scores.parameter_names
+                #     }
+                # )
+                # source_dict.update(
+                #     {run.validation_score_name: np.array(best_scores.values)}
+                # )
 
                 source = bokeh.plotting.ColumnDataSource(source_dict)
                 validation_figures[dataset.name].line(
