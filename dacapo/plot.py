@@ -3,8 +3,9 @@ from bokeh.embed.standalone import json_item
 from dacapo.store.create_store import create_config_store, create_stats_store
 from dacapo.experiments.run import Run
 
-from dacapo.plotting.plot_handler import PlotHandler, RunInfo
-from bokeh.plotting.matplot_plot_handler import MatplotPlotHandler
+from bokeh.palettes import Category20 as palette
+import bokeh.layouts
+import bokeh.plotting
 import numpy as np
 
 from collections import namedtuple
