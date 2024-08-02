@@ -1,5 +1,5 @@
 from upath import UPath as Path
-
+from dacapo.blockwise import global_vars
 from dacapo.blockwise import run_blockwise
 import dacapo.blockwise
 from dacapo.experiments import Run
@@ -24,7 +24,7 @@ def predict(
     input_dataset: str,
     output_path: LocalArrayIdentifier | Path | str,
     output_roi: Optional[Roi | str] = None,
-    num_workers: int = 12,
+    num_workers: int = 1,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):
@@ -136,10 +136,12 @@ def predict(
         write_size=output_size,
     )
 
+    global_vars.current_run = run
+
     # run blockwise prediction
     worker_file = str(Path(Path(dacapo.blockwise.__file__).parent, "predict_worker.py"))
     print("Running blockwise prediction with worker_file: ", worker_file)
-    run_blockwise(
+    success = run_blockwise(
         worker_file=worker_file,
         total_roi=_input_roi,
         read_roi=Roi((0, 0, 0), input_size),
@@ -148,9 +150,10 @@ def predict(
         max_retries=2,  # TODO: make this an option
         timeout=None,  # TODO: make this an option
         ######
-        run_name=run,
+        run_name=run.name,
         iteration=iteration,
         input_array_identifier=input_array_identifier,
         output_array_identifier=output_array_identifier,
     )
     print("Done predicting.")
+    return success

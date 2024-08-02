@@ -17,6 +17,7 @@ import daisy
 
 import numpy as np
 import click
+from dacapo.blockwise import global_vars
 
 import logging
 
@@ -25,6 +26,17 @@ logger = logging.getLogger(__file__)
 read_write_conflict: bool = False
 fit: str = "valid"
 path = __file__
+
+
+def is_global_run_set(run_name) -> bool:
+    found = global_vars.current_run is not None
+    if found:
+        found = global_vars.current_run.name == run_name
+        if not found:
+            logger.error(
+                f"Found global run {global_vars.current_run.name} but looking for {run_name}"
+            )
+    return found
 
 
 @click.group()
@@ -70,7 +82,7 @@ def cli(log_level):
 )
 @click.option("-od", "--output_dataset", required=True, type=str)
 def start_worker(
-    run_name: str | Run,
+    run_name: str,
     iteration: int | None,
     input_container: Path | str,
     input_dataset: str,
@@ -90,7 +102,7 @@ def start_worker(
 
 
 def start_worker_fn(
-    run_name: str | Run,
+    run_name: str,
     iteration: int | None,
     input_container: Path | str,
     input_dataset: str,
@@ -109,93 +121,97 @@ def start_worker_fn(
         output_container (Path | str): The output container.
         output_dataset (str): The output dataset.
     """
-    compute_context = create_compute_context()
-    device = compute_context.device
-
-    # retrieving run
-    if isinstance(run_name, Run):
-        run = run_name
-        run_name = run.name
-    else:
-        config_store = create_config_store()
-        run_config = config_store.retrieve_run_config(run_name)
-        run = Run(run_config)
-
-    if iteration is not None and compute_context.distribute_workers:
-        # create weights store
-        weights_store = create_weights_store()
-
-        # load weights
-        run.model.load_state_dict(
-            weights_store.retrieve_weights(run_name, iteration).model
-        )
-
-    # get arrays
-    input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    raw_array = ZarrArray.open_from_array_identifier(input_array_identifier)
-
-    output_array_identifier = LocalArrayIdentifier(
-        Path(output_container), output_dataset
-    )
-    output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
-
-    # set benchmark flag to True for performance
-    torch.backends.cudnn.benchmark = True
-
-    # get the model's input and output size
-    model = run.model.eval().to(device)
-    input_voxel_size = Coordinate(raw_array.voxel_size)
-    output_voxel_size = model.scale(input_voxel_size)
-    input_shape = Coordinate(model.eval_input_shape)
-    input_size = input_voxel_size * input_shape
-    output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
-
-    print(f"Predicting with input size {input_size}, output size {output_size}")
-
-    # create gunpowder keys
-
-    raw = gp.ArrayKey("RAW")
-    prediction = gp.ArrayKey("PREDICTION")
-
-    # assemble prediction pipeline
-
-    # prepare data source
-    pipeline = DaCapoArraySource(raw_array, raw)
-    # raw: (c, d, h, w)
-    pipeline += gp.Pad(raw, None)
-    # raw: (c, d, h, w)
-    pipeline += gp.Unsqueeze([raw])
-    # raw: (1, c, d, h, w)
-
-    pipeline += gp.Normalize(raw)
-
-    # predict
-    # model.eval()
-    pipeline += gp_torch.Predict(
-        model=model,
-        inputs={"x": raw},
-        outputs={0: prediction},
-        array_specs={
-            prediction: gp.ArraySpec(
-                voxel_size=output_voxel_size,
-                dtype=np.float32,  # assumes network output is float32
-            )
-        },
-        spawn_subprocess=False,
-        device=str(device),
-    )
-
-    # make reference batch request
-    request = gp.BatchRequest()
-    request.add(raw, input_size, voxel_size=input_voxel_size)
-    request.add(
-        prediction,
-        output_size,
-        voxel_size=output_voxel_size,
-    )
 
     def io_loop():
         daisy_client = daisy.Client()
+
+        compute_context = create_compute_context()
+        device = compute_context.device
+
+        if is_global_run_set(run_name):
+            logger.warning("Using global run variable")
+            run = global_vars.current_run
+        else:
+            logger.warning("initiating local run in predict_worker")
+            config_store = create_config_store()
+            run_config = config_store.retrieve_run_config(run_name)
+            run = Run(run_config)
+
+        if iteration is not None and compute_context.distribute_workers:
+            # create weights store
+            weights_store = create_weights_store()
+
+            # load weights
+            run.model.load_state_dict(
+                weights_store.retrieve_weights(run_name, iteration).model
+            )
+
+        # get arrays
+        input_array_identifier = LocalArrayIdentifier(
+            Path(input_container), input_dataset
+        )
+        raw_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+
+        output_array_identifier = LocalArrayIdentifier(
+            Path(output_container), output_dataset
+        )
+        output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
+
+        # set benchmark flag to True for performance
+        torch.backends.cudnn.benchmark = True
+
+        # get the model's input and output size
+        model = run.model.eval()
+        # .to(device)
+        input_voxel_size = Coordinate(raw_array.voxel_size)
+        output_voxel_size = model.scale(input_voxel_size)
+        input_shape = Coordinate(model.eval_input_shape)
+        input_size = input_voxel_size * input_shape
+        output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
+
+        print(f"Predicting with input size {input_size}, output size {output_size}")
+
+        # create gunpowder keys
+
+        raw = gp.ArrayKey("RAW")
+        prediction = gp.ArrayKey("PREDICTION")
+
+        # assemble prediction pipeline
+
+        # prepare data source
+        pipeline = DaCapoArraySource(raw_array, raw)
+        # raw: (c, d, h, w)
+        pipeline += gp.Pad(raw, None)
+        # raw: (c, d, h, w)
+        pipeline += gp.Unsqueeze([raw])
+        # raw: (1, c, d, h, w)
+
+        pipeline += gp.Normalize(raw)
+
+        # predict
+        # model.eval()
+        pipeline += gp_torch.Predict(
+            model=model,
+            inputs={"x": raw},
+            outputs={0: prediction},
+            array_specs={
+                prediction: gp.ArraySpec(
+                    voxel_size=output_voxel_size,
+                    dtype=np.float32,  # assumes network output is float32
+                )
+            },
+            spawn_subprocess=False,
+            device=str(device),
+        )
+
+        # make reference batch request
+        request = gp.BatchRequest()
+        request.add(raw, input_size, voxel_size=input_voxel_size)
+        request.add(
+            prediction,
+            output_size,
+            voxel_size=output_voxel_size,
+        )
 
         while True:
             with daisy_client.acquire_block() as block:
@@ -231,7 +247,7 @@ def start_worker_fn(
 
 
 def spawn_worker(
-    run_name: str | Run,
+    run_name: str,
     iteration: int | None,
     input_array_identifier: "LocalArrayIdentifier",
     output_array_identifier: "LocalArrayIdentifier",
@@ -248,6 +264,7 @@ def spawn_worker(
         Callable: The function to run the worker.
     """
     compute_context = create_compute_context()
+
     if not compute_context.distribute_workers:
         return start_worker_fn(
             run_name=run_name,
