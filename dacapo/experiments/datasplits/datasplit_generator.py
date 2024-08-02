@@ -616,6 +616,11 @@ class DataSplitGenerator:
         Notes:
             This function is used to get the class name.
         """
+        if self._class_name is None:
+            if self.targets is None:
+                logger.warning("Both targets and class name are None.")
+                return None
+            self._class_name = self.targets
         return self._class_name
 
     # Goal is to force class_name to be set only once, so we have the same classes for all datasets
@@ -730,10 +735,14 @@ class DataSplitGenerator:
                 gt_config,
                 mask_config,
             ) = self.__generate_semantic_seg_dataset_crop(dataset)
+            if type(self.class_name) == list:
+                classes = self.classes_separator_caracter.join(self.class_name)
+            else:
+                classes = self.class_name
             if dataset.dataset_type == DatasetType.train:
                 train_dataset_configs.append(
                     RawGTDatasetConfig(
-                        name=f"{dataset}_{self.class_name}_{self.output_resolution[0]}nm",
+                        name=f"{dataset}_{gt_config.name}_{classes}_{self.output_resolution[0]}nm",
                         raw_config=raw_config,
                         gt_config=gt_config,
                         mask_config=mask_config,
@@ -742,16 +751,13 @@ class DataSplitGenerator:
             else:
                 validation_dataset_configs.append(
                     RawGTDatasetConfig(
-                        name=f"{dataset}_{self.class_name}_{self.output_resolution[0]}nm",
+                        name=f"{dataset}_{gt_config.name}_{classes}_{self.output_resolution[0]}nm",
                         raw_config=raw_config,
                         gt_config=gt_config,
                         mask_config=mask_config,
                     )
                 )
-        if type(self.class_name) == list:
-            classes = self.classes_separator_caracter.join(self.class_name)
-        else:
-            classes = self.class_name
+        
         return TrainValidateDataSplitConfig(
             name=f"{self.name}_{self.segmentation_type}_{classes}_{self.output_resolution[0]}nm",
             train_configs=train_dataset_configs,
@@ -815,7 +821,7 @@ class DataSplitGenerator:
         organelle_arrays = {}
         # classes_datasets, classes = self.check_class_name(gt_dataset)
         classes_datasets, classes = format_class_name(
-            gt_dataset, self.classes_separator_caracter
+            gt_dataset, self.classes_separator_caracter, self.targets
         )
         for current_class_dataset, current_class_name in zip(classes_datasets, classes):
             if not (gt_path / current_class_dataset).exists():
