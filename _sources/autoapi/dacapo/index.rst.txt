@@ -47,7 +47,6 @@ Functions
 .. autoapisummary::
 
    dacapo.apply
-   dacapo.train
    dacapo.validate
    dacapo.predict
 
@@ -160,19 +159,6 @@ Package Contents
    ...     output_dtype=np.uint8,
    ...     overwrite=True,
    ... )
-
-
-.. py:function:: train(run_name: str)
-
-   Train a run
-
-   :param run_name: Name of the run to train
-
-   :raises ValueError: If run_name is not found in config store
-
-   .. rubric:: Examples
-
-   >>> train("run_name")
 
 
 .. py:function:: validate(run_name: str | dacapo.experiments.Run, iteration: int, num_workers: int = 1, output_dtype: str = 'uint8', overwrite: bool = True)

@@ -79,7 +79,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#package-contents">Package Contents</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#dacapo.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dacapo.apply"><code class="docutils literal notranslate"><span class="pre">apply()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#dacapo.train"><code class="docutils literal notranslate"><span class="pre">train()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dacapo.validate"><code class="docutils literal notranslate"><span class="pre">validate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dacapo.predict"><code class="docutils literal notranslate"><span class="pre">predict()</span></code></a></li>
 </ul>
@@ -162,13 +161,10 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.apply" title="dacapo.apply"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply</span></code></a>(run_name, input_container, input_dataset, ...[, ...])</p></td>
 <td><p>Load weights and apply a trained model to a dataset. If iteration is None, the best iteration based on the criterion is used. If roi is None, the whole input dataset is used.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="train/index.html#module-dacapo.train" title="dacapo.train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train</span></code></a>(run_name)</p></td>
-<td><p>Train a run</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="validate/index.html#module-dacapo.validate" title="dacapo.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>(run_name, iteration[, num_workers, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="validate/index.html#module-dacapo.validate" title="dacapo.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>(run_name, iteration[, num_workers, ...])</p></td>
 <td><p>Validate a run at a given iteration. Loads the weights from a previously</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="predict/index.html#module-dacapo.predict" title="dacapo.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(run_name, iteration, input_container, ...[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="predict/index.html#module-dacapo.predict" title="dacapo.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(run_name, iteration, input_container, ...[, ...])</p></td>
 <td><p>Predict with a trained model.</p></td>
 </tr>
 </tbody>
@@ -285,24 +281,6 @@
 <span class="gp">... </span>    <span class="n">output_dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="gp">... </span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="dacapo.train">
-<span class="sig-prename descclassname"><span class="pre">dacapo.</span></span><span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.train" title="Link to this definition"></a></dt>
-<dd><p>Train a run</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>run_name</strong> – Name of the run to train</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If run_name is not found in config store</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">train</span><span class="p">(</span><span class="s2">&quot;run_name&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
