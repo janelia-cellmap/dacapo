@@ -29,14 +29,17 @@ path = __file__
 
 
 def is_global_run_set(run_name) -> bool:
-    found = global_vars.current_run is not None
-    if found:
-        found = global_vars.current_run.name == run_name
-        if not found:
+    if global_vars.current_run is not None:
+        if global_vars.current_run.name == run_name:
+            return True
+        else:
             logger.error(
                 f"Found global run {global_vars.current_run.name} but looking for {run_name}"
             )
-    return found
+            return False
+    else:
+        logger.error("No global run is set.")
+        return False
 
 
 @click.group()
