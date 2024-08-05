@@ -123,7 +123,10 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.plot.get_runs_info" title="dacapo.plot.get_runs_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_runs_info</span></code></a>(→ List[RunInfo])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.plot.plot_runs" title="dacapo.plot.plot_runs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_runs</span></code></a>(run_config_base_names[, smooth, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.plot.bokeh_plot_runs" title="dacapo.plot.bokeh_plot_runs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bokeh_plot_runs</span></code></a>(run_config_base_names[, smooth, ...])</p></td>
+<td><p>Plot runs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.plot.plot_runs" title="dacapo.plot.plot_runs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_runs</span></code></a>(run_config_base_names[, smooth, ...])</p></td>
 <td><p>Plot runs.</p></td>
 </tr>
 </tbody>
@@ -171,8 +174,8 @@ s: standard deviation of the smoothed values</p>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="dacapo.plot.plot_runs">
-<span class="sig-prename descclassname"><span class="pre">dacapo.plot.</span></span><span class="sig-name descname"><span class="pre">plot_runs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config_base_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_scores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_is_betters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_losses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_json</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.plot.plot_runs" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="dacapo.plot.bokeh_plot_runs">
+<span class="sig-prename descclassname"><span class="pre">dacapo.plot.</span></span><span class="sig-name descname"><span class="pre">bokeh_plot_runs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config_base_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_scores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_is_betters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_losses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_json</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.plot.bokeh_plot_runs" title="Link to this definition"></a></dt>
 <dd><p>Plot runs.
 :param run_config_base_names: Names of run configs to plot
 :param smooth: Smoothing factor
@@ -192,6 +195,22 @@ s: standard deviation of the smoothed values</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot_runs</span><span class="p">([</span><span class="s2">&quot;run_name&quot;</span><span class="p">],</span> <span class="mi">100</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">[</span><span class="kc">True</span><span class="p">])</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.plot.plot_runs">
+<span class="sig-prename descclassname"><span class="pre">dacapo.plot.</span></span><span class="sig-name descname"><span class="pre">plot_runs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config_base_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_scores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_is_betters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_losses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.plot.plot_runs" title="Link to this definition"></a></dt>
+<dd><p>Plot runs.
+:param run_config_base_names: Names of run configs to plot
+:param smooth: Smoothing factor
+:param validation_scores: Validation scores to plot
+:param higher_is_betters: Whether higher is better
+:param plot_losses: Whether to plot losses</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

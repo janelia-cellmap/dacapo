@@ -20,6 +20,7 @@ Functions
 
 .. autoapisummary::
 
+   dacapo.blockwise.predict_worker.is_global_run_set
    dacapo.blockwise.predict_worker.cli
    dacapo.blockwise.predict_worker.start_worker
    dacapo.blockwise.predict_worker.start_worker_fn
@@ -43,6 +44,8 @@ Module Contents
 
 .. py:data:: path
 
+.. py:function:: is_global_run_set(run_name) -> bool
+
 .. py:function:: cli(log_level)
 
    CLI for running the predict worker.
@@ -53,9 +56,9 @@ Module Contents
    :type log_level: str
 
 
-.. py:function:: start_worker(run_name: str | dacapo.experiments.Run, iteration: int | None, input_container: upath.UPath | str, input_dataset: str, output_container: upath.UPath | str, output_dataset: str, return_io_loop: Optional[bool] = False)
+.. py:function:: start_worker(run_name: str, iteration: int | None, input_container: upath.UPath | str, input_dataset: str, output_container: upath.UPath | str, output_dataset: str, return_io_loop: Optional[bool] = False)
 
-.. py:function:: start_worker_fn(run_name: str | dacapo.experiments.Run, iteration: int | None, input_container: upath.UPath | str, input_dataset: str, output_container: upath.UPath | str, output_dataset: str, return_io_loop: Optional[bool] = False)
+.. py:function:: start_worker_fn(run_name: str, iteration: int | None, input_container: upath.UPath | str, input_dataset: str, output_container: upath.UPath | str, output_dataset: str, return_io_loop: Optional[bool] = False)
 
    Start a worker to apply a trained model to a dataset.
 
@@ -73,7 +76,7 @@ Module Contents
    :type output_dataset: str
 
 
-.. py:function:: spawn_worker(run_name: str | dacapo.experiments.Run, iteration: int | None, input_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier)
+.. py:function:: spawn_worker(run_name: str, iteration: int | None, input_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier)
 
    Spawn a worker to predict on a given dataset.
 

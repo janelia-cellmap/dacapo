@@ -120,10 +120,10 @@
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.validate.validate_run" title="dacapo.validate.validate_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_run</span></code></a>(run, iteration[, num_workers, ...])</p></td>
-<td><p>validate_run is deprecated and will be removed in a future version. Please use validate instead.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.validate.validate_run" title="dacapo.validate.validate_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_run</span></code></a>(run_name, iteration[, num_workers, ...])</p></td>
+<td><p>Validate a run at a given iteration. Loads the weights from a previously</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.validate.validate" title="dacapo.validate.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>(run_name, iteration[, num_workers, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.validate.validate" title="dacapo.validate.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>(run, iteration[, num_workers, output_dtype, ...])</p></td>
 <td><p>Validate a run at a given iteration. Loads the weights from a previously</p></td>
 </tr>
 </tbody>
@@ -138,20 +138,33 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.validate.validate_run">
-<span class="sig-prename descclassname"><span class="pre">dacapo.validate.</span></span><span class="sig-name descname"><span class="pre">validate_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dacapo.experiments.Run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'uint8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.validate.validate_run" title="Link to this definition"></a></dt>
-<dd><p>validate_run is deprecated and will be removed in a future version. Please use validate instead.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="dacapo.validate.validate">
-<span class="sig-prename descclassname"><span class="pre">dacapo.validate.</span></span><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dacapo.experiments.Run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'uint8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.validate.validate" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">dacapo.validate.</span></span><span class="sig-name descname"><span class="pre">validate_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'uint8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.validate.validate_run" title="Link to this definition"></a></dt>
 <dd><p>Validate a run at a given iteration. Loads the weights from a previously
 stored checkpoint. Returns the best parameters and scores for this
 iteration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>run_name</strong> – The name of the run to validate.</p></li>
+<li><p><strong>run</strong> – The name of the run to validate.</p></li>
+<li><p><strong>iteration</strong> – The iteration to validate.</p></li>
+<li><p><strong>num_workers</strong> – The number of workers to use for validation.</p></li>
+<li><p><strong>output_dtype</strong> – The dtype to use for the output arrays.</p></li>
+<li><p><strong>overwrite</strong> – Whether to overwrite existing output arrays</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dacapo.validate.validate">
+<span class="sig-prename descclassname"><span class="pre">dacapo.validate.</span></span><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dacapo.experiments.Run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'uint8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.validate.validate" title="Link to this definition"></a></dt>
+<dd><p>Validate a run at a given iteration. Loads the weights from a previously
+stored checkpoint. Returns the best parameters and scores for this
+iteration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run</strong> – The run to validate.</p></li>
 <li><p><strong>iteration</strong> – The iteration to validate.</p></li>
 <li><p><strong>num_workers</strong> – The number of workers to use for validation.</p></li>
 <li><p><strong>output_dtype</strong> – The dtype to use for the output arrays.</p></li>
@@ -166,7 +179,7 @@ iteration.</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<p>validate(“my_run”, 1000)</p>
+<p>validate(my_run, 1000)</p>
 </dd></dl>
 
 <dl class="py data">

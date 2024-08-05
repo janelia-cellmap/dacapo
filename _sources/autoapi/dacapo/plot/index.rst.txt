@@ -19,6 +19,7 @@ Functions
 
    dacapo.plot.smooth_values
    dacapo.plot.get_runs_info
+   dacapo.plot.bokeh_plot_runs
    dacapo.plot.plot_runs
 
 
@@ -48,7 +49,7 @@ Module Contents
 
 .. py:function:: get_runs_info(run_config_names: List[str], validation_score_names: List[str], plot_losses: List[bool]) -> List[RunInfo]
 
-.. py:function:: plot_runs(run_config_base_names, smooth=100, validation_scores=None, higher_is_betters=None, plot_losses=None, return_json=False)
+.. py:function:: bokeh_plot_runs(run_config_base_names, smooth=100, validation_scores=None, higher_is_betters=None, plot_losses=None, return_json=False)
 
    Plot runs.
    :param run_config_base_names: Names of run configs to plot
@@ -65,5 +66,17 @@ Module Contents
    .. rubric:: Examples
 
    >>> plot_runs(["run_name"], 100, None, None, [True])
+
+
+.. py:function:: plot_runs(run_config_base_names, smooth=100, validation_scores=None, higher_is_betters=None, plot_losses=None)
+
+   Plot runs.
+   :param run_config_base_names: Names of run configs to plot
+   :param smooth: Smoothing factor
+   :param validation_scores: Validation scores to plot
+   :param higher_is_betters: Whether higher is better
+   :param plot_losses: Whether to plot losses
+
+   :returns: None
 
 

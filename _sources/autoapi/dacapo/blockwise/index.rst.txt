@@ -13,6 +13,7 @@ Submodules
    /autoapi/dacapo/blockwise/argmax_worker/index
    /autoapi/dacapo/blockwise/blockwise_task/index
    /autoapi/dacapo/blockwise/empanada_function/index
+   /autoapi/dacapo/blockwise/global_vars/index
    /autoapi/dacapo/blockwise/predict_worker/index
    /autoapi/dacapo/blockwise/relabel_worker/index
    /autoapi/dacapo/blockwise/scheduler/index

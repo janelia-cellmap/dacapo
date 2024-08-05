@@ -406,7 +406,7 @@ Package Contents
 
 
 
-   .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, num_workers: int = 16, block_size: daisy.Coordinate = Coordinate((256, 256, 256))) -> dacapo.experiments.datasplits.datasets.arrays.zarr_array.ZarrArray
+   .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, num_workers: int = 12, block_size: daisy.Coordinate = Coordinate((256, 256, 256))) -> dacapo.experiments.datasplits.datasets.arrays.zarr_array.ZarrArray
 
       Process the prediction with the given parameters.
 

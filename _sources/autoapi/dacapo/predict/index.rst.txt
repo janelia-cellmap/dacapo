@@ -25,7 +25,7 @@ Module Contents
 
 .. py:data:: logger
 
-.. py:function:: predict(run_name: str | dacapo.experiments.Run, iteration: int | None, input_container: upath.UPath | str, input_dataset: str, output_path: dacapo.store.local_array_store.LocalArrayIdentifier | upath.UPath | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 12, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True)
+.. py:function:: predict(run_name: str | dacapo.experiments.Run, iteration: int | None, input_container: upath.UPath | str, input_dataset: str, output_path: dacapo.store.local_array_store.LocalArrayIdentifier | upath.UPath | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 1, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True)
 
    Predict with a trained model.
 
