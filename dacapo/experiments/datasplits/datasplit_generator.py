@@ -758,6 +758,7 @@ class DataSplitGenerator:
                     )
                 )
 
+        
         return TrainValidateDataSplitConfig(
             name=f"{self.name}_{self.segmentation_type}_{classes}_{self.output_resolution[0]}nm",
             train_configs=train_dataset_configs,
