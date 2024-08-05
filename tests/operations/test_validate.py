@@ -56,13 +56,13 @@ def test_validate(
 
     # test validating iterations for which we know there are weights
     weights_store.store_weights(run, 0)
-    validate(run_config.name, 0, num_workers=4)
+    validate(run.name, 0, num_workers=4)
     # weights_store.store_weights(run, 1)
     # validate(run_config.name, 1, num_workers=4)
 
     # test validating weights that don't exist
     with pytest.raises(FileNotFoundError):
-        validate(run_config.name, 2, num_workers=4)
+        validate(run.name, 2, num_workers=4)
 
     if debug:
         os.chdir(old_path)
