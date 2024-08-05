@@ -369,11 +369,17 @@ class ZarrArray(Array):
         """
         file_name = str(self.file_name)
         # Zarr library does not detect the store for N5 datasets
-        if file_name.endswith(".n5"):
-            zarr_container = zarr.open(N5FSStore(str(file_name)), mode=self.mode)
-        else:
-            zarr_container = zarr.open(str(file_name), mode=self.mode)
-        return zarr_container[self.dataset]
+        try:
+            if file_name.endswith(".n5"):
+                zarr_container = zarr.open(N5FSStore(str(file_name)), mode=self.mode)
+            else:
+                zarr_container = zarr.open(str(file_name), mode=self.mode)
+            return zarr_container[self.dataset]
+        except Exception as e:
+            logger.error(
+                f"Could not open dataset {self.dataset} in file {file_name} in mode {self.mode}"
+            )
+            raise e
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
         """
