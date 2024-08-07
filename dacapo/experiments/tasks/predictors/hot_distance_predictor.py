@@ -188,7 +188,7 @@ class HotDistancePredictor(Predictor):
                 self.dt_scale_factor,
             )
         else:
-            distance_mask = np.ones_like(target.data)
+            distance_mask = np.ones_like(gt.data)
 
         distance_weights, distance_moving_class_counts = balance_weights(
             gt[target.roi],

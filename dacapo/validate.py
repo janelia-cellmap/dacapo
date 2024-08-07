@@ -1,3 +1,4 @@
+from dacapo.compute_context import create_compute_context
 from .predict import predict
 from .experiments import Run, ValidationIterationScores
 from .experiments.datasplits.datasets.arrays import ZarrArray
@@ -16,30 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 def validate_run(
-    run: Run,
-    iteration: int,
-    num_workers: int = 1,
-    output_dtype: str = "uint8",
-    overwrite: bool = True,
-):
-    """
-    validate_run is deprecated and will be removed in a future version. Please use validate instead.
-    """
-    warn(
-        "validate_run is deprecated and will be removed in a future version. Please use validate instead.",
-        DeprecationWarning,
-    )
-    return validate(
-        run_name=run,
-        iteration=iteration,
-        num_workers=num_workers,
-        output_dtype=output_dtype,
-        overwrite=overwrite,
-    )
-
-
-def validate(
-    run_name: str | Run,
+    run_name: str,
     iteration: int,
     num_workers: int = 1,
     output_dtype: str = "uint8",
@@ -51,7 +29,50 @@ def validate(
     iteration.
 
     Args:
-        run_name: The name of the run to validate.
+        run: The name of the run to validate.
+        iteration: The iteration to validate.
+        num_workers: The number of workers to use for validation.
+        output_dtype: The dtype to use for the output arrays.
+        overwrite: Whether to overwrite existing output arrays
+
+    """
+    # Load the model and weights
+    config_store = create_config_store()
+    run_config = config_store.retrieve_run_config(run_name)
+    run = Run(run_config)
+    compute_context = create_compute_context()
+    if iteration is not None and not compute_context.distribute_workers:
+        # create weights store
+        weights_store = create_weights_store()
+
+        # load weights
+        run.model.load_state_dict(
+            weights_store.retrieve_weights(run_name, iteration).model
+        )
+
+    return validate(
+        run=run,
+        iteration=iteration,
+        num_workers=num_workers,
+        output_dtype=output_dtype,
+        overwrite=overwrite,
+    )
+
+
+def validate(
+    run: Run,
+    iteration: int,
+    num_workers: int = 1,
+    output_dtype: str = "uint8",
+    overwrite: bool = True,
+):
+    """
+    Validate a run at a given iteration. Loads the weights from a previously
+    stored checkpoint. Returns the best parameters and scores for this
+    iteration.
+
+    Args:
+        run: The run to validate.
         iteration: The iteration to validate.
         num_workers: The number of workers to use for validation.
         output_dtype: The dtype to use for the output arrays.
@@ -61,18 +82,12 @@ def validate(
     Raises:
         ValueError: If the run does not have a validation dataset or the dataset does not have ground truth.
     Example:
-        validate("my_run", 1000)
+        validate(my_run, 1000)
     """
 
-    print(f"Validating run {run_name} at iteration {iteration}...")
+    print(f"Validating run {run.name} at iteration {iteration}...")
 
-    if isinstance(run_name, Run):
-        run = run_name
-        run_name = run.name
-    else:
-        config_store = create_config_store()
-        run_config = config_store.retrieve_run_config(run_name)
-        run = Run(run_config)
+    run_name = run.name
 
     # read in previous training/validation stats
     stats_store = create_stats_store()
@@ -170,9 +185,10 @@ def validate(
         prediction_array_identifier = array_store.validation_prediction_array(
             run.name, iteration, validation_dataset.name
         )
-        predict(
+        compute_context = create_compute_context()
+        sucess = predict(
             run,
-            iteration,
+            iteration if compute_context.distribute_workers else None,
             input_container=input_raw_array_identifier.container,
             input_dataset=input_raw_array_identifier.dataset,
             output_path=prediction_array_identifier,
@@ -181,6 +197,12 @@ def validate(
             output_dtype=output_dtype,
             overwrite=overwrite,
         )
+
+        if not sucess:
+            logger.error(
+                f"Could not predict run {run.name} on dataset {validation_dataset.name}."
+            )
+            continue
 
         print(f"Predicted on dataset {validation_dataset.name}")
 

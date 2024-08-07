@@ -72,4 +72,15 @@ Tasks we support and approaches for those tasks:
     - Example of [groundtruth data](https://tinyurl.com/pu8mespz)
  - Visualization
     - [Neuroglancer GitHub Repo](https://github.com/google/neuroglancer)
-   
+
+# Citing this repo
+If you use our code, please cite us and spread the news!
+```
+@article{Patton_DaCapo_a_modular_2024,
+author = {Patton, William and Rhoades, Jeff L. and Zouinkhi, Marwan and Ackerman, David G. and Malin-Mayor, Caroline and Adjavon, Diane and Heinrich, Larissa and Bennett, Davis and Zubov, Yurii and Project Team, CellMap and Weigel, Aubrey V. and Funke, Jan},
+doi = {10.48550/arXiv.2408.02834},
+journal = {arXiv-cs.CV},
+title = {{DaCapo: a modular deep learning framework for scalable 3D image segmentation}},
+year = {2024}
+}
+```
