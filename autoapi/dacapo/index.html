@@ -79,9 +79,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#package-contents">Package Contents</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#dacapo.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dacapo.apply"><code class="docutils literal notranslate"><span class="pre">apply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dacapo.train"><code class="docutils literal notranslate"><span class="pre">train()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dacapo.validate"><code class="docutils literal notranslate"><span class="pre">validate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dacapo.validate_run"><code class="docutils literal notranslate"><span class="pre">validate_run()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#dacapo.predict"><code class="docutils literal notranslate"><span class="pre">predict()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -162,14 +162,14 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.apply" title="dacapo.apply"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply</span></code></a>(run_name, input_container, input_dataset, ...[, ...])</p></td>
 <td><p>Load weights and apply a trained model to a dataset. If iteration is None, the best iteration based on the criterion is used. If roi is None, the whole input dataset is used.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="validate/index.html#module-dacapo.validate" title="dacapo.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>(run, iteration[, num_workers, output_dtype, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="train/index.html#module-dacapo.train" title="dacapo.train"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train</span></code></a>(run_name)</p></td>
+<td><p>Train a run</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="validate/index.html#module-dacapo.validate" title="dacapo.validate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate</span></code></a>(run, iteration[, num_workers, output_dtype, ...])</p></td>
 <td><p>Validate a run at a given iteration. Loads the weights from a previously</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.validate_run" title="dacapo.validate_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_run</span></code></a>(run_name, iteration[, num_workers, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.validate_run" title="dacapo.validate_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_run</span></code></a>(run_name, iteration[, num_workers, ...])</p></td>
 <td><p>Validate a run at a given iteration. Loads the weights from a previously</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="predict/index.html#module-dacapo.predict" title="dacapo.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(run_name, iteration, input_container, ...[, ...])</p></td>
-<td><p>Predict with a trained model.</p></td>
 </tr>
 </tbody>
 </table>
@@ -290,6 +290,24 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="dacapo.train">
+<span class="sig-prename descclassname"><span class="pre">dacapo.</span></span><span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.train" title="Link to this definition"></a></dt>
+<dd><p>Train a run</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run_name</strong> – Name of the run to train</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If run_name is not found in config store</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">train</span><span class="p">(</span><span class="s2">&quot;run_name&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="dacapo.validate">
 <span class="sig-prename descclassname"><span class="pre">dacapo.</span></span><span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dacapo.experiments.Run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'uint8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.validate" title="Link to this definition"></a></dt>
 <dd><p>Validate a run at a given iteration. Loads the weights from a previously
@@ -333,34 +351,6 @@ iteration.</p>
 </ul>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="dacapo.predict">
-<span class="sig-prename descclassname"><span class="pre">dacapo.</span></span><span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dacapo.experiments.Run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_container</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">upath.UPath</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dacapo.store.local_array_store.LocalArrayIdentifier</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">upath.UPath</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Roi</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="experiments/tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.dtype</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">np.uint8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.predict" title="Link to this definition"></a></dt>
-<dd><p>Predict with a trained model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>run_name</strong> (<em>str</em><em> or </em><a class="reference internal" href="experiments/run/index.html#dacapo.experiments.run.Run" title="dacapo.experiments.run.Run"><em>Run</em></a>) – The name of the run to predict with or the Run object.</p></li>
-<li><p><strong>iteration</strong> (<em>int</em><em> or </em><em>None</em>) – The training iteration of the model to use for prediction.</p></li>
-<li><p><strong>input_container</strong> (<em>Path</em><em> | </em><em>str</em>) – The container of the input array.</p></li>
-<li><p><strong>input_dataset</strong> (<em>str</em>) – The dataset name of the input array.</p></li>
-<li><p><strong>output_path</strong> (<a class="reference internal" href="store/array_store/index.html#dacapo.store.array_store.LocalArrayIdentifier" title="dacapo.store.array_store.LocalArrayIdentifier"><em>LocalArrayIdentifier</em></a><em> | </em><em>str</em>) – The path where the prediction array will be stored, or a LocalArryIdentifier for the prediction array.</p></li>
-<li><p><strong>output_roi</strong> (<em>Optional</em><em>[</em><em>Roi</em><em> | </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The ROI of the output array. If None, the ROI of the input array will be used. Defaults to None.</p></li>
-<li><p><strong>num_workers</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of workers to use for blockwise prediction. Defaults to 1 for local processing, otherwise 12.</p></li>
-<li><p><strong>output_dtype</strong> (<em>np.dtype</em><em> | </em><em>str</em><em>, </em><em>optional</em>) – The dtype of the output array. Defaults to np.uint8.</p></li>
-<li><p><strong>overwrite</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the output array will be overwritten if it already exists. Defaults to True.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If run_name is not found in config store</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predict</span><span class="p">(</span><span class="s2">&quot;run_name&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;input.zarr&quot;</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="s2">&quot;output.zarr&quot;</span><span class="p">,</span> <span class="n">output_roi</span><span class="o">=</span><span class="s2">&quot;[0:100,0:100,0:100]&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </section>
