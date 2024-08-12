@@ -5,7 +5,7 @@ from ..fixtures import *
 
 from dacapo.experiments import Run
 from dacapo.store.create_store import create_config_store, create_weights_store
-from dacapo import validate
+from dacapo import validate_run
 
 import pytest
 from pytest_lazy_fixtures import lf
@@ -56,13 +56,13 @@ def test_validate(
 
     # test validating iterations for which we know there are weights
     weights_store.store_weights(run, 0)
-    validate(run_config.name, 0, num_workers=4)
+    validate_run(run_config.name, 0, num_workers=4)
     # weights_store.store_weights(run, 1)
-    # validate(run_config.name, 1, num_workers=4)
+    # validate_run(run_config.name, 1, num_workers=4)
 
     # test validating weights that don't exist
     with pytest.raises(FileNotFoundError):
-        validate(run_config.name, 2, num_workers=4)
+        validate_run(run_config.name, 2, num_workers=4)
 
     if debug:
         os.chdir(old_path)
