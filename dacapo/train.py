@@ -57,7 +57,7 @@ def train_run(run: Run, do_validate=True):
         ValueError: If run_name is not found in config store
 
     """
-    print(f"Starting/resuming training for run {run}...")
+    print(f"Starting/resuming training for run {run.name}...")
 
     # create run
 

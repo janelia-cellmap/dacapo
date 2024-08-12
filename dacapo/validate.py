@@ -186,7 +186,7 @@ def validate(
             run.name, iteration, validation_dataset.name
         )
         compute_context = create_compute_context()
-        sucess = predict(
+        success = predict(
             run,
             iteration if compute_context.distribute_workers else None,
             input_container=input_raw_array_identifier.container,
@@ -198,7 +198,7 @@ def validate(
             overwrite=overwrite,
         )
 
-        if not sucess:
+        if not success:
             logger.error(
                 f"Could not predict run {run.name} on dataset {validation_dataset.name}."
             )
