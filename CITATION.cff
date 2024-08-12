@@ -1,0 +1,62 @@
+
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Patton"
+  given-names: "William"
+  orcid: "https://orcid.org/0000-0002-9652-3222"
+- family-names: "Rhoades"
+  given-names: "Jeff L."
+  orcid: "https://orcid.org/0000-0001-5077-2533"
+- family-names: "Zouinkhi"
+  given-names: "Marwan"
+  orcid: "https://orcid.org/0000-0002-9441-2908"
+- family-names: "Funke"
+  given-names: "Jan"
+  orcid: "http://orcid.org/0000-0003-4388-7783"
+title: "DaCapo"
+version: 0.3.0
+doi: 10.48550/arXiv.2408.02834
+date-released: 2024-08-05
+url: "https://github.com/janelia-cellmap/dacapo"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Patton"
+    given-names: "William"
+    orcid: "https://orcid.org/0000-0002-9652-3222"
+  - family-names: "Rhoades"
+    given-names: "Jeff L."
+    orcid: "https://orcid.org/0000-0001-5077-2533"
+  - family-names: "Zouinkhi"
+    given-names: "Marwan"
+    orcid: "https://orcid.org/0000-0002-9441-2908"
+  - family-names: "Ackerman"
+    given-names: "David G."
+    orcid: "http://orcid.org/0000-0003-0172-6594"
+  - family-names: "Malin-Mayor"
+    given-names: "Caroline"
+    orcid: "https://orcid.org/0000-0002-9627-6030"
+  - family-names: "Adjavon"
+    given-names: "Diane"
+  - family-names: "Heinrich"
+    given-names: "Larissa"
+    orcid: "http://orcid.org/0000-0003-2852-6664"
+  - family-names: "Bennett"
+    given-names: "Davis"
+    orcid: "http://orcid.org/0000-0001-7579-2848"
+  - family-names: "Zubov"
+    given-names: "Yurii"
+    orcid: "https://orcid.org/0000-0003-1988-8081"
+  - family-names: "Project Team"
+    given-names: "CellMap"
+  - family-names: "Weigel"
+    given-names: "Aubrey V."
+    orcid: "http://orcid.org/0000-0003-1694-4420"
+  - family-names: "Funke"
+    given-names: "Jan"
+    orcid: "http://orcid.org/0000-0003-4388-7783"
+  doi: 10.48550/arXiv.2408.02834
+  journal: "arXiv-cs.CV"
+  title: "DaCapo: a modular deep learning framework for scalable 3D image segmentation"
+  year: 2024
