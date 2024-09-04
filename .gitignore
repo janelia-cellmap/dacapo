@@ -31,3 +31,5 @@ daisy_logs/
 
 *.csv
 *.private
+
+user_experiments/

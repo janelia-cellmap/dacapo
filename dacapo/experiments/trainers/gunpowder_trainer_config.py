@@ -1,8 +1,10 @@
 import attr
+from typing import Callable
 
 from .gp_augments import AugmentConfig
 from .gunpowder_trainer import GunpowderTrainer
 from .trainer_config import TrainerConfig
+import torch
 
 from typing import Optional, List
 
@@ -43,3 +45,15 @@ class GunpowderTrainerConfig(TrainerConfig):
     )
     min_masked: Optional[float] = attr.ib(default=0.15)
     clip_raw: bool = attr.ib(default=False)
+    optimizer: Optional[Callable] = attr.ib(
+        default=None,
+        metadata={
+            "help_text": "If provided, should be a function with the signature: f(learning_rate, model.parameters()) --> torch.optim.Optimizer"
+        },
+    )
+    scheduler: Optional[Callable] = attr.ib(
+        default=None,
+        metadata={
+            "help_text": "If provided, should be a function with the signature: f(optimizer) --> torch.optim.lr_scheduler._LRScheduler"
+        },
+    )

@@ -439,10 +439,10 @@ class DataSplitGenerator:
             The minimum raw value.
         raw_max : int
             The maximum raw value.
-        classes_separator_caracter : str
+        classes_separator_character : str
             The classes separator character.
     Methods:
-        __init__(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_caracter)
+        __init__(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_character)
             Initializes the DataSplitGenerator class with the specified name, datasets, input resolution, output resolution, targets, segmentation type, maximum ground truth downsample, maximum ground truth upsample, maximum raw training downsample, maximum raw training upsample, maximum raw validation downsample, maximum raw validation upsample, minimum training volume size, minimum raw value, maximum raw value, and classes separator character.
         __str__(self)
             A method to get the string representation of the class.
@@ -482,7 +482,7 @@ class DataSplitGenerator:
         min_training_volume_size=8_000,  # 20**3
         raw_min=0,
         raw_max=255,
-        classes_separator_caracter="&",
+        classes_separator_character="&",
         use_negative_class=False,
     ):
         """
@@ -535,7 +535,7 @@ class DataSplitGenerator:
                 The minimum raw value.
             raw_max : int
                 The maximum raw value.
-            classes_separator_caracter : str
+            classes_separator_character : str
                 The classes separator character.
         Returns:
             obj : The DataSplitGenerator class.
@@ -543,7 +543,7 @@ class DataSplitGenerator:
             ValueError
             If the class name is already set, a ValueError is raised.
         Examples:
-            >>> DataSplitGenerator(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_caracter)
+            >>> DataSplitGenerator(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_character)
         Notes:
             This function is used to initialize the DataSplitGenerator class with the specified name, datasets, input resolution, output resolution, targets, segmentation type, maximum ground truth downsample, maximum ground truth upsample, maximum raw training downsample, maximum raw training upsample, maximum raw validation downsample, maximum raw validation upsample, minimum training volume size, minimum raw value, maximum raw value, and classes separator character.
 
@@ -571,7 +571,7 @@ class DataSplitGenerator:
         self.min_training_volume_size = min_training_volume_size
         self.raw_min = raw_min
         self.raw_max = raw_max
-        self.classes_separator_caracter = classes_separator_caracter
+        self.classes_separator_character = classes_separator_character
         self.use_negative_class = use_negative_class
         if use_negative_class:
             if targets is None:
@@ -671,7 +671,7 @@ class DataSplitGenerator:
 
         """
         datasets, classes = format_class_name(
-            class_name, self.classes_separator_caracter, self.targets
+            class_name, self.classes_separator_character, self.targets
         )
         if self.class_name is None:
             self.class_name = classes
@@ -736,7 +736,7 @@ class DataSplitGenerator:
                 mask_config,
             ) = self.__generate_semantic_seg_dataset_crop(dataset)
             if type(self.class_name) == list:
-                classes = self.classes_separator_caracter.join(self.class_name)
+                classes = self.classes_separator_character.join(self.class_name)
             else:
                 classes = self.class_name
             if dataset.dataset_type == DatasetType.train:
@@ -821,7 +821,7 @@ class DataSplitGenerator:
         organelle_arrays = {}
         # classes_datasets, classes = self.check_class_name(gt_dataset)
         classes_datasets, classes = format_class_name(
-            gt_dataset, self.classes_separator_caracter, self.targets
+            gt_dataset, self.classes_separator_character, self.targets
         )
         for current_class_dataset, current_class_name in zip(classes_datasets, classes):
             if not (gt_path / current_class_dataset).exists():

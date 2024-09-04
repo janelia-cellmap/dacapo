@@ -91,8 +91,8 @@ class GunpowderTrainer(Trainer):
         self.augments = trainer_config.augments
         self.mask_integral_downsample_factor = 4
         self.clip_raw = trainer_config.clip_raw
-
-        self.scheduler = None
+        self.optimizer_lambda = trainer_config.optimizer
+        self.scheduler_lambda = trainer_config.scheduler
 
     def create_optimizer(self, model):
         """
@@ -108,18 +108,24 @@ class GunpowderTrainer(Trainer):
             >>> optimizer = trainer.create_optimizer(model)
 
         """
-        optimizer = torch.optim.RAdam(
-            lr=self.learning_rate,
-            params=model.parameters(),
-            decoupled_weight_decay=True,
+        if self.optimizer_lambda is None:
+            self.optimizer_lambda = lambda lr, params: torch.optim.RAdam(
+                lr=lr, params=params, decoupled_weight_decay=True
+            )
+        optimizer = self.optimizer_lambda(
+            self.learning_rate,
+            model.parameters(),
         )
-        self.scheduler = torch.optim.lr_scheduler.LinearLR(
-            optimizer,
-            start_factor=0.01,
-            end_factor=1.0,
-            total_iters=1000,
-            last_epoch=-1,
-        )
+
+        if self.scheduler_lambda is None:
+            self.scheduler_lambda = lambda optimizer: torch.optim.lr_scheduler.LinearLR(
+                optimizer,
+                start_factor=0.01,
+                end_factor=1.0,
+                total_iters=1000,
+                last_epoch=-1,
+            )
+        self.scheduler = self.scheduler_lambda(optimizer)
         return optimizer
 
     def build_batch_provider(self, datasets, model, task, snapshot_container=None):
@@ -220,7 +226,9 @@ class GunpowderTrainer(Trainer):
                 )
             )
 
-            dataset_source += gp.Reject(mask_placeholder, 1e-6)
+            dataset_source += gp.Reject(
+                mask_placeholder, 1e-6
+            )  # TODO: this threshold needs to come from the config = one_vx_thr
 
             for augment in self.augments:
                 dataset_source += augment.node(raw_key, gt_key, mask_key)
@@ -385,7 +393,8 @@ class GunpowderTrainer(Trainer):
                 f"Trainer step took {time.time() - t_start_prediction} seconds"
             )
             self.iteration += 1
-            self.scheduler.step()
+            if self.scheduler is not None:
+                self.scheduler.step()
             yield TrainingIterationStats(
                 loss=loss.item(),
                 iteration=iteration,

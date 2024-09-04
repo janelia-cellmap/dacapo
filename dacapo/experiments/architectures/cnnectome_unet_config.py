@@ -124,6 +124,6 @@ class CNNectomeUNetConfig(ArchitectureConfig):
     use_attention: bool = attr.ib(
         default=False,
         metadata={
-            "help_text": "Whether to use attention blocks in the UNet. This is supported for 2D and  3D."
+            "help_text": "Whether to use attention blocks in the UNet. This is supported for 2D and 3D."
         },
     )
