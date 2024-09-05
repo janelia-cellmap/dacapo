@@ -1,7 +1,8 @@
+from dacapo.store.create_store import create_array_store
 from .datasplits import DataSplit
 from .tasks.task import Task
 from .architectures import Architecture
-from .trainers import Trainer
+from .trainers import Trainer, GunpowderTrainer
 from .training_stats import TrainingStats
 from .validation_scores import ValidationScores
 from .starts import Start
@@ -215,3 +216,25 @@ class Run:
 
     def __str__(self):
         return self.name
+
+    def visualize_pipeline(self):
+        """
+        Visualizes the pipeline for the run, including all produced arrays.
+
+        Examples:
+            >>> run.visualize_pipeline()
+
+        """
+        if not isinstance(self.trainer, GunpowderTrainer):
+            raise NotImplementedError(
+                "Only GunpowderTrainer is supported for visualization"
+            )
+        if not hasattr(self.trainer, "_pipeline"):
+            array_store = create_array_store()
+            self.trainer.build_batch_provider(
+                self.datasplit.train,
+                self.model,
+                self.task,
+                array_store.snapshot_container(self.name),
+            )
+        self.trainer.visualize_pipeline()
