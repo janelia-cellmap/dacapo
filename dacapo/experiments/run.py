@@ -1,4 +1,3 @@
-from dacapo.store.create_store import create_array_store
 from .datasplits import DataSplit
 from .tasks.task import Task
 from .architectures import Architecture
@@ -230,6 +229,8 @@ class Run:
                 "Only GunpowderTrainer is supported for visualization"
             )
         if not hasattr(self.trainer, "_pipeline"):
+            from ..store.create_store import create_array_store
+
             array_store = create_array_store()
             self.trainer.build_batch_provider(
                 self.datasplit.train,

@@ -544,7 +544,12 @@ class GunpowderTrainer(Trainer):
                         dimensions=dims,
                     )
 
-                    s.layers[str(name)] = neuroglancer.ImageLayer(source=local_vol)
+                    if name == self._gt_key:
+                        s.layers[str(name)] = neuroglancer.SegmentationLayer(
+                            source=local_vol
+                        )
+                    else:
+                        s.layers[str(name)] = neuroglancer.ImageLayer(source=local_vol)
 
                 s.layout = neuroglancer.row_layout(
                     [

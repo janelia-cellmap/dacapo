@@ -173,7 +173,7 @@ datasplit_config = DataSplitGenerator.generate_from_csv(
     csv_path,
     input_resolution,
     output_resolution,
-    binarize_gt=True,
+    binarize_gt=True,  # Binarize the ground truth data to convert from instance segmentation to semantic segmentation
 ).compute()
 
 datasplit = datasplit_config.datasplit_type(datasplit_config)
