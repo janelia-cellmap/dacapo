@@ -94,8 +94,8 @@ def train(run_name):
 @click.option("-w", "--num_workers", type=int, default=30)
 @click.option("-dt", "--output_dtype", type=str, default="uint8")
 @click.option("-ow", "--overwrite", is_flag=True)
-def validate(run_name, iteration):
-    dacapo.validate(run_name, iteration)
+def validate(run_name, iteration, num_workers, output_dtype, overwrite):
+    dacapo.validate_run(run_name, iteration, num_workers, output_dtype, overwrite)
 
 
 @cli.command()
