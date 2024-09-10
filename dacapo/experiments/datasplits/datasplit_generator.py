@@ -6,6 +6,7 @@ from funlib.geometry import Coordinate
 
 import zarr
 from zarr.n5 import N5FSStore
+import numpy as np
 from dacapo.experiments.datasplits.datasets.arrays import (
     ZarrArrayConfig,
     ZarrArray,
@@ -15,10 +16,12 @@ from dacapo.experiments.datasplits.datasets.arrays import (
     ConcatArrayConfig,
     LogicalOrArrayConfig,
     ConstantArrayConfig,
+    CropArrayConfig,
 )
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
 from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
 import logging
+
 
 logger = logging.getLogger(__name__)
 
