@@ -438,7 +438,7 @@ class ConstantArray(Array):
             This method is used to return the source array for neuroglancer.
         """
         # return self._source_array._neuroglancer_source()
-        shape = self.source_array[self.source_array.roi].shape[-3:]
+        shape = self.source_array[self.source_array.roi].shape
         return np.ones(shape, dtype=np.uint64) * self._constant
 
     def _combined_neuroglancer_source(self) -> neuroglancer.LocalVolume:
