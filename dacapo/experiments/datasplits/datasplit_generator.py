@@ -95,6 +95,7 @@ def resize_if_needed(
     else:
         return array_config
 
+
 def limit_validation_crop_size(gt_config, mask_config, max_size):
     gt_array = gt_config.array_type(gt_config)
     voxel_shape = gt_array.roi.shape / gt_array.voxel_size
@@ -126,6 +127,7 @@ def limit_validation_crop_size(gt_config, mask_config, max_size):
             roi=crop_roi,
         )
     return gt_config, mask_config
+
 
 def get_right_resolution_array_config(
     container: Path, dataset, target_resolution, extra_str=""
