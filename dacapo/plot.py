@@ -104,7 +104,7 @@ def get_runs_info(
             run_config.trainer_config.name,
             run_config.datasplit_config.name,
             (
-                stats_store.retrieve_training_stats(run_config_name, subsample=True)
+                stats_store.retrieve_training_stats(run_config_name)
                 if plot_loss
                 else None
             ),
