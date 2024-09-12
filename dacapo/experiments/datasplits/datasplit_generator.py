@@ -475,14 +475,14 @@ class DataSplitGenerator:
             The minimum raw value.
         raw_max : int
             The maximum raw value.
-        classes_separator_caracter : str
+        classes_separator_character : str
             The classes separator character.
         max_validation_volume_size : int
             The maximum validation volume size. Default is None. If None, the validation volume size is not limited.
             else, the validation volume size is limited to the specified value.
             e.g. 600**3 for 600^3 voxels = 216_000_000 voxels.
     Methods:
-        __init__(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_caracter)
+        __init__(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_character)
             Initializes the DataSplitGenerator class with the specified name, datasets, input resolution, output resolution, targets, segmentation type, maximum ground truth downsample, maximum ground truth upsample, maximum raw training downsample, maximum raw training upsample, maximum raw validation downsample, maximum raw validation upsample, minimum training volume size, minimum raw value, maximum raw value, and classes separator character.
         __str__(self)
             A method to get the string representation of the class.
@@ -522,9 +522,10 @@ class DataSplitGenerator:
         min_training_volume_size=8_000,  # 20**3
         raw_min=0,
         raw_max=255,
-        classes_separator_caracter="&",
+        classes_separator_character="&",
         use_negative_class=False,
         max_validation_volume_size=None,
+        binarize_gt=False,
     ):
         """
         Initializes the DataSplitGenerator class with the specified:
@@ -544,6 +545,8 @@ class DataSplitGenerator:
         - minimum raw value
         - maximum raw value
         - classes separator character
+        - use negative class
+        - binarize ground truth
 
         Args:
             name : str
@@ -576,15 +579,19 @@ class DataSplitGenerator:
                 The minimum raw value.
             raw_max : int
                 The maximum raw value.
-            classes_separator_caracter : str
+            classes_separator_character : str
                 The classes separator character.
+            use_negative_class : bool
+                Whether to use negative classes.
+            binarize_gt : bool
+                Whether to binarize the ground truth as part of preprocessing. Use this if you are doing semantic segmentation on instance labels (where each object has a unique ID).
         Returns:
             obj : The DataSplitGenerator class.
         Raises:
             ValueError
             If the class name is already set, a ValueError is raised.
         Examples:
-            >>> DataSplitGenerator(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_caracter)
+            >>> DataSplitGenerator(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_character)
         Notes:
             This function is used to initialize the DataSplitGenerator class with the specified name, datasets, input resolution, output resolution, targets, segmentation type, maximum ground truth downsample, maximum ground truth upsample, maximum raw training downsample, maximum raw training upsample, maximum raw validation downsample, maximum raw validation upsample, minimum training volume size, minimum raw value, maximum raw value, and classes separator character.
 
@@ -612,9 +619,10 @@ class DataSplitGenerator:
         self.min_training_volume_size = min_training_volume_size
         self.raw_min = raw_min
         self.raw_max = raw_max
-        self.classes_separator_caracter = classes_separator_caracter
+        self.classes_separator_character = classes_separator_character
         self.use_negative_class = use_negative_class
         self.max_validation_volume_size = max_validation_volume_size
+        self.binarize_gt = binarize_gt
         if use_negative_class:
             if targets is None:
                 raise ValueError(
@@ -713,7 +721,7 @@ class DataSplitGenerator:
 
         """
         datasets, classes = format_class_name(
-            class_name, self.classes_separator_caracter, self.targets
+            class_name, self.classes_separator_character, self.targets
         )
         if self.class_name is None:
             self.class_name = classes
@@ -778,7 +786,7 @@ class DataSplitGenerator:
                 mask_config,
             ) = self.__generate_semantic_seg_dataset_crop(dataset)
             if type(self.class_name) == list:
-                classes = self.classes_separator_caracter.join(self.class_name)
+                classes = self.classes_separator_character.join(self.class_name)
             else:
                 classes = self.class_name
             if dataset.dataset_type == DatasetType.train:
@@ -867,7 +875,7 @@ class DataSplitGenerator:
         organelle_arrays = {}
         # classes_datasets, classes = self.check_class_name(gt_dataset)
         classes_datasets, classes = format_class_name(
-            gt_dataset, self.classes_separator_caracter, self.targets
+            gt_dataset, self.classes_separator_character, self.targets
         )
         for current_class_dataset, current_class_name in zip(classes_datasets, classes):
             if not (gt_path / current_class_dataset).exists():
@@ -889,11 +897,12 @@ class DataSplitGenerator:
                     self.output_resolution,
                     "gt",
                 )
-            # gt_config = BinarizeArrayConfig(
-            #     f"{dataset}_{current_class_name}_{self.output_resolution[0]}nm_binarized",
-            #     source_array_config=gt_config,
-            #     groupings=[(current_class_name, [])],
-            # )
+            if self.binarize_gt:
+                gt_config = BinarizeArrayConfig(
+                    f"{dataset}_{current_class_name}_{self.output_resolution[0]}nm_binarized",
+                    source_array_config=gt_config,
+                    groupings=[(current_class_name, [])],
+                )
             organelle_arrays[current_class_name] = gt_config
 
         if self.targets is None:

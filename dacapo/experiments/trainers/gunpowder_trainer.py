@@ -489,3 +489,90 @@ class GunpowderTrainer(Trainer):
 
         """
         return all([dataset.gt is not None for dataset in datasets])
+
+    def visualize_pipeline(self):
+        if self._pipeline is None:
+            raise ValueError("Pipeline not initialized!")
+
+        import neuroglancer
+
+        # self.iteration = 0
+
+        pipeline = self._pipeline.children[0].children[0].copy()
+        if self.num_data_fetchers > 1:
+            pipeline = pipeline.children[0]
+
+        pipeline += gp.Stack(1)
+
+        request = self._request
+        # raise Exception(request)
+
+        def batch_generator():
+            with gp.build(pipeline):
+                while True:
+                    yield pipeline.request_batch(request)
+
+        batch_gen = batch_generator()
+
+        def load_batch(event):
+            print("fetching_batch")
+            batch = next(batch_gen)
+
+            with viewer.txn() as s:
+                while len(s.layers) > 0:
+                    del s.layers[0]
+
+                # reverse order for raw so we can set opacity to 1, this
+                # way higher res raw replaces low res when available
+                for name, array in batch.arrays.items():
+                    print(name)
+                    data = array.data[0]
+
+                    channel_dims = len(data.shape) - len(array.spec.voxel_size)
+                    assert channel_dims <= 1
+
+                    dims = neuroglancer.CoordinateSpace(
+                        names=["c^", "z", "y", "x"][-len(data.shape) :],
+                        units="nm",
+                        scales=tuple([1] * channel_dims) + tuple(array.spec.voxel_size),
+                    )
+
+                    local_vol = neuroglancer.LocalVolume(
+                        data=data,
+                        voxel_offset=tuple([0] * channel_dims)
+                        + tuple((-array.spec.roi.shape / 2) / array.spec.voxel_size),
+                        dimensions=dims,
+                    )
+
+                    if name == self._gt_key:
+                        s.layers[str(name)] = neuroglancer.SegmentationLayer(
+                            source=local_vol
+                        )
+                    else:
+                        s.layers[str(name)] = neuroglancer.ImageLayer(source=local_vol)
+
+                s.layout = neuroglancer.row_layout(
+                    [
+                        neuroglancer.column_layout(
+                            [
+                                neuroglancer.LayerGroupViewer(
+                                    layers=[str(k) for k, v in batch.items()]
+                                ),
+                            ]
+                        )
+                    ]
+                )
+
+        neuroglancer.set_server_bind_address("0.0.0.0")
+
+        viewer = neuroglancer.Viewer()
+
+        viewer.actions.add("load_batch", load_batch)
+
+        with viewer.config_state.txn() as s:
+            s.input_event_bindings.data_view["keyt"] = "load_batch"
+
+        print(viewer)
+        load_batch(None)
+
+        input("Enter to quit!")
