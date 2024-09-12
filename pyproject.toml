@@ -47,7 +47,7 @@ dependencies = [
         "funlib.geometry>=0.2",
         "mwatershed>=0.1",
         "cellmap-models",
-        "funlib.persistence>=0.3.0",
+        "funlib.persistence==0.4.0",
         "gunpowder>=1.3",
         "lsds",
         "xarray",
