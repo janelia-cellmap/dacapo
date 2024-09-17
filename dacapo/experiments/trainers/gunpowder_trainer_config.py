@@ -43,7 +43,7 @@ class GunpowderTrainerConfig(TrainerConfig):
         default=None,
         metadata={"help_text": "Number of iterations before saving a new snapshot."},
     )
-    min_masked: Optional[float] = attr.ib(default=0.15)
+    min_masked: Optional[float] = attr.ib(default=1e-6)
     clip_raw: bool = attr.ib(default=False)
     optimizer: Optional[Callable] = attr.ib(
         default=None,

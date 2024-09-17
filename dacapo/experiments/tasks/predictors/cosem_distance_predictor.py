@@ -7,6 +7,10 @@ from dacapo.utils.balance_weights import balance_weights
 from funlib.geometry import Coordinate
 
 from scipy.ndimage.morphology import distance_transform_edt
+from scipy.ndimage import (
+    binary_erosion,
+    generate_binary_structure,
+)
 import numpy as np
 import torch
 
@@ -16,9 +20,9 @@ from typing import List
 logger = logging.getLogger(__name__)
 
 
-class DistancePredictor(Predictor):
+class COSEMDistancePredictor(Predictor):
     """
-    Predict signed distances for a binary segmentation task.
+    Predict signed distances for a binary segmentation task. This variant is designed to recapiulate the COSEM distance targets used in the original paper (https://www.nature.com/articles/s41586-021-03977-3) as well as possible.
     Distances deep within background are pushed to -inf, distances deep within
     the foreground object are pushed to inf. After distances have been
     calculated they are passed through a tanh so that distances saturate at +-1.
@@ -33,7 +37,7 @@ class DistancePredictor(Predictor):
         clipmin (float): The minimum value to clip the weights to.
         clipmax (float): The maximum value to clip the weights to.
     Methods:
-        __init__(self, channels: List[str], scale_factor: float, mask_distances: bool, clipmin: float = 0.05, clipmax: float = 0.95): Initializes the DistancePredictor.
+        __init__(self, channels: List[str], scale_factor: float, mask_distances: bool, clipmin: float = 0.05, clipmax: float = 0.95): Initializes the COSEMDistancePredictor.
         create_model(self, architecture): Create the model for the predictor.
         create_target(self, gt): Create the target array for training.
         create_weight(self, gt, target, mask, moving_class_counts=None): Create the weight array for training.
@@ -43,7 +47,7 @@ class DistancePredictor(Predictor):
         gt_region_for_roi(self, target_spec): Get the ground-truth region for the ROI.
         padding(self, gt_voxel_size: Coordinate) -> Coordinate: Get the padding needed for the ground-truth array.
     Notes:
-        The DistancePredictor is used to predict signed distances for a binary segmentation task.
+        The COSEMDistancePredictor is used to predict signed distances for a binary segmentation task.
         The distances are calculated using the distance_transform_edt function from scipy.ndimage.morphology.
         The distances are then passed through a tanh function to saturate the distances at +-1.
         The distances are calculated for each class that is being segmented and are stored in separate channels.
@@ -63,7 +67,7 @@ class DistancePredictor(Predictor):
         clipmax: float = 0.95,
     ):
         """
-        Initialize the DistancePredictor object.
+        Initialize the COSEMDistancePredictor object.
 
         Args:
             channels (List[str]): List of channel names.
@@ -74,7 +78,7 @@ class DistancePredictor(Predictor):
         Raises:
             NotImplementedError: This method is not implemented.
         Examples:
-            >>> predictor = DistancePredictor(channels, scale_factor, mask_distances, clipmin, clipmax)
+            >>> predictor = COSEMDistancePredictor(channels, scale_factor, mask_distances, clipmin, clipmax)
         """
         self.channels = channels
         self.norm = "tanh"
@@ -82,8 +86,7 @@ class DistancePredictor(Predictor):
         self.mask_distances = mask_distances
 
         self.max_distance = 1 * scale_factor
-        self.epsilon = 5e-2
-        self.threshold = 0.8
+        self.max_distance = 0.8
         self.clipmin = clipmin
         self.clipmax = clipmax
 
@@ -248,10 +251,6 @@ class DistancePredictor(Predictor):
                 tmp,
                 sampling=voxel_size,
             )
-            if self.epsilon is None:
-                add = 0
-            else:
-                add = self.epsilon
             boundary_distance = self.__normalize(
                 boundary_distance[slices], normalize, normalize_args
             )
@@ -264,7 +263,7 @@ class DistancePredictor(Predictor):
             )
             channel_mask_output[
                 np.logical_and(
-                    np.clip(abs(channel_distance) + add, 0, self.threshold)
+                    np.clip(abs(channel_distance), 0, self.max_distance)
                     >= boundary_distance,
                     channel_distance >= 0,
                 )
@@ -276,9 +275,9 @@ class DistancePredictor(Predictor):
             )
             channel_mask_output[
                 np.logical_and(
-                    np.clip(abs(channel_distance) + add, 0, self.threshold)
-                    >= boundary_distance,
-                    channel_distance <= 0,
+                    np.clip(abs(channel_distance), 0, self.max_distance)
+                    >= boundary_distance + 1,
+                    channel_distance < 0,
                 )
             ] = 0
             logging.debug(
@@ -460,3 +459,22 @@ class DistancePredictor(Predictor):
 
         """
         return Coordinate((self.max_distance,) * gt_voxel_size.dims)
+
+    def __signed_distance(self, label, **kwargs):
+        # calculate signed distance transform relative to a binary label. Positive distance inside the object,
+        # negative distance outside the object. This function estimates signed distance by taking the difference
+        # between the distance transform of the label ("inner distances") and the distance transform of
+        # the complement of the label ("outer distances"). To compensate for an edge effect, .5 (half a pixel's
+        # distance) is added to the positive distances and subtracted from the negative distances.
+        inner_distance = distance_transform_edt(
+            binary_erosion(
+                label,
+                border_value=1,
+                structure=generate_binary_structure(label.ndim, label.ndim),
+            ),
+            **kwargs,
+        )
+        outer_distance = distance_transform_edt(np.logical_not(label), **kwargs)
+        result = inner_distance - outer_distance
+
+        return result

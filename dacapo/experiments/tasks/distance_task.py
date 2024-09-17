@@ -1,7 +1,7 @@
 from .evaluators import BinarySegmentationEvaluator
 from .losses import MSELoss
 from .post_processors import ThresholdPostProcessor
-from .predictors import DistancePredictor
+from .predictors import DistancePredictor, COSEMDistancePredictor
 from .task import Task
 
 
@@ -38,14 +38,22 @@ class DistanceTask(Task):
         Examples:
             >>> task = DistanceTask(task_config)
         """
-
-        self.predictor = DistancePredictor(
-            channels=task_config.channels,
-            scale_factor=task_config.scale_factor,
-            mask_distances=task_config.mask_distances,
-            clipmin=task_config.clipmin,
-            clipmax=task_config.clipmax,
-        )
+        if task_config.do_cosem:
+            self.predictor = COSEMDistancePredictor(
+                channels=task_config.channels,
+                scale_factor=task_config.scale_factor,
+                mask_distances=task_config.mask_distances,
+                clipmin=task_config.clipmin,
+                clipmax=task_config.clipmax,
+            )
+        else:
+            self.predictor = DistancePredictor(
+                channels=task_config.channels,
+                scale_factor=task_config.scale_factor,
+                mask_distances=task_config.mask_distances,
+                clipmin=task_config.clipmin,
+                clipmax=task_config.clipmax,
+            )
         self.loss = MSELoss()
         self.post_processor = ThresholdPostProcessor()
         self.evaluator = BinarySegmentationEvaluator(

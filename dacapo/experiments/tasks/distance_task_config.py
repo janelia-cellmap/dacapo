@@ -69,3 +69,9 @@ class DistanceTaskConfig(TaskConfig):
         default=0.95,
         metadata={"help_text": "The maximum value for distance weights."},
     )
+    do_cosem: bool = attr.ib(
+        default=False,
+        metadata={
+            "help_text": "Whether to use COSEM setup for distance transforms and masking (i.e. COSEMDistancePredictor)."
+        },
+    )

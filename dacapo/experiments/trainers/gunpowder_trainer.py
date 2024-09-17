@@ -227,7 +227,7 @@ class GunpowderTrainer(Trainer):
             )
 
             dataset_source += gp.Reject(
-                mask_placeholder, 1e-6
+                mask_placeholder, self.min_masked
             )  # TODO: this threshold needs to come from the config = one_vx_thr
 
             for augment in self.augments:

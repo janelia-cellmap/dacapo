@@ -704,6 +704,11 @@ class DataSplitGenerator:
         """
         if self.segmentation_type == SegmentationType.semantic:
             return self.__generate_semantic_seg_datasplit()
+        elif self.segmentation_type == SegmentationType.instance:
+            return self.__generate_instance_seg_datasplit()
+            raise NotImplementedError(
+                f"{self.segmentation_type} segmentation not implemented yet!"
+            )
         else:
             raise NotImplementedError(
                 f"{self.segmentation_type} segmentation not implemented yet!"
@@ -932,6 +937,182 @@ class DataSplitGenerator:
     #             f.write(
     #                 f"{dataset.dataset_type.name},{str(dataset.raw_container)},{dataset.raw_dataset},{str(dataset.gt_container)},{dataset.gt_dataset}\n"
     #             )
+
+    def __generate_instance_seg_datasplit(self):
+        """
+        Generate the instance segmentation data split.
+
+        Args:
+            self : obj
+                The object.
+        Returns:
+            obj : The data split.
+        Raises:
+            FileNotFoundError
+            If the file does not exist, a FileNotFoundError is raised.
+        Examples:
+            >>> __generate_instance_seg_datasplit()
+        Notes:
+            This function is used to generate the instance segmentation data split.
+
+        """
+        train_dataset_configs = []
+        validation_dataset_configs = []
+        for dataset in self.datasets:
+            (
+                raw_config,
+                gt_config,
+                mask_config,
+            ) = self.__generate_instance_seg_dataset_crop(dataset)
+            if type(self.class_name) == list:
+                classes = self.classes_separator_character.join(self.class_name)
+            else:
+                classes = self.class_name
+            if dataset.dataset_type == DatasetType.train:
+                train_dataset_configs.append(
+                    RawGTDatasetConfig(
+                        name=f"{dataset}_{gt_config.name}_{classes}_{self.output_resolution[0]}nm",
+                        raw_config=raw_config,
+                        gt_config=gt_config,
+                        mask_config=mask_config,
+                    )
+                )
+            else:
+                validation_dataset_configs.append(
+                    RawGTDatasetConfig(
+                        name=f"{dataset}_{gt_config.name}_{classes}_{self.output_resolution[0]}nm",
+                        raw_config=raw_config,
+                        gt_config=gt_config,
+                        mask_config=mask_config,
+                    )
+                )
+
+        return TrainValidateDataSplitConfig(
+            name=f"{self.name}_{self.segmentation_type}_{classes}_{self.output_resolution[0]}nm",
+            train_configs=train_dataset_configs,
+            validate_configs=validation_dataset_configs,
+        )
+
+    def __generate_instance_seg_dataset_crop(self, dataset: DatasetSpec):
+        """
+        Generate the instance segmentation dataset crop.
+
+        Args:
+            self : obj
+                The object.
+            dataset : obj
+                The dataset.
+        Returns:
+            obj : The dataset crop.
+        Raises:
+            FileNotFoundError
+            If the file does not exist, a FileNotFoundError is raised.
+        Examples:
+            >>> __generate_instance_seg_dataset_crop(dataset)
+        Notes:
+            This function is used to generate the instance segmentation dataset crop.
+        """
+        raw_container = dataset.raw_container
+        raw_dataset = dataset.raw_dataset
+        gt_path = dataset.gt_container
+        gt_dataset = dataset.gt_dataset
+
+        if not (raw_container / raw_dataset).exists():
+            raise FileNotFoundError(
+                f"Raw path {raw_container/raw_dataset} does not exist."
+            )
+
+        if is_zarr_group(raw_container, raw_dataset):
+            raw_config = get_right_resolution_array_config(
+                raw_container, raw_dataset, self.input_resolution, "raw"
+            )
+        else:
+            raw_config = resize_if_needed(
+                ZarrArrayConfig(
+                    name=f"raw_{raw_container.stem}_uint8",
+                    file_name=raw_container,
+                    dataset=raw_dataset,
+                    mode="r",
+                ),
+                self.input_resolution,
+                "raw",
+            )
+        raw_config = IntensitiesArrayConfig(
+            name=f"raw_{raw_container.stem}_uint8",
+            source_array_config=raw_config,
+            min=self.raw_min,
+            max=self.raw_max,
+        )
+        organelle_arrays = {}
+        classes_datasets, classes = format_class_name(
+            gt_dataset, self.classes_separator_character, self.targets
+        )
+        for current_class_dataset, current_class_name in zip(classes_datasets, classes):
+            if not (gt_path / current_class_dataset).exists():
+                raise FileNotFoundError(
+                    f"GT path {gt_path/current_class_dataset} does not exist."
+                )
+            if is_zarr_group(gt_path, current_class_dataset):
+                gt_config = get_right_resolution_array_config(
+                    gt_path, current_class_dataset, self.output_resolution, "gt"
+                )
+            else:
+                gt_config = resize_if_needed(
+                    ZarrArrayConfig(
+                        name=f"gt_{gt_path.stem}_{current_class_dataset}_uint8",
+                        file_name=gt_path,
+                        dataset=current_class_dataset,
+                        mode="r",
+                    ),
+                    self.output_resolution,
+                    "gt",
+                )
+            organelle_arrays[current_class_name] = gt_config
+
+        if self.targets is None:
+            targets_str = "_".join(classes)
+            current_targets = classes
+        else:
+            current_targets = self.targets
+            targets_str = "_".join(self.targets)
+
+        target_images = {}
+        target_masks = {}
+
+        missing_classes = [c for c in current_targets if c not in classes]
+        found_classes = [c for c in current_targets if c in classes]
+        for t in found_classes:
+            target_images[t] = organelle_arrays[t]
+
+        if len(missing_classes) > 0:
+            raise ValueError(
+                f"Missing classes found, {str(missing_classes)}, but not available for instance segmentations."
+            )
+
+        for t in found_classes:
+            target_masks[t] = ConstantArrayConfig(
+                name=f"{dataset}_{t}_{self.output_resolution[0]}nm_labelled_voxels",
+                source_array_config=target_images[t],
+                constant=1,
+            )
+
+        if len(target_images) > 1:
+            gt_config = ConcatArrayConfig(
+                name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_gt",
+                channels=[organelle for organelle in current_targets],
+                source_array_configs={k: target_images[k] for k in current_targets},
+            )
+            mask_config = ConcatArrayConfig(
+                name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_mask",
+                channels=[organelle for organelle in current_targets],
+                # to be sure to have the same order
+                source_array_configs={k: target_masks[k] for k in current_targets},
+            )
+        else:
+            gt_config = list(target_images.values())[0]
+            mask_config = list(target_masks.values())[0]
+
+        return raw_config, gt_config, mask_config
 
     @staticmethod
     def generate_from_csv(
