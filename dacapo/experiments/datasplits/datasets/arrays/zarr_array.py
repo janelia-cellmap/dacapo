@@ -273,7 +273,9 @@ class ZarrArray(Array):
             This method is used to return the region of interest of the array.
         """
         if self.snap_to_grid is not None:
-            return self._daisy_array.roi.snap_to_grid(self.snap_to_grid, mode="shrink")
+            return self._daisy_array.roi.snap_to_grid(
+             np.lcm(self.voxel_size, self.snap_to_grid), mode="shrink"
+         )
         else:
             return self._daisy_array.roi
 
