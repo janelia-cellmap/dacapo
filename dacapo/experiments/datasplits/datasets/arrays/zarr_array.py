@@ -274,8 +274,8 @@ class ZarrArray(Array):
         """
         if self.snap_to_grid is not None:
             return self._daisy_array.roi.snap_to_grid(
-             np.lcm(self.voxel_size, self.snap_to_grid), mode="shrink"
-         )
+                np.lcm(self.voxel_size, self.snap_to_grid), mode="shrink"
+            )
         else:
             return self._daisy_array.roi
 
