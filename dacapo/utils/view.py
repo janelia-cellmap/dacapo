@@ -440,7 +440,7 @@ class NeuroglancerRunViewer:
             >>> ds = viewer.open_from_array_identitifier(array_identifier)
         """
         if os.path.exists(array_identifier.container / array_identifier.dataset):
-            return open_ds(str(array_identifier.container), array_identifier.dataset)
+            return open_ds(str(array_identifier.container.path), array_identifier.dataset)
         else:
             return None
 

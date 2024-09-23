@@ -111,7 +111,7 @@ class GunpowderTrainer(Trainer):
         optimizer = torch.optim.RAdam(
             lr=self.learning_rate,
             params=model.parameters(),
-            decoupled_weight_decay=True,
+            # decoupled_weight_decay=True,
         )
         self.scheduler = torch.optim.lr_scheduler.LinearLR(
             optimizer,
@@ -161,6 +161,8 @@ class GunpowderTrainer(Trainer):
         mask_placeholder = gp.ArrayKey("MASK_PLACEHOLDER")
 
         target_key = gp.ArrayKey("TARGET")
+        dataset_weight_key = gp.ArrayKey("DATASET_WEIGHT")
+        datasets_weight_key = gp.ArrayKey("DATASETS_WEIGHT")
         weight_key = gp.ArrayKey("WEIGHT")
         sample_points_key = gp.GraphKey("SAMPLE_POINTS")
 
@@ -207,9 +209,9 @@ class GunpowderTrainer(Trainer):
                     mask_placeholder,
                     drop_channels=True,
                 )
-                + gp.Pad(raw_key, None)
-                + gp.Pad(gt_key, None)
-                + gp.Pad(mask_key, None)
+                + gp.Pad(raw_key, None, mode="constant", value=0)
+                + gp.Pad(gt_key, None, mode="constant", value=0)
+                + gp.Pad(mask_key, None, mode="constant", value=0)
                 + gp.RandomLocation(
                     ensure_nonempty=(
                         sample_points_key if points_source is not None else None
@@ -225,6 +227,14 @@ class GunpowderTrainer(Trainer):
             for augment in self.augments:
                 dataset_source += augment.node(raw_key, gt_key, mask_key)
 
+            # Add predictor nodes to dataset_source
+            dataset_source += DaCapoTargetFilter(
+                task.predictor,
+                gt_key=gt_key,
+                weights_key=dataset_weight_key,
+                mask_key=mask_key,
+            )
+
             dataset_sources.append(dataset_source)
         pipeline = tuple(dataset_sources) + gp.RandomProvider(weights)
 
@@ -233,9 +243,11 @@ class GunpowderTrainer(Trainer):
             task.predictor,
             gt_key=gt_key,
             target_key=target_key,
-            weights_key=weight_key,
+            weights_key=datasets_weight_key,
             mask_key=mask_key,
         )
+
+        pipeline += Product(dataset_weight_key, datasets_weight_key, weight_key)
 
         # Trainer attributes:
         if self.num_data_fetchers > 1:

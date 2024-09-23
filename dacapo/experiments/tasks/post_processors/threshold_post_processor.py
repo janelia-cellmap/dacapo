@@ -1,12 +1,12 @@
-from upath import UPath as Path
-from dacapo.blockwise.scheduler import run_blockwise
 from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from .threshold_post_processor_parameters import ThresholdPostProcessorParameters
 from dacapo.store.array_store import LocalArrayIdentifier
 from .post_processor import PostProcessor
-import dacapo.blockwise
 import numpy as np
+import daisy
 from daisy import Roi, Coordinate
+from dacapo.utils.array_utils import to_ndarray, save_ndarray
+from funlib.persistence import open_ds
 
 from typing import Iterable
 
@@ -43,7 +43,7 @@ class ThresholdPostProcessor(PostProcessor):
         Note:
             This method should return a generator of instances of ``ThresholdPostProcessorParameters``.
         """
-        for i, threshold in enumerate([100, 127, 150]):
+        for i, threshold in enumerate([127]):
             yield ThresholdPostProcessorParameters(id=i, threshold=threshold)
 
     def set_prediction(self, prediction_array_identifier):
@@ -117,28 +117,31 @@ class ThresholdPostProcessor(PostProcessor):
             self.prediction_array.num_channels,
             self.prediction_array.voxel_size,
             np.uint8,
-            write_size,
         )
 
+
         read_roi = Roi((0, 0, 0), write_size[-self.prediction_array.dims :])
-        # run blockwise post-processing
-        sucess = run_blockwise(
-            worker_file=str(
-                Path(Path(dacapo.blockwise.__file__).parent, "threshold_worker.py")
-            ),
+        input_array = open_ds(self.prediction_array_identifier.container.path,self.prediction_array_identifier.dataset)
+
+        def process_block(block):
+            print("Predicting block", block.read_roi)
+            data = to_ndarray(input_array,block.read_roi) > parameters.threshold
+            if int(data.max()) == 0:
+                print("No data in block", block.read_roi)
+                return
+            save_ndarray(data, block.write_roi, output_array)
+
+        task = daisy.Task(
+            f"threshold_{output_array.dataset}",
             total_roi=self.prediction_array.roi,
             read_roi=read_roi,
             write_roi=read_roi,
-            num_workers=num_workers,
-            max_retries=2,  # TODO: make this an option
-            timeout=None,  # TODO: make this an option
-            ######
-            input_array_identifier=self.prediction_array_identifier,
-            output_array_identifier=output_array_identifier,
-            threshold=parameters.threshold,
+            process_function=process_block,
+            check_function=None,
+            read_write_conflict=False,
+            fit="overhang",
+            max_retries=0,
+            timeout=None,
         )
 
-        if not sucess:
-            raise RuntimeError("Blockwise post-processing failed.")
-
-        return output_array
+        return daisy.run_blockwise([task], multiprocessing=False)

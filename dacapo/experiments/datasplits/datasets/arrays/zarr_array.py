@@ -14,6 +14,7 @@ from zarr.n5 import N5FSStore
 from collections import OrderedDict
 import logging
 from upath import UPath as Path
+import os 
 import json
 from typing import Dict, Tuple, Any, Optional, List
 
@@ -273,7 +274,9 @@ class ZarrArray(Array):
             This method is used to return the region of interest of the array.
         """
         if self.snap_to_grid is not None:
-            return self._daisy_array.roi.snap_to_grid(self.snap_to_grid, mode="shrink")
+            return self._daisy_array.roi.snap_to_grid(
+             np.lcm(self.voxel_size, self.snap_to_grid), mode="shrink"
+         )
         else:
             return self._daisy_array.roi
 
@@ -426,33 +429,12 @@ class ZarrArray(Array):
         num_channels,
         voxel_size,
         dtype,
-        mode="a",
         write_size=None,
         name=None,
-        overwrite=False,
     ):
         """
         Create a new ZarrArray given an array identifier. It is assumed that
-        this array_identifier points to a dataset that does not yet exist.
-
-        Args:
-            array_identifier (ArrayIdentifier): The array identifier.
-            axes (List[str]): The axes of the array.
-            roi (Roi): The region of interest.
-            num_channels (int): The number of channels.
-            voxel_size (Coordinate): The voxel size.
-            dtype (Any): The data type.
-            write_size (Optional[Coordinate]): The write size.
-            name (Optional[str]): The name of the array.
-            overwrite (bool): The boolean value to overwrite the array.
-        Returns:
-            ZarrArray: The ZarrArray.
-        Raises:
-            NotImplementedError
-        Examples:
-            >>> create_from_array_identifier(array_identifier, axes, roi, num_channels, voxel_size, dtype, write_size=None, name=None, overwrite=False)
-        Notes:
-            This method is used to create a new ZarrArray given an array identifier.
+        this array_identifier points to a dataset that does not yet exist
         """
         if write_size is None:
             # total storage per block is approx c*x*y*z*dtype_size
@@ -469,11 +451,6 @@ class ZarrArray(Array):
             write_size = Coordinate((axis_length,) * voxel_size.dims) * voxel_size
         write_size = Coordinate((min(a, b) for a, b in zip(write_size, roi.shape)))
         zarr_container = zarr.open(array_identifier.container, "a")
-        if num_channels is None or num_channels == 1:
-            axes = [axis for axis in axes if "c" not in axis]
-            num_channels = None
-        else:
-            axes = ["c"] + [axis for axis in axes if "c" not in axis]
         try:
             funlib.persistence.prepare_ds(
                 f"{array_identifier.container}",
@@ -483,41 +460,21 @@ class ZarrArray(Array):
                 dtype,
                 num_channels=num_channels,
                 write_size=write_size,
-                delete=overwrite,
-                force_exact_write_size=True,
             )
             zarr_dataset = zarr_container[array_identifier.dataset]
-            if array_identifier.container.name.endswith("n5"):
-                zarr_dataset.attrs["offset"] = roi.offset[::-1]
-                zarr_dataset.attrs["resolution"] = voxel_size[::-1]
-                zarr_dataset.attrs["axes"] = axes[::-1]
-                # to make display right in neuroglancer: TODO ADD CHANNELS
-                zarr_dataset.attrs["dimension_units"] = [
-                    f"{size} nm" for size in voxel_size[::-1]
-                ]
-                zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = [
-                    a if a != "c" else "c^" for a in axes[::-1]
-                ]
-            else:
-                zarr_dataset.attrs["offset"] = roi.offset
-                zarr_dataset.attrs["resolution"] = voxel_size
-                zarr_dataset.attrs["axes"] = axes
-                # to make display right in neuroglancer: TODO ADD CHANNELS
-                zarr_dataset.attrs["dimension_units"] = [
-                    f"{size} nm" for size in voxel_size
-                ]
-                zarr_dataset.attrs["_ARRAY_DIMENSIONS"] = [
-                    a if a != "c" else "c^" for a in axes
-                ]
-            if "c" in axes:
-                if axes.index("c") == 0:
-                    zarr_dataset.attrs["dimension_units"] = [
-                        str(num_channels)
-                    ] + zarr_dataset.attrs["dimension_units"]
-                else:
-                    zarr_dataset.attrs["dimension_units"] = zarr_dataset.attrs[
-                        "dimension_units"
-                    ] + [str(num_channels)]
+            zarr_dataset.attrs["offset"] = (
+                roi.offset[::-1]
+                if array_identifier.container.name.endswith("n5")
+                else roi.offset
+            )
+            zarr_dataset.attrs["resolution"] = (
+                voxel_size[::-1]
+                if array_identifier.container.name.endswith("n5")
+                else voxel_size
+            )
+            zarr_dataset.attrs["axes"] = (
+                axes[::-1] if array_identifier.container.name.endswith("n5") else axes
+            )
         except zarr.errors.ContainsArrayError:
             zarr_dataset = zarr_container[array_identifier.dataset]
             assert (

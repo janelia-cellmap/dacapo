@@ -913,23 +913,23 @@ class DataSplitGenerator:
                 constant=1,
             )
 
-        if len(target_images) > 1:
-            gt_config = ConcatArrayConfig(
-                name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_gt",
-                channels=[organelle for organelle in current_targets],
-                # source_array_configs={k: gt for k, gt in target_images.items()},
-                source_array_configs={k: target_images[k] for k in current_targets},
-            )
-            mask_config = ConcatArrayConfig(
-                name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_mask",
-                channels=[organelle for organelle in current_targets],
-                # source_array_configs={k: mask for k, mask in target_masks.items()},
-                # to be sure to have the same order
-                source_array_configs={k: target_masks[k] for k in current_targets},
-            )
-        else:
-            gt_config = list(target_images.values())[0]
-            mask_config = list(target_masks.values())[0]
+        # if len(target_images) > 1:
+        gt_config = ConcatArrayConfig(
+            name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_gt",
+            channels=[organelle for organelle in current_targets],
+            # source_array_configs={k: gt for k, gt in target_images.items()},
+            source_array_configs={k: target_images[k] for k in current_targets},
+        )
+        mask_config = ConcatArrayConfig(
+            name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_mask",
+            channels=[organelle for organelle in current_targets],
+            # source_array_configs={k: mask for k, mask in target_masks.items()},
+            # to be sure to have the same order
+            source_array_configs={k: target_masks[k] for k in current_targets},
+        )
+        # else:
+        #     gt_config = list(target_images.values())[0]
+        #     mask_config = list(target_masks.values())[0]
 
         return raw_config, gt_config, mask_config
 

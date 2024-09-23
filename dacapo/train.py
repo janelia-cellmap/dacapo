@@ -17,7 +17,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def train(run_name: str):
+def train(run_name: str, do_validate=True):
     """
     Train a run
 
@@ -44,7 +44,7 @@ def train(run_name: str):
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
 
-    return train_run(run)
+    return train_run(run, do_validate)
 
 
 def train_run(run: Run, do_validate=True):
