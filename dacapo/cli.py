@@ -88,7 +88,7 @@ def train(run_name, no_validation):
         no_validation (bool): Flag to disable validation after training.
     """
     do_validate = not no_validation
-    dacapo.train(run_name, do_validate=do_validate) 
+    dacapo.train(run_name, do_validate=do_validate)
 
 
 @cli.command()

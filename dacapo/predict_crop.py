@@ -27,7 +27,9 @@ def predict(
     shift = min_raw
     scale = max_raw - min_raw
     # get the model's input and output size
-    raw_array = open_ds(raw_array_identifier.container.path, raw_array_identifier.dataset)
+    raw_array = open_ds(
+        raw_array_identifier.container.path, raw_array_identifier.dataset
+    )
     input_voxel_size = Coordinate(raw_array.voxel_size)
     output_voxel_size = model.scale(input_voxel_size)
 
@@ -43,8 +45,7 @@ def predict(
     else:
         input_roi = output_roi.grow(context, context)
 
-
-    read_roi = Roi((0,0,0), input_size)
+    read_roi = Roi((0, 0, 0), input_size)
     write_roi = read_roi.grow(-context, -context)
 
     axes = ["c", "z", "y", "x"]
@@ -60,7 +61,6 @@ def predict(
         np.float32,
     )
 
-
     logger.info("Total input ROI: %s, output ROI: %s", input_size, output_roi)
     logger.info("Block read ROI: %s, write ROI: %s", read_roi, write_roi)
 
@@ -71,22 +71,30 @@ def predict(
     compute_context = create_compute_context()
     device = compute_context.device
 
-    
     def predict_fn(block):
-        raw_input = to_ndarray(raw_array,block.read_roi)
-        raw_input = 2.0 * (raw_input.astype(np.float32) - shift )/ scale - 1.0
+        raw_input = to_ndarray(raw_array, block.read_roi)
+        raw_input = 2.0 * (raw_input.astype(np.float32) - shift) / scale - 1.0
         if len(raw_input.shape) == 3:
             raw_input = np.expand_dims(raw_input, (0, 1))
         with torch.no_grad():
-            predictions = model.forward(torch.from_numpy(raw_input).float().to(device)).detach().cpu().numpy()[0]
+            predictions = (
+                model.forward(torch.from_numpy(raw_input).float().to(device))
+                .detach()
+                .cpu()
+                .numpy()[0]
+            )
 
             predictions = (predictions + 1) * 255.0 / 2.0
-            print(f"Predicting block {block.read_roi} uniques: {np.unique(predictions)}")
+            print(
+                f"Predicting block {block.read_roi} uniques: {np.unique(predictions)}"
+            )
             save_ndarray(predictions, block.write_roi, result_dataset)
             # result_dataset[block.write_roi] = predictions
 
     # fixing the input roi to be a multiple of the output voxel size
-    input_roi = input_roi.snap_to_grid(np.lcm(input_voxel_size, output_voxel_size), mode="shrink")
+    input_roi = input_roi.snap_to_grid(
+        np.lcm(input_voxel_size, output_voxel_size), mode="shrink"
+    )
 
     task = daisy.Task(
         f"predict_{out_container}_{out_dataset}",

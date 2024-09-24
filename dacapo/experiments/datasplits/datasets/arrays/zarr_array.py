@@ -14,7 +14,7 @@ from zarr.n5 import N5FSStore
 from collections import OrderedDict
 import logging
 from upath import UPath as Path
-import os 
+import os
 import json
 from typing import Dict, Tuple, Any, Optional, List
 
@@ -275,8 +275,8 @@ class ZarrArray(Array):
         """
         if self.snap_to_grid is not None:
             return self._daisy_array.roi.snap_to_grid(
-             np.lcm(self.voxel_size, self.snap_to_grid), mode="shrink"
-         )
+                np.lcm(self.voxel_size, self.snap_to_grid), mode="shrink"
+            )
         else:
             return self._daisy_array.roi
 
