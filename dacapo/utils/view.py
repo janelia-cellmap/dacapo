@@ -16,7 +16,12 @@ from typing import Optional
 
 
 def get_viewer(
-    arrays: dict, width: int = 1500, height: int = 600, headless: bool = True
+    arrays: dict, 
+    width: int = 1500, 
+    height: int = 600, 
+    headless: bool = True,
+    bind_address: str = "0.0.0.0", 
+    bind_port: int = 0
 ) -> neuroglancer.Viewer | IFrame:
     """
     Creates a neuroglancer viewer to visualize arrays.
@@ -26,6 +31,8 @@ def get_viewer(
         width (int, optional): The width of the viewer window in pixels. Defaults to 1500.
         height (int, optional): The height of the viewer window in pixels. Defaults to 600.
         headless (bool, optional): If True, returns the viewer object. If False, returns an IFrame object embedding the viewer. Defaults to True.
+        bind_address (str, optional): Bind address for Neuroglancer webserver.
+        bind_port (int, optional): Bind port for Neuroglancer webserver.
     Returns:
         neuroglancer.Viewer | IFrame: The neuroglancer viewer object or an IFrame object embedding the viewer.
     Raises:
@@ -58,7 +65,7 @@ def get_viewer(
         else:
             arrays[name]["voxel_sizes"] = array.spec.voxel_size
 
-    neuroglancer.set_server_bind_address("0.0.0.0")
+    neuroglancer.set_server_bind_address(bind_address=bind_address, bind_port=bind_port)
     viewer = neuroglancer.Viewer()
     with viewer.txn() as state:
         state.showSlices = False
@@ -365,10 +372,13 @@ class NeuroglancerRunViewer:
         neuroglancer.set_server_bind_address("0.0.0.0")
         self.viewer = neuroglancer.Viewer()
 
-    def start_neuroglancer(self):
+    def start_neuroglancer(self, bind_address="0.0.0.0", bind_port=None):
         """
         Start the neuroglancer viewer.
 
+        Args:
+            bind_address (str, optional): Bind address for Neuroglancer webserver.
+            bind_port (int, optional): Bind port for Neuroglancer webserver.
         Returns:
             IFrame: The embedded viewer.
         Raises:
@@ -380,7 +390,7 @@ class NeuroglancerRunViewer:
             >>> viewer = NeuroglancerRunViewer(run)
             >>> viewer.start_neuroglancer()
         """
-        neuroglancer.set_server_bind_address("0.0.0.0")
+        neuroglancer.set_server_bind_address(bind_address=bind_address, bind_port=bind_port)
         self.viewer = neuroglancer.Viewer()
         print(f"Neuroglancer viewer: {self.viewer}")
         with self.viewer.txn() as state:
