@@ -12,7 +12,7 @@ import torch
 
 from pathlib import Path
 import logging
-
+from dacapo.compute_context import create_compute_context
 logger = logging.getLogger(__name__)
 
 
@@ -29,6 +29,10 @@ def validate(run_name: str, iteration: int = 0, datasets_config=None):
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
 
+    compute_context = create_compute_context()
+    device = compute_context.device
+    run.model.to(device)
+
     # read in previous training/validation stats
 
     stats_store = create_stats_store()
@@ -40,7 +44,8 @@ def validate(run_name: str, iteration: int = 0, datasets_config=None):
     # create weights store and read weights
     if iteration > 0:
         weights_store = create_weights_store()
-        weights_store.retrieve_weights(run, iteration)
+        weights = weights_store.retrieve_weights(run, iteration)
+        run.model.load_state_dict(weights.model)
 
     return validate_run(run, iteration, datasets_config)
 
@@ -147,7 +152,7 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
             logger.info("validation inputs already copied!")
 
         prediction_array_identifier = array_store.validation_prediction_array(
-            run.name, iteration, validation_dataset
+            run.name, iteration+3, validation_dataset
         )
         predict(
             run.model,
@@ -162,7 +167,7 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
 
         for parameters in post_processor.enumerate_parameters():
             output_array_identifier = array_store.validation_output_array(
-                run.name, iteration, parameters, validation_dataset
+                run.name, iteration+3, parameters, validation_dataset
             )
 
             post_processed_array = post_processor.process(
