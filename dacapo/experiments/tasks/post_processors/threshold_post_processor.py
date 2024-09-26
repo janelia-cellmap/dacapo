@@ -119,9 +119,11 @@ class ThresholdPostProcessor(PostProcessor):
             np.uint8,
         )
 
-
         read_roi = Roi((0, 0, 0), write_size[-self.prediction_array.dims :])
-        input_array = open_ds(self.prediction_array_identifier.container.path,self.prediction_array_identifier.dataset)
+        input_array = open_ds(
+            self.prediction_array_identifier.container.path,
+            self.prediction_array_identifier.dataset,
+        )
 
         def process_block(block):
             data = to_ndarray(input_array,block.read_roi) > parameters.threshold

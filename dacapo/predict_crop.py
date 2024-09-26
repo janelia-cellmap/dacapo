@@ -42,8 +42,7 @@ def predict(
     else:
         input_roi = output_roi.grow(context, context)
 
-
-    read_roi = Roi((0,0,0), input_size)
+    read_roi = Roi((0, 0, 0), input_size)
     write_roi = read_roi.grow(-context, -context)
 
     axes = ["c", "z", "y", "x"]
@@ -59,7 +58,6 @@ def predict(
         np.float32,
     )
 
-
     logger.info("Total input ROI: %s, output ROI: %s", input_size, output_roi)
     logger.info("Block read ROI: %s, write ROI: %s", read_roi, write_roi)
 
@@ -70,7 +68,6 @@ def predict(
     compute_context = create_compute_context()
     device = compute_context.device
 
-    
     def predict_fn(block):
         raw_input = to_ndarray(raw_array,block.read_roi)
         # expend batch dim
@@ -79,11 +76,14 @@ def predict(
         with torch.no_grad():
             predictions = model.forward(torch.from_numpy(raw_input).float().to(device)).detach().cpu().numpy()[0]
             predictions = (predictions + 1) * 255.0 / 2.0
+
             save_ndarray(predictions, block.write_roi, result_dataset)
             # result_dataset[block.write_roi] = predictions
 
     # fixing the input roi to be a multiple of the output voxel size
-    input_roi = input_roi.snap_to_grid(np.lcm(input_voxel_size, output_voxel_size), mode="shrink")
+    input_roi = input_roi.snap_to_grid(
+        np.lcm(input_voxel_size, output_voxel_size), mode="shrink"
+    )
 
     task = daisy.Task(
         f"predict_{out_container}_{out_dataset}",

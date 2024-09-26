@@ -1,6 +1,7 @@
 import numpy as np
 from funlib.persistence import Array
 
+
 def to_ndarray(result_data, roi, fill_value=0):
     """An alternative implementation of `__getitem__` that supports
     using fill values to request data that may extend outside the
@@ -23,7 +24,8 @@ def to_ndarray(result_data, roi, fill_value=0):
 
     shape = roi.shape / result_data.voxel_size
     data = np.zeros(
-        result_data[result_data.roi].shape[: result_data.n_channel_dims] + shape, dtype=result_data.data.dtype
+        result_data[result_data.roi].shape[: result_data.n_channel_dims] + shape,
+        dtype=result_data.data.dtype,
     )
     if fill_value != 0:
         data[:] = fill_value
@@ -36,6 +38,7 @@ def to_ndarray(result_data, roi, fill_value=0):
         array[shared_roi] = result_data[shared_roi]
 
     return data
+
 
 def save_ndarray(data, roi, array):
     """An alternative implementation of `__setitem__` that supports
