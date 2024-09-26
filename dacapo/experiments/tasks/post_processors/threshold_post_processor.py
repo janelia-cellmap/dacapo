@@ -124,8 +124,8 @@ class ThresholdPostProcessor(PostProcessor):
         input_array = open_ds(self.prediction_array_identifier.container.path,self.prediction_array_identifier.dataset)
 
         def process_block(block):
-            print("Predicting block", block.read_roi)
             data = to_ndarray(input_array,block.read_roi) > parameters.threshold
+            data = data.astype(np.uint8)
             if int(data.max()) == 0:
                 print("No data in block", block.read_roi)
                 return

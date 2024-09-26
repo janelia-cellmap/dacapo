@@ -16,7 +16,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def validate(run_name: str, iteration: int = 0):
+def validate(run_name: str, iteration: int = 0, datasets_config=None):
     """Validate a run at a given iteration. Loads the weights from a previously
     stored checkpoint. Returns the best parameters and scores for this
     iteration."""
@@ -42,10 +42,10 @@ def validate(run_name: str, iteration: int = 0):
         weights_store = create_weights_store()
         weights_store.retrieve_weights(run, iteration)
 
-    return validate_run(run, iteration)
+    return validate_run(run, iteration, datasets_config)
 
 
-def validate_run(run: Run, iteration: int):
+def validate_run(run: Run, iteration: int, datasets_config=None):
     """Validate an already loaded run at the given iteration. This does not
     load the weights of that iteration, it is assumed that the model is already
     loaded correctly. Returns the best parameters and scores for this
@@ -54,16 +54,14 @@ def validate_run(run: Run, iteration: int):
     torch.backends.cudnn.benchmark = True
     run.model.eval()
 
-    if (
-        run.datasplit.validate is None
+    if (run.datasplit.validate is None
         or len(run.datasplit.validate) == 0
         or run.datasplit.validate[0].gt is None
     ):
-        logger.info("Cannot validate run %s. Continuing training!", run.name)
+        logger.error("Cannot validate run %s. Continuing training!", run.name)
         return None, None
 
     # get array and weight store
-    weights_store = create_weights_store()
     array_store = create_array_store()
     iteration_scores = []
 
@@ -71,9 +69,25 @@ def validate_run(run: Run, iteration: int):
     post_processor = run.task.post_processor
     evaluator = run.task.evaluator
 
+    input_voxel_size = run.datasplit.train[0].raw.voxel_size
+    output_voxel_size = run.model.scale(input_voxel_size)
+
     # Initialize the evaluator with the best scores seen so far
-    evaluator.set_best(run.validation_scores)
-    for validation_dataset in run.datasplit.validate:
+    # evaluator.set_best(run.validation_scores)
+    if datasets_config is None:
+        datasets = run.datasplit.validate
+    else:
+        from dacapo.experiments.datasplits import DataSplitGenerator
+        datasplit_config = DataSplitGenerator(
+            "",
+            datasets_config,
+            input_voxel_size,
+            output_voxel_size,
+            targets = run.task.evaluator.channels
+        ).compute().validate_configs
+        datasets = [validate_config.dataset_type(validate_config) for validate_config in datasplit_config]
+
+    for validation_dataset in datasets:
         assert (
             validation_dataset.gt is not None
         ), "We do not yet support validating on datasets without ground truth"
@@ -94,8 +108,7 @@ def validate_run(run: Run, iteration: int):
             ).exists()
         ):
             logger.info("Copying validation inputs!")
-            input_voxel_size = validation_dataset.raw.voxel_size
-            output_voxel_size = run.model.scale(input_voxel_size)
+            
             input_shape = run.model.eval_input_shape
             input_size = input_voxel_size * input_shape
             output_shape = run.model.compute_output_shape(input_shape)[1]
@@ -158,49 +171,49 @@ def validate_run(run: Run, iteration: int):
 
             scores = evaluator.evaluate(output_array_identifier, validation_dataset.gt)
 
-            for criterion in run.validation_scores.criteria:
-                # replace predictions in array with the new better predictions
-                if evaluator.is_best(
-                    validation_dataset,
-                    parameters,
-                    criterion,
-                    scores,
-                ):
-                    best_array_identifier = array_store.best_validation_array(
-                        run.name, criterion, index=validation_dataset.name
-                    )
-                    best_array = ZarrArray.create_from_array_identifier(
-                        best_array_identifier,
-                        post_processed_array.axes,
-                        post_processed_array.roi,
-                        post_processed_array.num_channels,
-                        post_processed_array.voxel_size,
-                        post_processed_array.dtype,
-                    )
-                    best_array[best_array.roi] = post_processed_array[
-                        post_processed_array.roi
-                    ]
-                    best_array.add_metadata(
-                        {
-                            "iteration": iteration,
-                            criterion: getattr(scores, criterion),
-                            "parameters_id": parameters.id,
-                        }
-                    )
-                    weights_store.store_best(
-                        run, iteration, validation_dataset.name, criterion
-                    )
+            # for criterion in run.validation_scores.criteria:
+            #     # replace predictions in array with the new better predictions
+            #     if evaluator.is_best(
+            #         validation_dataset,
+            #         parameters,
+            #         criterion,
+            #         scores,
+            #     ):
+            #         best_array_identifier = array_store.best_validation_array(
+            #             run.name, criterion, index=validation_dataset.name
+            #         )
+            #         best_array = ZarrArray.create_from_array_identifier(
+            #             best_array_identifier,
+            #             post_processed_array.axes,
+            #             post_processed_array.roi,
+            #             post_processed_array.num_channels,
+            #             post_processed_array.voxel_size,
+            #             post_processed_array.dtype,
+            #         )
+            #         best_array[best_array.roi] = post_processed_array[
+            #             post_processed_array.roi
+            #         ]
+            #         best_array.add_metadata(
+            #             {
+            #                 "iteration": iteration,
+            #                 criterion: getattr(scores, criterion),
+            #                 "parameters_id": parameters.id,
+            #             }
+            #         )
+            #         weights_store.store_best(
+            #             run, iteration, validation_dataset.name, criterion
+            #         )
 
             # delete current output. We only keep the best outputs as determined by
             # the evaluator
-            array_store.remove(output_array_identifier)
+            # array_store.remove(output_array_identifier)
 
             dataset_iteration_scores.append(
                 [getattr(scores, criterion) for criterion in scores.criteria]
             )
 
         iteration_scores.append(dataset_iteration_scores)
-        array_store.remove(prediction_array_identifier)
+        # array_store.remove(prediction_array_identifier)
 
     run.validation_scores.add_iteration_scores(
         ValidationIterationScores(iteration, iteration_scores)

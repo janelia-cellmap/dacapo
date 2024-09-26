@@ -6,7 +6,7 @@ from dacapo.store.create_store import (
     create_weights_store,
 )
 from dacapo.experiments import Run
-from dacapo.validate import validate
+from dacapo.validate import validate_run
 
 import torch
 from tqdm import tqdm
@@ -196,7 +196,7 @@ def train_run(run: Run, do_validate=True):
                         )
                         validate_thread.start()
                     else:
-                        validate(
+                        validate_run(
                             run,
                             iteration_stats.iteration + 1,
                         )
