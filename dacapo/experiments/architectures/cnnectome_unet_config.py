@@ -127,3 +127,7 @@ class CNNectomeUNetConfig(ArchitectureConfig):
             "help_text": "Whether to use attention blocks in the UNet. This is supported for 2D and  3D."
         },
     )
+    batch_norm: bool = attr.ib(
+        default=True,
+        metadata={"help_text": "Whether to use batch normalization."},
+    )

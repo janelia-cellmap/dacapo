@@ -171,7 +171,9 @@ class ResampledArray(Array):
             This method returns the region of interest of the resampled array.
 
         """
-        return self._source_array.roi.snap_to_grid(self.voxel_size, mode="shrink")
+        return self._source_array.roi.snap_to_grid(
+            np.lcm(self._source_array.voxel_size, self.voxel_size), mode="shrink"
+        )
 
     @property
     def writable(self) -> bool:
@@ -281,7 +283,9 @@ class ResampledArray(Array):
         Note:
             This method returns the data of the resampled array within the given region of interest.
         """
-        snapped_roi = roi.snap_to_grid(self._source_array.voxel_size, mode="grow")
+        snapped_roi = roi.snap_to_grid(
+            np.lcm(self._source_array.voxel_size, self.voxel_size), mode="grow"
+        )
         resampled_array = funlib.persistence.Array(
             rescale(
                 self._source_array[snapped_roi].astype(np.float32),
