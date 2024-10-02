@@ -495,7 +495,17 @@ class GunpowderTrainer(Trainer):
         """
         return all([dataset.gt is not None for dataset in datasets])
 
-    def visualize_pipeline(self):
+    def visualize_pipeline(self, bind_address="0.0.0.0", bind_port=0):
+        """
+        Visualizes the pipeline for the run, including all produced arrays.
+
+        Args:
+            bind_address : str
+                Bind address for Neuroglancer webserver
+            bind_port : int
+                Bind port for Neuroglancer webserver
+        """
+
         if self._pipeline is None:
             raise ValueError("Pipeline not initialized!")
 
@@ -568,7 +578,9 @@ class GunpowderTrainer(Trainer):
                     ]
                 )
 
-        neuroglancer.set_server_bind_address("0.0.0.0")
+        neuroglancer.set_server_bind_address(
+            bind_address=bind_address, bind_port=bind_port
+        )
 
         viewer = neuroglancer.Viewer()
 

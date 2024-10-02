@@ -216,9 +216,15 @@ class Run:
     def __str__(self):
         return self.name
 
-    def visualize_pipeline(self):
+    def visualize_pipeline(self, bind_address="0.0.0.0", bind_port=0):
         """
         Visualizes the pipeline for the run, including all produced arrays.
+
+        Args:
+            bind_address : str
+                Bind address for Neuroglancer webserver
+            bind_port : int
+                Bind port for Neuroglancer webserver
 
         Examples:
             >>> run.visualize_pipeline()
@@ -238,4 +244,4 @@ class Run:
                 self.task,
                 array_store.snapshot_container(self.name),
             )
-        self.trainer.visualize_pipeline()
+        self.trainer.visualize_pipeline(bind_address, bind_port)
