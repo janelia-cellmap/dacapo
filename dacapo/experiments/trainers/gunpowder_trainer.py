@@ -501,7 +501,6 @@ class GunpowderTrainer(Trainer):
                 Bind port for Neuroglancer webserver
         """
 
-
         if self._pipeline is None:
             raise ValueError("Pipeline not initialized!")
 
@@ -574,7 +573,9 @@ class GunpowderTrainer(Trainer):
                     ]
                 )
 
-        neuroglancer.set_server_bind_address(bind_address=bind_address, bind_port=bind_port)
+        neuroglancer.set_server_bind_address(
+            bind_address=bind_address, bind_port=bind_port
+        )
 
         viewer = neuroglancer.Viewer()
 
