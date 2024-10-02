@@ -282,7 +282,7 @@ class CNNectomeUNet(Architecture):
                     self.fmaps_out,
                     [(3,) * len(upsample_factor)] * 2,
                     activation="ReLU",
-                    batch_norm= self.batch_norm,
+                    batch_norm=self.batch_norm,
                 )
                 layers.append(conv)
             unet = torch.nn.Sequential(*layers)
@@ -1307,7 +1307,7 @@ class AttentionBlockModule(nn.Module):
            The AttentionBlockModule is an instance of the ``torch.nn.Module`` class.
     """
 
-    def __init__(self, F_g, F_l, F_int, dims, upsample_factor=None,batch_norm=True):
+    def __init__(self, F_g, F_l, F_int, dims, upsample_factor=None, batch_norm=True):
         """
         Initialize the Attention Block Module.
 
@@ -1337,7 +1337,12 @@ class AttentionBlockModule(nn.Module):
             self.upsample_factor = (2,) * self.dims
 
         self.W_g = ConvPass(
-            F_g, F_int, kernel_sizes=self.kernel_sizes, activation=None, padding="same",batch_norm=self.batch_norm
+            F_g,
+            F_int,
+            kernel_sizes=self.kernel_sizes,
+            activation=None,
+            padding="same",
+            batch_norm=self.batch_norm,
         )
 
         self.W_x = nn.Sequential(
@@ -1347,7 +1352,7 @@ class AttentionBlockModule(nn.Module):
                 kernel_sizes=self.kernel_sizes,
                 activation=None,
                 padding="same",
-                batch_norm=self.batch_norm
+                batch_norm=self.batch_norm,
             ),
             Downsample(upsample_factor),
         )
