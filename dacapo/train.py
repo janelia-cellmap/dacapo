@@ -113,7 +113,9 @@ def train_run(run: Run, do_validate=True):
             weights = weights_store.retrieve_weights(run, iteration=trained_until)
 
         elif latest_weights_iteration > trained_until:
-            weights = weights_store.retrieve_weights(run, iteration=latest_weights_iteration)
+            weights = weights_store.retrieve_weights(
+                run, iteration=latest_weights_iteration
+            )
             logger.error(
                 f"Found weights for iteration {latest_weights_iteration}, but "
                 f"run {run.name} was only trained until {trained_until}. "
