@@ -51,7 +51,9 @@ class DataSplit(ABC):
             It creates a Neuroglancer viewer and adds the layers of the training and validation datasets to it.
             Neuroglancer is a powerful tool for visualizing large-scale volumetric data.
         """
-        neuroglancer.set_server_bind_address(bind_address=bind_address, bind_port=bind_port)
+        neuroglancer.set_server_bind_address(
+            bind_address=bind_address, bind_port=bind_port
+        )
         viewer = neuroglancer.Viewer()
         with viewer.txn() as s:
             train_layers = {}

@@ -16,12 +16,12 @@ from typing import Optional
 
 
 def get_viewer(
-    arrays: dict, 
-    width: int = 1500, 
-    height: int = 600, 
+    arrays: dict,
+    width: int = 1500,
+    height: int = 600,
     headless: bool = True,
-    bind_address: str = "0.0.0.0", 
-    bind_port: int = 0
+    bind_address: str = "0.0.0.0",
+    bind_port: int = 0,
 ) -> neuroglancer.Viewer | IFrame:
     """
     Creates a neuroglancer viewer to visualize arrays.
@@ -390,7 +390,9 @@ class NeuroglancerRunViewer:
             >>> viewer = NeuroglancerRunViewer(run)
             >>> viewer.start_neuroglancer()
         """
-        neuroglancer.set_server_bind_address(bind_address=bind_address, bind_port=bind_port)
+        neuroglancer.set_server_bind_address(
+            bind_address=bind_address, bind_port=bind_port
+        )
         self.viewer = neuroglancer.Viewer()
         print(f"Neuroglancer viewer: {self.viewer}")
         with self.viewer.txn() as state:
