@@ -10,7 +10,7 @@ from dacapo.store.create_store import (
 )
 import torch
 
-from pathlib import Path
+from upath import UPath as Path
 import logging
 from dacapo.compute_context import create_compute_context
 
@@ -162,7 +162,7 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
             logger.info("validation inputs already copied!")
 
         prediction_array_identifier = array_store.validation_prediction_array(
-            run.name, iteration + 3, validation_dataset
+            run.name, iteration, validation_dataset
         )
         predict(
             run.model,
@@ -177,7 +177,7 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
 
         for parameters in post_processor.enumerate_parameters():
             output_array_identifier = array_store.validation_output_array(
-                run.name, iteration + 3, parameters, validation_dataset
+                run.name, iteration, parameters, validation_dataset
             )
 
             post_processed_array = post_processor.process(
