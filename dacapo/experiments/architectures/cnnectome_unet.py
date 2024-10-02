@@ -827,7 +827,13 @@ class ConvPass(torch.nn.Module):
     """
 
     def __init__(
-        self, in_channels, out_channels, kernel_sizes, activation, padding="valid", batch_normalize=True
+        self,
+        in_channels,
+        out_channels,
+        kernel_sizes,
+        activation,
+        padding="valid",
+        batch_normalize=True,
     ):
         """
         Convolutional pass module. This module performs a series of
@@ -870,10 +876,14 @@ class ConvPass(torch.nn.Module):
             try:
                 layers.append(conv(in_channels, out_channels, kernel_size, padding=pad))
                 if batch_normalize:
-                    layers.append({
-                        2: torch.nn.BatchNorm2d,
-                        3: torch.nn.BatchNorm3d,
-                    }[self.dims](out_channels))
+                    layers.append(
+                        {
+                            2: torch.nn.BatchNorm2d,
+                            3: torch.nn.BatchNorm3d,
+                        }[
+                            self.dims
+                        ](out_channels)
+                    )
             except KeyError:
                 raise RuntimeError("%dD convolution not implemented" % self.dims)
 

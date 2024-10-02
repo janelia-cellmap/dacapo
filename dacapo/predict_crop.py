@@ -24,7 +24,9 @@ def predict(
 ):
     # get the model's input and output size
     if isinstance(raw_array_identifier, LocalArrayIdentifier):
-        raw_array = open_ds(raw_array_identifier.container.path, raw_array_identifier.dataset)
+        raw_array = open_ds(
+            raw_array_identifier.container.path, raw_array_identifier.dataset
+        )
     else:
         raw_array = raw_array_identifier
     input_voxel_size = Coordinate(raw_array.voxel_size)
@@ -69,14 +71,19 @@ def predict(
     device = compute_context.device
 
     def predict_fn(block):
-        raw_input = to_ndarray(raw_array,block.read_roi)
+        raw_input = to_ndarray(raw_array, block.read_roi)
         # expend batch dim
         # no need to normalize, done by datasplit
         raw_input = np.expand_dims(raw_input, (0, 1))
         with torch.no_grad():
-            predictions = model.forward(torch.from_numpy(raw_input).float().to(device)).detach().cpu().numpy()[0]
+            predictions = (
+                model.forward(torch.from_numpy(raw_input).float().to(device))
+                .detach()
+                .cpu()
+                .numpy()[0]
+            )
             predictions = (predictions + 1) * 255.0 / 2.0
-            predictions[predictions> 250] = 0
+            predictions[predictions > 250] = 0
             predictions = np.round(predictions).astype(np.uint8)
 
             save_ndarray(predictions, block.write_roi, result_dataset)
