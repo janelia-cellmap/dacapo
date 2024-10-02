@@ -433,7 +433,8 @@ class ZarrArray(Array):
     ):
         """
         Create a new ZarrArray given an array identifier. It is assumed that
-            this array_identifier points to a dataset that does not yet exist.
+        this array_identifier points to a dataset that does not yet exist.
+        
         Args:
             array_identifier (ArrayIdentifier): The array identifier.
             axes (List[str]): The axes of the array.
