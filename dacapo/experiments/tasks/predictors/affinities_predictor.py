@@ -4,22 +4,6 @@ from dacapo.experiments.arraytypes import EmbeddingArray
 from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
 from dacapo.utils.affinities import seg_to_affgraph, padding as aff_padding
 from dacapo.utils.balance_weights import balance_weights
-
-from funlib.geometry import Coordinate
-from lsd.train import LsdExtractor
-
-from scipy import ndimage
-import numpy as np
-import torch
-import itertools
-
-from typing import List
-from .predictor import Predictor
-from dacapo.experiments import Model
-from dacapo.experiments.arraytypes import EmbeddingArray
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
-from dacapo.utils.affinities import seg_to_affgraph, padding as aff_padding
-from dacapo.utils.balance_weights import balance_weights
 from funlib.geometry import Coordinate
 from lsd.train import LsdExtractor
 from scipy import ndimage

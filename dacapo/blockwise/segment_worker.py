@@ -48,12 +48,32 @@ path = __file__
 @click.option("--tmpdir", type=str, help="Temporary directory")
 @click.option("--function_path", type=str, help="Path to the segment function")
 def start_worker(
-    input_container: str,
+    input_container: str | Path,
     input_dataset: str,
-    output_container: str,
+    output_container: str | Path,
     output_dataset: str,
-    tmpdir: str,
-    function_path: str,
+    tmpdir: str | Path,
+    function_path: str | Path,
+    return_io_loop: bool = False,
+):
+    return start_worker_fn(
+        input_container=input_container,
+        input_dataset=input_dataset,
+        output_container=output_container,
+        output_dataset=output_dataset,
+        tmpdir=tmpdir,
+        function_path=function_path,
+        return_io_loop=return_io_loop,
+    )
+
+
+def start_worker_fn(
+    input_container: str | Path,
+    input_dataset: str,
+    output_container: str | Path,
+    output_dataset: str,
+    tmpdir: str | Path,
+    function_path: str | Path,
     return_io_loop: bool = False,
 ):
     """
@@ -211,7 +231,7 @@ def spawn_worker(
     """
     compute_context = create_compute_context()
     if not compute_context.distribute_workers:
-        return start_worker(
+        return start_worker_fn(
             input_array_identifier.container,
             input_array_identifier.dataset,
             output_array_identifier.container,
