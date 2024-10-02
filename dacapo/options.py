@@ -133,8 +133,8 @@ class Options:
             PosixPath('/home/user/.config/dacapo/dacapo.yaml')
         """
         env_dict = dict(os.environ)
-        if "OPTIONS_FILE" in env_dict:
-            options_files = [Path(env_dict["OPTIONS_FILE"])]
+        if "DACAPO_OPTIONS_FILE" in env_dict:
+            options_files = [Path(env_dict["DACAPO_OPTIONS_FILE"])]
         else:
             options_files = []
 
@@ -147,7 +147,7 @@ class Options:
         ]
         for path in options_files:
             if path.exists():
-                os.environ["OPTIONS_FILE"] = str(path)
+                os.environ["DACAPO_OPTIONS_FILE"] = str(path)
                 return path
         return None
 
