@@ -83,7 +83,7 @@ def predict(
                 .numpy()[0]
             )
             predictions = (predictions + 1) * 255.0 / 2.0
-            predictions[predictions > 250] = 0
+            predictions[predictions > 254] = 0
             predictions = np.round(predictions).astype(np.uint8)
 
             save_ndarray(predictions, block.write_roi, result_dataset)
