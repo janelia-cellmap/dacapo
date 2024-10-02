@@ -221,7 +221,7 @@ class GunpowderTrainer(Trainer):
             )
 
             dataset_source += gp.Reject(mask_placeholder, 1e-6)
-            dataset_source += gp.Reject(gt_key,0.1)
+            dataset_source += gp.Reject(gt_key, 0.1)
 
             for augment in self.augments:
                 dataset_source += augment.node(raw_key, gt_key, mask_key)

@@ -211,7 +211,6 @@ def bokeh_plot_runs(
             validation_figure.background_fill_color = "#efefef"
             validation_figures[dataset.name] = validation_figure
 
-
     summary_tooltips = [
         ("run", "@run"),
         ("task", "@task"),
@@ -242,7 +241,6 @@ def bokeh_plot_runs(
         if run.plot_loss:
             iterations = [stat.iteration for stat in run.training_stats.iteration_stats]
             losses = [stat.loss for stat in run.training_stats.iteration_stats]
-
 
             if run.plot_loss:
                 include_loss_figure = True
@@ -415,7 +413,6 @@ def plot_runs(
         if run.plot_loss:
             iterations = [stat.iteration for stat in run.training_stats.iteration_stats]
             losses = [stat.loss for stat in run.training_stats.iteration_stats]
-
 
             if run.plot_loss:
                 include_loss_figure = True

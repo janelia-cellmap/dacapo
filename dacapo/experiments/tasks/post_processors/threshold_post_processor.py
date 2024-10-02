@@ -126,7 +126,7 @@ class ThresholdPostProcessor(PostProcessor):
         )
 
         def process_block(block):
-            data = to_ndarray(input_array,block.read_roi) > parameters.threshold
+            data = to_ndarray(input_array, block.read_roi) > parameters.threshold
             data = data.astype(np.uint8)
             if int(data.max()) == 0:
                 print("No data in block", block.read_roi)

@@ -13,6 +13,7 @@ import torch
 from pathlib import Path
 import logging
 from dacapo.compute_context import create_compute_context
+
 logger = logging.getLogger(__name__)
 
 
@@ -59,7 +60,8 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
     torch.backends.cudnn.benchmark = True
     run.model.eval()
 
-    if (run.datasplit.validate is None
+    if (
+        run.datasplit.validate is None
         or len(run.datasplit.validate) == 0
         or run.datasplit.validate[0].gt is None
     ):
@@ -83,14 +85,22 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
         datasets = run.datasplit.validate
     else:
         from dacapo.experiments.datasplits import DataSplitGenerator
-        datasplit_config = DataSplitGenerator(
-            "",
-            datasets_config,
-            input_voxel_size,
-            output_voxel_size,
-            targets = run.task.evaluator.channels
-        ).compute().validate_configs
-        datasets = [validate_config.dataset_type(validate_config) for validate_config in datasplit_config]
+
+        datasplit_config = (
+            DataSplitGenerator(
+                "",
+                datasets_config,
+                input_voxel_size,
+                output_voxel_size,
+                targets=run.task.evaluator.channels,
+            )
+            .compute()
+            .validate_configs
+        )
+        datasets = [
+            validate_config.dataset_type(validate_config)
+            for validate_config in datasplit_config
+        ]
 
     for validation_dataset in datasets:
         assert (
@@ -113,7 +123,7 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
             ).exists()
         ):
             logger.info("Copying validation inputs!")
-            
+
             input_shape = run.model.eval_input_shape
             input_size = input_voxel_size * input_shape
             output_shape = run.model.compute_output_shape(input_shape)[1]
@@ -152,7 +162,7 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
             logger.info("validation inputs already copied!")
 
         prediction_array_identifier = array_store.validation_prediction_array(
-            run.name, iteration+3, validation_dataset
+            run.name, iteration + 3, validation_dataset
         )
         predict(
             run.model,
@@ -167,7 +177,7 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
 
         for parameters in post_processor.enumerate_parameters():
             output_array_identifier = array_store.validation_output_array(
-                run.name, iteration+3, parameters, validation_dataset
+                run.name, iteration + 3, parameters, validation_dataset
             )
 
             post_processed_array = post_processor.process(

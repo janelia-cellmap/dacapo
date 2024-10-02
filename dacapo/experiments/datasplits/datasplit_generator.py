@@ -82,7 +82,9 @@ def resize_if_needed(
         f"have different dimensions {zarr_array.dims}"
     )
     if any([u > 1 or d > 1 for u, d in zip(raw_upsample, raw_downsample)]):
-        print(f"dataset {array_config} needs resampling to {target_resolution}, upsample: {raw_upsample}, downsample: {raw_downsample}")
+        print(
+            f"dataset {array_config} needs resampling to {target_resolution}, upsample: {raw_upsample}, downsample: {raw_downsample}"
+        )
         return ResampledArrayConfig(
             name=f"{extra_str}_{array_config.name}_{array_config.dataset}_resampled",
             source_array_config=array_config,
