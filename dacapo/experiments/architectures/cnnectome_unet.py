@@ -130,6 +130,7 @@ class CNNectomeUNet(Architecture):
                 activation after the upsample operation.
                 - use_attention (optional): Whether or not to use an attention block
                 in the U-Net.
+                - batch_norm (optional): Whether to use batch normalization.
         Raises:
             ValueError: If the input shape is not given.
         Examples:
@@ -170,6 +171,7 @@ class CNNectomeUNet(Architecture):
             self.upsample_factors if self.upsample_factors is not None else []
         )
         self.use_attention = architecture_config.use_attention
+        self.batch_norm = architecture_config.batch_norm
 
         self.unet = self.module()
 
@@ -261,6 +263,7 @@ class CNNectomeUNet(Architecture):
             upsample_channel_contraction=[False]
             + [True] * (len(downsample_factors) - 1),
             use_attention=self.use_attention,
+            batch_norm=self.batch_norm,
         )
         if len(self.upsample_factors) > 0:
             layers = [unet]
@@ -279,6 +282,7 @@ class CNNectomeUNet(Architecture):
                     self.fmaps_out,
                     [(3,) * len(upsample_factor)] * 2,
                     activation="ReLU",
+                    batch_norm= self.batch_norm,
                 )
                 layers.append(conv)
             unet = torch.nn.Sequential(*layers)
@@ -455,6 +459,7 @@ class CNNectomeUNetModule(torch.nn.Module):
         upsample_channel_contraction=False,
         activation_on_upsample=False,
         use_attention=False,
+        batch_norm=True,
     ):
         """
         Create a U-Net::
@@ -573,6 +578,7 @@ class CNNectomeUNetModule(torch.nn.Module):
 
         self.dims = len(downsample_factors[0])
         self.use_attention = use_attention
+        self.batch_norm = batch_norm
 
         # default arguments
 
@@ -611,6 +617,7 @@ class CNNectomeUNetModule(torch.nn.Module):
                     kernel_size_down[level],
                     activation=activation,
                     padding=padding,
+                    batch_norm=self.batch_norm,
                 )
                 for level in range(self.num_levels)
             ]
@@ -668,6 +675,7 @@ class CNNectomeUNetModule(torch.nn.Module):
                                 ),
                                 dims=self.dims,
                                 upsample_factor=downsample_factors[level],
+                                batch_norm=self.batch_norm,
                             )
                             for level in range(self.num_levels - 1)
                         ]
@@ -694,6 +702,7 @@ class CNNectomeUNetModule(torch.nn.Module):
                             kernel_size_up[level],
                             activation=activation,
                             padding=padding,
+                            batch_norm=self.batch_norm,
                         )
                         for level in range(self.num_levels - 1)
                     ]
@@ -833,7 +842,7 @@ class ConvPass(torch.nn.Module):
         kernel_sizes,
         activation,
         padding="valid",
-        batch_normalize=True,
+        batch_norm=True,
     ):
         """
         Convolutional pass module. This module performs a series of
@@ -875,7 +884,7 @@ class ConvPass(torch.nn.Module):
 
             try:
                 layers.append(conv(in_channels, out_channels, kernel_size, padding=pad))
-                if batch_normalize:
+                if batch_norm:
                     layers.append(
                         {
                             2: torch.nn.BatchNorm2d,
@@ -1298,7 +1307,7 @@ class AttentionBlockModule(nn.Module):
            The AttentionBlockModule is an instance of the ``torch.nn.Module`` class.
     """
 
-    def __init__(self, F_g, F_l, F_int, dims, upsample_factor=None):
+    def __init__(self, F_g, F_l, F_int, dims, upsample_factor=None,batch_norm=True):
         """
         Initialize the Attention Block Module.
 
@@ -1321,13 +1330,14 @@ class AttentionBlockModule(nn.Module):
         super(AttentionBlockModule, self).__init__()
         self.dims = dims
         self.kernel_sizes = [(1,) * self.dims, (1,) * self.dims]
+        self.batch_norm = batch_norm
         if upsample_factor is not None:
             self.upsample_factor = upsample_factor
         else:
             self.upsample_factor = (2,) * self.dims
 
         self.W_g = ConvPass(
-            F_g, F_int, kernel_sizes=self.kernel_sizes, activation=None, padding="same"
+            F_g, F_int, kernel_sizes=self.kernel_sizes, activation=None, padding="same",batch_norm=self.batch_norm
         )
 
         self.W_x = nn.Sequential(
@@ -1337,6 +1347,7 @@ class AttentionBlockModule(nn.Module):
                 kernel_sizes=self.kernel_sizes,
                 activation=None,
                 padding="same",
+                batch_norm=self.batch_norm
             ),
             Downsample(upsample_factor),
         )
@@ -1347,6 +1358,7 @@ class AttentionBlockModule(nn.Module):
             kernel_sizes=self.kernel_sizes,
             activation="Sigmoid",
             padding="same",
+            batch_norm=self.batch_norm,
         )
 
         up_mode = {2: "bilinear", 3: "trilinear"}[self.dims]

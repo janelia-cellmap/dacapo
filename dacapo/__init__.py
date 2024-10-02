@@ -8,4 +8,3 @@ from .train import train  # noqa
 from .validate import validate, validate_run  # noqa
 from .predict import predict  # noqa
 from .blockwise import run_blockwise, segment_blockwise  # noqa
-from .submit_predict import full_predict  # noqa
