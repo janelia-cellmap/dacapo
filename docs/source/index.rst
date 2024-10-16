@@ -9,6 +9,7 @@
 
    overview
    install
+   notebooks/minimal_tutorial
    tutorial
    docker
    aws

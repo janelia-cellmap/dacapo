@@ -17,7 +17,11 @@ jobs:
         fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
     - name: install dacapo
       # run: pip install .[docs]
-      run: pip install sphinx-autodoc-typehints sphinx-autoapi sphinx-click sphinx-rtd-theme myst-parser
+      run: pip install sphinx-autodoc-typehints sphinx-autoapi sphinx-click sphinx-rtd-theme myst-parser jupytext ipykernel nbsphinx
+    - name: parse notebooks
+      run: jupytext --to notebook --execute ./docs/source/notebooks/*.py
+    - name: remove notebook scripts
+      run: rm ./docs/source/notebooks/*.py
     - name: Build and Commit
       uses: sphinx-notes/pages@v2
       with:
