@@ -61,6 +61,7 @@
 # %%
 # First we need to create a config store to store our configurations
 import multiprocessing
+
 multiprocessing.set_start_method("fork", force=True)
 from dacapo.store.create_store import create_config_store, create_stats_store
 
@@ -333,7 +334,7 @@ from dacapo.store.create_store import create_config_store
 config_store = create_config_store()
 
 run = Run(config_store.retrieve_run_config("example_run"))
-if __name__ == '__main__':
+if __name__ == "__main__":
     train_run(run)
 
 # %% [markdown]
@@ -358,7 +359,7 @@ num_snapshots = run_config.num_iterations // run_config.trainer_config.snapshot_
 fig, ax = plt.subplots(num_snapshots, 3, figsize=(10, 2 * num_snapshots))
 
 # Set column titles
-column_titles = ['Raw', 'Target', 'Prediction']
+column_titles = ["Raw", "Target", "Prediction"]
 for col in range(3):
     ax[0, col].set_title(column_titles[col])
 
@@ -378,6 +379,5 @@ for snapshot in range(num_snapshots):
     ax[snapshot, 0].imshow(raw[raw.shape[0] // 2, c:-c, c:-c])
     ax[snapshot, 1].imshow(target[target.shape[0] // 2])
     ax[snapshot, 2].imshow(prediction[prediction.shape[0] // 2])
-    ax[snapshot, 0].set_ylabel(f'Snapshot {snapshot_it}')
+    ax[snapshot, 0].set_ylabel(f"Snapshot {snapshot_it}")
 plt.show()
-
