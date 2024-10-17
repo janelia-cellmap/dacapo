@@ -91,6 +91,7 @@ class GunpowderTrainer(Trainer):
         self.augments = trainer_config.augments
         self.mask_integral_downsample_factor = 4
         self.clip_raw = trainer_config.clip_raw
+        self.gt_min_reject = trainer_config.gt_min_reject
 
         self.scheduler = None
 
@@ -221,6 +222,8 @@ class GunpowderTrainer(Trainer):
             )
 
             dataset_source += gp.Reject(mask_placeholder, 1e-6)
+            if self.gt_min_reject is not None:
+                dataset_source += gp.Reject(gt_key, self.gt_min_reject)
 
             for augment in self.augments:
                 dataset_source += augment.node(raw_key, gt_key, mask_key)
@@ -351,11 +354,15 @@ class GunpowderTrainer(Trainer):
                         snapshot_array_identifier = (
                             self.snapshot_container.array_identifier(k)
                         )
+                        if v.num_channels == 1:
+                            channels = None
+                        else:
+                            channels = v.num_channels
                         ZarrArray.create_from_array_identifier(
                             snapshot_array_identifier,
                             v.axes,
                             v.roi,
-                            v.num_channels,
+                            channels,
                             v.voxel_size,
                             v.dtype if not v.dtype == bool else np.float32,
                             model.output_shape * v.voxel_size,

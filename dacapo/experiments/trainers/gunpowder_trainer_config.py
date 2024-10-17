@@ -43,3 +43,11 @@ class GunpowderTrainerConfig(TrainerConfig):
     )
     min_masked: Optional[float] = attr.ib(default=0.15)
     clip_raw: bool = attr.ib(default=False)
+    gt_min_reject: Optional[float] = attr.ib(
+        default=None,
+        metadata={
+            "help_text": "The value to use for the GT mask. If None, the value will be "
+            "determined by the GT mask augment."
+            "e.g. 0.15"
+        },
+    )

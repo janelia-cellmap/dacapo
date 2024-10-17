@@ -6,7 +6,7 @@ from dacapo.store.create_store import (
     create_weights_store,
 )
 from dacapo.experiments import Run
-from dacapo.validate import validate
+from dacapo.validate import validate_run
 
 import torch
 from tqdm import tqdm
@@ -17,7 +17,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def train(run_name: str):
+def train(run_name: str, do_validate=True):
     """
     Train a run
 
@@ -44,7 +44,7 @@ def train(run_name: str):
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
 
-    return train_run(run)
+    return train_run(run, do_validate)
 
 
 def train_run(run: Run, do_validate=True):
@@ -82,6 +82,7 @@ def train_run(run: Run, do_validate=True):
 
     weights_store = create_weights_store()
     latest_weights_iteration = weights_store.latest_iteration(run)
+    weights = None
 
     if trained_until > 0:
         if latest_weights_iteration is None:
@@ -104,19 +105,23 @@ def train_run(run: Run, do_validate=True):
             trained_until = latest_weights_iteration
             run.training_stats.delete_after(trained_until)
             run.validation_scores.delete_after(trained_until)
-            weights_store.retrieve_weights(run, iteration=trained_until)
+            weights = weights_store.retrieve_weights(run, iteration=trained_until)
 
         elif latest_weights_iteration == trained_until:
             print(f"Resuming training from iteration {trained_until}")
 
-            weights_store.retrieve_weights(run, iteration=trained_until)
+            weights = weights_store.retrieve_weights(run, iteration=trained_until)
 
         elif latest_weights_iteration > trained_until:
-            weights_store.retrieve_weights(run, iteration=latest_weights_iteration)
+            weights = weights_store.retrieve_weights(
+                run, iteration=latest_weights_iteration
+            )
             logger.error(
                 f"Found weights for iteration {latest_weights_iteration}, but "
                 f"run {run.name} was only trained until {trained_until}. "
             )
+        if weights is not None:
+            run.model.load_state_dict(weights.model)
 
     # start/resume training
 
@@ -196,7 +201,7 @@ def train_run(run: Run, do_validate=True):
                         )
                         validate_thread.start()
                     else:
-                        validate(
+                        validate_run(
                             run,
                             iteration_stats.iteration + 1,
                         )
