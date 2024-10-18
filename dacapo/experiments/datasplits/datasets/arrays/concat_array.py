@@ -455,7 +455,7 @@ class ConcatArray(Array):
             axis=0,
         )
         if concatenated.shape[0] == 1:
-            print(
+            logger.info(
                 f"Concatenated array has only one channel: {self.name} {concatenated.shape}"
             )
         return concatenated

@@ -1,5 +1,5 @@
 import os
-from pathlib import Path
+from upath import UPath as Path
 import shutil
 from ..fixtures import *
 
@@ -15,6 +15,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
+@pytest.mark.skip(reason="blockwise task is not currently supported")
 @pytest.mark.parametrize(
     "run_config",
     [

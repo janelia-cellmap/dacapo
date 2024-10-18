@@ -4,7 +4,7 @@ from dacapo import Options
 from os.path import expanduser
 
 
-from pathlib import Path
+from upath import UPath as Path
 import textwrap
 
 
@@ -19,8 +19,8 @@ def test_no_config():
 
     # Remove the environment variable
     env_dict = dict(os.environ)
-    if "OPTIONS_FILE" in env_dict:
-        del env_dict["OPTIONS_FILE"]
+    if "DACAPO_OPTIONS_FILE" in env_dict:
+        del env_dict["DACAPO_OPTIONS_FILE"]
 
     # Parse the options
     options = Options.instance()
@@ -61,7 +61,7 @@ def test_local_config_file():
                 """
             )
         )
-        os.environ["OPTIONS_FILE"] = str(config_file)
+        os.environ["DACAPO_OPTIONS_FILE"] = str(config_file)
 
         # Parse the options
         options = Options.instance()

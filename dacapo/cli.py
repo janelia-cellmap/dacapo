@@ -76,8 +76,19 @@ logger = logging.getLogger(__name__)
 @click.option(
     "-r", "--run-name", required=True, type=str, help="The NAME of the run to train."
 )
-def train(run_name):
-    dacapo.train(run_name)  # TODO: run with compute_context
+@click.option(
+    "--no-validation", is_flag=True, help="Disable validation after training."
+)
+def train(run_name, no_validation):
+    """
+    Train a model with the specified run name.
+
+    Args:
+        run_name (str): The name of the run to train.
+        no_validation (bool): Flag to disable validation after training.
+    """
+    do_validate = not no_validation
+    dacapo.train(run_name, do_validate=do_validate)
 
 
 @cli.command()

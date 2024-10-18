@@ -5,8 +5,8 @@ from ..fixtures import *
 
 from dacapo.experiments import Run
 from dacapo.store.create_store import create_config_store, create_weights_store
-from dacapo import predict
-
+from dacapo.predict_local import predict
+from dacapo.store.array_store import LocalArrayIdentifier
 import pytest
 from pytest_lazy_fixtures import lf
 
@@ -15,7 +15,6 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-@pytest.mark.skip(reason="blockwise task is not currently supported")
 @pytest.mark.parametrize(
     "run_config",
     [
@@ -38,7 +37,10 @@ def test_predict(options, run_config, zarr_array, tmp_path):
     # -------------------------------------
 
     # create a store
-
+    input_identifier = LocalArrayIdentifier(
+        Path(zarr_array.file_name), zarr_array.dataset
+    )
+    tmp_output = LocalArrayIdentifier(Path(tmp_path) / "prediciton.zarr", "prediction")
     store = create_config_store()
     weights_store = create_weights_store()
 
@@ -55,33 +57,9 @@ def test_predict(options, run_config, zarr_array, tmp_path):
     # test predicting with iterations for which we know there are weights
     weights_store.store_weights(run, 0)
     predict(
-        run_config.name,
-        iteration=0,
-        input_container=zarr_array.file_name,
-        input_dataset=zarr_array.dataset,
-        output_path=tmp_path,
-        num_workers=4,
+        run.model,
+        input_identifier,
+        tmp_output,
     )
-    weights_store.store_weights(run, 1)
-    predict(
-        run_config.name,
-        iteration=1,
-        input_container=zarr_array.file_name,
-        input_dataset=zarr_array.dataset,
-        output_path=tmp_path,
-        num_workers=4,
-    )
-
-    # test predicting with iterations for which we know there are no weights
-    with pytest.raises(FileNotFoundError):
-        predict(
-            run_config.name,
-            iteration=2,
-            input_container=zarr_array.file_name,
-            input_dataset=zarr_array.dataset,
-            output_path=tmp_path,
-            num_workers=4,
-        )
-
     if debug:
         os.chdir(old_path)
