@@ -127,8 +127,9 @@ class BinarySegmentationEvaluator(Evaluator):
             This function is used to evaluate the output array against the evaluation array.
         """
         output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
-        evaluation_data = evaluation_array[evaluation_array.roi].squeeze()
-        output_data = output_array[output_array.roi].squeeze()
+        # removed the .squeeze() because it was used for batch size and now we are feeding 4d c, z, y, x
+        evaluation_data = evaluation_array[evaluation_array.roi]
+        output_data = output_array[output_array.roi]
         print(
             f"Evaluating binary segmentations on evaluation_data of shape: {evaluation_data.shape}"
         )
