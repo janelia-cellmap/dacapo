@@ -17,7 +17,6 @@ import daisy
 
 import numpy as np
 import click
-from dacapo.blockwise import global_vars
 
 import logging
 
@@ -26,20 +25,6 @@ logger = logging.getLogger(__file__)
 read_write_conflict: bool = False
 fit: str = "valid"
 path = __file__
-
-
-def is_global_run_set(run_name) -> bool:
-    if global_vars.current_run is not None:
-        if global_vars.current_run.name == run_name:
-            return True
-        else:
-            logger.error(
-                f"Found global run {global_vars.current_run.name} but looking for {run_name}"
-            )
-            return False
-    else:
-        logger.error("No global run is set.")
-        return False
 
 
 @click.group()
@@ -131,14 +116,10 @@ def start_worker_fn(
         compute_context = create_compute_context()
         device = compute_context.device
 
-        if is_global_run_set(run_name):
-            logger.warning("Using global run variable")
-            run = global_vars.current_run
-        else:
-            logger.warning("initiating local run in predict_worker")
-            config_store = create_config_store()
-            run_config = config_store.retrieve_run_config(run_name)
-            run = Run(run_config)
+        logger.warning("initiating local run in predict_worker")
+        config_store = create_config_store()
+        run_config = config_store.retrieve_run_config(run_name)
+        run = Run(run_config)
 
         if iteration is not None and compute_context.distribute_workers:
             # create weights store

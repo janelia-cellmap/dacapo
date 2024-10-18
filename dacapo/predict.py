@@ -1,5 +1,4 @@
 from upath import UPath as Path
-from dacapo.blockwise import global_vars
 from dacapo.blockwise import run_blockwise
 import dacapo.blockwise
 from dacapo.experiments import Run
@@ -135,8 +134,6 @@ def predict(
         overwrite=overwrite,
         write_size=output_size,
     )
-
-    global_vars.current_run = run
 
     # run blockwise prediction
     worker_file = str(Path(Path(dacapo.blockwise.__file__).parent, "predict_worker.py"))

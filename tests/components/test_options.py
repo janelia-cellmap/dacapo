@@ -4,7 +4,7 @@ from dacapo import Options
 from os.path import expanduser
 
 
-from pathlib import Path
+from upath import UPath as Path
 import textwrap
 
 
