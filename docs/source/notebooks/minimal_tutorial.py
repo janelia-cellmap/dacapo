@@ -2,6 +2,15 @@
 # # Minimal Tutorial
 #
 
+#  %% [markdown]
+# ## Needed Libraries for this Tutorial
+# For the tutorial we will use data from the `skimage` library, and we will use `matplotlib` to visualize the data. You can install these libraries using the following commands:
+#
+# ```bash
+# pip install 'scikit-image[data]'
+# pip install matplotlib
+# ```
+
 # %% [markdown]
 # ## Introduction and overview
 #
@@ -61,6 +70,7 @@
 # %%
 # First we need to create a config store to store our configurations
 import multiprocessing
+
 multiprocessing.set_start_method("fork", force=True)
 from dacapo.store.create_store import create_config_store, create_stats_store
 
@@ -68,7 +78,7 @@ config_store = create_config_store()
 
 # %% Create some data
 
-import random
+# import random
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -140,6 +150,7 @@ affs_array[affs_array.roi] = (
     )
     * 255
 )
+print("Data saved to cells3d.zarr")
 
 
 # %% [markdown]
@@ -158,59 +169,39 @@ plt.imshow(cell_array.data[30])
 # experiments, but is useful for this tutorial.
 
 # %%
-from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
-from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
-from dacapo.experiments.datasplits.datasets.arrays import (
-    ZarrArrayConfig,
-    IntensitiesArrayConfig,
-)
-from funlib.geometry import Coordinate
+from dacapo.experiments.datasplits import DataSplitGenerator, DatasetSpec
 
-datasplit_config = TrainValidateDataSplitConfig(
-    name="example_datasplit",
-    train_configs=[
-        RawGTDatasetConfig(
-            name="example_dataset",
-            raw_config=IntensitiesArrayConfig(
-                name="example_raw_normalized",
-                source_array_config=ZarrArrayConfig(
-                    name="example_raw",
-                    file_name="cells3d.zarr",
-                    dataset="raw",
-                ),
-                min=0,
-                max=255,
-            ),
-            gt_config=ZarrArrayConfig(
-                name="example_gt",
-                file_name="cells3d.zarr",
-                dataset="mask",
-            ),
-        )
-    ],
-    validate_configs=[
-        RawGTDatasetConfig(
-            name="example_dataset",
-            raw_config=IntensitiesArrayConfig(
-                name="example_raw_normalized",
-                source_array_config=ZarrArrayConfig(
-                    name="example_raw",
-                    file_name="cells3d.zarr",
-                    dataset="raw",
-                ),
-                min=0,
-                max=255,
-            ),
-            gt_config=ZarrArrayConfig(
-                name="example_gt",
-                file_name="cells3d.zarr",
-                dataset="mask",
-            ),
-        )
-    ],
-)
+dataspecs = [
+    DatasetSpec(
+        dataset_type="train",
+        raw_container="cells3d.zarr",
+        raw_dataset="raw",
+        gt_container="cells3d.zarr",
+        gt_dataset="mask",
+    ),
+    DatasetSpec(
+        dataset_type="val",
+        raw_container="cells3d.zarr",
+        raw_dataset="raw",
+        gt_container="cells3d.zarr",
+        gt_dataset="mask",
+    ),
+]
 
+datasplit_config = DataSplitGenerator(
+    name="skimage_tutorial_data",
+    datasets=dataspecs,
+    input_resolution=voxel_size,
+    output_resolution=voxel_size,
+    targets=["cell"],
+).compute()
+
+
+# %%
 datasplit = datasplit_config.datasplit_type(datasplit_config)
+viewer = datasplit._neuroglancer()
+
+# %%
 config_store.store_datasplit_config(datasplit_config)
 
 # %% [markdown]
@@ -227,11 +218,12 @@ from dacapo.experiments.tasks import DistanceTaskConfig, AffinitiesTaskConfig
 # note that the clip_distance, tol_distance, and scale_factor are in nm
 dist_task_config = DistanceTaskConfig(
     name="example_dist",
-    channels=["mito"],
+    channels=["cell"],
     clip_distance=260 * 10.0,
     tol_distance=260 * 10.0,
     scale_factor=260 * 20.0,
 )
+# config_store.delete_task_config(dist_task_config.name)
 config_store.store_task_config(dist_task_config)
 
 # an example affinities task configuration
@@ -239,6 +231,7 @@ affs_task_config = AffinitiesTaskConfig(
     name="example_affs",
     neighborhood=[(0, 1, 0), (0, 0, 1)],
 )
+# config_store.delete_task_config(dist_task_config.name)
 config_store.store_task_config(affs_task_config)
 
 # %% [markdown]
@@ -286,7 +279,7 @@ trainer_config = GunpowderTrainerConfig(
     batch_size=10,
     learning_rate=0.0001,
     num_data_fetchers=8,
-    snapshot_interval=100,
+    snapshot_interval=1000,
     min_masked=0.05,
     clip_raw=False,
 )
@@ -302,7 +295,7 @@ config_store.store_trainer_config(trainer_config)
 from dacapo.experiments import RunConfig
 from dacapo.experiments.run import Run
 
-iterations = 10000
+iterations = 2000
 validation_interval = iterations // 4
 run_config = RunConfig(
     name="example_run",
@@ -326,15 +319,18 @@ config_store.store_run_config(run_config)
 
 # %%
 from dacapo.train import train_run
-from dacapo.validate import validate
+
+# from dacapo.validate import validate
 from dacapo.experiments.run import Run
+
 from dacapo.store.create_store import create_config_store
 
 config_store = create_config_store()
 
 run = Run(config_store.retrieve_run_config("example_run"))
-if __name__ == '__main__':
-    train_run(run)
+# if __name__ == "__main__":
+train_run(run)
+
 
 # %% [markdown]
 # ## Visualize
@@ -358,7 +354,7 @@ num_snapshots = run_config.num_iterations // run_config.trainer_config.snapshot_
 fig, ax = plt.subplots(num_snapshots, 3, figsize=(10, 2 * num_snapshots))
 
 # Set column titles
-column_titles = ['Raw', 'Target', 'Prediction']
+column_titles = ["Raw", "Target", "Prediction"]
 for col in range(3):
     ax[0, col].set_title(column_titles[col])
 
@@ -378,6 +374,5 @@ for snapshot in range(num_snapshots):
     ax[snapshot, 0].imshow(raw[raw.shape[0] // 2, c:-c, c:-c])
     ax[snapshot, 1].imshow(target[target.shape[0] // 2])
     ax[snapshot, 2].imshow(prediction[prediction.shape[0] // 2])
-    ax[snapshot, 0].set_ylabel(f'Snapshot {snapshot_it}')
+    ax[snapshot, 0].set_ylabel(f"Snapshot {snapshot_it}")
 plt.show()
-
