@@ -328,9 +328,9 @@ from dacapo.store.create_store import create_config_store
 config_store = create_config_store()
 
 run = Run(config_store.retrieve_run_config("example_run"))
-# if __name__ == "__main__":
-train_run(run)
 
+if __name__ == "__main__":
+    train_run(run)
 
 # %% [markdown]
 # ## Visualize
