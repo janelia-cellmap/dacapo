@@ -1,4 +1,4 @@
-from .predict_crop import predict
+from .predict_local import predict
 
 from .experiments import Run, ValidationIterationScores
 from .experiments.datasplits.datasets.arrays import ZarrArray

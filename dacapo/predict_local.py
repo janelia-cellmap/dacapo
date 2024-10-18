@@ -25,7 +25,7 @@ def predict(
     # get the model's input and output size
     if isinstance(raw_array_identifier, LocalArrayIdentifier):
         raw_array = open_ds(
-            raw_array_identifier.container.path, raw_array_identifier.dataset
+            str(raw_array_identifier.container), raw_array_identifier.dataset
         )
     else:
         raw_array = raw_array_identifier

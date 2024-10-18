@@ -1,3 +1,5 @@
+# TODO This file should be deleted after we megrate to the new version of funlib.persistence
+
 import numpy as np
 from funlib.persistence import Array
 
