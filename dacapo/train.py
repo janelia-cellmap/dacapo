@@ -6,7 +6,7 @@ from dacapo.store.create_store import (
     create_weights_store,
 )
 from dacapo.experiments import Run
-from dacapo.validate import validate_run
+from dacapo.validate import validate_run, validate
 
 import torch
 from tqdm import tqdm
