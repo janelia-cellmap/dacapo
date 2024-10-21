@@ -386,7 +386,7 @@ fig, ax = plt.subplots(num_validations, 4, figsize=(10, 2 * num_validations))
 
 # Set column titles
 column_titles = ["Raw", "Ground Truth", "Prediction", "Segmentation"]
-for col in range(3):
+for col in range(len(column_titles)):
     ax[0, col].set_title(column_titles[col])
 
 for validation in range(1, num_validations + 1):
