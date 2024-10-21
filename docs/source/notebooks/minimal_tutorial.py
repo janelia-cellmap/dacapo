@@ -407,7 +407,9 @@ for validation in range(1, num_validations + 1):
     prediction = zarr.open(pred_path)[0]
     print(raw.shape, gt.shape, output.shape)
     c = (raw.shape[1] - gt.shape[1]) // 2
-    ax[validation - 1, 0].imshow(raw[raw.shape[0] // 2, c:-c, c:-c])
+    if c != 0:
+        raw = raw[:, c:-c, c:-c]
+    ax[validation - 1, 0].imshow(raw[raw.shape[0] // 2])
     ax[validation - 1, 1].imshow(gt[gt.shape[0] // 2])
     ax[validation - 1, 2].imshow(prediction[prediction.shape[0] // 2])
     ax[validation - 1, 3].imshow(output[output.shape[0] // 2])
