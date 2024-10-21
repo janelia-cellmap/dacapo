@@ -1,8 +1,9 @@
 from .predict_local import predict
 
 from .experiments import Run, ValidationIterationScores
-from .experiments.datasplits.datasets.arrays import ZarrArray
-from dacapo.store.create_store import (
+from dacapo.tmp import create_from_identifier, num_channels_from_array
+
+from .store.create_store import (
     create_array_store,
     create_config_store,
     create_stats_store,
@@ -140,26 +141,28 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
                 .snap_to_grid(validation_dataset.raw.voxel_size, mode="grow")
                 .intersect(validation_dataset.raw.roi)
             )
-            input_raw = ZarrArray.create_from_array_identifier(
+            input_raw = create_from_identifier(
                 input_raw_array_identifier,
-                validation_dataset.raw.axes,
+                validation_dataset.raw.axis_names,
                 input_roi,
-                validation_dataset.raw.num_channels,
+                num_channels_from_array(validation_dataset.raw),
                 validation_dataset.raw.voxel_size,
                 validation_dataset.raw.dtype,
                 name=f"{run.name}_validation_raw",
                 write_size=input_size,
+                overwrite=True,
             )
-            input_raw[input_roi] = validation_dataset.raw[input_roi]
-            input_gt = ZarrArray.create_from_array_identifier(
+            input_raw[input_roi] = validation_dataset.raw[input_roi].squeeze()
+            input_gt = create_from_identifier(
                 input_gt_array_identifier,
-                validation_dataset.gt.axes,
+                validation_dataset.gt.axis_names,
                 output_roi,
-                validation_dataset.gt.num_channels,
+                num_channels_from_array(validation_dataset.gt),
                 validation_dataset.gt.voxel_size,
                 validation_dataset.gt.dtype,
                 name=f"{run.name}_validation_gt",
                 write_size=output_size,
+                overwrite=True,
             )
             input_gt[output_roi] = validation_dataset.gt[output_roi]
         else:
@@ -188,40 +191,67 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
                 parameters, output_array_identifier
             )
 
-            scores = evaluator.evaluate(output_array_identifier, validation_dataset.gt)
+            try:
+                scores = evaluator.evaluate(
+                    output_array_identifier,
+                    validation_dataset.gt,  # type: ignore
+                )
+                # for criterion in run.validation_scores.criteria:
+                #     # replace predictions in array with the new better predictions
+                #     if evaluator.is_best(
+                #         validation_dataset,
+                #         parameters,
+                #         criterion,
+                #         scores,
+                #     ):
+                #         # then this is the current best score for this parameter, but not necessarily the overall best
+                #         # initial_best_score = overall_best_scores[criterion]
+                #         current_score = getattr(scores, criterion)
+                #         if not overall_best_scores[criterion] or evaluator.compare(
+                #             current_score, overall_best_scores[criterion], criterion
+                #         ):
+                #             any_overall_best = True
+                #             overall_best_scores[criterion] = current_score
 
-            # for criterion in run.validation_scores.criteria:
-            #     # replace predictions in array with the new better predictions
-            #     if evaluator.is_best(
-            #         validation_dataset,
-            #         parameters,
-            #         criterion,
-            #         scores,
-            #     ):
-            #         best_array_identifier = array_store.best_validation_array(
-            #             run.name, criterion, index=validation_dataset.name
-            #         )
-            #         best_array = ZarrArray.create_from_array_identifier(
-            #             best_array_identifier,
-            #             post_processed_array.axes,
-            #             post_processed_array.roi,
-            #             post_processed_array.num_channels,
-            #             post_processed_array.voxel_size,
-            #             post_processed_array.dtype,
-            #         )
-            #         best_array[best_array.roi] = post_processed_array[
-            #             post_processed_array.roi
-            #         ]
-            #         best_array.add_metadata(
-            #             {
-            #                 "iteration": iteration,
-            #                 criterion: getattr(scores, criterion),
-            #                 "parameters_id": parameters.id,
-            #             }
-            #         )
-            #         weights_store.store_best(
-            #             run, iteration, validation_dataset.name, criterion
-            #         )
+                #             # For example, if parameter 2 did better this round than it did in other rounds, but it was still worse than parameter 1
+                #             # the code would have overwritten it below since all parameters write to the same file. Now each parameter will be its own file
+                #             # Either we do that, or we only write out the overall best, regardless of parameters
+                #             best_array_identifier = array_store.best_validation_array(
+                #                 run.name,
+                #                 criterion,
+                #                 index=validation_dataset.name,
+                #             )
+                #             best_array = create_from_identifier(
+                #                 best_array_identifier,
+                #                 post_processed_array.axis_names,
+                #                 post_processed_array.roi,
+                #                 num_channels_from_array(post_processed_array),
+                #                 post_processed_array.voxel_size,
+                #                 post_processed_array.dtype,
+                #                 output_size,
+                #             )
+                #             best_array[best_array.roi] = post_processed_array[
+                #                 post_processed_array.roi
+                #             ]
+                #             best_array.add_metadata(
+                #                 {
+                #                     "iteration": iteration,
+                #                     criterion: getattr(scores, criterion),
+                #                     "parameters_id": parameters.id,
+                #                 }
+                #             )
+                #             weights_store.store_best(
+                #                 run.name,
+                #                 iteration,
+                #                 validation_dataset.name,
+                #                 criterion,
+                #             )
+            except:
+                logger.error(
+                    f"Could not evaluate run {run.name} on dataset {validation_dataset.name} with parameters {parameters}.",
+                    exc_info=True,
+                    stack_info=True,
+                )
 
             # delete current output. We only keep the best outputs as determined by
             # the evaluator

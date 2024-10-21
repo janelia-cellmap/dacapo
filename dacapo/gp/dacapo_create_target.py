@@ -1,5 +1,5 @@
 from dacapo.experiments.tasks.predictors import Predictor
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+from dacapo.tmp import gp_to_funlib_array
 
 import gunpowder as gp
 
@@ -152,9 +152,12 @@ class DaCapoTargetFilter(gp.BatchFilter):
         """
         output = gp.Batch()
 
-        gt_array = NumpyArray.from_gp_array(batch[self.gt_key])
+        gt_array = gp_to_funlib_array(batch[self.gt_key])
+        print(gt_array.shape, gt_array.axis_names)
         target_array = self.predictor.create_target(gt_array)
-        mask_array = NumpyArray.from_gp_array(batch[self.mask_key])
+        print(target_array.shape, target_array.axis_names)
+        print(self.predictor)
+        mask_array = gp_to_funlib_array(batch[self.mask_key])
 
         if self.target_key is not None:
             request_spec = request[self.target_key]

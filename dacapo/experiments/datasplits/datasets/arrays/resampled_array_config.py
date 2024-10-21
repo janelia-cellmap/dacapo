@@ -1,7 +1,6 @@
 import attr
 
 from .array_config import ArrayConfig
-from .resampled_array import ResampledArray
 
 from funlib.geometry import Coordinate
 
@@ -22,8 +21,6 @@ class ResampledArrayConfig(ArrayConfig):
         This class is meant to be used with the ArrayDataset class.
 
     """
-
-    array_type = ResampledArray
 
     source_array_config: ArrayConfig = attr.ib(
         metadata={"help_text": "The Array that you want to upsample or downsample."}

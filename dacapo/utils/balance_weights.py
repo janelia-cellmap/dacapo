@@ -126,6 +126,7 @@ def balance_weights(
         total_frac = 1.0
         w_sparse = total_frac / float(num_classes) / fracs
         w = np.zeros(num_classes)
+        print(w.shape, classes, w_sparse)
         w[classes] = w_sparse
 
         # if labels_slab are uint64 take gets very upset

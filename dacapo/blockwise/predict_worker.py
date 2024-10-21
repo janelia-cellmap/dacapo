@@ -3,12 +3,12 @@ from upath import UPath as Path
 from typing import Optional
 
 import torch
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
-from dacapo.gp import DaCapoArraySource
+
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.experiments import Run
 from dacapo.compute_context import create_compute_context
+from dacapo.tmp import open_from_identifier
 import gunpowder as gp
 import gunpowder.torch as gp_torch
 
@@ -134,12 +134,12 @@ def start_worker_fn(
         input_array_identifier = LocalArrayIdentifier(
             Path(input_container), input_dataset
         )
-        raw_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+        raw_array = open_from_identifier(input_array_identifier)
 
         output_array_identifier = LocalArrayIdentifier(
             Path(output_container), output_dataset
         )
-        output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
+        output_array = open_from_identifier(output_array_identifier)
 
         # set benchmark flag to True for performance
         torch.backends.cudnn.benchmark = True
@@ -163,7 +163,7 @@ def start_worker_fn(
         # assemble prediction pipeline
 
         # prepare data source
-        pipeline = DaCapoArraySource(raw_array, raw)
+        pipeline = gp.ArraySource(raw, raw_array)
         # raw: (c, d, h, w)
         pipeline += gp.Pad(raw, None)
         # raw: (c, d, h, w)

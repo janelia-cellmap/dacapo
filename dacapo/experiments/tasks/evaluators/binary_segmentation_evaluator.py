@@ -5,7 +5,7 @@ from .binary_segmentation_evaluation_scores import (
     MultiChannelBinarySegmentationEvaluationScores,
 )
 
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+
 
 import numpy as np
 import SimpleITK as sitk
@@ -110,7 +110,7 @@ class BinarySegmentationEvaluator(Evaluator):
         Args:
             output_array_identifier : str
                 the identifier of the output array
-            evaluation_array : ZarrArray
+            evaluation_array : Zarr Array
                 the evaluation array
         Returns:
             BinarySegmentationEvaluationScores or MultiChannelBinarySegmentationEvaluationScores
@@ -120,13 +120,13 @@ class BinarySegmentationEvaluator(Evaluator):
         Examples:
             >>> binary_segmentation_evaluator = BinarySegmentationEvaluator(clip_distance=200, tol_distance=40, channels=["channel1", "channel2"])
             >>> output_array_identifier = "output_array"
-            >>> evaluation_array = ZarrArray.open_from_array_identifier("evaluation_array")
+            >>> evaluation_array = open_from_identifier("evaluation_array")
             >>> binary_segmentation_evaluator.evaluate(output_array_identifier, evaluation_array)
             BinarySegmentationEvaluationScores(dice=0.0, jaccard=0.0, hausdorff=0.0, false_negative_rate=0.0, false_positive_rate=0.0, false_discovery_rate=0.0, voi=0.0, mean_false_distance=0.0, mean_false_negative_distance=0.0, mean_false_positive_distance=0.0, mean_false_distance_clipped=0.0, mean_false_negative_distance_clipped=0.0, mean_false_positive_distance_clipped=0.0, precision_with_tolerance=0.0, recall_with_tolerance=0.0, f1_score_with_tolerance=0.0, precision=0.0, recall=0.0, f1_score=0.0)
         Note:
             This function is used to evaluate the output array against the evaluation array.
         """
-        output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
+        output_array = open_from_identifier(output_array_identifier)
         # removed the .squeeze() because it was used for batch size and now we are feeding 4d c, z, y, x
         evaluation_data = evaluation_array[evaluation_array.roi]
         output_data = output_array[output_array.roi]
@@ -136,14 +136,14 @@ class BinarySegmentationEvaluator(Evaluator):
         assert (
             evaluation_data.shape == output_data.shape
         ), f"{evaluation_data.shape} vs {output_data.shape}"
-        if "c" in evaluation_array.axes and "c" in output_array.axes:
+        if "c^" in evaluation_array.axis_names and "c^" in output_array.axis_names:
             score_dict = []
             for indx, channel in enumerate(evaluation_array.channels):
                 evaluation_channel_data = evaluation_data.take(
-                    indices=indx, axis=evaluation_array.axes.index("c")
+                    indices=indx, axis=evaluation_array.axis_names.index("c^")
                 )
                 output_channel_data = output_data.take(
-                    indices=indx, axis=output_array.axes.index("c")
+                    indices=indx, axis=output_array.axis_names.index("c^")
                 )
                 evaluator = ArrayEvaluator(
                     evaluation_channel_data,

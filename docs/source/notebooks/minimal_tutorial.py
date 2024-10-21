@@ -109,23 +109,28 @@ units = ["nm", "nm", "nm"]
 
 # Create the zarr array with appropriate metadata
 cell_array = prepare_ds(
-    "cells3d.zarr",
-    "raw",
-    Roi((0, 0, 0), cell_data.shape[1:]) * voxel_size,
+    "cells3d.zarr/raw",
+    cell_data.shape,
+    offset=offset,
     voxel_size=voxel_size,
+    axis_names=axis_names,
+    units=units,
+    mode="w",
     dtype=np.uint8,
-    num_channels=None,
 )
 
 # Save the cell data to the zarr array
-cell_array[cell_array.roi] = cell_data[1]
+cell_array[cell_array.roi] = cell_data
 
 # Generate and save some pseudo ground truth data
 mask_array = prepare_ds(
-    "cells3d.zarr",
-    "mask",
-    Roi((0, 0, 0), cell_data.shape[1:]) * voxel_size,
+    "cells3d.zarr/mask",
+    cell_data.shape[1:],
+    offset=offset,
     voxel_size=voxel_size,
+    axis_names=axis_names[1:],
+    units=units,
+    mode="w",
     dtype=np.uint8,
 )
 cell_mask = np.clip(gaussian(cell_data[1] / 255.0, sigma=1), 0, 255) * 255 > 30
@@ -134,16 +139,18 @@ mask_array[mask_array.roi] = cell_mask * not_membrane_mask
 
 # Generate labels via connected components
 labels_array = prepare_ds(
-    "cells3d.zarr",
-    "labels",
-    Roi((0, 0, 0), cell_data.shape[1:]) * voxel_size,
+    "cells3d.zarr/labels",
+    cell_data.shape[1:],
+    offset=offset,
     voxel_size=voxel_size,
+    axis_names=axis_names[1:],
+    units=units,
+    mode="w",
     dtype=np.uint8,
 )
 labels_array[labels_array.roi] = label(mask_array.to_ndarray(mask_array.roi))[0]
 
 print("Data saved to cells3d.zarr")
-import zarr
 
 print(zarr.open("cells3d.zarr", mode="r").tree())
 # %% [markdown]
@@ -365,9 +372,9 @@ from dacapo.store.create_store import create_config_store
 config_store = create_config_store()
 
 run = Run(config_store.retrieve_run_config("example_run"))
-
 if __name__ == "__main__":
     train_run(run)
+    pass
 
 # %% [markdown]
 # ## Visualize
@@ -375,7 +382,15 @@ if __name__ == "__main__":
 # including snapshots, validation results, and the loss.
 
 # %%
-run.validation_scores.to_xarray()["criteria"].values
+stats_store = create_stats_store()
+training_stats = stats_store.retrieve_training_stats(run_config.name)
+stats = training_stats.to_xarray()
+print(stats)
+plt.plot(stats)
+plt.title("Training Loss")
+plt.xlabel("Iteration")
+plt.ylabel("Loss")
+plt.show()
 
 # %%
 from dacapo.plot import plot_runs
@@ -405,8 +420,10 @@ label_cmap = ListedColormap(colors)
 
 run_path = config_store.path.parent / run_config.name
 
+BROWSER = False
 num_snapshots = run_config.num_iterations // run_config.trainer_config.snapshot_interval
-fig, ax = plt.subplots(num_snapshots, 3, figsize=(10, 2 * num_snapshots))
+if BROWSER:
+    fig, ax = plt.subplots(num_snapshots, 3, figsize=(10, 2 * num_snapshots))
 
 # Set column titles
 column_titles = ["Raw", "Target", "Prediction"]

@@ -1,7 +1,6 @@
 import attr
 
 from .array_config import ArrayConfig
-from .missing_annotations_mask import MissingAnnotationsMask
 
 from typing import List, Tuple
 
@@ -22,8 +21,6 @@ class MissingAnnotationsMaskConfig(ArrayConfig):
         The output array will have a channel dimension equal to the number of groups.
         Each channel will be a binary mask of the ids in the groupings list.
     """
-
-    array_type = MissingAnnotationsMask
 
     source_array_config: ArrayConfig = attr.ib(
         metadata={

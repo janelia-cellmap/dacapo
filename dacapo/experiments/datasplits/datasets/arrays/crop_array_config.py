@@ -1,7 +1,7 @@
 import attr
 
 from .array_config import ArrayConfig
-from .crop_array import CropArray
+from funlib.persistence import Array
 
 from funlib.geometry import Roi
 
@@ -29,10 +29,20 @@ class CropArrayConfig(ArrayConfig):
         and methods. The only difference is that the array_type is CropArray.
     """
 
-    array_type = CropArray
-
     source_array_config: ArrayConfig = attr.ib(
         metadata={"help_text": "The Array to crop"}
     )
 
     roi: Roi = attr.ib(metadata={"help_text": "The ROI for cropping"})
+
+    def array(self, mode: str = "r") -> Array:
+        source_array = self.source_array_config.array(mode)
+        roi_slices = source_array._Array__slices(self.roi)
+        out_array = Array(
+            source_array.data[roi_slices],
+            self.roi.offset,
+            source_array.voxel_size,
+            source_array.axis_names,
+            source_array.units,
+        )
+        return out_array

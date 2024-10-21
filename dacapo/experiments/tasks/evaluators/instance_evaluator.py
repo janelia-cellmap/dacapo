@@ -1,5 +1,5 @@
 from typing import List
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+
 
 from .evaluator import Evaluator
 from .instance_evaluation_scores import InstanceEvaluationScores
@@ -100,7 +100,7 @@ class InstanceEvaluator(Evaluator):
         Args:
             output_array_identifier : str
                 the identifier of the output array
-            evaluation_array : ZarrArray
+            evaluation_array : Zarr Array
                 the evaluation array
         Returns:
             InstanceEvaluationScores
@@ -110,14 +110,14 @@ class InstanceEvaluator(Evaluator):
         Examples:
             >>> instance_evaluator = InstanceEvaluator()
             >>> output_array_identifier = "output_array"
-            >>> evaluation_array = ZarrArray.open_from_array_identifier("evaluation_array")
+            >>> evaluation_array = open_from_identifier("evaluation_array")
             >>> instance_evaluator.evaluate(output_array_identifier, evaluation_array)
             InstanceEvaluationScores(voi_merge=0.0, voi_split=0.0)
         Note:
             This function is used to evaluate the output array against the evaluation array.
 
         """
-        output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
+        output_array = open_from_identifier(output_array_identifier)
         evaluation_data = evaluation_array[evaluation_array.roi].astype(np.uint64)
         output_data = output_array[output_array.roi].astype(np.uint64)
         results = voi(evaluation_data, output_data)

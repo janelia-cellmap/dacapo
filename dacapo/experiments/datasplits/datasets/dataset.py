@@ -1,5 +1,5 @@
-from .arrays import Array
 from funlib.geometry import Coordinate
+from funlib.persistence import Array
 from abc import ABC
 from typing import Optional, Any, List
 

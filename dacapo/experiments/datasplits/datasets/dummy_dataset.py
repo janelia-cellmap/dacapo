@@ -1,6 +1,5 @@
 from .dataset import Dataset
-from .arrays import Array
-
+from funlib.persistence import Array
 
 class DummyDataset(Dataset):
     """
@@ -35,4 +34,4 @@ class DummyDataset(Dataset):
         """
         super().__init__()
         self.name = dataset_config.name
-        self.raw = dataset_config.raw_config.array_type(dataset_config.raw_config)
+        self.raw = dataset_config.raw_config.array()

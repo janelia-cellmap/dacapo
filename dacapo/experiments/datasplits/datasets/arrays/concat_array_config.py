@@ -1,9 +1,11 @@
 import attr
 
 from .array_config import ArrayConfig
-from .concat_array import ConcatArray
 
 from typing import List, Dict, Optional
+from funlib.persistence import Array
+import numpy as np
+import dask.array as da
 
 
 @attr.s
@@ -23,8 +25,6 @@ class ConcatArrayConfig(ArrayConfig):
         The source array is a dictionary with the key being the channel and the value being the array.
     """
 
-    array_type = ConcatArray
-
     channels: List[str] = attr.ib(
         metadata={"help_text": "An ordering for the source_arrays."}
     )
@@ -41,3 +41,22 @@ class ConcatArrayConfig(ArrayConfig):
             "not provided, missing channels will simply be filled with 0s"
         },
     )
+
+    def array(self, mode="r") -> Array:
+        arrays = [config.array(mode) for _, config in self.source_array_configs]
+
+        out_array = Array(
+            da.zeros(len(arrays), *arrays[0].physical_shape, dtype=arrays[0].dtype),
+            offset=arrays[0].offset,
+            voxel_size=arrays[0].voxel_size,
+            axis_names=["c^"] + arrays[0].axis_names,
+            units=arrays[0].units,
+        )
+
+        def set_channels(data):
+            for i, array in enumerate(arrays):
+                data[i] = array.data[:]
+            return data
+
+        out_array.lazy_op(set_channels)
+        return out_array

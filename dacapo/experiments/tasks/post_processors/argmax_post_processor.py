@@ -1,13 +1,13 @@
-import daisy
-from daisy import Roi, Coordinate
-from funlib.persistence import open_ds
-from dacapo.utils.array_utils import to_ndarray, save_ndarray
-from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
+from upath import UPath as Path
+from dacapo.blockwise import run_blockwise
+import dacapo.blockwise
+
 from dacapo.store.array_store import LocalArrayIdentifier
 from .argmax_post_processor_parameters import ArgmaxPostProcessorParameters
 from .post_processor import PostProcessor
 import numpy as np
 from daisy import Roi, Coordinate
+from dacapo.tmp import create_from_identifier
 
 
 class ArgmaxPostProcessor(PostProcessor):
@@ -81,7 +81,7 @@ class ArgmaxPostProcessor(PostProcessor):
             `prediction_array_identifier` attribute.
         """
         self.prediction_array_identifier = prediction_array_identifier
-        self.prediction_array = ZarrArray.open_from_array_identifier(
+        self.prediction_array = open_from_identifier(
             prediction_array_identifier
         )
 
@@ -119,17 +119,9 @@ class ArgmaxPostProcessor(PostProcessor):
                 ]
             )
 
-        write_size = [
-            b * v
-            for b, v in zip(
-                block_size[-self.prediction_array.dims :],
-                self.prediction_array.voxel_size,
-            )
-        ]
-
-        output_array = ZarrArray.create_from_array_identifier(
+        output_array = create_from_identifier(
             output_array_identifier,
-            [dim for dim in self.prediction_array.axes if dim != "c"],
+            [dim for dim in self.prediction_array.axis_names if dim != "c^"],
             self.prediction_array.roi,
             None,
             self.prediction_array.voxel_size,

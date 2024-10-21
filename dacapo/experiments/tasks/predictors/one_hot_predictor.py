@@ -1,7 +1,8 @@
 from .predictor import Predictor
 from dacapo.experiments import Model
 from dacapo.experiments.arraytypes import ProbabilityArray
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+from dacapo.tmp import np_to_funlib_array
+from funlib.persistence import Array
 
 import numpy as np
 import torch
@@ -75,26 +76,20 @@ class OneHotPredictor(Predictor):
 
         return Model(architecture, head)
 
-    def create_target(self, gt):
+    def create_target(self, gt: Array):
         """
-        Create the target array for training.
-
-        Args:
-            gt: The ground truth array.
-        Returns:
-            NumpyArray: The created target array.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> target = predictor.create_target(gt)
-
+        Turn labels into a one hot encoding
         """
-        one_hots = self.process(gt.data)
-        return NumpyArray.from_np_array(
+        label_data = gt[:]
+        if gt.channel_dims == 0:
+            label_data = label_data[np.newaxis]
+        elif gt.channel_dims > 1:
+            raise ValueError(f"Cannot handle multiple channel dims: {gt.channel_dims}")
+        one_hots = self.process(label_data)
+        return np_to_funlib_array(
             one_hots,
-            gt.roi,
+            gt.roi.offset,
             gt.voxel_size,
-            gt.axes,
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
@@ -115,11 +110,10 @@ class OneHotPredictor(Predictor):
 
         """
         return (
-            NumpyArray.from_np_array(
+            np_to_funlib_array(
                 np.ones(target.data.shape),
-                target.roi,
+                target.roi.offset,
                 target.voxel_size,
-                target.axes,
             ),
             None,
         )

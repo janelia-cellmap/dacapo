@@ -10,7 +10,7 @@ from funlib.persistence import Array
 import numpy as np
 import yaml
 from dacapo.compute_context import create_compute_context
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+
 
 from dacapo.store.array_store import LocalArrayIdentifier
 
@@ -93,13 +93,13 @@ def start_worker_fn(
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
     print(f"Opening input array {input_array_identifier}")
-    input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+    input_array = open_from_identifier(input_array_identifier)
 
     output_array_identifier = LocalArrayIdentifier(
         Path(output_container), output_dataset
     )
     print(f"Opening output array {output_array_identifier}")
-    output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
+    output_array = open_from_identifier(output_array_identifier)
 
     # Load segment function
     function_name = Path(function_path).stem

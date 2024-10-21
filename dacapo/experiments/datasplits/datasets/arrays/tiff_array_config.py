@@ -1,7 +1,6 @@
 import attr
 
 from .array_config import ArrayConfig
-from .tiff_array import TiffArray
 
 from funlib.geometry import Coordinate
 
@@ -10,7 +9,7 @@ from typing import List
 
 
 @attr.s
-class ZarrArrayConfig(ArrayConfig):
+class TiffArrayConfig(ArrayConfig):
     """
     This config class provides the necessary configuration for a tiff array
 
@@ -21,13 +20,11 @@ class ZarrArrayConfig(ArrayConfig):
             The offset of the array.
         voxel_size: Coordinate
             The voxel size of the array.
-        axes: List[str]
-            The axes of the array.
+        axis_names: List[str]
+            The axis_names of the array.
     Note:
         This class is a subclass of ArrayConfig.
     """
-
-    array_type = TiffArray
 
     file_name: Path = attr.ib(
         metadata={"help_text": "The file name of the zarr container."}
@@ -41,4 +38,4 @@ class ZarrArrayConfig(ArrayConfig):
     voxel_size: Coordinate = attr.ib(
         metadata={"help_text": "The size of each voxel in each dimension."}
     )
-    axes: List[str] = attr.ib(metadata={"help_text": "The axes of your array"})
+    axis_names: List[str] = attr.ib(metadata={"help_text": "The axis_names of your array"})

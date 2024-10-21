@@ -1,10 +1,12 @@
 from .predictor import Predictor
 from dacapo.experiments import Model
 from dacapo.experiments.arraytypes import EmbeddingArray
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+from dacapo.tmp import np_to_funlib_array
 from dacapo.utils.affinities import seg_to_affgraph, padding as aff_padding
 from dacapo.utils.balance_weights import balance_weights
+from dacapo.tmp import np_to_funlib_array
 from funlib.geometry import Coordinate
+from funlib.persistence import Array
 from lsd.train import LsdExtractor
 from scipy import ndimage
 import numpy as np
@@ -173,20 +175,6 @@ class AffinitiesPredictor(Predictor):
         padding = Coordinate(self.sigma(voxel_size) * multiplier)
         return padding
 
-    @property
-    def num_channels(self):
-        """
-        Get the number of channels.
-
-        Returns:
-            int: The number of channels.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.num_channels
-        """
-        return len(self.neighborhood) + self.num_lsds
-
     def create_model(self, architecture):
         """
         Create the model.
@@ -215,7 +203,7 @@ class AffinitiesPredictor(Predictor):
 
         return Model(architecture, head, eval_activation=torch.nn.Sigmoid())
 
-    def create_target(self, gt):
+    def create_target(self, gt: Array):
         """
         Create the target data.
 
@@ -230,16 +218,19 @@ class AffinitiesPredictor(Predictor):
 
         """
         # zeros
-        assert gt.num_channels is None or gt.num_channels == 1, (
-            "Cannot create affinities from ground truth with multiple channels.\n"
-            f"GT axes: {gt.axes} with {gt.num_channels} channels"
+        assert np.prod(gt.physical_shape) == np.prod(gt.shape), (
+            "Cannot create affinities from ground truth with nonspatial dimensions.\n"
+            f"GT axis_names: {gt.axis_names}"
         )
+        assert (
+            gt.channel_dims <= 1
+        ), "Cannot create affinities from ground truth with more than one channel dimension."
         label_data = gt[gt.roi]
-        axes = gt.axes
-        if gt.num_channels is not None:
+        axis_names = gt.axis_names
+        if gt.channel_dims == 1:
             label_data = label_data[0]
         else:
-            axes = ["c"] + axes
+            axis_names = ["c^"] + axis_names
         affinities = seg_to_affgraph(
             label_data + int(self.background_as_object), self.neighborhood
         ).astype(np.float32)
@@ -248,17 +239,15 @@ class AffinitiesPredictor(Predictor):
                 segmentation=label_data + int(self.background_as_object),
                 voxel_size=gt.voxel_size,
             )
-            return NumpyArray.from_np_array(
+            return np_to_funlib_array(
                 np.concatenate([affinities, descriptors], axis=0, dtype=np.float32),
-                gt.roi,
+                gt.roi.offset,
                 gt.voxel_size,
-                axes,
             )
-        return NumpyArray.from_np_array(
+        return np_to_funlib_array(
             affinities,
-            gt.roi,
+            gt.roi.offset,
             gt.voxel_size,
-            axes,
         )
 
     def _grow_boundaries(self, mask, slab):
@@ -297,7 +286,9 @@ class AffinitiesPredictor(Predictor):
         mask[background] = 0
         return mask
 
-    def create_weight(self, gt, target, mask, moving_class_counts=None):
+    def create_weight(
+        self, gt: Array, target: Array, mask: Array, moving_class_counts=None
+    ):
         """
         Create the weight data.
 
@@ -318,14 +309,15 @@ class AffinitiesPredictor(Predictor):
         )
         if self.grow_boundary_iterations > 0:
             mask_data = self._grow_boundaries(
-                mask[target.roi], slab=tuple(1 if c == "c" else -1 for c in target.axes)
+                mask[target.roi],
+                slab=tuple(1 if c == "c^" else -1 for c in target.axis_names),
             )
         else:
             mask_data = mask[target.roi]
         aff_weights, moving_class_counts = balance_weights(
             target[target.roi][: self.num_channels - self.num_lsds].astype(np.uint8),
             2,
-            slab=tuple(1 if c == "c" else -1 for c in target.axes),
+            slab=tuple(1 if c == "c^" else -1 for c in target.axis_names),
             masks=[mask_data],
             moving_counts=moving_class_counts,
             clipmin=self.affs_weight_clipmin,
@@ -335,7 +327,7 @@ class AffinitiesPredictor(Predictor):
             lsd_weights, moving_lsd_class_counts = balance_weights(
                 (gt[target.roi] > 0).astype(np.uint8),
                 2,
-                slab=(-1,) * len(gt.axes),
+                slab=(-1,) * len(gt.axis_names),
                 masks=[mask_data],
                 moving_counts=moving_lsd_class_counts,
                 clipmin=self.lsd_weight_clipmin,
@@ -344,17 +336,17 @@ class AffinitiesPredictor(Predictor):
             lsd_weights = np.ones(
                 (self.num_lsds,) + aff_weights.shape[1:], dtype=aff_weights.dtype
             ) * lsd_weights.reshape((1,) + aff_weights.shape[1:])
-            return NumpyArray.from_np_array(
+            return np_to_funlib_array(
                 np.concatenate([aff_weights, lsd_weights], axis=0),
                 target.roi,
                 target.voxel_size,
-                target.axes,
+                target.axis_names,
             ), (moving_class_counts, moving_lsd_class_counts)
-        return NumpyArray.from_np_array(
+        return np_to_funlib_array(
             aff_weights,
             target.roi,
             target.voxel_size,
-            target.axes,
+            target.axis_names,
         ), (moving_class_counts, moving_lsd_class_counts)
 
     def gt_region_for_roi(self, target_spec):

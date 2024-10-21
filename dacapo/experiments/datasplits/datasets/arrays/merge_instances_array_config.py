@@ -1,8 +1,7 @@
 import attr
 
 from .array_config import ArrayConfig
-from .merge_instances_array import MergeInstancesArray
-
+from funlib.persistence import Array
 from typing import List
 
 
@@ -23,8 +22,9 @@ class MergeInstancesArrayConfig(ArrayConfig):
         The MergeInstancesArrayConfig class is used to create a MergeInstancesArray
     """
 
-    array_type = MergeInstancesArray
-
     source_array_configs: List[ArrayConfig] = attr.ib(
         metadata={"help_text": "The Array of masks from which to take the union"}
     )
+
+    def array(self, mode: str = "r") -> Array:
+        raise NotImplementedError
