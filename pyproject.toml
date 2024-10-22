@@ -78,6 +78,8 @@ docs = [
     "sphinx-click",
     "sphinx-rtd-theme",
     "myst-parser",
+    "matplotlib",
+    "pooch",
 ]
 examples = [
     "ipython",
