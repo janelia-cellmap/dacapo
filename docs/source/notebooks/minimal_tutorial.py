@@ -401,9 +401,7 @@ for validation in range(1, num_validations + 1):
     )[0]
     pred_path = f"/Users/pattonw/dacapo/example_run/validation.zarr/{validation_it}/ds_{dataset}/prediction"
     out_path = f"/Users/pattonw/dacapo/example_run/validation.zarr/{validation_it}/ds_{dataset}/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))"
-    output = zarr.open(
-        out_path
-    )[:]
+    output = zarr.open(out_path)[:]
     prediction = zarr.open(pred_path)[0]
     print(raw.shape, gt.shape, output.shape)
     c = (raw.shape[1] - gt.shape[1]) // 2
