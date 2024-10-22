@@ -376,3 +376,42 @@ for snapshot in range(num_snapshots):
     ax[snapshot, 2].imshow(prediction[prediction.shape[0] // 2])
     ax[snapshot, 0].set_ylabel(f"Snapshot {snapshot_it}")
 plt.show()
+
+# %%
+# Visualize validations
+import zarr
+
+num_validations = run_config.num_iterations // run_config.validation_interval
+fig, ax = plt.subplots(num_validations, 4, figsize=(10, 2 * num_validations))
+
+# Set column titles
+column_titles = ["Raw", "Ground Truth", "Prediction", "Segmentation"]
+for col in range(len(column_titles)):
+    ax[0, col].set_title(column_titles[col])
+
+for validation in range(1, num_validations + 1):
+    dataset = run.datasplit.validate[0].name
+    validation_it = validation * run_config.validation_interval
+    # break
+    raw = zarr.open(
+        f"/Users/pattonw/dacapo/example_run/validation.zarr/inputs/{dataset}/raw"
+    )[:]
+    gt = zarr.open(
+        f"/Users/pattonw/dacapo/example_run/validation.zarr/inputs/{dataset}/gt"
+    )[0]
+    pred_path = f"/Users/pattonw/dacapo/example_run/validation.zarr/{validation_it}/ds_{dataset}/prediction"
+    out_path = f"/Users/pattonw/dacapo/example_run/validation.zarr/{validation_it}/ds_{dataset}/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))"
+    output = zarr.open(
+        out_path
+    )[:]
+    prediction = zarr.open(pred_path)[0]
+    print(raw.shape, gt.shape, output.shape)
+    c = (raw.shape[1] - gt.shape[1]) // 2
+    if c != 0:
+        raw = raw[:, c:-c, c:-c]
+    ax[validation - 1, 0].imshow(raw[raw.shape[0] // 2])
+    ax[validation - 1, 1].imshow(gt[gt.shape[0] // 2])
+    ax[validation - 1, 2].imshow(prediction[prediction.shape[0] // 2])
+    ax[validation - 1, 3].imshow(output[output.shape[0] // 2])
+    ax[validation - 1, 0].set_ylabel(f"Validation {validation_it}")
+plt.show()
