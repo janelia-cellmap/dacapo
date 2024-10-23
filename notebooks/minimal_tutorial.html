@@ -1,0 +1,640 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minimal Tutorial &mdash; DaCapo  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tutorial: A Simple Experiment in Python" href="../tutorial.html" />
+    <link rel="prev" title="Installation" href="../install.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            DaCapo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">DaCapo API:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Minimal Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#needed-libraries-for-this-tutorial">Needed Libraries for this Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#introduction-and-overview">Introduction and overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-setup">Environment setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#config-store">Config Store</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-preparation">Data Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#datasplit">Datasplit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task">Task</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-do-you-want-to-learn">What do you want to learn?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#architecture">Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#trainer">Trainer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run">Run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#train">Train</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#visualize">Visualize</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../aws.html">AWS EC2 Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autoapi/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">CLI</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">DaCapo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Minimal Tutorial</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/minimal_tutorial.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="minimal-tutorial">
+<h1>Minimal Tutorial<a class="headerlink" href="#minimal-tutorial" title="Link to this heading"></a></h1>
+<p>DaCapo is a framework for easy application of established machine learning techniques on large, multi-dimensional images.
+<img alt="DaCapo Diagram" src="https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/dacapo_diagram.png" /></p>
+<section id="needed-libraries-for-this-tutorial">
+<h2>Needed Libraries for this Tutorial<a class="headerlink" href="#needed-libraries-for-this-tutorial" title="Link to this heading"></a></h2>
+<p>For the tutorial we will use data from the <code class="docutils literal notranslate"><span class="pre">skimage</span></code> library, and we will use <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> to visualize the data. You can install these libraries using the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;scikit-image[data]&#39;</span>
+pip<span class="w"> </span>install<span class="w"> </span>matplotlib
+</pre></div>
+</div>
+</section>
+<section id="introduction-and-overview">
+<h2>Introduction and overview<a class="headerlink" href="#introduction-and-overview" title="Link to this heading"></a></h2>
+<p>In this tutorial we will cover the basics of running an ML experiment with DaCapo.</p>
+<p>DaCapo has 4 major configurable components:</p>
+<ol class="arabic simple">
+<li><p><strong>dacapo.datasplits.DataSplit</strong></p></li>
+<li><p><strong>dacapo.tasks.Task</strong></p></li>
+<li><p><strong>dacapo.architectures.Architecture</strong></p></li>
+<li><p><strong>dacapo.trainers.Trainer</strong></p></li>
+</ol>
+<p>These are then combined in a single <strong>dacapo.experiments.Run</strong> that includes
+your starting point (whether you want to start training from scratch or
+continue off of a previously trained model) and stopping criterion (the number
+of iterations you want to train).</p>
+</section>
+<section id="environment-setup">
+<h2>Environment setup<a class="headerlink" href="#environment-setup" title="Link to this heading"></a></h2>
+<p>If you have not already done so, you will need to install DaCapo. You can do this
+by first creating a new environment and then installing DaCapo using pip.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>dacapo<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
+conda<span class="w"> </span>activate<span class="w"> </span>dacapo
+</pre></div>
+</div>
+<p>Then, you can install DaCapo using pip, via GitHub:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/janelia-cellmap/dacapo.git
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>dacapo-ml
+</pre></div>
+</div>
+<p>Be sure to select this environment in your Jupyter notebook or JupyterLab.</p>
+</section>
+<section id="config-store">
+<h2>Config Store<a class="headerlink" href="#config-store" title="Link to this heading"></a></h2>
+<p>Configs, model checkpoints, stats, and snapshots can be saved in:</p>
+<ul class="simple">
+<li><p>a local folder</p></li>
+<li><p>an S3 bucket</p></li>
+<li><p>a MongoDB server</p></li>
+</ul>
+<p>To define where the data goes, create a <code class="docutils literal notranslate"><span class="pre">dacapo.yaml</span></code> configuration file either in <code class="docutils literal notranslate"><span class="pre">~/.config/dacapo/dacapo.yaml</span></code> or in <code class="docutils literal notranslate"><span class="pre">./dacapo.yaml</span></code>. Here is a template:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">files</span>
+<span class="nt">runs_base_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/my/data/storage</span>
+</pre></div>
+</div>
+<p>Alternatively, you can define it by setting an environment variable: <code class="docutils literal notranslate"><span class="pre">DACAPO_OPTIONS_FILE=/PATH/TO/MY/DACAPO_FILES</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">runs_base_dir</span></code> defines where your on-disk data will be stored. The <code class="docutils literal notranslate"><span class="pre">type</span></code> setting determines the database backend. The default is <code class="docutils literal notranslate"><span class="pre">files</span></code>, which stores the data in a file tree on disk. Alternatively, you can use <code class="docutils literal notranslate"><span class="pre">mongodb</span></code> to store the data in a MongoDB database. To use MongoDB, you will need to provide a <code class="docutils literal notranslate"><span class="pre">mongodbhost</span></code> and <code class="docutils literal notranslate"><span class="pre">mongodbname</span></code> in the configuration file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">mongodbhost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mongodb://dbuser:dbpass@dburl:dbport/</span>
+<span class="nt">mongodbname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dacapo</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First we need to create a config store to store our configurations</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+
+<span class="c1"># This line is mostly for MacOS users to avoid a bug in multiprocessing</span>
+<span class="n">multiprocessing</span><span class="o">.</span><span class="n">set_start_method</span><span class="p">(</span><span class="s2">&quot;fork&quot;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">dacapo.store.create_store</span> <span class="kn">import</span> <span class="n">create_config_store</span><span class="p">,</span> <span class="n">create_stats_store</span>
+
+<span class="n">config_store</span> <span class="o">=</span> <span class="n">create_config_store</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.10.15/x64/lib/python3.10/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating FileConfigStore:
+	path: /home/runner/dacapo/configs
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-preparation">
+<h2>Data Preparation<a class="headerlink" href="#data-preparation" title="Link to this heading"></a></h2>
+<p>DaCapo works with zarr, so we will download <a class="reference external" href="https://scikit-image.org/docs/stable/api/skimage.data.html#skimage.data.cells3d">skimage example cell data</a> and save it as a zarr file.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">funlib.geometry</span> <span class="kn">import</span> <span class="n">Coordinate</span><span class="p">,</span> <span class="n">Roi</span>
+<span class="kn">from</span> <span class="nn">funlib.persistence</span> <span class="kn">import</span> <span class="n">prepare_ds</span>
+<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="kn">import</span> <span class="n">label</span>
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="kn">import</span> <span class="n">data</span>
+<span class="kn">from</span> <span class="nn">skimage.filters</span> <span class="kn">import</span> <span class="n">gaussian</span>
+
+<span class="c1"># Download the data</span>
+<span class="n">cell_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">cells3d</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">/</span> <span class="mi">256</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+<span class="c1"># Handle metadata</span>
+<span class="n">offset</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">voxel_size</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">290</span><span class="p">,</span> <span class="mi">260</span><span class="p">,</span> <span class="mi">260</span><span class="p">)</span>
+<span class="n">axis_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;c^&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">]</span>
+<span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nm&quot;</span><span class="p">,</span> <span class="s2">&quot;nm&quot;</span><span class="p">,</span> <span class="s2">&quot;nm&quot;</span><span class="p">]</span>
+
+<span class="c1"># Create the zarr array with appropriate metadata</span>
+<span class="n">cell_array</span> <span class="o">=</span> <span class="n">prepare_ds</span><span class="p">(</span>
+    <span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+    <span class="n">Roi</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">cell_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">*</span> <span class="n">voxel_size</span><span class="p">,</span>
+    <span class="n">voxel_size</span><span class="o">=</span><span class="n">voxel_size</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span>
+    <span class="n">num_channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Save the cell data to the zarr array</span>
+<span class="n">cell_array</span><span class="p">[</span><span class="n">cell_array</span><span class="o">.</span><span class="n">roi</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Generate and save some pseudo ground truth data</span>
+<span class="n">mask_array</span> <span class="o">=</span> <span class="n">prepare_ds</span><span class="p">(</span>
+    <span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mask&quot;</span><span class="p">,</span>
+    <span class="n">Roi</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">cell_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">*</span> <span class="n">voxel_size</span><span class="p">,</span>
+    <span class="n">voxel_size</span><span class="o">=</span><span class="n">voxel_size</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">cell_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">gaussian</span><span class="p">(</span><span class="n">cell_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span> <span class="o">*</span> <span class="mi">255</span> <span class="o">&gt;</span> <span class="mi">30</span>
+<span class="n">not_membrane_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">gaussian</span><span class="p">(</span><span class="n">cell_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span> <span class="o">*</span> <span class="mi">255</span> <span class="o">&lt;</span> <span class="mi">10</span>
+<span class="n">mask_array</span><span class="p">[</span><span class="n">mask_array</span><span class="o">.</span><span class="n">roi</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell_mask</span> <span class="o">*</span> <span class="n">not_membrane_mask</span>
+
+<span class="c1"># Generate labels via connected components</span>
+<span class="n">labels_array</span> <span class="o">=</span> <span class="n">prepare_ds</span><span class="p">(</span>
+    <span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;labels&quot;</span><span class="p">,</span>
+    <span class="n">Roi</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">cell_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">*</span> <span class="n">voxel_size</span><span class="p">,</span>
+    <span class="n">voxel_size</span><span class="o">=</span><span class="n">voxel_size</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">labels_array</span><span class="p">[</span><span class="n">labels_array</span><span class="o">.</span><span class="n">roi</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span><span class="p">(</span><span class="n">mask_array</span><span class="o">.</span><span class="n">to_ndarray</span><span class="p">(</span><span class="n">mask_array</span><span class="o">.</span><span class="n">roi</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data saved to cells3d.zarr&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">zarr</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">tree</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data saved to cells3d.zarr
+/
+ ├── labels (60, 256, 256) uint8
+ ├── mask (60, 256, 256) uint8
+ └── raw (60, 256, 256) uint8
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here we show a slice of the raw data:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># a custom label color map for showing instances</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="c1"># Show the raw data</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">cell_array</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">30</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Raw Data&quot;</span><span class="p">)</span>
+
+<span class="c1"># Show the labels using the custom label color map</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">labels_array</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">30</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Labels&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/7bcc41b2e8c9ecea9d3960b78d0841b6e9abdcd7b93e9589e8378151e1c3d58e.png" src="../_images/7bcc41b2e8c9ecea9d3960b78d0841b6e9abdcd7b93e9589e8378151e1c3d58e.png" />
+</div>
+</div>
+</section>
+<section id="datasplit">
+<h2>Datasplit<a class="headerlink" href="#datasplit" title="Link to this heading"></a></h2>
+<p>Where can you find your data? What format is it in? Does it need to be normalized?
+What data do you want to use for validation?</p>
+<p>We have already saved some data in <code class="docutils literal notranslate"><span class="pre">cells3d.zarr</span></code>. We will use this data for
+training and validation. We only have one dataset, so we will be using the
+same data for both training and validation. This is not recommended for real
+experiments, but is useful for this tutorial.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits</span> <span class="kn">import</span> <span class="n">DataSplitGenerator</span><span class="p">,</span> <span class="n">DatasetSpec</span>
+
+<span class="n">dataspecs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">DatasetSpec</span><span class="p">(</span>
+        <span class="n">dataset_type</span><span class="o">=</span><span class="n">type_crop</span><span class="p">,</span>
+        <span class="n">raw_container</span><span class="o">=</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
+        <span class="n">raw_dataset</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+        <span class="n">gt_container</span><span class="o">=</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
+        <span class="n">gt_dataset</span><span class="o">=</span><span class="s2">&quot;labels&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">type_crop</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;val&quot;</span><span class="p">]</span>
+<span class="p">]</span>
+
+<span class="n">datasplit_config</span> <span class="o">=</span> <span class="n">DataSplitGenerator</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;skimage_tutorial_data&quot;</span><span class="p">,</span>
+    <span class="n">datasets</span><span class="o">=</span><span class="n">dataspecs</span><span class="p">,</span>
+    <span class="n">input_resolution</span><span class="o">=</span><span class="n">voxel_size</span><span class="p">,</span>
+    <span class="n">output_resolution</span><span class="o">=</span><span class="n">voxel_size</span><span class="p">,</span>
+    <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell&quot;</span><span class="p">],</span>
+<span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">datasplit</span> <span class="o">=</span> <span class="n">datasplit_config</span><span class="o">.</span><span class="n">datasplit_type</span><span class="p">(</span><span class="n">datasplit_config</span><span class="p">)</span>
+<span class="c1"># viewer = datasplit._neuroglancer()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">config_store</span><span class="o">.</span><span class="n">store_datasplit_config</span><span class="p">(</span><span class="n">datasplit_config</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="task">
+<h2>Task<a class="headerlink" href="#task" title="Link to this heading"></a></h2>
+<section id="what-do-you-want-to-learn">
+<h3>What do you want to learn?<a class="headerlink" href="#what-do-you-want-to-learn" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Instance Segmentation</strong>: Identify and separate individual objects within an image.</p></li>
+<li><p><strong>Affinities</strong>: Learn the likelihood of neighboring pixels belonging to the same object.</p></li>
+<li><p><strong>Distance Transform</strong>: Calculate the distance of each pixel to the nearest object boundary.</p></li>
+<li><p><strong>Foreground/Background</strong>: Distinguish between object pixels and background pixels.</p></li>
+</ul>
+<p>Each of these tasks is commonly learned and evaluated with specific loss functions and evaluation metrics. Some tasks may also require specific non-linearities or output formats from your model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.tasks</span> <span class="kn">import</span> <span class="n">DistanceTaskConfig</span><span class="p">,</span> <span class="n">AffinitiesTaskConfig</span>
+
+<span class="n">resolution</span> <span class="o">=</span> <span class="mi">260</span>  <span class="c1"># nm</span>
+<span class="c1"># an example distance task configuration</span>
+<span class="c1"># note that the clip_distance, tol_distance, and scale_factor are in nm</span>
+<span class="n">dist_task_config</span> <span class="o">=</span> <span class="n">DistanceTaskConfig</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_dist&quot;</span><span class="p">,</span>
+    <span class="n">channels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell&quot;</span><span class="p">],</span>
+    <span class="n">clip_distance</span><span class="o">=</span><span class="n">resolution</span> <span class="o">*</span> <span class="mf">10.0</span><span class="p">,</span>
+    <span class="n">tol_distance</span><span class="o">=</span><span class="n">resolution</span> <span class="o">*</span> <span class="mf">10.0</span><span class="p">,</span>
+    <span class="n">scale_factor</span><span class="o">=</span><span class="n">resolution</span> <span class="o">*</span> <span class="mf">20.0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># if the config already exists, delete it first</span>
+<span class="c1"># config_store.delete_task_config(dist_task_config.name)</span>
+<span class="n">config_store</span><span class="o">.</span><span class="n">store_task_config</span><span class="p">(</span><span class="n">dist_task_config</span><span class="p">)</span>
+
+<span class="c1"># an example affinities task configuration</span>
+<span class="n">affs_task_config</span> <span class="o">=</span> <span class="n">AffinitiesTaskConfig</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_affs&quot;</span><span class="p">,</span>
+    <span class="n">neighborhood</span><span class="o">=</span><span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
+<span class="p">)</span>
+<span class="c1"># config_store.delete_task_config(dist_task_config.name)</span>
+<span class="n">config_store</span><span class="o">.</span><span class="n">store_task_config</span><span class="p">(</span><span class="n">affs_task_config</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading"></a></h2>
+<p>The setup of the network you will train. Biomedical image to image translation
+often utilizes a UNet, but even after choosing a UNet you still need to provide
+some additional parameters. How much do you want to downsample? How many
+convolutional layers do you want?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.architectures</span> <span class="kn">import</span> <span class="n">CNNectomeUNetConfig</span>
+
+<span class="c1"># Note we make this UNet 2D by defining kernel_size_down, kernel_size_up, and downsample_factors</span>
+<span class="c1"># all with 1s in z meaning no downsampling or convolving in the z direction.</span>
+<span class="n">architecture_config</span> <span class="o">=</span> <span class="n">CNNectomeUNetConfig</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_unet&quot;</span><span class="p">,</span>
+    <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">132</span><span class="p">,</span> <span class="mi">132</span><span class="p">),</span>
+    <span class="n">eval_shape_increase</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+    <span class="n">fmaps_in</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">num_fmaps</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">fmaps_out</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">fmap_inc_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">downsample_factors</span><span class="o">=</span><span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)],</span>
+    <span class="n">kernel_size_down</span><span class="o">=</span><span class="p">[[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">kernel_size_up</span><span class="o">=</span><span class="p">[[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">constant_upsample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;valid&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">config_store</span><span class="o">.</span><span class="n">store_architecture_config</span><span class="p">(</span><span class="n">architecture_config</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="trainer">
+<h2>Trainer<a class="headerlink" href="#trainer" title="Link to this heading"></a></h2>
+<p>How do you want to train? This config defines the training loop and how
+the other three components work together. What sort of augmentations to
+apply during training, what learning rate and optimizer to use, what
+batch size to train with.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.trainers</span> <span class="kn">import</span> <span class="n">GunpowderTrainerConfig</span>
+
+<span class="n">trainer_config</span> <span class="o">=</span> <span class="n">GunpowderTrainerConfig</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example&quot;</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+    <span class="n">num_data_fetchers</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">snapshot_interval</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">min_masked</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">clip_raw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">config_store</span><span class="o">.</span><span class="n">store_trainer_config</span><span class="p">(</span><span class="n">trainer_config</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="run">
+<h2>Run<a class="headerlink" href="#run" title="Link to this heading"></a></h2>
+<p>Now that we have our components configured, we just need to combine them
+into a run and start training. We can have multiple repetitions of a single
+set of configs in order to increase our chances of finding an optimum.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments</span> <span class="kn">import</span> <span class="n">RunConfig</span>
+<span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+
+<span class="n">iterations</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">validation_interval</span> <span class="o">=</span> <span class="n">iterations</span> <span class="o">//</span> <span class="mi">4</span>
+<span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_run&quot;</span><span class="p">,</span>
+    <span class="n">datasplit_config</span><span class="o">=</span><span class="n">datasplit_config</span><span class="p">,</span>
+    <span class="n">task_config</span><span class="o">=</span><span class="n">affs_task_config</span><span class="p">,</span>
+    <span class="n">architecture_config</span><span class="o">=</span><span class="n">architecture_config</span><span class="p">,</span>
+    <span class="n">trainer_config</span><span class="o">=</span><span class="n">trainer_config</span><span class="p">,</span>
+    <span class="n">num_iterations</span><span class="o">=</span><span class="n">iterations</span><span class="p">,</span>
+    <span class="n">validation_interval</span><span class="o">=</span><span class="n">validation_interval</span><span class="p">,</span>
+    <span class="n">repetition</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">config_store</span><span class="o">.</span><span class="n">store_run_config</span><span class="p">(</span><span class="n">run_config</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="train">
+<h2>Train<a class="headerlink" href="#train" title="Link to this heading"></a></h2>
+<p>NOTE: The run stats are stored in the <code class="docutils literal notranslate"><span class="pre">runs_base_dir/stats</span></code> directory.
+You can delete this directory to remove all stored stats if you want to re-run training.
+Otherwise, the stats will be appended to the existing files, and the run won’t start
+from scratch. This may cause errors.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.train</span> <span class="kn">import</span> <span class="n">train_run</span>
+
+<span class="c1"># from dacapo.validate import validate</span>
+<span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+
+<span class="kn">from</span> <span class="nn">dacapo.store.create_store</span> <span class="kn">import</span> <span class="n">create_config_store</span>
+
+<span class="n">config_store</span> <span class="o">=</span> <span class="n">create_config_store</span><span class="p">()</span>
+
+<span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">(</span><span class="n">config_store</span><span class="o">.</span><span class="n">retrieve_run_config</span><span class="p">(</span><span class="s2">&quot;example_run&quot;</span><span class="p">))</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">train_run</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating FileConfigStore:
+	path: /home/runner/dacapo/configs
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Starting/resuming training for run example_run...
+Creating FileStatsStore:
+	path    : /home/runner/dacapo/stats
+Trained until 2000, but validated until 2001! Deleting extra validation stats
+Current state: trained until 2000/2000
+Creating local weights store in directory /home/runner/dacapo
+Resuming training from iteration 2000
+Retrieving weights for run example_run, iteration 2000
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Trained until 2000. Finished.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualize">
+<h2>Visualize<a class="headerlink" href="#visualize" title="Link to this heading"></a></h2>
+<p>Let’s visualize the results of the training run. DaCapo saves a few artifacts during training
+including snapshots, validation results, and the loss.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats_store</span> <span class="o">=</span> <span class="n">create_stats_store</span><span class="p">()</span>
+<span class="n">training_stats</span> <span class="o">=</span> <span class="n">stats_store</span><span class="o">.</span><span class="n">retrieve_training_stats</span><span class="p">(</span><span class="n">run_config</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">training_stats</span><span class="o">.</span><span class="n">to_xarray</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Training Loss&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Loss&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating FileStatsStore:
+	path    : /home/runner/dacapo/stats
+</pre></div>
+</div>
+<img alt="../_images/97b2edf7e99216bd990eef2c7597672b7c0cfe34cad52e451d4ff080ec986ee9.png" src="../_images/97b2edf7e99216bd990eef2c7597672b7c0cfe34cad52e451d4ff080ec986ee9.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import zarr</span>
+<span class="c1"># from matplotlib.colors import ListedColormap</span>
+
+<span class="c1"># np.random.seed(1)</span>
+<span class="c1"># colors = [[0, 0, 0]] + [list(np.random.choice(range(256), size=3)) for _ in range(254)]</span>
+<span class="c1"># label_cmap = ListedColormap(colors)</span>
+<span class="c1"># run_path = config_store.path / run_config.name</span>
+
+<span class="c1"># num_snapshots = run_config.num_iterations // run_config.trainer_config.snapshot_interval</span>
+<span class="c1"># fig, ax = plt.subplots(num_snapshots, 3, figsize=(10, 2 * num_snapshots))</span>
+
+<span class="c1"># # Set column titles</span>
+<span class="c1"># column_titles = [&quot;Raw&quot;, &quot;Target&quot;, &quot;Prediction&quot;]</span>
+<span class="c1"># for col in range(3):</span>
+<span class="c1">#     ax[0, col].set_title(column_titles[col])</span>
+
+<span class="c1"># for snapshot in range(num_snapshots):</span>
+<span class="c1">#     snapshot_it = snapshot * run_config.trainer_config.snapshot_interval</span>
+<span class="c1">#     # break</span>
+<span class="c1">#     raw = zarr.open(f&quot;{run_path}/snapshot.zarr/{snapshot_it}/volumes/raw&quot;)[:]</span>
+<span class="c1">#     target = zarr.open(f&quot;{run_path}/snapshot.zarr/{snapshot_it}/volumes/target&quot;)[0]</span>
+<span class="c1">#     prediction = zarr.open(</span>
+<span class="c1">#         f&quot;{run_path}/snapshot.zarr/{snapshot_it}/volumes/prediction&quot;</span>
+<span class="c1">#     )[0]</span>
+<span class="c1">#     c = (raw.shape[1] - target.shape[1]) // 2</span>
+<span class="c1">#     ax[snapshot, 0].imshow(raw[raw.shape[0] // 2, c:-c, c:-c])</span>
+<span class="c1">#     ax[snapshot, 1].imshow(target[target.shape[0] // 2])</span>
+<span class="c1">#     ax[snapshot, 2].imshow(prediction[prediction.shape[0] // 2])</span>
+<span class="c1">#     ax[snapshot, 0].set_ylabel(f&quot;Snapshot {snapshot_it}&quot;)</span>
+<span class="c1"># plt.show()</span>
+
+<span class="c1"># # %%</span>
+<span class="c1"># # Visualize validations</span>
+<span class="c1"># import zarr</span>
+
+<span class="c1"># num_validations = run_config.num_iterations // run_config.validation_interval</span>
+<span class="c1"># fig, ax = plt.subplots(num_validations, 4, figsize=(10, 2 * num_validations))</span>
+
+<span class="c1"># # Set column titles</span>
+<span class="c1"># column_titles = [&quot;Raw&quot;, &quot;Ground Truth&quot;, &quot;Prediction&quot;, &quot;Segmentation&quot;]</span>
+<span class="c1"># for col in range(len(column_titles)):</span>
+<span class="c1">#     ax[0, col].set_title(column_titles[col])</span>
+
+<span class="c1"># for validation in range(1, num_validations + 1):</span>
+<span class="c1">#     dataset = run.datasplit.validate[0].name</span>
+<span class="c1">#     validation_it = validation * run_config.validation_interval</span>
+<span class="c1">#     # break</span>
+<span class="c1">#     raw = zarr.open(f&quot;{run_path}/validation.zarr/inputs/{dataset}/raw&quot;)[:]</span>
+<span class="c1">#     gt = zarr.open(f&quot;{run_path}/validation.zarr/inputs/{dataset}/gt&quot;)[0]</span>
+<span class="c1">#     pred_path = f&quot;{run_path}/validation.zarr/{validation_it}/ds_{dataset}/prediction&quot;</span>
+<span class="c1">#     out_path = f&quot;{run_path}/validation.zarr/{validation_it}/ds_{dataset}/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))&quot;</span>
+<span class="c1">#     output = zarr.open(out_path)[:]</span>
+<span class="c1">#     prediction = zarr.open(pred_path)[0]</span>
+<span class="c1">#     c = (raw.shape[1] - gt.shape[1]) // 2</span>
+<span class="c1">#     if c != 0:</span>
+<span class="c1">#         raw = raw[:, c:-c, c:-c]</span>
+<span class="c1">#     ax[validation - 1, 0].imshow(raw[raw.shape[0] // 2])</span>
+<span class="c1">#     ax[validation - 1, 1].imshow(</span>
+<span class="c1">#         gt[gt.shape[0] // 2], cmap=label_cmap, interpolation=&quot;none&quot;</span>
+<span class="c1">#     )</span>
+<span class="c1">#     ax[validation - 1, 2].imshow(prediction[prediction.shape[0] // 2])</span>
+<span class="c1">#     ax[validation - 1, 3].imshow(</span>
+<span class="c1">#         output[output.shape[0] // 2], cmap=label_cmap, interpolation=&quot;none&quot;</span>
+<span class="c1">#     )</span>
+<span class="c1">#     ax[validation - 1, 0].set_ylabel(f&quot;Validation {validation_it}&quot;)</span>
+<span class="c1"># plt.show()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../tutorial.html" class="btn btn-neutral float-right" title="Tutorial: A Simple Experiment in Python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Caroline Malin-Mayor, Jeff Rhoades, Marwan Zouinkhi, William Patton, David Ackerman, Jan Funke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
