@@ -84,7 +84,7 @@ class MongoStatsStore(StatsStore):
                 if stats.trained_until() > existing_stats.trained_until():
                     # current stats go further than the one in DB
                     store_from_iteration = existing_stats.trained_until()
-                    print(
+                    logger.debug(
                         f"Updating training stats of run {run_name} after iteration {store_from_iteration}"
                     )
                 else:
