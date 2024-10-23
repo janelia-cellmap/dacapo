@@ -189,7 +189,7 @@ datasplit_config = DataSplitGenerator(
 
 # %%
 datasplit = datasplit_config.datasplit_type(datasplit_config)
-viewer = datasplit._neuroglancer()
+# viewer = datasplit._neuroglancer()
 
 # %%
 config_store.store_datasplit_config(datasplit_config)
@@ -351,14 +351,10 @@ for col in range(3):
 for snapshot in range(num_snapshots):
     snapshot_it = snapshot * run_config.trainer_config.snapshot_interval
     # break
-    raw = zarr.open(
-        f"/Users/pattonw/dacapo/example_run/snapshot.zarr/{snapshot_it}/volumes/raw"
-    )[:]
-    target = zarr.open(
-        f"/Users/pattonw/dacapo/example_run/snapshot.zarr/{snapshot_it}/volumes/target"
-    )[0]
+    raw = zarr.open(f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/raw")[:]
+    target = zarr.open(f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/target")[0]
     prediction = zarr.open(
-        f"/Users/pattonw/dacapo/example_run/snapshot.zarr/{snapshot_it}/volumes/prediction"
+        f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/prediction"
     )[0]
     c = (raw.shape[1] - target.shape[1]) // 2
     ax[snapshot, 0].imshow(raw[raw.shape[0] // 2, c:-c, c:-c])
@@ -370,6 +366,8 @@ plt.show()
 # %%
 # Visualize validations
 import zarr
+
+run_path = config_store.path / run_config.name
 
 num_validations = run_config.num_iterations // run_config.validation_interval
 fig, ax = plt.subplots(num_validations, 4, figsize=(10, 2 * num_validations))
@@ -383,14 +381,10 @@ for validation in range(1, num_validations + 1):
     dataset = run.datasplit.validate[0].name
     validation_it = validation * run_config.validation_interval
     # break
-    raw = zarr.open(
-        f"/Users/pattonw/dacapo/example_run/validation.zarr/inputs/{dataset}/raw"
-    )[:]
-    gt = zarr.open(
-        f"/Users/pattonw/dacapo/example_run/validation.zarr/inputs/{dataset}/gt"
-    )[0]
-    pred_path = f"/Users/pattonw/dacapo/example_run/validation.zarr/{validation_it}/ds_{dataset}/prediction"
-    out_path = f"/Users/pattonw/dacapo/example_run/validation.zarr/{validation_it}/ds_{dataset}/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))"
+    raw = zarr.open(f"{run_path}/validation.zarr/inputs/{dataset}/raw")[:]
+    gt = zarr.open(f"{run_path}/validation.zarr/inputs/{dataset}/gt")[0]
+    pred_path = f"{run_path}/validation.zarr/{validation_it}/ds_{dataset}/prediction"
+    out_path = f"{run_path}/validation.zarr/{validation_it}/ds_{dataset}/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))"
     output = zarr.open(out_path)[:]
     prediction = zarr.open(pred_path)[0]
     c = (raw.shape[1] - gt.shape[1]) // 2
