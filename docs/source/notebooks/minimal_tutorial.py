@@ -340,6 +340,8 @@ plt.show()
 # %%
 import zarr
 
+run_path = config_store.path / run_config.name
+
 num_snapshots = run_config.num_iterations // run_config.trainer_config.snapshot_interval
 fig, ax = plt.subplots(num_snapshots, 3, figsize=(10, 2 * num_snapshots))
 
@@ -366,8 +368,6 @@ plt.show()
 # %%
 # Visualize validations
 import zarr
-
-run_path = config_store.path / run_config.name
 
 num_validations = run_config.num_iterations // run_config.validation_interval
 fig, ax = plt.subplots(num_validations, 4, figsize=(10, 2 * num_validations))

@@ -17,14 +17,19 @@
 A framework for easy application of established machine learning techniques on large, multi-dimensional images.
 
 `dacapo` allows you to configure machine learning jobs as combinations of
-[DataSplits](http://docs/api.html#datasplits),
-[Architectures](http://docs/api.html#architectures),
-[Tasks](http://docs/api.html#tasks),
-[Trainers](http://docs/api.html#trainers),
+[DataSplits](https://janelia-cellmap.github.io/dacapo/autoapi/dacapo/experiments/datasplits/index.html),
+[Architectures](https://janelia-cellmap.github.io/dacapo/autoapi/dacapo/experiments/architectures/index.html),
+[Tasks](https://janelia-cellmap.github.io/dacapo/autoapi/dacapo/experiments/tasks/index.html),
+[Trainers](https://janelia-cellmap.github.io/dacapo/autoapi/dacapo/experiments/trainers/index.html),
 on arbitrarily large volumes of
 multi-dimensional images. `dacapo` is not tied to a particular learning
 framework, but currently only supports [`torch`](https://pytorch.org/) with
 plans to support [`tensorflow`](https://www.tensorflow.org/).
+
+
+![DaCapo Diagram](https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/dacapo_diagram.png)
+
+
 
 ## Installation and Setup
 Currently, python>=3.10 is supported. We recommend creating a new conda environment for dacapo with python 3.10.
