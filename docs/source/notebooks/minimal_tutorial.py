@@ -81,6 +81,7 @@ config_store = create_config_store()
 # import random
 
 import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
 import numpy as np
 from funlib.geometry import Coordinate, Roi
 from funlib.persistence import prepare_ds
@@ -134,29 +135,18 @@ labels_array = prepare_ds(
 )
 labels_array[labels_array.roi] = label(mask_array.to_ndarray(mask_array.roi))[0]
 
-# Generate affinity graph
-affs_array = prepare_ds(
-    "cells3d.zarr",
-    "affs",
-    Roi((0, 0, 0), cell_data.shape[1:]) * voxel_size,
-    voxel_size=voxel_size,
-    num_channels=3,
-    dtype=np.uint8,
-)
-affs_array[affs_array.roi] = (
-    seg_to_affgraph(
-        labels_array.to_ndarray(labels_array.roi),
-        neighborhood=[Coordinate(1, 0, 0), Coordinate(0, 1, 0), Coordinate(0, 0, 1)],
-    )
-    * 255
-)
 print("Data saved to cells3d.zarr")
 
+
+# Create a custom label color map for showing instances
+np.random.seed(1)
+colors = [[0, 0, 0]] + [list(np.random.choice(range(256), size=3)) for _ in range(254)]
+label_cmap = ListedColormap(colors)
 
 # %% [markdown]
 # Here we show a slice of the raw data:
 # %%
-plt.imshow(cell_array.data[30])
+# plt.imshow(cell_array.data[30])
 
 # %% [markdown]
 # ## Datasplit
@@ -177,14 +167,14 @@ dataspecs = [
         raw_container="cells3d.zarr",
         raw_dataset="raw",
         gt_container="cells3d.zarr",
-        gt_dataset="mask",
+        gt_dataset="labels",
     ),
     DatasetSpec(
         dataset_type="val",
         raw_container="cells3d.zarr",
         raw_dataset="raw",
         gt_container="cells3d.zarr",
-        gt_dataset="mask",
+        gt_dataset="labels",
     ),
 ]
 
@@ -229,7 +219,7 @@ config_store.store_task_config(dist_task_config)
 # an example affinities task configuration
 affs_task_config = AffinitiesTaskConfig(
     name="example_affs",
-    neighborhood=[(0, 1, 0), (0, 0, 1)],
+    neighborhood=[(1, 0, 0), (0, 1, 0), (0, 0, 1)],
 )
 # config_store.delete_task_config(dist_task_config.name)
 config_store.store_task_config(affs_task_config)
@@ -249,8 +239,8 @@ from dacapo.experiments.architectures import CNNectomeUNetConfig
 # all with 1s in z meaning no downsampling or convolving in the z direction.
 architecture_config = CNNectomeUNetConfig(
     name="example_unet",
-    input_shape=(2, 64, 64),
-    eval_shape_increase=(7, 0, 0),
+    input_shape=(2, 132, 132),
+    eval_shape_increase=(8, 32, 32),
     fmaps_in=1,
     num_fmaps=8,
     fmaps_out=8,
@@ -259,7 +249,7 @@ architecture_config = CNNectomeUNetConfig(
     kernel_size_down=[[(1, 3, 3)] * 2] * 3,
     kernel_size_up=[[(1, 3, 3)] * 2] * 2,
     constant_upsample=True,
-    padding="same",
+    padding="valid",
 )
 config_store.store_architecture_config(architecture_config)
 
@@ -401,17 +391,18 @@ for validation in range(1, num_validations + 1):
     )[0]
     pred_path = f"/Users/pattonw/dacapo/example_run/validation.zarr/{validation_it}/ds_{dataset}/prediction"
     out_path = f"/Users/pattonw/dacapo/example_run/validation.zarr/{validation_it}/ds_{dataset}/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))"
-    output = zarr.open(
-        out_path
-    )[:]
+    output = zarr.open(out_path)[:]
     prediction = zarr.open(pred_path)[0]
-    print(raw.shape, gt.shape, output.shape)
     c = (raw.shape[1] - gt.shape[1]) // 2
     if c != 0:
         raw = raw[:, c:-c, c:-c]
     ax[validation - 1, 0].imshow(raw[raw.shape[0] // 2])
-    ax[validation - 1, 1].imshow(gt[gt.shape[0] // 2])
+    ax[validation - 1, 1].imshow(
+        gt[gt.shape[0] // 2], cmap=label_cmap, interpolation="none"
+    )
     ax[validation - 1, 2].imshow(prediction[prediction.shape[0] // 2])
-    ax[validation - 1, 3].imshow(output[output.shape[0] // 2])
+    ax[validation - 1, 3].imshow(
+        output[output.shape[0] // 2], cmap=label_cmap, interpolation="none"
+    )
     ax[validation - 1, 0].set_ylabel(f"Validation {validation_it}")
 plt.show()

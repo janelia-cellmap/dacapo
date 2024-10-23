@@ -132,7 +132,7 @@ class WatershedPostProcessor(PostProcessor):
             self.prediction_array_identifier.dataset,
         )
 
-        data = to_ndarray(input_array, output_array.roi)
+        data = to_ndarray(input_array, output_array.roi).astype(float)
         segmentation = mws.agglom(
             data - parameters.bias, offsets=self.offsets, randomized_strides=True
         )
