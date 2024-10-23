@@ -318,6 +318,35 @@ run_config = RunConfig(
 config_store.store_run_config(run_config)
 
 # %% [markdown]
+# ## Retrieve Configurations
+# All of the configurations are saved in the config store. You can retrieve them as follows:
+#
+# - **Architectures**: These define the network architectures used in your experiments.
+# ```python
+# architectures = config_store.retrieve_architecture_configs()
+# ```
+#
+# - **Tasks**: These specify the tasks that your model will learn, such as instance segmentation or affinity prediction.
+# ```python
+# tasks = config_store.retrieve_task_configs()
+# ```
+#
+# - **Trainers**: These configurations define how the training process is conducted, including parameters like batch size and learning rate.
+# ```python
+# trainers = config_store.retrieve_trainer_configs()
+# ```
+#
+# - **Datasplits**: These configurations specify how your data is split into training, validation, and test sets.
+# ```python
+# datasplits = config_store.retrieve_datasplit_configs()
+# ```
+#
+# - **Runs**: These combine all the above configurations into a single experiment run.
+# ```python
+# runs = config_store.retrieve_run_configs()
+# ```
+
+# %% [markdown]
 # ## Train
 #
 # NOTE: The run stats are stored in the `runs_base_dir/stats` directory.
@@ -346,79 +375,93 @@ if __name__ == "__main__":
 # including snapshots, validation results, and the loss.
 
 # %%
-stats_store = create_stats_store()
-training_stats = stats_store.retrieve_training_stats(run_config.name)
-stats = training_stats.to_xarray()
-plt.plot(stats)
-plt.title("Training Loss")
-plt.xlabel("Iteration")
-plt.ylabel("Loss")
+run.validation_scores.to_xarray()["criteria"].values
+
+# %%
+from dacapo.plot import plot_runs
+
+plot_runs(
+    run_config_base_names=[run_config.name],
+    validation_scores=["voi"],
+    plot_losses=[True],
+)
+
+# # other ways to visualize the training stats
+# stats_store = create_stats_store()
+# training_stats = stats_store.retrieve_training_stats(run_config.name)
+# stats = training_stats.to_xarray()
+# plt.plot(stats)
+# plt.title("Training Loss")
+# plt.xlabel("Iteration")
+# plt.ylabel("Loss")
+# plt.show()
+# %%
+import zarr
+from matplotlib.colors import ListedColormap
+
+np.random.seed(1)
+colors = [[0, 0, 0]] + [list(np.random.choice(range(256), size=3)) for _ in range(254)]
+label_cmap = ListedColormap(colors)
+
+run_path = config_store.path.parent / run_config.name
+
+num_snapshots = run_config.num_iterations // run_config.trainer_config.snapshot_interval
+fig, ax = plt.subplots(num_snapshots, 3, figsize=(10, 2 * num_snapshots))
+
+# Set column titles
+column_titles = ["Raw", "Target", "Prediction"]
+for col in range(3):
+    ax[0, col].set_title(column_titles[col])
+
+for snapshot in range(num_snapshots):
+    snapshot_it = snapshot * run_config.trainer_config.snapshot_interval
+    # break
+    raw = zarr.open(f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/raw")[:]
+    target = zarr.open(f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/target")[0]
+    prediction = zarr.open(
+        f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/prediction"
+    )[0]
+    c = (raw.shape[1] - target.shape[1]) // 2
+    ax[snapshot, 0].imshow(raw[raw.shape[0] // 2, c:-c, c:-c])
+    ax[snapshot, 1].imshow(target[target.shape[0] // 2])
+    ax[snapshot, 2].imshow(prediction[prediction.shape[0] // 2])
+    ax[snapshot, 0].set_ylabel(f"Snapshot {snapshot_it}")
+plt.show()
+
+# # %%
+# Visualize validations
+import zarr
+
+num_validations = run_config.num_iterations // run_config.validation_interval
+fig, ax = plt.subplots(num_validations, 4, figsize=(10, 2 * num_validations))
+
+# Set column titles
+column_titles = ["Raw", "Ground Truth", "Prediction", "Segmentation"]
+for col in range(len(column_titles)):
+    ax[0, col].set_title(column_titles[col])
+
+for validation in range(1, num_validations + 1):
+    dataset = run.datasplit.validate[0].name
+    validation_it = validation * run_config.validation_interval
+    # break
+    raw = zarr.open(f"{run_path}/validation.zarr/inputs/{dataset}/raw")[:]
+    gt = zarr.open(f"{run_path}/validation.zarr/inputs/{dataset}/gt")[0]
+    pred_path = f"{run_path}/validation.zarr/{validation_it}/ds_{dataset}/prediction"
+    out_path = f"{run_path}/validation.zarr/{validation_it}/ds_{dataset}/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))"
+    output = zarr.open(out_path)[:]
+    prediction = zarr.open(pred_path)[0]
+    c = (raw.shape[1] - gt.shape[1]) // 2
+    if c != 0:
+        raw = raw[:, c:-c, c:-c]
+    ax[validation - 1, 0].imshow(raw[raw.shape[0] // 2])
+    ax[validation - 1, 1].imshow(
+        gt[gt.shape[0] // 2], cmap=label_cmap, interpolation="none"
+    )
+    ax[validation - 1, 2].imshow(prediction[prediction.shape[0] // 2])
+    ax[validation - 1, 3].imshow(
+        output[output.shape[0] // 2], cmap=label_cmap, interpolation="none"
+    )
+    ax[validation - 1, 0].set_ylabel(f"Validation {validation_it}")
 plt.show()
 
 # %%
-# import zarr
-# from matplotlib.colors import ListedColormap
-
-# np.random.seed(1)
-# colors = [[0, 0, 0]] + [list(np.random.choice(range(256), size=3)) for _ in range(254)]
-# label_cmap = ListedColormap(colors)
-# run_path = config_store.path / run_config.name
-
-# num_snapshots = run_config.num_iterations // run_config.trainer_config.snapshot_interval
-# fig, ax = plt.subplots(num_snapshots, 3, figsize=(10, 2 * num_snapshots))
-
-# # Set column titles
-# column_titles = ["Raw", "Target", "Prediction"]
-# for col in range(3):
-#     ax[0, col].set_title(column_titles[col])
-
-# for snapshot in range(num_snapshots):
-#     snapshot_it = snapshot * run_config.trainer_config.snapshot_interval
-#     # break
-#     raw = zarr.open(f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/raw")[:]
-#     target = zarr.open(f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/target")[0]
-#     prediction = zarr.open(
-#         f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/prediction"
-#     )[0]
-#     c = (raw.shape[1] - target.shape[1]) // 2
-#     ax[snapshot, 0].imshow(raw[raw.shape[0] // 2, c:-c, c:-c])
-#     ax[snapshot, 1].imshow(target[target.shape[0] // 2])
-#     ax[snapshot, 2].imshow(prediction[prediction.shape[0] // 2])
-#     ax[snapshot, 0].set_ylabel(f"Snapshot {snapshot_it}")
-# plt.show()
-
-# # %%
-# # Visualize validations
-# import zarr
-
-# num_validations = run_config.num_iterations // run_config.validation_interval
-# fig, ax = plt.subplots(num_validations, 4, figsize=(10, 2 * num_validations))
-
-# # Set column titles
-# column_titles = ["Raw", "Ground Truth", "Prediction", "Segmentation"]
-# for col in range(len(column_titles)):
-#     ax[0, col].set_title(column_titles[col])
-
-# for validation in range(1, num_validations + 1):
-#     dataset = run.datasplit.validate[0].name
-#     validation_it = validation * run_config.validation_interval
-#     # break
-#     raw = zarr.open(f"{run_path}/validation.zarr/inputs/{dataset}/raw")[:]
-#     gt = zarr.open(f"{run_path}/validation.zarr/inputs/{dataset}/gt")[0]
-#     pred_path = f"{run_path}/validation.zarr/{validation_it}/ds_{dataset}/prediction"
-#     out_path = f"{run_path}/validation.zarr/{validation_it}/ds_{dataset}/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))"
-#     output = zarr.open(out_path)[:]
-#     prediction = zarr.open(pred_path)[0]
-#     c = (raw.shape[1] - gt.shape[1]) // 2
-#     if c != 0:
-#         raw = raw[:, c:-c, c:-c]
-#     ax[validation - 1, 0].imshow(raw[raw.shape[0] // 2])
-#     ax[validation - 1, 1].imshow(
-#         gt[gt.shape[0] // 2], cmap=label_cmap, interpolation="none"
-#     )
-#     ax[validation - 1, 2].imshow(prediction[prediction.shape[0] // 2])
-#     ax[validation - 1, 3].imshow(
-#         output[output.shape[0] // 2], cmap=label_cmap, interpolation="none"
-#     )
-#     ax[validation - 1, 0].set_ylabel(f"Validation {validation_it}")
-# plt.show()

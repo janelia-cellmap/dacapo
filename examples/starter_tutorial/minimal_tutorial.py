@@ -1,6 +1,8 @@
 # %% [markdown]
 # # Minimal Tutorial
-#
+# DaCapo is a framework for easy application of established machine learning techniques on large, multi-dimensional images.
+# ![DaCapo Diagram](https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/dacapo_diagram.png)
+
 
 #  %% [markdown]
 # ## Needed Libraries for this Tutorial
@@ -54,12 +56,20 @@
 
 # %% [markdown]
 # ## Config Store
-# To define where the data goes, create a dacapo.yaml configuration file either in `~/.config/dacapo/dacapo.yaml` or in `./dacapo.yaml`. Here is a template:
+# Configs, model checkpoints, stats, and snapshots can be saved in:
+# - a local folder
+# - an S3 bucket
+# - a MongoDB server
+#
+# To define where the data goes, create a `dacapo.yaml` configuration file either in `~/.config/dacapo/dacapo.yaml` or in `./dacapo.yaml`. Here is a template:
 #
 # ```yaml
 # type: files
 # runs_base_dir: /path/to/my/data/storage
 # ```
+#
+# Alternatively, you can define it by setting an environment variable: `DACAPO_OPTIONS_FILE=/PATH/TO/MY/DACAPO_FILES`.
+#
 # The `runs_base_dir` defines where your on-disk data will be stored. The `type` setting determines the database backend. The default is `files`, which stores the data in a file tree on disk. Alternatively, you can use `mongodb` to store the data in a MongoDB database. To use MongoDB, you will need to provide a `mongodbhost` and `mongodbname` in the configuration file:
 #
 # ```yaml
@@ -71,25 +81,22 @@
 # First we need to create a config store to store our configurations
 import multiprocessing
 
+# This line is mostly for MacOS users to avoid a bug in multiprocessing
 multiprocessing.set_start_method("fork", force=True)
 from dacapo.store.create_store import create_config_store, create_stats_store
 
 config_store = create_config_store()
 
+# %% [markdown]
+# ## Data Preparation
+# DaCapo works with zarr, so we will download [skimage example cell data](https://scikit-image.org/docs/stable/api/skimage.data.html#skimage.data.cells3d) and save it as a zarr file.
 # %% Create some data
-
-# import random
-
-import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
 import numpy as np
 from funlib.geometry import Coordinate, Roi
 from funlib.persistence import prepare_ds
 from scipy.ndimage import label
 from skimage import data
 from skimage.filters import gaussian
-
-from dacapo.utils.affinities import seg_to_affgraph
 
 # Download the data
 cell_data = (data.cells3d().transpose((1, 0, 2, 3)) / 256).astype(np.uint8)
@@ -136,17 +143,27 @@ labels_array = prepare_ds(
 labels_array[labels_array.roi] = label(mask_array.to_ndarray(mask_array.roi))[0]
 
 print("Data saved to cells3d.zarr")
+import zarr
 
-
-# Create a custom label color map for showing instances
-np.random.seed(1)
-colors = [[0, 0, 0]] + [list(np.random.choice(range(256), size=3)) for _ in range(254)]
-label_cmap = ListedColormap(colors)
-
+print(zarr.open("cells3d.zarr", mode="r").tree())
 # %% [markdown]
 # Here we show a slice of the raw data:
 # %%
-# plt.imshow(cell_array.data[30])
+# a custom label color map for showing instances
+import matplotlib.pyplot as plt
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+
+# Show the raw data
+axes[0].imshow(cell_array.data[30])
+axes[0].set_title("Raw Data")
+
+# Show the labels using the custom label color map
+axes[1].imshow(labels_array.data[30])
+axes[1].set_title("Labels")
+
+plt.show()
+
 
 # %% [markdown]
 # ## Datasplit
@@ -163,19 +180,13 @@ from dacapo.experiments.datasplits import DataSplitGenerator, DatasetSpec
 
 dataspecs = [
     DatasetSpec(
-        dataset_type="train",
+        dataset_type=type_crop,
         raw_container="cells3d.zarr",
         raw_dataset="raw",
         gt_container="cells3d.zarr",
         gt_dataset="labels",
-    ),
-    DatasetSpec(
-        dataset_type="val",
-        raw_container="cells3d.zarr",
-        raw_dataset="raw",
-        gt_container="cells3d.zarr",
-        gt_dataset="labels",
-    ),
+    )
+    for type_crop in ["train", "val"]
 ]
 
 datasplit_config = DataSplitGenerator(
@@ -196,23 +207,30 @@ config_store.store_datasplit_config(datasplit_config)
 
 # %% [markdown]
 # ## Task
-# What do you want to learn? An instance segmentation? If so, how? Affinities,
-# Distance Transform, Foreground/Background, etc. Each of these tasks are commonly learned
-# and evaluated with specific loss functions and evaluation metrics. Some tasks may
-# also require specific non-linearities or output formats from your model.
+#
+# ### What do you want to learn?
+#
+# - **Instance Segmentation**: Identify and separate individual objects within an image.
+# - **Affinities**: Learn the likelihood of neighboring pixels belonging to the same object.
+# - **Distance Transform**: Calculate the distance of each pixel to the nearest object boundary.
+# - **Foreground/Background**: Distinguish between object pixels and background pixels.
+#
+# Each of these tasks is commonly learned and evaluated with specific loss functions and evaluation metrics. Some tasks may also require specific non-linearities or output formats from your model.
 
 # %%
 from dacapo.experiments.tasks import DistanceTaskConfig, AffinitiesTaskConfig
 
+resolution = 260  # nm
 # an example distance task configuration
 # note that the clip_distance, tol_distance, and scale_factor are in nm
 dist_task_config = DistanceTaskConfig(
     name="example_dist",
     channels=["cell"],
-    clip_distance=260 * 10.0,
-    tol_distance=260 * 10.0,
-    scale_factor=260 * 20.0,
+    clip_distance=resolution * 10.0,
+    tol_distance=resolution * 10.0,
+    scale_factor=resolution * 20.0,
 )
+# if the config already exists, delete it first
 # config_store.delete_task_config(dist_task_config.name)
 config_store.store_task_config(dist_task_config)
 
@@ -300,6 +318,35 @@ run_config = RunConfig(
 config_store.store_run_config(run_config)
 
 # %% [markdown]
+# ## Retrieve Configurations
+# All of the configurations are saved in the config store. You can retrieve them as follows:
+#
+# - **Architectures**: These define the network architectures used in your experiments.
+# ```python
+# architectures = config_store.retrieve_architecture_configs()
+# ```
+#
+# - **Tasks**: These specify the tasks that your model will learn, such as instance segmentation or affinity prediction.
+# ```python
+# tasks = config_store.retrieve_task_configs()
+# ```
+#
+# - **Trainers**: These configurations define how the training process is conducted, including parameters like batch size and learning rate.
+# ```python
+# trainers = config_store.retrieve_trainer_configs()
+# ```
+#
+# - **Datasplits**: These configurations specify how your data is split into training, validation, and test sets.
+# ```python
+# datasplits = config_store.retrieve_datasplit_configs()
+# ```
+#
+# - **Runs**: These combine all the above configurations into a single experiment run.
+# ```python
+# runs = config_store.retrieve_run_configs()
+# ```
+
+# %% [markdown]
 # ## Train
 #
 # NOTE: The run stats are stored in the `runs_base_dir/stats` directory.
@@ -328,17 +375,35 @@ if __name__ == "__main__":
 # including snapshots, validation results, and the loss.
 
 # %%
-stats_store = create_stats_store()
-training_stats = stats_store.retrieve_training_stats(run_config.name)
-stats = training_stats.to_xarray()
-plt.plot(stats)
-plt.title("Training Loss")
-plt.xlabel("Iteration")
-plt.ylabel("Loss")
-plt.show()
+run.validation_scores.to_xarray()["criteria"].values
 
 # %%
+from dacapo.plot import plot_runs
+
+plot_runs(
+    run_config_base_names=[run_config.name],
+    validation_scores=["voi"],
+    plot_losses=[True],
+)
+
+# # other ways to visualize the training stats
+# stats_store = create_stats_store()
+# training_stats = stats_store.retrieve_training_stats(run_config.name)
+# stats = training_stats.to_xarray()
+# plt.plot(stats)
+# plt.title("Training Loss")
+# plt.xlabel("Iteration")
+# plt.ylabel("Loss")
+# plt.show()
+# %%
 import zarr
+from matplotlib.colors import ListedColormap
+
+np.random.seed(1)
+colors = [[0, 0, 0]] + [list(np.random.choice(range(256), size=3)) for _ in range(254)]
+label_cmap = ListedColormap(colors)
+
+run_path = config_store.path.parent / run_config.name
 
 num_snapshots = run_config.num_iterations // run_config.trainer_config.snapshot_interval
 fig, ax = plt.subplots(num_snapshots, 3, figsize=(10, 2 * num_snapshots))
@@ -363,11 +428,9 @@ for snapshot in range(num_snapshots):
     ax[snapshot, 0].set_ylabel(f"Snapshot {snapshot_it}")
 plt.show()
 
-# %%
+# # %%
 # Visualize validations
 import zarr
-
-run_path = config_store.path / run_config.name
 
 num_validations = run_config.num_iterations // run_config.validation_interval
 fig, ax = plt.subplots(num_validations, 4, figsize=(10, 2 * num_validations))
@@ -400,3 +463,5 @@ for validation in range(1, num_validations + 1):
     )
     ax[validation - 1, 0].set_ylabel(f"Validation {validation_it}")
 plt.show()
+
+# %%
