@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
@@ -6,20 +8,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dacapo.blockwise &mdash; DaCapo  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -111,7 +109,6 @@
 <li class="toctree-l1"><a class="reference internal" href="argmax_worker/index.html">dacapo.blockwise.argmax_worker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="blockwise_task/index.html">dacapo.blockwise.blockwise_task</a></li>
 <li class="toctree-l1"><a class="reference internal" href="empanada_function/index.html">dacapo.blockwise.empanada_function</a></li>
-<li class="toctree-l1"><a class="reference internal" href="global_vars/index.html">dacapo.blockwise.global_vars</a></li>
 <li class="toctree-l1"><a class="reference internal" href="predict_worker/index.html">dacapo.blockwise.predict_worker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="relabel_worker/index.html">dacapo.blockwise.relabel_worker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="scheduler/index.html">dacapo.blockwise.scheduler</a></li>
@@ -127,19 +124,6 @@
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.DaCapoBlockwiseTask" title="dacapo.blockwise.DaCapoBlockwiseTask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DaCapoBlockwiseTask</span></code></a></p></td>
 <td><p>A task to run a blockwise worker function. This task is used to run a</p></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.run_blockwise" title="dacapo.blockwise.run_blockwise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_blockwise</span></code></a>(worker_file, total_roi, read_roi, write_roi)</p></td>
-<td><p>Run a function in parallel over a large volume.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.segment_blockwise" title="dacapo.blockwise.segment_blockwise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">segment_blockwise</span></code></a>(segment_function_file, context, ...)</p></td>
-<td><p>Run a segmentation function in parallel over a large volume.</p></td>
 </tr>
 </tbody>
 </table>
@@ -289,72 +273,6 @@ failure)</p>
 <span class="sig-name descname"><span class="pre">kwargs</span></span><a class="headerlink" href="#dacapo.blockwise.DaCapoBlockwiseTask.kwargs" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="dacapo.blockwise.run_blockwise">
-<span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.</span></span><span class="sig-name descname"><span class="pre">run_blockwise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">worker_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">upath.UPath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">read_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upstream_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.run_blockwise" title="Link to this definition"></a></dt>
-<dd><p>Run a function in parallel over a large volume.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>worker_file</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">Path</span></code>) – The path to the file containing the necessary worker functions:
-<code class="docutils literal notranslate"><span class="pre">spawn_worker</span></code> and <code class="docutils literal notranslate"><span class="pre">start_worker</span></code>.
-Optionally, the file can also contain a <code class="docutils literal notranslate"><span class="pre">check_function</span></code> and an <code class="docutils literal notranslate"><span class="pre">init_callback_fn</span></code>.</p></li>
-<li><p><strong>total_roi</strong> (<code class="docutils literal notranslate"><span class="pre">Roi</span></code>) – The ROI to process.</p></li>
-<li><p><strong>read_roi</strong> (<code class="docutils literal notranslate"><span class="pre">Roi</span></code>) – The ROI to read from for a block.</p></li>
-<li><p><strong>write_roi</strong> (<code class="docutils literal notranslate"><span class="pre">Roi</span></code>) – The ROI to write to for a block.</p></li>
-<li><p><strong>num_workers</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – The number of workers to use.</p></li>
-<li><p><strong>max_retries</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – The maximum number of times a task will be retried if failed
-(either due to failed post check or application crashes or network
-failure)</p></li>
-<li><p><strong>*args</strong> – Additional positional arguments to pass to <code class="docutils literal notranslate"><span class="pre">worker_function</span></code>.</p></li>
-<li><p><strong>**kwargs</strong> – Additional keyword arguments to pass to <code class="docutils literal notranslate"><span class="pre">worker_function</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Bool</span></code>.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">run_blockwise</span><span class="p">(</span><span class="n">worker_file</span><span class="p">,</span> <span class="n">total_roi</span><span class="p">,</span> <span class="n">read_roi</span><span class="p">,</span> <span class="n">write_roi</span><span class="p">,</span> <span class="n">num_workers</span><span class="p">,</span> <span class="n">max_retries</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">upstream_tasks</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="dacapo.blockwise.segment_blockwise">
-<span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.</span></span><span class="sig-name descname"><span class="pre">segment_blockwise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">segment_function_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">upath.UPath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Coordinate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">read_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_roi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.geometry.Roi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upstream_tasks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_tmpdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.blockwise.segment_blockwise" title="Link to this definition"></a></dt>
-<dd><p>Run a segmentation function in parallel over a large volume.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>segment_function_file</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">Path</span></code>) – The path to the file containing the necessary worker functions:
-<code class="docutils literal notranslate"><span class="pre">spawn_worker</span></code> and <code class="docutils literal notranslate"><span class="pre">start_worker</span></code>.
-Optionally, the file can also contain a <code class="docutils literal notranslate"><span class="pre">check_function</span></code> and an <code class="docutils literal notranslate"><span class="pre">init_callback_fn</span></code>.</p></li>
-<li><p><strong>context</strong> (<code class="docutils literal notranslate"><span class="pre">Coordinate</span></code>) – The context to add to the read and write ROI.</p></li>
-<li><p><strong>total_roi</strong> (<code class="docutils literal notranslate"><span class="pre">Roi</span></code>) – The ROI to process.</p></li>
-<li><p><strong>read_roi</strong> (<code class="docutils literal notranslate"><span class="pre">Roi</span></code>) – The ROI to read from for a block.</p></li>
-<li><p><strong>write_roi</strong> (<code class="docutils literal notranslate"><span class="pre">Roi</span></code>) – The ROI to write to for a block.</p></li>
-<li><p><strong>num_workers</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – The number of workers to use.</p></li>
-<li><p><strong>max_retries</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – The maximum number of times a task will be retried if failed
-(either due to failed post check or application crashes or network
-failure)</p></li>
-<li><p><strong>timeout</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – The maximum time in seconds to wait for a worker to complete a task.</p></li>
-<li><p><strong>upstream_tasks</strong> (<code class="docutils literal notranslate"><span class="pre">List</span></code>) – List of upstream tasks.</p></li>
-<li><p><strong>keep_tmpdir</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to keep the temporary directory.</p></li>
-<li><p><strong>*args</strong> – Additional positional arguments to pass to <code class="docutils literal notranslate"><span class="pre">worker_function</span></code>.</p></li>
-<li><p><strong>**kwargs</strong> – Additional keyword arguments to pass to <code class="docutils literal notranslate"><span class="pre">worker_function</span></code>.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">Bool</span></code>.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">segment_blockwise</span><span class="p">(</span><span class="n">segment_function_file</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">total_roi</span><span class="p">,</span> <span class="n">read_roi</span><span class="p">,</span> <span class="n">write_roi</span><span class="p">,</span> <span class="n">num_workers</span><span class="p">,</span> <span class="n">max_retries</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">upstream_tasks</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </section>

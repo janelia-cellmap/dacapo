@@ -83,3 +83,7 @@ Module Contents
       :type:  bool
 
 
+   .. py:attribute:: gt_min_reject
+      :type:  Optional[float]
+
+

@@ -53,6 +53,23 @@ Module Contents
       :value: ['frizz_level', 'blipp_score']
 
 
+      The evaluation criteria.
+
+      :returns:
+
+                List[str]
+                    the evaluation criteria
+
+      :raises NotImplementedError: if the function is not implemented
+
+      .. rubric:: Examples
+
+      >>> evaluation_scores = EvaluationScores()
+      >>> evaluation_scores.criteria
+      ["criterion1", "criterion2"]
+
+      .. note:: This function is used to return the evaluation criteria.
+
 
    .. py:attribute:: frizz_level
       :type:  float

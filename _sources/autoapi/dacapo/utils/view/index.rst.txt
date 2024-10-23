@@ -26,7 +26,7 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: get_viewer(arrays: dict, width: int = 1500, height: int = 600, headless: bool = True) -> neuroglancer.Viewer | IPython.display.IFrame
+.. py:function:: get_viewer(arrays: dict, width: int = 1500, height: int = 600, headless: bool = True, bind_address: str = '0.0.0.0', bind_port: int = 0) -> neuroglancer.Viewer | IPython.display.IFrame
 
    Creates a neuroglancer viewer to visualize arrays.
 
@@ -38,6 +38,10 @@ Module Contents
    :type height: int, optional
    :param headless: If True, returns the viewer object. If False, returns an IFrame object embedding the viewer. Defaults to True.
    :type headless: bool, optional
+   :param bind_address: Bind address for Neuroglancer webserver.
+   :type bind_address: str, optional
+   :param bind_port: Bind port for Neuroglancer webserver.
+   :type bind_port: int, optional
 
    :returns: The neuroglancer viewer object or an IFrame object embedding the viewer.
    :rtype: neuroglancer.Viewer | IFrame
@@ -391,9 +395,14 @@ Module Contents
 
 
 
-   .. py:method:: start_neuroglancer()
+   .. py:method:: start_neuroglancer(bind_address='0.0.0.0', bind_port=None)
 
       Start the neuroglancer viewer.
+
+      :param bind_address: Bind address for Neuroglancer webserver.
+      :type bind_address: str, optional
+      :param bind_port: Bind port for Neuroglancer webserver.
+      :type bind_port: int, optional
 
       :returns: The embedded viewer.
       :rtype: IFrame

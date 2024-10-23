@@ -34,7 +34,7 @@ Classes
 Package Contents
 ----------------
 
-.. py:class:: Architecture
+.. py:class:: Architecture(*args, **kwargs)
 
 
 
@@ -564,6 +564,10 @@ Package Contents
       :type:  bool
 
 
+   .. py:attribute:: batch_norm
+      :type:  bool
+
+
 .. py:class:: CNNectomeUNet(architecture_config)
 
 
@@ -728,6 +732,9 @@ Package Contents
 
 
    .. py:attribute:: use_attention
+
+
+   .. py:attribute:: batch_norm
 
 
    .. py:attribute:: unet

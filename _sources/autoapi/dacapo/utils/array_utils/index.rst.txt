@@ -1,0 +1,52 @@
+dacapo.utils.array_utils
+========================
+
+.. py:module:: dacapo.utils.array_utils
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   dacapo.utils.array_utils.to_ndarray
+   dacapo.utils.array_utils.save_ndarray
+
+
+Module Contents
+---------------
+
+.. py:function:: to_ndarray(result_data, roi, fill_value=0)
+
+   An alternative implementation of `__getitem__` that supports
+   using fill values to request data that may extend outside the
+   roi covered by result_data.
+
+   :param roi (`class: Roi`, optional):
+
+                       If given, copy only the data represented by this ROI. This is
+                       equivalent to::
+
+                           array[roi].to_ndarray()
+   :param fill_value: The value to use to fill in values that are outside the ROI
+                      provided by this data. Defaults to 0.
+   :type fill_value: scalar, optional
+
+
+.. py:function:: save_ndarray(data, roi, array)
+
+   An alternative implementation of `__setitem__` that supports
+   using fill values to request data that may extend outside the
+   roi covered by result_data.
+
+   :param roi (`class: Roi`, optional):
+
+                       If given, copy only the data represented by this ROI. This is
+                       equivalent to::
+
+                           array[roi] = data
+   :param fill_value: The value to use to fill in values that are outside the ROI
+                      provided by this data. Defaults to 0.
+   :type fill_value: scalar, optional
+
+

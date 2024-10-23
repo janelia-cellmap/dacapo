@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
@@ -6,25 +8,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dacapo.blockwise.predict_worker &mdash; DaCapo  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
     <link rel="next" title="dacapo.blockwise.relabel_worker" href="../relabel_worker/index.html" />
-    <link rel="prev" title="dacapo.blockwise.global_vars" href="../global_vars/index.html" /> 
+    <link rel="prev" title="dacapo.blockwise.empanada_function" href="../empanada_function/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -128,19 +126,16 @@
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.predict_worker.is_global_run_set" title="dacapo.blockwise.predict_worker.is_global_run_set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_global_run_set</span></code></a>(→ bool)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.predict_worker.cli" title="dacapo.blockwise.predict_worker.cli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cli</span></code></a>(log_level)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.predict_worker.cli" title="dacapo.blockwise.predict_worker.cli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cli</span></code></a>(log_level)</p></td>
 <td><p>CLI for running the predict worker.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.predict_worker.start_worker" title="dacapo.blockwise.predict_worker.start_worker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_worker</span></code></a>(run_name, iteration, input_container, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.predict_worker.start_worker" title="dacapo.blockwise.predict_worker.start_worker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_worker</span></code></a>(run_name, iteration, input_container, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.predict_worker.start_worker_fn" title="dacapo.blockwise.predict_worker.start_worker_fn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_worker_fn</span></code></a>(run_name, iteration, input_container, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.predict_worker.start_worker_fn" title="dacapo.blockwise.predict_worker.start_worker_fn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_worker_fn</span></code></a>(run_name, iteration, input_container, ...)</p></td>
 <td><p>Start a worker to apply a trained model to a dataset.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.blockwise.predict_worker.spawn_worker" title="dacapo.blockwise.predict_worker.spawn_worker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spawn_worker</span></code></a>(run_name, iteration, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#dacapo.blockwise.predict_worker.spawn_worker" title="dacapo.blockwise.predict_worker.spawn_worker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spawn_worker</span></code></a>(run_name, iteration, ...)</p></td>
 <td><p>Spawn a worker to predict on a given dataset.</p></td>
 </tr>
 </tbody>
@@ -166,11 +161,6 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="dacapo.blockwise.predict_worker.path">
 <span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.predict_worker.</span></span><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#dacapo.blockwise.predict_worker.path" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="dacapo.blockwise.predict_worker.is_global_run_set">
-<span class="sig-prename descclassname"><span class="pre">dacapo.blockwise.predict_worker.</span></span><span class="sig-name descname"><span class="pre">is_global_run_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#dacapo.blockwise.predict_worker.is_global_run_set" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -237,7 +227,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../global_vars/index.html" class="btn btn-neutral float-left" title="dacapo.blockwise.global_vars" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../empanada_function/index.html" class="btn btn-neutral float-left" title="dacapo.blockwise.empanada_function" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="../relabel_worker/index.html" class="btn btn-neutral float-right" title="dacapo.blockwise.relabel_worker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

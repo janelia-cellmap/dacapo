@@ -154,3 +154,7 @@ Module Contents
       :type:  bool
 
 
+   .. py:attribute:: batch_norm
+      :type:  bool
+
+

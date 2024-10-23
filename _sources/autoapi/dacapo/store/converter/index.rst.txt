@@ -23,7 +23,7 @@ Classes
 Module Contents
 ---------------
 
-.. py:class:: TypedConverter
+.. py:class:: TypedConverter(dict_factory: Callable[[], Any] = dict, unstruct_strat: UnstructureStrategy = UnstructureStrategy.AS_DICT, omit_if_default: bool = False, forbid_extra_keys: bool = False, type_overrides: cattrs._compat.Mapping[type, cattrs.gen.AttributeOverride] = {}, unstruct_collection_overrides: cattrs._compat.Mapping[type, Callable] = {}, prefer_attrib_converters: bool = False, detailed_validation: bool = True, unstructure_fallback_factory: cattrs.dispatch.HookFactory[cattrs.dispatch.UnstructureHook] = lambda _: identity, structure_fallback_factory: cattrs.dispatch.HookFactory[cattrs.dispatch.StructureHook] = lambda _: raise_error)
 
 
 

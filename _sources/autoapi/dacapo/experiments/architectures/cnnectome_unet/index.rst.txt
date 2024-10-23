@@ -186,6 +186,9 @@ Module Contents
    .. py:attribute:: use_attention
 
 
+   .. py:attribute:: batch_norm
+
+
    .. py:attribute:: unet
 
 
@@ -335,7 +338,7 @@ Module Contents
 
 
 
-.. py:class:: CNNectomeUNetModule(in_channels, num_fmaps, fmap_inc_factor, downsample_factors, kernel_size_down=None, kernel_size_up=None, activation='ReLU', num_fmaps_out=None, num_heads=1, constant_upsample=False, padding='valid', upsample_channel_contraction=False, activation_on_upsample=False, use_attention=False)
+.. py:class:: CNNectomeUNetModule(in_channels, num_fmaps, fmap_inc_factor, downsample_factors, kernel_size_down=None, kernel_size_up=None, activation='ReLU', num_fmaps_out=None, num_heads=1, constant_upsample=False, padding='valid', upsample_channel_contraction=False, activation_on_upsample=False, use_attention=False, batch_norm=True)
 
 
 
@@ -464,6 +467,9 @@ Module Contents
    .. py:attribute:: use_attention
 
 
+   .. py:attribute:: batch_norm
+
+
    .. py:attribute:: kernel_size_down
 
 
@@ -562,7 +568,7 @@ Module Contents
 
 
 
-.. py:class:: ConvPass(in_channels, out_channels, kernel_sizes, activation, padding='valid')
+.. py:class:: ConvPass(in_channels, out_channels, kernel_sizes, activation, padding='valid', batch_norm=True)
 
 
 
@@ -835,7 +841,7 @@ Module Contents
 
 
 
-.. py:class:: AttentionBlockModule(F_g, F_l, F_int, dims, upsample_factor=None)
+.. py:class:: AttentionBlockModule(F_g, F_l, F_int, dims, upsample_factor=None, batch_norm=True)
 
 
 
@@ -890,6 +896,9 @@ Module Contents
 
 
    .. py:attribute:: kernel_sizes
+
+
+   .. py:attribute:: batch_norm
 
 
    .. py:attribute:: W_g

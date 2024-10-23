@@ -210,3 +210,18 @@ Module Contents
 
 
 
+   .. py:method:: visualize_pipeline(bind_address='0.0.0.0', bind_port=0)
+
+      Visualizes the pipeline for the run, including all produced arrays.
+
+      :param bind_address: str
+                           Bind address for Neuroglancer webserver
+      :param bind_port: int
+                        Bind port for Neuroglancer webserver
+
+      .. rubric:: Examples
+
+      >>> run.visualize_pipeline()
+
+
+

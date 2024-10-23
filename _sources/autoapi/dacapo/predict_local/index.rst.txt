@@ -1,0 +1,29 @@
+dacapo.predict_local
+====================
+
+.. py:module:: dacapo.predict_local
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   dacapo.predict_local.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   dacapo.predict_local.predict
+
+
+Module Contents
+---------------
+
+.. py:data:: logger
+
+.. py:function:: predict(model: dacapo.experiments.model.Model, raw_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, prediction_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, output_roi: Optional[funlib.geometry.Roi] = None)
+

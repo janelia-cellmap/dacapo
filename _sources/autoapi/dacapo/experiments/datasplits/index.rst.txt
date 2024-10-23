@@ -41,6 +41,7 @@ Classes
    dacapo.experiments.datasplits.TrainValidateDataSplit
    dacapo.experiments.datasplits.TrainValidateDataSplitConfig
    dacapo.experiments.datasplits.DataSplitGenerator
+   dacapo.experiments.datasplits.DatasetSpec
 
 
 Package Contents
@@ -301,7 +302,7 @@ Package Contents
       :type:  List[dacapo.experiments.datasplits.datasets.DatasetConfig]
 
 
-.. py:class:: DataSplitGenerator(name: str, datasets: List[DatasetSpec], input_resolution: Union[Sequence[int], funlib.geometry.Coordinate], output_resolution: Union[Sequence[int], funlib.geometry.Coordinate], targets: Optional[List[str]] = None, segmentation_type: Union[str, SegmentationType] = 'semantic', max_gt_downsample=32, max_gt_upsample=4, max_raw_training_downsample=16, max_raw_training_upsample=2, max_raw_validation_downsample=8, max_raw_validation_upsample=2, min_training_volume_size=8000, raw_min=0, raw_max=255, classes_separator_caracter='&', use_negative_class=False)
+.. py:class:: DataSplitGenerator(name: str, datasets: List[DatasetSpec], input_resolution: Union[Sequence[int], funlib.geometry.Coordinate], output_resolution: Union[Sequence[int], funlib.geometry.Coordinate], targets: Optional[List[str]] = None, segmentation_type: Union[str, SegmentationType] = 'semantic', max_gt_downsample=32, max_gt_upsample=4, max_raw_training_downsample=16, max_raw_training_upsample=2, max_raw_validation_downsample=8, max_raw_validation_upsample=2, min_training_volume_size=8000, raw_min=0, raw_max=255, classes_separator_character='&', use_negative_class=False, max_validation_volume_size=None, binarize_gt=False)
 
    Generates DataSplitConfig for a given task config and datasets.
 
@@ -392,12 +393,19 @@ Package Contents
       int
       The maximum raw value.
 
-   .. attribute:: classes_separator_caracter
+   .. attribute:: classes_separator_character
 
       str
       The classes separator character.
 
-   .. method:: __init__(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_caracter)
+   .. attribute:: max_validation_volume_size
+
+      int
+      The maximum validation volume size. Default is None. If None, the validation volume size is not limited.
+      else, the validation volume size is limited to the specified value.
+      e.g. 600**3 for 600^3 voxels = 216_000_000 voxels.
+
+   .. method:: __init__(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_character)
 
       
       Initializes the DataSplitGenerator class with the specified name, datasets, input resolution, output resolution, targets, segmentation type, maximum ground truth downsample, maximum ground truth upsample, maximum raw training downsample, maximum raw training upsample, maximum raw validation downsample, maximum raw validation upsample, minimum training volume size, minimum raw value, maximum raw value, and classes separator character.
@@ -493,10 +501,16 @@ Package Contents
    .. py:attribute:: raw_max
 
 
-   .. py:attribute:: classes_separator_caracter
+   .. py:attribute:: classes_separator_character
 
 
    .. py:attribute:: use_negative_class
+
+
+   .. py:attribute:: max_validation_volume_size
+
+
+   .. py:attribute:: binarize_gt
 
 
    .. py:property:: class_name
@@ -599,5 +613,64 @@ Package Contents
 
       This function is used to generate the data split from the CSV file.
 
+
+
+.. py:class:: DatasetSpec(dataset_type: Union[str, DatasetType], raw_container: Union[str, upath.UPath], raw_dataset: str, gt_container: Union[str, upath.UPath], gt_dataset: str)
+
+   A class for dataset specification. It is used to specify the dataset.
+
+   .. attribute:: dataset_type
+
+      obj
+      The dataset type.
+
+   .. attribute:: raw_container
+
+      obj
+      The raw container.
+
+   .. attribute:: raw_dataset
+
+      str
+      The raw dataset.
+
+   .. attribute:: gt_container
+
+      obj
+      The ground truth container.
+
+   .. attribute:: gt_dataset
+
+      str
+      The ground truth dataset.
+
+   .. method:: __init__(dataset_type, raw_container, raw_dataset, gt_container, gt_dataset)
+
+      
+      Initializes the DatasetSpec class with the specified dataset type, raw container, raw dataset, ground truth container, and ground truth dataset.
+
+   .. method:: __str__(self)
+
+      
+      A method to get the string representation of the class.
+
+   .. rubric:: Notes
+
+   This class is used to specify the dataset.
+
+
+   .. py:attribute:: dataset_type
+
+
+   .. py:attribute:: raw_container
+
+
+   .. py:attribute:: raw_dataset
+
+
+   .. py:attribute:: gt_container
+
+
+   .. py:attribute:: gt_dataset
 
 

@@ -546,6 +546,10 @@ Package Contents
       :type:  bool
 
 
+   .. py:attribute:: gt_min_reject
+      :type:  Optional[float]
+
+
 .. py:class:: GunpowderTrainer(trainer_config)
 
 
@@ -694,6 +698,9 @@ Package Contents
    .. py:attribute:: clip_raw
 
 
+   .. py:attribute:: gt_min_reject
+
+
    .. py:attribute:: scheduler
       :value: None
 
@@ -793,6 +800,17 @@ Package Contents
       .. rubric:: Examples
 
       >>> can_train = trainer.can_train(datasets)
+
+
+
+   .. py:method:: visualize_pipeline(bind_address='0.0.0.0', bind_port=0)
+
+      Visualizes the pipeline for the run, including all produced arrays.
+
+      :param bind_address: str
+                           Bind address for Neuroglancer webserver
+      :param bind_port: int
+                        Bind port for Neuroglancer webserver
 
 
 

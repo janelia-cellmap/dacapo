@@ -20,7 +20,6 @@ Functions
 
 .. autoapisummary::
 
-   dacapo.blockwise.predict_worker.is_global_run_set
    dacapo.blockwise.predict_worker.cli
    dacapo.blockwise.predict_worker.start_worker
    dacapo.blockwise.predict_worker.start_worker_fn
@@ -43,8 +42,6 @@ Module Contents
 
 
 .. py:data:: path
-
-.. py:function:: is_global_run_set(run_name) -> bool
 
 .. py:function:: cli(log_level)
 
