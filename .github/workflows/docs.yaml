@@ -18,13 +18,13 @@ jobs:
     - name: install dacapo
       # run: 
       run: |
-        pip install sphinx-autodoc-typehints sphinx-autoapi sphinx-click sphinx-rtd-theme myst-parser jupytext ipykernel nbsphinx
+        pip install sphinx-autodoc-typehints sphinx-autoapi sphinx-click sphinx-rtd-theme myst-parser jupytext ipykernel nbsphinx myst_nb
         python -m ipykernel install --user --name python3
         pip install .[docs]
         
     - name: parse notebooks
       run: jupytext --to notebook --execute ./docs/source/notebooks/*.py
-      continue-on-error: true
+      # continue-on-error: true
     - name: remove notebook scripts
       run: rm ./docs/source/notebooks/*.py
     - name: Build and Commit

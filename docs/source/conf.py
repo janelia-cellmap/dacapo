@@ -34,7 +34,8 @@ extensions = [
     "sphinx_autodoc_typehints",
     "autoapi.extension",  # autobuild api docs
     "sphinx_click",  # auto document cli
-    "myst_parser",  # include md files in rst files
+    # "myst_parser",  # include md files in rst files
+    "myst_nb",  # integrate ipynb
 ]
 
 # Add any paths that contain templates here, relative to this directory.

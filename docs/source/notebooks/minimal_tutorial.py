@@ -56,12 +56,20 @@
 
 # %% [markdown]
 # ## Config Store
-# To define where the data goes, create a dacapo.yaml configuration file either in `~/.config/dacapo/dacapo.yaml` or in `./dacapo.yaml`. Here is a template:
+# Configs, model checkpoints, stats, and snapshots can be saved in:
+# - a local folder
+# - an S3 bucket
+# - a MongoDB server
+#
+# To define where the data goes, create a `dacapo.yaml` configuration file either in `~/.config/dacapo/dacapo.yaml` or in `./dacapo.yaml`. Here is a template:
 #
 # ```yaml
 # type: files
 # runs_base_dir: /path/to/my/data/storage
 # ```
+#
+# Alternatively, you can define it by setting an environment variable: `DACAPO_OPTIONS_FILE=/PATH/TO/MY/DACAPO_FILES`.
+#
 # The `runs_base_dir` defines where your on-disk data will be stored. The `type` setting determines the database backend. The default is `files`, which stores the data in a file tree on disk. Alternatively, you can use `mongodb` to store the data in a MongoDB database. To use MongoDB, you will need to provide a `mongodbhost` and `mongodbname` in the configuration file:
 #
 # ```yaml
@@ -73,25 +81,22 @@
 # First we need to create a config store to store our configurations
 import multiprocessing
 
+# This line is mostly for MacOS users to avoid a bug in multiprocessing
 multiprocessing.set_start_method("fork", force=True)
-from dacapo.store.create_store import create_config_store, create_stats_store
+from dacapo.store.create_store import create_config_store
 
 config_store = create_config_store()
 
+# %% [markdown]
+# ## Data Preparation
+# DaCapo works with zarr, so we will download [skimage example cell data](https://scikit-image.org/docs/stable/api/skimage.data.html#skimage.data.cells3d) and save it as a zarr file.
 # %% Create some data
-
-# import random
-
-import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
 import numpy as np
 from funlib.geometry import Coordinate, Roi
 from funlib.persistence import prepare_ds
 from scipy.ndimage import label
 from skimage import data
 from skimage.filters import gaussian
-
-from dacapo.utils.affinities import seg_to_affgraph
 
 # Download the data
 cell_data = (data.cells3d().transpose((1, 0, 2, 3)) / 256).astype(np.uint8)
@@ -138,17 +143,27 @@ labels_array = prepare_ds(
 labels_array[labels_array.roi] = label(mask_array.to_ndarray(mask_array.roi))[0]
 
 print("Data saved to cells3d.zarr")
+import zarr
 
-
-# Create a custom label color map for showing instances
-np.random.seed(1)
-colors = [[0, 0, 0]] + [list(np.random.choice(range(256), size=3)) for _ in range(254)]
-label_cmap = ListedColormap(colors)
-
+print(zarr.open("cells3d.zarr", mode="r").tree())
 # %% [markdown]
 # Here we show a slice of the raw data:
 # %%
-# plt.imshow(cell_array.data[30])
+# Create a custom label color map for showing instances
+import matplotlib.pyplot as plt
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+
+# Show the raw data
+axes[0].imshow(cell_array.data[30])
+axes[0].set_title("Raw Data")
+
+# Show the labels using the custom label color map
+axes[1].imshow(labels_array.data[30])
+axes[1].set_title("Labels")
+
+plt.show()
+
 
 # %% [markdown]
 # ## Datasplit
@@ -165,19 +180,13 @@ from dacapo.experiments.datasplits import DataSplitGenerator, DatasetSpec
 
 dataspecs = [
     DatasetSpec(
-        dataset_type="train",
+        dataset_type=type_crop,
         raw_container="cells3d.zarr",
         raw_dataset="raw",
         gt_container="cells3d.zarr",
         gt_dataset="labels",
-    ),
-    DatasetSpec(
-        dataset_type="val",
-        raw_container="cells3d.zarr",
-        raw_dataset="raw",
-        gt_container="cells3d.zarr",
-        gt_dataset="labels",
-    ),
+    )
+    for type_crop in ["train", "val"]
 ]
 
 datasplit_config = DataSplitGenerator(
@@ -198,23 +207,30 @@ config_store.store_datasplit_config(datasplit_config)
 
 # %% [markdown]
 # ## Task
-# What do you want to learn? An instance segmentation? If so, how? Affinities,
-# Distance Transform, Foreground/Background, etc. Each of these tasks are commonly learned
-# and evaluated with specific loss functions and evaluation metrics. Some tasks may
-# also require specific non-linearities or output formats from your model.
+#
+# ### What do you want to learn?
+#
+# - **Instance Segmentation**: Identify and separate individual objects within an image.
+# - **Affinities**: Learn the likelihood of neighboring pixels belonging to the same object.
+# - **Distance Transform**: Calculate the distance of each pixel to the nearest object boundary.
+# - **Foreground/Background**: Distinguish between object pixels and background pixels.
+#
+# Each of these tasks is commonly learned and evaluated with specific loss functions and evaluation metrics. Some tasks may also require specific non-linearities or output formats from your model.
 
 # %%
 from dacapo.experiments.tasks import DistanceTaskConfig, AffinitiesTaskConfig
 
+resolution = 260  # nm
 # an example distance task configuration
 # note that the clip_distance, tol_distance, and scale_factor are in nm
 dist_task_config = DistanceTaskConfig(
     name="example_dist",
     channels=["cell"],
-    clip_distance=260 * 10.0,
-    tol_distance=260 * 10.0,
-    scale_factor=260 * 20.0,
+    clip_distance=resolution * 10.0,
+    tol_distance=resolution * 10.0,
+    scale_factor=resolution * 20.0,
 )
+# if the config already exists, delete it first
 # config_store.delete_task_config(dist_task_config.name)
 config_store.store_task_config(dist_task_config)
 
@@ -341,7 +357,11 @@ plt.show()
 
 # %%
 import zarr
+from matplotlib.colors import ListedColormap
 
+np.random.seed(1)
+colors = [[0, 0, 0]] + [list(np.random.choice(range(256), size=3)) for _ in range(254)]
+label_cmap = ListedColormap(colors)
 run_path = config_store.path / run_config.name
 
 num_snapshots = run_config.num_iterations // run_config.trainer_config.snapshot_interval
