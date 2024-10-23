@@ -1,6 +1,8 @@
 # %% [markdown]
 # # Minimal Tutorial
-#
+# DaCapo is a framework for easy application of established machine learning techniques on large, multi-dimensional images.
+# ![DaCapo Diagram](https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/dacapo_diagram.png)
+
 
 #  %% [markdown]
 # ## Needed Libraries for this Tutorial

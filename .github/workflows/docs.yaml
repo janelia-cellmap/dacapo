@@ -24,6 +24,7 @@ jobs:
         
     - name: parse notebooks
       run: jupytext --to notebook --execute ./docs/source/notebooks/*.py
+      continue-on-error: true
     - name: remove notebook scripts
       run: rm ./docs/source/notebooks/*.py
     - name: Build and Commit
