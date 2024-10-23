@@ -63,6 +63,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#architecture">Architecture</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#trainer">Trainer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#run">Run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieve-configurations">Retrieve Configurations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#train">Train</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#visualize">Visualize</a></li>
 </ul>
@@ -461,6 +462,40 @@ set of configs in order to increase our chances of finding an optimum.</p>
 </div>
 </div>
 </section>
+<section id="retrieve-configurations">
+<h2>Retrieve Configurations<a class="headerlink" href="#retrieve-configurations" title="Link to this heading"></a></h2>
+<p>All of the configurations are saved in the config store. You can retrieve them as follows:</p>
+<ul class="simple">
+<li><p><strong>Architectures</strong>: These define the network architectures used in your experiments.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">architectures</span> <span class="o">=</span> <span class="n">config_store</span><span class="o">.</span><span class="n">retrieve_architecture_configs</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Tasks</strong>: These specify the tasks that your model will learn, such as instance segmentation or affinity prediction.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span> <span class="o">=</span> <span class="n">config_store</span><span class="o">.</span><span class="n">retrieve_task_configs</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Trainers</strong>: These configurations define how the training process is conducted, including parameters like batch size and learning rate.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">trainers</span> <span class="o">=</span> <span class="n">config_store</span><span class="o">.</span><span class="n">retrieve_trainer_configs</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Datasplits</strong>: These configurations specify how your data is split into training, validation, and test sets.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">datasplits</span> <span class="o">=</span> <span class="n">config_store</span><span class="o">.</span><span class="n">retrieve_datasplit_configs</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Runs</strong>: These combine all the above configurations into a single experiment run.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">runs</span> <span class="o">=</span> <span class="n">config_store</span><span class="o">.</span><span class="n">retrieve_run_configs</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
 <section id="train">
 <h2>Train<a class="headerlink" href="#train" title="Link to this heading"></a></h2>
 <p>NOTE: The run stats are stored in the <code class="docutils literal notranslate"><span class="pre">runs_base_dir/stats</span></code> directory.
@@ -512,95 +547,123 @@ Retrieving weights for run example_run, iteration 2000
 including snapshots, validation results, and the loss.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats_store</span> <span class="o">=</span> <span class="n">create_stats_store</span><span class="p">()</span>
-<span class="n">training_stats</span> <span class="o">=</span> <span class="n">stats_store</span><span class="o">.</span><span class="n">retrieve_training_stats</span><span class="p">(</span><span class="n">run_config</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-<span class="n">stats</span> <span class="o">=</span> <span class="n">training_stats</span><span class="o">.</span><span class="n">to_xarray</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Training Loss&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Loss&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run</span><span class="o">.</span><span class="n">validation_scores</span><span class="o">.</span><span class="n">to_xarray</span><span class="p">()[</span><span class="s2">&quot;criteria&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&#39;voi_split&#39;, &#39;voi_merge&#39;, &#39;voi&#39;], dtype=&#39;&lt;U9&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.plot</span> <span class="kn">import</span> <span class="n">plot_runs</span>
+
+<span class="n">plot_runs</span><span class="p">(</span>
+    <span class="n">run_config_base_names</span><span class="o">=</span><span class="p">[</span><span class="n">run_config</span><span class="o">.</span><span class="n">name</span><span class="p">],</span>
+    <span class="n">validation_scores</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;voi&quot;</span><span class="p">],</span>
+    <span class="n">plot_losses</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1"># # other ways to visualize the training stats</span>
+<span class="c1"># stats_store = create_stats_store()</span>
+<span class="c1"># training_stats = stats_store.retrieve_training_stats(run_config.name)</span>
+<span class="c1"># stats = training_stats.to_xarray()</span>
+<span class="c1"># plt.plot(stats)</span>
+<span class="c1"># plt.title(&quot;Training Loss&quot;)</span>
+<span class="c1"># plt.xlabel(&quot;Iteration&quot;)</span>
+<span class="c1"># plt.ylabel(&quot;Loss&quot;)</span>
+<span class="c1"># plt.show()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating FileConfigStore:
+	path: /home/runner/dacapo/configs
+Creating FileStatsStore:
+	path    : /home/runner/dacapo/stats
+</pre></div>
+</div>
+<img alt="../_images/a13c7f54a64270dadd461f085154ea2630cd8e61f64a7240d21ef6fe5ae51291.png" src="../_images/a13c7f54a64270dadd461f085154ea2630cd8e61f64a7240d21ef6fe5ae51291.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">zarr</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">254</span><span class="p">)]</span>
+<span class="n">label_cmap</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+
+<span class="n">run_path</span> <span class="o">=</span> <span class="n">config_store</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">run_config</span><span class="o">.</span><span class="n">name</span>
+
+<span class="n">num_snapshots</span> <span class="o">=</span> <span class="n">run_config</span><span class="o">.</span><span class="n">num_iterations</span> <span class="o">//</span> <span class="n">run_config</span><span class="o">.</span><span class="n">trainer_config</span><span class="o">.</span><span class="n">snapshot_interval</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">num_snapshots</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">num_snapshots</span><span class="p">))</span>
+
+<span class="c1"># Set column titles</span>
+<span class="n">column_titles</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span> <span class="s2">&quot;Target&quot;</span><span class="p">,</span> <span class="s2">&quot;Prediction&quot;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">column_titles</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_snapshots</span><span class="p">):</span>
+    <span class="n">snapshot_it</span> <span class="o">=</span> <span class="n">snapshot</span> <span class="o">*</span> <span class="n">run_config</span><span class="o">.</span><span class="n">trainer_config</span><span class="o">.</span><span class="n">snapshot_interval</span>
+    <span class="c1"># break</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/snapshot.zarr/</span><span class="si">{</span><span class="n">snapshot_it</span><span class="si">}</span><span class="s2">/volumes/raw&quot;</span><span class="p">)[:]</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/snapshot.zarr/</span><span class="si">{</span><span class="n">snapshot_it</span><span class="si">}</span><span class="s2">/volumes/target&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/snapshot.zarr/</span><span class="si">{</span><span class="n">snapshot_it</span><span class="si">}</span><span class="s2">/volumes/prediction&quot;</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">snapshot</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">raw</span><span class="p">[</span><span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span><span class="o">-</span><span class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span><span class="o">-</span><span class="n">c</span><span class="p">])</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">snapshot</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">snapshot</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="n">prediction</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">snapshot</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Snapshot </span><span class="si">{</span><span class="n">snapshot_it</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># # %%</span>
+<span class="c1"># Visualize validations</span>
+<span class="kn">import</span> <span class="nn">zarr</span>
+
+<span class="n">num_validations</span> <span class="o">=</span> <span class="n">run_config</span><span class="o">.</span><span class="n">num_iterations</span> <span class="o">//</span> <span class="n">run_config</span><span class="o">.</span><span class="n">validation_interval</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">num_validations</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">num_validations</span><span class="p">))</span>
+
+<span class="c1"># Set column titles</span>
+<span class="n">column_titles</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span> <span class="s2">&quot;Ground Truth&quot;</span><span class="p">,</span> <span class="s2">&quot;Prediction&quot;</span><span class="p">,</span> <span class="s2">&quot;Segmentation&quot;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">column_titles</span><span class="p">)):</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">column_titles</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">validation</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_validations</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">datasplit</span><span class="o">.</span><span class="n">validate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">validation_it</span> <span class="o">=</span> <span class="n">validation</span> <span class="o">*</span> <span class="n">run_config</span><span class="o">.</span><span class="n">validation_interval</span>
+    <span class="c1"># break</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/inputs/</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/raw&quot;</span><span class="p">)[:]</span>
+    <span class="n">gt</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/inputs/</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/gt&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">pred_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/</span><span class="si">{</span><span class="n">validation_it</span><span class="si">}</span><span class="s2">/ds_</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/prediction&quot;</span>
+    <span class="n">out_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/</span><span class="si">{</span><span class="n">validation_it</span><span class="si">}</span><span class="s2">/ds_</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))&quot;</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">out_path</span><span class="p">)[:]</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pred_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">gt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[:,</span> <span class="n">c</span><span class="p">:</span><span class="o">-</span><span class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span><span class="o">-</span><span class="n">c</span><span class="p">]</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">validation</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">raw</span><span class="p">[</span><span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">validation</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
+        <span class="n">gt</span><span class="p">[</span><span class="n">gt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">label_cmap</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;none&quot;</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">validation</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="n">prediction</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">validation</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
+        <span class="n">output</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">label_cmap</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;none&quot;</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">validation</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Validation </span><span class="si">{</span><span class="n">validation_it</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating FileStatsStore:
-	path    : /home/runner/dacapo/stats
-</pre></div>
-</div>
-<img alt="../_images/97b2edf7e99216bd990eef2c7597672b7c0cfe34cad52e451d4ff080ec986ee9.png" src="../_images/97b2edf7e99216bd990eef2c7597672b7c0cfe34cad52e451d4ff080ec986ee9.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import zarr</span>
-<span class="c1"># from matplotlib.colors import ListedColormap</span>
-
-<span class="c1"># np.random.seed(1)</span>
-<span class="c1"># colors = [[0, 0, 0]] + [list(np.random.choice(range(256), size=3)) for _ in range(254)]</span>
-<span class="c1"># label_cmap = ListedColormap(colors)</span>
-<span class="c1"># run_path = config_store.path / run_config.name</span>
-
-<span class="c1"># num_snapshots = run_config.num_iterations // run_config.trainer_config.snapshot_interval</span>
-<span class="c1"># fig, ax = plt.subplots(num_snapshots, 3, figsize=(10, 2 * num_snapshots))</span>
-
-<span class="c1"># # Set column titles</span>
-<span class="c1"># column_titles = [&quot;Raw&quot;, &quot;Target&quot;, &quot;Prediction&quot;]</span>
-<span class="c1"># for col in range(3):</span>
-<span class="c1">#     ax[0, col].set_title(column_titles[col])</span>
-
-<span class="c1"># for snapshot in range(num_snapshots):</span>
-<span class="c1">#     snapshot_it = snapshot * run_config.trainer_config.snapshot_interval</span>
-<span class="c1">#     # break</span>
-<span class="c1">#     raw = zarr.open(f&quot;{run_path}/snapshot.zarr/{snapshot_it}/volumes/raw&quot;)[:]</span>
-<span class="c1">#     target = zarr.open(f&quot;{run_path}/snapshot.zarr/{snapshot_it}/volumes/target&quot;)[0]</span>
-<span class="c1">#     prediction = zarr.open(</span>
-<span class="c1">#         f&quot;{run_path}/snapshot.zarr/{snapshot_it}/volumes/prediction&quot;</span>
-<span class="c1">#     )[0]</span>
-<span class="c1">#     c = (raw.shape[1] - target.shape[1]) // 2</span>
-<span class="c1">#     ax[snapshot, 0].imshow(raw[raw.shape[0] // 2, c:-c, c:-c])</span>
-<span class="c1">#     ax[snapshot, 1].imshow(target[target.shape[0] // 2])</span>
-<span class="c1">#     ax[snapshot, 2].imshow(prediction[prediction.shape[0] // 2])</span>
-<span class="c1">#     ax[snapshot, 0].set_ylabel(f&quot;Snapshot {snapshot_it}&quot;)</span>
-<span class="c1"># plt.show()</span>
-
-<span class="c1"># # %%</span>
-<span class="c1"># # Visualize validations</span>
-<span class="c1"># import zarr</span>
-
-<span class="c1"># num_validations = run_config.num_iterations // run_config.validation_interval</span>
-<span class="c1"># fig, ax = plt.subplots(num_validations, 4, figsize=(10, 2 * num_validations))</span>
-
-<span class="c1"># # Set column titles</span>
-<span class="c1"># column_titles = [&quot;Raw&quot;, &quot;Ground Truth&quot;, &quot;Prediction&quot;, &quot;Segmentation&quot;]</span>
-<span class="c1"># for col in range(len(column_titles)):</span>
-<span class="c1">#     ax[0, col].set_title(column_titles[col])</span>
-
-<span class="c1"># for validation in range(1, num_validations + 1):</span>
-<span class="c1">#     dataset = run.datasplit.validate[0].name</span>
-<span class="c1">#     validation_it = validation * run_config.validation_interval</span>
-<span class="c1">#     # break</span>
-<span class="c1">#     raw = zarr.open(f&quot;{run_path}/validation.zarr/inputs/{dataset}/raw&quot;)[:]</span>
-<span class="c1">#     gt = zarr.open(f&quot;{run_path}/validation.zarr/inputs/{dataset}/gt&quot;)[0]</span>
-<span class="c1">#     pred_path = f&quot;{run_path}/validation.zarr/{validation_it}/ds_{dataset}/prediction&quot;</span>
-<span class="c1">#     out_path = f&quot;{run_path}/validation.zarr/{validation_it}/ds_{dataset}/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))&quot;</span>
-<span class="c1">#     output = zarr.open(out_path)[:]</span>
-<span class="c1">#     prediction = zarr.open(pred_path)[0]</span>
-<span class="c1">#     c = (raw.shape[1] - gt.shape[1]) // 2</span>
-<span class="c1">#     if c != 0:</span>
-<span class="c1">#         raw = raw[:, c:-c, c:-c]</span>
-<span class="c1">#     ax[validation - 1, 0].imshow(raw[raw.shape[0] // 2])</span>
-<span class="c1">#     ax[validation - 1, 1].imshow(</span>
-<span class="c1">#         gt[gt.shape[0] // 2], cmap=label_cmap, interpolation=&quot;none&quot;</span>
-<span class="c1">#     )</span>
-<span class="c1">#     ax[validation - 1, 2].imshow(prediction[prediction.shape[0] // 2])</span>
-<span class="c1">#     ax[validation - 1, 3].imshow(</span>
-<span class="c1">#         output[output.shape[0] // 2], cmap=label_cmap, interpolation=&quot;none&quot;</span>
-<span class="c1">#     )</span>
-<span class="c1">#     ax[validation - 1, 0].set_ylabel(f&quot;Validation {validation_it}&quot;)</span>
-<span class="c1"># plt.show()</span>
-</pre></div>
-</div>
+<img alt="../_images/629bd8aa5e473546ff43d4c3e1b5b421c9476dc3f020b430a121dde9edab08e0.png" src="../_images/629bd8aa5e473546ff43d4c3e1b5b421c9476dc3f020b430a121dde9edab08e0.png" />
+<img alt="../_images/3b0d5b228fdd133ea7415e1f4348561154a752e7744397e139ea8fbfe8a9fce0.png" src="../_images/3b0d5b228fdd133ea7415e1f4348561154a752e7744397e139ea8fbfe8a9fce0.png" />
 </div>
 </div>
 </section>
