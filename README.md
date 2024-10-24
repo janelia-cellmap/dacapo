@@ -57,7 +57,12 @@ Tasks we support and approaches for those tasks:
  - Semantic segmentation
     - Signed distances
     - One-hot encoding of different types of objects
-  
+
+## Example Tutorial
+A minimal example tutorial can be found in the examples directory and opened in colab here: <a target="_blank" href="https://colab.research.google.com/github/janelia-cellmap/dacapo/blob/main/examples/starter_tutorial/minimal_tutorial.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
+
 ## Helpful Resources & Tools
  - Chunked data, zarr, and n5
     - OME-Zarr: a cloud-optimized bioimaging file format with international community support (doi: [10.1101/2023.02.17.528834](https://pubmed.ncbi.nlm.nih.gov/36865282/))
