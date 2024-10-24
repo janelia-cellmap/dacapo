@@ -25,14 +25,10 @@ class AffinitiesTask(Task):
 
     def __init__(self, task_config):
         """
-        Create a `DummyTask` from a `DummyTaskConfig`.
+        Create an AffinitiesTask object from a given AffinitiesTaskConfig.
 
         Args:
-            task_config: The configuration for the task.
-        Returns:
-            A `DummyTask` object.
-        Raises:
-            NotImplementedError: This method is not implemented.
+            task_config (AffinitiesTaskConfig): The configuration for the affinities task
         Examples:
             >>> task = AffinitiesTask(task_config)
         """
@@ -40,6 +36,8 @@ class AffinitiesTask(Task):
         self.predictor = AffinitiesPredictor(
             neighborhood=task_config.neighborhood,
             lsds=task_config.lsds,
+            num_voxels=task_config.num_lsd_voxels,
+            downsample_lsds=task_config.downsample_lsds,
             affs_weight_clipmin=task_config.affs_weight_clipmin,
             affs_weight_clipmax=task_config.affs_weight_clipmax,
             lsd_weight_clipmin=task_config.lsd_weight_clipmin,

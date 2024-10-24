@@ -9,8 +9,10 @@
 
    overview
    install
+   notebooks/minimal_tutorial
    tutorial
    docker
+   aws
    autoapi/index
    cli
 

@@ -1,5 +1,4 @@
 from upath import UPath as Path
-
 from dacapo.blockwise import run_blockwise
 import dacapo.blockwise
 from dacapo.experiments import Run
@@ -24,7 +23,7 @@ def predict(
     input_dataset: str,
     output_path: LocalArrayIdentifier | Path | str,
     output_roi: Optional[Roi | str] = None,
-    num_workers: int = 12,
+    num_workers: int = 1,
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):
@@ -72,14 +71,13 @@ def predict(
             output_container, f"prediction_{run_name}_{iteration}"
         )
 
-    # get the model's input and output size
     compute_context = create_compute_context()
     if isinstance(compute_context, LocalTorch):
         num_workers = 1
 
     model = run.model.eval()
 
-    if iteration is not None:
+    if iteration is not None and not compute_context.distribute_workers:
         # create weights store
         weights_store = create_weights_store()
 
@@ -94,7 +92,7 @@ def predict(
     input_size = input_voxel_size * input_shape
     output_size = output_voxel_size * model.compute_output_shape(input_shape)[1]
     num_out_channels = model.num_out_channels
-    del model
+    # del model
 
     # calculate input and output rois
 
@@ -140,7 +138,7 @@ def predict(
     # run blockwise prediction
     worker_file = str(Path(Path(dacapo.blockwise.__file__).parent, "predict_worker.py"))
     print("Running blockwise prediction with worker_file: ", worker_file)
-    run_blockwise(
+    success = run_blockwise(
         worker_file=worker_file,
         total_roi=_input_roi,
         read_roi=Roi((0, 0, 0), input_size),
@@ -149,9 +147,10 @@ def predict(
         max_retries=2,  # TODO: make this an option
         timeout=None,  # TODO: make this an option
         ######
-        run_name=run_name,
+        run_name=run.name,
         iteration=iteration,
         input_array_identifier=input_array_identifier,
         output_array_identifier=output_array_identifier,
     )
     print("Done predicting.")
+    return success

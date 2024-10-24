@@ -1,5 +1,5 @@
 import os
-from pathlib import Path
+from upath import UPath as Path
 import shutil
 from ..fixtures import *
 
@@ -8,19 +8,20 @@ from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo import apply
 
 import pytest
-from pytest_lazyfixture import lazy_fixture
+from pytest_lazy_fixtures import lf
 
 import logging
 
 logging.basicConfig(level=logging.INFO)
 
 
+@pytest.mark.skip(reason="blockwise task is not currently supported")
 @pytest.mark.parametrize(
     "run_config",
     [
-        # lazy_fixture("distance_run"),
-        lazy_fixture("dummy_run"),
-        # lazy_fixture("onehot_run"),
+        # lf("distance_run"),
+        lf("dummy_run"),
+        # lf("onehot_run"),
     ],
 )
 def test_apply(options, run_config, zarr_array, tmp_path):

@@ -13,8 +13,6 @@ from zarr.n5 import N5FSStore
 
 from collections import OrderedDict
 import logging
-from upath import UPath as Path
-import json
 from typing import Dict, Tuple, Any, Optional, List
 
 logger = logging.getLogger(__name__)
@@ -273,7 +271,9 @@ class ZarrArray(Array):
             This method is used to return the region of interest of the array.
         """
         if self.snap_to_grid is not None:
-            return self._daisy_array.roi.snap_to_grid(self.snap_to_grid, mode="shrink")
+            return self._daisy_array.roi.snap_to_grid(
+                np.lcm(self.voxel_size, self.snap_to_grid), mode="shrink"
+            )
         else:
             return self._daisy_array.roi
 
@@ -369,11 +369,17 @@ class ZarrArray(Array):
         """
         file_name = str(self.file_name)
         # Zarr library does not detect the store for N5 datasets
-        if file_name.endswith(".n5"):
-            zarr_container = zarr.open(N5FSStore(str(file_name)), mode=self.mode)
-        else:
-            zarr_container = zarr.open(str(file_name), mode=self.mode)
-        return zarr_container[self.dataset]
+        try:
+            if file_name.endswith(".n5"):
+                zarr_container = zarr.open(N5FSStore(str(file_name)), mode=self.mode)
+            else:
+                zarr_container = zarr.open(str(file_name), mode=self.mode)
+            return zarr_container[self.dataset]
+        except Exception as e:
+            logger.error(
+                f"Could not open dataset {self.dataset} in file {file_name} in mode {self.mode}"
+            )
+            raise e
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
         """
@@ -463,7 +469,7 @@ class ZarrArray(Array):
             write_size = Coordinate((axis_length,) * voxel_size.dims) * voxel_size
         write_size = Coordinate((min(a, b) for a, b in zip(write_size, roi.shape)))
         zarr_container = zarr.open(array_identifier.container, "a")
-        if num_channels is None or num_channels == 1:
+        if num_channels is None:
             axes = [axis for axis in axes if "c" not in axis]
             num_channels = None
         else:

@@ -38,7 +38,7 @@ dependencies = [
         "lazy-property",
         "neuroglancer",
         "torch",
-        "fibsem_tools",
+        "fibsem_tools<=6.3",
         "attrs",
         "bokeh",
         "numpy-indexed>=0.3.7",
@@ -47,7 +47,7 @@ dependencies = [
         "funlib.geometry>=0.2",
         "mwatershed>=0.1",
         "cellmap-models",
-        "funlib.persistence>=0.3.0",
+        "funlib.persistence==0.4.0",
         "gunpowder>=1.3",
         "lsds",
         "xarray",
@@ -58,12 +58,13 @@ dependencies = [
         "scipy",
         "upath",
         "boto3",
+        "matplotlib",
         ]
 
 # extras
 # https://peps.python.org/pep-0621/#dependencies-optional-dependencies
 [project.optional-dependencies]
-test = ["pytest==7.4.4", "pytest-cov", "pytest-lazy-fixture"]
+test = ["pytest", "pytest-cov", "pytest-lazy-fixtures"]
 dev = [
     "black",
     "mypy",
@@ -78,6 +79,7 @@ docs = [
     "sphinx-click",
     "sphinx-rtd-theme",
     "myst-parser",
+    "pooch",
 ]
 examples = [
     "ipython",

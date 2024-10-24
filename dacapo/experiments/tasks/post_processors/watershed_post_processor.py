@@ -3,6 +3,10 @@ import dacapo.blockwise
 from dacapo.blockwise.scheduler import segment_blockwise
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from dacapo.store.array_store import LocalArrayIdentifier
+from dacapo.utils.array_utils import to_ndarray, save_ndarray
+from funlib.persistence import open_ds
+import daisy
+import mwatershed as mws
 
 from .watershed_post_processor_parameters import WatershedPostProcessorParameters
 from .post_processor import PostProcessor
@@ -123,29 +127,15 @@ class WatershedPostProcessor(PostProcessor):
             np.uint64,
             block_size * self.prediction_array.voxel_size,
         )
-
-        read_roi = Roi((0, 0, 0), self.prediction_array.voxel_size * block_size)
-        # run blockwise prediction
-        pars = {
-            "offsets": self.offsets,
-            "bias": parameters.bias,
-            "context": parameters.context,
-        }
-        segment_blockwise(
-            segment_function_file=str(
-                Path(Path(dacapo.blockwise.__file__).parent, "watershed_function.py")
-            ),
-            context=parameters.context,
-            total_roi=self.prediction_array.roi,
-            read_roi=read_roi.grow(parameters.context, parameters.context),
-            write_roi=read_roi,
-            num_workers=num_workers,
-            max_retries=2,  # TODO: make this an option
-            timeout=None,  # TODO: make this an option
-            ######
-            input_array_identifier=self.prediction_array_identifier,
-            output_array_identifier=output_array_identifier,
-            parameters=pars,
+        input_array = open_ds(
+            self.prediction_array_identifier.container.path,
+            self.prediction_array_identifier.dataset,
         )
 
-        return output_array
+        data = to_ndarray(input_array, output_array.roi).astype(float)
+        segmentation = mws.agglom(
+            data - parameters.bias, offsets=self.offsets, randomized_strides=True
+        )
+        save_ndarray(segmentation, self.prediction_array.roi, output_array)
+
+        return output_array_identifier

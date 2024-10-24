@@ -74,7 +74,12 @@ def run_blockwise(
     )
     print("Running blockwise with worker_file: ", worker_file)
     print(f"Using compute context: {create_compute_context()}")
-    success = daisy.run_blockwise([task])
+    compute_context = create_compute_context()
+    print(f"Using compute context: {compute_context}")
+
+    multiprocessing = compute_context.distribute_workers
+
+    success = daisy.run_blockwise([task], multiprocessing=multiprocessing)
     return success
 
 

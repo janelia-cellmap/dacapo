@@ -4,6 +4,10 @@ from funlib.geometry import Roi
 
 import numpy as np
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class OnesArray(Array):
     """
@@ -67,6 +71,7 @@ class OnesArray(Array):
             `like` method to create a new OnesArray with the same metadata as
             another array.
         """
+        logger.warning("OnesArray is deprecated. Use ConstantArray instead.")
         self._source_array = array_config.source_array_config.array_type(
             array_config.source_array_config
         )

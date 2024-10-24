@@ -50,7 +50,7 @@ def segment_function(input_array, block, **parameters):
 
     Args:
         input_array (np.ndarray): The 3D array to segment.
-        block (dask.array.core.Block): The block object.
+        block (daisy.Block): The block object.
         **parameters: Parameters for the empanada-napari segmenter.
     Returns:
         np.ndarray: The segmented 3D array.
