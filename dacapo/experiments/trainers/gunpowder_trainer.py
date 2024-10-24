@@ -313,8 +313,8 @@ class GunpowderTrainer(Trainer):
             predicted.retain_grad()
             loss = self._loss.compute(
                 predicted,
-                torch.as_tensor(target[target.roi]).to(device).float(),
-                torch.as_tensor(weight[weight.roi]).to(device).float(),
+                torch.as_tensor(target[target.roi]).float().to(device),
+                torch.as_tensor(weight[weight.roi]).float().to(device),
             )
             loss.backward()
             optimizer.step()
