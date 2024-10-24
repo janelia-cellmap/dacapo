@@ -309,7 +309,7 @@ class GunpowderTrainer(Trainer):
                 param.grad = None
 
             t_start_prediction = time.time()
-            predicted = model.forward(torch.as_tensor(raw[raw.roi]).to(device).float())
+            predicted = model.forward(torch.as_tensor(raw[raw.roi]).float().to(device))
             predicted.retain_grad()
             loss = self._loss.compute(
                 predicted,
