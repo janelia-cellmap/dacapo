@@ -135,6 +135,7 @@ def train_run(run: Run, do_validate=True):
     compute_context = create_compute_context()
     run.model = run.model.to(compute_context.device)
     run.move_optimizer(compute_context.device)
+    logger.info(f"Training on {compute_context.device}")
 
     array_store = create_array_store()
     run.trainer.iteration = trained_until

@@ -60,6 +60,8 @@ class LocalTorch(ComputeContext):
                 if free < self.oom_limit:  # less than 1 GB free, decrease chance of OOM
                     return torch.device("cpu")
                 return torch.device("cuda")
+            elif torch.backends.mps.is_available():
+                return torch.device("mps")
             else:
                 return torch.device("cpu")
         return torch.device(self._device)
