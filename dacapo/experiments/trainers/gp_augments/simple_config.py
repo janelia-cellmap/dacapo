@@ -20,6 +20,13 @@ class SimpleAugmentConfig(AugmentConfig):
         This class is a subclass of AugmentConfig.
     """
 
+    augmentation_probability: float = attr.ib(
+        default=1.,
+        metadata={
+            "help_text": "Probability of applying the augmentations."
+        },
+    )
+
     def node(self, _raw_key=None, _gt_key=None, _mask_key=None):
         """
         Get a gp.SimpleAugment node.
@@ -36,4 +43,4 @@ class SimpleAugmentConfig(AugmentConfig):
             >>> node = simple_augment_config.node()
 
         """
-        return gp.SimpleAugment()
+        return gp.SimpleAugment(p=self.augmentation_probability)

@@ -62,6 +62,12 @@ class ElasticAugmentConfig(AugmentConfig):
             "3D rotations."
         },
     )
+    augmentation_probability: float = attr.ib(
+        default=1.,
+        metadata={
+            "help_text": "Probability of applying the augmentations."
+        },
+    )
 
     def node(self, _raw_key=None, _gt_key=None, _mask_key=None):
         """
@@ -87,4 +93,5 @@ class ElasticAugmentConfig(AugmentConfig):
             rotation_interval=self.rotation_interval,
             subsample=self.subsample,
             uniform_3d_rotation=self.uniform_3d_rotation,
+            augmentation_probability=self.augmentation_probability,
         )
