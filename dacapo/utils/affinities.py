@@ -9,32 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 def seg_to_affgraph(seg: np.ndarray, neighborhood: List[Coordinate]) -> np.ndarray:
-    """
-    Constructs an affinity graph from a segmentation.
-
-    Args:
-        seg (np.ndarray): The segmentation array.
-        neighborhood (List[Coordinate]): The list of coordinates representing the neighborhood.
-    Returns:
-        np.ndarray: The affinity graph.
-    Raises:
-        RuntimeError: If the number of dimensions is not 2 or 3.
-    Examples:
-        >>> seg = np.array([[1, 1, 2], [1, 1, 2], [3, 3, 4]])
-        >>> neighborhood = [Coordinate(1, 0), Coordinate(0, 1)]
-        >>> seg_to_affgraph(seg, neighborhood)
-        array([[[0, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0]],
-        <BLANKLINE>
-               [[1, 1, 0],
-                [1, 1, 0],
-                [0, 0, 0]]], dtype=int32)
-    Notes:
-        The affinity graph is represented as:
-        shape = (e, z, y, x)
-        nhood.shape = (edges, 3)
-    """
+    
     nhood: np.ndarray = np.array(neighborhood)
 
     # constructs an affinity graph from a segmentation
@@ -124,22 +99,7 @@ def seg_to_affgraph(seg: np.ndarray, neighborhood: List[Coordinate]) -> np.ndarr
 
 
 def padding(neighborhood, voxel_size):
-    """
-    Get the appropriate padding to make sure all provided affinities are "True"
-
-    Args:
-        neighborhood (List[Coordinate]): The list of coordinates representing the neighborhood.
-        voxel_size (Coordinate): The voxel size.
-    Returns:
-        Tuple[Coordinate, Coordinate]: The negative and positive padding.
-    Raises:
-        RuntimeError: If the number of dimensions is not 2 or 3.
-    Examples:
-        >>> neighborhood = [Coordinate(1, 0), Coordinate(0, 1)]
-        >>> voxel_size = Coordinate(1, 1)
-        >>> padding(neighborhood, voxel_size)
-        (Coordinate(0, 0), Coordinate(1, 1))
-    """
+    
     dims = voxel_size.dims
     padding_neg = (
         Coordinate(min([0] + [a[d] for a in neighborhood]) for d in range(dims))

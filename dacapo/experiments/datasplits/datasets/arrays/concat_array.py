@@ -11,53 +11,10 @@ logger = logging.getLogger(__file__)
 
 
 class ConcatArray(Array):
-    """
-    This is a wrapper around other `source_arrays` that concatenates
-    them along the channel dimension. The `source_arrays` are expected
-    to have the same shape and ROI, but can have different data types.
-
-    Attributes:
-        name: The name of the array.
-        channels: The list of channel names.
-        source_arrays: A dictionary mapping channel names to source arrays.
-        default_array: An optional default array to use for channels that are
-            not present in `source_arrays`.
-    Methods:
-        from_toml(cls, toml_path: str) -> ConcatArrayConfig:
-            Load the ConcatArrayConfig from a TOML file
-        to_toml(self, toml_path: str) -> None:
-            Save the ConcatArrayConfig to a TOML file
-        create_array(self) -> ConcatArray:
-            Create the ConcatArray from the config
-    Note:
-        This class is a subclass of Array and inherits all its attributes
-        and methods. The only difference is that the array_type is ConcatArray.
-
-    """
+    
 
     def __init__(self, array_config):
-        """
-        Initialize the ConcatArray from a ConcatArrayConfig.
-
-        Args:
-            array_config (ConcatArrayConfig): The config to create the ConcatArray from.
-        Raises:
-            AssertionError: If the source arrays have different shapes or ROIs.
-        Examples:
-            >>> config = ConcatArrayConfig(
-            ...     name="my_concat_array",
-            ...     channels=["A", "B"],
-            ...     source_array_configs={
-            ...         "A": ArrayConfig(...),
-            ...         "B": ArrayConfig(...),
-            ...     },
-            ...     default_config=ArrayConfig(...),
-            ... )
-            >>> array = ConcatArray(config)
-        Note:
-            The `source_arrays` are expected to have the same shape and ROI,
-            but can have different data types.
-        """
+        
         self.name = array_config.name
         self.channels = array_config.channels
         self.source_arrays = {
@@ -72,82 +29,17 @@ class ConcatArray(Array):
 
     @property
     def attrs(self):
-        """
-        Return the attributes of the ConcatArray as a dictionary.
-
-        Returns:
-            Dict[str, Any]: The attributes of the ConcatArray.
-        Raises:
-            AssertionError: If the source arrays have different attributes.
-        Examples:
-            >>> config = ConcatArrayConfig(
-            ...     name="my_concat_array",
-            ...     channels=["A", "B"],
-            ...     source_array_configs={
-            ...         "A": ArrayConfig(...),
-            ...         "B": ArrayConfig(...),
-            ...     },
-            ...     default_config=ArrayConfig(...),
-            ... )
-            >>> array = ConcatArray(config)
-            >>> array.attrs
-            {'axes': 'cxyz', 'roi': Roi(...), 'voxel_size': (1, 1, 1)}
-        Note:
-            The `source_arrays` are expected to have the same attributes.
-        """
+        
         return dict()
 
     @property
     def source_arrays(self) -> Dict[str, Array]:
-        """
-        Return the source arrays of the ConcatArray.
-
-        Returns:
-            Dict[str, Array]: The source arrays of the ConcatArray.
-        Raises:
-            AssertionError: If the source arrays are empty.
-        Examples:
-            >>> config = ConcatArrayConfig(
-            ...     name="my_concat_array",
-            ...     channels=["A", "B"],
-            ...     source_array_configs={
-            ...         "A": ArrayConfig(...),
-            ...         "B": ArrayConfig(...),
-            ...     },
-            ...     default_config=ArrayConfig(...),
-            ... )
-            >>> array = ConcatArray(config)
-            >>> array.source_arrays
-            {'A': Array(...), 'B': Array(...)}
-        Note:
-            The `source_arrays` are expected to have the same shape and ROI.
-        """
+        
         return self._source_arrays
 
     @source_arrays.setter
     def source_arrays(self, value: Dict[str, Array]):
-        """
-        Set the source arrays of the ConcatArray.
-
-        Args:
-            value (Dict[str, Array]): The source arrays to set.
-        Raises:
-            AssertionError: If the source arrays are empty.
-        Examples:
-            >>> config = ConcatArrayConfig(
-            ...     name="my_concat_array",
-            ...     channels=["A", "B"],
-            ...     source_array_configs={
-            ...         "A": ArrayConfig(...),
-            ...         "B": ArrayConfig(...),
-            ...     },
-            ...     default_config=ArrayConfig(...),
-            ... )
-            >>> array = ConcatArray(config)
-            >>> array.source_arrays = {'A': Array(...), 'B': Array(...)}
-        Note:
-            The `source_arrays` are expected to have the same shape and ROI.
-        """
+        
         assert len(value) > 0, "Source arrays is empty!"
         self._source_arrays = value
         attrs: Dict[str, Any] = {}
@@ -169,56 +61,12 @@ class ConcatArray(Array):
 
     @property
     def source_array(self) -> Array:
-        """
-        Return the source array of the ConcatArray.
-
-        Returns:
-            Array: The source array of the ConcatArray.
-        Raises:
-            AssertionError: If the source array is None.
-        Examples:
-            >>> config = ConcatArrayConfig(
-            ...     name="my_concat_array",
-            ...     channels=["A", "B"],
-            ...     source_array_configs={
-            ...         "A": ArrayConfig(...),
-            ...         "B": ArrayConfig(...),
-            ...     },
-            ...     default_config=ArrayConfig(...),
-            ... )
-            >>> array = ConcatArray(config)
-            >>> array.source_array
-            Array(...)
-        Note:
-            The `source_array` is expected to have the same shape and ROI.
-        """
+        
         return self._source_array
 
     @property
     def axes(self):
-        """
-        Return the axes of the ConcatArray.
-
-        Returns:
-            str: The axes of the ConcatArray.
-        Raises:
-            AssertionError: If the source arrays have different axes.
-        Examples:
-            >>> config = ConcatArrayConfig(
-            ...     name="my_concat_array",
-            ...     channels=["A", "B"],
-            ...     source_array_configs={
-            ...         "A": ArrayConfig(...),
-            ...         "B": ArrayConfig(...),
-            ...     },
-            ...     default_config=ArrayConfig(...),
-            ... )
-            >>> array = ConcatArray(config)
-            >>> array.axes
-            'cxyz'
-        Note:
-            The `source_arrays` are expected to have the same axes.
-        """
+        
         source_axes = self.source_array.axes
         if "c" not in source_axes:
             source_axes = ["c"] + source_axes
@@ -226,210 +74,41 @@ class ConcatArray(Array):
 
     @property
     def dims(self):
-        """
-        Return the dimensions of the ConcatArray.
-
-        Returns:
-            Tuple[int]: The dimensions of the ConcatArray.
-        Raises:
-            AssertionError: If the source arrays have different dimensions.
-        Examples:
-            >>> config = ConcatArrayConfig(
-            ...     name="my_concat_array",
-            ...     channels=["A", "B"],
-            ...     source_array_configs={
-            ...         "A": ArrayConfig(...),
-            ...         "B": ArrayConfig(...),
-            ...     },
-            ...     default_config=ArrayConfig(...),
-            ... )
-            >>> array = ConcatArray(config)
-            >>> array.dims
-            (2, 100, 100, 100)
-        Note:
-            The `source_arrays` are expected to have the same dimensions.
-        """
+        
         return self.source_array.dims
 
     @property
     def voxel_size(self):
-        """
-        Return the voxel size of the ConcatArray.
-
-        Returns:
-            Tuple[float]: The voxel size of the ConcatArray.
-        Raises:
-            AssertionError: If the source arrays have different voxel sizes.
-        Examples:
-            >>> config = ConcatArrayConfig(
-            ...     name="my_concat_array",
-            ...     channels=["A", "B"],
-            ...     source_array_configs={
-            ...         "A": ArrayConfig(...),
-            ...         "B": ArrayConfig(...),
-            ...     },
-            ...     default_config=ArrayConfig(...),
-            ... )
-            >>> array = ConcatArray(config)
-            >>> array.voxel_size
-            (1, 1, 1)
-        Note:
-            The `source_arrays` are expected to have the same voxel size.
-        """
+        
         return self.source_array.voxel_size
 
     @property
     def roi(self):
-        """
-        Return the ROI of the ConcatArray.
-
-        Returns:
-            Roi: The ROI of the ConcatArray.
-        Raises:
-            AssertionError: If the source arrays have different ROIs.
-        Examples:
-            >>> config = ConcatArrayConfig(
-            ...     name="my_concat_array",
-            ...     channels=["A", "B"],
-            ...     source_array_configs={
-            ...         "A": ArrayConfig(...),
-            ...         "B": ArrayConfig(...),
-            ...     },
-            ...     default_config=ArrayConfig(...),
-            ... )
-            >>> array = ConcatArray(config)
-            >>> array.roi
-            Roi(...)
-        Note:
-            The `source_arrays` are expected to have the same ROI.
-        """
+        
         return self.source_array.roi
 
     @property
     def writable(self) -> bool:
-        """
-        Return whether the ConcatArray is writable.
-
-        Returns:
-            bool: Whether the ConcatArray is writable.
-        Raises:
-            AssertionError: If the ConcatArray is writable.
-        Examples:
-            >>> config = ConcatArrayConfig(
-            ...     name="my_concat_array",
-            ...     channels=["A", "B"],
-            ...     source_array_configs={
-            ...         "A": ArrayConfig(...),
-            ...         "B": ArrayConfig(...),
-            ...     },
-            ...     default_config=ArrayConfig(...),
-            ... )
-            >>> array = ConcatArray(config)
-            >>> array.writable
-            False
-        Note:
-            The ConcatArray is not writable.
-        """
+        
         return False
 
     @property
     def data(self):
-        """
-        Return the data of the ConcatArray.
-
-        Returns:
-            np.ndarray: The data of the ConcatArray.
-        Raises:
-            RuntimeError: If the ConcatArray is not writable.
-        Examples:
-            >>> config = ConcatArrayConfig(
-            ...     name="my_concat_array",
-            ...     channels=["A", "B"],
-            ...     source_array_configs={
-            ...         "A": ArrayConfig(...),
-            ...         "B": ArrayConfig(...),
-            ...     },
-            ...     default_config=ArrayConfig(...),
-            ... )
-            >>> array = ConcatArray(config)
-            >>> array.data
-            np.ndarray(...)
-        Note:
-            The ConcatArray is not writable.
-        """
+        
         raise RuntimeError("Cannot get writable version of this data!")
 
     @property
     def dtype(self):
-        """
-        Return the data type of the ConcatArray.
-
-        Returns:
-            np.dtype: The data type of the ConcatArray.
-        Raises:
-            AssertionError: If the source arrays have different data types.
-        Examples:
-            >>> config = ConcatArrayConfig(
-            ...     name="my_concat_array",
-            ...     channels=["A", "B"],
-            ...     source_array_configs={
-            ...         "A": ArrayConfig(...),
-            ...         "B": ArrayConfig(...),
-            ...     },
-            ...     default_config=ArrayConfig(...),
-            ... )
-            >>> array = ConcatArray(config)
-            >>> array.dtype
-            np.float32
-        Note:
-            The `source_arrays` are expected to have the same data type.
-        """
+        
         return self.source_array.dtype
 
     @property
     def num_channels(self):
-        """
-        Return the number of channels of the ConcatArray.
-
-        Returns:
-            int: The number of channels of the ConcatArray.
-        Raises:
-            AssertionError: If the source arrays have different numbers of channels.
-        Examples:
-            >>> config = ConcatArrayConfig(
-            ...     name="my_concat_array",
-            ...     channels=["A", "B"],
-            ...     source_array_configs={
-            ...         "A": ArrayConfig(...),
-            ...         "B": ArrayConfig(...),
-            ...     },
-            ...     default_config=ArrayConfig(...),
-            ... )
-            >>> array = ConcatArray(config)
-            >>> array.num_channels
-            2
-        Note:
-            The `source_arrays` are expected to have the same number of channels.
-        """
+        
         return len(self.channels)
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        """
-        Return the data of the ConcatArray for a given ROI.
-
-        Args:
-            roi (Roi): The ROI to get the data for.
-        Returns:
-            np.ndarray: The data of the ConcatArray for the given ROI.
-        Raises:
-            AssertionError: If the source arrays have different shapes or ROIs.
-        Examples:
-            >>> roi = Roi(...)
-            >>> array[roi]
-            np.ndarray(...)
-        Note:
-            The `source_arrays` are expected to have the same shape and ROI.
-        """
+        
         default = (
             np.zeros_like(self.source_array[roi])
             if self.default_array is None
@@ -461,18 +140,7 @@ class ConcatArray(Array):
         return concatenated
 
     def _can_neuroglance(self):
-        """
-        This method returns True if the source array can be visualized in neuroglance.
-
-        Returns:
-            bool: True if the source array can be visualized in neuroglance.
-        Raises:
-            ValueError: If the source array is not writable.
-        Examples:
-            >>> binarize_array._can_neuroglance()
-        Note:
-            This method is used to return True if the source array can be visualized in neuroglance.
-        """
+        
         return any(
             [
                 source_array._can_neuroglance()
@@ -481,18 +149,7 @@ class ConcatArray(Array):
         )
 
     def _neuroglancer_source(self):
-        """
-        This method returns the source array for neuroglancer.
-
-        Returns:
-            neuroglancer.LocalVolume: The source array for neuroglancer.
-        Raises:
-            ValueError: If the source array is not writable.
-        Examples:
-            >>> binarize_array._neuroglancer_source()
-        Note:
-            This method is used to return the source array for neuroglancer.
-        """
+        
         # return self._source_array._neuroglancer_source()
         return [
             source_array._neuroglancer_source()
@@ -500,18 +157,7 @@ class ConcatArray(Array):
         ]
 
     def _neuroglancer_layer(self):
-        """
-        This method returns the neuroglancer layer for the source array.
-
-        Returns:
-            neuroglancer.SegmentationLayer: The neuroglancer layer for the source array.
-        Raises:
-            ValueError: If the source array is not writable.
-        Examples:
-            >>> binarize_array._neuroglancer_layer()
-        Note:
-            This method is used to return the neuroglancer layer for the source array.
-        """
+        
         # layer = neuroglancer.SegmentationLayer(source=self._neuroglancer_source())
         return [
             source_array._neuroglancer_layer()
@@ -520,18 +166,7 @@ class ConcatArray(Array):
         ]
 
     def _source_name(self):
-        """
-        This method returns the name of the source array.
-
-        Returns:
-            str: The name of the source array.
-        Raises:
-            ValueError: If the source array is not writable.
-        Examples:
-            >>> binarize_array._source_name()
-        Note:
-            This method is used to return the name of the source array.
-        """
+        
         # return self._source_array._source_name()
         return [
             source_array._source_name()

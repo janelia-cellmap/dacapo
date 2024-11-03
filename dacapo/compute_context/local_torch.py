@@ -7,21 +7,7 @@ from typing import Optional
 
 @attr.s
 class LocalTorch(ComputeContext):
-    """
-    The LocalTorch class is a subclass of the ComputeContext class.
-    It is used to specify the context in which computations are to be done.
-    LocalTorch is used to specify that computations are to be done on the local machine using PyTorch.
-
-    Attributes:
-        _device (Optional[str]): This stores the type of device on which torch computations are to be done. It can
-        take "cuda" for GPU or "cpu" for CPU. None value results in automatic detection of device type.
-        oom_limit (Optional[float | int]): The out of GPU memory to leave free in GB. If the free memory is below
-        this limit, we will fall back on CPU.
-    Methods:
-        device(): Returns the torch device object.
-    Note:
-        The class is a subclass of the ComputeContext class.
-    """
+    
 
     distribute_workers: Optional[bool] = attr.ib(
         default=False,
@@ -46,13 +32,7 @@ class LocalTorch(ComputeContext):
 
     @property
     def device(self):
-        """
-        A property method that returns the torch device object. It automatically detects and uses "cuda" (GPU) if
-        available, else it falls back on using "cpu".
-
-        Returns:
-            torch.device: The torch device object.
-        """
+        
         if self._device is None:
             if torch.cuda.is_available():
                 # TODO: make this more sophisticated, for multiple GPUs for instance

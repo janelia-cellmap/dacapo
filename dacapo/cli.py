@@ -19,6 +19,14 @@ from dacapo.store.local_array_store import LocalArrayIdentifier
 from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from dacapo.options import DaCapoConfig
 import os
+from dacapo.utils.uri import setup_uri_scheme, add_config
+
+import requests
+import subprocess
+import http.server
+import socketserver
+from urllib.parse import urlparse
+import threading
 
 
 @click.group()
@@ -30,46 +38,100 @@ import os
     default="INFO",
 )
 def cli(log_level):
-    """
-    Command-line interface for the DACAPO application.
-
-    Args:
-        log_level (str): The desired log level for the application.
-    Examples:
-        To train a model, run:
-        ```
-        dacapo train --run-name my_run
-        ```
-
-        To validate a model, run:
-        ```
-        dacapo validate --run-name my_run --iteration 100
-        ```
-
-        To apply a model, run:
-        ```
-        dacapo apply --run-name my_run --input-container /path/to/input --input-dataset my_dataset --output-path /path/to/output
-        ```
-
-        To predict with a model, run:
-        ```
-        dacapo predict --run-name my_run --iteration 100 --input-container /path/to/input --input-dataset my_dataset --output-path /path/to/output
-        ```
-
-        To run a blockwise operation, run:
-        ```
-        dacapo run-blockwise --input-container /path/to/input --input-dataset my_dataset --output-container /path/to/output --output-dataset my_output --worker-file /path/to/worker.py --total-roi [0:100,0:100,0:100] --read-roi-size [10,10,10] --write-roi-size [10,10,10] --num-workers 16
-        ```
-
-        To segment blockwise, run:
-        ```
-        dacapo segment-blockwise --input-container /path/to/input --input-dataset my_dataset --output-container /path/to/output --output-dataset my_output --segment-function-file /path/to/segment_function.py --total-roi [0:100,0:100,0:100] --read-roi-size [10,10,10] --write-roi-size [10,10,10] --num-workers 16
-        ```
-    """
+    
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
 logger = logging.getLogger(__name__)
+
+
+import http.server
+import socketserver
+import threading
+import webbrowser
+
+
+class SingleRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        self.wfile.write(
+            f"<html><body><h2>{self.server.message}</h2></body></html>".encode("utf-8")
+        )
+
+
+class SingleRequestServer(socketserver.TCPServer):
+    allow_reuse_address = True
+
+    def __init__(self, server_address, RequestHandlerClass, message):
+        super().__init__(server_address, RequestHandlerClass)
+        self.message = message
+        self.request_count = 0
+
+    def handle_request(self):
+        
+        super().handle_request()
+        self.shutdown()  # Stop server after the first request
+
+
+def start_server(message):
+    with SingleRequestServer(
+        ("localhost", 8080), SingleRequestHandler, message
+    ) as httpd:
+        webbrowser.open(
+            "http://localhost:8080"
+        )  # Open the browser once the server starts
+        httpd.handle_request()
+
+
+@cli.command()
+@click.argument("uri")
+def install_config(uri):
+    
+    print("Downloading configuration...")
+    parsed_uri = urlparse(uri)
+    if parsed_uri.scheme != "dacapo" or parsed_uri.netloc != "install_config":
+        print(
+            f"Invalid URI: {uri}. Expected format: dacapo://install_config/CONFIG_URL"
+        )
+        print(f"Scheme: {parsed_uri.scheme}")
+        print(f"Path: {parsed_uri.path}")
+        print(f"Netloc: {parsed_uri.netloc}")
+        print(f"Params: {parsed_uri.params}")
+        print(f"Query: {parsed_uri.query}")
+        start_server("Invalid URI. Expected format: dacapo://install_config/CONFIG_URL")
+        return
+
+    config_url = parsed_uri.path.split("/install_config/")[-1]
+    try:
+        response = requests.get(config_url)
+        response.raise_for_status()
+        with open("temp_config.yaml", "wb") as file:
+            file.write(response.content)
+        result = add_config("temp_config.yaml")
+        message = "Configuration added successfully."
+    except requests.exceptions.RequestException:
+        message = "Failed to download config."
+    except subprocess.CalledProcessError as e:
+        if "already exists" in str(e):
+            message = "Error: Configuration already exists!"
+        else:
+            message = "An error occurred while adding the configuration."
+
+    # Start server to display the message
+    thread = threading.Thread(target=start_server, args=(message,))
+    thread.start()
+    print("Navigate to http://localhost:8084 to see the status.")
+    import sys
+
+    sys.exit(0)
+
+
+@cli.command()
+def setup_uri():
+    
+    setup_uri_scheme()
 
 
 @cli.command()
@@ -80,13 +142,7 @@ logger = logging.getLogger(__name__)
     "--no-validation", is_flag=True, help="Disable validation after training."
 )
 def train(run_name, no_validation):
-    """
-    Train a model with the specified run name.
-
-    Args:
-        run_name (str): The name of the run to train.
-        no_validation (bool): Flag to disable validation after training.
-    """
+    
     do_validate = not no_validation
     dacapo.train(run_name, do_validate=do_validate)
 
@@ -202,30 +258,7 @@ def apply(
     output_dtype: np.dtype | str = "uint8",
     overwrite: bool = True,
 ):
-    """
-    Apply a trained run to an input dataset.
-
-    Args:
-        run_name (str): The name of the run to apply.
-        input_container (Path | str): The path to the input container.
-        input_dataset (str): The name of the input dataset.
-        output_path (Path | str): The path to the output directory.
-        validation_dataset (Dataset | str, optional): The name of the validation dataset. Defaults to None.
-        criterion (str, optional): The criterion to use for applying the run. Defaults to "voi".
-        iteration (int, optional): The iteration of the model to use for prediction. Defaults to None.
-        parameters (PostProcessorParameters | str, optional): The parameters for the post-processor. Defaults to None.
-        roi (Roi | str, optional): The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]. Defaults to None.
-        num_workers (int, optional): The number of workers to use for prediction. Defaults to 30.
-        output_dtype (np.dtype | str, optional): The output data type. Defaults to "uint8".
-        overwrite (bool, optional): Whether to overwrite existing output files. Defaults to True.
-    Raises:
-        ValueError: If the run_name is not valid.
-    Examples:
-        To apply a trained run to an input dataset, run:
-        ```
-        dacapo apply --run-name my_run --input-container /path/to/input --input-dataset my_dataset --output-path /path/to/output
-        ```
-    """
+    
     dacapo.apply(
         run_name,
         input_container,
@@ -308,27 +341,7 @@ def predict(
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):
-    """
-    Apply a trained model to predict on a dataset.
-
-    Args:
-        run_name (str): The name of the run to apply.
-        iteration (int): The training iteration of the model to use for prediction.
-        input_container (Path | str): The path to the input container.
-        input_dataset (str): The name of the input dataset.
-        output_path (Path | str): The path to the output directory.
-        output_roi (Optional[str | Roi], optional): The roi to predict on. Passed in as [lower:upper, lower:upper, ... ]. Defaults to None.
-        num_workers (int, optional): The number of workers to use for prediction. Defaults to 30.
-        output_dtype (np.dtype | str, optional): The output data type. Defaults to np.uint8.
-        overwrite (bool, optional): Whether to overwrite existing output files. Defaults to True.
-    Raises:
-        ValueError: If the run_name is not valid.
-    Examples:
-        To predict with a model, run:
-        ```
-        dacapo predict --run-name my_run --iteration 100 --input-container /path/to/input --input-dataset my_dataset --output-path /path/to/output
-        ```
-    """
+    
     dacapo.predict(
         run_name,
         iteration,
@@ -444,32 +457,7 @@ def run_blockwise(
     *args,
     **kwargs,
 ):
-    """
-    Run blockwise processing on a dataset.
-
-    Args:
-        input_container: The path to the input container.
-        input_dataset: The name of the input dataset.
-        output_container: The path to the output container.
-        output_dataset: The name of the output dataset.
-        worker_file: The path to the worker file.
-        total_roi: The total roi to be processed. Format is [start:end, start:end, ... ] in voxels. Defaults to the roi of the input dataset. Do not use spaces in CLI argument.
-        read_roi_size: The size of the roi to be read for each block, in the format of [z,y,x] in voxels.
-        write_roi_size: The size of the roi to be written for each block, in the format of [z,y,x] in voxels.
-        num_workers: The number of workers to use.
-        max_retries: The maximum number of retries.
-        timeout: The timeout in seconds.
-        overwrite: Whether to overwrite existing output files.
-        channels_out: The number of output channels.
-        output_dtype: The output data type.
-    Raises:
-        ValueError: If the run_name is not valid.
-    Examples:
-        To run a blockwise operation, run:
-        ```
-        dacapo run-blockwise --input-container /path/to/input --input-dataset my_dataset --output-container /path/to/output --output-dataset my_output --worker-file /path/to/worker.py --total-roi [0:100,0:100,0:100] --read-roi-size [10,10,10] --write-roi-size [10,10,10] --num-workers 16
-        ```
-    """
+    
     # get arbitrary args and kwargs
     parameters = unpack_ctx(ctx)
 
@@ -622,32 +610,7 @@ def segment_blockwise(
     *args,
     **kwargs,
 ):
-    """
-    Segment the input dataset blockwise using a segment function file.
-
-    Args:
-        input_container (str): The path to the input container.
-        input_dataset (str): The name of the input dataset.
-        output_container (str): The path to the output container.
-        output_dataset (str): The name of the output dataset.
-        segment_function_file (str): The path to the segment function file.
-        total_roi (str): The total roi to be processed. Format is [start:end,start:end,...] in voxels. Defaults to the roi of the input dataset. Do not use spaces in CLI argument.
-        read_roi_size (str): The size of the roi to be read for each block, in the format of [z,y,x] in voxels.
-        write_roi_size (str): The size of the roi to be written for each block, in the format of [z,y,x] in voxels.
-        context (str, optional): The context to be used, in the format of [z,y,x] in voxels. Defaults to the difference between the read and write rois.
-        num_workers (int, optional): The number of workers to use. Defaults to 16.
-        max_retries (int, optional): The maximum number of retries. Defaults to 2.
-        timeout (int, optional): The timeout in seconds. Defaults to None.
-        overwrite (bool, optional): Whether to overwrite existing output files. Defaults to True.
-        channels_out (int, optional): The number of output channels. Defaults to None.
-    Raises:
-        ValueError: If the run_name is not valid.
-    Examples:
-        To segment blockwise, run:
-        ```
-        dacapo segment-blockwise --input-container /path/to/input --input-dataset my_dataset --output-container /path/to/output --output-dataset my_output --segment-function-file /path/to/segment_function.py --total-roi [0:100,0:100,0:100] --read-roi-size [10,10,10] --write-roi-size [10,10,10] --num-workers 16
-        ```
-    """
+    
     # get arbitrary args and kwargs
     parameters = unpack_ctx(ctx)
 
@@ -700,17 +663,7 @@ def segment_blockwise(
 
 
 def prompt_with_choices(prompt_text, choices, default_index=0):
-    """
-    Prompts the user with a list of choices and returns the selected choice.
-
-    Args:
-        prompt_text (str): The prompt text to display to the user.
-        choices (list): The list of choices to present.
-        default_index (int): The index of the default choice (0-based).
-
-    Returns:
-        str: The selected choice.
-    """
+    
     while True:
         click.echo(prompt_text)
         for i, choice in enumerate(choices, 1):
@@ -818,21 +771,7 @@ def generate_config(
 
 
 def unpack_ctx(ctx):
-    """
-    Unpacks the context object and returns a dictionary of keyword arguments.
-
-    Args:
-        ctx (object): The context object containing the arguments.
-    Returns:
-        dict: A dictionary of keyword arguments.
-    Raises:
-        ValueError: If the run_name is not valid.
-    Example:
-        >>> ctx = ...
-        >>> kwargs = unpack_ctx(ctx)
-        >>> print(kwargs)
-        {'arg1': value1, 'arg2': value2, ...}
-    """
+    
     kwargs = {
         ctx.args[i].lstrip("-"): ctx.args[i + 1] for i in range(0, len(ctx.args), 2)
     }
@@ -846,21 +785,7 @@ def unpack_ctx(ctx):
 
 
 def get_rois(total_roi, read_roi_size, write_roi_size, input_array):
-    """
-    Get the ROIs for processing.
-
-    Args:
-        total_roi (str): The total ROI to be processed.
-        read_roi_size (str): The size of the ROI to be read for each block.
-        write_roi_size (str): The size of the ROI to be written for each block.
-        input_array (ZarrArray): The input array.
-    Returns:
-        tuple: A tuple containing the total ROI, read ROI, write ROI, and context.
-    Raises:
-        ValueError: If the run_name is not valid.
-    Example:
-        >>> total_roi, read_roi, write_roi, context = get_rois(total_roi, read_roi_size, write_roi_size, input_array)
-    """
+    
     if total_roi is not None:
         # parse the string into a Roi
         start, end = zip(

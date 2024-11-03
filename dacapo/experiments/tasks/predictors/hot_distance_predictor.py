@@ -18,52 +18,10 @@ logger = logging.getLogger(__name__)
 
 
 class HotDistancePredictor(Predictor):
-    """
-    Predict signed distances and one hot embedding (as a proxy task) for a binary segmentation task.
-    Distances deep within background are pushed to -inf, distances deep within
-    the foreground object are pushed to inf. After distances have been
-    calculated they are passed through a tanh so that distances saturate at +-1.
-    Multiple classes can be predicted via multiple distance channels. The names
-    of each class that is being segmented can be passed in as a list of strings
-    in the channels argument.
-
-    Attributes:
-        channels: List of strings, each string is the name of a class that is being segmented.
-        scale_factor: The scale factor for the distance transform.
-        mask_distances: Whether to mask distances based on the distance to the boundary.
-        norm: The normalization function to use for the distance transform.
-        dt_scale_factor: The scale factor for the distance transform.
-        max_distance: The maximum distance to consider for the distance transform.
-        epsilon: The epsilon value to use for the distance transform.
-        threshold: The threshold value to use for the distance transform.
-    Methods:
-        __init__(self, channels: List[str], scale_factor: float, mask_distances: bool): Initializes the HotDistancePredictor.
-        create_model(self, architecture): Create the model for the predictor.
-        create_target(self, gt): Create the target array for training.
-        create_weight(self, gt, target, mask, moving_class_counts=None): Create the weight array for training.
-        create_distance_mask(self, distances, mask, voxel_size, normalize=None, normalize_args=None): Create the distance mask for training.
-        process(self, labels, voxel_size, normalize=None, normalize_args=None): Process the labels array and convert it to one-hot encoding.
-        gt_region_for_roi(self, target_spec): Report how much spatial context this predictor needs to generate a target for the given ROI.
-        padding(self, gt_voxel_size): Return the padding needed for the ground-truth
-    Notes:
-        This is a subclass of Predictor.
-    """
+    
 
     def __init__(self, channels: List[str], scale_factor: float, mask_distances: bool):
-        """
-        Initializes the HotDistancePredictor.
-
-        Args:
-            channels (List[str]): The list of class labels.
-            scale_factor (float): The scale factor for the distance transform.
-            mask_distances (bool): Whether to mask distances based on the distance to the boundary.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor = HotDistancePredictor(channels, scale_factor, mask_distances)
-        Note:
-            The channels argument is a list of strings, each string is the name of a class that is being segmented.
-        """
+        
         self.channels = (
             channels * 2
         )  # one hot + distance (TODO: add hot/distance to channel names)
@@ -77,46 +35,16 @@ class HotDistancePredictor(Predictor):
 
     @property
     def embedding_dims(self):
-        """
-        Get the number of embedding dimensions.
-
-        Returns:
-            int: The number of embedding dimensions.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> embedding_dims = predictor.embedding_dims
-        """
+        
         return len(self.channels)
 
     @property
     def classes(self):
-        """
-        Get the number of classes.
-
-        Returns:
-            int: The number of classes.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> classes = predictor.classes
-
-        """
+        
         return len(self.channels) // 2
 
     def create_model(self, architecture):
-        """
-        Create the model for the predictor.
-
-        Args:
-            architecture: The architecture for the model.
-        Returns:
-            Model: The created model.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> model = predictor.create_model(architecture)
-        """
+        
         if architecture.dims == 2:
             head = torch.nn.Conv2d(
                 architecture.num_out_channels, self.embedding_dims, kernel_size=3
@@ -129,18 +57,7 @@ class HotDistancePredictor(Predictor):
         return Model(architecture, head)
 
     def create_target(self, gt):
-        """
-        Create the target array for training.
-
-        Args:
-            gt: The ground truth array.
-        Returns:
-            NumpyArray: The created target array.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> target = predictor.create_target(gt)
-        """
+        
         target = self.process(gt.data, gt.voxel_size, self.norm, self.dt_scale_factor)
         return NumpyArray.from_np_array(
             target,
@@ -150,22 +67,7 @@ class HotDistancePredictor(Predictor):
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
-        """
-        Create the weight array for training, given a ground-truth and
-        associated target array.
-
-        Args:
-            gt: The ground-truth array.
-            target: The target array.
-            mask: The mask array.
-            moving_class_counts: The moving class counts.
-        Returns:
-            Tuple[NumpyArray, np.ndarray]: The weight array and the moving class counts.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.create_weight(gt, target, mask, moving_class_counts)
-        """
+        
         # balance weights independently for each channel
         one_hot_weights, one_hot_moving_class_counts = balance_weights(
             gt[target.roi],
@@ -218,18 +120,7 @@ class HotDistancePredictor(Predictor):
 
     @property
     def output_array_type(self):
-        """
-        Get the output array type.
-
-        Returns:
-            ProbabilityArray: The output array type.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> output_array_type = predictor.output_array_type
-        Notes:
-            Technically this is a probability array + distance array, but it is only ever referenced for interpolatability (which is true for both).
-        """
+        
         # technically this is a probability array + distance array, but it is only ever referenced for interpolatability (which is true for both) (TODO)
         return ProbabilityArray(self.embedding_dims)
 
@@ -241,22 +132,7 @@ class HotDistancePredictor(Predictor):
         normalize=None,
         normalize_args=None,
     ):
-        """
-        Create the distance mask for training.
-
-        Args:
-            distances: The distances array.
-            mask: The mask array.
-            voxel_size: The voxel size.
-            normalize: The normalization function to use.
-            normalize_args: The normalization arguments.
-        Returns:
-            np.ndarray: The distance mask.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> distance_mask = self.create_distance_mask(distances, mask, voxel_size, normalize, normalize_args)
-        """
+        
         mask_output = mask.copy()
         for i, (channel_distance, channel_mask) in enumerate(zip(distances, mask)):
             tmp = np.zeros(
@@ -316,22 +192,7 @@ class HotDistancePredictor(Predictor):
         normalize=None,
         normalize_args=None,
     ):
-        """
-        Process the labels array and convert it to one-hot encoding.
-
-        Args:
-            labels: The labels array.
-            voxel_size: The voxel size.
-            normalize: The normalization function to use.
-            normalize_args: The normalization arguments.
-        Returns:
-            np.ndarray: The one-hot encoded array.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.process(labels, voxel_size, normalize, normalize_args)
-
-        """
+        
         all_distances = np.zeros(labels.shape, dtype=np.float32) - 1
         for ii, channel in enumerate(labels):
             boundaries = self.__find_boundaries(channel)
@@ -369,20 +230,7 @@ class HotDistancePredictor(Predictor):
         return np.concatenate((labels, all_distances))
 
     def __find_boundaries(self, labels):
-        """
-        Find the boundaries in the labels array.
-
-        Args:
-            labels: The labels array.
-        Returns:
-            The boundaries array.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> boundaries = self.__find_boundaries(labels)
-        Notes:
-            Assumes labels has a singleton channel dim and channel dim is first.
-        """
+        
         # labels: 1 1 1 1 0 0 2 2 2 2 3 3       n
         # shift :   1 1 1 1 0 0 2 2 2 2 3       n - 1
         # diff  :   0 0 0 1 0 1 0 0 0 1 0       n - 1
@@ -421,20 +269,7 @@ class HotDistancePredictor(Predictor):
         return boundaries
 
     def __normalize(self, distances, norm, normalize_args):
-        """
-        Normalize the distances.
-
-        Args:
-            distances: The distances to normalize.
-            norm: The normalization function to use.
-            normalize_args: The normalization arguments.
-        Returns:
-            The normalized distances.
-        Raises:
-            ValueError: Only tanh is supported for normalization.
-        Examples:
-            >>> normalized_distances = self.__normalize(distances, norm, normalize_args)
-        """
+        
         if norm == "tanh":
             scale = normalize_args
             return np.tanh(distances / scale)
@@ -442,20 +277,7 @@ class HotDistancePredictor(Predictor):
             raise ValueError("Only tanh is supported for normalization")
 
     def gt_region_for_roi(self, target_spec):
-        """
-        Report how much spatial context this predictor needs to generate a
-        target for the given ROI. By default, uses the same ROI.
-
-        Args:
-            target_spec: The ROI for which the target is requested.
-        Returns:
-            The ROI for which the ground-truth is requested.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.gt_region_for_roi(target_spec)
-
-        """
+        
         if self.mask_distances:
             gt_spec = target_spec.copy()
             gt_spec.roi = gt_spec.roi.grow(
@@ -467,16 +289,5 @@ class HotDistancePredictor(Predictor):
         return gt_spec
 
     def padding(self, gt_voxel_size: Coordinate) -> Coordinate:
-        """
-        Return the padding needed for the ground-truth array.
-
-        Args:
-            gt_voxel_size: The voxel size of the ground-truth array.
-        Returns:
-            Coordinate: The padding needed for the ground-truth array.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.padding(gt_voxel_size)
-        """
+        
         return Coordinate((self.max_distance,) * gt_voxel_size.dims)

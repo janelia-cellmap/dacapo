@@ -17,46 +17,10 @@ logger = logging.getLogger(__name__)
 
 
 class InnerDistancePredictor(Predictor):
-    """
-    Predict signed distances for a binary segmentation task.
-
-    Distances deep within background are pushed to -inf, distances deep within
-    the foreground object are pushed to inf. After distances have been
-    calculated they are passed through a tanh so that distances saturate at +-1.
-    Multiple classes can be predicted via multiple distance channels. The names
-    of each class that is being segmented can be passed in as a list of strings
-    in the channels argument.
-
-    Attributes:
-        channels (List[str]): The list of channel names.
-        scale_factor (float): The amount by which to scale distances before applying a tanh normalization.
-    Methods:
-        __init__(self, channels: List[str], scale_factor: float): Initializes the InnerDistancePredictor.
-        create_model(self, architecture): Create the model for the predictor.
-        create_target(self, gt): Create the target array for training.
-        create_weight(self, gt, target, mask, moving_class_counts=None): Create the weight array for training.
-        output_array_type: Get the output array type.
-        process(self, labels: np.ndarray, voxel_size: Coordinate, normalize=None, normalize_args=None): Process the labels array and convert it to signed distances.
-        __find_boundaries(self, labels): Find the boundaries in a labels array.
-        __normalize(self, distances, norm, normalize_args): Normalize the distances.
-        gt_region_for_roi(self, target_spec): Get the ground-truth region for the given ROI.
-        padding(self, gt_voxel_size: Coordinate) -> Coordinate: Get the padding needed for the ground-truth array.
-    Notes:
-        This is a subclass of Predictor.
-    """
+    
 
     def __init__(self, channels: List[str], scale_factor: float):
-        """
-        Initialize the InnerDistancePredictor.
-
-        Args:
-            channels (List[str]): The list of channel names.
-            scale_factor (float): The amount by which to scale distances before applying a tanh normalization.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor = InnerDistancePredictor(channels, scale_factor)
-        """
+        
         self.channels = channels
         self.norm = "tanh"
         self.dt_scale_factor = scale_factor
@@ -67,29 +31,11 @@ class InnerDistancePredictor(Predictor):
 
     @property
     def embedding_dims(self):
-        """
-        Get the number of embedding dimensions.
-
-        Returns:
-            int: The number of embedding dimensions.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> embedding_dims = predictor.embedding_dims
-        """
+        
         return len(self.channels)
 
     def create_model(self, architecture):
-        """
-        Create the model for the predictor.
-
-        Args:
-            architecture: The architecture for the model.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> model = predictor.create_model(architecture)
-        """
+        
         if architecture.dims == 2:
             head = torch.nn.Conv2d(
                 architecture.num_out_channels, self.embedding_dims, kernel_size=1
@@ -102,19 +48,7 @@ class InnerDistancePredictor(Predictor):
         return Model(architecture, head)
 
     def create_target(self, gt):
-        """
-        Create the target array for training.
-
-        Args:
-            gt: The ground-truth array.
-        Returns:
-            The DistanceArray.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.create_target(gt)
-
-        """
+        
         distances = self.process(
             gt.data, gt.voxel_size, self.norm, self.dt_scale_factor
         )
@@ -126,23 +60,7 @@ class InnerDistancePredictor(Predictor):
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
-        """
-        Create the weight array for training, given a ground-truth and
-        associated target array.
-
-        Args:
-            gt: The ground-truth array.
-            target: The target array.
-            mask: The mask array.
-            moving_class_counts: The moving class counts.
-        Returns:
-            The weight array and the moving class counts.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.create_weight(gt, target, mask, moving_class_counts)
-
-        """
+        
         # balance weights independently for each channel
 
         weights, moving_class_counts = balance_weights(
@@ -164,17 +82,7 @@ class InnerDistancePredictor(Predictor):
 
     @property
     def output_array_type(self):
-        """
-        Get the output array type.
-
-        Returns:
-            The DistanceArray.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.output_array_type
-
-        """
+        
         return DistanceArray(self.embedding_dims)
 
     def process(
@@ -184,22 +92,7 @@ class InnerDistancePredictor(Predictor):
         normalize=None,
         normalize_args=None,
     ):
-        """
-        Process the labels array and convert it to signed distances.
-
-        Args:
-            labels: The labels array.
-            voxel_size: The voxel size.
-            normalize: The normalization method.
-            normalize_args: The normalization arguments.
-        Returns:
-            The signed distances.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.process(labels, voxel_size, normalize, normalize_args)
-
-        """
+        
         all_distances = np.zeros(labels.shape, dtype=np.float32) - 1
         for ii, channel in enumerate(labels):
             boundaries = self.__find_boundaries(channel)
@@ -237,19 +130,7 @@ class InnerDistancePredictor(Predictor):
         return all_distances * labels
 
     def __find_boundaries(self, labels):
-        """
-        Find boundaries in a labels array.
-
-        Args:
-            labels: The labels array.
-        Returns:
-            The boundaries array.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.__find_boundaries(labels)
-
-        """
+        
         # labels: 1 1 1 1 0 0 2 2 2 2 3 3       n
         # shift :   1 1 1 1 0 0 2 2 2 2 3       n - 1
         # diff  :   0 0 0 1 0 1 0 0 0 1 0       n - 1
@@ -288,20 +169,7 @@ class InnerDistancePredictor(Predictor):
         return boundaries
 
     def __normalize(self, distances, norm, normalize_args):
-        """
-        Normalize distances.
-
-        Args:
-            distances: The distances to normalize.
-            norm: The normalization method.
-            normalize_args: The normalization arguments.
-        Returns:
-            The normalized distances.
-        Raises:
-            ValueError: If the normalization method is not supported.
-        Examples:
-            >>> predictor.__normalize(distances, norm, normalize_args)
-        """
+        
         if norm == "tanh":
             scale = normalize_args
             return np.tanh(distances / scale)
@@ -309,20 +177,7 @@ class InnerDistancePredictor(Predictor):
             raise ValueError("Only tanh is supported for normalization")
 
     def gt_region_for_roi(self, target_spec):
-        """
-        Report how much spatial context this predictor needs to generate a
-        target for the given ROI. By default, uses the same ROI.
-
-        Args:
-            target_spec: The ROI for which the target is requested.
-        Returns:
-            The ROI for which the ground-truth is requested.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.gt_region_for_roi(target_spec)
-
-        """
+        
         if self.mask_distances:
             gt_spec = target_spec.copy()
             gt_spec.roi = gt_spec.roi.grow(
@@ -334,16 +189,5 @@ class InnerDistancePredictor(Predictor):
         return gt_spec
 
     def padding(self, gt_voxel_size: Coordinate) -> Coordinate:
-        """
-        Return the padding needed for the ground-truth array.
-
-        Args:
-            gt_voxel_size: The voxel size of the ground-truth array.
-        Returns:
-            The padding needed for the ground-truth array.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.padding(gt_voxel_size)
-        """
+        
         return Coordinate((self.max_distance,) * gt_voxel_size.dims)

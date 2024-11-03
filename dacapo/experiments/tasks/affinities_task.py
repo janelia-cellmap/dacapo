@@ -6,32 +6,10 @@ from .task import Task
 
 
 class AffinitiesTask(Task):
-    """
-    This is a task for generating voxel affinities. It uses an `AffinitiesPredictor` for prediction,
-    an `AffinitiesLoss` for loss calculation, a `WatershedPostProcessor` for post-processing, and an
-    `InstanceEvaluator` for evaluation.
-
-    Attributes:
-        predictor: AffinitiesPredictor object
-        loss: AffinitiesLoss object
-        post_processor: WatershedPostProcessor object
-        evaluator: InstanceEvaluator object
-    Methods:
-        __init__(self, task_config): Initializes all components for the affinities task.
-    Notes:
-        This is a subclass of Task.
-
-    """
+    
 
     def __init__(self, task_config):
-        """
-        Create an AffinitiesTask object from a given AffinitiesTaskConfig.
-
-        Args:
-            task_config (AffinitiesTaskConfig): The configuration for the affinities task
-        Examples:
-            >>> task = AffinitiesTask(task_config)
-        """
+        
 
         self.predictor = AffinitiesPredictor(
             neighborhood=task_config.neighborhood,

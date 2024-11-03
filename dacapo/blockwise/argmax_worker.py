@@ -27,12 +27,7 @@ path = __file__
     default="INFO",
 )
 def cli(log_level):
-    """
-    CLI for running the threshold worker.
-
-    Args:
-        log_level (str): The log level to use.
-    """
+    
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
@@ -71,15 +66,7 @@ def start_worker_fn(
     output_dataset: str,
     return_io_loop: bool = False,
 ):
-    """
-    Start the threshold worker.
-
-    Args:
-        input_container (Path | str): The input container.
-        input_dataset (str): The input dataset.
-        output_container (Path | str): The output container.
-        output_dataset (str): The output dataset.
-    """
+    
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
     input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
@@ -115,16 +102,7 @@ def spawn_worker(
     input_array_identifier: "LocalArrayIdentifier",
     output_array_identifier: "LocalArrayIdentifier",
 ):
-    """
-    Spawn a worker to predict on a given dataset.
-
-    Args:
-        model (Model): The model to use for prediction.
-        raw_array (Array): The raw data to predict on.
-        prediction_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
-    Returns:
-        Callable: The function to run the worker.
-    """
+    
     compute_context = create_compute_context()
     if not compute_context.distribute_workers:
         return start_worker_fn(
@@ -152,9 +130,7 @@ def spawn_worker(
     ]
 
     def run_worker():
-        """
-        Run the worker in the given compute context.
-        """
+        
         compute_context.execute(command)
 
     return run_worker

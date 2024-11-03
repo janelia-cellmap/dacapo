@@ -24,12 +24,7 @@ import click
     default="INFO",
 )
 def cli(log_level):
-    """
-    CLI for running the relabel worker.
-
-    Args:
-        log_level (str): The log level to use.
-    """
+    
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
@@ -62,14 +57,7 @@ def start_worker_fn(
     tmpdir,
     return_io_loop=False,
 ):
-    """
-    Start the relabel worker.
-
-    Args:
-        output_container (str): The output container
-        output_dataset (str): The output dataset
-        tmpdir (str): The temporary directory
-    """
+    
     client = daisy.Client()
     array_out = open_ds(output_container, output_dataset, mode="a")
 
@@ -100,15 +88,7 @@ def start_worker_fn(
 
 
 def relabel_in_block(array_out, old_values, new_values, block):
-    """
-    Relabel the array in the given block.
-
-    Args:
-        array_out (np.ndarray): The output array
-        old_values (np.ndarray): The old values
-        new_values (np.ndarray): The new values
-        block (daisy.Block): The block
-    """
+    
     a = array_out.to_ndarray(block.write_roi)
     # DGA: had to add in flatten and reshape since remap (in particular indices) didn't seem to work with ndarrays for the input
     if old_values.size > 0:
@@ -117,15 +97,7 @@ def relabel_in_block(array_out, old_values, new_values, block):
 
 
 def find_components(nodes, edges):
-    """
-    Find the components.
-
-    Args:
-        nodes (np.ndarray): The nodes
-        edges (np.ndarray): The edges
-    Returns:
-        List[int]: The components
-    """
+    
     # scipy
     disjoint_set = DisjointSet(nodes)
     for edge in edges:
@@ -134,14 +106,7 @@ def find_components(nodes, edges):
 
 
 def read_cross_block_merges(tmpdir):
-    """
-    Read the cross block merges.
-
-    Args:
-        tmpdir (str): The temporary directory
-    Returns:
-        Tuple[np.ndarray, np.ndarray]: The nodes and edges
-    """
+    
     block_files = glob(os.path.join(tmpdir, "block_*.npz"))
 
     nodes = []
@@ -158,15 +123,7 @@ def spawn_worker(
     output_array_identifier: LocalArrayIdentifier,
     tmpdir: str,
 ):
-    """
-    Spawn a worker to predict on a given dataset.
-
-    Args:
-        output_array_identifier (LocalArrayIdentifier): The output array identifier
-        tmpdir (str): The temporary directory
-    Returns:
-        Callable: The function to run the worker
-    """
+    
     compute_context = create_compute_context()
 
     if not compute_context.distribute_workers:
@@ -192,9 +149,7 @@ def spawn_worker(
     ]
 
     def run_worker():
-        """
-        Run the worker in the given compute context.
-        """
+        
         compute_context.execute(command)
 
     return run_worker

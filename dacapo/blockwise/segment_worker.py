@@ -26,12 +26,7 @@ logger = logging.getLogger(__name__)
     default="INFO",
 )
 def cli(log_level):
-    """
-    CLI for running the segment worker.
-
-    Args:
-        log_level (str): The log level to use.
-    """
+    
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
@@ -76,18 +71,7 @@ def start_worker_fn(
     function_path: str | Path,
     return_io_loop: bool = False,
 ):
-    """
-    Start a worker to run a segment function on a given dataset.
-
-    Args:
-        input_container (str): The input container.
-        input_dataset (str): The input dataset.
-        output_container (str): The output container.
-        output_dataset (str): The output dataset.
-        tmpdir (str): The temporary directory.
-        function_path (str): The path to the segment function.
-        return_io_loop (bool): Whether to return the io loop or run it.
-    """
+    
 
     print("Starting worker")
     # get arrays
@@ -219,16 +203,7 @@ def spawn_worker(
     tmpdir: str,
     function_path: str,
 ):
-    """
-    Spawn a worker to predict on a given dataset.
-
-    Args:
-        model (Model): The model to use for prediction.
-        raw_array (Array): The raw data to predict on.
-        prediction_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
-    Returns:
-        Callable: The function to run the worker.
-    """
+    
     compute_context = create_compute_context()
     if not compute_context.distribute_workers:
         return start_worker_fn(
@@ -262,9 +237,7 @@ def spawn_worker(
     ]
 
     def run_worker():
-        """
-        Run the worker in the given compute context.
-        """
+        
         compute_context.execute(command)
 
     return run_worker

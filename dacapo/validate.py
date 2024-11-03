@@ -18,9 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 def validate(run_name: str, iteration: int = 0, datasets_config=None):
-    """Validate a run at a given iteration. Loads the weights from a previously
-    stored checkpoint. Returns the best parameters and scores for this
-    iteration."""
+    
 
     logger.info("Validating run %s at iteration %d...", run_name, iteration)
 
@@ -52,10 +50,7 @@ def validate(run_name: str, iteration: int = 0, datasets_config=None):
 
 
 def validate_run(run: Run, iteration: int, datasets_config=None):
-    """Validate an already loaded run at the given iteration. This does not
-    load the weights of that iteration, it is assumed that the model is already
-    loaded correctly. Returns the best parameters and scores for this
-    iteration."""
+    
     # set benchmark flag to True for performance
     torch.backends.cudnn.benchmark = True
     run.model.eval()

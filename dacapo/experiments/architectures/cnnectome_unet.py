@@ -7,152 +7,10 @@ import math
 
 
 class CNNectomeUNet(Architecture):
-    """
-    A U-Net architecture for 3D or 4D data. The U-Net expects 3D or 4D tensors
-    shaped like::
-
-        ``(batch=1, channels, [length,] depth, height, width)``.
-
-    This U-Net performs only "valid" convolutions, i.e., sizes of the feature
-    maps decrease after each convolution. It will perfrom 4D convolutions as
-    long as ``length`` is greater than 1. As soon as ``length`` is 1 due to a
-    valid convolution, the time dimension will be dropped and tensors with
-    ``(b, c, z, y, x)`` will be use (and returned) from there on.
-
-    Attributes:
-            fmaps_in:
-                The number of input channels.
-            fmaps_out:
-                The number of feature maps in the output layer. This is also the
-                number of output feature maps. Stored in the ``channels`` dimension.
-            num_fmaps:
-                The number of feature maps in the first layer. This is also the
-                number of output feature maps. Stored in the ``channels`` dimension.
-            fmap_inc_factor:
-                By how much to multiply the number of feature maps between layers.
-                If layer 0 has ``k`` feature maps, layer ``l`` will have
-                ``k*fmap_inc_factor**l``.
-            downsample_factors:
-                List of tuples ``(z, y, x)`` to use to down- and up-sample the
-                feature maps between layers.
-            kernel_size_down (optional):
-                List of lists of kernel sizes. The number of sizes in a list
-                determines the number of convolutional layers in the corresponding
-                level of the build on the left side. Kernel sizes can be given as
-                tuples or integer. If not given, each convolutional pass will
-                consist of two 3x3x3 convolutions.
-            kernel_size_up (optional):
-                List of lists of kernel sizes. The number of sizes in a list
-                determines the number of convolutional layers in the corresponding
-                level of the build on the right side. Within one of the lists going
-                from left to right. Kernel sizes can be given as tuples or integer.
-                If not given, each convolutional pass will consist of two 3x3x3
-                convolutions.
-            activation
-                Which activation to use after a convolution. Accepts the name of
-                any tensorflow activation function (e.g., ``ReLU`` for
-                ``torch.nn.ReLU``).
-            fov (optional):
-                Initial field of view in physical units
-            voxel_size (optional):
-                Size of a voxel in the input data, in physical units
-            num_heads (optional):
-                Number of decoders. The resulting U-Net has one single encoder
-                path and num_heads decoder paths. This is useful in a multi-task
-                learning context.
-            constant_upsample (optional):
-                If set to true, perform a constant upsampling instead of a
-                transposed convolution in the upsampling layers.
-            padding (optional):
-                How to pad convolutions. Either 'same' or 'valid' (default).
-            upsample_channel_contraction:
-                When performing the ConvTranspose, whether to reduce the number
-                of channels by the fmap_increment_factor. can be either bool or
-                list of bools to apply independently per layer.
-            activation_on_upsample:
-                Whether or not to add an activation after the upsample operation.
-            use_attention:
-                Whether or not to use an attention block in the U-Net.
-        Methods:
-            forward(x):
-                Forward pass of the U-Net.
-            scale(voxel_size):
-                Scale the voxel size according to the upsampling factors.
-            input_shape:
-                Return the input shape of the U-Net.
-            num_in_channels:
-                Return the number of input channels.
-            num_out_channels:
-                Return the number of output channels.
-            eval_shape_increase:
-                Return the increase in shape due to the U-Net.
-        Note:
-            This class is a wrapper around the ``CNNectomeUNetModule`` class.
-            The ``CNNectomeUNetModule`` class is the actual implementation of the
-            U-Net architecture.
-    """
+    
 
     def __init__(self, architecture_config):
-        """
-        Initialize the U-Net architecture.
-
-        Args:
-            architecture_config (dict): A dictionary containing the configuration
-            of the U-Net architecture. The dictionary should contain the following
-            keys:
-                - input_shape: The shape of the input data.
-                - fmaps_out: The number of output feature maps.
-                - fmaps_in: The number of input feature maps.
-                - num_fmaps: The number of feature maps in the first layer.
-                - fmap_inc_factor: The factor by which the number of feature maps
-                increases between layers.
-                - downsample_factors: List of tuples ``(z, y, x)`` to use to down-
-                and up-sample the feature maps between layers.
-                - kernel_size_down (optional): List of lists of kernel sizes. The
-                number of sizes in a list determines the number of convolutional
-                layers in the corresponding level of the build on the left side.
-                Kernel sizes can be given as tuples or integer. If not given, each
-                convolutional pass will consist of two 3x3x3 convolutions.
-                - kernel_size_up (optional): List of lists of kernel sizes. The
-                number of sizes in a list determines the number of convolutional
-                layers in the corresponding level of the build on the right side.
-                Within one of the lists going from left to right. Kernel sizes can
-                be given as tuples or integer. If not given, each convolutional
-                pass will consist of two 3x3x3 convolutions.
-                - constant_upsample (optional): If set to true, perform a constant
-                upsampling instead of a transposed convolution in the upsampling
-                layers.
-                - padding (optional): How to pad convolutions. Either 'same' or
-                'valid' (default).
-                - upsample_factors (optional): List of tuples ``(z, y, x)`` to use
-                to upsample the feature maps between layers.
-                - activation_on_upsample (optional): Whether or not to add an
-                activation after the upsample operation.
-                - use_attention (optional): Whether or not to use an attention block
-                in the U-Net.
-                - batch_norm (optional): Whether to use batch normalization.
-        Raises:
-            ValueError: If the input shape is not given.
-        Examples:
-            >>> architecture_config = {
-            ...     "input_shape": (1, 1, 128, 128, 128),
-            ...     "fmaps_out": 1,
-            ...     "fmaps_in": 1,
-            ...     "num_fmaps": 24,
-            ...     "fmap_inc_factor": 2,
-            ...     "downsample_factors": [(2, 2, 2), (2, 2, 2), (2, 2, 2)],
-            ...     "kernel_size_down": [[(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)]],
-            ...     "kernel_size_up": [[(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)]],
-            ...     "constant_upsample": False,
-            ...     "padding": "valid",
-            ...     "upsample_factors": [(2, 2, 2), (2, 2, 2), (2, 2, 2)],
-            ...     "activation_on_upsample": True,
-            ...     "use_attention": False
-            ... }
-            >>> unet = CNNectomeUNet(architecture_config)
-        Note:
-            The input shape should be given as a tuple ``(batch, channels, [length,] depth, height, width)``.
-        """
+        
         super().__init__()
 
         self._input_shape = architecture_config.input_shape
@@ -177,62 +35,13 @@ class CNNectomeUNet(Architecture):
 
     @property
     def eval_shape_increase(self):
-        """
-        The increase in shape due to the U-Net.
-
-        Returns:
-            The increase in shape due to the U-Net.
-        Raises:
-            AttributeError: If the increase in shape is not given.
-        Examples:
-            >>> unet.eval_shape_increase
-            (1, 1, 128, 128, 128)
-        Note:
-            The increase in shape should be given as a tuple ``(batch, channels, [length,] depth, height, width)``.
-        """
+        
         if self._eval_shape_increase is None:
             return super().eval_shape_increase
         return self._eval_shape_increase
 
     def module(self):
-        """
-        Create the U-Net module.
-
-        Returns:
-            The U-Net module.
-        Raises:
-            AttributeError: If the number of input channels is not given.
-            AttributeError: If the number of output channels is not given.
-            AttributeError: If the number of feature maps in the first layer is not given.
-            AttributeError: If the factor by which the number of feature maps increases between layers is not given.
-            AttributeError: If the downsample factors are not given.
-            AttributeError: If the kernel sizes for the down pass are not given.
-            AttributeError: If the kernel sizes for the up pass are not given.
-            AttributeError: If the constant upsample flag is not given.
-            AttributeError: If the padding is not given.
-            AttributeError: If the upsample factors are not given.
-            AttributeError: If the activation on upsample flag is not given.
-            AttributeError: If the use attention flag is not given.
-        Examples:
-            >>> unet.module()
-            CNNectomeUNetModule(
-                in_channels=1,
-                num_fmaps=24,
-                num_fmaps_out=1,
-                fmap_inc_factor=2,
-                kernel_size_down=[[(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)]],
-                kernel_size_up=[[(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)]],
-                downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],
-                constant_upsample=False,
-                padding='valid',
-                activation_on_upsample=True,
-                upsample_channel_contraction=[False, True, True],
-                use_attention=False
-            )
-        Note:
-            The U-Net module is an instance of the ``CNNectomeUNetModule`` class.
-
-        """
+        
         fmaps_in = self.fmaps_in
         levels = len(self.downsample_factors) + 1
         dims = len(self.downsample_factors[0])
@@ -290,158 +99,33 @@ class CNNectomeUNet(Architecture):
         return unet
 
     def scale(self, voxel_size):
-        """
-        Scale the voxel size according to the upsampling factors.
-
-        Args:
-            voxel_size (tuple): The size of a voxel in the input data.
-        Returns:
-            The scaled voxel size.
-        Raises:
-            ValueError: If the voxel size is not given.
-        Examples:
-            >>> unet.scale((1, 1, 1))
-            (1, 1, 1)
-        Note:
-            The voxel size should be given as a tuple ``(z, y, x)``.
-        """
+        
         for upsample_factor in self.upsample_factors:
             voxel_size = voxel_size / upsample_factor
         return voxel_size
 
     @property
     def input_shape(self):
-        """
-        Return the input shape of the U-Net.
-
-        Returns:
-            The input shape of the U-Net.
-        Raises:
-            AttributeError: If the input shape is not given.
-        Examples:
-            >>> unet.input_shape
-            (1, 1, 128, 128, 128)
-        Note:
-            The input shape should be given as a tuple ``(batch, channels, [length,] depth, height, width)``.
-        """
+        
         return self._input_shape
 
     @property
     def num_in_channels(self) -> int:
-        """
-        Return the number of input channels.
-
-        Returns:
-            The number of input channels.
-        Raises:
-            AttributeError: If the number of input channels is not given.
-        Examples:
-            >>> unet.num_in_channels
-            1
-        Note:
-            The number of input channels should be given as an integer.
-        """
+        
         return self.fmaps_in
 
     @property
     def num_out_channels(self) -> int:
-        """
-        Return the number of output channels.
-
-        Returns:
-            The number of output channels.
-        Raises:
-            AttributeError: If the number of output channels is not given.
-        Examples:
-            >>> unet.num_out_channels
-            1
-        Note:
-            The number of output channels should be given as an integer.
-        """
+        
         return self.fmaps_out
 
     def forward(self, x):
-        """
-        Forward pass of the U-Net.
-
-        Args:
-            x (Tensor): The input tensor.
-        Returns:
-            The output tensor.
-        Raises:
-            RuntimeError: If the tensors have different dimensions.
-        Examples:
-            >>> unet = CNNectomeUNet(architecture_config)
-            >>> x = torch.randn(1, 1, 64, 64, 64)
-            >>> unet(x)
-        Note:
-            The input tensor should be given as a 5D tensor.
-        """
+        
         return self.unet(x)
 
 
 class CNNectomeUNetModule(torch.nn.Module):
-    """
-    A U-Net module for 3D or 4D data. The U-Net expects 3D or 4D tensors shaped
-    like::
-
-            ``(batch=1, channels, [length,] depth, height, width)``.
-
-    This U-Net performs only "valid" convolutions, i.e., sizes of the feature maps
-    decrease after each convolution. It will perfrom 4D convolutions as long as
-    ``length`` is greater than 1. As soon as ``length`` is 1 due to a valid
-    convolution, the time dimension will be dropped and tensors with ``(b, c, z, y, x)``
-    will be use (and returned) from there on.
-
-    Attributes:
-        num_levels:
-            The number of levels in the U-Net.
-        num_heads:
-            The number of decoders.
-        in_channels:
-            The number of input channels.
-        out_channels:
-            The number of output channels.
-        dims:
-            The number of dimensions.
-        use_attention:
-            Whether or not to use an attention block in the U-Net.
-        l_conv:
-            The left convolutional passes.
-        l_down:
-            The left downsample layers.
-        r_up:
-            The right up/crop/concatenate layers.
-        r_conv:
-            The right convolutional passes.
-        kernel_size_down:
-            The kernel sizes for the down pass.
-        kernel_size_up:
-            The kernel sizes for the up pass.
-        fmap_inc_factor:
-            The factor by which the number of feature maps increases between layers.
-        downsample_factors:
-            The downsample factors.
-        constant_upsample:
-            Whether to perform a constant upsampling instead of a transposed convolution.
-        padding:
-            How to pad convolutions.
-        upsample_channel_contraction:
-            Whether to reduce the number of channels by the fmap_increment_factor.
-        activation_on_upsample:
-            Whether or not to add an activation after the upsample operation.
-        use_attention:
-            Whether or not to use an attention block in the U-Net.
-        attention:
-            The attention blocks.
-    Methods:
-        rec_forward(level, f_in):
-            Recursive forward pass of the U-Net.
-        forward(x):
-            Forward pass of the U-Net.
-    Note:
-        The input tensor should be given as a 5D tensor.
-    """
+    
 
     def __init__(
         self,
@@ -461,108 +145,7 @@ class CNNectomeUNetModule(torch.nn.Module):
         use_attention=False,
         batch_norm=True,
     ):
-        """
-        Create a U-Net::
-
-            f_in --> f_left --------------------------->> f_right--> f_out
-                        |                                   ^
-                        v                                   |
-                     g_in --> g_left ------->> g_right --> g_out
-                                 |               ^
-                                 v               |
-                                       ...
-
-        where each ``-->`` is a convolution pass, each `-->>` a crop, and down
-        and up arrows are max-pooling and transposed convolutions,
-        respectively.
-
-        The U-Net expects 3D or 4D tensors shaped like::
-
-            ``(batch=1, channels, [length,] depth, height, width)``.
-
-        This U-Net performs only "valid" convolutions, i.e., sizes of the
-        feature maps decrease after each convolution. It will perfrom 4D
-        convolutions as long as ``length`` is greater than 1. As soon as
-        ``length`` is 1 due to a valid convolution, the time dimension will be
-        dropped and tensors with ``(b, c, z, y, x)`` will be use (and returned)
-        from there on.
-
-        Args:
-            in_channels:
-                The number of input channels.
-            num_fmaps:
-                The number of feature maps in the first layer. This is also the
-                number of output feature maps. Stored in the ``channels``
-                dimension.
-            fmap_inc_factor:
-                By how much to multiply the number of feature maps between
-                layers. If layer 0 has ``k`` feature maps, layer ``l`` will
-                have ``k*fmap_inc_factor**l``.
-            downsample_factors:
-                List of tuples ``(z, y, x)`` to use to down- and up-sample the
-                feature maps between layers.
-            kernel_size_down (optional):
-                List of lists of kernel sizes. The number of sizes in a list
-                determines the number of convolutional layers in the
-                corresponding level of the build on the left side. Kernel sizes
-                can be given as tuples or integer. If not given, each
-                convolutional pass will consist of two 3x3x3 convolutions.
-            kernel_size_up (optional):
-                List of lists of kernel sizes. The number of sizes in a list
-                determines the number of convolutional layers in the
-                corresponding level of the build on the right side. Within one
-                of the lists going from left to right. Kernel sizes can be
-                given as tuples or integer. If not given, each convolutional
-                pass will consist of two 3x3x3 convolutions.
-            activation:
-                Which activation to use after a convolution. Accepts the name
-                of any tensorflow activation function (e.g., ``ReLU`` for
-                ``torch.nn.ReLU``).
-            fov (optional):
-                Initial field of view in physical units
-            voxel_size (optional):
-                Size of a voxel in the input data, in physical units
-            num_heads (optional):
-                Number of decoders. The resulting U-Net has one single encoder
-                path and num_heads decoder paths. This is useful in a
-                multi-task learning context.
-            constant_upsample (optional):
-                If set to true, perform a constant upsampling instead of a
-                transposed convolution in the upsampling layers.
-            padding (optional):
-                How to pad convolutions. Either 'same' or 'valid' (default).
-            upsample_channel_contraction:
-                When performing the ConvTranspose, whether to reduce the number
-                of channels by the fmap_increment_factor. can be either bool
-                or list of bools to apply independently per layer.
-            activation_on_upsample:
-                Whether or not to add an activation after the upsample operation.
-            use_attention:
-                Whether or not to use an attention block in the U-Net.
-            attention:
-                The attention blocks.
-        Returns:
-            The U-Net module.
-        Raises:
-            ValueError: If the number of input channels is not given.
-        Examples:
-            >>> unet = CNNectomeUNetModule(
-            ...     in_channels=1,
-            ...     num_fmaps=24,
-            ...     num_fmaps_out=1,
-            ...     fmap_inc_factor=2,
-            ...     kernel_size_down=[[(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)]],
-            ...     kernel_size_up=[[(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)]],
-            ...     downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],
-            ...     constant_upsample=False,
-            ...     padding='valid',
-            ...     activation_on_upsample=True,
-            ...     upsample_channel_contraction=[False, True, True],
-            ...     use_attention=False
-            ... )
-        Note:
-            The input tensor should be given as a 5D tensor.
-        """
+        
 
         super().__init__()
 
@@ -712,36 +295,7 @@ class CNNectomeUNetModule(torch.nn.Module):
         )
 
     def rec_forward(self, level, f_in):
-        """
-        Recursive forward pass of the U-Net.
-
-        Args:
-            level (int): The level of the U-Net.
-            f_in (Tensor): The input tensor.
-        Returns:
-            The output tensor.
-        Raises:
-            RuntimeError: If the tensors have different dimensions.
-        Examples:
-            >>> unet = CNNectomeUNetModule(
-            ...     in_channels=1,
-            ...     num_fmaps=24,
-            ...     num_fmaps_out=1,
-            ...     fmap_inc_factor=2,
-            ...     kernel_size_down=[[(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)]],
-            ...     kernel_size_up=[[(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)]],
-            ...     downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],
-            ...     constant_upsample=False,
-            ...     padding='valid',
-            ...     activation_on_upsample=True,
-            ...     upsample_channel_contraction=[False, True, True],
-            ...     use_attention=False
-            ... )
-            >>> x = torch.randn(1, 1, 64, 64, 64)
-            >>> unet.rec_forward(2, x)
-        Note:
-            The input tensor should be given as a 5D tensor.
-        """
+        
         # index of level in layer arrays
         i = self.num_levels - level - 1
 
@@ -779,35 +333,7 @@ class CNNectomeUNetModule(torch.nn.Module):
         return fs_out
 
     def forward(self, x):
-        """
-        Forward pass of the U-Net.
-
-        Args:
-            x (Tensor): The input tensor.
-        Returns:
-            The output tensor.
-        Raises:
-            RuntimeError: If the tensors have different dimensions.
-        Examples:
-            >>> unet = CNNectomeUNetModule(
-            ...     in_channels=1,
-            ...     num_fmaps=24,
-            ...     num_fmaps_out=1,
-            ...     fmap_inc_factor=2,
-            ...     kernel_size_down=[[(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)]],
-            ...     kernel_size_up=[[(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)], [(3, 3, 3), (3, 3, 3)]],
-            ...     downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],
-            ...     constant_upsample=False,
-            ...     padding='valid',
-            ...     activation_on_upsample=True,
-            ...     upsample_channel_contraction=[False, True, True],
-            ...     use_attention=False
-            ... )
-            >>> x = torch.randn(1, 1, 64, 64, 64)
-            >>> unet(x)
-        Note:
-            The input tensor should be given as a 5D tensor.
-        """
+        
         y = self.rec_forward(self.num_levels - 1, x)
 
         if self.num_heads == 1:
@@ -817,23 +343,7 @@ class CNNectomeUNetModule(torch.nn.Module):
 
 
 class ConvPass(torch.nn.Module):
-    """
-    Convolutional pass module. This module performs a series of convolutional
-    layers followed by an activation function. The module can also pad the
-    feature maps to ensure translation equivariance. The module can perform
-    2D or 3D convolutions.
-
-    Attributes:
-        dims:
-            The number of dimensions.
-        conv_pass:
-            The convolutional pass module.
-    Methods:
-        forward(x):
-            Forward pass of the Conv
-    Note:
-        The input tensor should be given as a 5D tensor.
-    """
+    
 
     def __init__(
         self,
@@ -844,24 +354,7 @@ class ConvPass(torch.nn.Module):
         padding="valid",
         batch_norm=True,
     ):
-        """
-        Convolutional pass module. This module performs a series of
-        convolutional layers followed by an activation function.
-
-        Args:
-            in_channels (int): The number of input channels.
-            out_channels (int): The number of output channels.
-            kernel_sizes (list): The kernel sizes for the convolutional layers.
-            activation (str): The activation function to use.
-            padding (optional): How to pad convolutions. Either 'same' or 'valid'.
-        Raises:
-            RuntimeError: If the tensors have different dimensions.
-        Examples:
-            >>> conv_pass = ConvPass(1, 1, [(3, 3, 3), (3, 3, 3)], "ReLU")
-        Note:
-            The input tensor should be given as a 5D tensor.
-
-        """
+        
         super(ConvPass, self).__init__()
 
         if activation is not None:
@@ -904,61 +397,15 @@ class ConvPass(torch.nn.Module):
         self.conv_pass = torch.nn.Sequential(*layers)
 
     def forward(self, x):
-        """
-        Forward pass of the ConvPass module.
-
-        Args:
-            x (Tensor): The input tensor.
-        Returns:
-            The output tensor.
-        Raises:
-            RuntimeError: If the tensors have different dimensions.
-        Examples:
-            >>> conv_pass = ConvPass(1, 1, [(3, 3, 3), (3, 3, 3)], "ReLU")
-            >>> x = torch.randn(1, 1, 64, 64, 64)
-            >>> conv_pass(x)
-        Note:
-            The input tensor should be given as a 5D tensor.
-        """
+        
         return self.conv_pass(x)
 
 
 class Downsample(torch.nn.Module):
-    """
-    Downsample module. This module performs downsampling of the input tensor
-    using either max-pooling or average pooling. The module can also crop the
-    feature maps to ensure translation equivariance with a stride of the
-    downsampling factor.
-
-    Attributes:
-        dims:
-            The number of dimensions.
-        downsample_factor:
-            The downsampling factor.
-        down:
-            The downsampling layer.
-    Methods:
-        forward(x):
-            Downsample the input tensor.
-    Note:
-        The input tensor should be given as a 5D tensor.
-
-    """
+    
 
     def __init__(self, downsample_factor):
-        """
-        Downsample module. This module performs downsampling of the input tensor
-        using either max-pooling or average pooling.
-
-        Args:
-            downsample_factor (tuple): The downsampling factor.
-        Raises:
-            RuntimeError: If the tensors have different dimensions.
-        Examples:
-            >>> downsample = Downsample((2, 2, 2))
-        Note:
-            The input tensor should be given as a 5D tensor.
-        """
+        
         super(Downsample, self).__init__()
 
         self.dims = len(downsample_factor)
@@ -973,22 +420,7 @@ class Downsample(torch.nn.Module):
         self.down = pool(downsample_factor, stride=downsample_factor)
 
     def forward(self, x):
-        """
-        Downsample the input tensor.
-
-        Args:
-            x (Tensor): The input tensor.
-        Returns:
-            The downsampled tensor.
-        Raises:
-            RuntimeError: If the tensors have different dimensions.
-        Examples:
-            >>> downsample = Downsample((2, 2, 2))
-            >>> x = torch.randn(1, 1, 64, 64, 64)
-            >>> downsample(x)
-        Note:
-            The input tensor should be given as a 5D tensor.
-        """
+        
         for d in range(1, self.dims + 1):
             if x.size()[-d] % self.downsample_factor[-d] != 0:
                 raise RuntimeError(
@@ -1001,33 +433,7 @@ class Downsample(torch.nn.Module):
 
 
 class Upsample(torch.nn.Module):
-    """
-    Upsample module. This module performs upsampling of the input tensor using
-    either transposed convolutions or nearest neighbor interpolation. The
-    module can also crop the feature maps to ensure translation equivariance
-    with a stride of the upsampling factor.
-
-    Attributes:
-        crop_factor:
-            The crop factor.
-        next_conv_kernel_sizes:
-            The kernel sizes for the convolutional layers.
-        dims:
-            The number of dimensions.
-        up:
-            The upsampling layer.
-    Methods:
-        crop_to_factor(x, factor, kernel_sizes):
-            Crop feature maps to ensure translation equivariance with stride of
-            upsampling factor.
-        crop(x, shape):
-            Center-crop x to match spatial dimensions given by shape.
-        forward(g_out, f_left=None):
-            Forward pass of the Upsample module.
-    Note:
-        The input tensor should be given as a 5D tensor.
-
-    """
+    
 
     def __init__(
         self,
@@ -1039,27 +445,7 @@ class Upsample(torch.nn.Module):
         next_conv_kernel_sizes=None,
         activation=None,
     ):
-        """
-        Upsample module. This module performs upsampling of the input tensor
-
-        Args:
-            scale_factor (tuple): The upsampling factor.
-            mode (optional): The upsampling mode. Either 'transposed_conv' or
-            'nearest
-            in_channels (optional): The number of input channels.
-            out_channels (optional): The number of output channels.
-            crop_factor (optional): The crop factor.
-            next_conv_kernel_sizes (optional): The kernel sizes for the convolutional layers.
-            activation (optional): The activation function to use.
-        Raises:
-            RuntimeError: If the tensors have different dimensions.
-        Examples:
-            >>> upsample = Upsample(scale_factor=(2, 2, 2), in_channels=1, out_channels=1)
-            >>> upsample = Upsample(scale_factor=(2, 2, 2), in_channels=1, out_channels=1, activation="ReLU")
-            >>> upsample = Upsample(scale_factor=(2, 2, 2), in_channels=1, out_channels=1, crop_factor=(2, 2, 2), next_conv_kernel_sizes=[(3, 3, 3), (3, 3, 3)])
-        Note:
-            The input tensor should be given as a 5D tensor.
-        """
+        
         super(Upsample, self).__init__()
 
         if activation is not None:
@@ -1107,51 +493,7 @@ class Upsample(torch.nn.Module):
             self.up = layers[0]
 
     def crop_to_factor(self, x, factor, kernel_sizes):
-        """
-        Crop feature maps to ensure translation equivariance with stride of
-        upsampling factor. This should be done right after upsampling, before
-        application of the convolutions with the given kernel sizes.
-
-        The crop could be done after the convolutions, but it is more efficient
-        to do that before (feature maps will be smaller).
-
-        We need to ensure that the feature map is large enough to ensure that
-        the translation equivariance is maintained. This is done by cropping
-        the feature map to the largest size that is a multiple of the factor
-        and that is large enough to ensure that the translation equivariance
-        is maintained.
-
-        We need (spatial_shape - convolution_crop) to be a multiple of factor,
-        i.e.:
-        (s - c) = n*k
-
-        where s is the spatial size of the feature map, c is the crop due to
-        the convolutions, n is the number of strides of the upsampling factor,
-        and k is the upsampling factor.
-
-        We want to find the largest n for which s' = n*k + c <= s
-
-        n = floor((s - c)/k)
-
-        This gives us the target shape s'
-
-        s' = n*k + c
-
-        Args:
-            x (Tensor): The input tensor.
-            factor (tuple): The upsampling factor.
-            kernel_sizes (list): The kernel sizes for the convolutional layers.
-        Returns:
-            The cropped tensor.
-        Raises:
-            RuntimeError: If the feature map is too small to ensure translation equivariance.
-        Examples:
-            >>> upsample = Upsample(scale_factor=(2, 2, 2), in_channels=1, out_channels=1)
-            >>> x = torch.randn(1, 1, 64, 64, 64)
-            >>> upsample.crop_to_factor(x, (2, 2, 2), [(3, 3, 3), (3, 3, 3)])
-        Note:
-            The input tensor should be given as a 5D tensor.
-        """
+        
 
         shape = x.size()
         spatial_shape = shape[-self.dims :]
@@ -1196,23 +538,7 @@ class Upsample(torch.nn.Module):
         return x
 
     def crop(self, x, shape):
-        """
-        Center-crop x to match spatial dimensions given by shape.
-
-        Args:
-            x (Tensor): The input tensor.
-            shape (tuple): The target shape.
-        Returns:
-            The center-cropped tensor.
-        Raises:
-            RuntimeError: If the tensors have different dimensions.
-        Examples:
-            >>> upsample = Upsample(scale_factor=(2, 2, 2), in_channels=1, out_channels=1)
-            >>> x = torch.randn(1, 1, 64, 64, 64)
-            >>> upsample.crop(x, (32, 32, 32))
-        Note:
-            The input tensor should be given as a 5D tensor.
-        """
+        
 
         x_target_size = x.size()[: -self.dims] + shape
 
@@ -1223,24 +549,7 @@ class Upsample(torch.nn.Module):
         return x[slices]
 
     def forward(self, g_out, f_left=None):
-        """
-        Forward pass of the Upsample module.
-
-        Args:
-            g_out (Tensor): The gating signal tensor.
-            f_left (Tensor): The input feature tensor.
-        Returns:
-            The output feature tensor.
-        Raises:
-            RuntimeError: If the tensors have different dimensions.
-        Examples:
-            >>> upsample = Upsample(scale_factor=(2, 2, 2), in_channels=1, out_channels=1)
-            >>> g_out = torch.randn(1, 1, 64, 64, 64)
-            >>> f_left = torch.randn(1, 1, 32, 32, 32)
-            >>> upsample(g_out, f_left)
-        Note:
-            The gating signal and input feature tensors should be given as 5D tensors.
-        """
+        
         g_up = self.up(g_out)
 
         if self.next_conv_kernel_sizes is not None:
@@ -1259,73 +568,10 @@ class Upsample(torch.nn.Module):
 
 
 class AttentionBlockModule(nn.Module):
-    """
-    Attention Block Module:
-
-       The AttentionBlock uses two separate pathways to process 'g' and 'x',
-       combines them, and applies a sigmoid activation to generate an attention map.
-       This map is then used to scale the input features 'x', resulting in an output
-       that focuses on important features as dictated by the gating signal 'g'.
-
-       The attention block takes two inputs: 'g' (gating signal) and 'x' (input features).
-
-               [g] --> W_g --\                 /--> psi --> * --> [output]
-                               \               /
-               [x] --> W_x --> [+] --> relu --
-
-       Where:
-           - W_g and W_x are 1x1 Convolution followed by Batch Normalization
-           - [+] indicates element-wise addition
-           - relu is the Rectified Linear Unit activation function
-           - psi is a sequence of 1x1 Convolution, Batch Normalization, and Sigmoid activation
-           - * indicates element-wise multiplication between the output of psi and input feature 'x'
-           - [output] has the same dimensions as input 'x', selectively emphasized by attention weights
-
-       Attributes:
-           dims:
-               The number of dimensions of the input tensors.
-           kernel_sizes:
-               The kernel sizes for the convolutional layers.
-           upsample_factor:
-               The factor by which to upsample the attention map.
-           W_g:
-               The 1x1 Convolutional layer for the gating signal.
-           W_x:
-               The 1x1 Convolutional layer for the input features.
-           psi:
-               The 1x1 Convolutional layer followed by Sigmoid activation.
-           up:
-               The upsampling layer to match the dimensions of the input features.
-           relu:
-               The Rectified Linear Unit activation function.
-       Methods:
-           calculate_and_apply_padding(smaller_tensor, larger_tensor):
-               Calculate and apply symmetric padding to the smaller tensor to match the dimensions of the larger tensor.
-           forward(g, x):
-               Forward pass of the Attention Block.
-       Note:
-           The AttentionBlockModule is an instance of the ``torch.nn.Module`` class.
-    """
+    
 
     def __init__(self, F_g, F_l, F_int, dims, upsample_factor=None, batch_norm=True):
-        """
-        Initialize the Attention Block Module.
-
-        Args:
-            F_g (int): The number of feature maps in the gating signal tensor.
-            F_l (int): The number of feature maps in the input feature tensor.
-            F_int (int): The number of feature maps in the intermediate tensor.
-            dims (int): The number of dimensions of the input tensors.
-            upsample_factor (optional): The factor by which to upsample the attention map.
-        Returns:
-            The Attention Block Module.
-        Raises:
-            RuntimeError: If the gating signal and input feature tensors have different dimensions.
-        Examples:
-            >>> attention_block = AttentionBlockModule(F_g=1, F_l=1, F_int=1, dims=3)
-        Note:
-            The number of feature maps should be given as an integer.
-        """
+        
 
         super(AttentionBlockModule, self).__init__()
         self.dims = dims
@@ -1375,24 +621,7 @@ class AttentionBlockModule(nn.Module):
         self.relu = nn.ReLU(inplace=True)
 
     def calculate_and_apply_padding(self, smaller_tensor, larger_tensor):
-        """
-        Calculate and apply symmetric padding to the smaller tensor to match the dimensions of the larger tensor.
-
-        Args:
-            smaller_tensor (Tensor): The tensor to be padded.
-            larger_tensor (Tensor): The tensor whose dimensions the smaller tensor needs to match.
-        Returns:
-            Tensor: The padded smaller tensor with the same dimensions as the larger tensor.
-        Raises:
-            RuntimeError: If the tensors have different dimensions.
-        Examples:
-            >>> larger_tensor = torch.randn(1, 1, 128, 128, 128)
-            >>> smaller_tensor = torch.randn(1, 1, 64, 64, 64)
-            >>> attention_block = AttentionBlockModule(F_g=1, F_l=1, F_int=1, dims=3)
-            >>> padded_tensor = attention_block.calculate_and_apply_padding(smaller_tensor, larger_tensor)
-        Note:
-            The tensors should have the same dimensions.
-        """
+        
         padding = []
         for i in range(2, 2 + self.dims):
             diff = larger_tensor.size(i) - smaller_tensor.size(i)
@@ -1405,24 +634,7 @@ class AttentionBlockModule(nn.Module):
         return nn.functional.pad(smaller_tensor, padding, mode="constant", value=0)
 
     def forward(self, g, x):
-        """
-        Forward pass of the Attention Block.
-
-        Args:
-            g (Tensor): The gating signal tensor.
-            x (Tensor): The input feature tensor.
-        Returns:
-            Tensor: The output tensor with the same dimensions as the input feature tensor.
-        Raises:
-            RuntimeError: If the gating signal and input feature tensors have different dimensions.
-        Examples:
-            >>> g = torch.randn(1, 1, 128, 128, 128)
-            >>> x = torch.randn(1, 1, 128, 128, 128)
-            >>> attention_block = AttentionBlockModule(F_g=1, F_l=1, F_int=1, dims=3)
-            >>> output = attention_block(g, x)
-        Note:
-            The gating signal and input feature tensors should have the same dimensions.
-        """
+        
         g1 = self.W_g(g)
         x1 = self.W_x(x)
         g1 = self.calculate_and_apply_padding(g1, x1)

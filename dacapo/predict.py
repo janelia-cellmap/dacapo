@@ -27,24 +27,7 @@ def predict(
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):
-    """Predict with a trained model.
-
-    Args:
-        run_name (str or Run): The name of the run to predict with or the Run object.
-        iteration (int or None): The training iteration of the model to use for prediction.
-        input_container (Path | str): The container of the input array.
-        input_dataset (str): The dataset name of the input array.
-        output_path (LocalArrayIdentifier | str): The path where the prediction array will be stored, or a LocalArryIdentifier for the prediction array.
-        output_roi (Optional[Roi | str], optional): The ROI of the output array. If None, the ROI of the input array will be used. Defaults to None.
-        num_workers (int, optional): The number of workers to use for blockwise prediction. Defaults to 1 for local processing, otherwise 12.
-        output_dtype (np.dtype | str, optional): The dtype of the output array. Defaults to np.uint8.
-        overwrite (bool, optional): If True, the output array will be overwritten if it already exists. Defaults to True.
-    Raises:
-        ValueError: If run_name is not found in config store
-    Examples:
-        >>> predict("run_name", 100, "input.zarr", "raw", "output.zarr", output_roi="[0:100,0:100,0:100]")
-
-    """
+    
     # retrieving run
     if isinstance(run_name, Run):
         run = run_name

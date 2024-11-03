@@ -13,62 +13,19 @@ logger = logging.getLogger(__name__)
 
 
 class OneHotPredictor(Predictor):
-    """
-    A predictor that uses one-hot encoding for classification tasks.
-
-    Attributes:
-        classes (List[str]): The list of class labels.
-    Methods:
-        __init__(self, classes: List[str]): Initializes the OneHotPredictor.
-        create_model(self, architecture): Create the model for the predictor.
-        create_target(self, gt): Create the target array for training.
-        create_weight(self, gt, target, mask, moving_class_counts=None): Create the weight array for training.
-        output_array_type: Get the output array type.
-        process(self, labels: np.ndarray): Process the labels array and convert it to one-hot encoding.
-    Notes:
-        This is a subclass of Predictor.
-    """
+    
 
     def __init__(self, classes: List[str]):
-        """
-        Initialize the OneHotPredictor.
-
-        Args:
-            classes (List[str]): The list of class labels.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor = OneHotPredictor(classes)
-        """
+        
         self.classes = classes
 
     @property
     def embedding_dims(self):
-        """
-        Get the number of embedding dimensions.
-
-        Returns:
-            int: The number of embedding dimensions.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> embedding_dims = predictor.embedding_dims
-        """
+        
         return len(self.classes)
 
     def create_model(self, architecture):
-        """
-        Create the model for the predictor.
-
-        Args:
-            architecture: The architecture for the model.
-        Returns:
-            Model: The created model.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> model = predictor.create_model(architecture)
-        """
+        
         head = torch.nn.Conv3d(
             architecture.num_out_channels, self.embedding_dims, kernel_size=3
         )
@@ -76,19 +33,7 @@ class OneHotPredictor(Predictor):
         return Model(architecture, head)
 
     def create_target(self, gt):
-        """
-        Create the target array for training.
-
-        Args:
-            gt: The ground truth array.
-        Returns:
-            NumpyArray: The created target array.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> target = predictor.create_target(gt)
-
-        """
+        
         one_hots = self.process(gt.data)
         return NumpyArray.from_np_array(
             one_hots,
@@ -98,22 +43,7 @@ class OneHotPredictor(Predictor):
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
-        """
-        Create the weight array for training.
-
-        Args:
-            gt: The ground truth array.
-            target: The target array.
-            mask: The mask array.
-            moving_class_counts: The moving class counts.
-        Returns:
-            Tuple[NumpyArray, None]: The created weight array and None.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.create_weight(gt, target, mask, moving_class_counts)
-
-        """
+        
         return (
             NumpyArray.from_np_array(
                 np.ones(target.data.shape),
@@ -126,36 +56,14 @@ class OneHotPredictor(Predictor):
 
     @property
     def output_array_type(self):
-        """
-        Get the output array type.
-
-        Returns:
-            ProbabilityArray: The output array type.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> output_array_type = predictor.output_array_type
-        """
+        
         return ProbabilityArray(self.classes)
 
     def process(
         self,
         labels: np.ndarray,
     ):
-        """
-        Process the labels array and convert it to one-hot encoding.
-
-        Args:
-            labels (np.ndarray): The labels array.
-        Returns:
-            np.ndarray: The one-hot encoded array.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> one_hots = predictor.process(labels)
-        Notes:
-            Assumes labels has a singleton channel dim and channel dim is first.
-        """
+        
         # TODO: Assumes labels has a singleton channel dim and channel dim is first
         one_hots = np.zeros((self.embedding_dims,) + labels.shape[1:], dtype=np.uint8)
         for i, _ in enumerate(self.classes):

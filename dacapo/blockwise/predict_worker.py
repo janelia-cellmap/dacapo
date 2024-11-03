@@ -36,14 +36,7 @@ path = __file__
     default="INFO",
 )
 def cli(log_level):
-    """
-    CLI for running the predict worker.
-
-    The predict worker is used to apply a trained model to a dataset.
-
-    Args:
-        log_level (str): The log level to use for logging.
-    """
+    
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
@@ -98,17 +91,7 @@ def start_worker_fn(
     output_dataset: str,
     return_io_loop: Optional[bool] = False,
 ):
-    """
-    Start a worker to apply a trained model to a dataset.
-
-    Args:
-        run_name (str): The name of the run to apply.
-        iteration (int or None): The training iteration of the model to use for prediction.
-        input_container (Path | str): The input container.
-        input_dataset (str): The input dataset.
-        output_container (Path | str): The output container.
-        output_dataset (str): The output dataset.
-    """
+    
 
     def io_loop():
         daisy_client = daisy.Client()
@@ -236,17 +219,7 @@ def spawn_worker(
     input_array_identifier: "LocalArrayIdentifier",
     output_array_identifier: "LocalArrayIdentifier",
 ):
-    """
-    Spawn a worker to predict on a given dataset.
-
-    Args:
-        run_name (str): The name of the run to apply.
-        iteration (int or None): The training iteration of the model to use for prediction.
-        input_array_identifier (LocalArrayIdentifier): The raw data to predict on.
-        output_array_identifier (LocalArrayIdentifier): The identifier of the prediction array.
-    Returns:
-        Callable: The function to run the worker.
-    """
+    
     compute_context = create_compute_context()
 
     if not compute_context.distribute_workers:
@@ -283,9 +256,7 @@ def spawn_worker(
     print("Defining worker with command: ", compute_context.wrap_command(command))
 
     def run_worker():
-        """
-        Run the worker in the given compute context.
-        """
+        
         print("Running worker with command: ", command)
         compute_context.execute(command)
 

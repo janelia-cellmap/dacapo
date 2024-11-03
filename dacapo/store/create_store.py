@@ -10,19 +10,7 @@ from upath import UPath as Path
 
 
 def create_config_store():
-    """
-    Create a config store based on the global DaCapo options.
-
-    Returns:
-        ConfigStore: The created config store.
-    Raises:
-        ValueError: If the store type is not supported.
-    Examples:
-        >>> create_config_store()
-        <dacapo.store.file_config_store.FileConfigStore object at 0x7f2e4f8e9e80>
-    Note:
-        Currently, only the FileConfigStore and MongoConfigStore are supported.
-    """
+    
 
     options = Options.instance()
 
@@ -38,22 +26,7 @@ def create_config_store():
 
 
 def create_stats_store():
-    """
-    Create a statistics store based on the global DaCapo options.
-
-    Args:
-        options (Options): The global DaCapo options.
-    Returns:
-        StatsStore: The created statistics store.
-    Raises:
-        ValueError: If the store type is not supported.
-    Examples:
-        >>> create_stats_store()
-        <dacapo.store.file_stats_store.FileStatsStore object at 0x7f2e4f8e9e80>
-    Note:
-        Currently, only the FileStatsStore and MongoStatsStore are supported.
-
-    """
+    
 
     options = Options.instance()
 
@@ -69,19 +42,7 @@ def create_stats_store():
 
 
 def create_weights_store():
-    """
-    Create a weights store based on the global DaCapo options.
-
-    Args:
-        options (Options): The global DaCapo options.
-    Returns:
-        WeightsStore: The created weights store.
-    Examples:
-        >>> create_weights_store()
-        <dacapo.store.local_weights_store.LocalWeightsStore object at 0x7f2e4f8e9e80>
-    Note:
-        Currently, only the LocalWeightsStore is supported.
-    """
+    
 
     options = Options.instance()
 
@@ -90,21 +51,7 @@ def create_weights_store():
 
 
 def create_array_store():
-    """
-    Create an array store based on the global DaCapo options.
-
-    Args:
-        options (Options): The global DaCapo options.
-    Returns:
-        ArrayStore: The created array store.
-    Raises:
-        ValueError: If the store type is not supported.
-    Examples:
-        >>> create_array_store()
-        <dacapo.store.local_array_store.LocalArrayStore object at 0x7f2e4f8e9e80>
-    Note:
-        Currently, only the LocalArrayStore is supported.
-    """
+    
 
     options = Options.instance()
 
