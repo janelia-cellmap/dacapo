@@ -11,8 +11,6 @@ from typing import Optional, List
 
 @attr.s
 class RawGTDatasetConfig(DatasetConfig):
-    
-
     dataset_type = RawGTDataset
 
     raw_config: Optional[ArrayConfig] = attr.ib(

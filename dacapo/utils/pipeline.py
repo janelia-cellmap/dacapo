@@ -13,19 +13,15 @@ logging.basicConfig(level=logging.INFO)
 
 
 class CreatePoints(gp.BatchFilter):
-    
-
     def __init__(
         self,
         labels,
         num_points=(20, 150),
     ):
-        
         self.labels = labels
         self.num_points = num_points
 
     def process(self, batch, request):
-        
         labels = batch[self.labels].data
 
         num_points = random.randint(*self.num_points)
@@ -40,8 +36,6 @@ class CreatePoints(gp.BatchFilter):
 
 
 class MakeRaw(gp.BatchFilter):
-    
-
     class Pipeline:
         def __init__(
             self,
@@ -54,7 +48,6 @@ class MakeRaw(gp.BatchFilter):
             membrane_size=3,
             inside_value=0.5,
         ):
-            
             self.raw = raw
             self.labels = labels
             self.gaussian_noise_args = gaussian_noise_args
@@ -65,13 +58,11 @@ class MakeRaw(gp.BatchFilter):
             self.inside_value = inside_value
 
     def setup(self):
-        
         spec = self.spec[self.labels].copy()  # type: ignore
         spec.dtype = np.float32
         self.provides(self.raw, spec)
 
     def process(self, batch, request):
-        
         labels = batch[self.labels].data
         raw: np.ndarray = np.zeros_like(labels, dtype=np.float32)
         raw[labels > 0] = 1
@@ -105,15 +96,11 @@ class MakeRaw(gp.BatchFilter):
 
 
 class DilatePoints(gp.BatchFilter):
-    
-
     def __init__(self, labels, dilations=[2, 8]):
-        
         self.labels = labels
         self.dilations = dilations
 
     def process(self, batch, request):
-        
         labels = batch[self.labels].data
 
         dilations = random.randint(*self.dilations)
@@ -123,14 +110,11 @@ class DilatePoints(gp.BatchFilter):
 
 
 class RandomDilateLabels(gp.BatchFilter):
-    
-
     def __init__(self, labels, dilations=[2, 8]):
         self.labels = labels
         self.dilations = dilations
 
     def process(self, batch, request):
-        
         labels = batch[self.labels].data
 
         new_labels = np.zeros_like(labels)
@@ -153,15 +137,11 @@ class RandomDilateLabels(gp.BatchFilter):
 
 
 class Relabel(gp.BatchFilter):
-    
-
     def __init__(self, labels, connectivity=1):
-        
         self.labels = labels
         self.connectivity = connectivity
 
     def process(self, batch, request):
-        
         labels = batch[self.labels].data
 
         relabeled = relabel(labels, connectivity=self.connectivity).astype(labels.dtype)  # type: ignore
@@ -170,15 +150,11 @@ class Relabel(gp.BatchFilter):
 
 
 class ExpandLabels(gp.BatchFilter):
-    
-
     def __init__(self, labels, background=0):
-        
         self.labels = labels
         self.background = background
 
     def process(self, batch, request):
-        
         labels_data = batch[self.labels].data
         distance = labels_data.shape[0]
 
@@ -202,19 +178,14 @@ class ExpandLabels(gp.BatchFilter):
 
 
 class ZerosSource(gp.BatchProvider):
-    
-
     def __init__(self, key, spec):
-        
         self.key = key
         self._spec = {key: spec}
 
     def setup(self):
-        
         pass
 
     def provide(self, request):
-        
         batch = gp.Batch()
 
         roi = request[self.key].roi
@@ -241,8 +212,6 @@ def random_source_pipeline(
     membrane_size=3,
     inside_value=0.5,
 ):
-    
-
     voxel_size = gp.Coordinate(voxel_size)
     input_shape = gp.Coordinate(input_shape)
 

@@ -6,8 +6,6 @@ from typing import List, Tuple, Union
 
 @attr.s
 class BinarySegmentationEvaluationScores(EvaluationScores):
-    
-
     dice: float = attr.ib(default=float("nan"))
     jaccard: float = attr.ib(default=float("nan"))
     hausdorff: float = attr.ib(default=float("nan"))
@@ -56,7 +54,6 @@ class BinarySegmentationEvaluationScores(EvaluationScores):
 
     @staticmethod
     def store_best(criterion: str) -> bool:
-        
         # Whether or not to store the best weights/validation blocks for this
         # criterion.
         mapping = {
@@ -86,7 +83,6 @@ class BinarySegmentationEvaluationScores(EvaluationScores):
 
     @staticmethod
     def higher_is_better(criterion: str) -> bool:
-        
         mapping = {
             "dice": True,
             "jaccard": True,
@@ -116,7 +112,6 @@ class BinarySegmentationEvaluationScores(EvaluationScores):
     def bounds(
         criterion: str,
     ) -> Tuple[Union[int, float, None], Union[int, float, None]]:
-        
         mapping = {
             "dice": (0, 1),
             "jaccard": (0, 1),
@@ -145,20 +140,15 @@ class BinarySegmentationEvaluationScores(EvaluationScores):
 
 @attr.s
 class MultiChannelBinarySegmentationEvaluationScores(EvaluationScores):
-    
-
     channel_scores: List[Tuple[str, BinarySegmentationEvaluationScores]] = attr.ib()
 
     def __attrs_post_init__(self):
-        
         for channel, scores in self.channel_scores:
             for criteria in BinarySegmentationEvaluationScores.criteria:
                 setattr(self, f"{channel}__{criteria}", getattr(scores, criteria))
 
     @property
     def criteria(self):
-        
-
         return [
             f"{channel}__{criteria}"
             for channel, _ in self.channel_scores
@@ -167,13 +157,11 @@ class MultiChannelBinarySegmentationEvaluationScores(EvaluationScores):
 
     @staticmethod
     def higher_is_better(criterion: str) -> bool:
-        
         _, criterion = criterion.split("__")
         return BinarySegmentationEvaluationScores.higher_is_better(criterion)
 
     @staticmethod
     def store_best(criterion: str) -> bool:
-        
         _, criterion = criterion.split("__")
         return BinarySegmentationEvaluationScores.store_best(criterion)
 
@@ -181,6 +169,5 @@ class MultiChannelBinarySegmentationEvaluationScores(EvaluationScores):
     def bounds(
         criterion: str,
     ) -> Tuple[Union[int, float, None], Union[int, float, None]]:
-        
         _, criterion = criterion.split("__")
         return BinarySegmentationEvaluationScores.bounds(criterion)

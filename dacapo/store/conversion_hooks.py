@@ -18,8 +18,6 @@ from upath import UPath as Path
 
 
 def register_hierarchy_hooks(converter):
-    
-
     converter.register_hierarchy(TaskConfig, cls_fun)
     converter.register_hierarchy(StartConfig, cls_fun)
     converter.register_hierarchy(ArchitectureConfig, cls_fun)
@@ -34,8 +32,6 @@ def register_hierarchy_hooks(converter):
 
 
 def register_hooks(converter):
-    
-
     #########################
     # DaCapo specific hooks #
     #########################
@@ -79,5 +75,4 @@ def register_hooks(converter):
 
 
 def cls_fun(typ):
-    
     return eval(typ)

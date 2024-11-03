@@ -26,7 +26,6 @@ logger = logging.getLogger(__name__)
     default="INFO",
 )
 def cli(log_level):
-    
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
@@ -71,8 +70,6 @@ def start_worker_fn(
     function_path: str | Path,
     return_io_loop: bool = False,
 ):
-    
-
     print("Starting worker")
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
@@ -203,7 +200,6 @@ def spawn_worker(
     tmpdir: str,
     function_path: str,
 ):
-    
     compute_context = create_compute_context()
     if not compute_context.distribute_workers:
         return start_worker_fn(
@@ -237,7 +233,6 @@ def spawn_worker(
     ]
 
     def run_worker():
-        
         compute_context.execute(command)
 
     return run_worker

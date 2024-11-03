@@ -14,8 +14,6 @@ logger = logging.getLogger(__name__)
 
 @attr.s
 class DaCapoConfig:
-    
-
     type: str = attr.ib(
         default="files",
         metadata={
@@ -50,28 +48,22 @@ class DaCapoConfig:
     )
 
     def serialize(self):
-        
         converter = Converter()
         data = converter.unstructure(self)
         return {k: v for k, v in data.items() if v is not None}
 
 
 class Options:
-    
-
     def __init__(self):
-        
         raise RuntimeError("Singleton: Use Options.instance()")
 
     @classmethod
     def instance(cls, **kwargs) -> DaCapoConfig:
-        
         config = cls.__parse_options(**kwargs)
         return config
 
     @classmethod
     def config_file(cls) -> Optional[Path]:
-        
         env_dict = dict(os.environ)
         if "DACAPO_OPTIONS_FILE" in env_dict:
             options_files = [Path(env_dict["DACAPO_OPTIONS_FILE"])]
@@ -93,7 +85,6 @@ class Options:
 
     @classmethod
     def __parse_options_from_file(cls):
-        
         if (config_file := cls.config_file()) is not None:
             with config_file.open("r") as f:
                 return yaml.safe_load(f)
@@ -102,7 +93,6 @@ class Options:
 
     @classmethod
     def __parse_options(cls, **kwargs):
-        
         options = cls.__parse_options_from_file()
         options.update(kwargs)
 

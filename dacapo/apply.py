@@ -38,7 +38,6 @@ def apply(
     overwrite: bool = True,
     file_format: str = "zarr",
 ):
-    
     if isinstance(output_dtype, str):
         output_dtype = np.dtype(output_dtype)
 
@@ -178,7 +177,6 @@ def apply_run(
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):
-    
     # render prediction dataset
     print(f"Predicting on dataset {prediction_array_identifier}")
     predict(

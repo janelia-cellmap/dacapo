@@ -6,10 +6,7 @@ from .task import Task
 
 
 class HotDistanceTask(Task):
-    
-
     def __init__(self, task_config):
-        
         self.predictor = HotDistancePredictor(
             channels=task_config.channels,
             scale_factor=task_config.scale_factor,

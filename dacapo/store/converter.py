@@ -4,11 +4,7 @@ from .conversion_hooks import register_hooks
 
 
 class TypedConverter(Converter):
-    
-
     def register_hierarchy(self, cls, cls_fn):
-        
-
         self.register_unstructure_hook(cls, lambda obj: self.__typed_unstructure(obj))
 
         self.register_structure_hook(
@@ -16,13 +12,11 @@ class TypedConverter(Converter):
         )
 
     def __typed_unstructure(self, obj):
-        
         cls = type(obj)
         unstructure_fn = make_dict_unstructure_fn(cls, self)
         return {"__type__": type(obj).__name__, **unstructure_fn(obj)}
 
     def __typed_structure(self, obj_data, cls, cls_fn):
-        
         try:
             cls = cls_fn(obj_data["__type__"])
             structure_fn = make_dict_structure_fn(cls, self)

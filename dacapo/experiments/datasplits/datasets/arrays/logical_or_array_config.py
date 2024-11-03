@@ -6,8 +6,6 @@ from .logical_or_array import LogicalOrArray
 
 @attr.s
 class LogicalOrArrayConfig(ArrayConfig):
-    
-
     array_type = LogicalOrArray
 
     source_array_config: ArrayConfig = attr.ib(

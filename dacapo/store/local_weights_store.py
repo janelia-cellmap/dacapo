@@ -14,17 +14,12 @@ logger = logging.getLogger(__name__)
 
 
 class LocalWeightsStore(WeightsStore):
-    
-
     def __init__(self, basedir):
-        
         print(f"Creating local weights store in directory {basedir}")
 
         self.basedir = basedir
 
     def latest_iteration(self, run: str) -> Optional[int]:
-        
-
         weights_dir = self.__get_weights_dir(run) / "iterations"
 
         iterations = sorted([int(path.parts[-1]) for path in weights_dir.glob("*")])
@@ -35,8 +30,6 @@ class LocalWeightsStore(WeightsStore):
         return iterations[-1]
 
     def store_weights(self, run: Run, iteration: int):
-        
-
         logger.warning(f"Storing weights for run {run}, iteration {iteration}")
 
         weights_dir = self.__get_weights_dir(run) / "iterations"
@@ -50,8 +43,6 @@ class LocalWeightsStore(WeightsStore):
         torch.save(weights, weights_name)
 
     def retrieve_weights(self, run: str, iteration: int) -> Weights:
-        
-
         print(f"Retrieving weights for run {run}, iteration {iteration}")
 
         weights_name = self.__get_weights_dir(run) / "iterations" / str(iteration)
@@ -66,7 +57,6 @@ class LocalWeightsStore(WeightsStore):
         return weights
 
     def _retrieve_weights(self, run: str, key: str) -> Weights:
-        
         weights_name = self.__get_weights_dir(run) / key
         if not weights_name.exists():
             weights_name = self.__get_weights_dir(run) / "iterations" / key
@@ -79,13 +69,10 @@ class LocalWeightsStore(WeightsStore):
         return weights
 
     def remove(self, run: str, iteration: int):
-        
         weights = self.__get_weights_dir(run) / "iterations" / str(iteration)
         weights.unlink()
 
     def store_best(self, run: str, iteration: int, dataset: str, criterion: str):
-        
-
         # must exist since we must read run/iteration weights
         weights_dir = self.__get_weights_dir(run)
         iteration_weights = weights_dir / "iterations" / f"{iteration}"
@@ -107,7 +94,6 @@ class LocalWeightsStore(WeightsStore):
             f.write(json.dumps({"iteration": iteration}))
 
     def retrieve_best(self, run: str, dataset: str | Dataset, criterion: str) -> int:
-        
         print(f"Retrieving weights for run {run}, criterion {criterion}")
 
         with (self.__get_weights_dir(run) / criterion / f"{dataset}.json").open(
@@ -118,7 +104,6 @@ class LocalWeightsStore(WeightsStore):
         return weights_info["iteration"]
 
     def _load_best(self, run: Run, criterion: str):
-        
         print(f"Retrieving weights for run {run}, criterion {criterion}")
 
         weights_name = self.__get_weights_dir(run) / f"{criterion}"
@@ -130,7 +115,6 @@ class LocalWeightsStore(WeightsStore):
         run.model.load_state_dict(weights.model)
 
     def __get_weights_dir(self, run: Union[str, Run]):
-        
         run = run if isinstance(run, str) else run.name
 
         return Path(self.basedir, run, "checkpoints")

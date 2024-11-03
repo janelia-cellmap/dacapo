@@ -12,8 +12,6 @@ import torch
 
 
 class Run:
-    
-
     name: str
     train_until: int
     validation_interval: int
@@ -30,7 +28,6 @@ class Run:
     _validation_scores: Optional[ValidationScores]
 
     def __init__(self, run_config, load_starter_model: bool = True):
-        
         self.name = run_config.name
         self._config = run_config
         self.train_until = run_config.num_iterations
@@ -102,7 +99,6 @@ class Run:
 
     @staticmethod
     def get_validation_scores(run_config) -> ValidationScores:
-        
         task_type = run_config.task_config.task_type
         datasplit_type = run_config.datasplit_config.datasplit_type
 
@@ -116,7 +112,6 @@ class Run:
     def move_optimizer(
         self, device: torch.device, empty_cuda_cache: bool = False
     ) -> None:
-        
         for state in self.optimizer.state.values():
             for k, v in state.items():
                 if torch.is_tensor(v):
@@ -128,7 +123,6 @@ class Run:
         return self.name
 
     def visualize_pipeline(self, bind_address="0.0.0.0", bind_port=0):
-        
         if not isinstance(self.trainer, GunpowderTrainer):
             raise NotImplementedError(
                 "Only GunpowderTrainer is supported for visualization"

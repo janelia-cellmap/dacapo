@@ -10,10 +10,7 @@ import numpy as np
 
 
 class DaCapoArraySource(gp.BatchProvider):
-    
-
     def __init__(self, array: Array, key: gp.ArrayKey):
-        
         self.array = array
         self.array_spec = ArraySpec(
             roi=self.array.roi, voxel_size=self.array.voxel_size
@@ -21,11 +18,9 @@ class DaCapoArraySource(gp.BatchProvider):
         self.key = key
 
     def setup(self):
-        
         self.provides(self.key, self.array_spec.copy())
 
     def provide(self, request):
-        
         output = gp.Batch()
 
         timing_provide = Timing(self, "provide")

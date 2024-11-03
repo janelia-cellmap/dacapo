@@ -6,8 +6,6 @@ from typing import Dict
 
 @attr.s
 class AnnotationArray(ArrayType):
-    
-
     classes: Dict[int, str] = attr.ib(
         metadata={
             "help_text": "A mapping from class label to class name. "
@@ -17,5 +15,4 @@ class AnnotationArray(ArrayType):
 
     @property
     def interpolatable(self):
-        
         return False

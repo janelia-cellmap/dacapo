@@ -11,10 +11,7 @@ logger = logging.getLogger(__file__)
 
 
 class ConcatArray(Array):
-    
-
     def __init__(self, array_config):
-        
         self.name = array_config.name
         self.channels = array_config.channels
         self.source_arrays = {
@@ -29,17 +26,14 @@ class ConcatArray(Array):
 
     @property
     def attrs(self):
-        
         return dict()
 
     @property
     def source_arrays(self) -> Dict[str, Array]:
-        
         return self._source_arrays
 
     @source_arrays.setter
     def source_arrays(self, value: Dict[str, Array]):
-        
         assert len(value) > 0, "Source arrays is empty!"
         self._source_arrays = value
         attrs: Dict[str, Any] = {}
@@ -61,12 +55,10 @@ class ConcatArray(Array):
 
     @property
     def source_array(self) -> Array:
-        
         return self._source_array
 
     @property
     def axes(self):
-        
         source_axes = self.source_array.axes
         if "c" not in source_axes:
             source_axes = ["c"] + source_axes
@@ -74,41 +66,33 @@ class ConcatArray(Array):
 
     @property
     def dims(self):
-        
         return self.source_array.dims
 
     @property
     def voxel_size(self):
-        
         return self.source_array.voxel_size
 
     @property
     def roi(self):
-        
         return self.source_array.roi
 
     @property
     def writable(self) -> bool:
-        
         return False
 
     @property
     def data(self):
-        
         raise RuntimeError("Cannot get writable version of this data!")
 
     @property
     def dtype(self):
-        
         return self.source_array.dtype
 
     @property
     def num_channels(self):
-        
         return len(self.channels)
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        
         default = (
             np.zeros_like(self.source_array[roi])
             if self.default_array is None
@@ -140,7 +124,6 @@ class ConcatArray(Array):
         return concatenated
 
     def _can_neuroglance(self):
-        
         return any(
             [
                 source_array._can_neuroglance()
@@ -149,7 +132,6 @@ class ConcatArray(Array):
         )
 
     def _neuroglancer_source(self):
-        
         # return self._source_array._neuroglancer_source()
         return [
             source_array._neuroglancer_source()
@@ -157,7 +139,6 @@ class ConcatArray(Array):
         ]
 
     def _neuroglancer_layer(self):
-        
         # layer = neuroglancer.SegmentationLayer(source=self._neuroglancer_source())
         return [
             source_array._neuroglancer_layer()
@@ -166,7 +147,6 @@ class ConcatArray(Array):
         ]
 
     def _source_name(self):
-        
         # return self._source_array._source_name()
         return [
             source_array._source_name()

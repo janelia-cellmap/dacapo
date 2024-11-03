@@ -11,7 +11,6 @@ import scipy.sparse as sparse
 
 
 def voi(reconstruction, groundtruth, ignore_reconstruction=[], ignore_groundtruth=[0]):
-    
     (hyxg, hxgy) = split_vi(
         reconstruction, groundtruth, ignore_reconstruction, ignore_groundtruth
     )
@@ -19,14 +18,12 @@ def voi(reconstruction, groundtruth, ignore_reconstruction=[], ignore_groundtrut
 
 
 def split_vi(x, y=None, ignore_x=[0], ignore_y=[0]):
-    
     _, _, _, hxgy, hygx, _, _ = vi_tables(x, y, ignore_x, ignore_y)
     # false merges, false splits
     return np.array([hygx.sum(), hxgy.sum()])
 
 
 def vi_tables(x, y=None, ignore_x=[0], ignore_y=[0]):
-    
     if y is not None:
         pxy = contingency_table(x, y, ignore_x, ignore_y)
     else:
@@ -59,7 +56,6 @@ def vi_tables(x, y=None, ignore_x=[0], ignore_y=[0]):
 
 
 def contingency_table(seg, gt, ignore_seg=[0], ignore_gt=[0], norm=True):
-    
     segr = seg.ravel()
     gtr = gt.ravel()
     ignored = np.zeros(segr.shape, bool)
@@ -76,7 +72,6 @@ def contingency_table(seg, gt, ignore_seg=[0], ignore_gt=[0], norm=True):
 
 
 def divide_columns(matrix, row, in_place=False):
-    
     if in_place:
         out = matrix
     else:
@@ -98,7 +93,6 @@ def divide_columns(matrix, row, in_place=False):
 
 
 def divide_rows(matrix, column, in_place=False):
-    
     if in_place:
         out = matrix
     else:
@@ -120,7 +114,6 @@ def divide_rows(matrix, column, in_place=False):
 
 
 def xlogx(x, out=None, in_place=False):
-    
     if in_place:
         y = x
     elif out is None:

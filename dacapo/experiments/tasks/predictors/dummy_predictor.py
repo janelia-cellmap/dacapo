@@ -8,14 +8,10 @@ import torch
 
 
 class DummyPredictor(Predictor):
-    
-
     def __init__(self, embedding_dims):
-        
         self.embedding_dims = embedding_dims
 
     def create_model(self, architecture):
-        
         head = torch.nn.Conv3d(
             architecture.num_out_channels, self.embedding_dims, kernel_size=3
         )
@@ -23,7 +19,6 @@ class DummyPredictor(Predictor):
         return Model(architecture, head)
 
     def create_target(self, gt):
-        
         # zeros
         return NumpyArray.from_np_array(
             np.zeros((self.embedding_dims,) + gt.data.shape[-gt.dims :]),
@@ -33,7 +28,6 @@ class DummyPredictor(Predictor):
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
-        
         # ones
         return (
             NumpyArray.from_np_array(
@@ -47,5 +41,4 @@ class DummyPredictor(Predictor):
 
     @property
     def output_array_type(self):
-        
         return EmbeddingArray(self.embedding_dims)

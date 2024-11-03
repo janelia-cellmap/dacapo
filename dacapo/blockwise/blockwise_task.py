@@ -5,8 +5,6 @@ from daisy import Task, Roi
 
 
 class DaCapoBlockwiseTask(Task):
-    
-
     def __init__(
         self,
         worker_file: str | Path,
@@ -20,7 +18,6 @@ class DaCapoBlockwiseTask(Task):
         *args,
         **kwargs,
     ):
-        
         # Load worker functions
         worker_name = Path(worker_file).stem
         worker = SourceFileLoader(worker_name, str(worker_file)).load_module()

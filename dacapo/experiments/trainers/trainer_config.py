@@ -5,8 +5,6 @@ from typing import Tuple
 
 @attr.s
 class TrainerConfig:
-    
-
     name: str = attr.ib(
         metadata={
             "help_text": "A unique name for this trainer. This will be saved so you "
@@ -27,5 +25,4 @@ class TrainerConfig:
     )
 
     def verify(self) -> Tuple[bool, str]:
-        
         return True, "No validation for this Trainer"

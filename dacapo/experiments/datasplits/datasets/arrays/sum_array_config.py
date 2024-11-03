@@ -8,8 +8,6 @@ from typing import List
 
 @attr.s
 class SumArrayConfig(ArrayConfig):
-    
-
     array_type = SumArray
 
     source_array_configs: List[ArrayConfig] = attr.ib(

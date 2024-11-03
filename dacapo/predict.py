@@ -27,7 +27,6 @@ def predict(
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):
-    
     # retrieving run
     if isinstance(run_name, Run):
         run = run_name

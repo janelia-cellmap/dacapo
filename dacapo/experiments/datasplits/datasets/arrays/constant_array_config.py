@@ -6,8 +6,6 @@ from .constant_array import ConstantArray
 
 @attr.s
 class ConstantArrayConfig(ArrayConfig):
-    
-
     array_type = ConstantArray
 
     source_array_config: ArrayConfig = attr.ib(

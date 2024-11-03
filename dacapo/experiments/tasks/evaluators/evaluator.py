@@ -21,20 +21,16 @@ BestScore = Optional[Tuple[Iteration, Score]]
 
 
 class Evaluator(ABC):
-    
-
     @abstractmethod
     def evaluate(
         self, output_array_identifier: "LocalArrayIdentifier", evaluation_array: "Array"
     ) -> "EvaluationScores":
-        
         pass
 
     @property
     def best_scores(
         self,
     ) -> Dict[OutputIdentifier, BestScore]:
-        
         if not hasattr(self, "_best_scores"):
             self._best_scores: Dict[OutputIdentifier, BestScore] = {}
         return self._best_scores
@@ -46,7 +42,6 @@ class Evaluator(ABC):
         criterion: str,
         score: "EvaluationScores",
     ) -> bool:
-        
         if not self.store_best(criterion) or math.isnan(getattr(score, criterion)):
             return False
         previous_best = self.best_scores[(dataset, parameter, criterion)]
@@ -59,7 +54,6 @@ class Evaluator(ABC):
             )
 
     def get_overall_best(self, dataset: "Dataset", criterion: str):
-        
         overall_best = None
         if self.best_scores:
             for _, parameter, _ in self.best_scores.keys():
@@ -81,7 +75,6 @@ class Evaluator(ABC):
         return overall_best
 
     def get_overall_best_parameters(self, dataset: "Dataset", criterion: str):
-        
         overall_best = None
         overall_best_parameters = None
         if self.best_scores:
@@ -104,14 +97,12 @@ class Evaluator(ABC):
         return overall_best_parameters
 
     def compare(self, score_1, score_2, criterion):
-        
         if self.higher_is_better(criterion):
             return score_1 > score_2
         else:
             return score_1 < score_2
 
     def set_best(self, validation_scores: "ValidationScores") -> None:
-        
         scores = validation_scores.to_xarray()
 
         # type these variables for mypy
@@ -162,25 +153,20 @@ class Evaluator(ABC):
     @property
     @abstractmethod
     def criteria(self) -> List[str]:
-        
         pass
 
     def higher_is_better(self, criterion: str) -> bool:
-        
         return self.score.higher_is_better(criterion)
 
     def bounds(
         self, criterion: str
     ) -> Tuple[Union[int, float, None], Union[int, float, None]]:
-        
         return self.score.bounds(criterion)
 
     def store_best(self, criterion: str) -> bool:
-        
         return self.score.store_best(criterion)
 
     @property
     @abstractmethod
     def score(self) -> "EvaluationScores":
-        
         pass

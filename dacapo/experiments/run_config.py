@@ -11,8 +11,6 @@ from typing import Optional
 
 @attr.s
 class RunConfig:
-    
-
     task_config: TaskConfig = attr.ib(
         metadata={
             "help_text": "A config defining the Task to run. The task defines the output "

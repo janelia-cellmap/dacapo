@@ -12,18 +12,14 @@ if TYPE_CHECKING:
 
 
 class PostProcessor(ABC):
-    
-
     @abstractmethod
     def enumerate_parameters(self) -> Iterable["PostProcessorParameters"]:
-        
         pass
 
     @abstractmethod
     def set_prediction(
         self, prediction_array_identifier: "LocalArrayIdentifier"
     ) -> None:
-        
         pass
 
     @abstractmethod
@@ -34,5 +30,4 @@ class PostProcessor(ABC):
         num_workers: int = 16,
         chunk_size: Coordinate = Coordinate((64, 64, 64)),
     ) -> "Array":
-        
         pass

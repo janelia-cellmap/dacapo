@@ -10,16 +10,12 @@ if TYPE_CHECKING:
 
 
 class Predictor(ABC):
-    
-
     @abstractmethod
     def create_model(self, architecture: "Architecture") -> "Model":
-        
         pass
 
     @abstractmethod
     def create_target(self, gt: "Array") -> "Array":
-        
         pass
 
     @abstractmethod
@@ -30,7 +26,6 @@ class Predictor(ABC):
         mask: "Array",
         moving_class_counts: Any,
     ) -> Tuple["Array", Any]:
-        
         pass
 
     @property
@@ -39,9 +34,7 @@ class Predictor(ABC):
         pass
 
     def gt_region_for_roi(self, target_spec):
-        
         return target_spec
 
     def padding(self, gt_voxel_size: Coordinate) -> Coordinate:
-        
         return Coordinate((0,) * gt_voxel_size.dims)

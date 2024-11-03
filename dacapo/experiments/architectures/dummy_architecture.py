@@ -4,10 +4,7 @@ import torch
 
 
 class DummyArchitecture(Architecture):
-    
-
     def __init__(self, architecture_config):
-        
         super().__init__()
 
         self.channels_in = architecture_config.num_in_channels
@@ -17,19 +14,15 @@ class DummyArchitecture(Architecture):
 
     @property
     def input_shape(self):
-        
         return Coordinate(40, 20, 20)
 
     @property
     def num_in_channels(self):
-        
         return self.channels_in
 
     @property
     def num_out_channels(self):
-        
         return self.channels_out
 
     def forward(self, x):
-        
         return self.conv(x)

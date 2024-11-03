@@ -8,8 +8,6 @@ from typing import Dict
 
 @attr.s
 class IntensitiesArray(ArrayType):
-    
-
     channels: Dict[int, str] = attr.ib(
         metadata={
             "help_text": "A mapping from channel to a name describing that channel."
@@ -24,5 +22,4 @@ class IntensitiesArray(ArrayType):
 
     @property
     def interpolatable(self) -> bool:
-        
         return True

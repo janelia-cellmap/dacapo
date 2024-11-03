@@ -7,8 +7,6 @@ from typing import Optional
 
 
 class DaCapoTargetFilter(gp.BatchFilter):
-    
-
     def __init__(
         self,
         predictor: Predictor,
@@ -17,7 +15,6 @@ class DaCapoTargetFilter(gp.BatchFilter):
         weights_key: Optional[gp.ArrayKey] = None,
         mask_key: Optional[gp.ArrayKey] = None,
     ):
-        
         self.predictor = predictor
         self.gt_key = gt_key
         self.target_key = target_key
@@ -31,7 +28,6 @@ class DaCapoTargetFilter(gp.BatchFilter):
         ), "Must provide either target or weights"
 
     def setup(self):
-        
         provided_spec = gp.ArraySpec(
             roi=self.spec[self.gt_key].roi,
             voxel_size=self.spec[self.gt_key].voxel_size,
@@ -49,7 +45,6 @@ class DaCapoTargetFilter(gp.BatchFilter):
             self.provides(self.weights_key, provided_spec)
 
     def prepare(self, request):
-        
         deps = gp.BatchRequest()
         # TODO: Does the gt depend on weights too?
         request_spec = None
@@ -68,7 +63,6 @@ class DaCapoTargetFilter(gp.BatchFilter):
         return deps
 
     def process(self, batch, request):
-        
         output = gp.Batch()
 
         gt_array = NumpyArray.from_gp_array(batch[self.gt_key])

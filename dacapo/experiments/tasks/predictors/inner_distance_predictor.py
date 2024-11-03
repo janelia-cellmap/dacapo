@@ -17,10 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class InnerDistancePredictor(Predictor):
-    
-
     def __init__(self, channels: List[str], scale_factor: float):
-        
         self.channels = channels
         self.norm = "tanh"
         self.dt_scale_factor = scale_factor
@@ -31,11 +28,9 @@ class InnerDistancePredictor(Predictor):
 
     @property
     def embedding_dims(self):
-        
         return len(self.channels)
 
     def create_model(self, architecture):
-        
         if architecture.dims == 2:
             head = torch.nn.Conv2d(
                 architecture.num_out_channels, self.embedding_dims, kernel_size=1
@@ -48,7 +43,6 @@ class InnerDistancePredictor(Predictor):
         return Model(architecture, head)
 
     def create_target(self, gt):
-        
         distances = self.process(
             gt.data, gt.voxel_size, self.norm, self.dt_scale_factor
         )
@@ -60,7 +54,6 @@ class InnerDistancePredictor(Predictor):
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
-        
         # balance weights independently for each channel
 
         weights, moving_class_counts = balance_weights(
@@ -82,7 +75,6 @@ class InnerDistancePredictor(Predictor):
 
     @property
     def output_array_type(self):
-        
         return DistanceArray(self.embedding_dims)
 
     def process(
@@ -92,7 +84,6 @@ class InnerDistancePredictor(Predictor):
         normalize=None,
         normalize_args=None,
     ):
-        
         all_distances = np.zeros(labels.shape, dtype=np.float32) - 1
         for ii, channel in enumerate(labels):
             boundaries = self.__find_boundaries(channel)
@@ -130,7 +121,6 @@ class InnerDistancePredictor(Predictor):
         return all_distances * labels
 
     def __find_boundaries(self, labels):
-        
         # labels: 1 1 1 1 0 0 2 2 2 2 3 3       n
         # shift :   1 1 1 1 0 0 2 2 2 2 3       n - 1
         # diff  :   0 0 0 1 0 1 0 0 0 1 0       n - 1
@@ -169,7 +159,6 @@ class InnerDistancePredictor(Predictor):
         return boundaries
 
     def __normalize(self, distances, norm, normalize_args):
-        
         if norm == "tanh":
             scale = normalize_args
             return np.tanh(distances / scale)
@@ -177,7 +166,6 @@ class InnerDistancePredictor(Predictor):
             raise ValueError("Only tanh is supported for normalization")
 
     def gt_region_for_roi(self, target_spec):
-        
         if self.mask_distances:
             gt_spec = target_spec.copy()
             gt_spec.roi = gt_spec.roi.grow(
@@ -189,5 +177,4 @@ class InnerDistancePredictor(Predictor):
         return gt_spec
 
     def padding(self, gt_voxel_size: Coordinate) -> Coordinate:
-        
         return Coordinate((self.max_distance,) * gt_voxel_size.dims)

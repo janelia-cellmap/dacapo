@@ -4,10 +4,7 @@ import torch
 
 
 class PretrainedTask(Task):
-    
-
     def __init__(self, task_config):
-        
         sub_task = task_config.sub_task_config.task_type(task_config.sub_task_config)
         self.weights = task_config.weights
 
@@ -17,7 +14,6 @@ class PretrainedTask(Task):
         self.evaluator = sub_task.evaluator
 
     def create_model(self, architecture):
-        
         model = self.predictor.create_model(architecture)
 
         saved_state_dict = torch.load(str(self.weights))

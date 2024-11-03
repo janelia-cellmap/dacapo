@@ -12,7 +12,6 @@ head_keys = [
 
 
 def match_heads(model, head_weights, old_head, new_head):
-    
     for label in new_head:
         if label in old_head:
             logger.warning(f"matching head for {label}.")
@@ -26,7 +25,6 @@ def match_heads(model, head_weights, old_head, new_head):
 
 
 def _set_weights(model, weights, run, criterion, old_head=None, new_head=None):
-    
     logger.warning(
         f"loading weights from run {run}, criterion: {criterion}, old_head {old_head}, new_head: {new_head}"
     )
@@ -77,10 +75,7 @@ def _set_weights(model, weights, run, criterion, old_head=None, new_head=None):
 
 
 class Start(ABC):
-    
-
     def __init__(self, start_config):
-        
         # Old version return a dict, new version return an object, this line is to support both
         if isinstance(start_config, dict):
             self.run = start_config["run"]
@@ -96,7 +91,6 @@ class Start(ABC):
                 self.channels = start_config.task_config.channels
 
     def initialize_weights(self, model, new_head=None):
-        
         from dacapo.store.create_store import create_weights_store
 
         weights_store = create_weights_store()

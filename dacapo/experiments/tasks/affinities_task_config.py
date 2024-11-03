@@ -10,8 +10,6 @@ from typing import List
 
 @attr.s
 class AffinitiesTaskConfig(TaskConfig):
-    
-
     task_type = AffinitiesTask
 
     neighborhood: List[Coordinate] = attr.ib(

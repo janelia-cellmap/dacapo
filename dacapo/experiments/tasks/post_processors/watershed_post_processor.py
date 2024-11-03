@@ -20,15 +20,10 @@ from typing import List
 
 
 class WatershedPostProcessor(PostProcessor):
-    
-
     def __init__(self, offsets: List[Coordinate]):
-        
         self.offsets = offsets
 
     def enumerate_parameters(self):
-        
-
         for i, bias in enumerate([0.1, 0.25, 0.5, 0.75, 0.9]):
             yield WatershedPostProcessorParameters(id=i, bias=bias)
 
@@ -37,7 +32,6 @@ class WatershedPostProcessor(PostProcessor):
         self.prediction_array = ZarrArray.open_from_array_identifier(
             prediction_array_identifier
         )
-        
 
     def process(
         self,
@@ -46,7 +40,6 @@ class WatershedPostProcessor(PostProcessor):
         num_workers: int = 16,
         block_size: Coordinate = Coordinate((256, 256, 256)),
     ):
-        
         if self.prediction_array._daisy_array.chunk_shape is not None:
             block_size = Coordinate(
                 self.prediction_array._daisy_array.chunk_shape[

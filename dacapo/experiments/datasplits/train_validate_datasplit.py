@@ -5,13 +5,10 @@ from typing import List
 
 
 class TrainValidateDataSplit(DataSplit):
-    
-
     train: List[Dataset]
     validate: List[Dataset]
 
     def __init__(self, datasplit_config):
-        
         super().__init__()
 
         self.train = [

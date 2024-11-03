@@ -16,7 +16,6 @@ logger = logging.getLogger(__name__)
 
 
 def _create_identity_transformation(shape, voxel_size=None, offset=None, subsample=1):
-    
     dims = len(shape)
 
     if voxel_size is None:
@@ -41,8 +40,6 @@ def _create_identity_transformation(shape, voxel_size=None, offset=None, subsamp
 def _upscale_transformation(
     transformation, output_shape, interpolate_order=1, dtype=np.float32
 ):
-    
-
     input_shape = transformation.shape[1:]
 
     dims = len(output_shape)
@@ -62,7 +59,6 @@ def _upscale_transformation(
 
 
 def _rotate(point, angle):
-    
     res = np.array(point)
     res[0] = math.sin(angle) * point[1] + math.cos(angle) * point[0]
     res[1] = -math.sin(angle) * point[0] + math.cos(angle) * point[1]
@@ -71,7 +67,6 @@ def _rotate(point, angle):
 
 
 def _create_rotation_transformation(shape, angle, subsample=1, voxel_size=None):
-    
     dims = len(shape)
     subsample_shape = tuple(max(1, int(s / subsample)) for s in shape)
     control_points = (2,) * dims
@@ -106,7 +101,6 @@ def _create_rotation_transformation(shape, angle, subsample=1, voxel_size=None):
 
 
 def _create_uniform_3d_transformation(shape, rotation, subsample=1, voxel_size=None):
-    
     dims = len(shape)
     subsample_shape = tuple(max(1, int(s / subsample)) for s in shape)
     control_points = (2,) * dims
@@ -141,13 +135,10 @@ def _create_uniform_3d_transformation(shape, rotation, subsample=1, voxel_size=N
 
 
 def _min_max_mean_std(ndarray, prefix=""):
-    
     return ""
 
 
 class ElasticAugment(BatchFilter):
-    
-
     def __init__(
         self,
         control_point_spacing,
@@ -158,7 +149,6 @@ class ElasticAugment(BatchFilter):
         seed=None,
         uniform_3d_rotation=False,
     ):
-        
         super(BatchFilter, self).__init__()
         self.control_point_spacing = control_point_spacing
         self.control_point_displacement_sigma = control_point_displacement_sigma
@@ -186,7 +176,6 @@ class ElasticAugment(BatchFilter):
         self.target_rois = {}
 
     def setup(self):
-        
         self.voxel_size = Coordinate(
             min(axis)
             for axis in zip(
@@ -199,7 +188,6 @@ class ElasticAugment(BatchFilter):
         self.spatial_dims = self.voxel_size.dims
 
     def prepare(self, request):
-        
         logger.debug(
             logger.debug(
                 f"{type(self).__name__} preparing request {request} with transformation voxel size {self.voxel_size}"
@@ -305,7 +293,6 @@ class ElasticAugment(BatchFilter):
             )
 
     def process(self, batch, request):
-        
         if not self.do_augment:
             logger.debug(
                 f"Process: Randomly not augmenting at all. (probability to augment: {self.augmentation_probability})"
@@ -367,7 +354,6 @@ class ElasticAugment(BatchFilter):
             array.spec.roi = request[key].roi
 
     def _create_transformation(self, target_shape, offset):
-        
         logger.debug(
             f"creating displacement for shape {target_shape}, subsample {self.subsample}",
         )
@@ -424,13 +410,11 @@ class ElasticAugment(BatchFilter):
         return transformation
 
     def _spatial_roi(self, roi):
-        
         return Roi(
             roi.get_begin()[-self.spatial_dims :], roi.get_shape()[-self.spatial_dims :]
         )
 
     def _affine(self, array, scale, offset, target_roi, dtype=np.float32, order=1):
-        
         ndim = array.shape[0]
         output = np.empty((ndim,) + target_roi.get_shape(), dtype=dtype)
         # Create a diagonal matrix if scale is a 1-D array
@@ -451,12 +435,10 @@ class ElasticAugment(BatchFilter):
         return output
 
     def _shift_transformation(self, shift, transformation):
-        
         for d in range(transformation.shape[0]):
             transformation[d] += shift[d]
 
     def _get_source_roi(self, transformation):
-        
         dims = transformation.shape[0]
 
         # get bounding box of needed data for transformation

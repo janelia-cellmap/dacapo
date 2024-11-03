@@ -19,10 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class ZarrArray(Array):
-    
-
     def __init__(self, array_config):
-        
         super().__init__()
         self.name = array_config.name
         self.file_name = array_config.file_name
@@ -33,11 +30,9 @@ class ZarrArray(Array):
         self.snap_to_grid = array_config.snap_to_grid
 
     def __str__(self):
-        
         return f"ZarrArray({self.file_name}, {self.dataset})"
 
     def __repr__(self):
-        
         return f"ZarrArray({self.file_name}, {self.dataset})"
 
     @property
@@ -50,12 +45,10 @@ class ZarrArray(Array):
 
     @property
     def attrs(self):
-        
         return self.data.attrs
 
     @property
     def axes(self):
-        
         if self._axes is not None:
             return self._axes
         try:
@@ -70,22 +63,18 @@ class ZarrArray(Array):
 
     @property
     def dims(self) -> int:
-        
         return self.voxel_size.dims
 
     @lazy_property.LazyProperty
     def _daisy_array(self) -> funlib.persistence.Array:
-        
         return funlib.persistence.open_ds(f"{self.file_name}", self.dataset)
 
     @lazy_property.LazyProperty
     def voxel_size(self) -> Coordinate:
-        
         return self._daisy_array.voxel_size
 
     @lazy_property.LazyProperty
     def roi(self) -> Roi:
-        
         if self.snap_to_grid is not None:
             return self._daisy_array.roi.snap_to_grid(
                 np.lcm(self.voxel_size, self.snap_to_grid), mode="shrink"
@@ -95,27 +84,22 @@ class ZarrArray(Array):
 
     @property
     def writable(self) -> bool:
-        
         return True
 
     @property
     def dtype(self) -> Any:
-        
         return self.data.dtype
 
     @property
     def num_channels(self) -> Optional[int]:
-        
         return None if "c" not in self.axes else self.data.shape[self.axes.index("c")]
 
     @property
     def spatial_axes(self) -> List[str]:
-        
         return [ax for ax in self.axes if ax not in set(["c", "b"])]
 
     @property
     def data(self) -> Any:
-        
         file_name = str(self.file_name)
         # Zarr library does not detect the store for N5 datasets
         try:
@@ -131,14 +115,12 @@ class ZarrArray(Array):
             raise e
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        
         data: np.ndarray = funlib.persistence.Array(
             self.data, self.roi, self.voxel_size
         ).to_ndarray(roi=roi)
         return data
 
     def __setitem__(self, roi: Roi, value: np.ndarray):
-        
         funlib.persistence.Array(self.data, self.roi, self.voxel_size)[roi] = value
 
     @classmethod
@@ -155,7 +137,6 @@ class ZarrArray(Array):
         name=None,
         overwrite=False,
     ):
-        
         if write_size is None:
             # total storage per block is approx c*x*y*z*dtype_size
             # appropriate block size about 5MB.
@@ -248,7 +229,6 @@ class ZarrArray(Array):
 
     @classmethod
     def open_from_array_identifier(cls, array_identifier, name=""):
-        
         zarr_array = cls.__new__(cls)
         zarr_array.name = name
         zarr_array.file_name = array_identifier.container
@@ -259,11 +239,9 @@ class ZarrArray(Array):
         return zarr_array
 
     def _can_neuroglance(self) -> bool:
-        
         return True
 
     def _neuroglancer_source(self):
-        
         d = open_ds(str(self.file_name), self.dataset)
         return neuroglancer.LocalVolume(
             data=d.data,
@@ -276,12 +254,10 @@ class ZarrArray(Array):
         )
 
     def _neuroglancer_layer(self) -> Tuple[neuroglancer.ImageLayer, Dict[str, Any]]:
-        
         layer = neuroglancer.ImageLayer(source=self._neuroglancer_source())
         return layer
 
     def _transform_matrix(self):
-        
         is_zarr = self.file_name.name.endswith(".zarr")
         if is_zarr:
             offset = self.roi.offset
@@ -306,7 +282,6 @@ class ZarrArray(Array):
             return [[0] * i + [1] + [0] * (self.dims - i) for i in range(self.dims)]
 
     def _output_dimensions(self) -> Dict[str, Tuple[float, str]]:
-        
         is_zarr = self.file_name.name.endswith(".zarr")
         if is_zarr:
             spatial_dimensions = OrderedDict()
@@ -322,11 +297,9 @@ class ZarrArray(Array):
             }
 
     def _source_name(self) -> str:
-        
         return self.name
 
     def add_metadata(self, metadata: Dict[str, Any]) -> None:
-        
         dataset = zarr.open(self.file_name, mode="a")[self.dataset]
         for k, v in metadata.items():
             dataset.attrs[k] = v

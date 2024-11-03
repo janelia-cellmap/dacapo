@@ -8,22 +8,17 @@ logger = logging.getLogger(__name__)
 
 
 class RejectIfEmpty(BatchFilter):
-    
-
     def __init__(self, gt=None, p=0.5, background=0):
-        
         self.gt = gt
         self.p = p
         self.background = 0
 
     def setup(self):
-        
         upstream_providers = self.get_upstream_providers()
         assert len(upstream_providers) == 1, "Only 1 upstream provider supported"
         self.upstream_provider = upstream_providers[0]
 
     def provide(self, request):
-        
         random.seed(request.random_seed)
 
         report_next_timeout = 10

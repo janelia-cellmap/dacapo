@@ -16,7 +16,7 @@ class Bsub(ComputeContext):
             "help_text": "Whether to distribute the workers across multiple nodes or processes."
         },
     )
-    
+
     queue: str = attr.ib(default="local", metadata={"help_text": "The queue to run on"})
     num_gpus: int = attr.ib(
         default=1,
@@ -40,14 +40,12 @@ class Bsub(ComputeContext):
 
     @property
     def device(self):
-        
         if self.num_gpus > 0:
             return "cuda"
         else:
             return "cpu"
 
     def _wrap_command(self, command):
-        
         try:
             client = daisy.Client()
             basename = str(

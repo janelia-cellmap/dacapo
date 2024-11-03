@@ -4,8 +4,6 @@ import attr
 
 @attr.s
 class ValidationIterationScores:
-    
-
     iteration: int = attr.ib(
         metadata={"help_text": "The iteration associated with these validation scores."}
     )

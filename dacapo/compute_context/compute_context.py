@@ -13,26 +13,21 @@ class ComputeContext(ABC):
             "help_text": "Whether to distribute the workers across multiple nodes or processes."
         },
     )
-    
 
     @property
     @abstractmethod
     def device(self):
-        
         pass
 
     def _wrap_command(self, command):
-        
         # A helper method to wrap a command in the context specific command.
         return command
 
     def wrap_command(self, command):
-        
         command = [str(com) for com in self._wrap_command(command)]
         return command
 
     def execute(self, command):
-        
         # A helper method to run a command in the context specific way.
 
         # add pythonpath to the environment
@@ -43,8 +38,6 @@ class ComputeContext(ABC):
 
 
 def create_compute_context() -> ComputeContext:
-    
-
     options = Options.instance()
 
     if hasattr(compute_context, options.compute_context["type"]):

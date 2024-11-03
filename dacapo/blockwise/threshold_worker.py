@@ -69,7 +69,6 @@ def start_worker_fn(
     threshold: float = 0.0,
     return_io_loop: bool = False,
 ):
-    
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
     input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
@@ -105,7 +104,6 @@ def spawn_worker(
     output_array_identifier: "LocalArrayIdentifier",
     threshold: float = 0.0,
 ):
-    
     compute_context = create_compute_context()
     if not compute_context.distribute_workers:
         return start_worker_fn(
@@ -134,7 +132,6 @@ def spawn_worker(
     ]
 
     def run_worker():
-        
         compute_context.execute(command)
 
     return run_worker

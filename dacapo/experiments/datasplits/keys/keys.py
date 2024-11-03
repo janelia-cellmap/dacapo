@@ -2,15 +2,11 @@ from enum import Enum, unique
 
 
 class DataKey(Enum):
-    
-
     pass
 
 
 @unique
 class ArrayKey(DataKey):
-    
-
     RAW = "raw"
     GT = "gt"
     MASK = "mask"
@@ -19,6 +15,4 @@ class ArrayKey(DataKey):
 
 @unique
 class GraphKey(DataKey):
-    
-
     SPECIFIED_LOCATIONS = "specified_locations"

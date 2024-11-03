@@ -14,8 +14,6 @@ from typing import List
 
 
 class AffinitiesPredictor(Predictor):
-    
-
     def __init__(
         self,
         neighborhood: List[Coordinate],
@@ -29,7 +27,6 @@ class AffinitiesPredictor(Predictor):
         lsd_weight_clipmax: float = 0.95,
         background_as_object: bool = False,
     ):
-        
         self.neighborhood = neighborhood
         self.lsds = lsds
         self.num_voxels = num_voxels
@@ -55,7 +52,6 @@ class AffinitiesPredictor(Predictor):
         self.background_as_object = background_as_object
 
     def extractor(self, voxel_size):
-        
         if self._extractor is None:
             self._extractor = LsdExtractor(
                 self.sigma(voxel_size), downsample=self.downsample_lsds
@@ -65,28 +61,23 @@ class AffinitiesPredictor(Predictor):
 
     @property
     def dims(self):
-        
         return self.neighborhood[0].dims
 
     def sigma(self, voxel_size):
-        
         voxel_dist = max(voxel_size)  # arbitrarily chosen
         sigma = voxel_dist * self.num_voxels  # arbitrarily chosen
         return Coordinate((sigma,) * self.dims)
 
     def lsd_pad(self, voxel_size):
-        
         multiplier = 3  # from AddLocalShapeDescriptor Node in funlib.lsd
         padding = Coordinate(self.sigma(voxel_size) * multiplier)
         return padding
 
     @property
     def num_channels(self):
-        
         return len(self.neighborhood) + self.num_lsds
 
     def create_model(self, architecture):
-        
         if self.dims == 2:
             head = torch.nn.Conv2d(
                 architecture.num_out_channels, self.num_channels, kernel_size=1
@@ -103,7 +94,6 @@ class AffinitiesPredictor(Predictor):
         return Model(architecture, head, eval_activation=torch.nn.Sigmoid())
 
     def create_target(self, gt):
-        
         # zeros
         assert gt.num_channels is None or gt.num_channels == 1, (
             "Cannot create affinities from ground truth with multiple channels.\n"
@@ -137,7 +127,6 @@ class AffinitiesPredictor(Predictor):
         )
 
     def _grow_boundaries(self, mask, slab):
-        
         # get all foreground voxels by erosion of each component
         foreground = np.zeros(shape=mask.shape, dtype=bool)
 
@@ -161,7 +150,6 @@ class AffinitiesPredictor(Predictor):
         return mask
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
-        
         (moving_class_counts, moving_lsd_class_counts) = (
             moving_class_counts if moving_class_counts is not None else (None, None)
         )
@@ -207,7 +195,6 @@ class AffinitiesPredictor(Predictor):
         ), (moving_class_counts, moving_lsd_class_counts)
 
     def gt_region_for_roi(self, target_spec):
-        
         gt_spec = target_spec.copy()
         pad_neg, pad_pos = aff_padding(self.neighborhood, target_spec.voxel_size)
         if self.lsds:
@@ -231,5 +218,4 @@ class AffinitiesPredictor(Predictor):
 
     @property
     def output_array_type(self):
-        
         return EmbeddingArray(self.dims)

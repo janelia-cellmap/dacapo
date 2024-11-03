@@ -3,8 +3,6 @@ import attr
 
 @attr.s
 class TrainingIterationStats:
-    
-
     iteration: int = attr.ib(
         metadata={"help_text": "The iteration that produced these stats."}
     )

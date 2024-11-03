@@ -11,19 +11,13 @@ from daisy import Roi, Coordinate
 
 
 class ArgmaxPostProcessor(PostProcessor):
-    
-
     def __init__(self):
-        
         pass
 
     def enumerate_parameters(self):
-        
-
         yield ArgmaxPostProcessorParameters(id=1)
 
     def set_prediction(self, prediction_array_identifier):
-        
         self.prediction_array_identifier = prediction_array_identifier
         self.prediction_array = ZarrArray.open_from_array_identifier(
             prediction_array_identifier
@@ -36,7 +30,6 @@ class ArgmaxPostProcessor(PostProcessor):
         num_workers: int = 16,
         block_size: Coordinate = Coordinate((256, 256, 256)),
     ):
-        
         if self.prediction_array._daisy_array.chunk_shape is not None:
             block_size = Coordinate(
                 self.prediction_array._daisy_array.chunk_shape[

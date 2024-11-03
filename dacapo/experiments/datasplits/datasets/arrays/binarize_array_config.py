@@ -8,8 +8,6 @@ from typing import List, Tuple
 
 @attr.s
 class BinarizeArrayConfig(ArrayConfig):
-    
-
     array_type = BinarizeArray
 
     source_array_config: ArrayConfig = attr.ib(

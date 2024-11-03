@@ -8,8 +8,6 @@ from funlib.geometry import Roi
 
 @attr.s
 class CropArrayConfig(ArrayConfig):
-    
-
     array_type = CropArray
 
     source_array_config: ArrayConfig = attr.ib(

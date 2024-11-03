@@ -45,7 +45,6 @@ default_parameters = {
 
 
 def segment_function(input_array, block, **parameters):
-    
     vols, class_names = [], []
     for vol, class_name, _ in empanada_segmenter(
         input_array[block.read_roi], **parameters
@@ -61,14 +60,12 @@ model_configs = get_configs()
 
 
 def stack_inference(engine, volume, axis_name):
-    
     stack, trackers = engine.infer_on_axis(volume, axis_name)
     trackers_dict = {axis_name: trackers}
     return stack, axis_name, trackers_dict
 
 
 def orthoplane_inference(engine, volume):
-    
     trackers_dict = {}
     for axis_name in ["xy", "xz", "yz"]:
         stack, trackers = engine.infer_on_axis(volume, axis_name)
@@ -106,7 +103,6 @@ def empanada_segmenter(
     pixel_vote_thr=1,
     allow_one_view=False,
 ):
-    
     # load the model config
     model_config = read_yaml(model_configs[model_config])
     min_size = int(min_size)
@@ -148,7 +144,6 @@ def empanada_segmenter(
         )
 
     def start_postprocess_worker(*args):
-        
         trackers_dict = args[0][2]
         for vol, class_name, tracker in stack_postprocessing(
             trackers_dict,
@@ -162,7 +157,6 @@ def empanada_segmenter(
             yield vol, class_name, tracker
 
     def start_consensus_worker(trackers_dict):
-        
         for vol, class_name, tracker in tracker_consensus(
             trackers_dict,
             model_config,
@@ -208,7 +202,6 @@ def stack_postprocessing(
     min_extent=4,
     dtype=np.uint32,
 ):
-    
     thing_list = model_config["thing_list"]
     class_names = model_config["class_names"]
 
@@ -248,7 +241,6 @@ def tracker_consensus(
     min_extent=4,
     dtype=np.uint32,
 ):
-    
     labels = model_config["labels"]
     thing_list = model_config["thing_list"]
     class_names = model_config["class_names"]

@@ -8,8 +8,6 @@ from typing import List
 
 @attr.s
 class DistanceTaskConfig(TaskConfig):
-    
-
     task_type = DistanceTask
 
     channels: List[str] = attr.ib(metadata={"help_text": "A list of channel names."})

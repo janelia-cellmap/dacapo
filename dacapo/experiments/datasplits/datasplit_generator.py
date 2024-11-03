@@ -28,7 +28,6 @@ logger = logging.getLogger(__name__)
 
 
 def is_zarr_group(file_name: Path, dataset: str):
-    
     if file_name.suffix == ".n5":
         zarr_file = zarr.open(N5FSStore(str(file_name)), mode="r")
     else:
@@ -39,7 +38,6 @@ def is_zarr_group(file_name: Path, dataset: str):
 def resize_if_needed(
     array_config: ZarrArrayConfig, target_resolution: Coordinate, extra_str=""
 ):
-    
     zarr_array = ZarrArray(array_config)
     raw_voxel_size = zarr_array.voxel_size
 
@@ -101,7 +99,6 @@ def limit_validation_crop_size(gt_config, mask_config, max_size):
 def get_right_resolution_array_config(
     container: Path, dataset, target_resolution, extra_str=""
 ):
-    
     level = 0
     current_dataset_path = Path(dataset, f"s{level}")
     if not (container / current_dataset_path).exists():
@@ -135,10 +132,7 @@ def get_right_resolution_array_config(
 
 
 class CustomEnumMeta(EnumMeta):
-    
-
     def __getitem__(self, item):
-        
         if item not in self._member_names_:
             raise KeyError(
                 f"{item} is not a valid option of {self.__name__}, the valid options are {self._member_names_}"
@@ -147,30 +141,21 @@ class CustomEnumMeta(EnumMeta):
 
 
 class CustomEnum(Enum, metaclass=CustomEnumMeta):
-    
-
     def __str__(self) -> str:
-        
         return self.name
 
 
 class DatasetType(CustomEnum):
-    
-
     val = 1
     train = 2
 
 
 class SegmentationType(CustomEnum):
-    
-
     semantic = 1
     instance = 2
 
 
 class DatasetSpec:
-    
-
     def __init__(
         self,
         dataset_type: Union[str, DatasetType],
@@ -179,7 +164,6 @@ class DatasetSpec:
         gt_container: Union[str, Path],
         gt_dataset: str,
     ):
-        
         if isinstance(dataset_type, str):
             dataset_type = DatasetType[dataset_type.lower()]
 
@@ -196,12 +180,10 @@ class DatasetSpec:
         self.gt_dataset = gt_dataset
 
     def __str__(self) -> str:
-        
         return f"{self.raw_container.stem}_{self.gt_dataset}"
 
 
 def generate_dataspec_from_csv(csv_path: Path):
-    
     datasets = []
     if not csv_path.exists():
         raise FileNotFoundError(f"CSV file {csv_path} does not exist.")
@@ -228,8 +210,6 @@ def generate_dataspec_from_csv(csv_path: Path):
 
 
 class DataSplitGenerator:
-    
-
     def __init__(
         self,
         name: str,
@@ -252,7 +232,6 @@ class DataSplitGenerator:
         max_validation_volume_size=None,
         binarize_gt=False,
     ):
-        
         if not isinstance(input_resolution, Coordinate):
             input_resolution = Coordinate(input_resolution)
         if not isinstance(output_resolution, Coordinate):
@@ -287,12 +266,10 @@ class DataSplitGenerator:
                 )
 
     def __str__(self) -> str:
-        
         return f"DataSplitGenerator:{self.name}_{self.segmentation_type}_{self.class_name}_{self.output_resolution[0]}nm"
 
     @property
     def class_name(self):
-        
         if self._class_name is None:
             if self.targets is None:
                 logger.warning("Both targets and class name are None.")
@@ -303,7 +280,6 @@ class DataSplitGenerator:
     # Goal is to force class_name to be set only once, so we have the same classes for all datasets
     @class_name.setter
     def class_name(self, class_name):
-        
         if self._class_name is not None:
             raise ValueError(
                 f"Class name already set. Current class name is {self.class_name} and new class name is {class_name}"
@@ -311,7 +287,6 @@ class DataSplitGenerator:
         self._class_name = class_name
 
     def check_class_name(self, class_name):
-        
         datasets, classes = format_class_name(
             class_name, self.classes_separator_character, self.targets
         )
@@ -328,7 +303,6 @@ class DataSplitGenerator:
         return datasets, classes
 
     def compute(self):
-        
         if self.segmentation_type == SegmentationType.semantic:
             return self.__generate_semantic_seg_datasplit()
         else:
@@ -337,7 +311,6 @@ class DataSplitGenerator:
             )
 
     def __generate_semantic_seg_datasplit(self):
-        
         train_dataset_configs = []
         validation_dataset_configs = []
         for dataset in self.datasets:
@@ -380,7 +353,6 @@ class DataSplitGenerator:
         )
 
     def __generate_semantic_seg_dataset_crop(self, dataset: DatasetSpec):
-        
         raw_container = dataset.raw_container
         raw_dataset = dataset.raw_dataset
         gt_path = dataset.gt_container
@@ -540,7 +512,6 @@ class DataSplitGenerator:
         name: Optional[str] = None,
         **kwargs,
     ):
-        
         if isinstance(csv_path, str):
             csv_path = Path(csv_path)
 
@@ -557,7 +528,6 @@ class DataSplitGenerator:
 
 
 def format_class_name(class_name, separator_character="&", targets=None):
-    
     if "[" in class_name:
         if "]" not in class_name:
             raise ValueError(f"Invalid class name {class_name} missing ']'")

@@ -8,8 +8,6 @@ from typing import List, Tuple
 
 @attr.s
 class MissingAnnotationsMaskConfig(ArrayConfig):
-    
-
     array_type = MissingAnnotationsMask
 
     source_array_config: ArrayConfig = attr.ib(

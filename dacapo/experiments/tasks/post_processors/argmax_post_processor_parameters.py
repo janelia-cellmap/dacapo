@@ -4,6 +4,4 @@ import attr
 
 @attr.s(frozen=True)
 class ArgmaxPostProcessorParameters(PostProcessorParameters):
-    
-
     pass

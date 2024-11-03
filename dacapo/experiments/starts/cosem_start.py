@@ -8,7 +8,6 @@ logger = logging.getLogger(__file__)
 
 
 def get_model_setup(run):
-    
     try:
         model = cosem.load_model(run)
         if hasattr(model, "classes_channels"):
@@ -32,10 +31,7 @@ def get_model_setup(run):
 
 
 class CosemStart(Start):
-    
-
     def __init__(self, start_config):
-        
         self.run = start_config.run
         self.criterion = start_config.criterion
         self.name = f"{self.run}/{self.criterion}"
@@ -47,7 +43,6 @@ class CosemStart(Start):
         self.channels = channels
 
     def check(self):
-        
         from dacapo.store.create_store import create_weights_store
 
         weights_store = create_weights_store()
@@ -61,7 +56,6 @@ class CosemStart(Start):
             logger.info(f"Checkpoint for {self.name} exists.")
 
     def initialize_weights(self, model, new_head=None):
-        
         self.check()
         from dacapo.store.create_store import create_weights_store
 

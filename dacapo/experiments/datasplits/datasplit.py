@@ -7,13 +7,10 @@ import itertools
 
 
 class DataSplit(ABC):
-    
-
     train: List[Dataset]
     validate: Optional[List[Dataset]]
 
     def _neuroglancer(self, embedded=False, bind_address="0.0.0.0", bind_port=0):
-        
         neuroglancer.set_server_bind_address(
             bind_address=bind_address, bind_port=bind_port
         )
