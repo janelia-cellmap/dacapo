@@ -162,6 +162,7 @@ Module Contents
 
 
    .. py:property:: score
+
       Return the evaluation scores.
 
       :returns:

@@ -142,6 +142,7 @@ Module Contents
 
 
    .. py:property:: attrs
+
       Returns the attributes of the source array.
 
       :returns: The attributes of the source array
@@ -157,6 +158,7 @@ Module Contents
 
 
    .. py:property:: axes
+
       Returns the axes of the source array.
 
       :returns: The axes of the source array
@@ -173,6 +175,7 @@ Module Contents
 
    .. py:property:: dims
       :type: int
+
 
       Returns the number of dimensions of the source array.
 
@@ -191,6 +194,7 @@ Module Contents
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
+
       Returns the voxel size of the resampled array.
 
       :returns: The voxel size of the resampled array
@@ -207,6 +211,7 @@ Module Contents
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
+
 
       Returns the region of interest of the resampled array.
 
@@ -225,6 +230,7 @@ Module Contents
    .. py:property:: writable
       :type: bool
 
+
       Returns whether the resampled array is writable.
 
       :returns: True if the resampled array is writable, False otherwise
@@ -240,6 +246,7 @@ Module Contents
 
 
    .. py:property:: dtype
+
       Returns the data type of the resampled array.
 
       :returns: The data type of the resampled array
@@ -257,6 +264,7 @@ Module Contents
    .. py:property:: num_channels
       :type: int
 
+
       Returns the number of channels of the resampled array.
 
       :returns: The number of channels of the resampled array
@@ -272,6 +280,7 @@ Module Contents
 
 
    .. py:property:: data
+
       Returns the data of the resampled array.
 
       :returns: The data of the resampled array
@@ -287,6 +296,7 @@ Module Contents
 
 
    .. py:property:: scale
+
       Returns the scale of the resampled array.
 
       :returns: The scale of the resampled array

@@ -4,27 +4,19 @@ dacapo.experiments.datasplits
 .. py:module:: dacapo.experiments.datasplits
 
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 1
-
-   /autoapi/dacapo/experiments/datasplits/datasets/index
-   /autoapi/dacapo/experiments/datasplits/keys/index
-
-
 Submodules
 ----------
 
 .. toctree::
    :maxdepth: 1
 
+   /autoapi/dacapo/experiments/datasplits/datasets/index
    /autoapi/dacapo/experiments/datasplits/datasplit/index
    /autoapi/dacapo/experiments/datasplits/datasplit_config/index
    /autoapi/dacapo/experiments/datasplits/datasplit_generator/index
    /autoapi/dacapo/experiments/datasplits/dummy_datasplit/index
    /autoapi/dacapo/experiments/datasplits/dummy_datasplit_config/index
+   /autoapi/dacapo/experiments/datasplits/keys/index
    /autoapi/dacapo/experiments/datasplits/train_validate_datasplit/index
    /autoapi/dacapo/experiments/datasplits/train_validate_datasplit_config/index
 
@@ -514,6 +506,7 @@ Package Contents
 
 
    .. py:property:: class_name
+
       Get the class name.
 
       :param self: obj

@@ -4,21 +4,6 @@ dacapo
 .. py:module:: dacapo
 
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 1
-
-   /autoapi/dacapo/blockwise/index
-   /autoapi/dacapo/compute_context/index
-   /autoapi/dacapo/experiments/index
-   /autoapi/dacapo/ext/index
-   /autoapi/dacapo/gp/index
-   /autoapi/dacapo/store/index
-   /autoapi/dacapo/utils/index
-
-
 Submodules
 ----------
 
@@ -26,11 +11,18 @@ Submodules
    :maxdepth: 1
 
    /autoapi/dacapo/apply/index
+   /autoapi/dacapo/blockwise/index
+   /autoapi/dacapo/compute_context/index
+   /autoapi/dacapo/experiments/index
+   /autoapi/dacapo/ext/index
+   /autoapi/dacapo/gp/index
    /autoapi/dacapo/options/index
    /autoapi/dacapo/plot/index
    /autoapi/dacapo/predict/index
    /autoapi/dacapo/predict_local/index
+   /autoapi/dacapo/store/index
    /autoapi/dacapo/train/index
+   /autoapi/dacapo/utils/index
    /autoapi/dacapo/validate/index
 
 

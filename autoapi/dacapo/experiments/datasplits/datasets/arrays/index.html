@@ -55,17 +55,23 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../aws.html">AWS EC2 Setup Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html">dacapo</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../../../apply/index.html">dacapo.apply</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../blockwise/index.html">dacapo.blockwise</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../compute_context/index.html">dacapo.compute_context</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="../../../index.html">dacapo.experiments</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../ext/index.html">dacapo.ext</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../gp/index.html">dacapo.gp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../options/index.html">dacapo.options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../plot/index.html">dacapo.plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../predict/index.html">dacapo.predict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../predict_local/index.html">dacapo.predict_local</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../store/index.html">dacapo.store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../train/index.html">dacapo.train</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../utils/index.html">dacapo.utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../validate/index.html">dacapo.validate</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../index.html#classes">Classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../index.html#functions">Functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../index.html#package-contents">Package Contents</a></li>
@@ -789,9 +795,8 @@ All intensities are converted to float32.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.attrs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.attrs" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the attributes of the source array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The attributes of the source array</p>
 </dd>
@@ -812,9 +817,8 @@ All intensities are converted to float32.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.axes">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.axes" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the axes of the source array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The axes of the source array</p>
 </dd>
@@ -837,9 +841,8 @@ All intensities are converted to float32.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.dims">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.dims" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">dimensions</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the number of dimensions of the source array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of dimensions of the source array</p>
 </dd>
@@ -862,9 +865,8 @@ All intensities are converted to float32.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.voxel_size">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.voxel_size" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">voxel</span> <span class="pre">size</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the voxel size of the source array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The voxel size of the source array</p>
 </dd>
@@ -887,9 +889,8 @@ All intensities are converted to float32.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.roi">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.roi" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">region</span> <span class="pre">of</span> <span class="pre">interest</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the region of interest of the source array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The region of interest of the source array</p>
 </dd>
@@ -933,9 +934,8 @@ All intensities are converted to float32.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.data">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.data" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the data of the source array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data of the source array</p>
 </dd>
@@ -964,9 +964,8 @@ All intensities are converted to float32.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.dtype">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.dtype" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the data type of the array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data type of the array</p>
 </dd>
@@ -989,9 +988,8 @@ All intensities are converted to float32.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DummyArray.num_channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DummyArray.num_channels" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">channels</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the number of channels in the source array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of channels in the source array</p>
 </dd>
@@ -1293,9 +1291,8 @@ labels that should be combined into a single binary channel.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.attrs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.attrs" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">This</span> <span class="pre">method</span> <span class="pre">returns</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>This method returns the attributes of the source array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The attributes of the source array.</p>
 </dd>
@@ -1319,9 +1316,8 @@ labels that should be combined into a single binary channel.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.axes">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.axes" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">This</span> <span class="pre">method</span> <span class="pre">returns</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>This method returns the axes of the source array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The axes of the source array.</p>
 </dd>
@@ -1445,9 +1441,8 @@ labels that should be combined into a single binary channel.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.dtype">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.dtype" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">This</span> <span class="pre">method</span> <span class="pre">returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>This method returns the data type of the source array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data type of the source array.</p>
 </dd>
@@ -1496,9 +1491,8 @@ labels that should be combined into a single binary channel.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.data">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.data" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">This</span> <span class="pre">method</span> <span class="pre">returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>This method returns the data of the source array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data of the source array.</p>
 </dd>
@@ -1522,9 +1516,8 @@ labels that should be combined into a single binary channel.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.BinarizeArray.channels" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">This</span> <span class="pre">method</span> <span class="pre">returns</span> <span class="pre">the</span> <span class="pre">channel</span> <span class="pre">names</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>This method returns the channel names of the source array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The channel names of the source array.</p>
 </dd>
@@ -1785,9 +1778,8 @@ Returns the data of the resampled array within the given region of interest</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id25">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id25" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the attributes of the source array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The attributes of the source array</p>
 </dd>
@@ -1811,9 +1803,8 @@ Returns the data of the resampled array within the given region of interest</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id26">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id26" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the axes of the source array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The axes of the source array</p>
 </dd>
@@ -1937,9 +1928,8 @@ Returns the data of the resampled array within the given region of interest</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id31">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">resampled</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the data type of the resampled array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data type of the resampled array</p>
 </dd>
@@ -1988,9 +1978,8 @@ Returns the data of the resampled array within the given region of interest</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id33">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">resampled</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the data of the resampled array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data of the resampled array</p>
 </dd>
@@ -2014,9 +2003,8 @@ Returns the data of the resampled array within the given region of interest</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id34">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scale</span></span><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">scale</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">resampled</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the scale of the resampled array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The scale of the resampled array</p>
 </dd>
@@ -2182,9 +2170,8 @@ All intensities are converted to float32.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.attrs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.attrs" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the attributes of the source array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The attributes of the source array</p>
 </dd>
@@ -2207,9 +2194,8 @@ All intensities are converted to float32.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.axes">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.axes" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the axes of the source array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The axes of the source array</p>
 </dd>
@@ -2328,9 +2314,8 @@ All intensities are converted to float32.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.dtype">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.dtype" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the data type of the array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data type of the array</p>
 </dd>
@@ -2377,9 +2362,8 @@ All intensities are converted to float32.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.data">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.IntensitiesArray.data" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the data of the source array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data of the source array</p>
 </dd>
@@ -2509,9 +2493,8 @@ not annotated.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.axes">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.axes" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the axes of the source array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Axes of the source array</p>
 </dd>
@@ -2635,9 +2618,8 @@ not annotated.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.dtype">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.dtype" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the data type of the source array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Data type of the source array</p>
 </dd>
@@ -2686,9 +2668,8 @@ not annotated.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.data">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.data" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the data of the source array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Data of the source array</p>
 </dd>
@@ -2712,9 +2693,8 @@ not annotated.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.attrs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.attrs" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the attributes of the source array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Attributes of the source array</p>
 </dd>
@@ -2738,9 +2718,8 @@ not annotated.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MissingAnnotationsMask.channels" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">names</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">channels</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the names of the channels</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Names of the channels</p>
 </dd>
@@ -2933,9 +2912,8 @@ another array.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id45">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id45" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the attributes of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>An empty dictionary.</p>
 </dd>
@@ -2997,9 +2975,8 @@ was created.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id47">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id47" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the axes of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The axes of the array.</p>
 </dd>
@@ -3026,9 +3003,8 @@ the array that was specified when the OnesArray was created.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id48">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#id48" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">dimensions</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the dimensions of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The dimensions of the array.</p>
 </dd>
@@ -3055,9 +3031,8 @@ dimensions of the array that was specified when the OnesArray was created.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id49">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#id49" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">voxel</span> <span class="pre">size</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the voxel size of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The voxel size of the array.</p>
 </dd>
@@ -3084,9 +3059,8 @@ size of the array that was specified when the OnesArray was created.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id50">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#id50" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">region</span> <span class="pre">of</span> <span class="pre">interest</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the region of interest of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The region of interest of the array.</p>
 </dd>
@@ -3143,9 +3117,8 @@ because the OnesArray is read-only and cannot be modified.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id52">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id52" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the data of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data of the array.</p>
 </dd>
@@ -3181,9 +3154,8 @@ of the array with all values set to 1.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id53">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id53" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the data type of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data type of the array.</p>
 </dd>
@@ -3211,9 +3183,8 @@ was created.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id54">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#id54" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">channels</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the number of channels of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of channels of the array.</p>
 </dd>
@@ -3385,9 +3356,8 @@ and methods. The only difference is that the array_type is ConcatArray.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.attrs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.attrs" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Return</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">ConcatArray</span> <span class="pre">as</span> <span class="pre">a</span> <span class="pre">dictionary.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Return the attributes of the ConcatArray as a dictionary.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The attributes of the ConcatArray.</p>
 </dd>
@@ -3458,9 +3428,8 @@ and methods. The only difference is that the array_type is ConcatArray.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.axes">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.axes" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Return</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">ConcatArray.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Return the axes of the ConcatArray.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The axes of the ConcatArray.</p>
 </dd>
@@ -3495,9 +3464,8 @@ and methods. The only difference is that the array_type is ConcatArray.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.dims">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.dims" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Return</span> <span class="pre">the</span> <span class="pre">dimensions</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">ConcatArray.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Return the dimensions of the ConcatArray.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The dimensions of the ConcatArray.</p>
 </dd>
@@ -3532,9 +3500,8 @@ and methods. The only difference is that the array_type is ConcatArray.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.voxel_size">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.voxel_size" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Return</span> <span class="pre">the</span> <span class="pre">voxel</span> <span class="pre">size</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">ConcatArray.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Return the voxel size of the ConcatArray.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The voxel size of the ConcatArray.</p>
 </dd>
@@ -3569,9 +3536,8 @@ and methods. The only difference is that the array_type is ConcatArray.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.roi">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.roi" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Return</span> <span class="pre">the</span> <span class="pre">ROI</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">ConcatArray.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Return the ROI of the ConcatArray.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The ROI of the ConcatArray.</p>
 </dd>
@@ -3642,9 +3608,8 @@ and methods. The only difference is that the array_type is ConcatArray.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.data">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.data" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Return</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">ConcatArray.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Return the data of the ConcatArray.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data of the ConcatArray.</p>
 </dd>
@@ -3679,9 +3644,8 @@ and methods. The only difference is that the array_type is ConcatArray.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.dtype">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.dtype" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Return</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">ConcatArray.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Return the data type of the ConcatArray.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data type of the ConcatArray.</p>
 </dd>
@@ -3716,9 +3680,8 @@ and methods. The only difference is that the array_type is ConcatArray.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.ConcatArray.num_channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.ConcatArray.num_channels" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Return</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">channels</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">ConcatArray.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Return the number of channels of the ConcatArray.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of channels of the ConcatArray.</p>
 </dd>
@@ -3955,9 +3918,8 @@ class is a subclass of the Array class.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id64">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id64" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the axes of the array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The axes of the array</p>
 </dd>
@@ -4191,9 +4153,8 @@ writable if it can be modified.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id69">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id69" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the data type of the array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data type of the array</p>
 </dd>
@@ -4239,9 +4200,8 @@ type of the data in the array.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id70">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#id70" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">channels</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the number of channels in the array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of channels in the array</p>
 </dd>
@@ -4287,9 +4247,8 @@ number of channels is the number of channels in the array.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id71">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id71" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the data of the array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data of the array</p>
 </dd>
@@ -4341,9 +4300,8 @@ the array.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id72">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id72" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the attributes of the array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The attributes of the array</p>
 </dd>
@@ -4560,9 +4518,8 @@ Neuroglancer.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id76">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id76" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the attributes of the source array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The attributes of the source array.</p>
 </dd>
@@ -4594,9 +4551,8 @@ Neuroglancer.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id77">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id77" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the axes of the source array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The axes of the source array.</p>
 </dd>
@@ -4768,9 +4724,8 @@ modifying another array on demand.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id82">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id82" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the data type of the source array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data type of the source array.</p>
 </dd>
@@ -4838,9 +4793,8 @@ modified.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id84">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id84" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the data of the source array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data of the source array.</p>
 </dd>
@@ -4879,9 +4833,8 @@ region of interest of the source array.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id85">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#id85" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">channels</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">source</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the channels of the source array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The channels of the source array.</p>
 </dd>
@@ -5047,9 +5000,8 @@ Source arrays must have the same shape.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.axes">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.axes" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the axes of the array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The axes of the array</p>
 </dd>
@@ -5318,9 +5270,8 @@ writable = array.writable
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.dtype">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.dtype" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the data type of the array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data type of the array</p>
 </dd>
@@ -5373,9 +5324,8 @@ dtype = array.dtype
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.num_channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.num_channels" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">channels</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the number of channels of the array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of channels of the array</p>
 </dd>
@@ -5428,9 +5378,8 @@ num_channels = array.num_channels
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.data">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.data" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the data of the array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data of the array</p>
 </dd>
@@ -5483,9 +5432,8 @@ data = array.data
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.attrs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.MergeInstancesArray.attrs" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the attributes of the array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The attributes of the array</p>
 </dd>
@@ -5646,9 +5594,8 @@ and the data name.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.DVIDArray.axes">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.DVIDArray.axes" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">DVID</span> <span class="pre">array</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the axes of the DVID array</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The axes of the DVID array</p>
 </dd>
@@ -6018,9 +5965,8 @@ Get the data for the given region of interest.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray.axes">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray.axes" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">The</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>The axes of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The axes of the array.</p>
 </dd>
@@ -6157,9 +6103,8 @@ Check if the array is writable.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray.dtype">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray.dtype" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">The</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>The data type of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>dtype</strong> – np.uint8
 The data type of the array.</p>
@@ -6188,9 +6133,8 @@ The data type of the array.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray.num_channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray.num_channels" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">The</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">channels</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>The number of channels in the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>num_channels</strong> – Optional[int]
 The number of channels in the array.</p>
@@ -6219,9 +6163,8 @@ The number of channels in the array.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray.data">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray.data" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the data of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – np.ndarray
 The data of the array.</p>
@@ -6250,9 +6193,8 @@ The data of the array.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.SumArray.attrs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.SumArray.attrs" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Return</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Return the attributes of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>attrs</strong> – Dict
 The attributes of the array.</p>
@@ -6361,9 +6303,8 @@ The Array of masks from which to take the union</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray.attrs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray.attrs" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the attributes of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The attributes of the array.</p>
 </dd>
@@ -6467,9 +6408,8 @@ The Array of masks from which to take the union</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id169">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id169" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the axes of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The axes of the array.</p>
 </dd>
@@ -6495,9 +6435,8 @@ The Array of masks from which to take the union</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray.dims">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray.dims" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">dimensions</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the number of dimensions of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of dimensions of the array.</p>
 </dd>
@@ -6523,9 +6462,8 @@ The Array of masks from which to take the union</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id170">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#id170" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">voxel</span> <span class="pre">size</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the voxel size of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The voxel size of the array.</p>
 </dd>
@@ -6548,9 +6486,8 @@ The Array of masks from which to take the union</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id171">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#id171" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">region</span> <span class="pre">of</span> <span class="pre">interest</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the region of interest of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The region of interest of the array.</p>
 </dd>
@@ -6600,9 +6537,8 @@ The Array of masks from which to take the union</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id172">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id172" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">numpy</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the numpy array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The numpy array.</p>
 </dd>
@@ -6631,9 +6567,8 @@ The Array of masks from which to take the union</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id173">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id173" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the data type of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data type of the array.</p>
 </dd>
@@ -6659,9 +6594,8 @@ The Array of masks from which to take the union</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.NumpyArray.num_channels">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.NumpyArray.num_channels" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">channels</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the number of channels in the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of channels in the array.</p>
 </dd>
@@ -6819,9 +6753,8 @@ another array.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id175">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id175" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the attributes of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>An empty dictionary.</p>
 </dd>
@@ -6883,9 +6816,8 @@ was created.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id177">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id177" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the axes of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The axes of the array.</p>
 </dd>
@@ -6912,9 +6844,8 @@ the array that was specified when the ConstantArray was created.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id178">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#id178" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">dimensions</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the dimensions of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The dimensions of the array.</p>
 </dd>
@@ -6941,9 +6872,8 @@ dimensions of the array that was specified when the ConstantArray was created.</
 <dl class="py property">
 <dt class="sig sig-object py" id="id179">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#id179" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">voxel</span> <span class="pre">size</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the voxel size of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The voxel size of the array.</p>
 </dd>
@@ -6970,9 +6900,8 @@ size of the array that was specified when the ConstantArray was created.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id180">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#id180" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">region</span> <span class="pre">of</span> <span class="pre">interest</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the region of interest of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The region of interest of the array.</p>
 </dd>
@@ -7029,9 +6958,8 @@ because the ConstantArray is read-only and cannot be modified.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id182">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id182" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the data of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data of the array.</p>
 </dd>
@@ -7067,9 +6995,8 @@ of the array with all values set to 1.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id183">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id183" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the data type of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data type of the array.</p>
 </dd>
@@ -7097,9 +7024,8 @@ was created.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id184">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#id184" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">channels</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the number of channels of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of channels of the array.</p>
 </dd>

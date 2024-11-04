@@ -213,6 +213,7 @@ Module Contents
    .. py:property:: criteria
       :type: List[str]
 
+
       Get the list of evaluation criteria.
 
       :returns: The list of evaluation criteria.
@@ -231,6 +232,7 @@ Module Contents
 
    .. py:property:: parameter_names
       :type: List[str]
+
 
       Get the list of parameter names.
 

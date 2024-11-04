@@ -55,17 +55,23 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../aws.html">AWS EC2 Setup Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html">dacapo</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../apply/index.html">dacapo.apply</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../blockwise/index.html">dacapo.blockwise</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">dacapo.compute_context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experiments/index.html">dacapo.experiments</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../ext/index.html">dacapo.ext</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../gp/index.html">dacapo.gp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../options/index.html">dacapo.options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../plot/index.html">dacapo.plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../predict/index.html">dacapo.predict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../predict_local/index.html">dacapo.predict_local</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../store/index.html">dacapo.store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../train/index.html">dacapo.train</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../utils/index.html">dacapo.utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../validate/index.html">dacapo.validate</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../index.html#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../index.html#classes">Classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../index.html#functions">Functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../index.html#package-contents">Package Contents</a></li>
@@ -385,11 +391,9 @@ additional methods related to the context design.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id5">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">device</span></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">A</span> <span class="pre">property</span> <span class="pre">method</span> <span class="pre">that</span> <span class="pre">returns</span> <span class="pre">the</span> <span class="pre">torch</span> <span class="pre">device</span> <span class="pre">object.</span> <span class="pre">It</span> <span class="pre">automatically</span> <span class="pre">detects</span> <span class="pre">and</span> <span class="pre">uses</span> <span class="pre">&quot;cuda&quot;</span> <span class="pre">(GPU)</span> <span class="pre">if</span></span></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">available,</span> <span class="pre">else</span> <span class="pre">it</span> <span class="pre">falls</span> <span class="pre">back</span> <span class="pre">on</span> <span class="pre">using</span> <span class="pre">&quot;cpu&quot;.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>A property method that returns the torch device object. It automatically detects and uses “cuda” (GPU) if
+available, else it falls back on using “cpu”.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The torch device object.</p>
 </dd>
@@ -497,9 +501,8 @@ computations are to be done on a cluster using LSF.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id10">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">device</span></span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">A</span> <span class="pre">property</span> <span class="pre">method</span> <span class="pre">that</span> <span class="pre">returns</span> <span class="pre">the</span> <span class="pre">device</span> <span class="pre">on</span> <span class="pre">which</span> <span class="pre">computations</span> <span class="pre">are</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">done.</span></span></dt>
-<dd><p>A device can be a CPU, GPU, TPU, etc. It is used to specify the context in which computations are to be done.</p>
+<dd><p>A property method that returns the device on which computations are to be done.</p>
+<p>A device can be a CPU, GPU, TPU, etc. It is used to specify the context in which computations are to be done.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The device on which computations are to be done.</p>

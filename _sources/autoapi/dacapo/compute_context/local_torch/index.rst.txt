@@ -82,6 +82,7 @@ Module Contents
 
 
    .. py:property:: device
+
       A property method that returns the torch device object. It automatically detects and uses "cuda" (GPU) if
       available, else it falls back on using "cpu".
 

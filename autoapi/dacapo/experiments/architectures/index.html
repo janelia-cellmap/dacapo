@@ -55,17 +55,23 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../aws.html">AWS EC2 Setup Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html">dacapo</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../apply/index.html">dacapo.apply</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../blockwise/index.html">dacapo.blockwise</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../compute_context/index.html">dacapo.compute_context</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="../index.html">dacapo.experiments</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ext/index.html">dacapo.ext</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../gp/index.html">dacapo.gp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../options/index.html">dacapo.options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../plot/index.html">dacapo.plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../predict/index.html">dacapo.predict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../predict_local/index.html">dacapo.predict_local</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../store/index.html">dacapo.store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../train/index.html">dacapo.train</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../utils/index.html">dacapo.utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../validate/index.html">dacapo.validate</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../index.html#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../index.html#classes">Classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../index.html#functions">Functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../index.html#package-contents">Package Contents</a></li>
@@ -611,9 +617,8 @@ indicating that the configuration is invalid.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id15">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">input_shape</span></span><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">input</span> <span class="pre">shape</span> <span class="pre">for</span> <span class="pre">this</span> <span class="pre">architecture.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the input shape for this architecture.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Input shape of the architecture.</p>
 </dd>
@@ -638,9 +643,8 @@ indicating that the configuration is invalid.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id16">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_in_channels</span></span><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">input</span> <span class="pre">channels</span> <span class="pre">for</span> <span class="pre">this</span> <span class="pre">architecture.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the number of input channels for this architecture.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Number of input channels.</p>
 </dd>
@@ -665,9 +669,8 @@ indicating that the configuration is invalid.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id17">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_out_channels</span></span><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Returns</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">output</span> <span class="pre">channels</span> <span class="pre">for</span> <span class="pre">this</span> <span class="pre">architecture.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns the number of output channels for this architecture.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Number of output channels.</p>
 </dd>
@@ -1160,9 +1163,8 @@ U-Net architecture.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.CNNectomeUNet.eval_shape_increase">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eval_shape_increase</span></span><a class="headerlink" href="#dacapo.experiments.architectures.CNNectomeUNet.eval_shape_increase" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">The</span> <span class="pre">increase</span> <span class="pre">in</span> <span class="pre">shape</span> <span class="pre">due</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">U-Net.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>The increase in shape due to the U-Net.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The increase in shape due to the U-Net.</p>
 </dd>
@@ -1259,9 +1261,8 @@ U-Net architecture.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.CNNectomeUNet.input_shape">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">input_shape</span></span><a class="headerlink" href="#dacapo.experiments.architectures.CNNectomeUNet.input_shape" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Return</span> <span class="pre">the</span> <span class="pre">input</span> <span class="pre">shape</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">U-Net.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Return the input shape of the U-Net.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The input shape of the U-Net.</p>
 </dd>

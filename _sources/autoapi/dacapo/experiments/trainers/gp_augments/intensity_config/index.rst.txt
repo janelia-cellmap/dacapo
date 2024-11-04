@@ -58,6 +58,10 @@ Module Contents
       :type:  bool
 
 
+   .. py:attribute:: augmentation_probability
+      :type:  float
+
+
    .. py:method:: node(raw_key: gunpowder.ArrayKey, _gt_key=None, _mask_key=None)
 
       Get a gp.IntensityAugment node.

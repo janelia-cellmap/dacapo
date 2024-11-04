@@ -110,6 +110,7 @@ Module Contents
 
 
    .. py:property:: output_array_type
+
       Gets the output array type.
 
       :returns: The output array type.

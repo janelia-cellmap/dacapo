@@ -207,6 +207,7 @@ Module Contents
 
 
    .. py:property:: attrs
+
       Returns the attributes of the array.
 
       :param attrs: The attributes of the array.
@@ -227,6 +228,7 @@ Module Contents
 
 
    .. py:property:: axes
+
       Returns the axes of the array.
 
       :param axes: The axes of the array.
@@ -248,6 +250,7 @@ Module Contents
 
    .. py:property:: dims
       :type: int
+
 
       Returns the dimensions of the array.
 
@@ -315,6 +318,7 @@ Module Contents
    .. py:property:: writable
       :type: bool
 
+
       Returns the boolean value of the array.
 
       :param writable: The boolean value of the array.
@@ -336,6 +340,7 @@ Module Contents
 
    .. py:property:: dtype
       :type: Any
+
 
       Returns the data type of the array.
 
@@ -359,6 +364,7 @@ Module Contents
    .. py:property:: num_channels
       :type: Optional[int]
 
+
       Returns the number of channels of the array.
 
       :param num_channels: The number of channels of the array.
@@ -381,6 +387,7 @@ Module Contents
    .. py:property:: spatial_axes
       :type: List[str]
 
+
       Returns the spatial axes of the array.
 
       :param spatial_axes: The spatial axes of the array.
@@ -402,6 +409,7 @@ Module Contents
 
    .. py:property:: data
       :type: Any
+
 
       Returns the data of the array.
 

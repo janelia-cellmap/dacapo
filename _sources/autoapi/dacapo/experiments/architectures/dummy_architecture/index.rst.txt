@@ -62,6 +62,7 @@ Module Contents
 
 
    .. py:property:: input_shape
+
       Returns the input shape for this architecture.
 
       :returns: Input shape of the architecture.
@@ -78,6 +79,7 @@ Module Contents
 
 
    .. py:property:: num_in_channels
+
       Returns the number of input channels for this architecture.
 
       :returns: Number of input channels.
@@ -94,6 +96,7 @@ Module Contents
 
 
    .. py:property:: num_out_channels
+
       Returns the number of output channels for this architecture.
 
       :returns: Number of output channels.

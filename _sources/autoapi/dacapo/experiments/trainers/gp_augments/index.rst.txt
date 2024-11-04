@@ -153,6 +153,10 @@ Package Contents
       :type:  bool
 
 
+   .. py:attribute:: augmentation_probability
+      :type:  float
+
+
    .. py:method:: node(_raw_key=None, _gt_key=None, _mask_key=None)
 
       Returns the object of ElasticAugment with the given configuration details.
@@ -191,6 +195,10 @@ Package Contents
       Get a gp.SimpleAugment node.
 
    .. note:: This class is a subclass of AugmentConfig.
+
+
+   .. py:attribute:: augmentation_probability
+      :type:  float
 
 
    .. py:method:: node(_raw_key=None, _gt_key=None, _mask_key=None)
@@ -302,6 +310,10 @@ Package Contents
 
    .. py:attribute:: clip
       :type:  bool
+
+
+   .. py:attribute:: augmentation_probability
+      :type:  float
 
 
    .. py:method:: node(raw_key: gunpowder.ArrayKey, _gt_key=None, _mask_key=None)

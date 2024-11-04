@@ -195,6 +195,7 @@ Module Contents
 
 
    .. py:property:: dims
+
       Get the number of dimensions.
 
       :returns: The number of dimensions.
@@ -244,6 +245,7 @@ Module Contents
 
 
    .. py:property:: num_channels
+
       Get the number of channels.
 
       :returns: The number of channels.
@@ -323,6 +325,7 @@ Module Contents
 
 
    .. py:property:: output_array_type
+
       Get the output array type.
 
       :returns: The output array type.

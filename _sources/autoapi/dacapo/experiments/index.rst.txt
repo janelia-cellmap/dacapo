@@ -4,8 +4,8 @@ dacapo.experiments
 .. py:module:: dacapo.experiments
 
 
-Subpackages
------------
+Submodules
+----------
 
 .. toctree::
    :maxdepth: 1
@@ -13,20 +13,12 @@ Subpackages
    /autoapi/dacapo/experiments/architectures/index
    /autoapi/dacapo/experiments/arraytypes/index
    /autoapi/dacapo/experiments/datasplits/index
-   /autoapi/dacapo/experiments/starts/index
-   /autoapi/dacapo/experiments/tasks/index
-   /autoapi/dacapo/experiments/trainers/index
-
-
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 1
-
    /autoapi/dacapo/experiments/model/index
    /autoapi/dacapo/experiments/run/index
    /autoapi/dacapo/experiments/run_config/index
+   /autoapi/dacapo/experiments/starts/index
+   /autoapi/dacapo/experiments/tasks/index
+   /autoapi/dacapo/experiments/trainers/index
    /autoapi/dacapo/experiments/training_iteration_stats/index
    /autoapi/dacapo/experiments/training_stats/index
    /autoapi/dacapo/experiments/validation_iteration_scores/index
@@ -731,6 +723,7 @@ Package Contents
    .. py:property:: criteria
       :type: List[str]
 
+
       Get the list of evaluation criteria.
 
       :returns: The list of evaluation criteria.
@@ -749,6 +742,7 @@ Package Contents
 
    .. py:property:: parameter_names
       :type: List[str]
+
 
       Get the list of parameter names.
 

@@ -100,27 +100,3 @@ Package Contents
       
 
 
-   .. py:attribute:: worker_name
-
-
-   .. py:attribute:: worker
-
-
-   .. py:attribute:: timestamp
-
-
-   .. py:attribute:: task_id
-
-
-   .. py:attribute:: process_function
-
-
-   .. py:attribute:: read_write_conflict
-
-
-   .. py:attribute:: fit
-
-
-   .. py:attribute:: kwargs
-
-

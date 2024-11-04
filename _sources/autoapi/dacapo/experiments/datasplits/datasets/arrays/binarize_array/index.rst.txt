@@ -99,6 +99,7 @@ Module Contents
 
 
    .. py:property:: attrs
+
       This method returns the attributes of the source array.
 
       :returns: The attributes of the source array.
@@ -114,6 +115,7 @@ Module Contents
 
 
    .. py:property:: axes
+
       This method returns the axes of the source array.
 
       :returns: The axes of the source array.
@@ -130,6 +132,7 @@ Module Contents
 
    .. py:property:: dims
       :type: int
+
 
       This method returns the dimensions of the source array.
 
@@ -148,6 +151,7 @@ Module Contents
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
+
       This method returns the voxel size of the source array.
 
       :returns: The voxel size of the source array.
@@ -164,6 +168,7 @@ Module Contents
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
+
 
       This method returns the region of interest of the source array.
 
@@ -182,6 +187,7 @@ Module Contents
    .. py:property:: writable
       :type: bool
 
+
       This method returns True if the source array is writable.
 
       :returns: True if the source array is writable.
@@ -197,6 +203,7 @@ Module Contents
 
 
    .. py:property:: dtype
+
       This method returns the data type of the source array.
 
       :returns: The data type of the source array.
@@ -214,6 +221,7 @@ Module Contents
    .. py:property:: num_channels
       :type: int
 
+
       This method returns the number of channels in the source array.
 
       :returns: The number of channels in the source array.
@@ -229,6 +237,7 @@ Module Contents
 
 
    .. py:property:: data
+
       This method returns the data of the source array.
 
       :returns: The data of the source array.
@@ -244,6 +253,7 @@ Module Contents
 
 
    .. py:property:: channels
+
       This method returns the channel names of the source array.
 
       :returns: The channel names of the source array.

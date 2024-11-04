@@ -83,6 +83,7 @@ Package Contents
 
       :abstractmethod:
 
+
       Abstract method to define the spatial input shape for the neural network architecture.
       The shape should not account for the channels and batch dimensions.
 
@@ -101,6 +102,7 @@ Package Contents
 
    .. py:property:: eval_shape_increase
       :type: funlib.geometry.Coordinate
+
 
       Provides information about how much to increase the input shape during prediction.
 
@@ -122,6 +124,7 @@ Package Contents
 
       :abstractmethod:
 
+
       Abstract method to return number of input channels required by the architecture.
 
       :returns: Required number of input channels.
@@ -142,6 +145,7 @@ Package Contents
 
       :abstractmethod:
 
+
       Abstract method to return the number of output channels provided by the architecture.
 
       :returns: Number of output channels.
@@ -159,6 +163,7 @@ Package Contents
 
    .. py:property:: dims
       :type: int
+
 
       Returns the number of dimensions of the input shape.
 
@@ -357,6 +362,7 @@ Package Contents
 
 
    .. py:property:: input_shape
+
       Returns the input shape for this architecture.
 
       :returns: Input shape of the architecture.
@@ -373,6 +379,7 @@ Package Contents
 
 
    .. py:property:: num_in_channels
+
       Returns the number of input channels for this architecture.
 
       :returns: Number of input channels.
@@ -389,6 +396,7 @@ Package Contents
 
 
    .. py:property:: num_out_channels
+
       Returns the number of output channels for this architecture.
 
       :returns: Number of output channels.
@@ -741,6 +749,7 @@ Package Contents
 
 
    .. py:property:: eval_shape_increase
+
       The increase in shape due to the U-Net.
 
       :returns: The increase in shape due to the U-Net.
@@ -817,6 +826,7 @@ Package Contents
 
 
    .. py:property:: input_shape
+
       Return the input shape of the U-Net.
 
       :returns: The input shape of the U-Net.
@@ -834,6 +844,7 @@ Package Contents
    .. py:property:: num_in_channels
       :type: int
 
+
       Return the number of input channels.
 
       :returns: The number of input channels.
@@ -850,6 +861,7 @@ Package Contents
 
    .. py:property:: num_out_channels
       :type: int
+
 
       Return the number of output channels.
 

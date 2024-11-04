@@ -62,6 +62,7 @@ Module Contents
    .. py:property:: attrs
       :abstractmethod:
 
+
       Return the attributes of the tiff.
 
       :returns: The attributes of the tiff.
@@ -80,6 +81,7 @@ Module Contents
    .. py:property:: axes
       :type: List[str]
 
+
       Return the axes of the array.
 
       :returns: The axes of the array.
@@ -97,6 +99,7 @@ Module Contents
 
    .. py:property:: dims
       :type: int
+
 
       Return the number of dimensions of the array.
 
@@ -170,6 +173,7 @@ Module Contents
    .. py:property:: writable
       :type: bool
 
+
       Return whether the array is writable.
 
       :returns: Whether the array is writable.
@@ -186,6 +190,7 @@ Module Contents
 
 
    .. py:property:: dtype
+
       Return the data type of the array.
 
       :returns: The data type of the array.
@@ -204,6 +209,7 @@ Module Contents
    .. py:property:: num_channels
       :type: Optional[int]
 
+
       Return the number of channels of the array.
 
       :returns: The number of channels of the array.
@@ -221,6 +227,7 @@ Module Contents
 
    .. py:property:: spatial_axes
       :type: List[str]
+
 
       Return the spatial axes of the array.
 

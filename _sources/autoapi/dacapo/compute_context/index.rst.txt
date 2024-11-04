@@ -74,6 +74,7 @@ Package Contents
    .. py:property:: device
       :abstractmethod:
 
+
       Abstract property method to define the device on which computations are to be done.
 
       A device can be a CPU, GPU, TPU, etc. It is used to specify the context in which computations are to be done.
@@ -215,6 +216,7 @@ Package Contents
 
 
    .. py:property:: device
+
       A property method that returns the torch device object. It automatically detects and uses "cuda" (GPU) if
       available, else it falls back on using "cpu".
 
@@ -289,6 +291,7 @@ Package Contents
 
 
    .. py:property:: device
+
       A property method that returns the device on which computations are to be done.
 
       A device can be a CPU, GPU, TPU, etc. It is used to specify the context in which computations are to be done.

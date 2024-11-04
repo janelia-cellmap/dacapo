@@ -526,6 +526,7 @@ Module Contents
 
 
    .. py:property:: class_name
+
       Get the class name.
 
       :param self: obj

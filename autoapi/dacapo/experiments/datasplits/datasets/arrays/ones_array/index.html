@@ -55,17 +55,23 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../aws.html">AWS EC2 Setup Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../../index.html">dacapo</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="../../../../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../../../../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../../../../apply/index.html">dacapo.apply</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../blockwise/index.html">dacapo.blockwise</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../compute_context/index.html">dacapo.compute_context</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="../../../../index.html">dacapo.experiments</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../ext/index.html">dacapo.ext</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../gp/index.html">dacapo.gp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../options/index.html">dacapo.options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../plot/index.html">dacapo.plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../predict/index.html">dacapo.predict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../predict_local/index.html">dacapo.predict_local</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../store/index.html">dacapo.store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../train/index.html">dacapo.train</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../utils/index.html">dacapo.utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../validate/index.html">dacapo.validate</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../../index.html#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../../index.html#classes">Classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../../index.html#functions">Functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../../index.html#package-contents">Package Contents</a></li>
@@ -263,9 +269,8 @@ another array.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id1">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attrs</span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the attributes of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>An empty dictionary.</p>
 </dd>
@@ -327,9 +332,8 @@ was created.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id3">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axes</span></span><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">axes</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the axes of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The axes of the array.</p>
 </dd>
@@ -356,9 +360,8 @@ the array that was specified when the OnesArray was created.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id4">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">dimensions</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the dimensions of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The dimensions of the array.</p>
 </dd>
@@ -385,9 +388,8 @@ dimensions of the array that was specified when the OnesArray was created.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id5">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voxel_size</span></span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">voxel</span> <span class="pre">size</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the voxel size of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The voxel size of the array.</p>
 </dd>
@@ -414,9 +416,8 @@ size of the array that was specified when the OnesArray was created.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id6">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roi</span></span><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">region</span> <span class="pre">of</span> <span class="pre">interest</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the region of interest of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The region of interest of the array.</p>
 </dd>
@@ -473,9 +474,8 @@ because the OnesArray is read-only and cannot be modified.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id8">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the data of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data of the array.</p>
 </dd>
@@ -511,9 +511,8 @@ of the array with all values set to 1.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id9">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the data type of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The data type of the array.</p>
 </dd>
@@ -541,9 +540,8 @@ was created.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="id10">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_channels</span></span><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Get</span> <span class="pre">the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">channels</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">array.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get the number of channels of the array.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of channels of the array.</p>
 </dd>

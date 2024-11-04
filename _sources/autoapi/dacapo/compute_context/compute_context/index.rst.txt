@@ -61,6 +61,7 @@ Module Contents
    .. py:property:: device
       :abstractmethod:
 
+
       Abstract property method to define the device on which computations are to be done.
 
       A device can be a CPU, GPU, TPU, etc. It is used to specify the context in which computations are to be done.

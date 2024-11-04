@@ -37,9 +37,6 @@ Module Contents
    This is a base class for all tasks that use pretrained models.
 
 
-   .. py:attribute:: sub_task
-
-
    .. py:attribute:: weights
 
 

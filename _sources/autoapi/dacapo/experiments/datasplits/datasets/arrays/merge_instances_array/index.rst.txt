@@ -67,6 +67,7 @@ Module Contents
 
 
    .. py:property:: axes
+
       Returns the axes of the array
 
       :returns: The axes of the array
@@ -106,6 +107,7 @@ Module Contents
 
    .. py:property:: dims
       :type: int
+
 
       Returns the number of dimensions of the array
 
@@ -147,6 +149,7 @@ Module Contents
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
+
       Returns the voxel size of the array
 
       :returns: The voxel size of the array
@@ -186,6 +189,7 @@ Module Contents
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
+
 
       Returns the region of interest of the array
 
@@ -227,6 +231,7 @@ Module Contents
    .. py:property:: writable
       :type: bool
 
+
       Returns True if the array is writable, False otherwise
 
       :returns: True if the array is writable, False otherwise
@@ -265,6 +270,7 @@ Module Contents
 
 
    .. py:property:: dtype
+
       Returns the data type of the array
 
       :returns: The data type of the array
@@ -303,6 +309,7 @@ Module Contents
 
 
    .. py:property:: num_channels
+
       Returns the number of channels of the array
 
       :returns: The number of channels of the array
@@ -341,6 +348,7 @@ Module Contents
 
 
    .. py:property:: data
+
       Returns the data of the array
 
       :returns: The data of the array
@@ -379,6 +387,7 @@ Module Contents
 
 
    .. py:property:: attrs
+
       Returns the attributes of the array
 
       :returns: The attributes of the array

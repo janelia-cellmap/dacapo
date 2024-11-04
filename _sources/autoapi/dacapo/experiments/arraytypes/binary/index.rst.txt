@@ -42,6 +42,7 @@ Module Contents
    .. py:property:: interpolatable
       :type: bool
 
+
       This function returns the interpolatable property value of the binary array.
 
       :returns: Always returns False because interpolation is not possible.

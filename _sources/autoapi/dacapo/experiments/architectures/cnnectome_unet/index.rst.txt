@@ -193,6 +193,7 @@ Module Contents
 
 
    .. py:property:: eval_shape_increase
+
       The increase in shape due to the U-Net.
 
       :returns: The increase in shape due to the U-Net.
@@ -269,6 +270,7 @@ Module Contents
 
 
    .. py:property:: input_shape
+
       Return the input shape of the U-Net.
 
       :returns: The input shape of the U-Net.
@@ -286,6 +288,7 @@ Module Contents
    .. py:property:: num_in_channels
       :type: int
 
+
       Return the number of input channels.
 
       :returns: The number of input channels.
@@ -302,6 +305,7 @@ Module Contents
 
    .. py:property:: num_out_channels
       :type: int
+
 
       Return the number of output channels.
 
@@ -458,9 +462,6 @@ Module Contents
    .. py:attribute:: out_channels
 
 
-   .. py:attribute:: upsample_channel_contraction
-
-
    .. py:attribute:: dims
 
 
@@ -474,16 +475,6 @@ Module Contents
 
 
    .. py:attribute:: kernel_size_up
-
-
-   .. py:attribute:: crop_factors
-      :value: []
-
-
-
-   .. py:attribute:: factor_product
-      :value: None
-
 
 
    .. py:attribute:: l_conv
@@ -593,11 +584,6 @@ Module Contents
    .. note:: The input tensor should be given as a 5D tensor.
 
 
-   .. py:attribute:: layers
-      :value: []
-
-
-
    .. py:attribute:: conv_pass
 
 
@@ -655,9 +641,6 @@ Module Contents
 
 
    .. py:attribute:: downsample_factor
-
-
-   .. py:attribute:: pool
 
 
    .. py:attribute:: down
@@ -735,11 +718,6 @@ Module Contents
 
 
    .. py:attribute:: dims
-
-
-   .. py:attribute:: layers
-      :value: []
-
 
 
    .. py:method:: crop_to_factor(x, factor, kernel_sizes)
@@ -908,9 +886,6 @@ Module Contents
 
 
    .. py:attribute:: psi
-
-
-   .. py:attribute:: up_mode
 
 
    .. py:attribute:: up

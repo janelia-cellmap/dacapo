@@ -130,6 +130,7 @@ Module Contents
 
 
    .. py:property:: attrs
+
       Get the attributes of the array.
 
       :returns: An empty dictionary.
@@ -153,6 +154,7 @@ Module Contents
 
    .. py:property:: source_array
       :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
+
 
       Get the source array that this array is based on.
 
@@ -188,6 +190,7 @@ Module Contents
 
 
    .. py:property:: axes
+
       Get the axes of the array.
 
       :returns: The axes of the array.
@@ -212,6 +215,7 @@ Module Contents
 
 
    .. py:property:: dims
+
       Get the dimensions of the array.
 
       :returns: The dimensions of the array.
@@ -236,6 +240,7 @@ Module Contents
 
 
    .. py:property:: voxel_size
+
       Get the voxel size of the array.
 
       :returns: The voxel size of the array.
@@ -260,6 +265,7 @@ Module Contents
 
 
    .. py:property:: roi
+
       Get the region of interest of the array.
 
       :returns: The region of interest of the array.
@@ -288,6 +294,7 @@ Module Contents
    .. py:property:: writable
       :type: bool
 
+
       Check if the array is writable.
 
       :returns: False.
@@ -312,6 +319,7 @@ Module Contents
 
 
    .. py:property:: data
+
       Get the data of the array.
 
       :returns: The data of the array.
@@ -345,6 +353,7 @@ Module Contents
 
 
    .. py:property:: dtype
+
       Get the data type of the array.
 
       :returns: The data type of the array.
@@ -370,6 +379,7 @@ Module Contents
 
 
    .. py:property:: num_channels
+
       Get the number of channels of the array.
 
       :returns: The number of channels of the array.

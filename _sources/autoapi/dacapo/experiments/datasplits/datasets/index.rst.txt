@@ -4,26 +4,18 @@ dacapo.experiments.datasplits.datasets
 .. py:module:: dacapo.experiments.datasplits.datasets
 
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 1
-
-   /autoapi/dacapo/experiments/datasplits/datasets/arrays/index
-   /autoapi/dacapo/experiments/datasplits/datasets/graphstores/index
-
-
 Submodules
 ----------
 
 .. toctree::
    :maxdepth: 1
 
+   /autoapi/dacapo/experiments/datasplits/datasets/arrays/index
    /autoapi/dacapo/experiments/datasplits/datasets/dataset/index
    /autoapi/dacapo/experiments/datasplits/datasets/dataset_config/index
    /autoapi/dacapo/experiments/datasplits/datasets/dummy_dataset/index
    /autoapi/dacapo/experiments/datasplits/datasets/dummy_dataset_config/index
+   /autoapi/dacapo/experiments/datasplits/datasets/graphstores/index
    /autoapi/dacapo/experiments/datasplits/datasets/raw_gt_dataset/index
    /autoapi/dacapo/experiments/datasplits/datasets/raw_gt_dataset_config/index
 

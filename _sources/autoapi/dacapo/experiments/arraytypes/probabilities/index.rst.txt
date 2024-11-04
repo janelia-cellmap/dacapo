@@ -44,6 +44,7 @@ Module Contents
    .. py:property:: interpolatable
       :type: bool
 
+
       Checks if the array is interpolatable. Returns True for this class.
 
       :returns: True indicating that the data can be interpolated.

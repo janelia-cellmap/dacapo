@@ -53,6 +53,7 @@ Module Contents
 
 
    .. py:property:: attrs
+
       Returns the attributes of the array.
 
       :returns: The attributes of the array.
@@ -137,6 +138,7 @@ Module Contents
 
 
    .. py:property:: axes
+
       Returns the axes of the array.
 
       :returns: The axes of the array.
@@ -154,6 +156,7 @@ Module Contents
 
 
    .. py:property:: dims
+
       Returns the number of dimensions of the array.
 
       :returns: The number of dimensions of the array.
@@ -171,6 +174,7 @@ Module Contents
 
 
    .. py:property:: voxel_size
+
       Returns the voxel size of the array.
 
       :returns: The voxel size of the array.
@@ -186,6 +190,7 @@ Module Contents
 
 
    .. py:property:: roi
+
       Returns the region of interest of the array.
 
       :returns: The region of interest of the array.
@@ -202,6 +207,7 @@ Module Contents
 
    .. py:property:: writable
       :type: bool
+
 
       Returns whether the array is writable.
 
@@ -220,6 +226,7 @@ Module Contents
 
 
    .. py:property:: data
+
       Returns the numpy array.
 
       :returns: The numpy array.
@@ -241,6 +248,7 @@ Module Contents
 
 
    .. py:property:: dtype
+
       Returns the data type of the array.
 
       :returns: The data type of the array.
@@ -258,6 +266,7 @@ Module Contents
 
 
    .. py:property:: num_channels
+
       Returns the number of channels in the array.
 
       :returns: The number of channels in the array.

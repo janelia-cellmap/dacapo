@@ -195,6 +195,7 @@ Package Contents
 
       :abstractmethod:
 
+
       Return a dictionary of metadata attributes stored on this array.
 
       :returns: A dictionary of metadata attributes stored on this array.
@@ -215,6 +216,7 @@ Package Contents
       :type: List[str]
 
       :abstractmethod:
+
 
       Returns the axes of this dataset as a string of charactes, as they
       are indexed. Permitted characters are:
@@ -242,6 +244,7 @@ Package Contents
 
       :abstractmethod:
 
+
       Returns the number of spatial dimensions.
 
       :returns: The number of spatial dimensions.
@@ -262,6 +265,7 @@ Package Contents
       :type: funlib.geometry.Coordinate
 
       :abstractmethod:
+
 
       The size of a voxel in physical units.
 
@@ -284,6 +288,7 @@ Package Contents
 
       :abstractmethod:
 
+
       The total ROI of this array, in world units.
 
       :returns: The total ROI of this array, in world units.
@@ -305,6 +310,7 @@ Package Contents
 
       :abstractmethod:
 
+
       The dtype of this array, in numpy dtypes
 
       :returns: The dtype of this array, in numpy dtypes.
@@ -325,6 +331,7 @@ Package Contents
       :type: Optional[int]
 
       :abstractmethod:
+
 
       The number of channels provided by this dataset.
       Should return None if the channel dimension doesn't exist.
@@ -348,6 +355,7 @@ Package Contents
 
       :abstractmethod:
 
+
       Get a numpy like readable and writable view into this array.
 
       :returns: A numpy like readable and writable view into this array.
@@ -368,6 +376,7 @@ Package Contents
       :type: bool
 
       :abstractmethod:
+
 
       Can we write to this Array?
 
@@ -460,6 +469,7 @@ Package Contents
 
 
    .. py:property:: attrs
+
       Returns the attributes of the source array
 
       :returns: The attributes of the source array
@@ -474,6 +484,7 @@ Package Contents
 
 
    .. py:property:: axes
+
       Returns the axes of the source array
 
       :returns: The axes of the source array
@@ -492,6 +503,7 @@ Package Contents
 
 
    .. py:property:: dims
+
       Returns the number of dimensions of the source array
 
       :returns: The number of dimensions of the source array
@@ -510,6 +522,7 @@ Package Contents
 
 
    .. py:property:: voxel_size
+
       Returns the voxel size of the source array
 
       :returns: The voxel size of the source array
@@ -528,6 +541,7 @@ Package Contents
 
 
    .. py:property:: roi
+
       Returns the region of interest of the source array
 
       :returns: The region of interest of the source array
@@ -548,6 +562,7 @@ Package Contents
    .. py:property:: writable
       :type: bool
 
+
       Returns whether the array is writable
 
       :returns: Whether the array is writable
@@ -564,6 +579,7 @@ Package Contents
 
 
    .. py:property:: data
+
       Returns the data of the source array
 
       :returns: The data of the source array
@@ -588,6 +604,7 @@ Package Contents
 
 
    .. py:property:: dtype
+
       Returns the data type of the array
 
       :returns: The data type of the array
@@ -606,6 +623,7 @@ Package Contents
 
 
    .. py:property:: num_channels
+
       Returns the number of channels in the source array
 
       :returns: The number of channels in the source array
@@ -835,6 +853,7 @@ Package Contents
 
 
    .. py:property:: attrs
+
       This method returns the attributes of the source array.
 
       :returns: The attributes of the source array.
@@ -850,6 +869,7 @@ Package Contents
 
 
    .. py:property:: axes
+
       This method returns the axes of the source array.
 
       :returns: The axes of the source array.
@@ -866,6 +886,7 @@ Package Contents
 
    .. py:property:: dims
       :type: int
+
 
       This method returns the dimensions of the source array.
 
@@ -884,6 +905,7 @@ Package Contents
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
+
       This method returns the voxel size of the source array.
 
       :returns: The voxel size of the source array.
@@ -900,6 +922,7 @@ Package Contents
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
+
 
       This method returns the region of interest of the source array.
 
@@ -918,6 +941,7 @@ Package Contents
    .. py:property:: writable
       :type: bool
 
+
       This method returns True if the source array is writable.
 
       :returns: True if the source array is writable.
@@ -933,6 +957,7 @@ Package Contents
 
 
    .. py:property:: dtype
+
       This method returns the data type of the source array.
 
       :returns: The data type of the source array.
@@ -950,6 +975,7 @@ Package Contents
    .. py:property:: num_channels
       :type: int
 
+
       This method returns the number of channels in the source array.
 
       :returns: The number of channels in the source array.
@@ -965,6 +991,7 @@ Package Contents
 
 
    .. py:property:: data
+
       This method returns the data of the source array.
 
       :returns: The data of the source array.
@@ -980,6 +1007,7 @@ Package Contents
 
 
    .. py:property:: channels
+
       This method returns the channel names of the source array.
 
       :returns: The channel names of the source array.
@@ -1169,6 +1197,7 @@ Package Contents
 
 
    .. py:property:: attrs
+
       Returns the attributes of the source array.
 
       :returns: The attributes of the source array
@@ -1184,6 +1213,7 @@ Package Contents
 
 
    .. py:property:: axes
+
       Returns the axes of the source array.
 
       :returns: The axes of the source array
@@ -1200,6 +1230,7 @@ Package Contents
 
    .. py:property:: dims
       :type: int
+
 
       Returns the number of dimensions of the source array.
 
@@ -1218,6 +1249,7 @@ Package Contents
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
+
       Returns the voxel size of the resampled array.
 
       :returns: The voxel size of the resampled array
@@ -1234,6 +1266,7 @@ Package Contents
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
+
 
       Returns the region of interest of the resampled array.
 
@@ -1252,6 +1285,7 @@ Package Contents
    .. py:property:: writable
       :type: bool
 
+
       Returns whether the resampled array is writable.
 
       :returns: True if the resampled array is writable, False otherwise
@@ -1267,6 +1301,7 @@ Package Contents
 
 
    .. py:property:: dtype
+
       Returns the data type of the resampled array.
 
       :returns: The data type of the resampled array
@@ -1284,6 +1319,7 @@ Package Contents
    .. py:property:: num_channels
       :type: int
 
+
       Returns the number of channels of the resampled array.
 
       :returns: The number of channels of the resampled array
@@ -1299,6 +1335,7 @@ Package Contents
 
 
    .. py:property:: data
+
       Returns the data of the resampled array.
 
       :returns: The data of the resampled array
@@ -1314,6 +1351,7 @@ Package Contents
 
 
    .. py:property:: scale
+
       Returns the scale of the resampled array.
 
       :returns: The scale of the resampled array
@@ -1426,6 +1464,7 @@ Package Contents
 
 
    .. py:property:: attrs
+
       Returns the attributes of the source array
 
       :returns: The attributes of the source array
@@ -1444,6 +1483,7 @@ Package Contents
 
 
    .. py:property:: axes
+
       Returns the axes of the source array
 
       :returns: The axes of the source array
@@ -1463,6 +1503,7 @@ Package Contents
 
    .. py:property:: dims
       :type: int
+
 
       Returns the dimensions of the source array
 
@@ -1484,6 +1525,7 @@ Package Contents
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
+
       Returns the voxel size of the source array
 
       :returns: The voxel size of the source array
@@ -1503,6 +1545,7 @@ Package Contents
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
+
 
       Returns the region of interest of the source array
 
@@ -1524,6 +1567,7 @@ Package Contents
    .. py:property:: writable
       :type: bool
 
+
       Returns whether the array is writable
 
       :returns: Whether the array is writable
@@ -1542,6 +1586,7 @@ Package Contents
 
 
    .. py:property:: dtype
+
       Returns the data type of the array
 
       :returns: The data type of the array
@@ -1562,6 +1607,7 @@ Package Contents
    .. py:property:: num_channels
       :type: int
 
+
       Returns the number of channels in the source array
 
       :returns: The number of channels in the source array
@@ -1580,6 +1626,7 @@ Package Contents
 
 
    .. py:property:: data
+
       Returns the data of the source array
 
       :returns: The data of the source array
@@ -1681,6 +1728,7 @@ Package Contents
 
 
    .. py:property:: axes
+
       Returns the axes of the source array
 
       :returns: Axes of the source array
@@ -1701,6 +1749,7 @@ Package Contents
 
    .. py:property:: dims
       :type: int
+
 
       Returns the number of dimensions of the source array
 
@@ -1723,6 +1772,7 @@ Package Contents
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
+
       Returns the voxel size of the source array
 
       :returns: Voxel size of the source array
@@ -1743,6 +1793,7 @@ Package Contents
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
+
 
       Returns the region of interest of the source array
 
@@ -1765,6 +1816,7 @@ Package Contents
    .. py:property:: writable
       :type: bool
 
+
       Returns whether the source array is writable
 
       :returns: Whether the source array is writable
@@ -1784,6 +1836,7 @@ Package Contents
 
 
    .. py:property:: dtype
+
       Returns the data type of the source array
 
       :returns: Data type of the source array
@@ -1805,6 +1858,7 @@ Package Contents
    .. py:property:: num_channels
       :type: int
 
+
       Returns the number of channels
 
       :returns: Number of channels
@@ -1824,6 +1878,7 @@ Package Contents
 
 
    .. py:property:: data
+
       Returns the data of the source array
 
       :returns: Data of the source array
@@ -1843,6 +1898,7 @@ Package Contents
 
 
    .. py:property:: attrs
+
       Returns the attributes of the source array
 
       :returns: Attributes of the source array
@@ -1862,6 +1918,7 @@ Package Contents
 
 
    .. py:property:: channels
+
       Returns the names of the channels
 
       :returns: Names of the channels
@@ -2020,6 +2077,7 @@ Package Contents
 
 
    .. py:property:: attrs
+
       Get the attributes of the array.
 
       :returns: An empty dictionary.
@@ -2043,6 +2101,7 @@ Package Contents
 
    .. py:property:: source_array
       :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
+
 
       Get the source array that this array is based on.
 
@@ -2078,6 +2137,7 @@ Package Contents
 
 
    .. py:property:: axes
+
       Get the axes of the array.
 
       :returns: The axes of the array.
@@ -2102,6 +2162,7 @@ Package Contents
 
 
    .. py:property:: dims
+
       Get the dimensions of the array.
 
       :returns: The dimensions of the array.
@@ -2126,6 +2187,7 @@ Package Contents
 
 
    .. py:property:: voxel_size
+
       Get the voxel size of the array.
 
       :returns: The voxel size of the array.
@@ -2150,6 +2212,7 @@ Package Contents
 
 
    .. py:property:: roi
+
       Get the region of interest of the array.
 
       :returns: The region of interest of the array.
@@ -2178,6 +2241,7 @@ Package Contents
    .. py:property:: writable
       :type: bool
 
+
       Check if the array is writable.
 
       :returns: False.
@@ -2202,6 +2266,7 @@ Package Contents
 
 
    .. py:property:: data
+
       Get the data of the array.
 
       :returns: The data of the array.
@@ -2235,6 +2300,7 @@ Package Contents
 
 
    .. py:property:: dtype
+
       Get the data type of the array.
 
       :returns: The data type of the array.
@@ -2260,6 +2326,7 @@ Package Contents
 
 
    .. py:property:: num_channels
+
       Get the number of channels of the array.
 
       :returns: The number of channels of the array.
@@ -2367,6 +2434,7 @@ Package Contents
    .. py:property:: source_arrays
       :type: Dict[str, dacapo.experiments.datasplits.datasets.arrays.array.Array]
 
+
       Return the source arrays of the ConcatArray.
 
       :returns: The source arrays of the ConcatArray.
@@ -2396,6 +2464,7 @@ Package Contents
 
 
    .. py:property:: attrs
+
       Return the attributes of the ConcatArray as a dictionary.
 
       :returns: The attributes of the ConcatArray.
@@ -2424,6 +2493,7 @@ Package Contents
    .. py:property:: source_array
       :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
 
+
       Return the source array of the ConcatArray.
 
       :returns: The source array of the ConcatArray.
@@ -2450,6 +2520,7 @@ Package Contents
 
 
    .. py:property:: axes
+
       Return the axes of the ConcatArray.
 
       :returns: The axes of the ConcatArray.
@@ -2476,6 +2547,7 @@ Package Contents
 
 
    .. py:property:: dims
+
       Return the dimensions of the ConcatArray.
 
       :returns: The dimensions of the ConcatArray.
@@ -2502,6 +2574,7 @@ Package Contents
 
 
    .. py:property:: voxel_size
+
       Return the voxel size of the ConcatArray.
 
       :returns: The voxel size of the ConcatArray.
@@ -2528,6 +2601,7 @@ Package Contents
 
 
    .. py:property:: roi
+
       Return the ROI of the ConcatArray.
 
       :returns: The ROI of the ConcatArray.
@@ -2556,6 +2630,7 @@ Package Contents
    .. py:property:: writable
       :type: bool
 
+
       Return whether the ConcatArray is writable.
 
       :returns: Whether the ConcatArray is writable.
@@ -2582,6 +2657,7 @@ Package Contents
 
 
    .. py:property:: data
+
       Return the data of the ConcatArray.
 
       :returns: The data of the ConcatArray.
@@ -2608,6 +2684,7 @@ Package Contents
 
 
    .. py:property:: dtype
+
       Return the data type of the ConcatArray.
 
       :returns: The data type of the ConcatArray.
@@ -2634,6 +2711,7 @@ Package Contents
 
 
    .. py:property:: num_channels
+
       Return the number of channels of the ConcatArray.
 
       :returns: The number of channels of the ConcatArray.
@@ -2808,6 +2886,7 @@ Package Contents
 
 
    .. py:property:: axes
+
       Get the axes of the array
 
       :returns: The axes of the array
@@ -2850,6 +2929,7 @@ Package Contents
 
    .. py:property:: dims
       :type: int
+
 
       Get the number of dimensions of the array
 
@@ -2894,6 +2974,7 @@ Package Contents
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
+
       Get the voxel size of the array
 
       :returns: The voxel size of the array
@@ -2936,6 +3017,7 @@ Package Contents
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
+
 
       Get the region of interest of the array
 
@@ -2980,6 +3062,7 @@ Package Contents
    .. py:property:: writable
       :type: bool
 
+
       Get whether the array is writable
 
       :returns: Whether the array is writable
@@ -3021,6 +3104,7 @@ Package Contents
 
 
    .. py:property:: dtype
+
       Get the data type of the array
 
       :returns: The data type of the array
@@ -3062,6 +3146,7 @@ Package Contents
 
 
    .. py:property:: num_channels
+
       Get the number of channels in the array
 
       :returns: The number of channels in the array
@@ -3103,6 +3188,7 @@ Package Contents
 
 
    .. py:property:: data
+
       Get the data of the array
 
       :returns: The data of the array
@@ -3150,6 +3236,7 @@ Package Contents
 
 
    .. py:property:: attrs
+
       Get the attributes of the array
 
       :returns: The attributes of the array
@@ -3314,6 +3401,7 @@ Package Contents
 
 
    .. py:property:: attrs
+
       Returns the attributes of the source array.
 
       :returns: The attributes of the source array.
@@ -3339,6 +3427,7 @@ Package Contents
 
 
    .. py:property:: axes
+
       Returns the axes of the source array.
 
       :returns: The axes of the source array.
@@ -3365,6 +3454,7 @@ Package Contents
 
    .. py:property:: dims
       :type: int
+
 
       Returns the number of dimensions of the source array.
 
@@ -3397,6 +3487,7 @@ Package Contents
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
+
       Returns the voxel size of the source array.
 
       :returns: The voxel size of the source array.
@@ -3427,6 +3518,7 @@ Package Contents
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
+
 
       Returns the region of interest of the source array.
 
@@ -3459,6 +3551,7 @@ Package Contents
    .. py:property:: writable
       :type: bool
 
+
       Returns whether the array is writable.
 
       :returns: False
@@ -3488,6 +3581,7 @@ Package Contents
 
 
    .. py:property:: dtype
+
       Returns the data type of the source array.
 
       :returns: The data type of the source array.
@@ -3515,6 +3609,7 @@ Package Contents
 
    .. py:property:: num_channels
       :type: int
+
 
       Returns the number of channels of the source array.
 
@@ -3545,6 +3640,7 @@ Package Contents
 
 
    .. py:property:: data
+
       Returns the data of the source array.
 
       :returns: The data of the source array.
@@ -3579,6 +3675,7 @@ Package Contents
 
 
    .. py:property:: channels
+
       Returns the channels of the source array.
 
       :returns: The channels of the source array.
@@ -3709,6 +3806,7 @@ Package Contents
 
 
    .. py:property:: axes
+
       Returns the axes of the array
 
       :returns: The axes of the array
@@ -3748,6 +3846,7 @@ Package Contents
 
    .. py:property:: dims
       :type: int
+
 
       Returns the number of dimensions of the array
 
@@ -3789,6 +3888,7 @@ Package Contents
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
+
       Returns the voxel size of the array
 
       :returns: The voxel size of the array
@@ -3828,6 +3928,7 @@ Package Contents
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
+
 
       Returns the region of interest of the array
 
@@ -3869,6 +3970,7 @@ Package Contents
    .. py:property:: writable
       :type: bool
 
+
       Returns True if the array is writable, False otherwise
 
       :returns: True if the array is writable, False otherwise
@@ -3907,6 +4009,7 @@ Package Contents
 
 
    .. py:property:: dtype
+
       Returns the data type of the array
 
       :returns: The data type of the array
@@ -3945,6 +4048,7 @@ Package Contents
 
 
    .. py:property:: num_channels
+
       Returns the number of channels of the array
 
       :returns: The number of channels of the array
@@ -3983,6 +4087,7 @@ Package Contents
 
 
    .. py:property:: data
+
       Returns the data of the array
 
       :returns: The data of the array
@@ -4021,6 +4126,7 @@ Package Contents
 
 
    .. py:property:: attrs
+
       Returns the attributes of the array
 
       :returns: The attributes of the array
@@ -4149,6 +4255,7 @@ Package Contents
 
 
    .. py:property:: axes
+
       Returns the axes of the DVID array
 
       :returns: The axes of the DVID array
@@ -4168,6 +4275,7 @@ Package Contents
 
    .. py:property:: dims
       :type: int
+
 
       Returns the dimensions of the DVID array
 
@@ -4229,6 +4337,7 @@ Package Contents
    .. py:property:: writable
       :type: bool
 
+
       Returns whether the DVID array is writable
 
       :returns: Whether the DVID array is writable
@@ -4248,6 +4357,7 @@ Package Contents
 
    .. py:property:: dtype
       :type: Any
+
 
       Returns the data type of the DVID array
 
@@ -4269,6 +4379,7 @@ Package Contents
    .. py:property:: num_channels
       :type: Optional[int]
 
+
       Returns the number of channels of the DVID array
 
       :returns: The number of channels of the DVID array
@@ -4288,6 +4399,7 @@ Package Contents
 
    .. py:property:: spatial_axes
       :type: List[str]
+
 
       Returns the spatial axes of the DVID array
 
@@ -4310,6 +4422,7 @@ Package Contents
       :type: Any
 
       :abstractmethod:
+
 
       Returns the number of channels of the DVID array
 
@@ -4454,6 +4567,7 @@ Package Contents
 
 
    .. py:property:: axes
+
       The axes of the array.
 
       :returns: The axes of the array.
@@ -4471,6 +4585,7 @@ Package Contents
 
    .. py:property:: dims
       :type: int
+
 
       The number of dimensions of the array.
 
@@ -4490,6 +4605,7 @@ Package Contents
    .. py:property:: voxel_size
       :type: funlib.geometry.Coordinate
 
+
       The size of each voxel in each dimension.
 
       :returns: The size of each voxel in each dimension.
@@ -4507,6 +4623,7 @@ Package Contents
 
    .. py:property:: roi
       :type: funlib.geometry.Roi
+
 
       The region of interest of the array.
 
@@ -4529,6 +4646,7 @@ Package Contents
    .. py:property:: writable
       :type: bool
 
+
       Check if the array is writable.
 
       :param writable: bool
@@ -4548,6 +4666,7 @@ Package Contents
 
 
    .. py:property:: dtype
+
       The data type of the array.
 
       :param dtype: np.uint8
@@ -4567,6 +4686,7 @@ Package Contents
 
 
    .. py:property:: num_channels
+
       The number of channels in the array.
 
       :param num_channels: Optional[int]
@@ -4586,6 +4706,7 @@ Package Contents
 
 
    .. py:property:: data
+
       Get the data of the array.
 
       :param data: np.ndarray
@@ -4605,6 +4726,7 @@ Package Contents
 
 
    .. py:property:: attrs
+
       Return the attributes of the array.
 
       :param attrs: Dict
@@ -4683,6 +4805,7 @@ Package Contents
 
 
    .. py:property:: attrs
+
       Returns the attributes of the array.
 
       :returns: The attributes of the array.
@@ -4767,6 +4890,7 @@ Package Contents
 
 
    .. py:property:: axes
+
       Returns the axes of the array.
 
       :returns: The axes of the array.
@@ -4784,6 +4908,7 @@ Package Contents
 
 
    .. py:property:: dims
+
       Returns the number of dimensions of the array.
 
       :returns: The number of dimensions of the array.
@@ -4801,6 +4926,7 @@ Package Contents
 
 
    .. py:property:: voxel_size
+
       Returns the voxel size of the array.
 
       :returns: The voxel size of the array.
@@ -4816,6 +4942,7 @@ Package Contents
 
 
    .. py:property:: roi
+
       Returns the region of interest of the array.
 
       :returns: The region of interest of the array.
@@ -4832,6 +4959,7 @@ Package Contents
 
    .. py:property:: writable
       :type: bool
+
 
       Returns whether the array is writable.
 
@@ -4850,6 +4978,7 @@ Package Contents
 
 
    .. py:property:: data
+
       Returns the numpy array.
 
       :returns: The numpy array.
@@ -4871,6 +5000,7 @@ Package Contents
 
 
    .. py:property:: dtype
+
       Returns the data type of the array.
 
       :returns: The data type of the array.
@@ -4888,6 +5018,7 @@ Package Contents
 
 
    .. py:property:: num_channels
+
       Returns the number of channels in the array.
 
       :returns: The number of channels in the array.
@@ -5014,6 +5145,7 @@ Package Contents
 
 
    .. py:property:: attrs
+
       Get the attributes of the array.
 
       :returns: An empty dictionary.
@@ -5037,6 +5169,7 @@ Package Contents
 
    .. py:property:: source_array
       :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
+
 
       Get the source array that this array is based on.
 
@@ -5072,6 +5205,7 @@ Package Contents
 
 
    .. py:property:: axes
+
       Get the axes of the array.
 
       :returns: The axes of the array.
@@ -5096,6 +5230,7 @@ Package Contents
 
 
    .. py:property:: dims
+
       Get the dimensions of the array.
 
       :returns: The dimensions of the array.
@@ -5120,6 +5255,7 @@ Package Contents
 
 
    .. py:property:: voxel_size
+
       Get the voxel size of the array.
 
       :returns: The voxel size of the array.
@@ -5144,6 +5280,7 @@ Package Contents
 
 
    .. py:property:: roi
+
       Get the region of interest of the array.
 
       :returns: The region of interest of the array.
@@ -5172,6 +5309,7 @@ Package Contents
    .. py:property:: writable
       :type: bool
 
+
       Check if the array is writable.
 
       :returns: False.
@@ -5196,6 +5334,7 @@ Package Contents
 
 
    .. py:property:: data
+
       Get the data of the array.
 
       :returns: The data of the array.
@@ -5229,6 +5368,7 @@ Package Contents
 
 
    .. py:property:: dtype
+
       Get the data type of the array.
 
       :returns: The data type of the array.
@@ -5254,6 +5394,7 @@ Package Contents
 
 
    .. py:property:: num_channels
+
       Get the number of channels of the array.
 
       :returns: The number of channels of the array.

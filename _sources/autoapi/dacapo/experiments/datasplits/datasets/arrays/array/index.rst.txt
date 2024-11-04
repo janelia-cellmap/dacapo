@@ -125,6 +125,7 @@ Module Contents
 
       :abstractmethod:
 
+
       Return a dictionary of metadata attributes stored on this array.
 
       :returns: A dictionary of metadata attributes stored on this array.
@@ -145,6 +146,7 @@ Module Contents
       :type: List[str]
 
       :abstractmethod:
+
 
       Returns the axes of this dataset as a string of charactes, as they
       are indexed. Permitted characters are:
@@ -172,6 +174,7 @@ Module Contents
 
       :abstractmethod:
 
+
       Returns the number of spatial dimensions.
 
       :returns: The number of spatial dimensions.
@@ -192,6 +195,7 @@ Module Contents
       :type: funlib.geometry.Coordinate
 
       :abstractmethod:
+
 
       The size of a voxel in physical units.
 
@@ -214,6 +218,7 @@ Module Contents
 
       :abstractmethod:
 
+
       The total ROI of this array, in world units.
 
       :returns: The total ROI of this array, in world units.
@@ -235,6 +240,7 @@ Module Contents
 
       :abstractmethod:
 
+
       The dtype of this array, in numpy dtypes
 
       :returns: The dtype of this array, in numpy dtypes.
@@ -255,6 +261,7 @@ Module Contents
       :type: Optional[int]
 
       :abstractmethod:
+
 
       The number of channels provided by this dataset.
       Should return None if the channel dimension doesn't exist.
@@ -278,6 +285,7 @@ Module Contents
 
       :abstractmethod:
 
+
       Get a numpy like readable and writable view into this array.
 
       :returns: A numpy like readable and writable view into this array.
@@ -298,6 +306,7 @@ Module Contents
       :type: bool
 
       :abstractmethod:
+
 
       Can we write to this Array?
 

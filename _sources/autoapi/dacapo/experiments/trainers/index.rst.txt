@@ -4,16 +4,6 @@ dacapo.experiments.trainers
 .. py:module:: dacapo.experiments.trainers
 
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 1
-
-   /autoapi/dacapo/experiments/trainers/gp_augments/index
-   /autoapi/dacapo/experiments/trainers/optimizers/index
-
-
 Submodules
 ----------
 
@@ -22,8 +12,10 @@ Submodules
 
    /autoapi/dacapo/experiments/trainers/dummy_trainer/index
    /autoapi/dacapo/experiments/trainers/dummy_trainer_config/index
+   /autoapi/dacapo/experiments/trainers/gp_augments/index
    /autoapi/dacapo/experiments/trainers/gunpowder_trainer/index
    /autoapi/dacapo/experiments/trainers/gunpowder_trainer_config/index
+   /autoapi/dacapo/experiments/trainers/optimizers/index
    /autoapi/dacapo/experiments/trainers/trainer/index
    /autoapi/dacapo/experiments/trainers/trainer_config/index
 

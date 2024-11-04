@@ -80,6 +80,7 @@ Module Contents
    .. py:property:: source_arrays
       :type: Dict[str, dacapo.experiments.datasplits.datasets.arrays.array.Array]
 
+
       Return the source arrays of the ConcatArray.
 
       :returns: The source arrays of the ConcatArray.
@@ -109,6 +110,7 @@ Module Contents
 
 
    .. py:property:: attrs
+
       Return the attributes of the ConcatArray as a dictionary.
 
       :returns: The attributes of the ConcatArray.
@@ -137,6 +139,7 @@ Module Contents
    .. py:property:: source_array
       :type: dacapo.experiments.datasplits.datasets.arrays.array.Array
 
+
       Return the source array of the ConcatArray.
 
       :returns: The source array of the ConcatArray.
@@ -163,6 +166,7 @@ Module Contents
 
 
    .. py:property:: axes
+
       Return the axes of the ConcatArray.
 
       :returns: The axes of the ConcatArray.
@@ -189,6 +193,7 @@ Module Contents
 
 
    .. py:property:: dims
+
       Return the dimensions of the ConcatArray.
 
       :returns: The dimensions of the ConcatArray.
@@ -215,6 +220,7 @@ Module Contents
 
 
    .. py:property:: voxel_size
+
       Return the voxel size of the ConcatArray.
 
       :returns: The voxel size of the ConcatArray.
@@ -241,6 +247,7 @@ Module Contents
 
 
    .. py:property:: roi
+
       Return the ROI of the ConcatArray.
 
       :returns: The ROI of the ConcatArray.
@@ -269,6 +276,7 @@ Module Contents
    .. py:property:: writable
       :type: bool
 
+
       Return whether the ConcatArray is writable.
 
       :returns: Whether the ConcatArray is writable.
@@ -295,6 +303,7 @@ Module Contents
 
 
    .. py:property:: data
+
       Return the data of the ConcatArray.
 
       :returns: The data of the ConcatArray.
@@ -321,6 +330,7 @@ Module Contents
 
 
    .. py:property:: dtype
+
       Return the data type of the ConcatArray.
 
       :returns: The data type of the ConcatArray.
@@ -347,6 +357,7 @@ Module Contents
 
 
    .. py:property:: num_channels
+
       Return the number of channels of the ConcatArray.
 
       :returns: The number of channels of the ConcatArray.

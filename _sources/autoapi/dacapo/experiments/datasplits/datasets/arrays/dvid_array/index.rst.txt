@@ -89,6 +89,7 @@ Module Contents
 
 
    .. py:property:: axes
+
       Returns the axes of the DVID array
 
       :returns: The axes of the DVID array
@@ -108,6 +109,7 @@ Module Contents
 
    .. py:property:: dims
       :type: int
+
 
       Returns the dimensions of the DVID array
 
@@ -169,6 +171,7 @@ Module Contents
    .. py:property:: writable
       :type: bool
 
+
       Returns whether the DVID array is writable
 
       :returns: Whether the DVID array is writable
@@ -188,6 +191,7 @@ Module Contents
 
    .. py:property:: dtype
       :type: Any
+
 
       Returns the data type of the DVID array
 
@@ -209,6 +213,7 @@ Module Contents
    .. py:property:: num_channels
       :type: Optional[int]
 
+
       Returns the number of channels of the DVID array
 
       :returns: The number of channels of the DVID array
@@ -228,6 +233,7 @@ Module Contents
 
    .. py:property:: spatial_axes
       :type: List[str]
+
 
       Returns the spatial axes of the DVID array
 
@@ -250,6 +256,7 @@ Module Contents
       :type: Any
 
       :abstractmethod:
+
 
       Returns the number of channels of the DVID array
 

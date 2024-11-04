@@ -85,6 +85,7 @@ Module Contents
 
 
    .. py:property:: voi
+
       Return the average of the VOI split and VOI merge.
 
       :returns:

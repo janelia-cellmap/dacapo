@@ -55,17 +55,23 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../aws.html">AWS EC2 Setup Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../index.html">dacapo</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../../apply/index.html">dacapo.apply</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../blockwise/index.html">dacapo.blockwise</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../compute_context/index.html">dacapo.compute_context</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="../../index.html">dacapo.experiments</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../ext/index.html">dacapo.ext</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../gp/index.html">dacapo.gp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../options/index.html">dacapo.options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../plot/index.html">dacapo.plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../predict/index.html">dacapo.predict</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../predict_local/index.html">dacapo.predict_local</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../store/index.html">dacapo.store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../train/index.html">dacapo.train</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../utils/index.html">dacapo.utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../validate/index.html">dacapo.validate</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../../../index.html#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../index.html#classes">Classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../index.html#functions">Functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../index.html#package-contents">Package Contents</a></li>
@@ -389,9 +395,8 @@ U-Net architecture.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.eval_shape_increase">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eval_shape_increase</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.eval_shape_increase" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">The</span> <span class="pre">increase</span> <span class="pre">in</span> <span class="pre">shape</span> <span class="pre">due</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">U-Net.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>The increase in shape due to the U-Net.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The increase in shape due to the U-Net.</p>
 </dd>
@@ -488,9 +493,8 @@ U-Net architecture.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.input_shape">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">input_shape</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNet.input_shape" title="Link to this definition"></a></dt>
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Return</span> <span class="pre">the</span> <span class="pre">input</span> <span class="pre">shape</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">U-Net.</span></span></dt>
-<dd><dl class="field-list simple">
+<dd><p>Return the input shape of the U-Net.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The input shape of the U-Net.</p>
 </dd>
@@ -755,17 +759,12 @@ will be use (and returned) from there on.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id15">
-<span class="sig-name descname"><span class="pre">upsample_channel_contraction</span></span><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id16">
-<span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id17">
-<span class="sig-name descname"><span class="pre">use_attention</span></span><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">use_attention</span></span><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -774,48 +773,38 @@ will be use (and returned) from there on.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="id17">
+<span class="sig-name descname"><span class="pre">kernel_size_down</span></span><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="id18">
-<span class="sig-name descname"><span class="pre">kernel_size_down</span></span><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">kernel_size_up</span></span><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id19">
-<span class="sig-name descname"><span class="pre">kernel_size_up</span></span><a class="headerlink" href="#id19" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.crop_factors">
-<span class="sig-name descname"><span class="pre">crop_factors</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.crop_factors" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.factor_product">
-<span class="sig-name descname"><span class="pre">factor_product</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.CNNectomeUNetModule.factor_product" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">l_conv</span></span><a class="headerlink" href="#id19" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id20">
-<span class="sig-name descname"><span class="pre">l_conv</span></span><a class="headerlink" href="#id20" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">l_down</span></span><a class="headerlink" href="#id20" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id21">
-<span class="sig-name descname"><span class="pre">l_down</span></span><a class="headerlink" href="#id21" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">r_up</span></span><a class="headerlink" href="#id21" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id22">
-<span class="sig-name descname"><span class="pre">r_up</span></span><a class="headerlink" href="#id22" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id23">
-<span class="sig-name descname"><span class="pre">r_conv</span></span><a class="headerlink" href="#id23" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">r_conv</span></span><a class="headerlink" href="#id22" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id24">
-<span class="sig-name descname"><span class="pre">rec_forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_in</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id24" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id23">
+<span class="sig-name descname"><span class="pre">rec_forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_in</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id23" title="Link to this definition"></a></dt>
 <dd><p>Recursive forward pass of the U-Net.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -857,8 +846,8 @@ will be use (and returned) from there on.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id25">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id25" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id24">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id24" title="Link to this definition"></a></dt>
 <dd><p>Forward pass of the U-Net.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -928,18 +917,13 @@ feature maps to ensure translation equivariance. The module can perform
 <p>The input tensor should be given as a 5D tensor.</p>
 </div>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.ConvPass.layers">
-<span class="sig-name descname"><span class="pre">layers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.ConvPass.layers" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id26">
-<span class="sig-name descname"><span class="pre">conv_pass</span></span><a class="headerlink" href="#id26" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id25">
+<span class="sig-name descname"><span class="pre">conv_pass</span></span><a class="headerlink" href="#id25" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id27">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id27" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id26">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id26" title="Link to this definition"></a></dt>
 <dd><p>Forward pass of the ConvPass module.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1002,28 +986,23 @@ downsampling factor.</p>
 <p>The input tensor should be given as a 5D tensor.</p>
 </div>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="id27">
+<span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#id27" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="id28">
-<span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">downsample_factor</span></span><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id29">
-<span class="sig-name descname"><span class="pre">downsample_factor</span></span><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.Downsample.pool">
-<span class="sig-name descname"><span class="pre">pool</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.Downsample.pool" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id30">
-<span class="sig-name descname"><span class="pre">down</span></span><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">down</span></span><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id31">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id30">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id30" title="Link to this definition"></a></dt>
 <dd><p>Downsample the input tensor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1105,28 +1084,23 @@ upsampling factor.</p>
 <p>The input tensor should be given as a 5D tensor.</p>
 </div>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="id31">
+<span class="sig-name descname"><span class="pre">crop_factor</span></span><a class="headerlink" href="#id31" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="id32">
-<span class="sig-name descname"><span class="pre">crop_factor</span></span><a class="headerlink" href="#id32" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">next_conv_kernel_sizes</span></span><a class="headerlink" href="#id32" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id33">
-<span class="sig-name descname"><span class="pre">next_conv_kernel_sizes</span></span><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="id34">
-<span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.Upsample.layers">
-<span class="sig-name descname"><span class="pre">layers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.Upsample.layers" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">dims</span></span><a class="headerlink" href="#id33" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id35">
-<span class="sig-name descname"><span class="pre">crop_to_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_sizes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id34">
+<span class="sig-name descname"><span class="pre">crop_to_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_sizes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id34" title="Link to this definition"></a></dt>
 <dd><p>Crop feature maps to ensure translation equivariance with stride of
 upsampling factor. This should be done right after upsampling, before
 application of the convolutions with the given kernel sizes.</p>
@@ -1175,8 +1149,8 @@ and k is the upsampling factor.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id36">
-<span class="sig-name descname"><span class="pre">crop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id36" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id35">
+<span class="sig-name descname"><span class="pre">crop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id35" title="Link to this definition"></a></dt>
 <dd><p>Center-crop x to match spatial dimensions given by shape.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1205,8 +1179,8 @@ and k is the upsampling factor.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id37">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id37" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id36">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id36" title="Link to this definition"></a></dt>
 <dd><p>Forward pass of the Upsample module.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1325,11 +1299,6 @@ that focuses on important features as dictated by the gating signal ‘g’.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.AttentionBlockModule.psi">
 <span class="sig-name descname"><span class="pre">psi</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.AttentionBlockModule.psi" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.architectures.cnnectome_unet.AttentionBlockModule.up_mode">
-<span class="sig-name descname"><span class="pre">up_mode</span></span><a class="headerlink" href="#dacapo.experiments.architectures.cnnectome_unet.AttentionBlockModule.up_mode" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">

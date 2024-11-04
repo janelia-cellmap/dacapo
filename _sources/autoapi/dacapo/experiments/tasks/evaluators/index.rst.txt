@@ -254,6 +254,7 @@ Package Contents
    .. py:property:: score
       :type: dacapo.experiments.tasks.evaluators.dummy_evaluation_scores.DummyEvaluationScores
 
+
       Return the evaluation scores.
 
       :returns: An object of DummyEvaluationScores class, with the evaluation scores.
@@ -301,6 +302,7 @@ Package Contents
       :type: List[str]
 
       :abstractmethod:
+
 
       The evaluation criteria.
 
@@ -504,6 +506,7 @@ Package Contents
    .. py:property:: best_scores
       :type: Dict[OutputIdentifier, BestScore]
 
+
       The best scores for each dataset/post-processing parameter/criterion combination.
 
       :returns:
@@ -671,6 +674,7 @@ Package Contents
 
       :abstractmethod:
 
+
       A list of all criteria for which a model might be "best". i.e. your
       criteria might be "precision", "recall", and "jaccard". It is unlikely
       that the best iteration/post processing parameters will be the same
@@ -772,6 +776,7 @@ Package Contents
 
       :abstractmethod:
 
+
       The evaluation scores.
 
       :returns:
@@ -824,6 +829,7 @@ Package Contents
 
 
    .. py:property:: criteria
+
       Returns a list of all criteria for all channels.
 
       :returns: The list of criteria.
@@ -1409,6 +1415,7 @@ Package Contents
 
 
    .. py:property:: score
+
       Return the evaluation scores.
 
       :returns:
@@ -1497,6 +1504,7 @@ Package Contents
 
 
    .. py:property:: voi
+
       Return the average of the VOI split and VOI merge.
 
       :returns:
@@ -1670,6 +1678,7 @@ Package Contents
 
    .. py:property:: score
       :type: dacapo.experiments.tasks.evaluators.instance_evaluation_scores.InstanceEvaluationScores
+
 
       Return the evaluation scores.
 

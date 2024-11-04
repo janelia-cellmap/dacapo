@@ -4,18 +4,6 @@ dacapo.experiments.tasks
 .. py:module:: dacapo.experiments.tasks
 
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 1
-
-   /autoapi/dacapo/experiments/tasks/evaluators/index
-   /autoapi/dacapo/experiments/tasks/losses/index
-   /autoapi/dacapo/experiments/tasks/post_processors/index
-   /autoapi/dacapo/experiments/tasks/predictors/index
-
-
 Submodules
 ----------
 
@@ -28,12 +16,16 @@ Submodules
    /autoapi/dacapo/experiments/tasks/distance_task_config/index
    /autoapi/dacapo/experiments/tasks/dummy_task/index
    /autoapi/dacapo/experiments/tasks/dummy_task_config/index
+   /autoapi/dacapo/experiments/tasks/evaluators/index
    /autoapi/dacapo/experiments/tasks/hot_distance_task/index
    /autoapi/dacapo/experiments/tasks/hot_distance_task_config/index
    /autoapi/dacapo/experiments/tasks/inner_distance_task/index
    /autoapi/dacapo/experiments/tasks/inner_distance_task_config/index
+   /autoapi/dacapo/experiments/tasks/losses/index
    /autoapi/dacapo/experiments/tasks/one_hot_task/index
    /autoapi/dacapo/experiments/tasks/one_hot_task_config/index
+   /autoapi/dacapo/experiments/tasks/post_processors/index
+   /autoapi/dacapo/experiments/tasks/predictors/index
    /autoapi/dacapo/experiments/tasks/pretrained_task/index
    /autoapi/dacapo/experiments/tasks/pretrained_task_config/index
    /autoapi/dacapo/experiments/tasks/task/index
@@ -515,9 +507,6 @@ Package Contents
    .. rubric:: Notes
 
    This is a base class for all tasks that use pretrained models.
-
-
-   .. py:attribute:: sub_task
 
 
    .. py:attribute:: weights

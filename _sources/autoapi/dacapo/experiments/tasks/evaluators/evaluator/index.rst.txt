@@ -130,6 +130,7 @@ Module Contents
    .. py:property:: best_scores
       :type: Dict[OutputIdentifier, BestScore]
 
+
       The best scores for each dataset/post-processing parameter/criterion combination.
 
       :returns:
@@ -297,6 +298,7 @@ Module Contents
 
       :abstractmethod:
 
+
       A list of all criteria for which a model might be "best". i.e. your
       criteria might be "precision", "recall", and "jaccard". It is unlikely
       that the best iteration/post processing parameters will be the same
@@ -397,6 +399,7 @@ Module Contents
       :type: dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
 
       :abstractmethod:
+
 
       The evaluation scores.
 

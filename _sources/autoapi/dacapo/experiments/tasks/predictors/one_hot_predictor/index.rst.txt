@@ -70,6 +70,7 @@ Module Contents
 
 
    .. py:property:: embedding_dims
+
       Get the number of embedding dimensions.
 
       :returns: The number of embedding dimensions.
@@ -137,6 +138,7 @@ Module Contents
 
 
    .. py:property:: output_array_type
+
       Get the output array type.
 
       :returns: The output array type.

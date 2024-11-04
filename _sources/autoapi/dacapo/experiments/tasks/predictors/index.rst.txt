@@ -131,6 +131,7 @@ Package Contents
 
 
    .. py:property:: output_array_type
+
       Gets the output array type.
 
       :returns: The output array type.
@@ -268,6 +269,7 @@ Package Contents
 
 
    .. py:property:: embedding_dims
+
       Get the number of embedding dimensions.
 
       :returns: The number of embedding dimensions.
@@ -335,6 +337,7 @@ Package Contents
 
 
    .. py:property:: output_array_type
+
       Get the output array type.
 
       :returns: The output array type.
@@ -475,6 +478,7 @@ Package Contents
 
 
    .. py:property:: embedding_dims
+
       Get the number of embedding dimensions.
 
       :returns: The number of embedding dimensions.
@@ -542,6 +546,7 @@ Package Contents
 
 
    .. py:property:: output_array_type
+
       Get the output array type.
 
       :returns: The output array type.
@@ -909,6 +914,7 @@ Package Contents
 
 
    .. py:property:: dims
+
       Get the number of dimensions.
 
       :returns: The number of dimensions.
@@ -958,6 +964,7 @@ Package Contents
 
 
    .. py:property:: num_channels
+
       Get the number of channels.
 
       :returns: The number of channels.
@@ -1037,6 +1044,7 @@ Package Contents
 
 
    .. py:property:: output_array_type
+
       Get the output array type.
 
       :returns: The output array type.
@@ -1144,6 +1152,7 @@ Package Contents
 
 
    .. py:property:: embedding_dims
+
       Get the number of embedding dimensions.
 
       :returns: The number of embedding dimensions.
@@ -1207,6 +1216,7 @@ Package Contents
 
 
    .. py:property:: output_array_type
+
       Get the output array type.
 
       :returns: The DistanceArray.
@@ -1379,6 +1389,7 @@ Package Contents
 
 
    .. py:property:: embedding_dims
+
       Get the number of embedding dimensions.
 
       :returns: The number of embedding dimensions.
@@ -1392,6 +1403,7 @@ Package Contents
 
 
    .. py:property:: classes
+
       Get the number of classes.
 
       :returns: The number of classes.
@@ -1460,6 +1472,7 @@ Package Contents
 
 
    .. py:property:: output_array_type
+
       Get the output array type.
 
       :returns: The output array type.

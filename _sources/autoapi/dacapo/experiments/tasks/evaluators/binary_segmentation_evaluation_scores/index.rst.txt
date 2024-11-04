@@ -407,6 +407,7 @@ Module Contents
 
 
    .. py:property:: criteria
+
       Returns a list of all criteria for all channels.
 
       :returns: The list of criteria.
