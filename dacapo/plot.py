@@ -426,21 +426,18 @@ def plot_runs(
                 criteria=run.validation_score_name
             )
             colors_val = itertools.cycle(plt.cm.tab20.colors)
-            for dataset, color_v in zip(run.validation_scores.datasets, colors_val):
+            for dataset in run.validation_scores.datasets:
                 dataset_data = validation_score_data.sel(datasets=dataset)
                 include_validation_figure = True
                 x = [score.iteration for score in run.validation_scores.scores]
-                cc = next(colors_val)
-                for i in range(dataset_data.data.shape[1]):
-                    current_name = (
-                        f"{i}_{dataset.name}_{name}_{run.validation_score_name}"
-                    )
+                for i, cc in zip(range(dataset_data.data.shape[1]), colors_val):
+                    current_name = f"{i}_{dataset.name}"
                     validation_ax.plot(
                         x,
                         dataset_data.data[:, i],
                         label=current_name,
                         color=cc,
-                        alpha=0.5 + 0.2 * i,
+                        # alpha=0.5 + 0.2 * i,
                     )
 
     if include_loss_figure:

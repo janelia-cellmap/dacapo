@@ -8,6 +8,7 @@ import zarr
 from zarr.n5 import N5FSStore
 import numpy as np
 from dacapo.experiments.datasplits.datasets.arrays import (
+    ArrayConfig,
     ZarrArrayConfig,
     ZarrArray,
     ResampledArrayConfig,
@@ -916,8 +917,8 @@ class DataSplitGenerator:
             current_targets = self.targets
             targets_str = "_".join(self.targets)
 
-        target_images = {}
-        target_masks = {}
+        target_images = dict[str, ArrayConfig]()
+        target_masks = dict[str, ArrayConfig]()
 
         missing_classes = [c for c in current_targets if c not in classes]
         found_classes = [c for c in current_targets if c in classes]

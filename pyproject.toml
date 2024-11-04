@@ -58,6 +58,7 @@ dependencies = [
         "scipy",
         "upath",
         "boto3",
+        "matplotlib",
         ]
 
 # extras
@@ -78,6 +79,7 @@ docs = [
     "sphinx-click",
     "sphinx-rtd-theme",
     "myst-parser",
+    "pooch",
 ]
 examples = [
     "ipython",

@@ -35,6 +35,12 @@ class IntensityAugmentConfig(AugmentConfig):
             "help_text": "Set to False if modified values should not be clipped to [0, 1]"
         },
     )
+    augmentation_probability: float = attr.ib(
+        default=1.,
+        metadata={
+            "help_text": "Probability of applying the augmentation."
+        },
+    )
 
     def node(self, raw_key: gp.ArrayKey, _gt_key=None, _mask_key=None):
         """
@@ -58,4 +64,5 @@ class IntensityAugmentConfig(AugmentConfig):
             shift_min=self.shift[0],
             shift_max=self.shift[1],
             clip=self.clip,
+            p=self.augmentation_probability,
         )

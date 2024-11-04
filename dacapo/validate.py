@@ -1,4 +1,4 @@
-from .predict_crop import predict
+from .predict_local import predict
 
 from .experiments import Run, ValidationIterationScores
 from .experiments.datasplits.datasets.arrays import ZarrArray
@@ -84,6 +84,10 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
     if datasets_config is None:
         datasets = run.datasplit.validate
     else:
+        if not hasattr(run.task.evaluator, "channels"):
+            raise ValueError(
+                f"Evaluator must have a channels attribute to validate with custom datasets, evaluator: {run.task.evaluator} is not supported yet."
+            )
         from dacapo.experiments.datasplits import DataSplitGenerator
 
         datasplit_config = (

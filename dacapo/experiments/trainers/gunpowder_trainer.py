@@ -297,7 +297,7 @@ class GunpowderTrainer(Trainer):
         """
         t_start_fetch = time.time()
 
-        print("Starting iteration!")
+        logger.debug("Starting iteration!")
 
         for iteration in range(self.iteration, self.iteration + num_iterations):
             raw, gt, target, weight, mask = self.next()
@@ -309,12 +309,12 @@ class GunpowderTrainer(Trainer):
                 param.grad = None
 
             t_start_prediction = time.time()
-            predicted = model.forward(torch.as_tensor(raw[raw.roi]).to(device).float())
+            predicted = model.forward(torch.as_tensor(raw[raw.roi]).float().to(device))
             predicted.retain_grad()
             loss = self._loss.compute(
                 predicted,
-                torch.as_tensor(target[target.roi]).to(device).float(),
-                torch.as_tensor(weight[weight.roi]).to(device).float(),
+                torch.as_tensor(target[target.roi]).float().to(device),
+                torch.as_tensor(weight[weight.roi]).float().to(device),
             )
             loss.backward()
             optimizer.step()

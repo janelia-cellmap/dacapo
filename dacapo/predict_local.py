@@ -25,7 +25,7 @@ def predict(
     # get the model's input and output size
     if isinstance(raw_array_identifier, LocalArrayIdentifier):
         raw_array = open_ds(
-            raw_array_identifier.container.path, raw_array_identifier.dataset
+            str(raw_array_identifier.container), raw_array_identifier.dataset
         )
     else:
         raw_array = raw_array_identifier
@@ -57,7 +57,7 @@ def predict(
         output_roi,
         num_channels,
         output_voxel_size,
-        np.uint8,
+        np.float32,
     )
 
     logger.info("Total input ROI: %s, output ROI: %s", input_size, output_roi)
@@ -82,9 +82,6 @@ def predict(
                 .cpu()
                 .numpy()[0]
             )
-            predictions = (predictions + 1) * 255.0 / 2.0
-            predictions[predictions > 254] = 0
-            predictions = np.round(predictions).astype(np.uint8)
 
             save_ndarray(predictions, block.write_roi, result_dataset)
             # result_dataset[block.write_roi] = predictions

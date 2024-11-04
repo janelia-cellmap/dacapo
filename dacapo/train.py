@@ -6,7 +6,7 @@ from dacapo.store.create_store import (
     create_weights_store,
 )
 from dacapo.experiments import Run
-from dacapo.validate import validate_run
+from dacapo.validate import validate_run, validate
 
 import torch
 from tqdm import tqdm
@@ -135,6 +135,7 @@ def train_run(run: Run, do_validate=True):
     compute_context = create_compute_context()
     run.model = run.model.to(compute_context.device)
     run.move_optimizer(compute_context.device)
+    logger.info(f"Training on {compute_context.device}")
 
     array_store = create_array_store()
     run.trainer.iteration = trained_until
@@ -146,23 +147,26 @@ def train_run(run: Run, do_validate=True):
     )
 
     with run.trainer as trainer:
+        bar = None
         while trained_until < run.train_until:
             # train for at most 100 iterations at a time, then store training stats
             iterations = min(100, run.train_until - trained_until)
             iteration_stats = None
-            bar = tqdm(
-                trainer.iterate(
-                    iterations,
-                    run.model,
-                    run.optimizer,
-                    compute_context.device,
-                ),
-                desc=f"training until {iterations + trained_until}",
-                total=run.train_until,
-                initial=trained_until,
-            )
-            for iteration_stats in bar:
+            if bar is None:
+                bar = tqdm(
+                    total=run.train_until,
+                    initial=trained_until,
+                    desc=f"training until {run.train_until}",
+                )
+
+            for iteration_stats in trainer.iterate(
+                iterations,
+                run.model,
+                run.optimizer,
+                compute_context.device,
+            ):
                 run.training_stats.add_iteration_stats(iteration_stats)
+                bar.update(1)
                 bar.set_postfix({"loss": iteration_stats.loss})
 
                 if (iteration_stats.iteration + 1) % run.validation_interval == 0:
