@@ -9,8 +9,6 @@ from typing import Tuple
 
 @attr.s
 class IntensityAugmentConfig(AugmentConfig):
-    
-
     scale: Tuple[float, float] = attr.ib(
         metadata={"help_text": "A range within which to choose a random scale factor."}
     )
@@ -27,7 +25,6 @@ class IntensityAugmentConfig(AugmentConfig):
     )
 
     def node(self, raw_key: gp.ArrayKey, _gt_key=None, _mask_key=None):
-        
         return gp.IntensityAugment(
             raw_key,
             scale_min=self.scale[0],

@@ -5,8 +5,6 @@ from typing import Optional
 
 
 class Loss(ABC):
-    
-
     @abstractmethod
     def compute(
         self,
@@ -14,5 +12,4 @@ class Loss(ABC):
         target: torch.Tensor,
         weight: Optional[torch.Tensor] = None,
     ) -> torch.Tensor:
-        
         pass

@@ -8,8 +8,6 @@ from funlib.geometry import Coordinate
 
 @attr.s
 class ResampledArrayConfig(ArrayConfig):
-    
-
     array_type = ResampledArray
 
     source_array_config: ArrayConfig = attr.ib(

@@ -8,8 +8,6 @@ from upath import UPath as Path
 
 @attr.s
 class PretrainedTaskConfig(TaskConfig):
-    
-
     task_type = PretrainedTask
 
     sub_task_config: TaskConfig = attr.ib(

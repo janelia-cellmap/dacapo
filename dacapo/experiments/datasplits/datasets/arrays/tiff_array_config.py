@@ -11,8 +11,6 @@ from typing import List
 
 @attr.s
 class ZarrArrayConfig(ArrayConfig):
-    
-
     array_type = TiffArray
 
     file_name: Path = attr.ib(

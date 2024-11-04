@@ -9,8 +9,6 @@ from typing import Optional, List
 
 @attr.s
 class GunpowderTrainerConfig(TrainerConfig):
-    
-
     trainer_type = GunpowderTrainer
 
     num_data_fetchers: int = attr.ib(

@@ -7,8 +7,6 @@ from typing import Optional
 
 @attr.s
 class LocalTorch(ComputeContext):
-    
-
     distribute_workers: Optional[bool] = attr.ib(
         default=False,
         metadata={
@@ -32,7 +30,6 @@ class LocalTorch(ComputeContext):
 
     @property
     def device(self):
-        
         if self._device is None:
             if torch.cuda.is_available():
                 # TODO: make this more sophisticated, for multiple GPUs for instance

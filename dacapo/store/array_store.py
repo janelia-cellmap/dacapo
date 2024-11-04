@@ -13,64 +13,50 @@ from typing import Optional, Tuple
 
 @attr.s
 class LocalArrayIdentifier:
-    
-
     container: Path = attr.ib()
     dataset: str = attr.ib()
 
 
 @attr.s
 class LocalContainerIdentifier:
-    
-
     container: Path = attr.ib()
 
     def array_identifier(self, dataset) -> LocalArrayIdentifier:
-        
         return LocalArrayIdentifier(self.container, dataset)
 
 
 class ArrayStore(ABC):
-    
-
     @abstractmethod
     def validation_prediction_array(
         self, run_name: str, iteration: int, dataset: str
     ) -> LocalArrayIdentifier:
-        
         pass
 
     @abstractmethod
     def validation_output_array(
         self, run_name: str, iteration: int, parameters: str, dataset: str
     ) -> LocalArrayIdentifier:
-        
         pass
 
     @abstractmethod
     def validation_input_arrays(
         self, run_name: str, index: Optional[str] = None
     ) -> Tuple[LocalArrayIdentifier, LocalArrayIdentifier]:
-        
         pass
 
     @abstractmethod
     def remove(self, array_identifier: "LocalArrayIdentifier") -> None:
-        
         pass
 
     @abstractmethod
     def snapshot_container(self, run_name: str) -> LocalContainerIdentifier:
-        
         pass
 
     @abstractmethod
     def validation_container(self, run_name: str) -> LocalContainerIdentifier:
-        
         pass
 
     def _visualize_training(self, run):
-        
         # returns a neuroglancer link to visualize snapshots and validations
         snapshot_container = self.snapshot_container(run.name)
         validation_container = self.validation_container(run.name)
@@ -81,10 +67,7 @@ class ArrayStore(ABC):
         validations = []
 
         def generate_groups(container):
-            
-
             def add_element(name, obj):
-                
                 if isinstance(obj, zarr.hierarchy.Array):
                     container.append(name)
 

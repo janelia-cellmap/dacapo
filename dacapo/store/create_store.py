@@ -10,8 +10,6 @@ from upath import UPath as Path
 
 
 def create_config_store():
-    
-
     options = Options.instance()
 
     if options.type == "mongo":
@@ -26,8 +24,6 @@ def create_config_store():
 
 
 def create_stats_store():
-    
-
     options = Options.instance()
 
     if options.type == "mongo":
@@ -42,8 +38,6 @@ def create_stats_store():
 
 
 def create_weights_store():
-    
-
     options = Options.instance()
 
     base_dir = Path(options.runs_base_dir)
@@ -51,8 +45,6 @@ def create_weights_store():
 
 
 def create_array_store():
-    
-
     options = Options.instance()
 
     # currently, only the LocalArrayStore is supported

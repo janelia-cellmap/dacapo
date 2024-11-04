@@ -10,8 +10,6 @@ from typing import List, Optional
 
 @attr.s
 class CNNectomeUNetConfig(ArchitectureConfig):
-    
-
     architecture_type = CNNectomeUNet
 
     input_shape: Coordinate = attr.ib(

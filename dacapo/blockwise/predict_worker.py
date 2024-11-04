@@ -36,7 +36,6 @@ path = __file__
     default="INFO",
 )
 def cli(log_level):
-    
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
@@ -91,8 +90,6 @@ def start_worker_fn(
     output_dataset: str,
     return_io_loop: Optional[bool] = False,
 ):
-    
-
     def io_loop():
         daisy_client = daisy.Client()
 
@@ -219,7 +216,6 @@ def spawn_worker(
     input_array_identifier: "LocalArrayIdentifier",
     output_array_identifier: "LocalArrayIdentifier",
 ):
-    
     compute_context = create_compute_context()
 
     if not compute_context.distribute_workers:
@@ -256,7 +252,6 @@ def spawn_worker(
     print("Defining worker with command: ", compute_context.wrap_command(command))
 
     def run_worker():
-        
         print("Running worker with command: ", command)
         compute_context.execute(command)
 

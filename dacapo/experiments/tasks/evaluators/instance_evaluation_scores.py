@@ -6,8 +6,6 @@ from typing import Tuple, Union
 
 @attr.s
 class InstanceEvaluationScores(EvaluationScores):
-    
-
     criteria = ["voi_split", "voi_merge", "voi"]
 
     voi_split: float = attr.ib(default=float("nan"))
@@ -15,12 +13,10 @@ class InstanceEvaluationScores(EvaluationScores):
 
     @property
     def voi(self):
-        
         return (self.voi_split + self.voi_merge) / 2
 
     @staticmethod
     def higher_is_better(criterion: str) -> bool:
-        
         mapping = {
             "voi_split": False,
             "voi_merge": False,
@@ -32,7 +28,6 @@ class InstanceEvaluationScores(EvaluationScores):
     def bounds(
         criterion: str,
     ) -> Tuple[Union[int, float, None], Union[int, float, None]]:
-        
         mapping = {
             "voi_split": (0, 1),
             "voi_merge": (0, 1),
@@ -42,5 +37,4 @@ class InstanceEvaluationScores(EvaluationScores):
 
     @staticmethod
     def store_best(criterion: str) -> bool:
-        
         return True

@@ -24,7 +24,6 @@ import click
     default="INFO",
 )
 def cli(log_level):
-    
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
@@ -57,7 +56,6 @@ def start_worker_fn(
     tmpdir,
     return_io_loop=False,
 ):
-    
     client = daisy.Client()
     array_out = open_ds(output_container, output_dataset, mode="a")
 
@@ -88,7 +86,6 @@ def start_worker_fn(
 
 
 def relabel_in_block(array_out, old_values, new_values, block):
-    
     a = array_out.to_ndarray(block.write_roi)
     # DGA: had to add in flatten and reshape since remap (in particular indices) didn't seem to work with ndarrays for the input
     if old_values.size > 0:
@@ -97,7 +94,6 @@ def relabel_in_block(array_out, old_values, new_values, block):
 
 
 def find_components(nodes, edges):
-    
     # scipy
     disjoint_set = DisjointSet(nodes)
     for edge in edges:
@@ -106,7 +102,6 @@ def find_components(nodes, edges):
 
 
 def read_cross_block_merges(tmpdir):
-    
     block_files = glob(os.path.join(tmpdir, "block_*.npz"))
 
     nodes = []
@@ -123,7 +118,6 @@ def spawn_worker(
     output_array_identifier: LocalArrayIdentifier,
     tmpdir: str,
 ):
-    
     compute_context = create_compute_context()
 
     if not compute_context.distribute_workers:
@@ -149,7 +143,6 @@ def spawn_worker(
     ]
 
     def run_worker():
-        
         compute_context.execute(command)
 
     return run_worker

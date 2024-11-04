@@ -7,10 +7,7 @@ import torch
 # The loss is the sum of the BCELoss for the hot maps and the MSELoss for the distance maps.
 # Model should predict twice the number of channels as the target.
 class HotDistanceLoss(Loss):
-    
-
     def compute(self, prediction, target, weight):
-        
         target_hot, target_distance = self.split(target)
         prediction_hot, prediction_distance = self.split(prediction)
         weight_hot, weight_distance = self.split(weight)
@@ -19,17 +16,14 @@ class HotDistanceLoss(Loss):
         ) + self.distance_loss(prediction_distance, target_distance, weight_distance)
 
     def hot_loss(self, prediction, target, weight):
-        
         loss = torch.nn.BCEWithLogitsLoss(reduction="none")
         return torch.mean(loss(prediction, target) * weight)
 
     def distance_loss(self, prediction, target, weight):
-        
         loss = torch.nn.MSELoss()
         return loss(prediction * weight, target * weight)
 
     def split(self, x):
-        
         # Shape[0] is the batch size and Shape[1] is the number of channels.
         assert (
             x.shape[1] % 2 == 0

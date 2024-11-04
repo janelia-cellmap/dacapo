@@ -7,10 +7,7 @@ logger = logging.getLogger(__file__)
 
 
 class GammaAugment(BatchFilter):
-    
-
     def __init__(self, arrays, gamma_min, gamma_max):
-        
         if not isinstance(arrays, Iterable):
             arrays = [
                 arrays,
@@ -21,12 +18,10 @@ class GammaAugment(BatchFilter):
         assert self.gamma_max >= self.gamma_min
 
     def setup(self):
-        
         for array in self.arrays:
             self.updates(array, self.spec[array])
 
     def process(self, batch, request):
-        
         sample_gamma_min = (max(self.gamma_min, 1.0 / self.gamma_min) - 1) * (-1) ** (
             self.gamma_min < 1
         )
@@ -51,7 +46,6 @@ class GammaAugment(BatchFilter):
             raw.data = self.__augment(raw.data, gamma)
 
     def __augment(self, a, gamma):
-        
         # normalize a
         a_min = a.min()
         a_max = a.max()

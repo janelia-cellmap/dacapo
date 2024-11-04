@@ -8,8 +8,6 @@ from typing import List, Dict, Optional
 
 @attr.s
 class ConcatArrayConfig(ArrayConfig):
-    
-
     array_type = ConcatArray
 
     channels: List[str] = attr.ib(

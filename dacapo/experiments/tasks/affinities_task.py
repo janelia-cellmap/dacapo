@@ -6,11 +6,7 @@ from .task import Task
 
 
 class AffinitiesTask(Task):
-    
-
     def __init__(self, task_config):
-        
-
         self.predictor = AffinitiesPredictor(
             neighborhood=task_config.neighborhood,
             lsds=task_config.lsds,

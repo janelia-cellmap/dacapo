@@ -6,11 +6,7 @@ from .task import Task
 
 
 class DistanceTask(Task):
-    
-
     def __init__(self, task_config):
-        
-
         self.predictor = DistancePredictor(
             channels=task_config.channels,
             scale_factor=task_config.scale_factor,

@@ -9,8 +9,6 @@ from typing import List
 
 @attr.s
 class TrainValidateDataSplitConfig(DataSplitConfig):
-    
-
     datasplit_type = TrainValidateDataSplit
 
     train_configs: List[DatasetConfig] = attr.ib(

@@ -3,15 +3,11 @@ import torch
 
 
 class AffinitiesLoss(Loss):
-    
-
     def __init__(self, num_affinities: int, lsds_to_affs_weight_ratio: float):
-        
         self.num_affinities = num_affinities
         self.lsds_to_affs_weight_ratio = lsds_to_affs_weight_ratio
 
     def compute(self, prediction, target, weight):
-        
         affs, affs_target, affs_weight = (
             prediction[:, 0 : self.num_affinities, ...],
             target[:, 0 : self.num_affinities, ...],

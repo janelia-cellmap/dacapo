@@ -11,10 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class MongoStatsStore(StatsStore):
-    
-
     def __init__(self, db_host, db_name):
-        
         print(
             f"Creating MongoStatsStore:\n\thost    : {db_host}\n\tdatabase: {db_name}"
         )
@@ -28,7 +25,6 @@ class MongoStatsStore(StatsStore):
         self.__init_db()
 
     def store_training_stats(self, run_name: str, stats: TrainingStats):
-        
         existing_stats = self.__read_training_stats(run_name)
 
         store_from_iteration = 0
@@ -57,14 +53,11 @@ class MongoStatsStore(StatsStore):
     def retrieve_training_stats(
         self, run_name: str, subsample: bool = False
     ) -> TrainingStats:
-        
         return self.__read_training_stats(run_name, subsample=subsample)
 
     def store_validation_iteration_scores(
         self, run_name: str, scores: ValidationScores
     ):
-        
-
         existing_iteration_scores = self.__read_validation_iteration_scores(run_name)
 
         drop_db, store_from_iteration = scores.compare(existing_iteration_scores)
@@ -89,7 +82,6 @@ class MongoStatsStore(StatsStore):
         subsample: bool = False,
         validation_interval: Optional[int] = None,
     ) -> List[ValidationIterationScores]:
-        
         return self.__read_validation_iteration_scores(
             run_name, subsample=subsample, validation_interval=validation_interval
         )
@@ -97,7 +89,6 @@ class MongoStatsStore(StatsStore):
     def __store_training_stats(
         self, stats: TrainingStats, begin: int, end: int, run_name: str
     ) -> None:
-        
         docs = converter.unstructure(stats.iteration_stats[begin:end])
         for doc in docs:
             doc.update({"run_name": run_name})
@@ -108,7 +99,6 @@ class MongoStatsStore(StatsStore):
     def __read_training_stats(
         self, run_name: str, subsample: bool = False
     ) -> TrainingStats:
-        
         filters: Dict[str, Any] = {"run_name": run_name}
         if subsample:
             # if possible subsample s.t. we get 1000 iterations
@@ -130,7 +120,6 @@ class MongoStatsStore(StatsStore):
         return stats
 
     def __delete_training_stats(self, run_name: str) -> None:
-        
         self.training_stats.delete_many({"run_name": run_name})
 
     def __store_validation_iteration_scores(
@@ -140,7 +129,6 @@ class MongoStatsStore(StatsStore):
         end: int,
         run_name: str,
     ) -> None:
-        
         docs = [
             converter.unstructure(scores)
             for scores in validation_scores.scores
@@ -158,7 +146,6 @@ class MongoStatsStore(StatsStore):
         subsample: bool = False,
         validation_interval: Optional[int] = None,
     ) -> List[ValidationIterationScores]:
-        
         filters: Dict[str, Any] = {"run_name": run_name}
         if subsample:
             # if possible subsample s.t. we get 1000 iterations
@@ -187,19 +174,15 @@ class MongoStatsStore(StatsStore):
         return scores
 
     def delete_validation_scores(self, run_name: str) -> None:
-        
         self.__delete_validation_scores(run_name)
 
     def __delete_validation_scores(self, run_name: str) -> None:
-        
         self.validation_scores.delete_many({"run_name": run_name})
 
     def delete_training_stats(self, run_name: str) -> None:
-        
         self.__delete_training_stats(run_name)
 
     def __init_db(self):
-        
         self.training_stats.create_index(
             [("run_name", ASCENDING), ("iteration", ASCENDING)],
             name="run_it",
@@ -214,6 +197,5 @@ class MongoStatsStore(StatsStore):
         self.validation_scores.create_index([("iteration", ASCENDING)], name="it")
 
     def __open_collections(self):
-        
         self.training_stats = self.database["training_stats"]
         self.validation_scores = self.database["validation_scores"]

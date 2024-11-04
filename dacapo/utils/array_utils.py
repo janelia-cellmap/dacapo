@@ -5,8 +5,6 @@ from funlib.persistence import Array
 
 
 def to_ndarray(result_data, roi, fill_value=0):
-    
-
     shape = roi.shape / result_data.voxel_size
     data = np.zeros(
         result_data[result_data.roi].shape[: result_data.n_channel_dims] + shape,
@@ -26,7 +24,6 @@ def to_ndarray(result_data, roi, fill_value=0):
 
 
 def save_ndarray(data, roi, array):
-    
     intersection_roi = roi.intersect(array.roi)
     if not intersection_roi.empty:
         result_array = Array(data, roi, array.voxel_size)

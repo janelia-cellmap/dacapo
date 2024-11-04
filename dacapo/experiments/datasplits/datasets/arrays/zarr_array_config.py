@@ -12,8 +12,6 @@ from typing import Optional, List, Tuple
 
 @attr.s
 class ZarrArrayConfig(ArrayConfig):
-    
-
     array_type = ZarrArray
 
     file_name: Path = attr.ib(
@@ -38,7 +36,6 @@ class ZarrArrayConfig(ArrayConfig):
     )
 
     def verify(self) -> Tuple[bool, str]:
-        
         if not self.file_name.exists():
             return False, f"{self.file_name} does not exist!"
         elif not (

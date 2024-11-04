@@ -18,10 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class HotDistancePredictor(Predictor):
-    
-
     def __init__(self, channels: List[str], scale_factor: float, mask_distances: bool):
-        
         self.channels = (
             channels * 2
         )  # one hot + distance (TODO: add hot/distance to channel names)
@@ -35,16 +32,13 @@ class HotDistancePredictor(Predictor):
 
     @property
     def embedding_dims(self):
-        
         return len(self.channels)
 
     @property
     def classes(self):
-        
         return len(self.channels) // 2
 
     def create_model(self, architecture):
-        
         if architecture.dims == 2:
             head = torch.nn.Conv2d(
                 architecture.num_out_channels, self.embedding_dims, kernel_size=3
@@ -57,7 +51,6 @@ class HotDistancePredictor(Predictor):
         return Model(architecture, head)
 
     def create_target(self, gt):
-        
         target = self.process(gt.data, gt.voxel_size, self.norm, self.dt_scale_factor)
         return NumpyArray.from_np_array(
             target,
@@ -67,7 +60,6 @@ class HotDistancePredictor(Predictor):
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
-        
         # balance weights independently for each channel
         one_hot_weights, one_hot_moving_class_counts = balance_weights(
             gt[target.roi],
@@ -120,7 +112,6 @@ class HotDistancePredictor(Predictor):
 
     @property
     def output_array_type(self):
-        
         # technically this is a probability array + distance array, but it is only ever referenced for interpolatability (which is true for both) (TODO)
         return ProbabilityArray(self.embedding_dims)
 
@@ -132,7 +123,6 @@ class HotDistancePredictor(Predictor):
         normalize=None,
         normalize_args=None,
     ):
-        
         mask_output = mask.copy()
         for i, (channel_distance, channel_mask) in enumerate(zip(distances, mask)):
             tmp = np.zeros(
@@ -192,7 +182,6 @@ class HotDistancePredictor(Predictor):
         normalize=None,
         normalize_args=None,
     ):
-        
         all_distances = np.zeros(labels.shape, dtype=np.float32) - 1
         for ii, channel in enumerate(labels):
             boundaries = self.__find_boundaries(channel)
@@ -230,7 +219,6 @@ class HotDistancePredictor(Predictor):
         return np.concatenate((labels, all_distances))
 
     def __find_boundaries(self, labels):
-        
         # labels: 1 1 1 1 0 0 2 2 2 2 3 3       n
         # shift :   1 1 1 1 0 0 2 2 2 2 3       n - 1
         # diff  :   0 0 0 1 0 1 0 0 0 1 0       n - 1
@@ -269,7 +257,6 @@ class HotDistancePredictor(Predictor):
         return boundaries
 
     def __normalize(self, distances, norm, normalize_args):
-        
         if norm == "tanh":
             scale = normalize_args
             return np.tanh(distances / scale)
@@ -277,7 +264,6 @@ class HotDistancePredictor(Predictor):
             raise ValueError("Only tanh is supported for normalization")
 
     def gt_region_for_roi(self, target_spec):
-        
         if self.mask_distances:
             gt_spec = target_spec.copy()
             gt_spec.roi = gt_spec.roi.grow(
@@ -289,5 +275,4 @@ class HotDistancePredictor(Predictor):
         return gt_spec
 
     def padding(self, gt_voxel_size: Coordinate) -> Coordinate:
-        
         return Coordinate((self.max_distance,) * gt_voxel_size.dims)

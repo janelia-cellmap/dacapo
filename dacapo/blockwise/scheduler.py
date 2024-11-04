@@ -28,8 +28,6 @@ def run_blockwise(
     *args,
     **kwargs,
 ):
-    
-
     # Make the task
     task = DaCapoBlockwiseTask(
         worker_file,
@@ -68,7 +66,6 @@ def segment_blockwise(
     *args,
     **kwargs,
 ):
-    
     options = Options.instance()
     if not options.runs_base_dir.exists():
         options.runs_base_dir.mkdir(parents=True)

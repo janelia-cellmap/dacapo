@@ -12,15 +12,12 @@ if TYPE_CHECKING:
 
 
 class Trainer(ABC):
-    
-
     iteration: int
     batch_size: int
     learning_rate: float
 
     @abstractmethod
     def create_optimizer(self, model: "Model") -> torch.optim.Optimizer:
-        
         pass
 
     @abstractmethod
@@ -31,12 +28,10 @@ class Trainer(ABC):
         optimizer: torch.optim.Optimizer,
         device: torch.device,
     ) -> Iterator["TrainingIterationStats"]:
-        
         pass
 
     @abstractmethod
     def can_train(self, datasets: List["Dataset"]) -> bool:
-        
         pass
 
     @abstractmethod
@@ -47,15 +42,12 @@ class Trainer(ABC):
         task: "Task",
         snapshot_container: "LocalContainerIdentifier",
     ) -> None:
-        
         pass
 
     @abstractmethod
     def __enter__(self):
-        
         return self
 
     @abstractmethod
     def __exit__(self, exc_type, exc_val, exc_tb):
-        
         pass

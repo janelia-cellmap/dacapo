@@ -7,64 +7,52 @@ from abc import ABC, abstractmethod
 
 
 class Array(ABC):
-    
-
     @property
     @abstractmethod
     def attrs(self) -> Dict[str, Any]:
-        
         pass
 
     @property
     @abstractmethod
     def axes(self) -> List[str]:
-        
         pass
 
     @property
     @abstractmethod
     def dims(self) -> int:
-        
         pass
 
     @property
     @abstractmethod
     def voxel_size(self) -> Coordinate:
-        
         pass
 
     @property
     @abstractmethod
     def roi(self) -> Roi:
-        
         pass
 
     @property
     @abstractmethod
     def dtype(self) -> Any:
-        
         pass
 
     @property
     @abstractmethod
     def num_channels(self) -> Optional[int]:
-        
         pass
 
     @property
     @abstractmethod
     def data(self) -> np.ndarray:
-        
         pass
 
     @property
     @abstractmethod
     def writable(self) -> bool:
-        
         pass
 
     def __getitem__(self, roi: Roi) -> np.ndarray:
-        
         if not self.roi.contains(roi):
             raise ValueError(f"Cannot fetch data from outside my roi: {self.roi}!")
 
@@ -80,15 +68,12 @@ class Array(ABC):
         return self.data[slices]
 
     def _can_neuroglance(self) -> bool:
-        
         return False
 
     def _neuroglancer_layer(self):
-        
         pass
 
     def _slices(self, roi: Roi) -> Iterable[slice]:
-        
         offset = (roi.offset - self.roi.offset) / self.voxel_size
         shape = roi.shape / self.voxel_size
         spatial_slices: Dict[str, slice] = {

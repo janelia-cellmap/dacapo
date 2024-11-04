@@ -14,8 +14,6 @@ logger = logging.getLogger(__name__)
 
 
 def relabel(array, return_backwards_map=False, inplace=False):
-    
-
     if array.size == 0:
         if return_backwards_map:
             return array, 0, []
@@ -47,12 +45,9 @@ def relabel(array, return_backwards_map=False, inplace=False):
 
 
 class InstanceEvaluator(Evaluator):
-    
-
     criteria: List[str] = ["voi_merge", "voi_split", "voi"]
 
     def evaluate(self, output_array_identifier, evaluation_array):
-        
         output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
         evaluation_data = evaluation_array[evaluation_array.roi].astype(np.uint64)
         output_data = output_array[output_array.roi].astype(np.uint64)
@@ -65,11 +60,9 @@ class InstanceEvaluator(Evaluator):
 
     @property
     def score(self) -> InstanceEvaluationScores:
-        
         return InstanceEvaluationScores()
 
 
 def voi(truth, test):
-    
     voi_split, voi_merge = _voi(test + 1, truth + 1, ignore_groundtruth=[])
     return {"voi_split": voi_split, "voi_merge": voi_merge}

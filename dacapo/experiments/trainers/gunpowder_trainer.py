@@ -28,12 +28,9 @@ logger = logging.getLogger(__name__)
 
 
 class GunpowderTrainer(Trainer):
-    
-
     iteration = 0
 
     def __init__(self, trainer_config):
-        
         self.learning_rate = trainer_config.learning_rate
         self.batch_size = trainer_config.batch_size
         self.num_data_fetchers = trainer_config.num_data_fetchers
@@ -49,7 +46,6 @@ class GunpowderTrainer(Trainer):
         self.scheduler = None
 
     def create_optimizer(self, model):
-        
         optimizer = torch.optim.RAdam(
             lr=self.learning_rate,
             params=model.parameters(),
@@ -65,7 +61,6 @@ class GunpowderTrainer(Trainer):
         return optimizer
 
     def build_batch_provider(self, datasets, model, task, snapshot_container=None):
-        
         input_shape = Coordinate(model.input_shape)
         output_shape = Coordinate(model.output_shape)
 
@@ -206,7 +201,6 @@ class GunpowderTrainer(Trainer):
         self.snapshot_container = snapshot_container
 
     def iterate(self, num_iterations, model, optimizer, device):
-        
         t_start_fetch = time.time()
 
         logger.debug("Starting iteration!")
@@ -313,7 +307,6 @@ class GunpowderTrainer(Trainer):
             t_start_fetch = time.time()
 
     def __iter__(self):
-        
         with gp.build(self._pipeline):
             teardown = False
             while not teardown:
@@ -323,7 +316,6 @@ class GunpowderTrainer(Trainer):
         yield None
 
     def next(self):
-        
         batch = next(self._iter)
         self._iter.send(False)
         return (
@@ -339,12 +331,10 @@ class GunpowderTrainer(Trainer):
         )
 
     def __enter__(self):
-        
         self._iter = iter(self)
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        
         try:
             self._iter.send(True)
         except TypeError:
@@ -352,12 +342,9 @@ class GunpowderTrainer(Trainer):
         pass
 
     def can_train(self, datasets) -> bool:
-        
         return all([dataset.gt is not None for dataset in datasets])
 
     def visualize_pipeline(self, bind_address="0.0.0.0", bind_port=0):
-        
-
         if self._pipeline is None:
             raise ValueError("Pipeline not initialized!")
 

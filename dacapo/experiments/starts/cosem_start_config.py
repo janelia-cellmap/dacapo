@@ -5,6 +5,4 @@ from .start_config import StartConfig
 
 @attr.s
 class CosemStartConfig(StartConfig):
-    
-
     start_type = CosemStart

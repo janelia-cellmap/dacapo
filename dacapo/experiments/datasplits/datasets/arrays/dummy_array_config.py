@@ -8,10 +8,7 @@ from typing import Tuple
 
 @attr.s
 class DummyArrayConfig(ArrayConfig):
-    
-
     array_type = DummyArray
 
     def verify(self) -> Tuple[bool, str]:
-        
         return False, "This is a DummyArrayConfig and is never valid"

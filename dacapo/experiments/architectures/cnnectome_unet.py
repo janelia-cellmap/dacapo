@@ -7,10 +7,7 @@ import math
 
 
 class CNNectomeUNet(Architecture):
-    
-
     def __init__(self, architecture_config):
-        
         super().__init__()
 
         self._input_shape = architecture_config.input_shape
@@ -35,13 +32,11 @@ class CNNectomeUNet(Architecture):
 
     @property
     def eval_shape_increase(self):
-        
         if self._eval_shape_increase is None:
             return super().eval_shape_increase
         return self._eval_shape_increase
 
     def module(self):
-        
         fmaps_in = self.fmaps_in
         levels = len(self.downsample_factors) + 1
         dims = len(self.downsample_factors[0])
@@ -99,34 +94,27 @@ class CNNectomeUNet(Architecture):
         return unet
 
     def scale(self, voxel_size):
-        
         for upsample_factor in self.upsample_factors:
             voxel_size = voxel_size / upsample_factor
         return voxel_size
 
     @property
     def input_shape(self):
-        
         return self._input_shape
 
     @property
     def num_in_channels(self) -> int:
-        
         return self.fmaps_in
 
     @property
     def num_out_channels(self) -> int:
-        
         return self.fmaps_out
 
     def forward(self, x):
-        
         return self.unet(x)
 
 
 class CNNectomeUNetModule(torch.nn.Module):
-    
-
     def __init__(
         self,
         in_channels,
@@ -145,8 +133,6 @@ class CNNectomeUNetModule(torch.nn.Module):
         use_attention=False,
         batch_norm=True,
     ):
-        
-
         super().__init__()
 
         self.num_levels = len(downsample_factors) + 1
@@ -295,7 +281,6 @@ class CNNectomeUNetModule(torch.nn.Module):
         )
 
     def rec_forward(self, level, f_in):
-        
         # index of level in layer arrays
         i = self.num_levels - level - 1
 
@@ -333,7 +318,6 @@ class CNNectomeUNetModule(torch.nn.Module):
         return fs_out
 
     def forward(self, x):
-        
         y = self.rec_forward(self.num_levels - 1, x)
 
         if self.num_heads == 1:
@@ -343,8 +327,6 @@ class CNNectomeUNetModule(torch.nn.Module):
 
 
 class ConvPass(torch.nn.Module):
-    
-
     def __init__(
         self,
         in_channels,
@@ -354,7 +336,6 @@ class ConvPass(torch.nn.Module):
         padding="valid",
         batch_norm=True,
     ):
-        
         super(ConvPass, self).__init__()
 
         if activation is not None:
@@ -397,15 +378,11 @@ class ConvPass(torch.nn.Module):
         self.conv_pass = torch.nn.Sequential(*layers)
 
     def forward(self, x):
-        
         return self.conv_pass(x)
 
 
 class Downsample(torch.nn.Module):
-    
-
     def __init__(self, downsample_factor):
-        
         super(Downsample, self).__init__()
 
         self.dims = len(downsample_factor)
@@ -420,7 +397,6 @@ class Downsample(torch.nn.Module):
         self.down = pool(downsample_factor, stride=downsample_factor)
 
     def forward(self, x):
-        
         for d in range(1, self.dims + 1):
             if x.size()[-d] % self.downsample_factor[-d] != 0:
                 raise RuntimeError(
@@ -433,8 +409,6 @@ class Downsample(torch.nn.Module):
 
 
 class Upsample(torch.nn.Module):
-    
-
     def __init__(
         self,
         scale_factor,
@@ -445,7 +419,6 @@ class Upsample(torch.nn.Module):
         next_conv_kernel_sizes=None,
         activation=None,
     ):
-        
         super(Upsample, self).__init__()
 
         if activation is not None:
@@ -493,8 +466,6 @@ class Upsample(torch.nn.Module):
             self.up = layers[0]
 
     def crop_to_factor(self, x, factor, kernel_sizes):
-        
-
         shape = x.size()
         spatial_shape = shape[-self.dims :]
 
@@ -538,8 +509,6 @@ class Upsample(torch.nn.Module):
         return x
 
     def crop(self, x, shape):
-        
-
         x_target_size = x.size()[: -self.dims] + shape
 
         offset = tuple((a - b) // 2 for a, b in zip(x.size(), x_target_size))
@@ -549,7 +518,6 @@ class Upsample(torch.nn.Module):
         return x[slices]
 
     def forward(self, g_out, f_left=None):
-        
         g_up = self.up(g_out)
 
         if self.next_conv_kernel_sizes is not None:
@@ -568,11 +536,7 @@ class Upsample(torch.nn.Module):
 
 
 class AttentionBlockModule(nn.Module):
-    
-
     def __init__(self, F_g, F_l, F_int, dims, upsample_factor=None, batch_norm=True):
-        
-
         super(AttentionBlockModule, self).__init__()
         self.dims = dims
         self.kernel_sizes = [(1,) * self.dims, (1,) * self.dims]
@@ -621,7 +585,6 @@ class AttentionBlockModule(nn.Module):
         self.relu = nn.ReLU(inplace=True)
 
     def calculate_and_apply_padding(self, smaller_tensor, larger_tensor):
-        
         padding = []
         for i in range(2, 2 + self.dims):
             diff = larger_tensor.size(i) - smaller_tensor.size(i)
@@ -634,7 +597,6 @@ class AttentionBlockModule(nn.Module):
         return nn.functional.pad(smaller_tensor, padding, mode="constant", value=0)
 
     def forward(self, g, x):
-        
         g1 = self.W_g(g)
         x1 = self.W_x(x)
         g1 = self.calculate_and_apply_padding(g1, x1)

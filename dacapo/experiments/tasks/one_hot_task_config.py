@@ -8,8 +8,6 @@ from typing import List
 
 @attr.s
 class OneHotTaskConfig(TaskConfig):
-    
-
     task_type = OneHotTask
 
     classes: List[str] = attr.ib(

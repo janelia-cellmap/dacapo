@@ -11,8 +11,6 @@ import xarray as xr
 
 @attr.s
 class ValidationScores:
-    
-
     parameters: List[PostProcessorParameters] = attr.ib(
         metadata={"help_text": "The list of parameters that are being evaluated"}
     )
@@ -35,7 +33,6 @@ class ValidationScores:
     def subscores(
         self, iteration_scores: List[ValidationIterationScores]
     ) -> "ValidationScores":
-        
         return ValidationScores(
             self.parameters,
             self.datasets,
@@ -47,15 +44,12 @@ class ValidationScores:
         self,
         iteration_scores: ValidationIterationScores,
     ) -> None:
-        
         self.scores.append(iteration_scores)
 
     def delete_after(self, iteration: int) -> None:
-        
         self.scores = [scores for scores in self.scores if scores.iteration < iteration]
 
     def validated_until(self) -> int:
-        
         if not self.scores:
             return 0
         return max([score.iteration for score in self.scores]) + 1
@@ -63,7 +57,6 @@ class ValidationScores:
     def compare(
         self, existing_iteration_scores: List[ValidationIterationScores]
     ) -> Tuple[bool, int]:
-        
         if not existing_iteration_scores:
             return False, 0
         existing_iteration = (
@@ -77,16 +70,13 @@ class ValidationScores:
 
     @property
     def criteria(self) -> List[str]:
-        
         return self.evaluation_scores.criteria
 
     @property
     def parameter_names(self) -> List[str]:
-        
         return self.parameters[0].parameter_names
 
     def to_xarray(self) -> xr.DataArray:
-        
         return xr.DataArray(
             np.array(
                 [iteration_score.scores for iteration_score in self.scores]
@@ -107,7 +97,6 @@ class ValidationScores:
     def get_best(
         self, data: xr.DataArray, dim: str
     ) -> Tuple[xr.DataArray, xr.DataArray]:
-        
         if "criteria" in data.coords.keys():
             if len(data.coords["criteria"].shape) > 1:
                 criteria_bests: List[Tuple[xr.DataArray, xr.DataArray]] = []

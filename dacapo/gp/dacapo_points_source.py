@@ -4,19 +4,14 @@ import copy
 
 
 class GraphSource(gp.BatchProvider):
-    
-
     def __init__(self, key: gp.GraphKey, graph: gp.Graph):
-        
         self.key = key
         self.graph = graph
 
     def setup(self):
-        
         self.provides(self.key, self.graph.spec)
 
     def provide(self, request):
-        
         outputs = gp.Batch()
         if self.key in request:
             outputs[self.key] = copy.deepcopy(

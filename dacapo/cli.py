@@ -38,7 +38,6 @@ import threading
     default="INFO",
 )
 def cli(log_level):
-    
     logging.basicConfig(level=getattr(logging, log_level.upper()))
 
 
@@ -70,7 +69,6 @@ class SingleRequestServer(socketserver.TCPServer):
         self.request_count = 0
 
     def handle_request(self):
-        
         super().handle_request()
         self.shutdown()  # Stop server after the first request
 
@@ -88,7 +86,6 @@ def start_server(message):
 @cli.command()
 @click.argument("uri")
 def install_config(uri):
-    
     print("Downloading configuration...")
     parsed_uri = urlparse(uri)
     if parsed_uri.scheme != "dacapo" or parsed_uri.netloc != "install_config":
@@ -130,7 +127,6 @@ def install_config(uri):
 
 @cli.command()
 def setup_uri():
-    
     setup_uri_scheme()
 
 
@@ -142,7 +138,6 @@ def setup_uri():
     "--no-validation", is_flag=True, help="Disable validation after training."
 )
 def train(run_name, no_validation):
-    
     do_validate = not no_validation
     dacapo.train(run_name, do_validate=do_validate)
 
@@ -258,7 +253,6 @@ def apply(
     output_dtype: np.dtype | str = "uint8",
     overwrite: bool = True,
 ):
-    
     dacapo.apply(
         run_name,
         input_container,
@@ -341,7 +335,6 @@ def predict(
     output_dtype: np.dtype | str = np.uint8,  # type: ignore
     overwrite: bool = True,
 ):
-    
     dacapo.predict(
         run_name,
         iteration,
@@ -457,7 +450,6 @@ def run_blockwise(
     *args,
     **kwargs,
 ):
-    
     # get arbitrary args and kwargs
     parameters = unpack_ctx(ctx)
 
@@ -610,7 +602,6 @@ def segment_blockwise(
     *args,
     **kwargs,
 ):
-    
     # get arbitrary args and kwargs
     parameters = unpack_ctx(ctx)
 
@@ -663,7 +654,6 @@ def segment_blockwise(
 
 
 def prompt_with_choices(prompt_text, choices, default_index=0):
-    
     while True:
         click.echo(prompt_text)
         for i, choice in enumerate(choices, 1):
@@ -771,7 +761,6 @@ def generate_config(
 
 
 def unpack_ctx(ctx):
-    
     kwargs = {
         ctx.args[i].lstrip("-"): ctx.args[i + 1] for i in range(0, len(ctx.args), 2)
     }
@@ -785,7 +774,6 @@ def unpack_ctx(ctx):
 
 
 def get_rois(total_roi, read_roi_size, write_roi_size, input_array):
-    
     if total_roi is not None:
         # parse the string into a Roi
         start, end = zip(

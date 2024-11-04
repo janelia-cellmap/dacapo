@@ -5,8 +5,6 @@ from typing import Optional, Any, List
 
 
 class Dataset(ABC):
-    
-
     name: str
     raw: Array
     gt: Optional[Array]
@@ -15,23 +13,18 @@ class Dataset(ABC):
     sample_points: Optional[List[Coordinate]]
 
     def __eq__(self, other: Any) -> bool:
-        
         return isinstance(other, type(self)) and self.name == other.name
 
     def __hash__(self) -> int:
-        
         return hash(self.name)
 
     def __repr__(self) -> str:
-        
         return f"ds_{self.name.replace('/', '_')}"
 
     def __str__(self) -> str:
-        
         return f"ds_{self.name.replace('/', '_')}"
 
     def _neuroglancer_layers(self, prefix="", exclude_layers=None):
-        
         layers = {}
         exclude_layers = exclude_layers if exclude_layers is not None else set()
         if (

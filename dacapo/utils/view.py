@@ -23,8 +23,6 @@ def get_viewer(
     bind_address: str = "0.0.0.0",
     bind_port: int = 0,
 ) -> neuroglancer.Viewer | IFrame:
-    
-
     for name, array_data in arrays.items():
         array = array_data["array"]
         if hasattr(array, "to_ndarray"):
@@ -59,7 +57,6 @@ def get_viewer(
 
 
 def add_seg_layer(state, name, data, voxel_size, meshes=False):
-    
     if meshes:
         kwargs = {"segments": np.unique(data[data > 0])}
     else:
@@ -78,7 +75,6 @@ def add_seg_layer(state, name, data, voxel_size, meshes=False):
 
 
 def add_scalar_layer(state, name, data, voxel_size):
-    
     state.layers[name] = neuroglancer.ImageLayer(
         source=neuroglancer.LocalVolume(
             data=data,
@@ -92,10 +88,7 @@ def add_scalar_layer(state, name, data, voxel_size):
 
 
 class BestScore:
-    
-
     def __init__(self, run: Run):
-        
         self.run: Run = run
         self.score: float = -1
         self.iteration: int = 0
@@ -106,7 +99,6 @@ class BestScore:
         self.stats_store = create_stats_store()
 
     def get_ds(self, iteration, validation_dataset):
-        
         prediction_array_identifier = self.array_store.validation_prediction_array(
             self.run.name, iteration, validation_dataset.name
         )
@@ -119,7 +111,6 @@ class BestScore:
         self.ds = open_ds(container, dataset)
 
     def does_new_best_exist(self):
-        
         new_best_exists = False
         self.validation_scores = self.stats_store.retrieve_validation_iteration_scores(
             self.run.name
@@ -145,16 +136,12 @@ class BestScore:
 
 
 class NeuroglancerRunViewer:
-    
-
     def __init__(self, run: Run, embedded=False):
-        
         self.run: Run = run
         self.best_score = BestScore(run)
         self.embedded = embedded
 
     def updated_neuroglancer_layer(self, layer_name, ds):
-        
         source = neuroglancer.LocalVolume(
             data=ds.data,
             dimensions=neuroglancer.CoordinateSpace(
@@ -177,12 +164,10 @@ class NeuroglancerRunViewer:
         self.viewer.set_state(new_state)
 
     def deprecated_start_neuroglancer(self):
-        
         neuroglancer.set_server_bind_address("0.0.0.0")
         self.viewer = neuroglancer.Viewer()
 
     def start_neuroglancer(self, bind_address="0.0.0.0", bind_port=None):
-        
         neuroglancer.set_server_bind_address(
             bind_address=bind_address, bind_port=bind_port
         )
@@ -206,7 +191,6 @@ class NeuroglancerRunViewer:
             return IFrame(src=self.viewer, width=1800, height=900)
 
     def start(self):
-        
         self.run_thread = True
         self.array_store = create_array_store()
         self.get_datasets()
@@ -214,7 +198,6 @@ class NeuroglancerRunViewer:
         return self.start_neuroglancer()
 
     def open_from_array_identitifier(self, array_identifier):
-        
         if os.path.exists(array_identifier.container / array_identifier.dataset):
             return open_ds(
                 str(array_identifier.container.path), array_identifier.dataset
@@ -223,7 +206,6 @@ class NeuroglancerRunViewer:
             return None
 
     def get_datasets(self):
-        
         for validation_dataset in self.run.datasplit.validate:
             raw = validation_dataset.raw._source_array
             gt = validation_dataset.gt._source_array
@@ -231,12 +213,10 @@ class NeuroglancerRunViewer:
             self.gt = open_ds(str(gt.file_name), gt.dataset)
 
     def update_best_info(self):
-        
         self.segmentation = self.best_score.ds
         self.most_recent_iteration = self.best_score.iteration
 
     def update_neuroglancer(self):
-        
         self.updated_neuroglancer_layer(
             f"prediction at iteration {self.best_score.iteration}, f1 score {self.best_score.score}",
             self.segmentation,
@@ -244,12 +224,10 @@ class NeuroglancerRunViewer:
         return None
 
     def update_best_layer(self):
-        
         self.update_best_info()
         self.update_neuroglancer()
 
     def new_validation_checker(self):
-        
         self.thread = threading.Thread(
             target=self.update_with_new_validation_if_possible, daemon=True
         )
@@ -257,7 +235,6 @@ class NeuroglancerRunViewer:
         self.thread.start()
 
     def update_with_new_validation_if_possible(self):
-        
         thread = threading.currentThread()
         # Here we are assuming that we are checking the directory .../valdiation_config/prediction
         # Ideally we will only have to check for the current best validation
@@ -271,5 +248,4 @@ class NeuroglancerRunViewer:
                 self.update_best_layer()
 
     def stop(self):
-        
         self.thread.run_thread = False

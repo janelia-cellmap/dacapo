@@ -35,7 +35,6 @@ RunInfo = namedtuple(
 
 
 def smooth_values(a, n, stride=1):
-    
     a = np.array(a)
 
     # mean
@@ -66,7 +65,6 @@ def get_runs_info(
     config_store = create_config_store()
     stats_store = create_stats_store()
     runs = []
-    
 
     for run_config_name, validation_score_name, plot_loss in zip(
         run_config_names, validation_score_names, plot_losses
@@ -104,7 +102,6 @@ def bokeh_plot_runs(
     plot_losses=None,
     return_json=False,
 ):
-    
     runs = get_runs_info(run_config_base_names, validation_scores, plot_losses)
 
     colors = itertools.cycle(palette[20])
@@ -343,7 +340,6 @@ def plot_runs(
     higher_is_betters=None,
     plot_losses=None,
 ):
-    
     runs = get_runs_info(run_config_base_names, validation_scores, plot_losses)
 
     colors = itertools.cycle(plt.cm.tab20.colors)

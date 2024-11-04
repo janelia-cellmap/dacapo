@@ -6,8 +6,6 @@ from .ones_array import OnesArray
 
 @attr.s
 class OnesArrayConfig(ArrayConfig):
-    
-
     array_type = OnesArray
 
     source_array_config: ArrayConfig = attr.ib(

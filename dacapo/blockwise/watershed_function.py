@@ -5,7 +5,6 @@ from scipy.ndimage import measurements
 
 
 def segment_function(input_array, block, offsets, bias):
-    
     # if a previous segmentation is provided, it must have a "grid graph"
     # in its metadata.
     pred_data = input_array[block.read_roi]

@@ -6,11 +6,7 @@ from .task import Task
 
 
 class InnerDistanceTask(Task):
-    
-
     def __init__(self, task_config):
-        
-
         self.predictor = InnerDistancePredictor(
             channels=task_config.channels,
             scale_factor=task_config.scale_factor,

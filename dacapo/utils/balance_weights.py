@@ -13,8 +13,6 @@ def balance_weights(
     clipmax: float = 0.95,
     moving_counts: Optional[List[Dict[int, Tuple[int, int]]]] = None,
 ):
-    
-
     if moving_counts is None:
         moving_counts = []
     unique_labels = np.unique(label_data)

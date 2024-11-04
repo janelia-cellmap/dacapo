@@ -8,8 +8,6 @@ from typing import Tuple
 
 @attr.s
 class DummyArchitectureConfig(ArchitectureConfig):
-    
-
     architecture_type = DummyArchitecture
 
     num_in_channels: int = attr.ib(metadata={"help_text": "Dummy attribute."})
@@ -17,6 +15,4 @@ class DummyArchitectureConfig(ArchitectureConfig):
     num_out_channels: int = attr.ib(metadata={"help_text": "Dummy attribute."})
 
     def verify(self) -> Tuple[bool, str]:
-        
-
         return False, "This is a DummyArchitectureConfig and is never valid"

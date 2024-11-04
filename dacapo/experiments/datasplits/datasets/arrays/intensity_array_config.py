@@ -6,8 +6,6 @@ from .intensity_array import IntensitiesArray
 
 @attr.s
 class IntensitiesArrayConfig(ArrayConfig):
-    
-
     array_type = IntensitiesArray
 
     source_array_config: ArrayConfig = attr.ib(

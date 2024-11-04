@@ -17,8 +17,6 @@ logger = logging.getLogger(__name__)
 
 
 class DistancePredictor(Predictor):
-    
-
     def __init__(
         self,
         channels: List[str],
@@ -27,7 +25,6 @@ class DistancePredictor(Predictor):
         clipmin: float = 0.05,
         clipmax: float = 0.95,
     ):
-        
         self.channels = channels
         self.norm = "tanh"
         self.dt_scale_factor = scale_factor
@@ -41,11 +38,9 @@ class DistancePredictor(Predictor):
 
     @property
     def embedding_dims(self):
-        
         return len(self.channels)
 
     def create_model(self, architecture):
-        
         if architecture.dims == 2:
             head = torch.nn.Conv2d(
                 architecture.num_out_channels, self.embedding_dims, kernel_size=1
@@ -58,7 +53,6 @@ class DistancePredictor(Predictor):
         return Model(architecture, head)
 
     def create_target(self, gt):
-        
         distances = self.process(
             gt.data, gt.voxel_size, self.norm, self.dt_scale_factor
         )
@@ -70,7 +64,6 @@ class DistancePredictor(Predictor):
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
-        
         # balance weights independently for each channel
         if self.mask_distances:
             distance_mask = self.create_distance_mask(
@@ -104,7 +97,6 @@ class DistancePredictor(Predictor):
 
     @property
     def output_array_type(self):
-        
         return DistanceArray(self.embedding_dims)
 
     def create_distance_mask(
@@ -115,7 +107,6 @@ class DistancePredictor(Predictor):
         normalize=None,
         normalize_args=None,
     ):
-        
         mask_output = mask.copy()
         for i, (channel_distance, channel_mask) in enumerate(zip(distances, mask)):
             tmp = np.zeros(
@@ -175,7 +166,6 @@ class DistancePredictor(Predictor):
         normalize=None,
         normalize_args=None,
     ):
-        
         all_distances = np.zeros(labels.shape, dtype=np.float32) - 1
         for ii, channel in enumerate(labels):
             boundaries = self.__find_boundaries(channel)
@@ -213,7 +203,6 @@ class DistancePredictor(Predictor):
         return all_distances
 
     def __find_boundaries(self, labels):
-        
         # labels: 1 1 1 1 0 0 2 2 2 2 3 3       n
         # shift :   1 1 1 1 0 0 2 2 2 2 3       n - 1
         # diff  :   0 0 0 1 0 1 0 0 0 1 0       n - 1
@@ -252,7 +241,6 @@ class DistancePredictor(Predictor):
         return boundaries
 
     def __normalize(self, distances, norm, normalize_args):
-        
         if norm == "tanh":
             scale = normalize_args
             return np.tanh(distances / scale)
@@ -260,7 +248,6 @@ class DistancePredictor(Predictor):
             raise ValueError("Only tanh is supported for normalization")
 
     def gt_region_for_roi(self, target_spec):
-        
         if self.mask_distances:
             gt_spec = target_spec.copy()
             gt_spec.roi = gt_spec.roi.grow(
@@ -272,5 +259,4 @@ class DistancePredictor(Predictor):
         return gt_spec
 
     def padding(self, gt_voxel_size: Coordinate) -> Coordinate:
-        
         return Coordinate((self.max_distance,) * gt_voxel_size.dims)

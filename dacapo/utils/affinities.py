@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 def seg_to_affgraph(seg: np.ndarray, neighborhood: List[Coordinate]) -> np.ndarray:
-    
     nhood: np.ndarray = np.array(neighborhood)
 
     # constructs an affinity graph from a segmentation
@@ -99,7 +98,6 @@ def seg_to_affgraph(seg: np.ndarray, neighborhood: List[Coordinate]) -> np.ndarr
 
 
 def padding(neighborhood, voxel_size):
-    
     dims = voxel_size.dims
     padding_neg = (
         Coordinate(min([0] + [a[d] for a in neighborhood]) for d in range(dims))

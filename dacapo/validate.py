@@ -18,8 +18,6 @@ logger = logging.getLogger(__name__)
 
 
 def validate(run_name: str, iteration: int = 0, datasets_config=None):
-    
-
     logger.info("Validating run %s at iteration %d...", run_name, iteration)
 
     # create run
@@ -50,7 +48,6 @@ def validate(run_name: str, iteration: int = 0, datasets_config=None):
 
 
 def validate_run(run: Run, iteration: int, datasets_config=None):
-    
     # set benchmark flag to True for performance
     torch.backends.cudnn.benchmark = True
     run.model.eval()
