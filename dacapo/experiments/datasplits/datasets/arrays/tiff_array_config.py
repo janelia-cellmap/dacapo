@@ -11,22 +11,6 @@ from typing import List
 
 @attr.s
 class ZarrArrayConfig(ArrayConfig):
-    """
-    This config class provides the necessary configuration for a tiff array
-
-    Attributes:
-        file_name: Path
-            The file name of the tiff.
-        offset: Coordinate
-            The offset of the array.
-        voxel_size: Coordinate
-            The voxel size of the array.
-        axes: List[str]
-            The axes of the array.
-    Note:
-        This class is a subclass of ArrayConfig.
-    """
-
     array_type = TiffArray
 
     file_name: Path = attr.ib(
