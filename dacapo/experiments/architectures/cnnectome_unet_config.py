@@ -131,3 +131,7 @@ class CNNectomeUNetConfig(ArchitectureConfig):
         default=True,
         metadata={"help_text": "Whether to use batch normalization."},
     )
+    skip_gate: bool = attr.ib(
+        default=True,
+        metadata={"help_text": "Whether to use skip gates. using skip gates concatenates the left feature map with the right feature map which helps for training. disabling the skip gate will make the model like a encoder-decoder model. example pipeline: start with skip gate false, we can train with only raw data. then we can train with skip gate true to fine tune the model with groundtruth."},
+    )

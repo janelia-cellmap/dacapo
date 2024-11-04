@@ -4,7 +4,9 @@ import torch
 import torch.nn as nn
 
 import math
+import logging
 
+logger = logging.getLogger(__name__)
 
 class CNNectomeUNet(Architecture):
     """
@@ -172,8 +174,18 @@ class CNNectomeUNet(Architecture):
         )
         self.use_attention = architecture_config.use_attention
         self.batch_norm = architecture_config.batch_norm
+        self._skip_gate = architecture_config.skip_gate
 
         self.unet = self.module()
+
+    @property
+    def skip_gate(self):
+        return self._skip_gate
+    
+    @skip_gate.setter
+    def skip_gate(self, skip):
+        self._skip_gate = skip
+        self.unet.skip_gate = skip
 
     @property
     def eval_shape_increase(self):
@@ -264,6 +276,7 @@ class CNNectomeUNet(Architecture):
             + [True] * (len(downsample_factors) - 1),
             use_attention=self.use_attention,
             batch_norm=self.batch_norm,
+            skip_gate=self.skip_gate,
         )
         if len(self.upsample_factors) > 0:
             layers = [unet]
@@ -460,6 +473,7 @@ class CNNectomeUNetModule(torch.nn.Module):
         activation_on_upsample=False,
         use_attention=False,
         batch_norm=True,
+        skip_gate=True,
     ):
         """
         Create a U-Net::
@@ -579,6 +593,7 @@ class CNNectomeUNetModule(torch.nn.Module):
         self.dims = len(downsample_factors[0])
         self.use_attention = use_attention
         self.batch_norm = batch_norm
+        self._skip_gate = skip_gate
 
         # default arguments
 
@@ -647,6 +662,7 @@ class CNNectomeUNetModule(torch.nn.Module):
                             crop_factor=crop_factors[level],
                             next_conv_kernel_sizes=kernel_size_up[level],
                             activation=activation if activation_on_upsample else None,
+                            skip_gate=skip_gate,
                         )
                         for level in range(self.num_levels - 1)
                     ]
@@ -710,6 +726,33 @@ class CNNectomeUNetModule(torch.nn.Module):
                 for _ in range(num_heads)
             ]
         )
+
+    @property
+    def skip_gate(self):
+        return self._skip_gate
+
+    @skip_gate.setter
+    def skip_gate(self, skip):
+        for head in self.r_up:
+            for layer in head:
+                if isinstance(layer, Upsample):
+                    layer.skip_gate = skip
+                else:
+                    logger.error(f"Layer {layer} is not an Upsample layer")
+
+    def set_skip(self, skip):
+        """
+        Set the skip_gate for all the Upsample layers.
+
+        Args:
+            skip (bool): The value to set for skip_gate.
+        """
+        for head in self.r_up:
+            for layer in head:
+                if isinstance(layer, Upsample):
+                    layer.skip_gate = skip
+                else:
+                    logger.error(f"Layer {layer} is not an Upsample layer")
 
     def rec_forward(self, level, f_in):
         """
@@ -1038,6 +1081,7 @@ class Upsample(torch.nn.Module):
         crop_factor=None,
         next_conv_kernel_sizes=None,
         activation=None,
+        skip_gate = True,
     ):
         """
         Upsample module. This module performs upsampling of the input tensor
@@ -1070,6 +1114,7 @@ class Upsample(torch.nn.Module):
 
         self.crop_factor = crop_factor
         self.next_conv_kernel_sizes = next_conv_kernel_sizes
+        self.skip_gate = skip_gate
 
         self.dims = len(scale_factor)
 
@@ -1250,7 +1295,7 @@ class Upsample(torch.nn.Module):
         else:
             g_cropped = g_up
 
-        if f_left is not None:
+        if f_left is not None and self.skip_gate:
             f_cropped = self.crop(f_left, g_cropped.size()[-self.dims :])
 
             return torch.cat([f_cropped, g_cropped], dim=1)
