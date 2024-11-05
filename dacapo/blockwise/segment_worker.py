@@ -10,6 +10,7 @@ from funlib.persistence import Array
 import numpy as np
 import yaml
 from dacapo.compute_context import create_compute_context
+from dacapo.tmp import open_from_identifier
 
 
 from dacapo.store.array_store import LocalArrayIdentifier

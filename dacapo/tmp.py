@@ -67,16 +67,16 @@ def create_from_identifier(
     if not out_path.parent.exists():
         out_path.parent.mkdir(parents=True)
 
-    num_channels = [num_channels] if num_channels is not None else []
+    list_num_channels = [num_channels] if num_channels is not None else []
     return prepare_ds(
         out_path,
-        shape=(*num_channels, *roi.shape / voxel_size),
+        shape=(*list_num_channels, *roi.shape / voxel_size),
         offset=roi.offset / voxel_size,
         voxel_size=voxel_size,
         axis_names=axis_names,
         dtype=dtype,
         chunk_shape=(
-            (*num_channels, *write_size / voxel_size)
+            (*list_num_channels, *write_size / voxel_size)
             if write_size is not None
             else None
         ),

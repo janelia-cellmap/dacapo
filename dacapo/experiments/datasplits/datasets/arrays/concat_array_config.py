@@ -43,7 +43,7 @@ class ConcatArrayConfig(ArrayConfig):
     )
 
     def array(self, mode: str = "r") -> Array:
-        arrays = [config.array(mode) for _, config in self.source_array_configs]
+        arrays = [config.array(mode) for _, config in self.source_array_configs.items()]
 
         out_array = Array(
             da.zeros(len(arrays), *arrays[0].physical_shape, dtype=arrays[0].dtype),

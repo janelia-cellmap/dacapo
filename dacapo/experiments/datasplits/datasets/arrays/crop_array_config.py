@@ -37,7 +37,7 @@ class CropArrayConfig(ArrayConfig):
 
     def array(self, mode: str = "r") -> Array:
         source_array = self.source_array_config.array(mode)
-        roi_slices = source_array._Array__slices(self.roi)
+        roi_slices = getattr(source_array, "_Array__slices")(self.roi)
         out_array = Array(
             source_array.data[roi_slices],
             self.roi.offset,

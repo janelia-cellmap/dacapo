@@ -1,4 +1,5 @@
 from dacapo.experiments.tasks import TaskConfig
+from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
 from upath import UPath as Path
 from typing import List, Union, Optional, Sequence
 from enum import Enum, EnumMeta

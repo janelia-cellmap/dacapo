@@ -48,7 +48,7 @@ class TiffArrayConfig(ArrayConfig):
     def array(self, mode: str = "r") -> Array:
 
         return Array(
-            data=tifffile.TiffFile(self._file_name).values,
+            data=tifffile.TiffFile(self.file_name).values,
             offset=self.offset,
             voxel_size=self.voxel_size,
             axis_names=self.axis_names,

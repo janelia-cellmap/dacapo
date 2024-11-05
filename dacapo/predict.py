@@ -129,10 +129,15 @@ def predict(
         axis_names = ["c^"] + raw_array.axis_names
     else:
         axis_names = raw_array.axis_names
+
+    if isinstance(output_roi, Roi):
+        out_roi: Roi = output_roi
+    else:
+        raise ValueError("out_roi must be a roi")
     create_from_identifier(
         output_array_identifier,
         axis_names,
-        output_roi,
+        out_roi,
         num_out_channels,
         output_voxel_size,
         output_dtype,

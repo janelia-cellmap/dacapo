@@ -31,6 +31,7 @@ class DVIDArrayConfig(ArrayConfig):
         # To handle this case we would need to subclass `funlib.persistence.Array` to
         # directly read from DVID
         raise NotImplementedError("NotImplemented")
+        """
         from dacapo.ext import NoSuchModule
 
         try:
@@ -47,6 +48,7 @@ class DVIDArrayConfig(ArrayConfig):
         )
         dtype = np.dtype(self.attrs["Extended"]["Values"][0]["DataType"])
         raise NotImplementedError
+        """
 
     def verify(self) -> Tuple[bool, str]:
         """

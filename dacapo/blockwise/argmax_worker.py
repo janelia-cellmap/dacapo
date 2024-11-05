@@ -3,6 +3,7 @@ import sys
 
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.compute_context import create_compute_context
+from dacapo.tmp import open_from_identifier
 
 import daisy
 
