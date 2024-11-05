@@ -3,6 +3,10 @@ import attr
 from .array_config import ArrayConfig
 
 from typing import List, Tuple
+from funlib.persistence import Array
+from fibsem_tools.metadata.groundtruth import LabelList
+
+import dask.array as da
 
 
 @attr.s
@@ -34,3 +38,23 @@ class MissingAnnotationsMaskConfig(ArrayConfig):
             "Group i found in groupings[i] will be binarized and placed in channel i."
         }
     )
+
+    def array(self, mode: str = "r") -> Array:
+        labels = self.source_array_config.array(mode)
+        grouped = da.ones((len(self._groupings), *labels.shape), dtype=bool)
+        grouped[:] = labels > 0
+        labels_list = LabelList.parse_obj({"labels": self.attrs["labels"]}).labels
+        present_not_annotated = set(
+            [
+                label.value
+                for label in labels_list
+                if label.annotationState.present and not label.annotationState.annotated
+            ]
+        )
+        for i, (_, ids) in enumerate(self._groupings):
+            if any([id in present_not_annotated for id in ids]):
+                grouped[i] = 0
+
+        return Array(
+            grouped, labels.offset, labels.voxel_size, labels.axis_names, labels.units
+        )

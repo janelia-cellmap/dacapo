@@ -4,6 +4,8 @@ from .array_config import ArrayConfig
 from funlib.persistence import Array
 from typing import List
 
+import dask.array as da
+
 
 @attr.s
 class MergeInstancesArrayConfig(ArrayConfig):
@@ -27,4 +29,14 @@ class MergeInstancesArrayConfig(ArrayConfig):
     )
 
     def array(self, mode: str = "r") -> Array:
-        raise NotImplementedError
+        arrays = [
+            source_array.array(mode) for source_array in self.source_array_configs
+        ]
+        merged_data = da.stack([array.data for array in arrays], axis=0).sum(axis=0)
+        return Array(
+            data=merged_data,
+            offset=arrays[0].offset,
+            voxel_size=arrays[0].voxel_size,
+            axis_names=arrays[0].axis_names,
+            units=arrays[0].units,
+        )

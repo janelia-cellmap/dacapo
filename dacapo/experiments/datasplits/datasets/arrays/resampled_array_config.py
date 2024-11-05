@@ -3,6 +3,7 @@ import attr
 from .array_config import ArrayConfig
 
 from funlib.geometry import Coordinate
+from funlib.persistence import Array
 
 
 @attr.s
@@ -35,3 +36,8 @@ class ResampledArrayConfig(ArrayConfig):
     interp_order: bool = attr.ib(
         metadata={"help_text": "The order of the interpolation!"}
     )
+
+    def array(self, mode: str = "r") -> Array:
+        # This is non trivial. We want to upsample or downsample the source
+        # array lazily. Not entirely sure how to do this with dask arrays.
+        raise NotImplementedError()

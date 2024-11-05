@@ -3,9 +3,11 @@ import attr
 from .array_config import ArrayConfig
 
 from funlib.geometry import Coordinate
+from funlib.persistence import Array
 
 from upath import UPath as Path
 from typing import List
+import tifffile
 
 
 @attr.s
@@ -38,4 +40,15 @@ class TiffArrayConfig(ArrayConfig):
     voxel_size: Coordinate = attr.ib(
         metadata={"help_text": "The size of each voxel in each dimension."}
     )
-    axis_names: List[str] = attr.ib(metadata={"help_text": "The axis_names of your array"})
+    axis_names: list[str] = attr.ib(metadata={"help_text": "The axis_names of your array"})
+    units: list[str] = attr.ib(metadata={"help_text": "The units of your array"})
+
+    def array(self, mode: str = "r") -> Array:
+
+        return Array(
+            data=tifffile.TiffFile(self._file_name).values,
+            offset=self.offset,
+            voxel_size=self.voxel_size,
+            axis_names=self.axis_names,
+            units=self.units,
+        )
