@@ -47,7 +47,7 @@ dependencies = [
         "funlib.geometry>=0.2",
         "mwatershed>=0.1",
         "cellmap-models",
-        "funlib.persistence==0.5.2",
+        "funlib.persistence>=0.5.3",
         "gunpowder>=1.4",
         "lsds",
         "xarray",
@@ -85,6 +85,7 @@ docs = [
     "myst-parser",
     "jupytext",
     "ipykernel",
+    "myst_nb",
 ]
 examples = [
     "ipython",
