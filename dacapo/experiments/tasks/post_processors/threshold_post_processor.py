@@ -10,7 +10,11 @@ from daisy import Roi, Coordinate
 from dacapo.utils.array_utils import to_ndarray, save_ndarray
 from funlib.persistence import open_ds
 
-from dacapo.tmp import open_from_identifier, create_from_identifier, num_channels_from_array
+from dacapo.tmp import (
+    open_from_identifier,
+    create_from_identifier,
+    num_channels_from_array,
+)
 from funlib.persistence import Array
 
 from typing import Iterable
@@ -101,8 +105,8 @@ class ThresholdPostProcessor(PostProcessor):
         # so our subclasses aren't directly replaceable anyway.
         # Might be missing something since I only did a quick google, leaving this here
         # for me or someone else to investigate further in the future.
-        if self.prediction_array._daisy_array.chunk_shape is not None:
-            block_size = self.prediction_array._daisy_array.chunk_shape
+        if self.prediction_array._source_data.chunks is not None:
+            block_size = self.prediction_array._source_data.chunks
 
         write_size = [
             b * v
@@ -118,24 +122,25 @@ class ThresholdPostProcessor(PostProcessor):
             num_channels_from_array(self.prediction_array),
             self.prediction_array.voxel_size,
             np.uint8,
+            overwrite=True,
         )
 
         read_roi = Roi((0, 0, 0), write_size[-self.prediction_array.dims :])
         input_array = open_ds(
-            self.prediction_array_identifier.container.path,
-            self.prediction_array_identifier.dataset,
+            f"{self.prediction_array_identifier.container.path}/{self.prediction_array_identifier.dataset}"
         )
 
         def process_block(block):
-            data = to_ndarray(input_array, block.read_roi) > parameters.threshold
+            write_roi = block.write_roi.intersect(input_array.roi)
+            data = input_array[write_roi] > parameters.threshold
             data = data.astype(np.uint8)
             if int(data.max()) == 0:
-                print("No data in block", block.read_roi)
+                print("No data in block", write_roi)
                 return
-            save_ndarray(data, block.write_roi, output_array)
+            output_array[write_roi] = data
 
         task = daisy.Task(
-            f"threshold_{output_array.dataset}",
+            f"threshold_{output_array_identifier.dataset}",
             total_roi=self.prediction_array.roi,
             read_roi=read_roi,
             write_roi=read_roi,

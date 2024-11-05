@@ -5,6 +5,7 @@ from .binary_segmentation_evaluation_scores import (
     MultiChannelBinarySegmentationEvaluationScores,
 )
 
+from dacapo.tmp import open_from_identifier
 
 
 import numpy as np
@@ -138,7 +139,9 @@ class BinarySegmentationEvaluator(Evaluator):
         ), f"{evaluation_data.shape} vs {output_data.shape}"
         if "c^" in evaluation_array.axis_names and "c^" in output_array.axis_names:
             score_dict = []
-            for indx, channel in enumerate(evaluation_array.channels):
+            for indx, channel in enumerate(
+                range(evaluation_array.shape[evaluation_array.axis_names.index("c^")])
+            ):
                 evaluation_channel_data = evaluation_data.take(
                     indices=indx, axis=evaluation_array.axis_names.index("c^")
                 )
