@@ -72,9 +72,7 @@ class WatershedPostProcessor(PostProcessor):
 
     def set_prediction(self, prediction_array_identifier):
         self.prediction_array_identifier = prediction_array_identifier
-        self.prediction_array = open_from_identifier(
-            prediction_array_identifier
-        )
+        self.prediction_array = open_from_identifier(prediction_array_identifier)
         """
         Set the prediction array.
 
@@ -112,10 +110,10 @@ class WatershedPostProcessor(PostProcessor):
         Note:
             This method should be implemented by the subclass. To run the watershed transformation, the method uses the `segment_blockwise` function from the `dacapo.blockwise.scheduler` module.
         """
-        if self.prediction_array._daisy_array.chunk_shape is not None:
+        if self.prediction_array._source_data.chunks is not None:
             block_size = Coordinate(
-                self.prediction_array._daisy_array.chunk_shape[
-                    -self.prediction_array.dims :
+                self.prediction_array._source_data.chunks[
+                    -self.prediction_array.spatial_dims :
                 ]
             )
 
@@ -126,17 +124,17 @@ class WatershedPostProcessor(PostProcessor):
             None,
             self.prediction_array.voxel_size,
             np.uint64,
-            block_size * self.prediction_array.voxel_size,
+            write_size=block_size * self.prediction_array.voxel_size,
+            overwrite=True,
         )
         input_array = open_ds(
-            self.prediction_array_identifier.container.path,
-            self.prediction_array_identifier.dataset,
+            f"{self.prediction_array_identifier.container.path}/{self.prediction_array_identifier.dataset}",
         )
 
-        data = to_ndarray(input_array, output_array.roi).astype(float)
+        data = input_array.to_ndarray(output_array.roi).astype(float)
         segmentation = mws.agglom(
             data - parameters.bias, offsets=self.offsets, randomized_strides=True
         )
-        save_ndarray(segmentation, self.prediction_array.roi, output_array)
+        output_array[self.prediction_array.roi] = segmentation
 
         return output_array_identifier

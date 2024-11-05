@@ -190,11 +190,11 @@ class AffinitiesPredictor(Predictor):
         """
         if self.dims == 2:
             head = torch.nn.Conv2d(
-                architecture.num_out_channels, self.num_channels, kernel_size=1
+                architecture.num_out_channels, len(self.neighborhood), kernel_size=1
             )
         elif self.dims == 3:
             head = torch.nn.Conv3d(
-                architecture.num_out_channels, self.num_channels, kernel_size=1
+                architecture.num_out_channels, len(self.neighborhood), kernel_size=1
             )
         else:
             raise NotImplementedError(
@@ -315,7 +315,7 @@ class AffinitiesPredictor(Predictor):
         else:
             mask_data = mask[target.roi]
         aff_weights, moving_class_counts = balance_weights(
-            target[target.roi][: self.num_channels - self.num_lsds].astype(np.uint8),
+            target[target.roi][: len(self.neighborhood)].astype(np.uint8),
             2,
             slab=tuple(1 if c == "c^" else -1 for c in target.axis_names),
             masks=[mask_data],
@@ -338,15 +338,13 @@ class AffinitiesPredictor(Predictor):
             ) * lsd_weights.reshape((1,) + aff_weights.shape[1:])
             return np_to_funlib_array(
                 np.concatenate([aff_weights, lsd_weights], axis=0),
-                target.roi,
+                target.roi.offset,
                 target.voxel_size,
-                target.axis_names,
             ), (moving_class_counts, moving_lsd_class_counts)
         return np_to_funlib_array(
             aff_weights,
-            target.roi,
+            target.roi.offset,
             target.voxel_size,
-            target.axis_names,
         ), (moving_class_counts, moving_lsd_class_counts)
 
     def gt_region_for_roi(self, target_spec):
