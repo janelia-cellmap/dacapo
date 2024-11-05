@@ -73,21 +73,25 @@ def predict(
 
     def predict_fn(block):
         raw_input = raw_array.to_ndarray(block.read_roi)
-        # expend batch dim
-        # no need to normalize, done by datasplit
-        raw_input = np.expand_dims(raw_input, (0))
+
+        # raw may or may not have channel dimensions.
+        axis_names = raw_array.axis_names
+        if raw_array.channel_dims == 0:
+            raw_input = np.expand_dims(raw_input, 0)
+            axis_names = ["c^"] + axis_names
+
         with torch.no_grad():
             predictions = (
                 model.forward(torch.from_numpy(raw_input).float().to(device))
                 .detach()
                 .cpu()
-                .numpy()[0]
+                .numpy()
             )
             predictions = Array(
                 predictions,
                 block.write_roi.offset,
                 raw_array.voxel_size,
-                raw_array.axis_names,
+                axis_names,
                 raw_array.units,
             )
 
