@@ -1,5 +1,3 @@
-
-
 import zarr
 import neuroglancer
 import attr

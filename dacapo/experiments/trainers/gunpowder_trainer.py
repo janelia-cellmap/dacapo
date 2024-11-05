@@ -374,9 +374,11 @@ class GunpowderTrainer(Trainer):
                             snapshot_array_identifier,
                             v.axis_names,
                             v.roi,
-                            v.shape[0]
-                            if (v.channel_dims == 1 and v.shape[0] > 1)
-                            else None,
+                            (
+                                v.shape[0]
+                                if (v.channel_dims == 1 and v.shape[0] > 1)
+                                else None
+                            ),
                             v.voxel_size,
                             v.dtype if not v.dtype == bool else np.float32,
                             model.output_shape * v.voxel_size,
@@ -386,7 +388,7 @@ class GunpowderTrainer(Trainer):
                         array = open_from_identifier(
                             snapshot_array_identifier, mode="a"
                         )
-                    
+
                     # neuroglancer doesn't allow bools
                     if not v.dtype == bool:
                         data = v[:]

@@ -1,6 +1,7 @@
 from .dataset import Dataset
 from funlib.persistence import Array
 
+
 class DummyDataset(Dataset):
     """
     DummyDataset is a child class of the Dataset. This class has property 'raw' of Array type and a name.

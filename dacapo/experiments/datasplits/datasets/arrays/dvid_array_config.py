@@ -32,6 +32,7 @@ class DVIDArrayConfig(ArrayConfig):
         # directly read from DVID
         raise NotImplementedError("NotImplemented")
         from dacapo.ext import NoSuchModule
+
         try:
             from neuclease.dvid import fetch_info, fetch_labelmap_voxels, fetch_raw
         except ImportError:

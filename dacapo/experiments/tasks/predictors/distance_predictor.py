@@ -130,9 +130,7 @@ class DistancePredictor(Predictor):
         """
         Turn the ground truth labels into a distance transform.
         """
-        distances = self.process(
-            gt[:], gt.voxel_size, self.norm, self.dt_scale_factor
-        )
+        distances = self.process(gt[:], gt.voxel_size, self.norm, self.dt_scale_factor)
         return np_to_funlib_array(
             distances,
             gt.roi.offset,

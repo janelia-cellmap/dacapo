@@ -75,9 +75,11 @@ def create_from_identifier(
         voxel_size=voxel_size,
         axis_names=axis_names,
         dtype=dtype,
-        chunk_shape=(*num_channels, *write_size / voxel_size)
-        if write_size is not None
-        else None,
+        chunk_shape=(
+            (*num_channels, *write_size / voxel_size)
+            if write_size is not None
+            else None
+        ),
         mode=mode if overwrite is False else "w",
     )
 

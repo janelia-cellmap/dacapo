@@ -40,7 +40,9 @@ class TiffArrayConfig(ArrayConfig):
     voxel_size: Coordinate = attr.ib(
         metadata={"help_text": "The size of each voxel in each dimension."}
     )
-    axis_names: list[str] = attr.ib(metadata={"help_text": "The axis_names of your array"})
+    axis_names: list[str] = attr.ib(
+        metadata={"help_text": "The axis_names of your array"}
+    )
     units: list[str] = attr.ib(metadata={"help_text": "The units of your array"})
 
     def array(self, mode: str = "r") -> Array:
