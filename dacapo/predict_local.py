@@ -74,6 +74,11 @@ def predict(
     def predict_fn(block):
         raw_input = raw_array.to_ndarray(block.read_roi)
 
+        # expand batch dimension
+        # this is done in case models use BatchNorm or similar layers that
+        # expect a batch dimension
+        raw_input = np.expand_dims(raw_input, 0)
+
         # raw may or may not have channel dimensions.
         axis_names = raw_array.axis_names
         if raw_array.channel_dims == 0:
@@ -81,12 +86,14 @@ def predict(
             axis_names = ["c^"] + axis_names
 
         with torch.no_grad():
+            model.eval()
             predictions = (
                 model.forward(torch.from_numpy(raw_input).float().to(device))
                 .detach()
                 .cpu()
-                .numpy()
+                .numpy()[0]
             )
+            model.train()
             predictions = Array(
                 predictions,
                 block.write_roi.offset,
