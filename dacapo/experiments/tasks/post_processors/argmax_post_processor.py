@@ -138,7 +138,7 @@ class ArgmaxPostProcessor(PostProcessor):
             # Apply argmax to each block of data
             data = np.argmax(
                 to_ndarray(input_array, block.read_roi),
-                axis=self.prediction_array.axes.index("c"),
+                axis=self.prediction_array.axes.index("c^"),
             ).astype(np.uint8)
             save_ndarray(data, block.write_roi, output_array)
 

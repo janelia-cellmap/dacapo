@@ -22,7 +22,7 @@ class DummyArrayConfig(ArrayConfig):
 
     """
 
-    def array(self, mode="r"):
+    def array(self, mode: str = "r") -> Array:
         return Array(np.zeros((100, 50, 50)))
 
     def verify(self) -> Tuple[bool, str]:

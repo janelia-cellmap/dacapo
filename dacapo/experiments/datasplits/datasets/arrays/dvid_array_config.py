@@ -2,6 +2,8 @@ import attr
 
 from .array_config import ArrayConfig
 
+from funlib.persistence import Array
+
 
 from typing import Tuple
 
@@ -24,7 +26,7 @@ class DVIDArrayConfig(ArrayConfig):
         metadata={"help_text": "The source strings."}
     )
 
-    def array(self, mode: str = "r"):
+    def array(self, mode: str = "r") -> Array:
         raise NotImplementedError
 
     def verify(self) -> Tuple[bool, str]:

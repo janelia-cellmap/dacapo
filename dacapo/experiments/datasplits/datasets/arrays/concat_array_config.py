@@ -42,7 +42,7 @@ class ConcatArrayConfig(ArrayConfig):
         },
     )
 
-    def array(self, mode="r") -> Array:
+    def array(self, mode:str="r") -> Array:
         arrays = [config.array(mode) for _, config in self.source_array_configs]
 
         out_array = Array(

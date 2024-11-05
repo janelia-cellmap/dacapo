@@ -1,4 +1,5 @@
 import attr
+from funlib.persistence import Array
 
 from .array_config import ArrayConfig
 
@@ -29,7 +30,7 @@ class IntensitiesArrayConfig(ArrayConfig):
     min: float = attr.ib(metadata={"help_text": "The minimum intensity in your data"})
     max: float = attr.ib(metadata={"help_text": "The maximum intensity in your data"})
 
-    def array(self, mode="r"):
+    def array(self, mode: str = "r") -> Array:
         array = self.source_array_config.array(mode)
         array.lazy_op(lambda data: (data - self.min) / (self.max - self.min))
-        return array 
+        return array
