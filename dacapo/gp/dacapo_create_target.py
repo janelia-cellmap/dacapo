@@ -153,10 +153,7 @@ class DaCapoTargetFilter(gp.BatchFilter):
         output = gp.Batch()
 
         gt_array = gp_to_funlib_array(batch[self.gt_key])
-        print(gt_array.shape, gt_array.axis_names)
         target_array = self.predictor.create_target(gt_array)
-        print(target_array.shape, target_array.axis_names)
-        print(self.predictor)
         mask_array = gp_to_funlib_array(batch[self.mask_key])
 
         if self.target_key is not None:
