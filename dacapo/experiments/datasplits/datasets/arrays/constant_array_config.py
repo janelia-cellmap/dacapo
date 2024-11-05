@@ -37,4 +37,4 @@ class ConstantArrayConfig(ArrayConfig):
             return array
 
         array.lazy_op(set_constant)
-        return source_array
+        return array
