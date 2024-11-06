@@ -23,8 +23,8 @@ jobs:
         pip install .[docs]
         
     - name: parse notebooks
-      run: jupytext --to notebook --execute ./docs/source/notebooks/*.py
-      # continue-on-error: true
+      run: |
+        jupytext --to notebook --execute ./examples/starter_tutorial/minimal_tutorial.py --output ./docs/source/notebooks/minimal_tutorial.ipynb
     - name: remove notebook scripts
       run: rm ./docs/source/notebooks/*.py
     - name: Build and Commit
