@@ -36,11 +36,13 @@ Module Contents
    The source must be a tuple of strings.
 
 
-   .. py:attribute:: array_type
-
-
    .. py:attribute:: source
       :type:  Tuple[str, str, str]
+
+
+   .. py:method:: array(mode: str = 'r') -> funlib.persistence.Array
+      :abstractmethod:
+
 
 
    .. py:method:: verify() -> Tuple[bool, str]

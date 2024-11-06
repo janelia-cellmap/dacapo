@@ -39,14 +39,14 @@ Module Contents
       Each channel will be a binary mask of the ids in the groupings list.
 
 
-   .. py:attribute:: array_type
-
-
    .. py:attribute:: source_array_config
       :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
 
    .. py:attribute:: groupings
       :type:  List[Tuple[str, List[int]]]
+
+
+   .. py:method:: array(mode: str = 'r') -> funlib.persistence.Array
 
 

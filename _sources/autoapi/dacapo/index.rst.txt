@@ -21,6 +21,7 @@ Submodules
    /autoapi/dacapo/predict/index
    /autoapi/dacapo/predict_local/index
    /autoapi/dacapo/store/index
+   /autoapi/dacapo/tmp/index
    /autoapi/dacapo/train/index
    /autoapi/dacapo/utils/index
    /autoapi/dacapo/validate/index

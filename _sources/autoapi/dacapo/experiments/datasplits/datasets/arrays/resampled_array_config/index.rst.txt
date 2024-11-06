@@ -52,9 +52,6 @@ Module Contents
    .. note:: This class is meant to be used with the ArrayDataset class.
 
 
-   .. py:attribute:: array_type
-
-
    .. py:attribute:: source_array_config
       :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
@@ -69,5 +66,10 @@ Module Contents
 
    .. py:attribute:: interp_order
       :type:  bool
+
+
+   .. py:method:: array(mode: str = 'r') -> funlib.persistence.Array
+      :abstractmethod:
+
 
 

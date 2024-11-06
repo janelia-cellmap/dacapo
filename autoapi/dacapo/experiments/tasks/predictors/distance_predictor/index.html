@@ -19,6 +19,7 @@
       <script src="../../../../../../_static/documentation_options.js?v=5929fcd5"></script>
       <script src="../../../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../../search.html" />
@@ -67,6 +68,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../../predict/index.html">dacapo.predict</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../predict_local/index.html">dacapo.predict_local</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../store/index.html">dacapo.store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../tmp/index.html">dacapo.tmp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../train/index.html">dacapo.train</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../utils/index.html">dacapo.utils</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../validate/index.html">dacapo.validate</a></li>
@@ -361,26 +363,8 @@ The clipmax argument is used to determine the maximum value to clip the weights 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">create_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
-<dd><p>Create the target array for training.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>gt</strong> – The ground-truth array.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The created target array.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../../../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.NumpyArray" title="dacapo.experiments.datasplits.datasets.arrays.NumpyArray">NumpyArray</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – This method is not implemented.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predictor</span><span class="o">.</span><span class="n">create_target</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span>
-</pre></div>
-</div>
+<span class="sig-name descname"><span class="pre">create_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.persistence.Array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
+<dd><p>Turn the ground truth labels into a distance transform.</p>
 </dd></dl>
 
 <dl class="py method">

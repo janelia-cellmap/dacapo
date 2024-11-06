@@ -11,7 +11,6 @@ Submodules
    :maxdepth: 1
 
    /autoapi/dacapo/gp/copy/index
-   /autoapi/dacapo/gp/dacapo_array_source/index
    /autoapi/dacapo/gp/dacapo_create_target/index
    /autoapi/dacapo/gp/dacapo_points_source/index
    /autoapi/dacapo/gp/elastic_augment_fuse/index
@@ -25,7 +24,6 @@ Classes
 
 .. autoapisummary::
 
-   dacapo.gp.DaCapoArraySource
    dacapo.gp.DaCapoTargetFilter
    dacapo.gp.GammaAugment
    dacapo.gp.ElasticAugment
@@ -37,77 +35,6 @@ Classes
 
 Package Contents
 ----------------
-
-.. py:class:: DaCapoArraySource(array: dacapo.experiments.datasplits.datasets.arrays.Array, key: gunpowder.ArrayKey)
-
-
-
-   A DaCapo Array source node
-
-   .. attribute:: array
-
-      The array to be served.
-
-      :type: Array
-
-   .. attribute:: key
-
-      The key of the array to be served.
-
-      :type: gp.ArrayKey
-
-   .. method:: setup()
-
-      Set up the provider.
-
-   .. method:: provide(request)
-
-      Provides the array for the requested ROI.
-
-   .. note::
-
-      This class is a subclass of gunpowder.BatchProvider and is used to
-      serve array data to gunpowder pipelines.
-
-
-   .. py:attribute:: array
-
-
-   .. py:attribute:: array_spec
-
-
-   .. py:attribute:: key
-
-
-   .. py:method:: setup()
-
-      Adds the key and the array spec to the provider.
-
-      :raises RuntimeError: If the key is already provided.
-
-      .. rubric:: Examples
-
-      >>> array_source.setup()
-
-
-
-   .. py:method:: provide(request)
-
-      Provides data based on the given request.
-
-      :param request: The request for data
-      :type request: gp.BatchRequest
-
-      :returns: The batch containing the provided data
-      :rtype: gp.Batch
-
-      :raises ValueError: If the input data contains NaN values
-
-      .. rubric:: Examples
-
-      >>> array_source.provide(request)
-
-
 
 .. py:class:: DaCapoTargetFilter(predictor: dacapo.experiments.tasks.predictors.Predictor, gt_key: gunpowder.ArrayKey, target_key: Optional[gunpowder.ArrayKey] = None, weights_key: Optional[gunpowder.ArrayKey] = None, mask_key: Optional[gunpowder.ArrayKey] = None)
 

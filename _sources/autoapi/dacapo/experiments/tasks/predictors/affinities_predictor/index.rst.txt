@@ -244,20 +244,6 @@ Module Contents
 
 
 
-   .. py:property:: num_channels
-
-      Get the number of channels.
-
-      :returns: The number of channels.
-      :rtype: int
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> predictor.num_channels
-
-
    .. py:method:: create_model(architecture)
 
       Create the model.
@@ -275,7 +261,7 @@ Module Contents
 
 
 
-   .. py:method:: create_target(gt)
+   .. py:method:: create_target(gt: funlib.persistence.Array)
 
       Create the target data.
 
@@ -292,7 +278,7 @@ Module Contents
 
 
 
-   .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
+   .. py:method:: create_weight(gt: funlib.persistence.Array, target: funlib.persistence.Array, mask: funlib.persistence.Array, moving_class_counts=None)
 
       Create the weight data.
 

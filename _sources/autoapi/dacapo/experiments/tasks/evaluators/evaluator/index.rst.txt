@@ -97,7 +97,7 @@ Module Contents
    .. note:: The Evaluator class is used to compare and evaluate the output array against the evaluation array.
 
 
-   .. py:method:: evaluate(output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, evaluation_array: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
+   .. py:method:: evaluate(output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, evaluation_array: funlib.persistence.Array) -> dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
       :abstractmethod:
 
 

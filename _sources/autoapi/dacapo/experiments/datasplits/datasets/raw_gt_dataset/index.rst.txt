@@ -57,15 +57,15 @@ Module Contents
 
 
    .. py:attribute:: raw
-      :type:  dacapo.experiments.datasplits.datasets.arrays.Array
+      :type:  funlib.persistence.Array
 
 
    .. py:attribute:: gt
-      :type:  dacapo.experiments.datasplits.datasets.arrays.Array
+      :type:  funlib.persistence.Array
 
 
    .. py:attribute:: mask
-      :type:  Optional[dacapo.experiments.datasplits.datasets.arrays.Array]
+      :type:  Optional[funlib.persistence.Array]
 
 
    .. py:attribute:: sample_points

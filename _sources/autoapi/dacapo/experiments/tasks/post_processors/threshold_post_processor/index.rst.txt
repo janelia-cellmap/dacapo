@@ -79,7 +79,7 @@ Module Contents
 
 
 
-   .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, num_workers: int = 12, block_size: daisy.Coordinate = Coordinate((256, 256, 256))) -> dacapo.experiments.datasplits.datasets.arrays.zarr_array.ZarrArray
+   .. py:method:: process(parameters: dacapo.experiments.tasks.post_processors.threshold_post_processor_parameters.ThresholdPostProcessorParameters, output_array_identifier: dacapo.store.array_store.LocalArrayIdentifier, num_workers: int = 12, block_size: daisy.Coordinate = Coordinate((256, 256, 256))) -> funlib.persistence.Array
 
       Process the prediction with the given parameters.
 
@@ -92,9 +92,6 @@ Module Contents
       :param block_size: The block size to use for processing.
       :type block_size: Coordinate
 
-      :returns: The output array.
-      :rtype: ZarrArray
-
       :raises NotImplementedError: If the method is not implemented.
 
       .. rubric:: Examples
@@ -104,7 +101,7 @@ Module Contents
       .. note::
 
          This method should process the prediction with the given parameters and return the output array. The method uses the `run_blockwise` function from the `dacapo.blockwise.scheduler` module to run the blockwise post-processing.
-         The output array is created using the `ZarrArray.create_from_array_identifier` function from the `dacapo.experiments.datasplits.datasets.arrays` module.
+         The output array is created using the `create_from_identifier` function from the `dacapo.experiments.datasplits.datasets.arrays` module.
 
 
 

@@ -767,7 +767,7 @@ Package Contents
       Fetches the next batch of data.
 
       :returns: A tuple containing the raw data, ground truth data, target data, weight data, and mask data.
-      :rtype: Tuple[NumpyArray, NumpyArray, NumpyArray, NumpyArray, NumpyArray]
+      :rtype: Tuple[Array, Array, Array, Array, Array]
 
       :raises NotImplementedError: If the method is not implemented by the subclass.
 

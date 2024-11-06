@@ -57,14 +57,14 @@ Module Contents
       and methods. The only difference is that the array_type is CropArray.
 
 
-   .. py:attribute:: array_type
-
-
    .. py:attribute:: source_array_config
       :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
 
    .. py:attribute:: roi
       :type:  funlib.geometry.Roi
+
+
+   .. py:method:: array(mode: str = 'r') -> funlib.persistence.Array
 
 

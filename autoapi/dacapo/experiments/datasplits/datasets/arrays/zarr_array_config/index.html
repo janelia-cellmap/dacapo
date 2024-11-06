@@ -19,11 +19,12 @@
       <script src="../../../../../../../_static/documentation_options.js?v=5929fcd5"></script>
       <script src="../../../../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../../../search.html" />
     <link rel="next" title="dacapo.experiments.datasplits.datasets.dataset" href="../../dataset/index.html" />
-    <link rel="prev" title="dacapo.experiments.datasplits.datasets.arrays.zarr_array" href="../zarr_array/index.html" /> 
+    <link rel="prev" title="dacapo.experiments.datasplits.datasets.arrays.tiff_array_config" href="../tiff_array_config/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -67,6 +68,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../../../predict/index.html">dacapo.predict</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../predict_local/index.html">dacapo.predict_local</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../store/index.html">dacapo.store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../tmp/index.html">dacapo.tmp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../train/index.html">dacapo.train</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../utils/index.html">dacapo.utils</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../../validate/index.html">dacapo.validate</a></li>
@@ -159,7 +161,7 @@ If you need to make sure your ROI’s align with a specific voxel_size</p>
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.zarr_array_config.ZarrArrayConfig._axes">
 <span class="sig-name descname"><span class="pre">_axes</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.zarr_array_config.ZarrArrayConfig._axes" title="Link to this definition"></a></dt>
 <dd><p>Optional[List[str]]
-The axes of your data!</p>
+The axis_names of your data!</p>
 </dd></dl>
 
 <dl class="py method">
@@ -172,11 +174,6 @@ The axes of your data!</p>
 <p class="admonition-title">Note</p>
 <p>This class is a subclass of ArrayConfig.</p>
 </div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.zarr_array_config.ZarrArrayConfig.array_type">
-<span class="sig-name descname"><span class="pre">array_type</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.zarr_array_config.ZarrArrayConfig.array_type" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id0">
 <span class="sig-name descname"><span class="pre">file_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">upath.UPath</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
@@ -195,6 +192,11 @@ The axes of your data!</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.zarr_array_config.ZarrArrayConfig.mode">
 <span class="sig-name descname"><span class="pre">mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.zarr_array_config.ZarrArrayConfig.mode" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.arrays.zarr_array_config.ZarrArrayConfig.array">
+<span class="sig-name descname"><span class="pre">array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'r'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.arrays.zarr_array_config.ZarrArrayConfig.array" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -239,7 +241,7 @@ The string provides a reason why the Array is not valid.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../zarr_array/index.html" class="btn btn-neutral float-left" title="dacapo.experiments.datasplits.datasets.arrays.zarr_array" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../tiff_array_config/index.html" class="btn btn-neutral float-left" title="dacapo.experiments.datasplits.datasets.arrays.tiff_array_config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="../../dataset/index.html" class="btn btn-neutral float-right" title="dacapo.experiments.datasplits.datasets.dataset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

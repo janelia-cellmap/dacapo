@@ -37,7 +37,7 @@ Module Contents
 
 
    .. py:attribute:: raw
-      :type:  dacapo.experiments.datasplits.datasets.arrays.Array
+      :type:  funlib.persistence.Array
 
 
    .. py:attribute:: name

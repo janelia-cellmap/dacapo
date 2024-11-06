@@ -19,6 +19,7 @@
       <script src="../_static/documentation_options.js?v=5929fcd5"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -210,23 +211,28 @@ conda<span class="w"> </span>activate<span class="w"> </span>dacapo
 
 <span class="c1"># Create the zarr array with appropriate metadata</span>
 <span class="n">cell_array</span> <span class="o">=</span> <span class="n">prepare_ds</span><span class="p">(</span>
-    <span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;raw&quot;</span><span class="p">,</span>
-    <span class="n">Roi</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">cell_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">*</span> <span class="n">voxel_size</span><span class="p">,</span>
+    <span class="s2">&quot;cells3d.zarr/raw&quot;</span><span class="p">,</span>
+    <span class="n">cell_data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+    <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
     <span class="n">voxel_size</span><span class="o">=</span><span class="n">voxel_size</span><span class="p">,</span>
+    <span class="n">axis_names</span><span class="o">=</span><span class="n">axis_names</span><span class="p">,</span>
+    <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span>
     <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span>
-    <span class="n">num_channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># Save the cell data to the zarr array</span>
-<span class="n">cell_array</span><span class="p">[</span><span class="n">cell_array</span><span class="o">.</span><span class="n">roi</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">cell_array</span><span class="p">[</span><span class="n">cell_array</span><span class="o">.</span><span class="n">roi</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell_data</span>
 
 <span class="c1"># Generate and save some pseudo ground truth data</span>
 <span class="n">mask_array</span> <span class="o">=</span> <span class="n">prepare_ds</span><span class="p">(</span>
-    <span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;mask&quot;</span><span class="p">,</span>
-    <span class="n">Roi</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">cell_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">*</span> <span class="n">voxel_size</span><span class="p">,</span>
+    <span class="s2">&quot;cells3d.zarr/mask&quot;</span><span class="p">,</span>
+    <span class="n">cell_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+    <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
     <span class="n">voxel_size</span><span class="o">=</span><span class="n">voxel_size</span><span class="p">,</span>
+    <span class="n">axis_names</span><span class="o">=</span><span class="n">axis_names</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+    <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span>
     <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">cell_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">gaussian</span><span class="p">(</span><span class="n">cell_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span> <span class="o">*</span> <span class="mi">255</span> <span class="o">&gt;</span> <span class="mi">30</span>
@@ -235,10 +241,13 @@ conda<span class="w"> </span>activate<span class="w"> </span>dacapo
 
 <span class="c1"># Generate labels via connected components</span>
 <span class="n">labels_array</span> <span class="o">=</span> <span class="n">prepare_ds</span><span class="p">(</span>
-    <span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;labels&quot;</span><span class="p">,</span>
-    <span class="n">Roi</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">cell_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">*</span> <span class="n">voxel_size</span><span class="p">,</span>
+    <span class="s2">&quot;cells3d.zarr/labels&quot;</span><span class="p">,</span>
+    <span class="n">cell_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+    <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
     <span class="n">voxel_size</span><span class="o">=</span><span class="n">voxel_size</span><span class="p">,</span>
+    <span class="n">axis_names</span><span class="o">=</span><span class="n">axis_names</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+    <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span>
     <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">labels_array</span><span class="p">[</span><span class="n">labels_array</span><span class="o">.</span><span class="n">roi</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span><span class="p">(</span><span class="n">mask_array</span><span class="o">.</span><span class="n">to_ndarray</span><span class="p">(</span><span class="n">mask_array</span><span class="o">.</span><span class="n">roi</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
@@ -246,7 +255,7 @@ conda<span class="w"> </span>activate<span class="w"> </span>dacapo
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data saved to cells3d.zarr&quot;</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">zarr</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">tree</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">tree</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -255,7 +264,7 @@ conda<span class="w"> </span>activate<span class="w"> </span>dacapo
 /
  ├── labels (60, 256, 256) uint8
  ├── mask (60, 256, 256) uint8
- └── raw (60, 256, 256) uint8
+ └── raw (2, 60, 256, 256) uint8
 </pre></div>
 </div>
 </div>
@@ -269,7 +278,7 @@ conda<span class="w"> </span>activate<span class="w"> </span>dacapo
 <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
 <span class="c1"># Show the raw data</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">cell_array</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">30</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">cell_array</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">])</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Raw Data&quot;</span><span class="p">)</span>
 
 <span class="c1"># Show the labels using the custom label color map</span>
@@ -281,7 +290,7 @@ conda<span class="w"> </span>activate<span class="w"> </span>dacapo
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7bcc41b2e8c9ecea9d3960b78d0841b6e9abdcd7b93e9589e8378151e1c3d58e.png" src="../_images/7bcc41b2e8c9ecea9d3960b78d0841b6e9abdcd7b93e9589e8378151e1c3d58e.png" />
+<img alt="../_images/049a0bbe91d8d778e120a45b30eddcaa19dab1b8a4a784a20eed29f032edfbee.png" src="../_images/049a0bbe91d8d778e120a45b30eddcaa19dab1b8a4a784a20eed29f032edfbee.png" />
 </div>
 </div>
 </section>
@@ -295,26 +304,59 @@ same data for both training and validation. This is not recommended for real
 experiments, but is useful for this tutorial.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits</span> <span class="kn">import</span> <span class="n">DataSplitGenerator</span><span class="p">,</span> <span class="n">DatasetSpec</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits</span> <span class="kn">import</span> <span class="n">TrainValidateDataSplitConfig</span>
+<span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets</span> <span class="kn">import</span> <span class="n">RawGTDatasetConfig</span>
+<span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ZarrArrayConfig</span><span class="p">,</span>
+    <span class="n">IntensitiesArrayConfig</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">funlib.geometry</span> <span class="kn">import</span> <span class="n">Coordinate</span>
 
-<span class="n">dataspecs</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">DatasetSpec</span><span class="p">(</span>
-        <span class="n">dataset_type</span><span class="o">=</span><span class="n">type_crop</span><span class="p">,</span>
-        <span class="n">raw_container</span><span class="o">=</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
-        <span class="n">raw_dataset</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span>
-        <span class="n">gt_container</span><span class="o">=</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
-        <span class="n">gt_dataset</span><span class="o">=</span><span class="s2">&quot;labels&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="k">for</span> <span class="n">type_crop</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;val&quot;</span><span class="p">]</span>
-<span class="p">]</span>
-
-<span class="n">datasplit_config</span> <span class="o">=</span> <span class="n">DataSplitGenerator</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;skimage_tutorial_data&quot;</span><span class="p">,</span>
-    <span class="n">datasets</span><span class="o">=</span><span class="n">dataspecs</span><span class="p">,</span>
-    <span class="n">input_resolution</span><span class="o">=</span><span class="n">voxel_size</span><span class="p">,</span>
-    <span class="n">output_resolution</span><span class="o">=</span><span class="n">voxel_size</span><span class="p">,</span>
-    <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;cell&quot;</span><span class="p">],</span>
-<span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="n">datasplit_config</span> <span class="o">=</span> <span class="n">TrainValidateDataSplitConfig</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_datasplit&quot;</span><span class="p">,</span>
+    <span class="n">train_configs</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">RawGTDatasetConfig</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_dataset&quot;</span><span class="p">,</span>
+            <span class="n">raw_config</span><span class="o">=</span><span class="n">IntensitiesArrayConfig</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_raw_normalized&quot;</span><span class="p">,</span>
+                <span class="n">source_array_config</span><span class="o">=</span><span class="n">ZarrArrayConfig</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_raw&quot;</span><span class="p">,</span>
+                    <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
+                    <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="nb">max</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">gt_config</span><span class="o">=</span><span class="n">ZarrArrayConfig</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_gt&quot;</span><span class="p">,</span>
+                <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
+                <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;mask&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+    <span class="p">],</span>
+    <span class="n">validate_configs</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">RawGTDatasetConfig</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_dataset&quot;</span><span class="p">,</span>
+            <span class="n">raw_config</span><span class="o">=</span><span class="n">IntensitiesArrayConfig</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_raw_normalized&quot;</span><span class="p">,</span>
+                <span class="n">source_array_config</span><span class="o">=</span><span class="n">ZarrArrayConfig</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_raw&quot;</span><span class="p">,</span>
+                    <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
+                    <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="nb">max</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">gt_config</span><span class="o">=</span><span class="n">ZarrArrayConfig</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_gt&quot;</span><span class="p">,</span>
+                <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
+                <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;labels&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+<span class="n">datasplit</span> <span class="o">=</span> <span class="n">datasplit_config</span><span class="o">.</span><span class="n">datasplit_type</span><span class="p">(</span><span class="n">datasplit_config</span><span class="p">)</span>
+<span class="n">config_store</span><span class="o">.</span><span class="n">store_datasplit_config</span><span class="p">(</span><span class="n">datasplit_config</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -393,7 +435,7 @@ convolutional layers do you want?</p>
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_unet&quot;</span><span class="p">,</span>
     <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">132</span><span class="p">,</span> <span class="mi">132</span><span class="p">),</span>
     <span class="n">eval_shape_increase</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
-    <span class="n">fmaps_in</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">fmaps_in</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">num_fmaps</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
     <span class="n">fmaps_out</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
     <span class="n">fmap_inc_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
@@ -423,7 +465,7 @@ batch size to train with.</p>
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example&quot;</span><span class="p">,</span>
     <span class="n">batch_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
-    <span class="n">num_data_fetchers</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">num_data_fetchers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">snapshot_interval</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">min_masked</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
     <span class="n">clip_raw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -514,7 +556,6 @@ from scratch. This may cause errors.</p>
 <span class="n">config_store</span> <span class="o">=</span> <span class="n">create_config_store</span><span class="p">()</span>
 
 <span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">(</span><span class="n">config_store</span><span class="o">.</span><span class="n">retrieve_run_config</span><span class="p">(</span><span class="s2">&quot;example_run&quot;</span><span class="p">))</span>
-
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">train_run</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 </pre></div>
@@ -547,14 +588,29 @@ Retrieving weights for run example_run, iteration 2000
 including snapshots, validation results, and the loss.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">run</span><span class="o">.</span><span class="n">validation_scores</span><span class="o">.</span><span class="n">to_xarray</span><span class="p">()[</span><span class="s2">&quot;criteria&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats_store</span> <span class="o">=</span> <span class="n">create_stats_store</span><span class="p">()</span>
+<span class="n">training_stats</span> <span class="o">=</span> <span class="n">stats_store</span><span class="o">.</span><span class="n">retrieve_training_stats</span><span class="p">(</span><span class="n">run_config</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">training_stats</span><span class="o">.</span><span class="n">to_xarray</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Training Loss&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Loss&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&#39;voi_split&#39;, &#39;voi_merge&#39;, &#39;voi&#39;], dtype=&#39;&lt;U9&#39;)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating FileStatsStore:
+	path    : /home/runner/dacapo/stats
+&lt;xarray.DataArray (iterations: 2000)&gt;
+array([0.66857749, 0.66658586, 0.64109617, ..., 0.20327242, 0.31089061,
+       0.2549527 ])
+Coordinates:
+  * iterations  (iterations) int64 0 1 2 3 4 5 ... 1994 1995 1996 1997 1998 1999
 </pre></div>
 </div>
+<img alt="../_images/d265d1deeb6083a9495d2b6183083bf78cc62239387a01aea233d71458629e09.png" src="../_images/d265d1deeb6083a9495d2b6183083bf78cc62239387a01aea233d71458629e09.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -586,7 +642,7 @@ Creating FileStatsStore:
 	path    : /home/runner/dacapo/stats
 </pre></div>
 </div>
-<img alt="../_images/d72a07c75fdd24c7188bdc106d8080d42bc7cb953f9428417bfb970a054bad32.png" src="../_images/d72a07c75fdd24c7188bdc106d8080d42bc7cb953f9428417bfb970a054bad32.png" />
+<img alt="../_images/7c52791c7bc3615d698d13814e1966f676060b18352dafff71173aed6a834783.png" src="../_images/7c52791c7bc3615d698d13814e1966f676060b18352dafff71173aed6a834783.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -600,28 +656,31 @@ Creating FileStatsStore:
 
 <span class="n">run_path</span> <span class="o">=</span> <span class="n">config_store</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">run_config</span><span class="o">.</span><span class="n">name</span>
 
+<span class="c1"># BROWSER = False</span>
 <span class="n">num_snapshots</span> <span class="o">=</span> <span class="n">run_config</span><span class="o">.</span><span class="n">num_iterations</span> <span class="o">//</span> <span class="n">run_config</span><span class="o">.</span><span class="n">trainer_config</span><span class="o">.</span><span class="n">snapshot_interval</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">num_snapshots</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">num_snapshots</span><span class="p">))</span>
 
-<span class="c1"># Set column titles</span>
-<span class="n">column_titles</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span> <span class="s2">&quot;Target&quot;</span><span class="p">,</span> <span class="s2">&quot;Prediction&quot;</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
-    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">column_titles</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+<span class="k">if</span> <span class="n">num_snapshots</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">num_snapshots</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">num_snapshots</span><span class="p">))</span>
 
-<span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_snapshots</span><span class="p">):</span>
-    <span class="n">snapshot_it</span> <span class="o">=</span> <span class="n">snapshot</span> <span class="o">*</span> <span class="n">run_config</span><span class="o">.</span><span class="n">trainer_config</span><span class="o">.</span><span class="n">snapshot_interval</span>
-    <span class="c1"># break</span>
-    <span class="n">raw</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/snapshot.zarr/</span><span class="si">{</span><span class="n">snapshot_it</span><span class="si">}</span><span class="s2">/volumes/raw&quot;</span><span class="p">)[:]</span>
-    <span class="n">target</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/snapshot.zarr/</span><span class="si">{</span><span class="n">snapshot_it</span><span class="si">}</span><span class="s2">/volumes/target&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">prediction</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/snapshot.zarr/</span><span class="si">{</span><span class="n">snapshot_it</span><span class="si">}</span><span class="s2">/volumes/prediction&quot;</span>
-    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span>
-    <span class="n">ax</span><span class="p">[</span><span class="n">snapshot</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">raw</span><span class="p">[</span><span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span><span class="o">-</span><span class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span><span class="o">-</span><span class="n">c</span><span class="p">])</span>
-    <span class="n">ax</span><span class="p">[</span><span class="n">snapshot</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
-    <span class="n">ax</span><span class="p">[</span><span class="n">snapshot</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="n">prediction</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
-    <span class="n">ax</span><span class="p">[</span><span class="n">snapshot</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Snapshot </span><span class="si">{</span><span class="n">snapshot_it</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="c1"># Set column titles</span>
+    <span class="n">column_titles</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Raw&quot;</span><span class="p">,</span> <span class="s2">&quot;Target&quot;</span><span class="p">,</span> <span class="s2">&quot;Prediction&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">column_titles</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_snapshots</span><span class="p">):</span>
+        <span class="n">snapshot_it</span> <span class="o">=</span> <span class="n">snapshot</span> <span class="o">*</span> <span class="n">run_config</span><span class="o">.</span><span class="n">trainer_config</span><span class="o">.</span><span class="n">snapshot_interval</span>
+        <span class="c1"># break</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/snapshot.zarr/</span><span class="si">{</span><span class="n">snapshot_it</span><span class="si">}</span><span class="s2">/volumes/raw&quot;</span><span class="p">)[:]</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/snapshot.zarr/</span><span class="si">{</span><span class="n">snapshot_it</span><span class="si">}</span><span class="s2">/volumes/target&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/snapshot.zarr/</span><span class="si">{</span><span class="n">snapshot_it</span><span class="si">}</span><span class="s2">/volumes/prediction&quot;</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">snapshot</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">raw</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span><span class="o">-</span><span class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span><span class="o">-</span><span class="n">c</span><span class="p">])</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">snapshot</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="n">target</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">snapshot</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="n">prediction</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">snapshot</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Snapshot </span><span class="si">{</span><span class="n">snapshot_it</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="c1"># # %%</span>
 <span class="c1"># Visualize validations</span>
@@ -639,16 +698,16 @@ Creating FileStatsStore:
     <span class="n">dataset</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">datasplit</span><span class="o">.</span><span class="n">validate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
     <span class="n">validation_it</span> <span class="o">=</span> <span class="n">validation</span> <span class="o">*</span> <span class="n">run_config</span><span class="o">.</span><span class="n">validation_interval</span>
     <span class="c1"># break</span>
-    <span class="n">raw</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/inputs/</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/raw&quot;</span><span class="p">)[:]</span>
-    <span class="n">gt</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/inputs/</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/gt&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/inputs/</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/raw&quot;</span><span class="p">)</span>
+    <span class="n">gt</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/inputs/</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/gt&quot;</span><span class="p">)</span>
     <span class="n">pred_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/</span><span class="si">{</span><span class="n">validation_it</span><span class="si">}</span><span class="s2">/ds_</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/prediction&quot;</span>
     <span class="n">out_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/</span><span class="si">{</span><span class="n">validation_it</span><span class="si">}</span><span class="s2">/ds_</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))&quot;</span>
     <span class="n">output</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">out_path</span><span class="p">)[:]</span>
     <span class="n">prediction</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pred_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">gt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">gt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span>
     <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">raw</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[:,</span> <span class="n">c</span><span class="p">:</span><span class="o">-</span><span class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span><span class="o">-</span><span class="n">c</span><span class="p">]</span>
-    <span class="n">ax</span><span class="p">[</span><span class="n">validation</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">raw</span><span class="p">[</span><span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">c</span><span class="p">:</span><span class="o">-</span><span class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span><span class="o">-</span><span class="n">c</span><span class="p">]</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">validation</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">raw</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
     <span class="n">ax</span><span class="p">[</span><span class="n">validation</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
         <span class="n">gt</span><span class="p">[</span><span class="n">gt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">label_cmap</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;none&quot;</span>
     <span class="p">)</span>
@@ -662,8 +721,8 @@ Creating FileStatsStore:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d02b5cabde229a74324f5e3bfdcfee0d245324ca9d552b6e8caa23ba461e8c03.png" src="../_images/d02b5cabde229a74324f5e3bfdcfee0d245324ca9d552b6e8caa23ba461e8c03.png" />
-<img alt="../_images/6cd7de5ff1f13c565c70d5e1db2556bef4a335a720bf2f31ce9e8439c35b21e1.png" src="../_images/6cd7de5ff1f13c565c70d5e1db2556bef4a335a720bf2f31ce9e8439c35b21e1.png" />
+<img alt="../_images/71872b3ffe3e5d98f3d8e70ad86d05e4d8fd5a73ee31106af15ba541b090614f.png" src="../_images/71872b3ffe3e5d98f3d8e70ad86d05e4d8fd5a73ee31106af15ba541b090614f.png" />
+<img alt="../_images/a837867f32382a992395cb369fd100a66eeacfde950f7cca84555618bc52305f.png" src="../_images/a837867f32382a992395cb369fd100a66eeacfde950f7cca84555618bc52305f.png" />
 </div>
 </div>
 </section>

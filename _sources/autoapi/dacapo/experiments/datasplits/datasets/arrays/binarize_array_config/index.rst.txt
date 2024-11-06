@@ -48,9 +48,6 @@ Module Contents
       Each class will be binarized into a separate channel.
 
 
-   .. py:attribute:: array_type
-
-
    .. py:attribute:: source_array_config
       :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
@@ -61,5 +58,8 @@ Module Contents
 
    .. py:attribute:: background
       :type:  int
+
+
+   .. py:method:: array(mode='r') -> funlib.persistence.Array
 
 

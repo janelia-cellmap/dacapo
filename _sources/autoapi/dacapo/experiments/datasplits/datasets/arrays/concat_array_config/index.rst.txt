@@ -53,9 +53,6 @@ Module Contents
       The source array is a dictionary with the key being the channel and the value being the array.
 
 
-   .. py:attribute:: array_type
-
-
    .. py:attribute:: channels
       :type:  List[str]
 
@@ -66,5 +63,8 @@ Module Contents
 
    .. py:attribute:: default_config
       :type:  Optional[dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
+
+
+   .. py:method:: array(mode: str = 'r') -> funlib.persistence.Array
 
 

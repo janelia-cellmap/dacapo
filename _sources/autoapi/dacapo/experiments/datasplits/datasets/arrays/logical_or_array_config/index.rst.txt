@@ -37,10 +37,10 @@ Module Contents
    The source_array_config must be an ArrayConfig object.
 
 
-   .. py:attribute:: array_type
-
-
    .. py:attribute:: source_array_config
       :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
+
+
+   .. py:method:: array(mode: str = 'r') -> funlib.persistence.Array
 
 

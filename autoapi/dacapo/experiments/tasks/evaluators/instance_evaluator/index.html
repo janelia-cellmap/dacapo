@@ -19,6 +19,7 @@
       <script src="../../../../../../_static/documentation_options.js?v=5929fcd5"></script>
       <script src="../../../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../../search.html" />
@@ -67,6 +68,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../../predict/index.html">dacapo.predict</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../predict_local/index.html">dacapo.predict_local</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../store/index.html">dacapo.store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../tmp/index.html">dacapo.tmp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../train/index.html">dacapo.train</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../utils/index.html">dacapo.utils</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../validate/index.html">dacapo.validate</a></li>
@@ -257,7 +259,7 @@ for all 3 of these criteria</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>output_array_identifier</strong> – str
 the identifier of the output array</p></li>
-<li><p><strong>evaluation_array</strong> – ZarrArray
+<li><p><strong>evaluation_array</strong> – Zarr Array
 the evaluation array</p></li>
 </ul>
 </dd>
@@ -275,7 +277,7 @@ the evaluation array</p></li>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">instance_evaluator</span> <span class="o">=</span> <span class="n">InstanceEvaluator</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">output_array_identifier</span> <span class="o">=</span> <span class="s2">&quot;output_array&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="o">.</span><span class="n">open_from_array_identifier</span><span class="p">(</span><span class="s2">&quot;evaluation_array&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_array</span> <span class="o">=</span> <span class="n">open_from_identifier</span><span class="p">(</span><span class="s2">&quot;evaluation_array&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instance_evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">output_array_identifier</span><span class="p">,</span> <span class="n">evaluation_array</span><span class="p">)</span>
 <span class="go">InstanceEvaluationScores(voi_merge=0.0, voi_split=0.0)</span>
 </pre></div>

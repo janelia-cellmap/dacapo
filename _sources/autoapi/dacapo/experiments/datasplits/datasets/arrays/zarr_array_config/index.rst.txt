@@ -44,7 +44,7 @@ Module Contents
    .. attribute:: _axes
 
       Optional[List[str]]
-      The axes of your data!
+      The axis_names of your data!
 
    .. method:: verify() -> Tuple[bool, str]
 
@@ -52,9 +52,6 @@ Module Contents
       Check whether this is a valid Array
 
    .. note:: This class is a subclass of ArrayConfig.
-
-
-   .. py:attribute:: array_type
 
 
    .. py:attribute:: file_name
@@ -71,6 +68,9 @@ Module Contents
 
    .. py:attribute:: mode
       :type:  Optional[str]
+
+
+   .. py:method:: array(mode='r')
 
 
    .. py:method:: verify() -> Tuple[bool, str]

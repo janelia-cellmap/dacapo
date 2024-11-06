@@ -101,7 +101,7 @@ Module Contents
    :param overwrite: Whether to overwrite existing output. Defaults to True.
    :type overwrite: bool, optional
 
-   :raises ValueError: If the input array is not a ZarrArray.
+   :raises ValueError: If the input array is not a zarr array.
 
    .. rubric:: Examples
 

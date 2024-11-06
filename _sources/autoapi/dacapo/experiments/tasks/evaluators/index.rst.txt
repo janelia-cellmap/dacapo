@@ -473,7 +473,7 @@ Package Contents
    .. note:: The Evaluator class is used to compare and evaluate the output array against the evaluation array.
 
 
-   .. py:method:: evaluate(output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, evaluation_array: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
+   .. py:method:: evaluate(output_array_identifier: dacapo.store.local_array_store.LocalArrayIdentifier, evaluation_array: funlib.persistence.Array) -> dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores
       :abstractmethod:
 
 
@@ -1392,7 +1392,7 @@ Package Contents
 
       :param output_array_identifier: str
                                       the identifier of the output array
-      :param evaluation_array: ZarrArray
+      :param evaluation_array: Zarr Array
                                the evaluation array
 
       :returns:
@@ -1406,7 +1406,7 @@ Package Contents
 
       >>> binary_segmentation_evaluator = BinarySegmentationEvaluator(clip_distance=200, tol_distance=40, channels=["channel1", "channel2"])
       >>> output_array_identifier = "output_array"
-      >>> evaluation_array = ZarrArray.open_from_array_identifier("evaluation_array")
+      >>> evaluation_array = open_from_identifier("evaluation_array")
       >>> binary_segmentation_evaluator.evaluate(output_array_identifier, evaluation_array)
       BinarySegmentationEvaluationScores(dice=0.0, jaccard=0.0, hausdorff=0.0, false_negative_rate=0.0, false_positive_rate=0.0, false_discovery_rate=0.0, voi=0.0, mean_false_distance=0.0, mean_false_negative_distance=0.0, mean_false_positive_distance=0.0, mean_false_distance_clipped=0.0, mean_false_negative_distance_clipped=0.0, mean_false_positive_distance_clipped=0.0, precision_with_tolerance=0.0, recall_with_tolerance=0.0, f1_score_with_tolerance=0.0, precision=0.0, recall=0.0, f1_score=0.0)
 
@@ -1654,7 +1654,7 @@ Package Contents
 
       :param output_array_identifier: str
                                       the identifier of the output array
-      :param evaluation_array: ZarrArray
+      :param evaluation_array: Zarr Array
                                the evaluation array
 
       :returns:
@@ -1668,7 +1668,7 @@ Package Contents
 
       >>> instance_evaluator = InstanceEvaluator()
       >>> output_array_identifier = "output_array"
-      >>> evaluation_array = ZarrArray.open_from_array_identifier("evaluation_array")
+      >>> evaluation_array = open_from_identifier("evaluation_array")
       >>> instance_evaluator.evaluate(output_array_identifier, evaluation_array)
       InstanceEvaluationScores(voi_merge=0.0, voi_split=0.0)
 

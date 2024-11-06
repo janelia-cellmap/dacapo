@@ -9,13 +9,13 @@ Classes
 
 .. autoapisummary::
 
-   dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.ZarrArrayConfig
+   dacapo.experiments.datasplits.datasets.arrays.tiff_array_config.TiffArrayConfig
 
 
 Module Contents
 ---------------
 
-.. py:class:: ZarrArrayConfig
+.. py:class:: TiffArrayConfig
 
 
 
@@ -36,15 +36,12 @@ Module Contents
       Coordinate
       The voxel size of the array.
 
-   .. attribute:: axes
+   .. attribute:: axis_names
 
       List[str]
-      The axes of the array.
+      The axis_names of the array.
 
    .. note:: This class is a subclass of ArrayConfig.
-
-
-   .. py:attribute:: array_type
 
 
    .. py:attribute:: file_name
@@ -59,7 +56,14 @@ Module Contents
       :type:  funlib.geometry.Coordinate
 
 
-   .. py:attribute:: axes
-      :type:  List[str]
+   .. py:attribute:: axis_names
+      :type:  list[str]
+
+
+   .. py:attribute:: units
+      :type:  list[str]
+
+
+   .. py:method:: array(mode: str = 'r') -> funlib.persistence.Array
 
 

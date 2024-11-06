@@ -100,20 +100,9 @@ Module Contents
 
 
 
-   .. py:method:: create_target(gt)
+   .. py:method:: create_target(gt: funlib.persistence.Array)
 
-      Create the target array for training.
-
-      :param gt: The ground truth array.
-
-      :returns: The created target array.
-      :rtype: NumpyArray
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> target = predictor.create_target(gt)
+      Turn labels into a one hot encoding
 
 
 

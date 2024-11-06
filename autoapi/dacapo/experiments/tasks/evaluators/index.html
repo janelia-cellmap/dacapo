@@ -19,6 +19,7 @@
       <script src="../../../../../_static/documentation_options.js?v=5929fcd5"></script>
       <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
@@ -67,6 +68,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../predict/index.html">dacapo.predict</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../predict_local/index.html">dacapo.predict_local</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../store/index.html">dacapo.store</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tmp/index.html">dacapo.tmp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../train/index.html">dacapo.train</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../utils/index.html">dacapo.utils</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../validate/index.html">dacapo.validate</a></li>
@@ -710,7 +712,7 @@ the best scores for each dataset/post-processing parameter/criterion combination
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="id12">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dacapo.store.local_array_store.LocalArrayIdentifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../datasplits/datasets/arrays/index.html#dacapo.experiments.datasplits.datasets.arrays.Array" title="dacapo.experiments.datasplits.datasets.arrays.Array"><span class="pre">dacapo.experiments.datasplits.datasets.arrays.Array</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores" title="dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores</span></a></span></span><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_array_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dacapo.store.local_array_store.LocalArrayIdentifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">funlib.persistence.Array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="evaluation_scores/index.html#dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores" title="dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores"><span class="pre">dacapo.experiments.tasks.evaluators.evaluation_scores.EvaluationScores</span></a></span></span><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
 <dd><p>Compares and evaluates the output array against the evaluation array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1908,7 +1910,7 @@ for all 3 of these criteria</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>output_array_identifier</strong> – str
 the identifier of the output array</p></li>
-<li><p><strong>evaluation_array</strong> – ZarrArray
+<li><p><strong>evaluation_array</strong> – Zarr Array
 the evaluation array</p></li>
 </ul>
 </dd>
@@ -1926,7 +1928,7 @@ the evaluation array</p></li>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binary_segmentation_evaluator</span> <span class="o">=</span> <span class="n">BinarySegmentationEvaluator</span><span class="p">(</span><span class="n">clip_distance</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">tol_distance</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;channel1&quot;</span><span class="p">,</span> <span class="s2">&quot;channel2&quot;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">output_array_identifier</span> <span class="o">=</span> <span class="s2">&quot;output_array&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="o">.</span><span class="n">open_from_array_identifier</span><span class="p">(</span><span class="s2">&quot;evaluation_array&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_array</span> <span class="o">=</span> <span class="n">open_from_identifier</span><span class="p">(</span><span class="s2">&quot;evaluation_array&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">binary_segmentation_evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">output_array_identifier</span><span class="p">,</span> <span class="n">evaluation_array</span><span class="p">)</span>
 <span class="go">BinarySegmentationEvaluationScores(dice=0.0, jaccard=0.0, hausdorff=0.0, false_negative_rate=0.0, false_positive_rate=0.0, false_discovery_rate=0.0, voi=0.0, mean_false_distance=0.0, mean_false_negative_distance=0.0, mean_false_positive_distance=0.0, mean_false_distance_clipped=0.0, mean_false_negative_distance_clipped=0.0, mean_false_positive_distance_clipped=0.0, precision_with_tolerance=0.0, recall_with_tolerance=0.0, f1_score_with_tolerance=0.0, precision=0.0, recall=0.0, f1_score=0.0)</span>
 </pre></div>
@@ -2242,7 +2244,7 @@ for all 3 of these criteria</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>output_array_identifier</strong> – str
 the identifier of the output array</p></li>
-<li><p><strong>evaluation_array</strong> – ZarrArray
+<li><p><strong>evaluation_array</strong> – Zarr Array
 the evaluation array</p></li>
 </ul>
 </dd>
@@ -2260,7 +2262,7 @@ the evaluation array</p></li>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">instance_evaluator</span> <span class="o">=</span> <span class="n">InstanceEvaluator</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">output_array_identifier</span> <span class="o">=</span> <span class="s2">&quot;output_array&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_array</span> <span class="o">=</span> <span class="n">ZarrArray</span><span class="o">.</span><span class="n">open_from_array_identifier</span><span class="p">(</span><span class="s2">&quot;evaluation_array&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evaluation_array</span> <span class="o">=</span> <span class="n">open_from_identifier</span><span class="p">(</span><span class="s2">&quot;evaluation_array&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instance_evaluator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">output_array_identifier</span><span class="p">,</span> <span class="n">evaluation_array</span><span class="p">)</span>
 <span class="go">InstanceEvaluationScores(voi_merge=0.0, voi_split=0.0)</span>
 </pre></div>

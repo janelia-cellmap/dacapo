@@ -31,11 +31,11 @@ Module Contents
 
    .. method:: create_target(self, gt
 
-      "Array") -> "Array": Create the target array for training, given a ground-truth array.
+      Array) -> Array: Create the target array for training, given a ground-truth array.
 
    .. method:: create_weight(self, gt
 
-      "Array", target: "Array", mask: "Array", moving_class_counts: Any) -> Tuple["Array", Any]: Create the weight array for training, given a ground-truth and associated target array.
+      Array, target: Array, mask: Array, moving_class_counts: Any) -> Tuple[Array, Any]: Create the weight array for training, given a ground-truth and associated target array.
 
    .. method:: gt_region_for_roi(self, target_spec)
 
@@ -71,7 +71,7 @@ Module Contents
 
 
 
-   .. py:method:: create_target(gt: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.datasplits.datasets.arrays.Array
+   .. py:method:: create_target(gt: funlib.persistence.Array) -> funlib.persistence.Array
       :abstractmethod:
 
 
@@ -105,7 +105,7 @@ Module Contents
 
 
 
-   .. py:method:: create_weight(gt: dacapo.experiments.datasplits.datasets.arrays.Array, target: dacapo.experiments.datasplits.datasets.arrays.Array, mask: dacapo.experiments.datasplits.datasets.arrays.Array, moving_class_counts: Any) -> Tuple[dacapo.experiments.datasplits.datasets.arrays.Array, Any]
+   .. py:method:: create_weight(gt: funlib.persistence.Array, target: funlib.persistence.Array, mask: funlib.persistence.Array, moving_class_counts: Any) -> Tuple[funlib.persistence.Array, Any]
       :abstractmethod:
 
 

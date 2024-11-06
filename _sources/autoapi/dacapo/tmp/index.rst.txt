@@ -1,0 +1,31 @@
+dacapo.tmp
+==========
+
+.. py:module:: dacapo.tmp
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   dacapo.tmp.num_channels_from_array
+   dacapo.tmp.gp_to_funlib_array
+   dacapo.tmp.np_to_funlib_array
+   dacapo.tmp.create_from_identifier
+   dacapo.tmp.open_from_identifier
+
+
+Module Contents
+---------------
+
+.. py:function:: num_channels_from_array(array: funlib.persistence.Array) -> int | None
+
+.. py:function:: gp_to_funlib_array(gp_array) -> funlib.persistence.Array
+
+.. py:function:: np_to_funlib_array(np_array, offset: funlib.geometry.Coordinate, voxel_size: funlib.geometry.Coordinate) -> funlib.persistence.Array
+
+.. py:function:: create_from_identifier(array_identifier, axis_names, roi: funlib.geometry.Roi, num_channels: int | None, voxel_size: funlib.geometry.Coordinate, dtype, mode='a+', write_size=None, name=None, overwrite=False) -> funlib.persistence.Array
+
+.. py:function:: open_from_identifier(array_identifier, name: str = '', mode: str = 'r') -> funlib.persistence.Array
+

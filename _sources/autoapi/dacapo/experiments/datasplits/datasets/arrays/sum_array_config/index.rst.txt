@@ -30,10 +30,10 @@ Module Contents
    .. note:: This class is a subclass of ArrayConfig.
 
 
-   .. py:attribute:: array_type
-
-
    .. py:attribute:: source_array_configs
       :type:  List[dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig]
+
+
+   .. py:method:: array(mode: str = 'r') -> funlib.persistence.Array
 
 

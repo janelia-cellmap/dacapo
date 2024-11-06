@@ -36,14 +36,14 @@ Module Contents
    .. note:: This class is a subclass of ArrayConfig.
 
 
-   .. py:attribute:: array_type
-
-
    .. py:attribute:: source_array_config
       :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
 
    .. py:attribute:: constant
       :type:  int
+
+
+   .. py:method:: array(mode: str = 'r') -> funlib.persistence.Array
 
 

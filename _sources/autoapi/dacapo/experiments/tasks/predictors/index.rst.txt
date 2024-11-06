@@ -299,20 +299,9 @@ Package Contents
 
 
 
-   .. py:method:: create_target(gt)
+   .. py:method:: create_target(gt: funlib.persistence.Array)
 
-      Create the target array for training.
-
-      :param gt: The ground-truth array.
-
-      :returns: The created target array.
-      :rtype: NumpyArray
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> predictor.create_target(gt)
+      Turn the ground truth labels into a distance transform.
 
 
 
@@ -508,20 +497,9 @@ Package Contents
 
 
 
-   .. py:method:: create_target(gt)
+   .. py:method:: create_target(gt: funlib.persistence.Array)
 
-      Create the target array for training.
-
-      :param gt: The ground truth array.
-
-      :returns: The created target array.
-      :rtype: NumpyArray
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> target = predictor.create_target(gt)
+      Turn labels into a one hot encoding
 
 
 
@@ -597,11 +575,11 @@ Package Contents
 
    .. method:: create_target(self, gt
 
-      "Array") -> "Array": Create the target array for training, given a ground-truth array.
+      Array) -> Array: Create the target array for training, given a ground-truth array.
 
    .. method:: create_weight(self, gt
 
-      "Array", target: "Array", mask: "Array", moving_class_counts: Any) -> Tuple["Array", Any]: Create the weight array for training, given a ground-truth and associated target array.
+      Array, target: Array, mask: Array, moving_class_counts: Any) -> Tuple[Array, Any]: Create the weight array for training, given a ground-truth and associated target array.
 
    .. method:: gt_region_for_roi(self, target_spec)
 
@@ -637,7 +615,7 @@ Package Contents
 
 
 
-   .. py:method:: create_target(gt: dacapo.experiments.datasplits.datasets.arrays.Array) -> dacapo.experiments.datasplits.datasets.arrays.Array
+   .. py:method:: create_target(gt: funlib.persistence.Array) -> funlib.persistence.Array
       :abstractmethod:
 
 
@@ -671,7 +649,7 @@ Package Contents
 
 
 
-   .. py:method:: create_weight(gt: dacapo.experiments.datasplits.datasets.arrays.Array, target: dacapo.experiments.datasplits.datasets.arrays.Array, mask: dacapo.experiments.datasplits.datasets.arrays.Array, moving_class_counts: Any) -> Tuple[dacapo.experiments.datasplits.datasets.arrays.Array, Any]
+   .. py:method:: create_weight(gt: funlib.persistence.Array, target: funlib.persistence.Array, mask: funlib.persistence.Array, moving_class_counts: Any) -> Tuple[funlib.persistence.Array, Any]
       :abstractmethod:
 
 
@@ -963,20 +941,6 @@ Package Contents
 
 
 
-   .. py:property:: num_channels
-
-      Get the number of channels.
-
-      :returns: The number of channels.
-      :rtype: int
-
-      :raises NotImplementedError: This method is not implemented.
-
-      .. rubric:: Examples
-
-      >>> predictor.num_channels
-
-
    .. py:method:: create_model(architecture)
 
       Create the model.
@@ -994,7 +958,7 @@ Package Contents
 
 
 
-   .. py:method:: create_target(gt)
+   .. py:method:: create_target(gt: funlib.persistence.Array)
 
       Create the target data.
 
@@ -1011,7 +975,7 @@ Package Contents
 
 
 
-   .. py:method:: create_weight(gt, target, mask, moving_class_counts=None)
+   .. py:method:: create_weight(gt: funlib.persistence.Array, target: funlib.persistence.Array, mask: funlib.persistence.Array, moving_class_counts=None)
 
       Create the weight data.
 
