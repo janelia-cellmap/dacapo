@@ -36,10 +36,8 @@ class IntensityAugmentConfig(AugmentConfig):
         },
     )
     augmentation_probability: float = attr.ib(
-        default=1.,
-        metadata={
-            "help_text": "Probability of applying the augmentation."
-        },
+        default=1.0,
+        metadata={"help_text": "Probability of applying the augmentation."},
     )
 
     def node(self, raw_key: gp.ArrayKey, _gt_key=None, _mask_key=None):

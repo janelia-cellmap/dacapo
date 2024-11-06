@@ -46,7 +46,6 @@ class TiffArrayConfig(ArrayConfig):
     units: list[str] = attr.ib(metadata={"help_text": "The units of your array"})
 
     def array(self, mode: str = "r") -> Array:
-
         return Array(
             data=tifffile.TiffFile(self.file_name).values,
             offset=self.offset,
