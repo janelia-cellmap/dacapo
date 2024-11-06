@@ -21,10 +21,8 @@ class SimpleAugmentConfig(AugmentConfig):
     """
 
     augmentation_probability: float = attr.ib(
-        default=1.,
-        metadata={
-            "help_text": "Probability of applying the augmentations."
-        },
+        default=1.0,
+        metadata={"help_text": "Probability of applying the augmentations."},
     )
 
     def node(self, _raw_key=None, _gt_key=None, _mask_key=None):
