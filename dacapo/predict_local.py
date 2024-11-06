@@ -2,7 +2,6 @@ from dacapo.experiments.model import Model
 from dacapo.store.local_array_store import LocalArrayIdentifier
 from funlib.persistence import open_ds, prepare_ds, Array
 from dacapo.utils.array_utils import to_ndarray
-from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
 from funlib.geometry import Coordinate, Roi
 import numpy as np
 from dacapo.compute_context import create_compute_context
@@ -12,6 +11,7 @@ import daisy
 import torch
 import os
 from dacapo.utils.array_utils import to_ndarray, save_ndarray
+from dacapo.tmp import create_from_identifier
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ def predict(
     # get the model's input and output size
     if isinstance(raw_array_identifier, LocalArrayIdentifier):
         raw_array = open_ds(
-            str(raw_array_identifier.container), raw_array_identifier.dataset
+            f"{raw_array_identifier.container}/{raw_array_identifier.dataset}"
         )
     else:
         raw_array = raw_array_identifier
@@ -47,17 +47,18 @@ def predict(
     read_roi = Roi((0, 0, 0), input_size)
     write_roi = read_roi.grow(-context, -context)
 
-    axes = ["c", "z", "y", "x"]
+    axes = ["c^", "z", "y", "x"]
 
     num_channels = model.num_out_channels
 
-    result_dataset = ZarrArray.create_from_array_identifier(
+    result_dataset = create_from_identifier(
         prediction_array_identifier,
         axes,
         output_roi,
         num_channels,
         output_voxel_size,
         np.float32,
+        overwrite=True,
     )
 
     logger.info("Total input ROI: %s, output ROI: %s", input_size, output_roi)
@@ -71,20 +72,39 @@ def predict(
     device = compute_context.device
 
     def predict_fn(block):
-        raw_input = to_ndarray(raw_array, block.read_roi)
-        # expend batch dim
-        # no need to normalize, done by datasplit
-        raw_input = np.expand_dims(raw_input, (0, 1))
+        raw_input = raw_array.to_ndarray(block.read_roi)
+
+        # expand batch dimension
+        # this is done in case models use BatchNorm or similar layers that
+        # expect a batch dimension
+        raw_input = np.expand_dims(raw_input, 0)
+
+        # raw may or may not have channel dimensions.
+        axis_names = raw_array.axis_names
+        if raw_array.channel_dims == 0:
+            raw_input = np.expand_dims(raw_input, 0)
+            axis_names = ["c^"] + axis_names
+
         with torch.no_grad():
+            model.eval()
             predictions = (
                 model.forward(torch.from_numpy(raw_input).float().to(device))
                 .detach()
                 .cpu()
                 .numpy()[0]
             )
+            model.train()
+            predictions = Array(
+                predictions,
+                block.write_roi.offset,
+                raw_array.voxel_size,
+                axis_names,
+                raw_array.units,
+            )
 
-            save_ndarray(predictions, block.write_roi, result_dataset)
-            # result_dataset[block.write_roi] = predictions
+            result_dataset[block.write_roi.intersect(result_dataset.roi)] = predictions[
+                block.write_roi.intersect(result_dataset.roi)
+            ]
 
     # fixing the input roi to be a multiple of the output voxel size
     input_roi = input_roi.snap_to_grid(

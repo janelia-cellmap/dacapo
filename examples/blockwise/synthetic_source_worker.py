@@ -4,9 +4,10 @@ import gunpowder as gp
 
 from pathlib import Path
 import sys
-from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
+
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.compute_context import create_compute_context
+from dacapo.tmp import create_from_identifier, open_from_identifier
 import dacapo
 
 import daisy
@@ -69,13 +70,13 @@ def generate_synthetic_dataset(
     raw_output_array_identifier = LocalArrayIdentifier(
         Path(output_container), raw_output_dataset
     )
-    raw_output_array = ZarrArray.create_from_array_identifier(
+    raw_output_array = create_from_identifier(
         raw_output_array_identifier,
         roi=roi,
         dtype=np.uint8,
         voxel_size=_voxel_size,
         num_channels=None,
-        axes=["z", "y", "x"],
+        axis_names=["z", "y", "x"],
         overwrite=overwrite,
         write_size=_write_shape * voxel_size,
     )
@@ -83,13 +84,13 @@ def generate_synthetic_dataset(
     labels_output_array_identifier = LocalArrayIdentifier(
         Path(output_container), labels_output_dataset
     )
-    labels_output_array = ZarrArray.create_from_array_identifier(
+    labels_output_array = create_from_identifier(
         labels_output_array_identifier,
         roi=roi,
         dtype=np.uint64,
         voxel_size=_voxel_size,
         num_channels=None,
-        axes=["z", "y", "x"],
+        axis_names=["z", "y", "x"],
         overwrite=overwrite,
         write_size=_write_shape * voxel_size,
     )
@@ -121,14 +122,12 @@ def start_worker(
     raw_output_array_identifier = LocalArrayIdentifier(
         Path(output_container), raw_output_dataset
     )
-    raw_output_array = ZarrArray.open_from_array_identifier(raw_output_array_identifier)
+    raw_output_array = open_from_identifier(raw_output_array_identifier)
 
     labels_output_array_identifier = LocalArrayIdentifier(
         Path(output_container), labels_output_dataset
     )
-    labels_output_array = ZarrArray.open_from_array_identifier(
-        labels_output_array_identifier
-    )
+    labels_output_array = open_from_identifier(labels_output_array_identifier)
 
     # get data generator
 

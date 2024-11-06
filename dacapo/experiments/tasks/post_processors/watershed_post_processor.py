@@ -1,7 +1,7 @@
 from upath import UPath as Path
 import dacapo.blockwise
 from dacapo.blockwise.scheduler import segment_blockwise
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.utils.array_utils import to_ndarray, save_ndarray
 from funlib.persistence import open_ds
@@ -12,6 +12,7 @@ from .watershed_post_processor_parameters import WatershedPostProcessorParameter
 from .post_processor import PostProcessor
 
 from funlib.geometry import Coordinate, Roi
+from dacapo.tmp import create_from_identifier, open_from_identifier
 
 
 import numpy as np
@@ -71,9 +72,7 @@ class WatershedPostProcessor(PostProcessor):
 
     def set_prediction(self, prediction_array_identifier):
         self.prediction_array_identifier = prediction_array_identifier
-        self.prediction_array = ZarrArray.open_from_array_identifier(
-            prediction_array_identifier
-        )
+        self.prediction_array = open_from_identifier(prediction_array_identifier)
         """
         Set the prediction array.
 
@@ -84,7 +83,7 @@ class WatershedPostProcessor(PostProcessor):
         Examples:
             >>> post_processor.set_prediction(prediction_array_identifier)
         Note:
-            This method should be implemented by the subclass. To set the prediction array, the method uses the `ZarrArray.open_from_array_identifier` function from the `dacapo.experiments.datasplits.datasets.arrays` module.
+            This method should be implemented by the subclass. To set the prediction array, the method uses the `open_from_identifier` function from the `dacapo.experiments.datasplits.datasets.arrays` module.
         """
 
     def process(
@@ -111,31 +110,31 @@ class WatershedPostProcessor(PostProcessor):
         Note:
             This method should be implemented by the subclass. To run the watershed transformation, the method uses the `segment_blockwise` function from the `dacapo.blockwise.scheduler` module.
         """
-        if self.prediction_array._daisy_array.chunk_shape is not None:
+        if self.prediction_array._source_data.chunks is not None:
             block_size = Coordinate(
-                self.prediction_array._daisy_array.chunk_shape[
-                    -self.prediction_array.dims :
+                self.prediction_array._source_data.chunks[
+                    -self.prediction_array.spatial_dims :
                 ]
             )
 
-        output_array = ZarrArray.create_from_array_identifier(
+        output_array = create_from_identifier(
             output_array_identifier,
-            [axis for axis in self.prediction_array.axes if axis != "c"],
+            [axis for axis in self.prediction_array.axis_names if axis != "c^"],
             self.prediction_array.roi,
             None,
             self.prediction_array.voxel_size,
             np.uint64,
-            block_size * self.prediction_array.voxel_size,
+            write_size=block_size * self.prediction_array.voxel_size,
+            overwrite=True,
         )
         input_array = open_ds(
-            self.prediction_array_identifier.container.path,
-            self.prediction_array_identifier.dataset,
+            f"{self.prediction_array_identifier.container.path}/{self.prediction_array_identifier.dataset}",
         )
 
-        data = to_ndarray(input_array, output_array.roi).astype(float)
+        data = input_array.to_ndarray(output_array.roi).astype(float)
         segmentation = mws.agglom(
             data - parameters.bias, offsets=self.offsets, randomized_strides=True
         )
-        save_ndarray(segmentation, self.prediction_array.roi, output_array)
+        output_array[self.prediction_array.roi] = segmentation
 
         return output_array_identifier

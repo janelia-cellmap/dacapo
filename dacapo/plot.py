@@ -403,9 +403,9 @@ def plot_runs(
     include_validation_figure = False
     include_loss_figure = False
 
-    fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
-    loss_ax = axes[0]
-    validation_ax = axes[1]
+    fig, axis_names = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
+    loss_ax = axis_names[0]
+    validation_ax = axis_names[1]
 
     for run, color in zip(runs, colors):
         name = run.name

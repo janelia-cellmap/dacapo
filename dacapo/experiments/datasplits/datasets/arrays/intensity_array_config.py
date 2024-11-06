@@ -1,7 +1,7 @@
 import attr
+from funlib.persistence import Array
 
 from .array_config import ArrayConfig
-from .intensity_array import IntensitiesArray
 
 
 @attr.s
@@ -21,8 +21,6 @@ class IntensitiesArrayConfig(ArrayConfig):
         The source_array_config must be an ArrayConfig object.
     """
 
-    array_type = IntensitiesArray
-
     source_array_config: ArrayConfig = attr.ib(
         metadata={
             "help_text": "The Array from which to pull annotated data. Is expected to contain a volume with uint64 voxels and no channel dimension"
@@ -31,3 +29,8 @@ class IntensitiesArrayConfig(ArrayConfig):
 
     min: float = attr.ib(metadata={"help_text": "The minimum intensity in your data"})
     max: float = attr.ib(metadata={"help_text": "The maximum intensity in your data"})
+
+    def array(self, mode: str = "r") -> Array:
+        array = self.source_array_config.array(mode)
+        array.lazy_op(lambda data: (data - self.min) / (self.max - self.min))
+        return array
