@@ -153,7 +153,7 @@ labels_array[labels_array.roi] = label(mask_array.to_ndarray(mask_array.roi))[0]
 print("Data saved to cells3d.zarr")
 import zarr
 
-print(zarr.open("cells3d.zarr", mode="r").tree())
+print(zarr.open("cells3d.zarr").tree())
 # %% [markdown]
 # Here we show a slice of the raw data:
 # %%
