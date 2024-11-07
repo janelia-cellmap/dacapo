@@ -56,7 +56,7 @@ Example:
 Full Example
 ------------
 
-Here’s how the complete setup looks:
+Here's how the complete setup looks:
 
 .. code-block:: python
 
@@ -81,19 +81,52 @@ Available COSEM Pretrained Models
 
 Below is a table of the COSEM pretrained models available, along with their details:
 
-+-----------+----------------------------+-----------------+--------------------------------------------------------------+-----------+------------+-----------------+
-| Model     | Checkpoints                | Best Checkpoint| Classes                                                      | Input Res | Output Res | Model           |
-+===========+============================+=================+==============================================================+===========+============+=================+
-| setup04   | 975000, 625000, 1820500    | 1820500        | ecs, pm, mito, mito_mem, ves, ves_mem, endo, endo_mem, er, er_mem, eres, nuc, mt, mt_out | 8 nm      | 4 nm       | Upsample U-Net  |
-+-----------+----------------------------+-----------------+--------------------------------------------------------------+-----------+------------+-----------------+
-| setup26.1 | 650000, 2580000            | 2580000        | mito, mito_mem, mito_ribo                                    | 8 nm      | 4 nm       | Upsample U-Net  |
-+-----------+----------------------------+-----------------+--------------------------------------------------------------+-----------+------------+-----------------+
-| setup28   | 775000                     | 775000         | er, er_mem                                                  | 8 nm      | 4 nm       | Upsample U-Net  |
-+-----------+----------------------------+-----------------+--------------------------------------------------------------+-----------+------------+-----------------+
-| setup36   | 500000, 1100000            | 1100000        | nuc, nucleo                                                 | 8 nm      | 4 nm       | Upsample U-Net  |
-+-----------+----------------------------+-----------------+--------------------------------------------------------------+-----------+------------+-----------------+
-| setup45   | 625000, 1634500            | 1634500        | ecs, pm                                                     | 4 nm      | 4 nm       | U-Net           |
-+-----------+----------------------------+-----------------+--------------------------------------------------------------+-----------+------------+-----------------+
+.. list-table:: Available COSEM Pretrained Models
+    :header-rows: 1
+
+    * - Model
+      - Checkpoints
+      - Best Checkpoint
+      - Classes
+      - Input Res
+      - Output Res
+      - Model
+    * - setup04
+      - 975000, 625000, 1820500
+      - 1820500
+      - ecs, pm, mito, mito_mem, ves, ves_mem, endo, endo_mem, er, er_mem, eres, nuc, mt, mt_out
+      - 8 nm
+      - 4 nm
+      - Upsample U-Net
+    * - setup26.1
+      - 650000, 2580000
+      - 2580000
+      - mito, mito_mem, mito_ribo
+      - 8 nm
+      - 4 nm
+      - Upsample U-Net
+    * - setup28
+      - 775000
+      - 775000
+      - er, er_mem
+      - 8 nm
+      - 4 nm
+      - Upsample U-Net
+    * - setup36
+      - 500000, 1100000
+      - 1100000
+      - nuc, nucleo
+      - 8 nm
+      - 4 nm
+      - Upsample U-Net
+    * - setup45
+      - 625000, 1634500
+      - 1634500
+      - ecs, pm
+      - 4 nm
+      - 4 nm
+      - U-Net
+
 
 Notes
 -----
