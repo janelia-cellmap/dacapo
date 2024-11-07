@@ -1,10 +1,11 @@
 from .predictor import Predictor
 from dacapo.experiments import Model
 from dacapo.experiments.arraytypes import DistanceArray
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
 from dacapo.utils.balance_weights import balance_weights
+from dacapo.tmp import np_to_funlib_array
 
 from funlib.geometry import Coordinate
+from funlib.persistence import Array
 
 from scipy.ndimage.morphology import distance_transform_edt
 import numpy as np
@@ -125,28 +126,15 @@ class DistancePredictor(Predictor):
 
         return Model(architecture, head)
 
-    def create_target(self, gt):
+    def create_target(self, gt: Array):
         """
-        Create the target array for training.
-
-        Args:
-            gt: The ground-truth array.
-        Returns:
-            NumpyArray: The created target array.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.create_target(gt)
-
+        Turn the ground truth labels into a distance transform.
         """
-        distances = self.process(
-            gt.data, gt.voxel_size, self.norm, self.dt_scale_factor
-        )
-        return NumpyArray.from_np_array(
+        distances = self.process(gt[:], gt.voxel_size, self.norm, self.dt_scale_factor)
+        return np_to_funlib_array(
             distances,
-            gt.roi,
+            gt.roi.offset,
             gt.voxel_size,
-            gt.axes,
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
@@ -181,18 +169,17 @@ class DistancePredictor(Predictor):
         weights, moving_class_counts = balance_weights(
             gt[target.roi],
             2,
-            slab=tuple(1 if c == "c" else -1 for c in gt.axes),
+            slab=tuple(1 if c == "c^" else -1 for c in gt.axis_names),
             masks=[mask[target.roi], distance_mask],
             moving_counts=moving_class_counts,
             clipmin=self.clipmin,
             clipmax=self.clipmax,
         )
         return (
-            NumpyArray.from_np_array(
+            np_to_funlib_array(
                 weights,
-                gt.roi,
+                gt.roi.offset,
                 gt.voxel_size,
-                gt.axes,
             ),
             moving_class_counts,
         )
@@ -347,7 +334,7 @@ class DistancePredictor(Predictor):
 
         return all_distances
 
-    def __find_boundaries(self, labels):
+    def __find_boundaries(self, labels: np.ndarray):
         """
         Find the boundaries in the labels.
 
@@ -365,6 +352,10 @@ class DistancePredictor(Predictor):
         # shift :   1 1 1 1 0 0 2 2 2 2 3       n - 1
         # diff  :   0 0 0 1 0 1 0 0 0 1 0       n - 1
         # bound.: 00000001000100000001000      2n - 1
+
+        if labels.dtype == bool:
+            raise ValueError("Labels should not be bools")
+            labels = labels.astype(np.uint8)
 
         logger.debug(f"computing boundaries for {labels.shape}")
 

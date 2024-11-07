@@ -2,7 +2,7 @@ from dacapo.experiments.arraytypes.probabilities import ProbabilityArray
 from .predictor import Predictor
 from dacapo.experiments import Model
 from dacapo.experiments.arraytypes import DistanceArray
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+from dacapo.tmp import np_to_funlib_array
 from dacapo.utils.balance_weights import balance_weights
 
 from funlib.geometry import Coordinate
@@ -142,11 +142,11 @@ class HotDistancePredictor(Predictor):
             >>> target = predictor.create_target(gt)
         """
         target = self.process(gt.data, gt.voxel_size, self.norm, self.dt_scale_factor)
-        return NumpyArray.from_np_array(
+        return np_to_funlib_array(
             target,
             gt.roi,
             gt.voxel_size,
-            gt.axes,
+            gt.axis_names,
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
@@ -170,7 +170,7 @@ class HotDistancePredictor(Predictor):
         one_hot_weights, one_hot_moving_class_counts = balance_weights(
             gt[target.roi],
             2,
-            slab=tuple(1 if c == "c" else -1 for c in gt.axes),
+            slab=tuple(1 if c == "c^" else -1 for c in gt.axis_names),
             masks=[mask[target.roi]],
             moving_counts=(
                 None
@@ -193,7 +193,7 @@ class HotDistancePredictor(Predictor):
         distance_weights, distance_moving_class_counts = balance_weights(
             gt[target.roi],
             2,
-            slab=tuple(1 if c == "c" else -1 for c in gt.axes),
+            slab=tuple(1 if c == "c^" else -1 for c in gt.axis_names),
             masks=[mask[target.roi], distance_mask],
             moving_counts=(
                 None
@@ -207,11 +207,11 @@ class HotDistancePredictor(Predictor):
             (one_hot_moving_class_counts, distance_moving_class_counts)
         )
         return (
-            NumpyArray.from_np_array(
+            np_to_funlib_array(
                 weights,
                 gt.roi,
                 gt.voxel_size,
-                gt.axes,
+                gt.axis_names,
             ),
             moving_class_counts,
         )

@@ -4,8 +4,9 @@ import dacapo.blockwise
 from dacapo.experiments import Run
 from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.store.local_array_store import LocalArrayIdentifier
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+
 from dacapo.compute_context import create_compute_context, LocalTorch
+from dacapo.tmp import open_from_identifier, create_from_identifier
 
 from funlib.geometry import Coordinate, Roi
 import numpy as np
@@ -56,7 +57,7 @@ def predict(
 
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    raw_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+    raw_array = open_from_identifier(input_array_identifier)
     if isinstance(output_path, LocalArrayIdentifier):
         output_array_identifier = output_path
     else:
@@ -124,10 +125,19 @@ def predict(
     print(f"Total input ROI: {_input_roi}, output ROI: {output_roi}")
 
     # prepare prediction dataset
-    ZarrArray.create_from_array_identifier(
+    if raw_array.channel_dims == 0:
+        axis_names = ["c^"] + raw_array.axis_names
+    else:
+        axis_names = raw_array.axis_names
+
+    if isinstance(output_roi, Roi):
+        out_roi: Roi = output_roi
+    else:
+        raise ValueError("out_roi must be a roi")
+    create_from_identifier(
         output_array_identifier,
-        raw_array.axes,
-        output_roi,
+        axis_names,
+        out_roi,
         num_out_channels,
         output_voxel_size,
         output_dtype,

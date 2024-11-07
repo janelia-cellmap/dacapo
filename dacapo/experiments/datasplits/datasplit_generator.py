@@ -1,4 +1,5 @@
 from dacapo.experiments.tasks import TaskConfig
+from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
 from upath import UPath as Path
 from typing import List, Union, Optional, Sequence
 from enum import Enum, EnumMeta
@@ -8,9 +9,6 @@ import zarr
 from zarr.n5 import N5FSStore
 import numpy as np
 from dacapo.experiments.datasplits.datasets.arrays import (
-    ArrayConfig,
-    ZarrArrayConfig,
-    ZarrArray,
     ResampledArrayConfig,
     BinarizeArrayConfig,
     IntensitiesArrayConfig,
@@ -18,6 +16,7 @@ from dacapo.experiments.datasplits.datasets.arrays import (
     LogicalOrArrayConfig,
     ConstantArrayConfig,
     CropArrayConfig,
+    ZarrArrayConfig,
 )
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
 from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
@@ -76,7 +75,7 @@ def resize_if_needed(
     Notes:
         This function is used to resize the array if needed.
     """
-    zarr_array = ZarrArray(array_config)
+    zarr_array = array_config.array()
     raw_voxel_size = zarr_array.voxel_size
 
     raw_upsample = raw_voxel_size / target_resolution
@@ -102,7 +101,7 @@ def resize_if_needed(
 
 
 def limit_validation_crop_size(gt_config, mask_config, max_size):
-    gt_array = gt_config.array_type(gt_config)
+    gt_array = gt_config.array()
     voxel_shape = gt_array.roi.shape / gt_array.voxel_size
     crop = False
     while np.prod(voxel_shape) > max_size:
@@ -173,7 +172,7 @@ def get_right_resolution_array_config(
         snap_to_grid=target_resolution,
         mode="r",
     )
-    zarr_array = ZarrArray(zarr_config)
+    zarr_array = zarr_config.array()
     while (
         all([z < t for (z, t) in zip(zarr_array.voxel_size, target_resolution)])
         and Path(container, Path(dataset, f"s{level+1}")).exists()
@@ -187,7 +186,7 @@ def get_right_resolution_array_config(
             mode="r",
         )
 
-        zarr_array = ZarrArray(zarr_config)
+        zarr_array = zarr_config.array()
     return resize_if_needed(zarr_config, target_resolution, extra_str)
 
 

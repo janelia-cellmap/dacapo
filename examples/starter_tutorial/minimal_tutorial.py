@@ -109,23 +109,28 @@ units = ["nm", "nm", "nm"]
 
 # Create the zarr array with appropriate metadata
 cell_array = prepare_ds(
-    "cells3d.zarr",
-    "raw",
-    Roi((0, 0, 0), cell_data.shape[1:]) * voxel_size,
+    "cells3d.zarr/raw",
+    cell_data.shape,
+    offset=offset,
     voxel_size=voxel_size,
+    axis_names=axis_names,
+    units=units,
+    mode="w",
     dtype=np.uint8,
-    num_channels=None,
 )
 
 # Save the cell data to the zarr array
-cell_array[cell_array.roi] = cell_data[1]
+cell_array[cell_array.roi] = cell_data
 
 # Generate and save some pseudo ground truth data
 mask_array = prepare_ds(
-    "cells3d.zarr",
-    "mask",
-    Roi((0, 0, 0), cell_data.shape[1:]) * voxel_size,
+    "cells3d.zarr/mask",
+    cell_data.shape[1:],
+    offset=offset,
     voxel_size=voxel_size,
+    axis_names=axis_names[1:],
+    units=units,
+    mode="w",
     dtype=np.uint8,
 )
 cell_mask = np.clip(gaussian(cell_data[1] / 255.0, sigma=1), 0, 255) * 255 > 30
@@ -134,10 +139,13 @@ mask_array[mask_array.roi] = cell_mask * not_membrane_mask
 
 # Generate labels via connected components
 labels_array = prepare_ds(
-    "cells3d.zarr",
-    "labels",
-    Roi((0, 0, 0), cell_data.shape[1:]) * voxel_size,
+    "cells3d.zarr/labels",
+    cell_data.shape[1:],
+    offset=offset,
     voxel_size=voxel_size,
+    axis_names=axis_names[1:],
+    units=units,
+    mode="w",
     dtype=np.uint8,
 )
 labels_array[labels_array.roi] = label(mask_array.to_ndarray(mask_array.roi))[0]
@@ -145,7 +153,7 @@ labels_array[labels_array.roi] = label(mask_array.to_ndarray(mask_array.roi))[0]
 print("Data saved to cells3d.zarr")
 import zarr
 
-print(zarr.open("cells3d.zarr", mode="r").tree())
+print(zarr.open("cells3d.zarr").tree())
 # %% [markdown]
 # Here we show a slice of the raw data:
 # %%
@@ -155,7 +163,7 @@ import matplotlib.pyplot as plt
 fig, axes = plt.subplots(1, 2, figsize=(12, 6))
 
 # Show the raw data
-axes[0].imshow(cell_array.data[30])
+axes[0].imshow(cell_array.data[0, 30])
 axes[0].set_title("Raw Data")
 
 # Show the labels using the custom label color map
@@ -176,26 +184,59 @@ plt.show()
 # experiments, but is useful for this tutorial.
 
 # %%
-from dacapo.experiments.datasplits import DataSplitGenerator, DatasetSpec
+from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
+from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
+from dacapo.experiments.datasplits.datasets.arrays import (
+    ZarrArrayConfig,
+    IntensitiesArrayConfig,
+)
+from funlib.geometry import Coordinate
 
-dataspecs = [
-    DatasetSpec(
-        dataset_type=type_crop,
-        raw_container="cells3d.zarr",
-        raw_dataset="raw",
-        gt_container="cells3d.zarr",
-        gt_dataset="labels",
-    )
-    for type_crop in ["train", "val"]
-]
-
-datasplit_config = DataSplitGenerator(
-    name="skimage_tutorial_data",
-    datasets=dataspecs,
-    input_resolution=voxel_size,
-    output_resolution=voxel_size,
-    targets=["cell"],
-).compute()
+datasplit_config = TrainValidateDataSplitConfig(
+    name="example_datasplit",
+    train_configs=[
+        RawGTDatasetConfig(
+            name="example_dataset",
+            raw_config=IntensitiesArrayConfig(
+                name="example_raw_normalized",
+                source_array_config=ZarrArrayConfig(
+                    name="example_raw",
+                    file_name="cells3d.zarr",
+                    dataset="raw",
+                ),
+                min=0,
+                max=255,
+            ),
+            gt_config=ZarrArrayConfig(
+                name="example_gt",
+                file_name="cells3d.zarr",
+                dataset="mask",
+            ),
+        )
+    ],
+    validate_configs=[
+        RawGTDatasetConfig(
+            name="example_dataset",
+            raw_config=IntensitiesArrayConfig(
+                name="example_raw_normalized",
+                source_array_config=ZarrArrayConfig(
+                    name="example_raw",
+                    file_name="cells3d.zarr",
+                    dataset="raw",
+                ),
+                min=0,
+                max=255,
+            ),
+            gt_config=ZarrArrayConfig(
+                name="example_gt",
+                file_name="cells3d.zarr",
+                dataset="labels",
+            ),
+        )
+    ],
+)
+datasplit = datasplit_config.datasplit_type(datasplit_config)
+config_store.store_datasplit_config(datasplit_config)
 
 
 # %%
@@ -259,7 +300,7 @@ architecture_config = CNNectomeUNetConfig(
     name="example_unet",
     input_shape=(2, 132, 132),
     eval_shape_increase=(8, 32, 32),
-    fmaps_in=1,
+    fmaps_in=2,
     num_fmaps=8,
     fmaps_out=8,
     fmap_inc_factor=2,
@@ -286,7 +327,7 @@ trainer_config = GunpowderTrainerConfig(
     name="example",
     batch_size=10,
     learning_rate=0.0001,
-    num_data_fetchers=8,
+    num_data_fetchers=1,
     snapshot_interval=1000,
     min_masked=0.05,
     clip_raw=False,
@@ -365,7 +406,6 @@ from dacapo.store.create_store import create_config_store
 config_store = create_config_store()
 
 run = Run(config_store.retrieve_run_config("example_run"))
-
 if __name__ == "__main__":
     train_run(run)
 
@@ -375,7 +415,15 @@ if __name__ == "__main__":
 # including snapshots, validation results, and the loss.
 
 # %%
-run.validation_scores.to_xarray()["criteria"].values
+stats_store = create_stats_store()
+training_stats = stats_store.retrieve_training_stats(run_config.name)
+stats = training_stats.to_xarray()
+print(stats)
+plt.plot(stats)
+plt.title("Training Loss")
+plt.xlabel("Iteration")
+plt.ylabel("Loss")
+plt.show()
 
 # %%
 from dacapo.plot import plot_runs
@@ -405,28 +453,31 @@ label_cmap = ListedColormap(colors)
 
 run_path = config_store.path.parent / run_config.name
 
+# BROWSER = False
 num_snapshots = run_config.num_iterations // run_config.trainer_config.snapshot_interval
-fig, ax = plt.subplots(num_snapshots, 3, figsize=(10, 2 * num_snapshots))
 
-# Set column titles
-column_titles = ["Raw", "Target", "Prediction"]
-for col in range(3):
-    ax[0, col].set_title(column_titles[col])
+if num_snapshots > 0:
+    fig, ax = plt.subplots(num_snapshots, 3, figsize=(10, 2 * num_snapshots))
 
-for snapshot in range(num_snapshots):
-    snapshot_it = snapshot * run_config.trainer_config.snapshot_interval
-    # break
-    raw = zarr.open(f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/raw")[:]
-    target = zarr.open(f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/target")[0]
-    prediction = zarr.open(
-        f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/prediction"
-    )[0]
-    c = (raw.shape[1] - target.shape[1]) // 2
-    ax[snapshot, 0].imshow(raw[raw.shape[0] // 2, c:-c, c:-c])
-    ax[snapshot, 1].imshow(target[target.shape[0] // 2])
-    ax[snapshot, 2].imshow(prediction[prediction.shape[0] // 2])
-    ax[snapshot, 0].set_ylabel(f"Snapshot {snapshot_it}")
-plt.show()
+    # Set column titles
+    column_titles = ["Raw", "Target", "Prediction"]
+    for col in range(3):
+        ax[0, col].set_title(column_titles[col])
+
+    for snapshot in range(num_snapshots):
+        snapshot_it = snapshot * run_config.trainer_config.snapshot_interval
+        # break
+        raw = zarr.open(f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/raw")[:]
+        target = zarr.open(f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/target")[0]
+        prediction = zarr.open(
+            f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/prediction"
+        )[0]
+        c = (raw.shape[2] - target.shape[1]) // 2
+        ax[snapshot, 0].imshow(raw[1, raw.shape[0] // 2, c:-c, c:-c])
+        ax[snapshot, 1].imshow(target[target.shape[0] // 2])
+        ax[snapshot, 2].imshow(prediction[prediction.shape[0] // 2])
+        ax[snapshot, 0].set_ylabel(f"Snapshot {snapshot_it}")
+    plt.show()
 
 # # %%
 # Visualize validations
@@ -444,16 +495,16 @@ for validation in range(1, num_validations + 1):
     dataset = run.datasplit.validate[0].name
     validation_it = validation * run_config.validation_interval
     # break
-    raw = zarr.open(f"{run_path}/validation.zarr/inputs/{dataset}/raw")[:]
-    gt = zarr.open(f"{run_path}/validation.zarr/inputs/{dataset}/gt")[0]
+    raw = zarr.open(f"{run_path}/validation.zarr/inputs/{dataset}/raw")
+    gt = zarr.open(f"{run_path}/validation.zarr/inputs/{dataset}/gt")
     pred_path = f"{run_path}/validation.zarr/{validation_it}/ds_{dataset}/prediction"
     out_path = f"{run_path}/validation.zarr/{validation_it}/ds_{dataset}/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))"
     output = zarr.open(out_path)[:]
     prediction = zarr.open(pred_path)[0]
-    c = (raw.shape[1] - gt.shape[1]) // 2
+    c = (raw.shape[2] - gt.shape[1]) // 2
     if c != 0:
-        raw = raw[:, c:-c, c:-c]
-    ax[validation - 1, 0].imshow(raw[raw.shape[0] // 2])
+        raw = raw[:, :, c:-c, c:-c]
+    ax[validation - 1, 0].imshow(raw[1, raw.shape[1] // 2])
     ax[validation - 1, 1].imshow(
         gt[gt.shape[0] // 2], cmap=label_cmap, interpolation="none"
     )

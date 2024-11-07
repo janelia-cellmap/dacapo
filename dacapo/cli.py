@@ -7,6 +7,7 @@ import dacapo
 import click
 import logging
 from funlib.geometry import Roi, Coordinate
+from funlib.persistence import Array
 from dacapo.experiments.datasplits.datasets.dataset import Dataset
 from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
     PostProcessorParameters,
@@ -16,7 +17,8 @@ from dacapo.blockwise import (
     segment_blockwise as _segment_blockwise,
 )
 from dacapo.store.local_array_store import LocalArrayIdentifier
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+from dacapo.tmp import open_from_identifier, create_from_identifier
+
 from dacapo.options import DaCapoConfig
 import os
 
@@ -474,7 +476,7 @@ def run_blockwise(
     parameters = unpack_ctx(ctx)
 
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+    input_array = open_from_identifier(input_array_identifier)
 
     _total_roi, read_roi, write_roi, _ = get_rois(
         total_roi, read_roi_size, write_roi_size, input_array
@@ -485,9 +487,9 @@ def run_blockwise(
         Path(output_container), output_dataset
     )
 
-    ZarrArray.create_from_array_identifier(
+    create_from_identifier(
         output_array_identifier,
-        input_array.axes,
+        input_array.axis_names,
         _total_roi,
         channels_out,
         input_array.voxel_size,
@@ -652,7 +654,7 @@ def segment_blockwise(
     parameters = unpack_ctx(ctx)
 
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+    input_array = open_from_identifier(input_array_identifier)
 
     _total_roi, read_roi, write_roi, _context = get_rois(
         total_roi, read_roi_size, write_roi_size, input_array
@@ -668,9 +670,9 @@ def segment_blockwise(
         Path(output_container), output_dataset
     )
 
-    ZarrArray.create_from_array_identifier(
+    create_from_identifier(
         output_array_identifier,
-        input_array.axes,
+        input_array.axis_names,
         _total_roi,
         channels_out,
         input_array.voxel_size,
@@ -845,7 +847,7 @@ def unpack_ctx(ctx):
     return kwargs
 
 
-def get_rois(total_roi, read_roi_size, write_roi_size, input_array):
+def get_rois(total_roi, read_roi_size, write_roi_size, input_array: Array):
     """
     Get the ROIs for processing.
 
@@ -853,7 +855,7 @@ def get_rois(total_roi, read_roi_size, write_roi_size, input_array):
         total_roi (str): The total ROI to be processed.
         read_roi_size (str): The size of the ROI to be read for each block.
         write_roi_size (str): The size of the ROI to be written for each block.
-        input_array (ZarrArray): The input array.
+        input_array: The input array.
     Returns:
         tuple: A tuple containing the total ROI, read ROI, write ROI, and context.
     Raises:
