@@ -8,6 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class CNNectomeUNet(Architecture):
     """
     A U-Net architecture for 3D or 4D data. The U-Net expects 3D or 4D tensors
@@ -181,7 +182,7 @@ class CNNectomeUNet(Architecture):
     @property
     def skip_gate(self):
         return self._skip_gate
-    
+
     @skip_gate.setter
     def skip_gate(self, skip):
         self._skip_gate = skip
@@ -1081,7 +1082,7 @@ class Upsample(torch.nn.Module):
         crop_factor=None,
         next_conv_kernel_sizes=None,
         activation=None,
-        skip_gate = True,
+        skip_gate=True,
     ):
         """
         Upsample module. This module performs upsampling of the input tensor
