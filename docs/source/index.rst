@@ -9,9 +9,11 @@
 
    overview
    install
+   notebooks/minimal_tutorial
    tutorial
    docker
    aws
+   cosem_starter
    autoapi/index
    cli
 

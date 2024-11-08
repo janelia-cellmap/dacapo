@@ -1,7 +1,7 @@
 import attr
 
 from .array_config import ArrayConfig
-from .constant_array import ConstantArray
+from funlib.persistence import Array
 
 
 @attr.s
@@ -21,8 +21,6 @@ class ConstantArrayConfig(ArrayConfig):
         This class is a subclass of ArrayConfig.
     """
 
-    array_type = ConstantArray
-
     source_array_config: ArrayConfig = attr.ib(
         metadata={"help_text": "The Array that you want to copy and fill with ones."}
     )
@@ -30,3 +28,13 @@ class ConstantArrayConfig(ArrayConfig):
     constant: int = attr.ib(
         metadata={"help_text": "The constant value to fill the array with."}, default=1
     )
+
+    def array(self, mode: str = "r") -> Array:
+        array = self.source_array_config.array(mode)
+
+        def set_constant(array):
+            array[:] = self.constant
+            return array
+
+        array.lazy_op(set_constant)
+        return array

@@ -1,4 +1,5 @@
 from dacapo.experiments.tasks import TaskConfig
+from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
 from upath import UPath as Path
 from typing import List, Union, Optional, Sequence
 from enum import Enum, EnumMeta
@@ -8,8 +9,6 @@ import zarr
 from zarr.n5 import N5FSStore
 import numpy as np
 from dacapo.experiments.datasplits.datasets.arrays import (
-    ZarrArrayConfig,
-    ZarrArray,
     ResampledArrayConfig,
     BinarizeArrayConfig,
     IntensitiesArrayConfig,
@@ -17,6 +16,7 @@ from dacapo.experiments.datasplits.datasets.arrays import (
     LogicalOrArrayConfig,
     ConstantArrayConfig,
     CropArrayConfig,
+    ZarrArrayConfig,
 )
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
 from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
@@ -75,7 +75,7 @@ def resize_if_needed(
     Notes:
         This function is used to resize the array if needed.
     """
-    zarr_array = ZarrArray(array_config)
+    zarr_array = array_config.array()
     raw_voxel_size = zarr_array.voxel_size
 
     raw_upsample = raw_voxel_size / target_resolution
@@ -85,6 +85,9 @@ def resize_if_needed(
         f"have different dimensions {zarr_array.dims}"
     )
     if any([u > 1 or d > 1 for u, d in zip(raw_upsample, raw_downsample)]):
+        print(
+            f"dataset {array_config} needs resampling to {target_resolution}, upsample: {raw_upsample}, downsample: {raw_downsample}"
+        )
         return ResampledArrayConfig(
             name=f"{extra_str}_{array_config.name}_{array_config.dataset}_resampled",
             source_array_config=array_config,
@@ -93,11 +96,12 @@ def resize_if_needed(
             interp_order=False,
         )
     else:
+        # print(f"dataset {array_config.dataset} does not need resampling found {raw_voxel_size}=={target_resolution}")
         return array_config
 
 
 def limit_validation_crop_size(gt_config, mask_config, max_size):
-    gt_array = gt_config.array_type(gt_config)
+    gt_array = gt_config.array()
     voxel_shape = gt_array.roi.shape / gt_array.voxel_size
     crop = False
     while np.prod(voxel_shape) > max_size:
@@ -168,7 +172,7 @@ def get_right_resolution_array_config(
         snap_to_grid=target_resolution,
         mode="r",
     )
-    zarr_array = ZarrArray(zarr_config)
+    zarr_array = zarr_config.array()
     while (
         all([z < t for (z, t) in zip(zarr_array.voxel_size, target_resolution)])
         and Path(container, Path(dataset, f"s{level+1}")).exists()
@@ -182,7 +186,7 @@ def get_right_resolution_array_config(
             mode="r",
         )
 
-        zarr_array = ZarrArray(zarr_config)
+        zarr_array = zarr_config.array()
     return resize_if_needed(zarr_config, target_resolution, extra_str)
 
 
@@ -912,8 +916,8 @@ class DataSplitGenerator:
             current_targets = self.targets
             targets_str = "_".join(self.targets)
 
-        target_images = {}
-        target_masks = {}
+        target_images = dict[str, ArrayConfig]()
+        target_masks = dict[str, ArrayConfig]()
 
         missing_classes = [c for c in current_targets if c not in classes]
         found_classes = [c for c in current_targets if c in classes]
@@ -959,23 +963,23 @@ class DataSplitGenerator:
                 constant=1,
             )
 
-        if len(target_images) > 1:
-            gt_config = ConcatArrayConfig(
-                name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_gt",
-                channels=[organelle for organelle in current_targets],
-                # source_array_configs={k: gt for k, gt in target_images.items()},
-                source_array_configs={k: target_images[k] for k in current_targets},
-            )
-            mask_config = ConcatArrayConfig(
-                name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_mask",
-                channels=[organelle for organelle in current_targets],
-                # source_array_configs={k: mask for k, mask in target_masks.items()},
-                # to be sure to have the same order
-                source_array_configs={k: target_masks[k] for k in current_targets},
-            )
-        else:
-            gt_config = list(target_images.values())[0]
-            mask_config = list(target_masks.values())[0]
+        # if len(target_images) > 1:
+        gt_config = ConcatArrayConfig(
+            name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_gt",
+            channels=[organelle for organelle in current_targets],
+            # source_array_configs={k: gt for k, gt in target_images.items()},
+            source_array_configs={k: target_images[k] for k in current_targets},
+        )
+        mask_config = ConcatArrayConfig(
+            name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_mask",
+            channels=[organelle for organelle in current_targets],
+            # source_array_configs={k: mask for k, mask in target_masks.items()},
+            # to be sure to have the same order
+            source_array_configs={k: target_masks[k] for k in current_targets},
+        )
+        # else:
+        #     gt_config = list(target_images.values())[0]
+        #     mask_config = list(target_masks.values())[0]
 
         return raw_config, gt_config, mask_config
 

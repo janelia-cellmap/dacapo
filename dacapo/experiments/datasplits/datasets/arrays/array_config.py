@@ -1,10 +1,12 @@
 import attr
 
 from typing import Tuple
+from abc import ABC, abstractmethod
+from funlib.persistence import Array
 
 
 @attr.s
-class ArrayConfig:
+class ArrayConfig(ABC):
     """
     Base class for array configurations. Each subclass of an
     `Array` should have a corresponding config class derived from
@@ -30,6 +32,10 @@ class ArrayConfig:
             "and avoid special characters."
         }
     )
+
+    @abstractmethod
+    def array(self, mode: str = "r") -> Array:
+        pass
 
     def verify(self) -> Tuple[bool, str]:
         """

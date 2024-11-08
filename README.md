@@ -17,14 +17,19 @@
 A framework for easy application of established machine learning techniques on large, multi-dimensional images.
 
 `dacapo` allows you to configure machine learning jobs as combinations of
-[DataSplits](http://docs/api.html#datasplits),
-[Architectures](http://docs/api.html#architectures),
-[Tasks](http://docs/api.html#tasks),
-[Trainers](http://docs/api.html#trainers),
+[DataSplits](https://janelia-cellmap.github.io/dacapo/autoapi/dacapo/experiments/datasplits/index.html),
+[Architectures](https://janelia-cellmap.github.io/dacapo/autoapi/dacapo/experiments/architectures/index.html),
+[Tasks](https://janelia-cellmap.github.io/dacapo/autoapi/dacapo/experiments/tasks/index.html),
+[Trainers](https://janelia-cellmap.github.io/dacapo/autoapi/dacapo/experiments/trainers/index.html),
 on arbitrarily large volumes of
 multi-dimensional images. `dacapo` is not tied to a particular learning
 framework, but currently only supports [`torch`](https://pytorch.org/) with
 plans to support [`tensorflow`](https://www.tensorflow.org/).
+
+
+![DaCapo Diagram](https://raw.githubusercontent.com/janelia-cellmap/dacapo/main/docs/source/_static/dacapo_diagram.png)
+
+
 
 ## Installation and Setup
 Currently, python>=3.10 is supported. We recommend creating a new conda environment for dacapo with python 3.10.
@@ -52,7 +57,12 @@ Tasks we support and approaches for those tasks:
  - Semantic segmentation
     - Signed distances
     - One-hot encoding of different types of objects
-  
+
+## Example Tutorial
+A minimal example tutorial can be found in the examples directory and opened in colab here: <a target="_blank" href="https://colab.research.google.com/github/janelia-cellmap/dacapo/blob/main/examples/starter_tutorial/minimal_tutorial.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
+
 ## Helpful Resources & Tools
  - Chunked data, zarr, and n5
     - OME-Zarr: a cloud-optimized bioimaging file format with international community support (doi: [10.1101/2023.02.17.528834](https://pubmed.ncbi.nlm.nih.gov/36865282/))

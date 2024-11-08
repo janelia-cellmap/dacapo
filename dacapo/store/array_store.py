@@ -1,5 +1,3 @@
-from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
-
 import zarr
 import neuroglancer
 import attr
@@ -264,13 +262,13 @@ class ArrayStore(ABC):
         with viewer.txn() as s:
             snapshot_layers = {}
             for snapshot in snapshots:
-                snapshot_layers[snapshot] = ZarrArray.open_from_array_identifier(
+                snapshot_layers[snapshot] = open_from_identifier(
                     snapshot_container.array_identifier(snapshot), name=snapshot
                 )._neuroglancer_layer()
 
             validation_layers = {}
             for validation in validations:
-                validation_layers[validation] = ZarrArray.open_from_array_identifier(
+                validation_layers[validation] = open_from_identifier(
                     validation_container.array_identifier(validation), name=validation
                 )._neuroglancer_layer()
 
