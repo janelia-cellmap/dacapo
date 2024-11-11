@@ -9,6 +9,7 @@
 
    overview
    install
+   roadmap
    notebooks/minimal_tutorial
    tutorial
    docker
