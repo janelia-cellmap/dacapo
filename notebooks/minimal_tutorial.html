@@ -23,7 +23,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Tutorial: A Simple Experiment in Python" href="../tutorial.html" />
+    <link rel="next" title="UNet Models" href="../unet_architectures.html" />
     <link rel="prev" title="Installation" href="../install.html" /> 
 </head>
 
@@ -69,6 +69,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#visualize">Visualize</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../unet_architectures.html">UNet Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../aws.html">AWS EC2 Setup Guide</a></li>
@@ -605,13 +606,13 @@ including snapshots, validation results, and the loss.</p>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating FileStatsStore:
 	path    : /home/runner/dacapo/stats
 &lt;xarray.DataArray (iterations: 2000)&gt;
-array([0.78323734, 0.73412889, 0.75879186, ..., 0.59049326, 0.35759771,
-       0.4338592 ])
+array([0.85137802, 0.92334807, 0.92810798, ..., 0.44166908, 0.54030401,
+       0.39814654])
 Coordinates:
   * iterations  (iterations) int64 0 1 2 3 4 5 ... 1994 1995 1996 1997 1998 1999
 </pre></div>
 </div>
-<img alt="../_images/f0b777515a067bf92625a6b5c7fc1d6f53803b2d1d4a45eb577f801db4d909da.png" src="../_images/f0b777515a067bf92625a6b5c7fc1d6f53803b2d1d4a45eb577f801db4d909da.png" />
+<img alt="../_images/bdb84b966c821ac2cd1e1609a8f680ac564cc77f1c82dcfa07a89b79a3bb581b.png" src="../_images/bdb84b966c821ac2cd1e1609a8f680ac564cc77f1c82dcfa07a89b79a3bb581b.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -643,7 +644,7 @@ Creating FileStatsStore:
 	path    : /home/runner/dacapo/stats
 </pre></div>
 </div>
-<img alt="../_images/51cdf388f441d27cb394fc34355bc1b5620cd50c7403731d3668a9bbc58b6489.png" src="../_images/51cdf388f441d27cb394fc34355bc1b5620cd50c7403731d3668a9bbc58b6489.png" />
+<img alt="../_images/fdb0eb26a3bc159468609f9c96a512def81029e9fbc9766a598442a00e605d52.png" src="../_images/fdb0eb26a3bc159468609f9c96a512def81029e9fbc9766a598442a00e605d52.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -722,8 +723,8 @@ Creating FileStatsStore:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fa87b4210262a0cea0da17811d74cf359d26fb6dcff2709fc01c3b5f8de02768.png" src="../_images/fa87b4210262a0cea0da17811d74cf359d26fb6dcff2709fc01c3b5f8de02768.png" />
-<img alt="../_images/99d5fdd1d05e74662f078ac6762d4f77eace3ab471f33e8133780fc9a2e6e1bd.png" src="../_images/99d5fdd1d05e74662f078ac6762d4f77eace3ab471f33e8133780fc9a2e6e1bd.png" />
+<img alt="../_images/cee211644a83c74056c72522c4832a384dea07ed83aaf61a9ac102e17f99c190.png" src="../_images/cee211644a83c74056c72522c4832a384dea07ed83aaf61a9ac102e17f99c190.png" />
+<img alt="../_images/1fe09343e7d87625063839d57cba477eb370f336834f68e7944434996f646ac6.png" src="../_images/1fe09343e7d87625063839d57cba477eb370f336834f68e7944434996f646ac6.png" />
 </div>
 </div>
 </section>
@@ -734,13 +735,13 @@ Creating FileStatsStore:
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../tutorial.html" class="btn btn-neutral float-right" title="Tutorial: A Simple Experiment in Python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../unet_architectures.html" class="btn btn-neutral float-right" title="UNet Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Caroline Malin-Mayor, Jeff Rhoades, Marwan Zouinkhi, William Patton, David Ackerman, Jan Funke.</p>
+    <p>&#169; Copyright 2024, William Patton, Jeff Rhoades, Marwan Zouinkhi,  David Ackerman, Caroline Malin-Mayor, Jan Funke.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -1,0 +1,247 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UNet Models &mdash; DaCapo  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial: A Simple Experiment in Python" href="tutorial.html" />
+    <link rel="prev" title="Minimal Tutorial" href="notebooks/minimal_tutorial.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DaCapo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">DaCapo API:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/minimal_tutorial.html">Minimal Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">UNet Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">AWS EC2 Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cosem_starter.html">Fine-Tune Cosem Starter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">CLI</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DaCapo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">UNet Models</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/unet_architectures.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="unet-models">
+<h1>UNet Models<a class="headerlink" href="#unet-models" title="Link to this heading"></a></h1>
+<p>This section explains how to configure and use UNet models in DaCapo. Several configurations for different types of UNet architectures are demonstrated below.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>UNet is a popular architecture for image segmentation tasks, particularly in biomedical imaging. DaCapo provides support for configuring various types of UNet models with customizable parameters.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<p>Here are some examples of UNet configurations:</p>
+<ol class="arabic simple">
+<li><p><strong>Upsample UNet</strong></p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.architectures</span> <span class="kn">import</span> <span class="n">CNNectomeUNetConfig</span>
+<span class="kn">from</span> <span class="nn">funlib.geometry</span> <span class="kn">import</span> <span class="n">Coordinate</span>
+
+<span class="n">architecture_config</span> <span class="o">=</span> <span class="n">CNNectomeUNetConfig</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;upsample_unet&quot;</span><span class="p">,</span>
+    <span class="n">input_shape</span><span class="o">=</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">216</span><span class="p">,</span> <span class="mi">216</span><span class="p">,</span> <span class="mi">216</span><span class="p">),</span>
+    <span class="n">eval_shape_increase</span><span class="o">=</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">72</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">72</span><span class="p">),</span>
+    <span class="n">fmaps_in</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">num_fmaps</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+    <span class="n">fmaps_out</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span>
+    <span class="n">fmap_inc_factor</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+    <span class="n">downsample_factors</span><span class="o">=</span><span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span>
+    <span class="n">constant_upsample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">upsample_factors</span><span class="o">=</span><span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Yoshi UNet</strong></p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">yoshi_unet_config</span> <span class="o">=</span> <span class="n">CNNectomeUNetConfig</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;yoshi-unet&quot;</span><span class="p">,</span>
+    <span class="n">input_shape</span><span class="o">=</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">188</span><span class="p">,</span> <span class="mi">188</span><span class="p">,</span> <span class="mi">188</span><span class="p">),</span>
+    <span class="n">eval_shape_increase</span><span class="o">=</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">72</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">72</span><span class="p">),</span>
+    <span class="n">fmaps_in</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">num_fmaps</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+    <span class="n">fmaps_out</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span>
+    <span class="n">fmap_inc_factor</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+    <span class="n">downsample_factors</span><span class="o">=</span><span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
+    <span class="n">constant_upsample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">upsample_factors</span><span class="o">=</span><span class="p">[],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p><strong>Attention Upsample UNet</strong></p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">attention_upsample_config</span> <span class="o">=</span> <span class="n">CNNectomeUNetConfig</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;attention-upsample-unet&quot;</span><span class="p">,</span>
+    <span class="n">input_shape</span><span class="o">=</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">216</span><span class="p">,</span> <span class="mi">216</span><span class="p">,</span> <span class="mi">216</span><span class="p">),</span>
+    <span class="n">eval_shape_increase</span><span class="o">=</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">72</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">72</span><span class="p">),</span>
+    <span class="n">fmaps_in</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">num_fmaps</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+    <span class="n">fmaps_out</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span>
+    <span class="n">fmap_inc_factor</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+    <span class="n">downsample_factors</span><span class="o">=</span><span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span>
+    <span class="n">constant_upsample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">upsample_factors</span><span class="o">=</span><span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
+    <span class="n">use_attention</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p><strong>2D UNet</strong></p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">architecture_config</span> <span class="o">=</span> <span class="n">CNNectomeUNetConfig</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;2d_unet&quot;</span><span class="p">,</span>
+    <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">132</span><span class="p">,</span> <span class="mi">132</span><span class="p">),</span>
+    <span class="n">eval_shape_increase</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+    <span class="n">fmaps_in</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">num_fmaps</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">fmaps_out</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">fmap_inc_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">downsample_factors</span><span class="o">=</span><span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)],</span>
+    <span class="n">kernel_size_down</span><span class="o">=</span><span class="p">[[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">kernel_size_up</span><span class="o">=</span><span class="p">[[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">constant_upsample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;valid&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p><strong>UNet with Batch Normalization</strong></p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">architecture_config</span> <span class="o">=</span> <span class="n">CNNectomeUNetConfig</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;unet_norm&quot;</span><span class="p">,</span>
+    <span class="n">input_shape</span><span class="o">=</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">216</span><span class="p">,</span> <span class="mi">216</span><span class="p">,</span> <span class="mi">216</span><span class="p">),</span>
+    <span class="n">eval_shape_increase</span><span class="o">=</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">72</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">72</span><span class="p">),</span>
+    <span class="n">fmaps_in</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">num_fmaps</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">fmaps_out</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">fmap_inc_factor</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">downsample_factors</span><span class="o">=</span><span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span>
+    <span class="n">constant_upsample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">upsample_factors</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">batch_norm</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration-parameters">
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>name</strong>: A unique identifier for the configuration.</p></li>
+<li><p><strong>input_shape</strong>: The shape of the input data.</p></li>
+<li><p><strong>eval_shape_increase</strong>: Increase in shape during evaluation.</p></li>
+<li><p><strong>fmaps_in</strong>: Number of input feature maps.</p></li>
+<li><p><strong>num_fmaps</strong>: Number of feature maps in the first layer.</p></li>
+<li><p><strong>fmaps_out</strong>: Number of output feature maps.</p></li>
+<li><p><strong>fmap_inc_factor</strong>: Factor by which feature maps increase in each layer.</p></li>
+<li><p><strong>downsample_factors</strong>: Factors by which the input is downsampled at each layer.</p></li>
+<li><p><strong>upsample_factors</strong>: Factors by which the input is upsampled at each layer.</p></li>
+<li><p><strong>constant_upsample</strong>: Whether to use constant upsampling.</p></li>
+<li><p><strong>use_attention</strong>: Whether to use attention mechanisms.</p></li>
+<li><p><strong>batch_norm</strong>: Whether to use batch normalization.</p></li>
+<li><p><strong>padding</strong>: Padding mode for convolutional layers.</p></li>
+</ul>
+<p>This page should serve as a reference for configuring UNet models in DaCapo. Adjust the parameters as per your dataset and task requirements.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="notebooks/minimal_tutorial.html" class="btn btn-neutral float-left" title="Minimal Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial.html" class="btn btn-neutral float-right" title="Tutorial: A Simple Experiment in Python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, William Patton, Jeff Rhoades, Marwan Zouinkhi,  David Ackerman, Caroline Malin-Mayor, Jan Funke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
