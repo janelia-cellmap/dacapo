@@ -10,6 +10,7 @@
    overview
    install
    notebooks/minimal_tutorial
+   unet_architectures
    tutorial
    docker
    aws

@@ -19,8 +19,8 @@ sys.path.insert(0, os.path.abspath("../.."))
 # -- Project information -----------------------------------------------------
 
 project = "DaCapo"
-copyright = "2024, Caroline Malin-Mayor, Jeff Rhoades, Marwan Zouinkhi, William Patton, David Ackerman, Jan Funke"
-author = "Caroline Malin-Mayor, Jeff Rhoades, Marwan Zouinkhi, William Patton, David Ackerman, Jan Funke"
+copyright = "2024, William Patton, Jeff Rhoades, Marwan Zouinkhi,  David Ackerman, Caroline Malin-Mayor, Jan Funke"
+author = " William Patton, Jeff Rhoades, Marwan Zouinkhi, David Ackerman, Caroline Malin-Mayor, Jan Funke"
 
 
 # -- General configuration ---------------------------------------------------
