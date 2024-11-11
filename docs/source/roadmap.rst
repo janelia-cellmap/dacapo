@@ -57,7 +57,8 @@ Detailed Road Map
          - [x] everything else
      - [ ] simplify array configs accordingly
 
-## Can Have
+Can Have
+--------
 
  - [ ] Support other stats stores. Too much time, effort and code was put into the stats and didn’t provide a very nice interface:
      - [ ] defining variables to store
@@ -69,7 +70,8 @@ Detailed Road Map
  - [ ] Lazy loading of dependencies (import takes too long)
  - [ ] Support bioimage model spec for model dissemination
 
-## Non-Goals (for v1.0)
+Non-Goals (for v1.0)
+--------------------
 
 - custom dash board
 - GUI to run experiments
