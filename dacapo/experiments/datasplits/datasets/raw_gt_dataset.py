@@ -4,6 +4,7 @@ from funlib.persistence import Array
 from funlib.geometry import Coordinate
 
 from typing import Optional, List
+import warnings
 
 
 class RawGTDataset(Dataset):
@@ -48,6 +49,12 @@ class RawGTDataset(Dataset):
         Notes:
             This method is used to initialize the dataset.
         """
+
+        warnings.warn(
+            "RawGTDataset is deprecated. Use SimpleDataset instead.",
+            DeprecationWarning,
+        )
+
         self.name = dataset_config.name
         self.raw = dataset_config.raw_config.array()
         self.gt = dataset_config.gt_config.array()

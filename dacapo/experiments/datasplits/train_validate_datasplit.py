@@ -2,6 +2,7 @@ from .datasplit import DataSplit
 from .datasets import Dataset
 
 from typing import List
+import warnings
 
 
 class TrainValidateDataSplit(DataSplit):
@@ -47,6 +48,10 @@ class TrainValidateDataSplit(DataSplit):
             into training and validation datasets.
         """
         super().__init__()
+        warnings.warn(
+            "TrainValidateDataSplit is deprecated. Use SimpleDataSplitConfig instead.",
+            DeprecationWarning,
+        )
 
         self.train = [
             train_config.dataset_type(train_config)
