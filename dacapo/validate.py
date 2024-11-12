@@ -247,7 +247,7 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
                 #                 criterion,
                 #             )
                 dataset_iteration_scores.append(
-                [getattr(scores, criterion) for criterion in scores.criteria]
+                    [getattr(scores, criterion) for criterion in scores.criteria]
                 )
             except:
                 logger.error(
@@ -259,8 +259,6 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
             # delete current output. We only keep the best outputs as determined by
             # the evaluator
             # array_store.remove(output_array_identifier)
-
-            
 
         iteration_scores.append(dataset_iteration_scores)
         # array_store.remove(prediction_array_identifier)
