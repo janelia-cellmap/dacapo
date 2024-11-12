@@ -11,13 +11,13 @@ Overview
 +===================================+==================+===============================+
 | Write Documentation               | High             | Started with a long way to go |
 +-----------------------------------+------------------+-------------------------------+
-| Simplify configurations           | High             | Not Started                   |
+| Simplify configurations           | High             | First draft complete          |
 +-----------------------------------+------------------+-------------------------------+
-| Develop Data Conventions          | High             | Not Started                   |
+| Develop Data Conventions          | High             | First draft complete          |
 +-----------------------------------+------------------+-------------------------------+
 | Improve Blockwise Post-Processing | Low              | Not Started                   |
 +-----------------------------------+------------------+-------------------------------+
-| Simplify Array handling           | High             | Completed                     |
+| Simplify Array handling           | High             | Almost done (Up/Down sampling)|
 +-----------------------------------+------------------+-------------------------------+
 
 Detailed Road Map
@@ -33,12 +33,12 @@ Detailed Road Map
          - [ ] semantic segmentation (LM and EM)
          - [ ] instance segmentation (LM or EM, can be simulated)
      - [ ] general documentation of CLI, also API for developers (curate docstrings)
- - [ ] Simplify configurations
-     - [ ] Depricate old configs
-     - [ ] Add simplified config for simple cases
-     - [ ] can still get rid of `*Config` classes
- - [ ] Develop Data Conventions
-     - [ ] document conventions
+ - [x] Simplify configurations
+     - [x] Depricate old configs
+     - [x] Add simplified config for simple cases
+     - [x] can still get rid of `*Config` classes
+ - [x] Develop Data Conventions
+     - [x] document conventions
      - [ ] convenience scripts to convert dataset into our convention (even starting from directories of PNG files)
  - [ ] Improve Blockwise Post-Processing
      - [ ] De-duplicate code between “in-memory” and “block-wise” processing
@@ -55,7 +55,7 @@ Detailed Road Map
          - [ ] DVID source
          - [x] Datatype conversions
          - [x] everything else
-     - [ ] simplify array configs accordingly
+     - [x] simplify array configs accordingly
 
 Can Have
 --------
