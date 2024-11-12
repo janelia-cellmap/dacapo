@@ -231,9 +231,11 @@ class DistancePredictor(Predictor):
             )
             slices = tmp.ndim * (slice(1, -1),)
             tmp[slices] = channel_mask
+            sampling = tuple(float(v) / 2 for v in voxel_size)
+            sampling = sampling[-len(tmp.shape) :]
             boundary_distance = distance_transform_edt(
                 tmp,
-                sampling=voxel_size,
+                sampling=sampling,
             )
             if self.epsilon is None:
                 add = 0
@@ -315,13 +317,17 @@ class DistancePredictor(Predictor):
                     distances = np.ones(channel.shape, dtype=np.float32) * max_distance
             else:
                 # get distances (voxel_size/2 because image is doubled)
+                sampling = tuple(float(v) / 2 for v in voxel_size)
+                # fixing the sampling for 2D images
+                if len(boundaries.shape) < len(sampling):
+                    sampling = sampling[-len(boundaries.shape):]
                 distances = distance_transform_edt(
-                    boundaries, sampling=tuple(float(v) / 2 for v in voxel_size)
+                    boundaries, sampling=sampling
                 )
                 distances = distances.astype(np.float32)
 
                 # restore original shape
-                downsample = (slice(None, None, 2),) * len(voxel_size)
+                downsample = (slice(None, None, 2),) * distances.ndim
                 distances = distances[downsample]
 
                 # todo: inverted distance

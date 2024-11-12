@@ -18,7 +18,9 @@ from dacapo.tmp import (
 from funlib.persistence import Array
 
 from typing import Iterable
+import logging
 
+logger = logging.getLogger(__name__)
 
 class ThresholdPostProcessor(PostProcessor):
     """
@@ -135,7 +137,7 @@ class ThresholdPostProcessor(PostProcessor):
             data = input_array[write_roi] > parameters.threshold
             data = data.astype(np.uint8)
             if int(data.max()) == 0:
-                print("No data in block", write_roi)
+                logger.debug("No data in block", write_roi)
                 return
             output_array[write_roi] = data
 

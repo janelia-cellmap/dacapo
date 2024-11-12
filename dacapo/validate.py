@@ -246,6 +246,9 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
                 #                 validation_dataset.name,
                 #                 criterion,
                 #             )
+                dataset_iteration_scores.append(
+                [getattr(scores, criterion) for criterion in scores.criteria]
+                )
             except:
                 logger.error(
                     f"Could not evaluate run {run.name} on dataset {validation_dataset.name} with parameters {parameters}.",
@@ -257,9 +260,7 @@ def validate_run(run: Run, iteration: int, datasets_config=None):
             # the evaluator
             # array_store.remove(output_array_identifier)
 
-            dataset_iteration_scores.append(
-                [getattr(scores, criterion) for criterion in scores.criteria]
-            )
+            
 
         iteration_scores.append(dataset_iteration_scores)
         # array_store.remove(prediction_array_identifier)
