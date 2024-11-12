@@ -15,32 +15,35 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
-from dacapo.experiments.architectures import DummyArchitectureConfig, CNNectomeUNetConfig
+from dacapo.experiments.architectures import (
+    DummyArchitectureConfig,
+    CNNectomeUNetConfig,
+)
 
 import pytest
 
 
-def unet_architecture(batch_norm, upsample,use_attention, three_d):
+def unet_architecture(batch_norm, upsample, use_attention, three_d):
     name = "3d_unet" if three_d else "2d_unet"
     name = f"{name}_bn" if batch_norm else name
     name = f"{name}_up" if upsample else name
     name = f"{name}_att" if use_attention else name
 
     if three_d:
-         return CNNectomeUNetConfig(
-                name=name,
-                input_shape=(188, 188, 188),
-                eval_shape_increase=(72, 72, 72),
-                fmaps_in=1,
-                num_fmaps=6,
-                fmaps_out=6,
-                fmap_inc_factor=2,
-                downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],
-                constant_upsample=True,
-                upsample_factors=[(2, 2, 2)] if upsample else [],
-                batch_norm=batch_norm,
-                use_attention=use_attention,
-            )
+        return CNNectomeUNetConfig(
+            name=name,
+            input_shape=(188, 188, 188),
+            eval_shape_increase=(72, 72, 72),
+            fmaps_in=1,
+            num_fmaps=6,
+            fmaps_out=6,
+            fmap_inc_factor=2,
+            downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],
+            constant_upsample=True,
+            upsample_factors=[(2, 2, 2)] if upsample else [],
+            batch_norm=batch_norm,
+            use_attention=use_attention,
+        )
     else:
         return CNNectomeUNetConfig(
             name=name,
@@ -59,7 +62,6 @@ def unet_architecture(batch_norm, upsample,use_attention, three_d):
             use_attention=use_attention,
             upsample_factors=[(1, 2, 2)] if upsample else [],
         )
-
 
 
 # skip the test for the Apple Paravirtual device
@@ -117,19 +119,15 @@ def test_train(
 @pytest.mark.parametrize("use_attention", [True, False])
 @pytest.mark.parametrize("three_d", [True, False])
 def test_train_unet(
-        datasplit,
-        task,
-        trainer,
-        batch_norm,
-        upsample,
-        use_attention,
-        three_d):
-    
+    datasplit, task, trainer, batch_norm, upsample, use_attention, three_d
+):
     store = create_config_store()
     stats_store = create_stats_store()
     weights_store = create_weights_store()
 
-    architecture_config = unet_architecture(batch_norm, upsample,use_attention, three_d)
+    architecture_config = unet_architecture(
+        batch_norm, upsample, use_attention, three_d
+    )
 
     run_config = RunConfig(
         name=f"{architecture_config.name}_run",
@@ -167,6 +165,3 @@ def test_train_unet(
     training_stats = stats_store.retrieve_training_stats(run_config.name)
 
     assert training_stats.trained_until() == run_config.num_iterations
-
-    
-    

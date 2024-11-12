@@ -320,10 +320,8 @@ class DistancePredictor(Predictor):
                 sampling = tuple(float(v) / 2 for v in voxel_size)
                 # fixing the sampling for 2D images
                 if len(boundaries.shape) < len(sampling):
-                    sampling = sampling[-len(boundaries.shape):]
-                distances = distance_transform_edt(
-                    boundaries, sampling=sampling
-                )
+                    sampling = sampling[-len(boundaries.shape) :]
+                distances = distance_transform_edt(boundaries, sampling=sampling)
                 distances = distances.astype(np.float32)
 
                 # restore original shape
