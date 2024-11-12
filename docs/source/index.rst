@@ -15,6 +15,7 @@
    docker
    aws
    cosem_starter
+   roadmap
    autoapi/index
    cli
 
