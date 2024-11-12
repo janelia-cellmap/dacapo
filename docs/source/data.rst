@@ -33,14 +33,11 @@ The simplest possible dataset would look like this:
 ::
 
     data.zarr
-    ├── train
-    │   ├── raw
-    │   └── labels
-    └── test
-        ├── raw
-        └── labels
+    ├── raw
+    └── labels
 
 If this is what your data looks like, then your data configuration will look like this:
+
 .. code-block::
     :caption: A simple data configuration
 
@@ -49,17 +46,32 @@ If this is what your data looks like, then your data configuration will look lik
     )
 
 Note that a lot of assumptions will be made.
-1. We assume your raw data is normalized based on the `dtype`. I.e.
-  if your data is stored as an unsigned int (we recommend uint8) we will assume a range and normalize it to [0,1] by dividing by the
-  appropriate value (255 for `uint8` or 65535 for `uint16`). If your data is stored as any `float` we will assume
-  it is already in the range [0, 1].
-2. We assume your labels are stored as unsigned integers. If you want to generate instance segmentations, you will need
-  to assign a unique id to every object of the class you are interested in. If you want semantic segmentations you
-  can simply assign a unique id to each class. 0 is reserved for the background class.
-3. We assume that the labels are provided densely. The entire volume will be used for training.
-  
 
-This will often not be enough to describe your data. You may have multiple crops and often your data may be
+1. We assume your raw data is normalized based on the `dtype`. I.e. if your data is
+   stored as an unsigned int (we recommend uint8) we will assume a range and normalize
+   it to [0,1] by dividing by the appropriate value (255 for `uint8` or 65535 for `uint16`).
+   If your data is stored as any `float` we will assume it is already in the range [0, 1].
+2. We assume your labels are stored as unsigned integers. If you want to generate instance segmentations, you will need
+   to assign a unique id to every object of the class you are interested in. If you want semantic segmentations you
+   can simply assign a unique id to each class. 0 is reserved for the background class.
+3. We assume that the labels are provided densely. The entire volume will be used for training.
+4. We will be training and validating on the same data. This is not ideal, but it is an ok starting point for testing
+   and debugging.
+
+Next we can add a little bit of complexity by seperating train and test data. This can also be handled
+by the same data configuration as above since it will detect the presence of the `train` and `test` groups.
+
+::
+
+    data.zarr
+    ├── train
+    │   ├── raw
+    │   └── labels
+    └── test
+        ├── raw
+        └── labels
+
+We can go further with our basic data configuration since this will often not be enough to describe your data. You may have multiple crops and often your data may be
 sparsely annotated. The same data configuration from above will also work for the slightly more complicated
 dataset below:
 
