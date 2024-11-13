@@ -184,57 +184,10 @@ plt.show()
 # experiments, but is useful for this tutorial.
 
 # %%
-from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
-from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
-from dacapo.experiments.datasplits.datasets.arrays import (
-    ZarrArrayConfig,
-    IntensitiesArrayConfig,
-)
+from dacapo.experiments.datasplits.simple_config import SimpleDataSplitConfig
 from funlib.geometry import Coordinate
 
-datasplit_config = TrainValidateDataSplitConfig(
-    name="example_datasplit",
-    train_configs=[
-        RawGTDatasetConfig(
-            name="example_dataset",
-            raw_config=IntensitiesArrayConfig(
-                name="example_raw_normalized",
-                source_array_config=ZarrArrayConfig(
-                    name="example_raw",
-                    file_name="cells3d.zarr",
-                    dataset="raw",
-                ),
-                min=0,
-                max=255,
-            ),
-            gt_config=ZarrArrayConfig(
-                name="example_gt",
-                file_name="cells3d.zarr",
-                dataset="mask",
-            ),
-        )
-    ],
-    validate_configs=[
-        RawGTDatasetConfig(
-            name="example_dataset",
-            raw_config=IntensitiesArrayConfig(
-                name="example_raw_normalized",
-                source_array_config=ZarrArrayConfig(
-                    name="example_raw",
-                    file_name="cells3d.zarr",
-                    dataset="raw",
-                ),
-                min=0,
-                max=255,
-            ),
-            gt_config=ZarrArrayConfig(
-                name="example_gt",
-                file_name="cells3d.zarr",
-                dataset="labels",
-            ),
-        )
-    ],
-)
+datasplit_config = SimpleDataSplitConfig(name="cells3d", path="cells3d.zarr")
 datasplit = datasplit_config.datasplit_type(datasplit_config)
 config_store.store_datasplit_config(datasplit_config)
 
@@ -497,8 +450,8 @@ for validation in range(1, num_validations + 1):
     # break
     raw = zarr.open(f"{run_path}/validation.zarr/inputs/{dataset}/raw")
     gt = zarr.open(f"{run_path}/validation.zarr/inputs/{dataset}/gt")
-    pred_path = f"{run_path}/validation.zarr/{validation_it}/ds_{dataset}/prediction"
-    out_path = f"{run_path}/validation.zarr/{validation_it}/ds_{dataset}/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))"
+    pred_path = f"{run_path}/validation.zarr/{validation_it}/{dataset}/prediction"
+    out_path = f"{run_path}/validation.zarr/{validation_it}/{dataset}/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))"
     output = zarr.open(out_path)[:]
     prediction = zarr.open(pred_path)[0]
     c = (raw.shape[2] - gt.shape[1]) // 2
