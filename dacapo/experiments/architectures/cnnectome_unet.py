@@ -281,7 +281,7 @@ class CNNectomeUNet(Architecture):
                 conv = ConvPass(
                     self.fmaps_out,
                     self.fmaps_out,
-                    [(3,) * len(upsample_factor)] * 2,
+                    kernel_size_up[-1],
                     activation="ReLU",
                     batch_norm=self.batch_norm,
                 )
