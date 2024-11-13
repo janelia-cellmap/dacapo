@@ -237,16 +237,15 @@ class CNNectomeUNet(Architecture):
         """
         fmaps_in = self.fmaps_in
         levels = len(self.downsample_factors) + 1
-        dims = len(self.downsample_factors[0])
 
-        if hasattr(self, "kernel_size_down"):
+        if self.kernel_size_down is not None:
             kernel_size_down = self.kernel_size_down
         else:
-            kernel_size_down = [[(3,) * dims, (3,) * dims]] * levels
-        if hasattr(self, "kernel_size_up"):
+            kernel_size_down = [[(3,) * self.dims, (3,) * self.dims]] * levels
+        if self.kernel_size_up is not None:
             kernel_size_up = self.kernel_size_up
         else:
-            kernel_size_up = [[(3,) * dims, (3,) * dims]] * (levels - 1)
+            kernel_size_up = [[(3,) * self.dims, (3,) * self.dims]] * (levels - 1)
 
         # downsample factors has to be a list of tuples
         downsample_factors = [tuple(x) for x in self.downsample_factors]
@@ -326,7 +325,7 @@ class CNNectomeUNet(Architecture):
         Note:
             The input shape should be given as a tuple ``(batch, channels, [length,] depth, height, width)``.
         """
-        return self._input_shape
+        return Coordinate(self._input_shape)
 
     @property
     def num_in_channels(self) -> int:
