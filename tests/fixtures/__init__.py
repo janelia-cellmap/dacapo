@@ -1,5 +1,5 @@
 from .db import options
-from .architectures import dummy_architecture, unet_architecture
+from .architectures import dummy_architecture, unet_architecture,unet_architecture_builder
 from .arrays import dummy_array, zarr_array, cellmap_array
 from .datasplits import dummy_datasplit, twelve_class_datasplit, six_class_datasplit
 from .evaluators import binary_3_channel_evaluator
