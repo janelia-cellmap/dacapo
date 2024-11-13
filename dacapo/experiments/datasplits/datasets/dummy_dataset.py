@@ -17,7 +17,6 @@ class DummyDataset(Dataset):
     Notes:
         This class is used to create a dataset with raw data.
     """
-    
 
     raw: Array
 
