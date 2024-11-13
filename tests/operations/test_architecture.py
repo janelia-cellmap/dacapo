@@ -18,7 +18,6 @@ logging.basicConfig(level=logging.INFO)
 def test_architecture(
     architecture_config,
 ):
-
     architecture_type = architecture_config.architecture_type
 
     architecture = architecture_type(architecture_config)
