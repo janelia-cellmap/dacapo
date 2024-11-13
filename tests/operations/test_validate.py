@@ -7,6 +7,8 @@ from dacapo.experiments import Run
 from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo import validate, validate_run
 
+from dacapo.experiments.run_config import RunConfig
+
 import pytest
 from pytest_lazy_fixtures import lf
 
@@ -97,3 +99,37 @@ def test_validate_run(
 
     if debug:
         os.chdir(old_path)
+
+
+
+
+@pytest.mark.parametrize("datasplit", [lf("six_class_datasplit")])
+@pytest.mark.parametrize("task", [lf("distance_task")])
+@pytest.mark.parametrize("trainer", [lf("gunpowder_trainer")])
+@pytest.mark.parametrize("architecture", [lf("unet_architecture")])
+def test_validate_unet(
+    datasplit, task, trainer, architecture
+):
+    store = create_config_store()
+    weights_store = create_weights_store()
+
+    run_config = RunConfig(
+        name=f"{architecture.name}_run",
+        task_config=task,
+        architecture_config=architecture,
+        trainer_config=trainer,
+        datasplit_config=datasplit,
+        repetition=0,
+        num_iterations=2,
+    )
+    try:
+        store.store_run_config(run_config)
+    except Exception as e:
+        store.delete_run_config(run_config.name)
+        store.store_run_config(run_config)
+
+    run = Run(run_config)
+
+    # -------------------------------------
+    weights_store.store_weights(run, 0)
+    validate_run(run, 0)

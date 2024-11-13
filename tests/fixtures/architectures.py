@@ -19,7 +19,7 @@ def unet_architecture():
         name="tmp_unet_architecture",
         input_shape=(2, 132, 132),
         eval_shape_increase=(8, 32, 32),
-        fmaps_in=2,
+        fmaps_in=1,
         num_fmaps=8,
         fmaps_out=8,
         fmap_inc_factor=2,

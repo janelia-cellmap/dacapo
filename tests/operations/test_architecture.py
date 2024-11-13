@@ -35,7 +35,11 @@ def test_stored_architecture(
     from dacapo.store.create_store import create_config_store
 
     config_store = create_config_store()
-    config_store.store_architecture_config(architecture_config)
+    try:
+        config_store.store_architecture_config(architecture_config)
+    except:
+        config_store.delete_architecture_config(architecture_config.name)
+        config_store.store_architecture_config(architecture_config)
 
     retrieved_arch_config = config_store.retrieve_architecture_config(
         architecture_config.name
