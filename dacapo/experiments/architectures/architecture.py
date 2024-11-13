@@ -99,6 +99,7 @@ class Architecture(torch.nn.Module, ABC):
         pass
 
     @property
+    @abstractmethod
     def dims(self) -> int:
         """
         Returns the number of dimensions of the input shape.
@@ -115,7 +116,7 @@ class Architecture(torch.nn.Module, ABC):
         Note:
             The method is optional and can be overridden in the derived class.
         """
-        return self.input_shape.dims
+        pass
 
     def scale(self, input_voxel_size: Coordinate) -> Coordinate:
         """

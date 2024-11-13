@@ -325,6 +325,24 @@ class CNNectomeUNet(Architecture):
             The input shape should be given as a tuple ``(batch, channels, [length,] depth, height, width)``.
         """
         return self._input_shape
+    
+    @property
+    def dims(self):
+        """
+        Return the number of dimensions of the input shape.
+
+        Returns:
+            The number of dimensions.
+        Raises:
+            AttributeError: If the input shape is not given.
+        Examples:
+            >>> unet.dims
+            3
+        Note:
+            The input shape should be given as a tuple ``(batch, channels, [length,] depth, height, width)``.
+        """
+        # return self.input_shape.dims
+        return self.unet.dims
 
     @property
     def num_in_channels(self) -> int:

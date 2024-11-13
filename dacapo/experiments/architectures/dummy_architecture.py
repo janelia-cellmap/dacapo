@@ -74,6 +74,23 @@ class DummyArchitecture(Architecture):
             This method is used to return the number of input channels for this architecture.
         """
         return self.channels_in
+    
+    @property
+    def dims(self):
+        """
+        Returns the number of dimensions of the input shape.
+
+        Returns:
+            int: The number of dimensions.
+        Raises:
+            NotImplementedError: This method is not implemented in this class.
+        Examples:
+            >>> dummy_architecture.dims
+            3
+        Note:
+            This method is used to return the number of dimensions of the input shape.
+        """
+        return self.input_shape.dims
 
     @property
     def num_out_channels(self):
