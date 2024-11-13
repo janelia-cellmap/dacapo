@@ -22,6 +22,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class ThresholdPostProcessor(PostProcessor):
     """
     A post-processor that applies a threshold to the prediction.
