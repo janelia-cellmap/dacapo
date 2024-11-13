@@ -3,6 +3,8 @@ from .architecture import Architecture
 import torch
 import torch.nn as nn
 
+from funlib.geometry import Coordinate
+
 import math
 
 
@@ -176,7 +178,7 @@ class CNNectomeUNet(Architecture):
         self.unet = self.module()
 
     @property
-    def eval_shape_increase(self):
+    def eval_shape_increase(self) -> Coordinate:
         """
         The increase in shape due to the U-Net.
 
@@ -192,7 +194,7 @@ class CNNectomeUNet(Architecture):
         """
         if self._eval_shape_increase is None:
             return super().eval_shape_increase
-        return self._eval_shape_increase
+        return Coordinate(self._eval_shape_increase)
 
     def module(self):
         """
@@ -306,11 +308,11 @@ class CNNectomeUNet(Architecture):
             The voxel size should be given as a tuple ``(z, y, x)``.
         """
         for upsample_factor in self.upsample_factors:
-            voxel_size = voxel_size / upsample_factor
+            voxel_size = voxel_size / Coordinate(upsample_factor)
         return voxel_size
 
     @property
-    def input_shape(self):
+    def input_shape(self) -> Coordinate:
         """
         Return the input shape of the U-Net.
 
