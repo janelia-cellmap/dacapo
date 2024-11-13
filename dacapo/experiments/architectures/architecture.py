@@ -115,7 +115,7 @@ class Architecture(torch.nn.Module, ABC):
         Note:
             The method is optional and can be overridden in the derived class.
         """
-        return self.input_shape.dims
+        return Coordinate(self.input_shape).dims
 
     def scale(self, input_voxel_size: Coordinate) -> Coordinate:
         """
