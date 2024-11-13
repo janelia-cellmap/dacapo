@@ -7,6 +7,7 @@ from pathlib import Path
 
 import glob
 
+
 @attr.s
 class SimpleDataSplitConfig(DataSplitConfig):
     """

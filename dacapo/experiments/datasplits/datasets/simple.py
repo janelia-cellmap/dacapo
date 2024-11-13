@@ -8,9 +8,9 @@ import attr
 from pathlib import Path
 import numpy as np
 
+
 @attr.s
 class SimpleDataset(DatasetConfig):
-
     path: Path = attr.ib()
     weight: int = attr.ib(default=1)
     raw_name: str = attr.ib(default="raw")
@@ -54,7 +54,6 @@ class SimpleDataset(DatasetConfig):
     @property
     def sample_points(self) -> None:
         return None
-    
 
     def __eq__(self, other) -> bool:
         return isinstance(other, type(self)) and self.name == other.name
