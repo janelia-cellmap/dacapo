@@ -17,6 +17,7 @@ Submodules
    /autoapi/dacapo/experiments/datasplits/dummy_datasplit/index
    /autoapi/dacapo/experiments/datasplits/dummy_datasplit_config/index
    /autoapi/dacapo/experiments/datasplits/keys/index
+   /autoapi/dacapo/experiments/datasplits/simple_config/index
    /autoapi/dacapo/experiments/datasplits/train_validate_datasplit/index
    /autoapi/dacapo/experiments/datasplits/train_validate_datasplit_config/index
 
@@ -34,6 +35,7 @@ Classes
    dacapo.experiments.datasplits.TrainValidateDataSplitConfig
    dacapo.experiments.datasplits.DataSplitGenerator
    dacapo.experiments.datasplits.DatasetSpec
+   dacapo.experiments.datasplits.SimpleDataSplitConfig
 
 
 Package Contents
@@ -665,5 +667,59 @@ Package Contents
 
 
    .. py:attribute:: gt_dataset
+
+
+.. py:class:: SimpleDataSplitConfig
+
+
+
+   A convention over configuration datasplit that can handle many of the most
+   basic cases.
+
+
+   .. py:attribute:: path
+      :type:  pathlib.Path
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: train_group_name
+      :type:  str
+
+
+   .. py:attribute:: validate_group_name
+      :type:  str
+
+
+   .. py:attribute:: raw_name
+      :type:  str
+
+
+   .. py:attribute:: gt_name
+      :type:  str
+
+
+   .. py:attribute:: mask_name
+      :type:  str
+
+
+   .. py:method:: datasplit_type(datasplit_config)
+      :staticmethod:
+
+
+
+   .. py:method:: get_paths(group_name: str) -> list[pathlib.Path]
+
+
+   .. py:property:: train
+      :type: list[dacapo.experiments.datasplits.datasets.simple.SimpleDataset]
+
+
+
+   .. py:property:: validate
+      :type: list[dacapo.experiments.datasplits.datasets.simple.SimpleDataset]
+
 
 

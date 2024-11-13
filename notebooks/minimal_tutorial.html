@@ -23,7 +23,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="UNet Models" href="../unet_architectures.html" />
+    <link rel="next" title="Data Formatting" href="../data.html" />
     <link rel="prev" title="Installation" href="../install.html" /> 
 </head>
 
@@ -69,6 +69,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#visualize">Visualize</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">Data Formatting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../unet_architectures.html">UNet Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
@@ -307,57 +308,10 @@ same data for both training and validation. This is not recommended for real
 experiments, but is useful for this tutorial.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits</span> <span class="kn">import</span> <span class="n">TrainValidateDataSplitConfig</span>
-<span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets</span> <span class="kn">import</span> <span class="n">RawGTDatasetConfig</span>
-<span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.datasets.arrays</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">ZarrArrayConfig</span><span class="p">,</span>
-    <span class="n">IntensitiesArrayConfig</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.datasplits.simple_config</span> <span class="kn">import</span> <span class="n">SimpleDataSplitConfig</span>
 <span class="kn">from</span> <span class="nn">funlib.geometry</span> <span class="kn">import</span> <span class="n">Coordinate</span>
 
-<span class="n">datasplit_config</span> <span class="o">=</span> <span class="n">TrainValidateDataSplitConfig</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_datasplit&quot;</span><span class="p">,</span>
-    <span class="n">train_configs</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">RawGTDatasetConfig</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_dataset&quot;</span><span class="p">,</span>
-            <span class="n">raw_config</span><span class="o">=</span><span class="n">IntensitiesArrayConfig</span><span class="p">(</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_raw_normalized&quot;</span><span class="p">,</span>
-                <span class="n">source_array_config</span><span class="o">=</span><span class="n">ZarrArrayConfig</span><span class="p">(</span>
-                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_raw&quot;</span><span class="p">,</span>
-                    <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
-                    <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span>
-                <span class="p">),</span>
-                <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="nb">max</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span>
-            <span class="p">),</span>
-            <span class="n">gt_config</span><span class="o">=</span><span class="n">ZarrArrayConfig</span><span class="p">(</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_gt&quot;</span><span class="p">,</span>
-                <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
-                <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;mask&quot;</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-    <span class="p">],</span>
-    <span class="n">validate_configs</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">RawGTDatasetConfig</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_dataset&quot;</span><span class="p">,</span>
-            <span class="n">raw_config</span><span class="o">=</span><span class="n">IntensitiesArrayConfig</span><span class="p">(</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_raw_normalized&quot;</span><span class="p">,</span>
-                <span class="n">source_array_config</span><span class="o">=</span><span class="n">ZarrArrayConfig</span><span class="p">(</span>
-                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_raw&quot;</span><span class="p">,</span>
-                    <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
-                    <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;raw&quot;</span><span class="p">,</span>
-                <span class="p">),</span>
-                <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="nb">max</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span>
-            <span class="p">),</span>
-            <span class="n">gt_config</span><span class="o">=</span><span class="n">ZarrArrayConfig</span><span class="p">(</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;example_gt&quot;</span><span class="p">,</span>
-                <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">,</span>
-                <span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;labels&quot;</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-    <span class="p">],</span>
-<span class="p">)</span>
+<span class="n">datasplit_config</span> <span class="o">=</span> <span class="n">SimpleDataSplitConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;cells3d&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;cells3d.zarr&quot;</span><span class="p">)</span>
 <span class="n">datasplit</span> <span class="o">=</span> <span class="n">datasplit_config</span><span class="o">.</span><span class="n">datasplit_type</span><span class="p">(</span><span class="n">datasplit_config</span><span class="p">)</span>
 <span class="n">config_store</span><span class="o">.</span><span class="n">store_datasplit_config</span><span class="p">(</span><span class="n">datasplit_config</span><span class="p">)</span>
 </pre></div>
@@ -607,13 +561,13 @@ including snapshots, validation results, and the loss.</p>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating FileStatsStore:
 	path    : /home/runner/dacapo/stats
 &lt;xarray.DataArray (iterations: 2000)&gt;
-array([0.88576496, 0.90838391, 0.8469612 , ..., 0.40522465, 0.40965399,
-       0.43413094])
+array([0.81003344, 0.78063643, 0.8337096 , ..., 0.32482904, 0.35309637,
+       0.28647012])
 Coordinates:
   * iterations  (iterations) int64 0 1 2 3 4 5 ... 1994 1995 1996 1997 1998 1999
 </pre></div>
 </div>
-<img alt="../_images/740324669767434e3255abbf72201f026346cb4364f2e6f09e376c501f4c34ea.png" src="../_images/740324669767434e3255abbf72201f026346cb4364f2e6f09e376c501f4c34ea.png" />
+<img alt="../_images/8be921556f6acfaaec95b290e4988697111466d547af287c05c75c5e4b1f0218.png" src="../_images/8be921556f6acfaaec95b290e4988697111466d547af287c05c75c5e4b1f0218.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -645,7 +599,7 @@ Creating FileStatsStore:
 	path    : /home/runner/dacapo/stats
 </pre></div>
 </div>
-<img alt="../_images/a95cc34aa288a713aa4e8ae662e6e2b4bf1df92956d2bd22f906bedc9ad0bab2.png" src="../_images/a95cc34aa288a713aa4e8ae662e6e2b4bf1df92956d2bd22f906bedc9ad0bab2.png" />
+<img alt="../_images/b40d3b8736f7145a8fdedb807170b2db4c6419fca7875f53015de0dbcc6cdd50.png" src="../_images/b40d3b8736f7145a8fdedb807170b2db4c6419fca7875f53015de0dbcc6cdd50.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -703,8 +657,8 @@ Creating FileStatsStore:
     <span class="c1"># break</span>
     <span class="n">raw</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/inputs/</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/raw&quot;</span><span class="p">)</span>
     <span class="n">gt</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/inputs/</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/gt&quot;</span><span class="p">)</span>
-    <span class="n">pred_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/</span><span class="si">{</span><span class="n">validation_it</span><span class="si">}</span><span class="s2">/ds_</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/prediction&quot;</span>
-    <span class="n">out_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/</span><span class="si">{</span><span class="n">validation_it</span><span class="si">}</span><span class="s2">/ds_</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))&quot;</span>
+    <span class="n">pred_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/</span><span class="si">{</span><span class="n">validation_it</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/prediction&quot;</span>
+    <span class="n">out_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2">/validation.zarr/</span><span class="si">{</span><span class="n">validation_it</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">/output/WatershedPostProcessorParameters(id=2, bias=0.5, context=(32, 32, 32))&quot;</span>
     <span class="n">output</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">out_path</span><span class="p">)[:]</span>
     <span class="n">prediction</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pred_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">gt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span>
@@ -724,8 +678,8 @@ Creating FileStatsStore:
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/2ccbe1c4a7d98ed745fcc7f7200daca047854f04cb1737136d0783ead59094b0.png" src="../_images/2ccbe1c4a7d98ed745fcc7f7200daca047854f04cb1737136d0783ead59094b0.png" />
-<img alt="../_images/8b95fb5e10d8585878ac2263174f153a8896787b2e7c482e18dca9dd22d661ac.png" src="../_images/8b95fb5e10d8585878ac2263174f153a8896787b2e7c482e18dca9dd22d661ac.png" />
+<img alt="../_images/4591dcf10cb139f8367afafe250d25785713675cc5c45038343818c91d8e1c7e.png" src="../_images/4591dcf10cb139f8367afafe250d25785713675cc5c45038343818c91d8e1c7e.png" />
+<img alt="../_images/c9c4bfe23fa7ad56740e5169aef51a8491920f9509173a32aed236d520ba90c2.png" src="../_images/c9c4bfe23fa7ad56740e5169aef51a8491920f9509173a32aed236d520ba90c2.png" />
 </div>
 </div>
 </section>
@@ -736,7 +690,7 @@ Creating FileStatsStore:
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../unet_architectures.html" class="btn btn-neutral float-right" title="UNet Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../data.html" class="btn btn-neutral float-right" title="Data Formatting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

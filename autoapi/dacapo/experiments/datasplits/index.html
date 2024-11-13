@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/minimal_tutorial.html">Minimal Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../data.html">Data Formatting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../unet_architectures.html">UNet Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
@@ -127,6 +128,7 @@
 <li class="toctree-l1"><a class="reference internal" href="dummy_datasplit/index.html">dacapo.experiments.datasplits.dummy_datasplit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dummy_datasplit_config/index.html">dacapo.experiments.datasplits.dummy_datasplit_config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="keys/index.html">dacapo.experiments.datasplits.keys</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simple_config/index.html">dacapo.experiments.datasplits.simple_config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train_validate_datasplit/index.html">dacapo.experiments.datasplits.train_validate_datasplit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train_validate_datasplit_config/index.html">dacapo.experiments.datasplits.train_validate_datasplit_config</a></li>
 </ul>
@@ -159,6 +161,9 @@
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.DatasetSpec" title="dacapo.experiments.datasplits.DatasetSpec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DatasetSpec</span></code></a></p></td>
 <td><p>A class for dataset specification. It is used to specify the dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.SimpleDataSplitConfig" title="dacapo.experiments.datasplits.SimpleDataSplitConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimpleDataSplitConfig</span></code></a></p></td>
+<td><p>A convention over configuration datasplit that can handle many of the most</p></td>
 </tr>
 </tbody>
 </table>
@@ -960,6 +965,68 @@ The ground truth dataset.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id38">
 <span class="sig-name descname"><span class="pre">gt_dataset</span></span><a class="headerlink" href="#id38" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.SimpleDataSplitConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.</span></span><span class="sig-name descname"><span class="pre">SimpleDataSplitConfig</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.SimpleDataSplitConfig" title="Link to this definition"></a></dt>
+<dd><p>A convention over configuration datasplit that can handle many of the most
+basic cases.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.SimpleDataSplitConfig.path">
+<span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.SimpleDataSplitConfig.path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.SimpleDataSplitConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.SimpleDataSplitConfig.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.SimpleDataSplitConfig.train_group_name">
+<span class="sig-name descname"><span class="pre">train_group_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.SimpleDataSplitConfig.train_group_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.SimpleDataSplitConfig.validate_group_name">
+<span class="sig-name descname"><span class="pre">validate_group_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.SimpleDataSplitConfig.validate_group_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.SimpleDataSplitConfig.raw_name">
+<span class="sig-name descname"><span class="pre">raw_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.SimpleDataSplitConfig.raw_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.SimpleDataSplitConfig.gt_name">
+<span class="sig-name descname"><span class="pre">gt_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.SimpleDataSplitConfig.gt_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.SimpleDataSplitConfig.mask_name">
+<span class="sig-name descname"><span class="pre">mask_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.SimpleDataSplitConfig.mask_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.SimpleDataSplitConfig.datasplit_type">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">datasplit_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasplit_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.SimpleDataSplitConfig.datasplit_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.SimpleDataSplitConfig.get_paths">
+<span class="sig-name descname"><span class="pre">get_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.experiments.datasplits.SimpleDataSplitConfig.get_paths" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.SimpleDataSplitConfig.train">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">train</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="datasets/simple/index.html#dacapo.experiments.datasplits.datasets.simple.SimpleDataset" title="dacapo.experiments.datasplits.datasets.simple.SimpleDataset"><span class="pre">dacapo.experiments.datasplits.datasets.simple.SimpleDataset</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.SimpleDataSplitConfig.train" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.SimpleDataSplitConfig.validate">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="datasets/simple/index.html#dacapo.experiments.datasplits.datasets.simple.SimpleDataset" title="dacapo.experiments.datasplits.datasets.simple.SimpleDataset"><span class="pre">dacapo.experiments.datasplits.datasets.simple.SimpleDataset</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#dacapo.experiments.datasplits.SimpleDataSplitConfig.validate" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

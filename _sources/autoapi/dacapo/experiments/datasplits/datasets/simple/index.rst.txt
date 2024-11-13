@@ -1,0 +1,94 @@
+dacapo.experiments.datasplits.datasets.simple
+=============================================
+
+.. py:module:: dacapo.experiments.datasplits.datasets.simple
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.simple.SimpleDataset
+
+
+Module Contents
+---------------
+
+.. py:class:: SimpleDataset
+
+
+
+   A class used to define configuration for datasets. This provides the
+   framework to create a Dataset instance.
+
+   .. attribute:: name
+
+      str (eg: "sample_dataset").
+      A unique identifier to name the dataset.
+      It aids in easy identification and reusability of this dataset.
+      Advised to keep it short and refrain from using special characters.
+
+   .. attribute:: weight
+
+      int (default=1).
+      A numeric value that indicates how frequently this dataset should be
+      sampled in comparison to others. Higher the weight, more frequently it
+      gets sampled.
+
+   .. method:: verify
+
+      
+      Checks and validates the dataset configuration. The specific rules for
+      validation need to be defined by the user.
+
+   .. rubric:: Notes
+
+   This class is used to create a configuration object for datasets.
+
+
+   .. py:attribute:: path
+      :type:  pathlib.Path
+
+
+   .. py:attribute:: weight
+      :type:  int
+
+
+   .. py:attribute:: raw_name
+      :type:  str
+
+
+   .. py:attribute:: gt_name
+      :type:  str
+
+
+   .. py:attribute:: mask_name
+      :type:  str
+
+
+   .. py:method:: dataset_type(dataset_config)
+      :staticmethod:
+
+
+
+   .. py:property:: raw
+      :type: funlib.persistence.Array
+
+
+
+   .. py:property:: gt
+      :type: funlib.persistence.Array
+
+
+
+   .. py:property:: mask
+      :type: funlib.persistence.Array | None
+
+
+
+   .. py:property:: sample_points
+      :type: None
+
+
+

@@ -1,0 +1,71 @@
+dacapo.experiments.datasplits.simple_config
+===========================================
+
+.. py:module:: dacapo.experiments.datasplits.simple_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.simple_config.SimpleDataSplitConfig
+
+
+Module Contents
+---------------
+
+.. py:class:: SimpleDataSplitConfig
+
+
+
+   A convention over configuration datasplit that can handle many of the most
+   basic cases.
+
+
+   .. py:attribute:: path
+      :type:  pathlib.Path
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: train_group_name
+      :type:  str
+
+
+   .. py:attribute:: validate_group_name
+      :type:  str
+
+
+   .. py:attribute:: raw_name
+      :type:  str
+
+
+   .. py:attribute:: gt_name
+      :type:  str
+
+
+   .. py:attribute:: mask_name
+      :type:  str
+
+
+   .. py:method:: datasplit_type(datasplit_config)
+      :staticmethod:
+
+
+
+   .. py:method:: get_paths(group_name: str) -> list[pathlib.Path]
+
+
+   .. py:property:: train
+      :type: list[dacapo.experiments.datasplits.datasets.simple.SimpleDataset]
+
+
+
+   .. py:property:: validate
+      :type: list[dacapo.experiments.datasplits.datasets.simple.SimpleDataset]
+
+
+

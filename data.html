@@ -1,0 +1,235 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Formatting &mdash; DaCapo  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="UNet Models" href="unet_architectures.html" />
+    <link rel="prev" title="Minimal Tutorial" href="notebooks/minimal_tutorial.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DaCapo
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">DaCapo API:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/minimal_tutorial.html">Minimal Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Data Formatting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#metadata">Metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#orgnaization">Orgnaization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#footnotes">Footnotes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="unet_architectures.html">UNet Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">AWS EC2 Setup Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cosem_starter.html">Fine-Tune Cosem Starter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Road Map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">CLI</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DaCapo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Data Formatting</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/data.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="data-formatting">
+<span id="sec-data"></span><h1>Data Formatting<a class="headerlink" href="#data-formatting" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>We support any data format that can be opened with the <cite>zarr.open</cite> convenience function from
+<a class="reference external" href="https://zarr.readthedocs.io/en/stable/api/convenience.html#zarr.convenience.open">zarr</a>. We also expect some specific metadata to come
+with the data.</p>
+</section>
+<section id="metadata">
+<h2>Metadata<a class="headerlink" href="#metadata" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><cite>voxel_size</cite>: The size of each voxel in the dataset. This is expected to be a tuple of ints
+with the same length as the number of spatial dimensions in the dataset.</p></li>
+<li><p><cite>offset</cite>: The offset of the dataset. This is expected to be a tuple of ints with the same length
+as the number of spatial dimensions in the dataset.</p></li>
+<li><p><cite>axis_names</cite>: The name of each axis. This is expected to be a tuple of strings with the same length
+as the total number of dimensions in the dataset. For example a 3D dataset with channels would have
+<cite>axis_names=(‘c^’, ‘z’, ‘y’, ‘x’)</cite>. Note we expect non-spatial dimensions to include a “^” character.
+See <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> for expected future changes</p></li>
+<li><p><cite>units</cite>: The units of each axis. This is expected to be a tuple of strings with the same length
+as the number of spatial dimensions in the dataset. For example a 3D dataset with channels would have
+<cite>units=(‘nanometers’, ‘nanometers’, ‘nanometers’)</cite>.</p></li>
+</ul>
+</section>
+<section id="orgnaization">
+<h2>Orgnaization<a class="headerlink" href="#orgnaization" title="Link to this heading"></a></h2>
+<p>Ideally all of your data will be contained in a single zarr container.
+The simplest possible dataset would look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>data.zarr
+├── raw
+└── labels
+</pre></div>
+</div>
+<p>If this is what your data looks like, then your data configuration will look like this:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">A simple data configuration</span><a class="headerlink" href="#id3" title="Link to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data_config</span> <span class="o">=</span> <span class="n">DataConfig</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="s2">&quot;/path/to/data.zarr&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Note that a lot of assumptions will be made.</p>
+<ol class="arabic simple">
+<li><p>We assume your raw data is normalized based on the <cite>dtype</cite>. I.e. if your data is
+stored as an unsigned int (we recommend uint8) we will assume a range and normalize
+it to [0,1] by dividing by the appropriate value (255 for <cite>uint8</cite> or 65535 for <cite>uint16</cite>).
+If your data is stored as any <cite>float</cite> we will assume it is already in the range [0, 1].</p></li>
+<li><p>We assume your labels are stored as unsigned integers. If you want to generate instance segmentations, you will need
+to assign a unique id to every object of the class you are interested in. If you want semantic segmentations you
+can simply assign a unique id to each class. 0 is reserved for the background class.</p></li>
+<li><p>We assume that the labels are provided densely. The entire volume will be used for training.</p></li>
+<li><p>We will be training and validating on the same data. This is not ideal, but it is an ok starting point for testing
+and debugging.</p></li>
+</ol>
+<p>Next we can add a little bit of complexity by seperating train and test data. This can also be handled
+by the same data configuration as above since it will detect the presence of the <cite>train</cite> and <cite>test</cite> groups.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>data.zarr
+├── train
+│   ├── raw
+│   └── labels
+└── test
+    ├── raw
+    └── labels
+</pre></div>
+</div>
+<p>We can go further with our basic data configuration since this will often not be enough to describe your data. You may have multiple crops and often your data may be
+sparsely annotated. The same data configuration from above will also work for the slightly more complicated
+dataset below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>data.zarr
+├── train
+│   ├── crop_01
+│   │   ├── raw
+│   │   ├── labels
+│   │   └── mask
+│   └── crop_02
+│       ├── raw
+│       └── labels
+└── test
+    └─ crop_03
+    │   ├── raw
+    │   ├── labels
+    │   └── mask
+    └─ crop_04
+        ├── raw
+        └── labels
+</pre></div>
+</div>
+<p>Note that <cite>crop_01</cite> and <cite>crop_03</cite> have masks associated with them. We assume a value of <cite>0</cite> in the mask indicates
+unknown data. We will never use this data for supervised training, regardless of the corresponding label value.
+If multiple test datasets are provided, this will increase the amount of information to review after training.
+You will have e.g. <cite>crop_03_voi</cite> and <cite>crop_04_voi</cite> stored in the validation scores. Since we also take care to
+save the “best” model checkpoint, you may now double the number of checkpoints saved since the checkpoint that
+achieves optimal <cite>voi</cite> on <cite>crop_03</cite> may not be the same as the checkpoint that achieves optimal <cite>voi</cite> on <cite>crop_04</cite>.</p>
+</section>
+<section id="footnotes">
+<h2>Footnotes<a class="headerlink" href="#footnotes" title="Link to this heading"></a></h2>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>The specification of axis names is expected to change in the future since we expect to support a <cite>type</cite> field in the future which
+can be one of [“time”, “space”, “{anything-else}”]. Which would allow you to specify dimensions as “channel”
+or “batch” or whatever else you want. This will bring us more in line with OME-Zarr and allow us to more easily
+handle a larger variety of common data specification formats.</p>
+</aside>
+</aside>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="notebooks/minimal_tutorial.html" class="btn btn-neutral float-left" title="Minimal Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="unet_architectures.html" class="btn btn-neutral float-right" title="UNet Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, William Patton, Jeff Rhoades, Marwan Zouinkhi,  David Ackerman, Caroline Malin-Mayor, Jan Funke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

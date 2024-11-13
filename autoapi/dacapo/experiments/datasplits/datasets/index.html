@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../notebooks/minimal_tutorial.html">Minimal Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../data.html">Data Formatting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../unet_architectures.html">UNet Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tutorial.html">Tutorial: A Simple Experiment in Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../docker.html">Docker Configuration for JupyterHub-Dacapo</a></li>
@@ -129,6 +130,7 @@
 <li class="toctree-l1"><a class="reference internal" href="graphstores/index.html">dacapo.experiments.datasplits.datasets.graphstores</a></li>
 <li class="toctree-l1"><a class="reference internal" href="raw_gt_dataset/index.html">dacapo.experiments.datasplits.datasets.raw_gt_dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="raw_gt_dataset_config/index.html">dacapo.experiments.datasplits.datasets.raw_gt_dataset_config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simple/index.html">dacapo.experiments.datasplits.datasets.simple</a></li>
 </ul>
 </div>
 </section>
@@ -153,6 +155,9 @@
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.RawGTDatasetConfig" title="dacapo.experiments.datasplits.datasets.RawGTDatasetConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RawGTDatasetConfig</span></code></a></p></td>
 <td><p>This is a configuration class for the standard dataset with both raw and GT Array.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.experiments.datasplits.datasets.SimpleDataset" title="dacapo.experiments.datasplits.datasets.SimpleDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimpleDataset</span></code></a></p></td>
+<td><p>A class used to define configuration for datasets. This provides the</p></td>
 </tr>
 </tbody>
 </table>
@@ -631,6 +636,90 @@ training samples will be extracted.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id22">
 <span class="sig-name descname"><span class="pre">sample_points</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">funlib.geometry.Coordinate</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#id22" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.SimpleDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.datasplits.datasets.</span></span><span class="sig-name descname"><span class="pre">SimpleDataset</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.SimpleDataset" title="Link to this definition"></a></dt>
+<dd><p>A class used to define configuration for datasets. This provides the
+framework to create a Dataset instance.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.SimpleDataset.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.SimpleDataset.name" title="Link to this definition"></a></dt>
+<dd><p>str (eg: “sample_dataset”).
+A unique identifier to name the dataset.
+It aids in easy identification and reusability of this dataset.
+Advised to keep it short and refrain from using special characters.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.SimpleDataset.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.SimpleDataset.weight" title="Link to this definition"></a></dt>
+<dd><p>int (default=1).
+A numeric value that indicates how frequently this dataset should be
+sampled in comparison to others. Higher the weight, more frequently it
+gets sampled.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.SimpleDataset.verify">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.SimpleDataset.verify" title="Link to this definition"></a></dt>
+<dd><p>Checks and validates the dataset configuration. The specific rules for
+validation need to be defined by the user.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This class is used to create a configuration object for datasets.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.SimpleDataset.path">
+<span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.SimpleDataset.path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id23">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id23" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.SimpleDataset.raw_name">
+<span class="sig-name descname"><span class="pre">raw_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.SimpleDataset.raw_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.SimpleDataset.gt_name">
+<span class="sig-name descname"><span class="pre">gt_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.SimpleDataset.gt_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.SimpleDataset.mask_name">
+<span class="sig-name descname"><span class="pre">mask_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.SimpleDataset.mask_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.SimpleDataset.dataset_type">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dataset_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.SimpleDataset.dataset_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.SimpleDataset.raw">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.persistence.Array</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.SimpleDataset.raw" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.SimpleDataset.gt">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.persistence.Array</span></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.SimpleDataset.gt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.SimpleDataset.mask">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mask</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">funlib.persistence.Array</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.SimpleDataset.mask" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dacapo.experiments.datasplits.datasets.SimpleDataset.sample_points">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_points</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../tasks/index.html#dacapo.experiments.tasks.OneHotTaskConfig.None" title="dacapo.experiments.tasks.OneHotTaskConfig.None"><span class="pre">None</span></a></em><a class="headerlink" href="#dacapo.experiments.datasplits.datasets.SimpleDataset.sample_points" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
