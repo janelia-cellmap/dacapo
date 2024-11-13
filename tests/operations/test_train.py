@@ -49,7 +49,7 @@ def unet_architecture(batch_norm, upsample, use_attention, three_d):
             name=name,
             input_shape=(2, 132, 132),
             eval_shape_increase=(8, 32, 32),
-            fmaps_in=2,
+            fmaps_in=1,
             num_fmaps=8,
             fmaps_out=8,
             fmap_inc_factor=2,

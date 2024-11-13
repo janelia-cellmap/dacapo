@@ -73,10 +73,10 @@ def twelve_class_datasplit(tmp_path):
             gt_dataset[:] += random_data > i
         raw_dataset[:] = random_data
         raw_dataset.attrs["offset"] = (0, 0, 0)
-        raw_dataset.attrs["resolution"] = (2, 2, 2)
+        raw_dataset.attrs["voxel_size"] = (2, 2, 2)
         raw_dataset.attrs["axis_names"] = ("z", "y", "x")
         gt_dataset.attrs["offset"] = (0, 0, 0)
-        gt_dataset.attrs["resolution"] = (2, 2, 2)
+        gt_dataset.attrs["voxel_size"] = (2, 2, 2)
         gt_dataset.attrs["axis_names"] = ("z", "y", "x")
 
     crop1 = RawGTDatasetConfig(name="crop1", raw_config=crop1_raw, gt_config=crop1_gt)
@@ -184,10 +184,10 @@ def six_class_datasplit(tmp_path):
             gt_dataset[:] += random_data > i
         raw_dataset[:] = random_data
         raw_dataset.attrs["offset"] = (0, 0, 0)
-        raw_dataset.attrs["resolution"] = (2, 2, 2)
+        raw_dataset.attrs["voxel_size"] = (2, 2, 2)
         raw_dataset.attrs["axis_names"] = ("z", "y", "x")
         gt_dataset.attrs["offset"] = (0, 0, 0)
-        gt_dataset.attrs["resolution"] = (2, 2, 2)
+        gt_dataset.attrs["voxel_size"] = (2, 2, 2)
         gt_dataset.attrs["axis_names"] = ("z", "y", "x")
 
     crop1 = RawGTDatasetConfig(
