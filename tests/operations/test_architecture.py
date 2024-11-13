@@ -22,8 +22,6 @@ def test_architecture(
     assert architecture.dims is not None, f"Architecture dims are None {architecture}"
 
 
-
-
 @pytest.mark.parametrize(
     "architecture_config",
     [
@@ -35,11 +33,13 @@ def test_stored_architecture(
     architecture_config,
 ):
     from dacapo.store.create_store import create_config_store
+
     config_store = create_config_store()
     config_store.store_architecture_config(architecture_config)
-    
-    retrieved_arch_config = config_store.retrieve_architecture_config(architecture_config.name)
 
+    retrieved_arch_config = config_store.retrieve_architecture_config(
+        architecture_config.name
+    )
 
     architecture = retrieved_arch_config.architecture_type(retrieved_arch_config)
 
