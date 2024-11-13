@@ -208,8 +208,6 @@ def six_class_datasplit(tmp_path):
     return six_class_distances_datasplit_config
 
 
-
-
 @pytest.fixture()
 def upsample_six_class_datasplit(tmp_path):
     """

@@ -68,10 +68,10 @@ def test_train(
 @pytest.mark.parametrize("datasplit", [lf("six_class_datasplit")])
 @pytest.mark.parametrize("task", [lf("distance_task")])
 @pytest.mark.parametrize("trainer", [lf("gunpowder_trainer")])
-@pytest.mark.parametrize("batch_norm", [ False])
+@pytest.mark.parametrize("batch_norm", [False])
 @pytest.mark.parametrize("upsample", [False])
-@pytest.mark.parametrize("use_attention", [ False])
-@pytest.mark.parametrize("three_d", [ False])
+@pytest.mark.parametrize("use_attention", [False])
+@pytest.mark.parametrize("three_d", [False])
 def test_train_unet(
     datasplit, task, trainer, batch_norm, upsample, use_attention, three_d
 ):
@@ -146,9 +146,6 @@ def test_train_unet(
     training_stats = stats_store.retrieve_training_stats(run_config.name)
 
     assert training_stats.trained_until() == run_config.num_iterations
-
-
-
 
 
 @pytest.mark.parametrize("upsample_datasplit", [lf("upsample_six_class_datasplit")])
