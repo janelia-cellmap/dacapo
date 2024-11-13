@@ -31,7 +31,6 @@ def unet_architecture():
     )
 
 
-
 def unet_architecture_builder(batch_norm, upsample, use_attention, three_d):
     name = "3d_unet" if three_d else "2d_unet"
     name = f"{name}_bn" if batch_norm else name
@@ -71,4 +70,3 @@ def unet_architecture_builder(batch_norm, upsample, use_attention, three_d):
             use_attention=use_attention,
             upsample_factors=[(1, 2, 2)] if upsample else [],
         )
-
