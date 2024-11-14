@@ -75,7 +75,6 @@ def unet_2d_distance_run(
     )
 
 
-
 @pytest.fixture()
 def unet_3d_distance_run(
     six_class_datasplit,
