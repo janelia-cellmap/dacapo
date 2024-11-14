@@ -110,7 +110,6 @@ def test_train_unet(
         batch_norm, upsample, use_attention, three_d
     )
 
-
     run_config = RunConfig(
         name=f"{architecture_config.name}_run",
         task_config=task,
