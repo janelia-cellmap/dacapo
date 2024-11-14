@@ -35,6 +35,7 @@ def onehot_task():
         classes=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"],
     )
 
+
 @pytest.fixture()
 def six_onehot_task():
     yield OneHotTaskConfig(
