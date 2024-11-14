@@ -2,6 +2,7 @@ from .db import options
 from .architectures import (
     dummy_architecture,
     unet_architecture,
+    unet_3d_architecture,
     unet_architecture_builder,
 )
 from .arrays import dummy_array, zarr_array, cellmap_array
@@ -16,5 +17,5 @@ from .losses import dummy_loss
 from .post_processors import argmax, threshold
 from .predictors import distance_predictor, onehot_predictor
 from .runs import dummy_run, distance_run, onehot_run
-from .tasks import dummy_task, distance_task, onehot_task
+from .tasks import dummy_task, distance_task, onehot_task, six_onehot_task
 from .trainers import dummy_trainer, gunpowder_trainer
