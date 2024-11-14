@@ -31,20 +31,19 @@ def unet_architecture():
     )
 
 
-
 @pytest.fixture()
 def unet_3d_architecture():
     yield CNNectomeUNetConfig(
-            name="tmp_unet_3d_architecture",
-            input_shape=(188, 188, 188),
-            eval_shape_increase=(72, 72, 72),
-            fmaps_in=1,
-            num_fmaps=6,
-            fmaps_out=6,
-            fmap_inc_factor=2,
-            downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],
-            constant_upsample=True,
-        )
+        name="tmp_unet_3d_architecture",
+        input_shape=(188, 188, 188),
+        eval_shape_increase=(72, 72, 72),
+        fmaps_in=1,
+        num_fmaps=6,
+        fmaps_out=6,
+        fmap_inc_factor=2,
+        downsample_factors=[(2, 2, 2), (2, 2, 2), (2, 2, 2)],
+        constant_upsample=True,
+    )
 
 
 def unet_architecture_builder(batch_norm, upsample, use_attention, three_d):

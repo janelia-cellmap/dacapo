@@ -104,7 +104,9 @@ def test_validate_run(
 @pytest.mark.parametrize("datasplit", [lf("six_class_datasplit")])
 @pytest.mark.parametrize("task", [lf("distance_task"), lf("six_onehot_task")])
 @pytest.mark.parametrize("trainer", [lf("gunpowder_trainer")])
-@pytest.mark.parametrize("architecture", [lf("unet_architecture"), lf("unet_3d_architecture")])
+@pytest.mark.parametrize(
+    "architecture", [lf("unet_architecture"), lf("unet_3d_architecture")]
+)
 def test_validate_unet(datasplit, task, trainer, architecture):
     store = create_config_store()
     weights_store = create_weights_store()
