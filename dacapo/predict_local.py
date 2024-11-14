@@ -71,9 +71,9 @@ def predict(
     compute_context = create_compute_context()
     device = compute_context.device
 
-    model_device = next(model.parameters()).device
+    model_device = str(next(model.parameters()).device).split(":")[0]
 
-    assert model_device == device, f"Model is not on the right device, Model: {model_device}, Compute device: {device}" 
+    assert model_device == str(device), f"Model is not on the right device, Model: {model_device}, Compute device: {device}" 
 
     def predict_fn(block):
         raw_input = raw_array.to_ndarray(block.read_roi)

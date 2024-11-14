@@ -16,6 +16,6 @@ from .evaluators import binary_3_channel_evaluator
 from .losses import dummy_loss
 from .post_processors import argmax, threshold
 from .predictors import distance_predictor, onehot_predictor
-from .runs import dummy_run, distance_run, onehot_run
+from .runs import dummy_run, distance_run, onehot_run, unet_2d_distance_run, unet_3d_distance_run
 from .tasks import dummy_task, distance_task, onehot_task, six_onehot_task
 from .trainers import dummy_trainer, gunpowder_trainer

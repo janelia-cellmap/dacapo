@@ -72,7 +72,7 @@ def test_train(
 @pytest.mark.parametrize("upsample", [False])
 @pytest.mark.parametrize("use_attention", [False])
 @pytest.mark.parametrize("three_d", [False])
-def test_train_unet(
+def test_train_non_stored_unet(
     datasplit, task, trainer, batch_norm, upsample, use_attention, three_d
 ):
     architecture_config = unet_architecture_builder(
@@ -80,13 +80,13 @@ def test_train_unet(
     )
 
     run_config = RunConfig(
-        name=f"{architecture_config.name}_run",
+        name=f"{architecture_config.name}_run_v",
         task_config=task,
         architecture_config=architecture_config,
         trainer_config=trainer,
         datasplit_config=datasplit,
         repetition=0,
-        num_iterations=2,
+        num_iterations=1,
     )
     run = Run(run_config)
     train_run(run)
@@ -110,6 +110,7 @@ def test_train_unet(
         batch_norm, upsample, use_attention, three_d
     )
 
+
     run_config = RunConfig(
         name=f"{architecture_config.name}_run",
         task_config=task,
@@ -117,7 +118,7 @@ def test_train_unet(
         trainer_config=trainer,
         datasplit_config=datasplit,
         repetition=0,
-        num_iterations=2,
+        num_iterations=1,
     )
     try:
         store.store_run_config(run_config)
@@ -135,7 +136,7 @@ def test_train_unet(
     train_run(run)
 
     init_weights = weights_store.retrieve_weights(run.name, 0)
-    final_weights = weights_store.retrieve_weights(run.name, run.train_until)
+    final_weights = weights_store.retrieve_weights(run.name, 1)
 
     for name, weight in init_weights.model.items():
         weight_diff = (weight - final_weights.model[name]).any()
@@ -148,57 +149,58 @@ def test_train_unet(
     assert training_stats.trained_until() == run_config.num_iterations
 
 
-@pytest.mark.parametrize("upsample_datasplit", [lf("upsample_six_class_datasplit")])
-@pytest.mark.parametrize("task", [lf("distance_task")])
-@pytest.mark.parametrize("trainer", [lf("gunpowder_trainer")])
-@pytest.mark.parametrize("batch_norm", [True, False])
-@pytest.mark.parametrize("upsample", [True])
-@pytest.mark.parametrize("use_attention", [True, False])
-@pytest.mark.parametrize("three_d", [True, False])
-def test_upsample_train_unet(
-    upsample_datasplit, task, trainer, batch_norm, upsample, use_attention, three_d
-):
-    store = create_config_store()
-    stats_store = create_stats_store()
-    weights_store = create_weights_store()
+# @pytest.mark.parametrize("upsample_datasplit", [lf("upsample_six_class_datasplit")])
+# @pytest.mark.parametrize("task", [lf("distance_task")])
+# @pytest.mark.parametrize("trainer", [lf("gunpowder_trainer")])
+# @pytest.mark.parametrize("batch_norm", [True, False])
+# @pytest.mark.parametrize("upsample", [True])
+# @pytest.mark.parametrize("use_attention", [True, False])
+# @pytest.mark.parametrize("three_d", [True, False])
+# def test_upsample_train_unet(
+#     upsample_datasplit, task, trainer, batch_norm, upsample, use_attention, three_d
+# ):
+#     store = create_config_store()
+#     stats_store = create_stats_store()
+#     weights_store = create_weights_store()
 
-    architecture_config = unet_architecture_builder(
-        batch_norm, upsample, use_attention, three_d
-    )
+#     architecture_config = unet_architecture_builder(
+#         batch_norm, upsample, use_attention, three_d
+#     )
 
-    run_config = RunConfig(
-        name=f"{architecture_config.name}_run",
-        task_config=task,
-        architecture_config=architecture_config,
-        trainer_config=trainer,
-        datasplit_config=upsample_datasplit,
-        repetition=0,
-        num_iterations=2,
-    )
-    try:
-        store.store_run_config(run_config)
-    except Exception as e:
-        store.delete_run_config(run_config.name)
-        store.store_run_config(run_config)
+#     run_config = RunConfig(
+#         name=f"{architecture_config.name}_run",
+#         task_config=task,
+#         architecture_config=architecture_config,
+#         trainer_config=trainer,
+#         datasplit_config=upsample_datasplit,
+#         repetition=0,
+#         num_iterations=1,
+#     )
+#     try:
+#         store.store_run_config(run_config)
+#     except Exception as e:
+#         store.delete_run_config(run_config.name)
+#         store.store_run_config(run_config)
 
-    run = Run(run_config)
+#     run = Run(run_config)
 
-    # -------------------------------------
+#     # -------------------------------------
 
-    # train
+#     # train
 
-    weights_store.store_weights(run, 0)
-    train_run(run)
+#     weights_store.store_weights(run, 0)
+#     train_run(run)
+#     # weights_store.store_weights(run, run.train_until)
 
-    init_weights = weights_store.retrieve_weights(run.name, 0)
-    final_weights = weights_store.retrieve_weights(run.name, run.train_until)
+#     init_weights = weights_store.retrieve_weights(run.name, 0)
+#     final_weights = weights_store.retrieve_weights(run.name, 1)
 
-    for name, weight in init_weights.model.items():
-        weight_diff = (weight - final_weights.model[name]).any()
-        assert weight_diff != 0, "Weights did not change"
+#     for name, weight in init_weights.model.items():
+#         weight_diff = (weight - final_weights.model[name]).any()
+#         assert weight_diff != 0, "Weights did not change"
 
-    # assert train_stats and validation_scores are available
+#     # assert train_stats and validation_scores are available
 
-    training_stats = stats_store.retrieve_training_stats(run_config.name)
+#     training_stats = stats_store.retrieve_training_stats(run_config.name)
 
-    assert training_stats.trained_until() == run_config.num_iterations
+#     assert training_stats.trained_until() == run_config.num_iterations

@@ -112,13 +112,13 @@ def test_validate_unet(datasplit, task, trainer, architecture):
     weights_store = create_weights_store()
 
     run_config = RunConfig(
-        name=f"{architecture.name}_run",
+        name=f"{architecture.name}_run_validate",
         task_config=task,
         architecture_config=architecture,
         trainer_config=trainer,
         datasplit_config=datasplit,
         repetition=0,
-        num_iterations=2,
+        num_iterations=10,
     )
     try:
         store.store_run_config(run_config)

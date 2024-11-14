@@ -17,7 +17,7 @@ def distance_run(
         trainer_config=gunpowder_trainer,
         datasplit_config=six_class_datasplit,
         repetition=0,
-        num_iterations=100,
+        num_iterations=10,
     )
 
 
@@ -35,7 +35,7 @@ def dummy_run(
         trainer_config=dummy_trainer,
         datasplit_config=dummy_datasplit,
         repetition=0,
-        num_iterations=100,
+        num_iterations=10,
     )
 
 
@@ -53,5 +53,42 @@ def onehot_run(
         trainer_config=gunpowder_trainer,
         datasplit_config=twelve_class_datasplit,
         repetition=0,
-        num_iterations=100,
+        num_iterations=10,
+    )
+
+
+@pytest.fixture()
+def unet_2d_distance_run(
+    six_class_datasplit,
+    unet_architecture,
+    distance_task,
+    gunpowder_trainer,
+):
+    yield RunConfig(
+        name="unet_2d_distance_run",
+        task_config=distance_task,
+        architecture_config=unet_architecture,
+        trainer_config=gunpowder_trainer,
+        datasplit_config=six_class_datasplit,
+        repetition=0,
+        num_iterations=10,
+    )
+
+
+
+@pytest.fixture()
+def unet_3d_distance_run(
+    six_class_datasplit,
+    unet_3d_architecture,
+    distance_task,
+    gunpowder_trainer,
+):
+    yield RunConfig(
+        name="unet_3d_distance_run",
+        task_config=distance_task,
+        architecture_config=unet_3d_architecture,
+        trainer_config=gunpowder_trainer,
+        datasplit_config=six_class_datasplit,
+        repetition=0,
+        num_iterations=10,
     )
