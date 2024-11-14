@@ -2,6 +2,7 @@ from ..fixtures import *
 
 import pytest
 from pytest_lazy_fixtures import lf
+import torch.nn as nn
 
 import logging
 
@@ -27,6 +28,7 @@ def test_architecture(
     [
         lf("dummy_architecture"),
         lf("unet_architecture"),
+        lf("unet_3d_architecture"),
     ],
 )
 def test_stored_architecture(
@@ -48,3 +50,33 @@ def test_stored_architecture(
     architecture = retrieved_arch_config.architecture_type(retrieved_arch_config)
 
     assert architecture.dims is not None, f"Architecture dims are None {architecture}"
+
+
+@pytest.mark.parametrize(
+    "architecture_config",
+    [
+        lf("unet_architecture"),
+    ],
+)
+def test_2d_conv_unet(
+    architecture_config,
+):
+    architecture = architecture_config.architecture_type(architecture_config)
+    for name, module in architecture.named_modules():
+        if isinstance(module, nn.Conv3d):
+            raise ValueError(f"Conv3d found in 2d unet {name}")
+
+
+@pytest.mark.parametrize(
+    "architecture_config",
+    [
+        lf("unet_3d_architecture"),
+    ],
+)
+def test_2d_conv_unet(
+    architecture_config,
+):
+    architecture = architecture_config.architecture_type(architecture_config)
+    for name, module in architecture.named_modules():
+        if isinstance(module, nn.Conv2d):
+            raise ValueError(f"Conv2d found in 3d unet {name}")

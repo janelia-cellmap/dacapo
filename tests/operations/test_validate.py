@@ -130,4 +130,4 @@ def test_validate_unet(datasplit, task, trainer, architecture):
 
     # -------------------------------------
     weights_store.store_weights(run, 0)
-    validate_run(run, 0)
+    validate(run.name, 0)

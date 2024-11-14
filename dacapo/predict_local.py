@@ -71,6 +71,10 @@ def predict(
     compute_context = create_compute_context()
     device = compute_context.device
 
+    model_device = next(model.parameters()).device
+
+    assert model_device == device, f"Model is not on the right device, Model: {model_device}, Compute device: {device}" 
+
     def predict_fn(block):
         raw_input = raw_array.to_ndarray(block.read_roi)
 
@@ -84,6 +88,7 @@ def predict(
         if raw_array.channel_dims == 0:
             raw_input = np.expand_dims(raw_input, 0)
             axis_names = ["c^"] + axis_names
+
 
         with torch.no_grad():
             model.eval()
