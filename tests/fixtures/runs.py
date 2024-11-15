@@ -20,6 +20,24 @@ def distance_run(
         num_iterations=10,
     )
 
+@pytest.fixture()
+def hot_distance_run(
+    six_class_datasplit,
+    dummy_architecture,
+    hot_distance_task,
+    gunpowder_trainer,
+):
+    yield RunConfig(
+        name="hot_distance_run",
+        task_config=hot_distance_task,
+        architecture_config=dummy_architecture,
+        trainer_config=gunpowder_trainer,
+        datasplit_config=six_class_datasplit,
+        repetition=0,
+        num_iterations=10,
+    )
+
+
 
 @pytest.fixture()
 def dummy_run(

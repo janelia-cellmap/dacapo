@@ -120,9 +120,8 @@ class InnerDistancePredictor(Predictor):
         )
         return np_to_funlib_array(
             distances,
-            gt.roi,
+            gt.roi.offset,
             gt.voxel_size,
-            gt.axis_names,
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
@@ -155,9 +154,8 @@ class InnerDistancePredictor(Predictor):
         return (
             np_to_funlib_array(
                 weights,
-                gt.roi,
+                gt.roi.offset,
                 gt.voxel_size,
-                gt.axis_names,
             ),
             moving_class_counts,
         )

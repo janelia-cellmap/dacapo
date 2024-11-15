@@ -141,12 +141,11 @@ class HotDistancePredictor(Predictor):
         Examples:
             >>> target = predictor.create_target(gt)
         """
-        target = self.process(gt.data, gt.voxel_size, self.norm, self.dt_scale_factor)
+        target = self.process(gt[:], gt.voxel_size, self.norm, self.dt_scale_factor)
         return np_to_funlib_array(
             target,
-            gt.roi,
+            gt.roi.offset,
             gt.voxel_size,
-            gt.axis_names,
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
@@ -209,9 +208,8 @@ class HotDistancePredictor(Predictor):
         return (
             np_to_funlib_array(
                 weights,
-                gt.roi,
+                gt.roi.offset,
                 gt.voxel_size,
-                gt.axis_names,
             ),
             moving_class_counts,
         )

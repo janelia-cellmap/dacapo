@@ -22,6 +22,7 @@ from .runs import (
     onehot_run,
     unet_2d_distance_run,
     unet_3d_distance_run,
+    hot_distance_run,
 )
-from .tasks import dummy_task, distance_task, onehot_task, six_onehot_task
+from .tasks import dummy_task, distance_task, onehot_task, six_onehot_task, hot_distance_task
 from .trainers import dummy_trainer, gunpowder_trainer

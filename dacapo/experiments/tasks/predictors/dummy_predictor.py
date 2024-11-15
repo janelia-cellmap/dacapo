@@ -71,9 +71,8 @@ class DummyPredictor(Predictor):
         # zeros
         return np_to_funlib_array(
             np.zeros((self.embedding_dims,) + gt.data.shape[-gt.dims :]),
-            gt.roi,
+            gt.roi.offset,
             gt.voxel_size,
-            ["c^"] + gt.axis_names,
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
@@ -96,9 +95,8 @@ class DummyPredictor(Predictor):
         return (
             np_to_funlib_array(
                 np.ones(target.data.shape),
-                target.roi,
+                target.roi.offset,
                 target.voxel_size,
-                target.axis_names,
             ),
             None,
         )
