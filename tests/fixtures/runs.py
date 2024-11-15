@@ -20,6 +20,7 @@ def distance_run(
         num_iterations=10,
     )
 
+
 @pytest.fixture()
 def hot_distance_run(
     six_class_datasplit,
@@ -36,7 +37,6 @@ def hot_distance_run(
         repetition=0,
         num_iterations=10,
     )
-
 
 
 @pytest.fixture()
