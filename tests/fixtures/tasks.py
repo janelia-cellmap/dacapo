@@ -28,6 +28,7 @@ def distance_task():
         tol_distance=10,
     )
 
+
 @pytest.fixture()
 def hot_distance_task():
     yield HotDistanceTaskConfig(
@@ -43,6 +44,7 @@ def hot_distance_task():
         clip_distance=5,
         tol_distance=10,
     )
+
 
 @pytest.fixture()
 def onehot_task():
