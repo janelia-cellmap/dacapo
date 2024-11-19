@@ -57,7 +57,6 @@ class HotDistanceTaskConfig(TaskConfig):
         },
     )
 
-
     kernel_size: int | None = attr.ib(
         default=None,
     )

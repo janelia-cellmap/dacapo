@@ -75,8 +75,8 @@ def predict(
 
     model_device = str(next(model.parameters()).device).split(":")[0]
 
-    assert (
-        model_device == str(device)
+    assert model_device == str(
+        device
     ), f"Model is not on the right device, Model: {model_device}, Compute device: {device}"
 
     def predict_fn(block):
@@ -122,7 +122,7 @@ def predict(
     task = daisy.Task(
         f"predict_{out_container}_{out_dataset}",
         total_roi=input_roi,
-        read_roi=Roi((0,)*input_size.dims, input_size),
+        read_roi=Roi((0,) * input_size.dims, input_size),
         write_roi=Roi(context, output_size),
         process_function=predict_fn,
         check_function=None,

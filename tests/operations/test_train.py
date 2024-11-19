@@ -58,4 +58,3 @@ def test_large(
     training_stats = stats_store.retrieve_training_stats(run_config.name)
 
     assert training_stats.trained_until() == run_config.num_iterations
-
