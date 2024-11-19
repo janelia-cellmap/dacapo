@@ -120,11 +120,11 @@ class HotDistancePredictor(Predictor):
         """
         if architecture.dims == 2:
             head = torch.nn.Conv2d(
-                architecture.num_out_channels, self.embedding_dims, self.kernel_size=1
+                architecture.num_out_channels, self.embedding_dims, self.kernel_size
             )
         elif architecture.dims == 3:
             head = torch.nn.Conv3d(
-                architecture.num_out_channels, self.embedding_dims, self.kernel_size=1
+                architecture.num_out_channels, self.embedding_dims, self.kernel_size
             )
 
         return Model(architecture, head)
