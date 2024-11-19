@@ -4,6 +4,8 @@ from .post_processors import ArgmaxPostProcessor
 from .predictors import OneHotPredictor
 from .task import Task
 
+import warnings
+
 
 class OneHotTask(Task):
     """
@@ -30,7 +32,17 @@ class OneHotTask(Task):
         Examples:
             >>> task = OneHotTask(task_config)
         """
-        self.predictor = OneHotPredictor(classes=task_config.classes)
+
+        if task_config.kernel_size is None:
+            warnings.warn(
+                "The default kernel size of 3 will be changing to 1. "
+                "Please specify the kernel size explicitly.",
+                DeprecationWarning,
+            )
+            task_config.kernel_size = 3
+        self.predictor = OneHotPredictor(
+            classes=task_config.classes, kernel_size=task_config.kernel_size
+        )
         self.loss = DummyLoss()
         self.post_processor = ArgmaxPostProcessor()
         self.evaluator = DummyEvaluator()

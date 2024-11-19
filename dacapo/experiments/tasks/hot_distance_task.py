@@ -4,6 +4,7 @@ from .post_processors import ThresholdPostProcessor
 from .predictors import HotDistancePredictor
 from .task import Task
 
+import warnings
 
 class HotDistanceTask(Task):
     """
@@ -34,6 +35,14 @@ class HotDistanceTask(Task):
             >>> task = HotDistanceTask(task_config)
 
         """
+
+        if task_config.kernel_size is None:
+            warnings.warn(
+                "The default kernel size of 3 will be changing to 1. "
+                "Please specify the kernel size explicitly.",
+                DeprecationWarning,
+            )
+            task_config.kernel_size = 3
         self.predictor = HotDistancePredictor(
             channels=task_config.channels,
             scale_factor=task_config.scale_factor,

@@ -28,3 +28,6 @@ class OneHotTaskConfig(TaskConfig):
     classes: List[str] = attr.ib(
         metadata={"help_text": "The classes corresponding with each id starting from 0"}
     )
+    kernel_size: int | None = attr.ib(
+        default=None,
+    )
