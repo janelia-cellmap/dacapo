@@ -268,13 +268,13 @@ class GunpowderTrainer(Trainer):
         request.add(weight_key, output_size)
         request.add(
             mask_placeholder,
-            prediction_voxel_size * self.mask_integral_downsample_factor,
+            prediction_voxel_size,
         )
         # request additional keys for snapshots
         request.add(gt_key, output_size)
         request.add(mask_key, output_size)
         request[mask_placeholder].roi = request[mask_placeholder].roi.snap_to_grid(
-            prediction_voxel_size * self.mask_integral_downsample_factor
+            prediction_voxel_size
         )
 
         self._request = request

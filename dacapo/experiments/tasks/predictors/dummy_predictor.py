@@ -50,7 +50,7 @@ class DummyPredictor(Predictor):
             >>> model = predictor.create_model(architecture)
         """
         head = torch.nn.Conv3d(
-            architecture.num_out_channels, self.embedding_dims, kernel_size=3
+            architecture.num_out_channels, self.embedding_dims, kernel_size=1
         )
 
         return Model(architecture, head)

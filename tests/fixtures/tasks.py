@@ -51,6 +51,7 @@ def onehot_task():
     yield OneHotTaskConfig(
         name="one_hot_task",
         classes=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"],
+        kernel_size=1,
     )
 
 
@@ -59,4 +60,5 @@ def six_onehot_task():
     yield OneHotTaskConfig(
         name="one_hot_task",
         classes=["a", "b", "c", "d", "e", "f"],
+        kernel_size=1,
     )

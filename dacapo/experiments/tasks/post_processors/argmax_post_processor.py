@@ -133,7 +133,7 @@ class ArgmaxPostProcessor(PostProcessor):
             overwrite=True,
         )
 
-        read_roi = Roi((0, 0, 0), block_size[-self.prediction_array.dims :])
+        read_roi = Roi((0,)*block_size.dims, block_size)
         input_array = open_ds(
             f"{self.prediction_array_identifier.container.path}/{self.prediction_array_identifier.dataset}"
         )

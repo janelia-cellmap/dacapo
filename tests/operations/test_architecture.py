@@ -55,25 +55,11 @@ def test_stored_architecture(
 @pytest.mark.parametrize(
     "architecture_config",
     [
+        lf("unet_3d_architecture"),
         lf("unet_architecture"),
     ],
 )
-def test_3d_conv_unet(
-    architecture_config,
-):
-    architecture = architecture_config.architecture_type(architecture_config)
-    for name, module in architecture.named_modules():
-        if isinstance(module, nn.Conv3d):
-            raise ValueError(f"Conv3d found in 2d unet {name}")
-
-
-@pytest.mark.parametrize(
-    "architecture_config",
-    [
-        lf("unet_3d_architecture"),
-    ],
-)
-def test_2d_conv_unet(
+def test_conv_dims(
     architecture_config,
 ):
     architecture = architecture_config.architecture_type(architecture_config)
@@ -81,21 +67,6 @@ def test_2d_conv_unet(
         if isinstance(module, nn.Conv2d):
             raise ValueError(f"Conv2d found in 3d unet {name}")
 
-
-@pytest.mark.parametrize(
-    "run_config",
-    [
-        lf("unet_2d_distance_run"),
-    ],
-)
-def test_2d_conv_unet_in_run(
-    run_config,
-):
-    run = Run(run_config)
-    model = run.model
-    for name, module in model.named_modules():
-        if isinstance(module, nn.Conv3d):
-            raise ValueError(f"Conv3d found in 2d unet {name}")
 
 
 @pytest.mark.parametrize(

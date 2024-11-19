@@ -30,7 +30,7 @@ class OneHotPredictor(Predictor):
         This is a subclass of Predictor.
     """
 
-    def __init__(self, classes: List[str]):
+    def __init__(self, classes: List[str], kernel_size: int):
         """
         Initialize the OneHotPredictor.
 
@@ -42,6 +42,7 @@ class OneHotPredictor(Predictor):
             >>> predictor = OneHotPredictor(classes)
         """
         self.classes = classes
+        self.kernel_size = kernel_size
 
     @property
     def embedding_dims(self):
@@ -70,8 +71,17 @@ class OneHotPredictor(Predictor):
         Examples:
             >>> model = predictor.create_model(architecture)
         """
-        head = torch.nn.Conv3d(
-            architecture.num_out_channels, self.embedding_dims, kernel_size=3
+
+        if architecture.dims == 3:
+            conv_layer = torch.nn.Conv3d
+        elif architecture.dims == 2:
+            conv_layer = torch.nn.Conv2d
+        else:
+            raise Exception(f"Unsupported number of dimensions: {architecture.dims}")
+        head = conv_layer(
+            architecture.num_out_channels,
+            self.embedding_dims,
+            kernel_size=self.kernel_size,
         )
 
         return Model(architecture, head)
