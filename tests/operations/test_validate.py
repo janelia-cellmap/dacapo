@@ -38,4 +38,3 @@ def test_large(
     # test validating weights that don't exist
     with pytest.raises(FileNotFoundError):
         validate(run_config.name, 2)
-

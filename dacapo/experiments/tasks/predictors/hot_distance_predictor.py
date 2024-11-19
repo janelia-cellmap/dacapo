@@ -49,7 +49,13 @@ class HotDistancePredictor(Predictor):
         This is a subclass of Predictor.
     """
 
-    def __init__(self, channels: List[str], scale_factor: float, mask_distances: bool, kernel_size: int):
+    def __init__(
+        self,
+        channels: List[str],
+        scale_factor: float,
+        mask_distances: bool,
+        kernel_size: int,
+    ):
         """
         Initializes the HotDistancePredictor.
 

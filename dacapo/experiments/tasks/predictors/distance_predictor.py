@@ -314,7 +314,7 @@ class DistancePredictor(Predictor):
             channel_dim = True
         else:
             raise ValueError("Cannot handle multiple channel dims")
-        
+
         if not channel_dim:
             labels = labels[np.newaxis]
 

@@ -59,7 +59,13 @@ def test_mini(
     )
     task_config = build_test_task_config(task, data_dims, architecture_dims)
     architecture_config = build_test_architecture_config(
-        data_dims, architecture_dims, channels, batch_norm, upsample, use_attention, padding
+        data_dims,
+        architecture_dims,
+        channels,
+        batch_norm,
+        upsample,
+        use_attention,
+        padding,
     )
 
     run_config = RunConfig(

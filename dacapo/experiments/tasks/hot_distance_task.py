@@ -6,6 +6,7 @@ from .task import Task
 
 import warnings
 
+
 class HotDistanceTask(Task):
     """
     A class to represent a hot distance task that use binary prediction and distance prediction.
