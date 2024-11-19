@@ -9,9 +9,7 @@ from dacapo.train import train_run
 import pytest
 from pytest_lazy_fixtures import lf
 
-import logging
-
-logging.basicConfig(level=logging.INFO)
+import pytest
 
 
 # skip the test for the Apple Paravirtual device
@@ -23,9 +21,10 @@ logging.basicConfig(level=logging.INFO)
         lf("distance_run"),
         lf("dummy_run"),
         lf("onehot_run"),
+        lf("hot_distance_run"),
     ],
 )
-def test_train(
+def test_large(
     options,
     run_config,
 ):

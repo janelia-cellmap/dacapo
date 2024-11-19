@@ -173,6 +173,8 @@ class GunpowderTrainer(Trainer):
             assert isinstance(dataset.weight, int), dataset
 
             raw_source = gp.ArraySource(raw_key, dataset.raw)
+            if dataset.raw.channel_dims == 0:
+                raw_source += gp.Unsqueeze([raw_key], axis=0)
             if self.clip_raw:
                 raw_source += gp.Crop(
                     raw_key, dataset.gt.roi.snap_to_grid(dataset.raw.voxel_size)
@@ -266,13 +268,13 @@ class GunpowderTrainer(Trainer):
         request.add(weight_key, output_size)
         request.add(
             mask_placeholder,
-            prediction_voxel_size * self.mask_integral_downsample_factor,
+            prediction_voxel_size,
         )
         # request additional keys for snapshots
         request.add(gt_key, output_size)
         request.add(mask_key, output_size)
         request[mask_placeholder].roi = request[mask_placeholder].roi.snap_to_grid(
-            prediction_voxel_size * self.mask_integral_downsample_factor
+            prediction_voxel_size
         )
 
         self._request = request

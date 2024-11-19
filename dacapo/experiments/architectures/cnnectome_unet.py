@@ -3,6 +3,8 @@ from .architecture import Architecture
 import torch
 import torch.nn as nn
 
+from funlib.geometry import Coordinate
+
 import math
 
 
@@ -176,7 +178,7 @@ class CNNectomeUNet(Architecture):
         self.unet = self.module()
 
     @property
-    def eval_shape_increase(self):
+    def eval_shape_increase(self) -> Coordinate:
         """
         The increase in shape due to the U-Net.
 
@@ -192,7 +194,7 @@ class CNNectomeUNet(Architecture):
         """
         if self._eval_shape_increase is None:
             return super().eval_shape_increase
-        return self._eval_shape_increase
+        return Coordinate(self._eval_shape_increase)
 
     def module(self):
         """
@@ -235,16 +237,15 @@ class CNNectomeUNet(Architecture):
         """
         fmaps_in = self.fmaps_in
         levels = len(self.downsample_factors) + 1
-        dims = len(self.downsample_factors[0])
 
-        if hasattr(self, "kernel_size_down"):
+        if self.kernel_size_down is not None:
             kernel_size_down = self.kernel_size_down
         else:
-            kernel_size_down = [[(3,) * dims, (3,) * dims]] * levels
-        if hasattr(self, "kernel_size_up"):
+            kernel_size_down = [[(3,) * self.dims, (3,) * self.dims]] * levels
+        if self.kernel_size_up is not None:
             kernel_size_up = self.kernel_size_up
         else:
-            kernel_size_up = [[(3,) * dims, (3,) * dims]] * (levels - 1)
+            kernel_size_up = [[(3,) * self.dims, (3,) * self.dims]] * (levels - 1)
 
         # downsample factors has to be a list of tuples
         downsample_factors = [tuple(x) for x in self.downsample_factors]
@@ -280,7 +281,7 @@ class CNNectomeUNet(Architecture):
                 conv = ConvPass(
                     self.fmaps_out,
                     self.fmaps_out,
-                    [(3,) * len(upsample_factor)] * 2,
+                    kernel_size_up[-1],
                     activation="ReLU",
                     batch_norm=self.batch_norm,
                 )
@@ -306,11 +307,11 @@ class CNNectomeUNet(Architecture):
             The voxel size should be given as a tuple ``(z, y, x)``.
         """
         for upsample_factor in self.upsample_factors:
-            voxel_size = voxel_size / upsample_factor
+            voxel_size = voxel_size / Coordinate(upsample_factor)
         return voxel_size
 
     @property
-    def input_shape(self):
+    def input_shape(self) -> Coordinate:
         """
         Return the input shape of the U-Net.
 
@@ -324,7 +325,7 @@ class CNNectomeUNet(Architecture):
         Note:
             The input shape should be given as a tuple ``(batch, channels, [length,] depth, height, width)``.
         """
-        return self._input_shape
+        return Coordinate(self._input_shape)
 
     @property
     def num_in_channels(self) -> int:

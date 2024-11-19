@@ -63,3 +63,6 @@ class DatasetConfig:
             This method is used to validate the configuration of the dataset.
         """
         return True, "No validation for this DataSet"
+
+    def __hash__(self) -> int:
+        return hash(self.name)
