@@ -17,13 +17,14 @@ from dacapo.experiments.run_config import RunConfig
 import pytest
 
 
+# TODO: Move unet parameters that don't affect interaction with other modules
+# to a separate architcture test
 @pytest.mark.parametrize("data_dims", [2, 3])
 @pytest.mark.parametrize("channels", [True, False])
 @pytest.mark.parametrize("task", ["distance", "onehot", "affs"])
 @pytest.mark.parametrize("trainer", [lf("gunpowder_trainer")])
 @pytest.mark.parametrize("architecture_dims", [2, 3])
 @pytest.mark.parametrize("upsample", [True, False])
-# @pytest.mark.parametrize("upsample", [False])
 # @pytest.mark.parametrize("batch_norm", [True, False])
 @pytest.mark.parametrize("batch_norm", [False])
 # @pytest.mark.parametrize("use_attention", [True, False])
