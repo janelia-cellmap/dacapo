@@ -45,7 +45,7 @@ dependencies = [
         "daisy",
         "funlib.math>=0.1",
         "funlib.geometry>=0.2",
-        "mwatershed>=0.1",
+        "mwatershed>=0.5.2",
         "cellmap-models",
         "funlib.persistence>=0.5.3",
         "gunpowder>=1.4",
