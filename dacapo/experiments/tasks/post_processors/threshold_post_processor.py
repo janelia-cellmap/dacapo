@@ -111,13 +111,13 @@ class ThresholdPostProcessor(PostProcessor):
         if self.prediction_array._source_data.chunks is not None:
             block_size = self.prediction_array._source_data.chunks
 
-        write_size = [
+        write_size = Coordinate([
             b * v
             for b, v in zip(
                 block_size[-self.prediction_array.dims :],
                 self.prediction_array.voxel_size,
             )
-        ]
+        ])
         output_array = create_from_identifier(
             output_array_identifier,
             self.prediction_array.axis_names,
@@ -128,7 +128,7 @@ class ThresholdPostProcessor(PostProcessor):
             overwrite=True,
         )
 
-        read_roi = Roi((0, 0, 0), write_size[-self.prediction_array.dims :])
+        read_roi = Roi(write_size * 0, write_size)
         input_array = open_ds(
             f"{self.prediction_array_identifier.container.path}/{self.prediction_array_identifier.dataset}"
         )
