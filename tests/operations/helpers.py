@@ -26,7 +26,8 @@ def build_test_data_config(
     if upsampling, labels are upsampled by a factor of 2 in each dimension
     """
 
-    data_shape = (64, 64, 64)[-data_dims:]
+    data_shape = (32, 32, 32)[-data_dims:]
+    axis_names = ["z", "y", "x"][-data_dims:]
     mesh = np.meshgrid(
         *[np.linspace(0, dim - 1, dim * (1 + upsample)) for dim in data_shape]
     )
@@ -42,6 +43,7 @@ def build_test_data_config(
         intensities.shape,
         offset=(0,) * data_dims,
         voxel_size=(2,) * data_dims,
+        axis_names=["c^"] * int(channels) + axis_names,
         dtype=intensities.dtype,
         mode="w",
     )
@@ -55,6 +57,7 @@ def build_test_data_config(
         labels.shape,
         offset=(0,) * data_dims,
         voxel_size=(2 - upsample,) * data_dims,
+        axis_names=axis_names,
         dtype=labels.dtype,
         mode="w",
     )
@@ -110,7 +113,8 @@ def build_test_architecture_config(
     Build the simplest architecture config given the parameters.
     """
     if data_dims == 2:
-        input_shape = (18, 18)
+        input_shape = (32, 32)
+        eval_shape_increase = (8, 8)
         downsample_factors = [(2, 2)]
         upsample_factors = [(2, 2)] * int(upsample)
 
@@ -120,7 +124,8 @@ def build_test_architecture_config(
         kernel_size_up = None  # the default should work
 
     elif data_dims == 3 and architecture_dims == 2:
-        input_shape = (1, 18, 18)
+        input_shape = (1, 32, 32)
+        eval_shape_increase = (15, 8, 8)
         downsample_factors = [(1, 2, 2)]
 
         # test data upsamples in all dimensions so we have
@@ -132,7 +137,8 @@ def build_test_architecture_config(
         kernel_size_up = [[(1, 3, 3)] * 2] * 1
 
     elif data_dims == 3 and architecture_dims == 3:
-        input_shape = (18, 18, 18)
+        input_shape = (32, 32, 32)
+        eval_shape_increase = (8, 8, 8)
         downsample_factors = [(2, 2, 2)]
         upsample_factors = [(2, 2, 2)] * int(upsample)
 
@@ -144,7 +150,7 @@ def build_test_architecture_config(
     return CNNectomeUNetConfig(
         name="test_cnnectome_unet",
         input_shape=input_shape,
-        eval_shape_increase=input_shape,
+        eval_shape_increase=eval_shape_increase,
         fmaps_in=1 + channels,
         num_fmaps=2,
         fmaps_out=2,

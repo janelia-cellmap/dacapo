@@ -3,7 +3,6 @@ from .architectures import (
     dummy_architecture,
     unet_architecture,
     unet_3d_architecture,
-    unet_architecture_builder,
 )
 from .arrays import dummy_array, zarr_array, cellmap_array
 from .datasplits import (

@@ -10,4 +10,4 @@ def distance_predictor():
 
 @pytest.fixture()
 def onehot_predictor():
-    yield OneHotPredictor(classes=["a", "b", "c"])
+    yield OneHotPredictor(classes=["a", "b", "c"], kernel_size=1)
