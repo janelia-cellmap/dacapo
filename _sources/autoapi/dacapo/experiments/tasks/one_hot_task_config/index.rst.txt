@@ -44,3 +44,7 @@ Module Contents
       :type:  List[str]
 
 
+   .. py:attribute:: kernel_size
+      :type:  int | None
+
+

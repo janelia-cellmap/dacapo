@@ -148,7 +148,7 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.hot_distance_predictor.HotDistancePredictor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.predictors.hot_distance_predictor.</span></span><span class="sig-name descname"><span class="pre">HotDistancePredictor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_distances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.hot_distance_predictor.HotDistancePredictor" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.experiments.tasks.predictors.hot_distance_predictor.</span></span><span class="sig-name descname"><span class="pre">HotDistancePredictor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_distances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.hot_distance_predictor.HotDistancePredictor" title="Link to this definition"></a></dt>
 <dd><p>Predict signed distances and one hot embedding (as a proxy task) for a binary segmentation task.
 Distances deep within background are pushed to -inf, distances deep within
 the foreground object are pushed to inf. After distances have been
@@ -254,6 +254,11 @@ in the channels argument.</p>
 
 <p class="rubric">Notes</p>
 <p>This is a subclass of Predictor.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.experiments.tasks.predictors.hot_distance_predictor.HotDistancePredictor.kernel_size">
+<span class="sig-name descname"><span class="pre">kernel_size</span></span><a class="headerlink" href="#dacapo.experiments.tasks.predictors.hot_distance_predictor.HotDistancePredictor.kernel_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="id0">
 <span class="sig-name descname"><span class="pre">channels</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>

@@ -422,7 +422,7 @@ Package Contents
 
 
 
-.. py:class:: OneHotPredictor(classes: List[str])
+.. py:class:: OneHotPredictor(classes: List[str], kernel_size: int)
 
 
 
@@ -464,6 +464,9 @@ Package Contents
 
 
    .. py:attribute:: classes
+
+
+   .. py:attribute:: kernel_size
 
 
    .. py:property:: embedding_dims
@@ -1244,7 +1247,7 @@ Package Contents
 
 
 
-.. py:class:: HotDistancePredictor(channels: List[str], scale_factor: float, mask_distances: bool)
+.. py:class:: HotDistancePredictor(channels: List[str], scale_factor: float, mask_distances: bool, kernel_size: int)
 
 
 
@@ -1323,6 +1326,9 @@ Package Contents
    .. rubric:: Notes
 
    This is a subclass of Predictor.
+
+
+   .. py:attribute:: kernel_size
 
 
    .. py:attribute:: channels

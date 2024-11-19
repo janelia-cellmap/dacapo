@@ -4,6 +4,14 @@ dacapo.experiments.tasks.post_processors.threshold_post_processor
 .. py:module:: dacapo.experiments.tasks.post_processors.threshold_post_processor
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   dacapo.experiments.tasks.post_processors.threshold_post_processor.logger
+
+
 Classes
 -------
 
@@ -14,6 +22,8 @@ Classes
 
 Module Contents
 ---------------
+
+.. py:data:: logger
 
 .. py:class:: ThresholdPostProcessor
 

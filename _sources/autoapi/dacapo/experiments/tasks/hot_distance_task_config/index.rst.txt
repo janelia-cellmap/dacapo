@@ -91,3 +91,7 @@ Module Contents
       :type:  bool
 
 
+   .. py:attribute:: kernel_size
+      :type:  int | None
+
+

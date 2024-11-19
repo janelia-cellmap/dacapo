@@ -193,6 +193,8 @@ Module Contents
 
 
    .. py:property:: eval_shape_increase
+      :type: funlib.geometry.Coordinate
+
 
       The increase in shape due to the U-Net.
 
@@ -270,6 +272,8 @@ Module Contents
 
 
    .. py:property:: input_shape
+      :type: funlib.geometry.Coordinate
+
 
       Return the input shape of the U-Net.
 

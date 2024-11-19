@@ -25,7 +25,7 @@ Module Contents
 
 .. py:data:: logger
 
-.. py:class:: HotDistancePredictor(channels: List[str], scale_factor: float, mask_distances: bool)
+.. py:class:: HotDistancePredictor(channels: List[str], scale_factor: float, mask_distances: bool, kernel_size: int)
 
 
 
@@ -104,6 +104,9 @@ Module Contents
    .. rubric:: Notes
 
    This is a subclass of Predictor.
+
+
+   .. py:attribute:: kernel_size
 
 
    .. py:attribute:: channels

@@ -25,7 +25,7 @@ Module Contents
 
 .. py:data:: logger
 
-.. py:class:: OneHotPredictor(classes: List[str])
+.. py:class:: OneHotPredictor(classes: List[str], kernel_size: int)
 
 
 
@@ -67,6 +67,9 @@ Module Contents
 
 
    .. py:attribute:: classes
+
+
+   .. py:attribute:: kernel_size
 
 
    .. py:property:: embedding_dims
