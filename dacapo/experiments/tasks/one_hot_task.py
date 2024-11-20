@@ -1,5 +1,5 @@
 from .evaluators import DummyEvaluator
-from .losses import DummyLoss
+from .losses import DummyLoss, CrossEntropyLoss
 from .post_processors import ArgmaxPostProcessor
 from .predictors import OneHotPredictor
 from .task import Task
@@ -41,8 +41,14 @@ class OneHotTask(Task):
             )
             task_config.kernel_size = 3
         self.predictor = OneHotPredictor(
-            classes=task_config.classes, kernel_size=task_config.kernel_size
+            classes=task_config.classes,
+            kernel_size=task_config.kernel_size,
         )
-        self.loss = DummyLoss()
+        weights = None
+        if task_config.weights is not None:
+            if len(task_config.weights) > 0:
+                weights = task_config.weights
+
+        self.loss = CrossEntropyLoss(weights=weights)
         self.post_processor = ArgmaxPostProcessor()
         self.evaluator = DummyEvaluator()

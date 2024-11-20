@@ -56,6 +56,21 @@ def onehot_task():
 
 
 @pytest.fixture()
+def weighted_onehot_task():
+    import random
+
+    classes = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"]
+    weights = [random.random() for _ in range(len(classes))]
+    weights = [w / sum(weights) for w in weights]
+    yield OneHotTaskConfig(
+        name="one_hot_task",
+        classes=classes,
+        kernel_size=1,
+        weights=weights,
+    )
+
+
+@pytest.fixture()
 def six_onehot_task():
     yield OneHotTaskConfig(
         name="one_hot_task",

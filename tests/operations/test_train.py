@@ -21,6 +21,7 @@ import pytest
         lf("distance_run"),
         lf("dummy_run"),
         lf("onehot_run"),
+        lf("weighted_onehot_run"),
         lf("hot_distance_run"),
     ],
 )

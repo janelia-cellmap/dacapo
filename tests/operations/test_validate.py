@@ -17,6 +17,7 @@ logging.basicConfig(level=logging.INFO)
     [
         lf("distance_run"),
         lf("onehot_run"),
+        lf("weighted_onehot_run"),
     ],
 )
 def test_large(

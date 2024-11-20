@@ -19,6 +19,7 @@ from .runs import (
     dummy_run,
     distance_run,
     onehot_run,
+    weighted_onehot_run,
     unet_2d_distance_run,
     unet_3d_distance_run,
     hot_distance_run,
@@ -27,6 +28,7 @@ from .tasks import (
     dummy_task,
     distance_task,
     onehot_task,
+    weighted_onehot_task,
     six_onehot_task,
     hot_distance_task,
 )

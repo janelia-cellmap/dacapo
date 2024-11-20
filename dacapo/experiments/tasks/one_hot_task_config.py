@@ -31,3 +31,10 @@ class OneHotTaskConfig(TaskConfig):
     kernel_size: int | None = attr.ib(
         default=None,
     )
+
+    weights: list[float] = attr.ib(
+        factory=list,
+        metadata={
+            "help_text": "Weights for the task. If not provided, the weights will be calculated based on representation "
+        },
+    )
