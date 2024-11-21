@@ -1,7 +1,6 @@
 from dacapo.experiments.model import Model
 from dacapo.store.local_array_store import LocalArrayIdentifier
-from funlib.persistence import open_ds, prepare_ds, Array
-from dacapo.utils.array_utils import to_ndarray
+from funlib.persistence import open_ds, Array
 from funlib.geometry import Coordinate, Roi
 import numpy as np
 from dacapo.compute_context import create_compute_context
@@ -9,8 +8,6 @@ from typing import Optional
 import logging
 import daisy
 import torch
-import os
-from dacapo.utils.array_utils import to_ndarray, save_ndarray
 from dacapo.tmp import create_from_identifier
 
 logger = logging.getLogger(__name__)

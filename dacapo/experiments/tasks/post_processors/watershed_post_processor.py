@@ -1,17 +1,11 @@
-from upath import UPath as Path
-import dacapo.blockwise
-from dacapo.blockwise.scheduler import segment_blockwise
-
 from dacapo.store.array_store import LocalArrayIdentifier
-from dacapo.utils.array_utils import to_ndarray, save_ndarray
 from funlib.persistence import open_ds
-import daisy
 import mwatershed as mws
 
 from .watershed_post_processor_parameters import WatershedPostProcessorParameters
 from .post_processor import PostProcessor
 
-from funlib.geometry import Coordinate, Roi
+from funlib.geometry import Coordinate
 from dacapo.tmp import create_from_identifier, open_from_identifier
 
 
