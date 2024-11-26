@@ -13,7 +13,7 @@ import dask.array as da
 from typing import Sequence
 
 
-def adjust_shape(array: da.Array, scale_factors: Sequence(int)) -> da.Array:
+def adjust_shape(array: da.Array, scale_factors: Sequence[int]) -> da.Array:
     """
     Crop array to a shape that is a multiple of the scale factors.
     This allows for clean downsampling.
@@ -57,20 +57,27 @@ class ResampledArrayConfig(ArrayConfig):
         metadata={"help_text": "The order of the interpolation!"}
     )
 
-    def array(self, mode: str = "r") -> Array:
-        source_array = self.source_array_config.array(mode)
-
+    def preprocess(self, array: Array) -> Array:
+        """
+        Preprocess an array by resampling it to the desired voxel size.
+        """
         if self.downsample is not None:
+            downsample = Coordinate(self.downsample)
             return Array(
                 data=downscale_dask(
-                    adjust_shape(source_array.data, self.downsample),
+                    adjust_shape(array.data, downsample),
                     windowed_mean,
-                    scale_factors=self.downsample,
+                    scale_factors=downsample,
                 ),
-                offset=source_array.offset,
-                voxel_size=source_array.voxel_size * 2,
-                axis_names=source_array.axis_names,
-                units=source_array.units,
+                offset=array.offset,
+                voxel_size=array.voxel_size * downsample,
+                axis_names=array.axis_names,
+                units=array.units,
             )
         elif self.upsample is not None:
             raise NotImplementedError("Upsampling not yet implemented")
+
+    def array(self, mode: str = "r") -> Array:
+        source_array = self.source_array_config.array(mode)
+
+        return self.preprocess(source_array)
