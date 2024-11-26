@@ -9,7 +9,7 @@ from funlib.geometry import Coordinate
 
 def test_resample():
     # test downsampling arrays with shape 10 and 11 by a factor of 2 to test croping works
-    for top in [11,12]:
+    for top in [11, 12]:
         arr = Array(np.array(np.arange(1, top)), offset=(0,), voxel_size=(3,))
         resample_config = ResampledArrayConfig(
             "test_resample", None, upsample=None, downsample=(2,), interp_order=1
