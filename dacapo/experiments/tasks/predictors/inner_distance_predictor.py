@@ -1,7 +1,7 @@
 from .predictor import Predictor
 from dacapo.experiments import Model
 from dacapo.experiments.arraytypes import DistanceArray
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+from dacapo.tmp import np_to_funlib_array
 from dacapo.utils.balance_weights import balance_weights
 
 from funlib.geometry import Coordinate
@@ -118,11 +118,10 @@ class InnerDistancePredictor(Predictor):
         distances = self.process(
             gt.data, gt.voxel_size, self.norm, self.dt_scale_factor
         )
-        return NumpyArray.from_np_array(
+        return np_to_funlib_array(
             distances,
-            gt.roi,
+            gt.roi.offset,
             gt.voxel_size,
-            gt.axes,
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
@@ -148,16 +147,15 @@ class InnerDistancePredictor(Predictor):
         weights, moving_class_counts = balance_weights(
             gt[target.roi],
             2,
-            slab=tuple(1 if c == "c" else -1 for c in gt.axes),
+            slab=tuple(1 if c == "c^" else -1 for c in gt.axis_names),
             masks=[mask[target.roi]],
             moving_counts=moving_class_counts,
         )
         return (
-            NumpyArray.from_np_array(
+            np_to_funlib_array(
                 weights,
-                gt.roi,
+                gt.roi.offset,
                 gt.voxel_size,
-                gt.axes,
             ),
             moving_class_counts,
         )

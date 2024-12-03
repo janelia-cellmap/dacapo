@@ -1,4 +1,5 @@
 from funlib.geometry import Coordinate
+from funlib.persistence import Array
 
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Tuple
@@ -6,7 +7,6 @@ from typing import TYPE_CHECKING, Any, Tuple
 if TYPE_CHECKING:
     from dacapo.experiments.architectures.architecture import Architecture
     from dacapo.experiments.model import Model
-    from dacapo.experiments.datasplits.datasets.arrays import Array
 
 
 class Predictor(ABC):
@@ -19,8 +19,8 @@ class Predictor(ABC):
 
     Methods:
         create_model(self, architecture: "Architecture") -> "Model": Given a training architecture, create a model for this predictor.
-        create_target(self, gt: "Array") -> "Array": Create the target array for training, given a ground-truth array.
-        create_weight(self, gt: "Array", target: "Array", mask: "Array", moving_class_counts: Any) -> Tuple["Array", Any]: Create the weight array for training, given a ground-truth and associated target array.
+        create_target(self, gt: Array) -> Array: Create the target array for training, given a ground-truth array.
+        create_weight(self, gt: Array, target: Array, mask: Array, moving_class_counts: Any) -> Tuple[Array, Any]: Create the weight array for training, given a ground-truth and associated target array.
         gt_region_for_roi(self, target_spec): Report how much spatial context this predictor needs to generate a target for the given ROI.
         padding(self, gt_voxel_size: Coordinate) -> Coordinate: Return the padding needed for the ground-truth array.
     Notes:
@@ -48,7 +48,7 @@ class Predictor(ABC):
         pass
 
     @abstractmethod
-    def create_target(self, gt: "Array") -> "Array":
+    def create_target(self, gt: Array) -> Array:
         """
         Create the target array for training, given a ground-truth array.
 
@@ -83,11 +83,11 @@ class Predictor(ABC):
     @abstractmethod
     def create_weight(
         self,
-        gt: "Array",
-        target: "Array",
-        mask: "Array",
+        gt: Array,
+        target: Array,
+        mask: Array,
         moving_class_counts: Any,
-    ) -> Tuple["Array", Any]:
+    ) -> Tuple[Array, Any]:
         """
         Create the weight array for training, given a ground-truth and
         associated target array.

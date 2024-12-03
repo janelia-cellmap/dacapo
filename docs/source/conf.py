@@ -19,8 +19,8 @@ sys.path.insert(0, os.path.abspath("../.."))
 # -- Project information -----------------------------------------------------
 
 project = "DaCapo"
-copyright = "2024, Caroline Malin-Mayor, Jeff Rhoades, Marwan Zouinkhi, William Patton, David Ackerman, Jan Funke"
-author = "Caroline Malin-Mayor, Jeff Rhoades, Marwan Zouinkhi, William Patton, David Ackerman, Jan Funke"
+copyright = "2024, William Patton, Jeff Rhoades, Marwan Zouinkhi,  David Ackerman, Caroline Malin-Mayor, Jan Funke"
+author = " William Patton, Jeff Rhoades, Marwan Zouinkhi, David Ackerman, Caroline Malin-Mayor, Jan Funke"
 
 
 # -- General configuration ---------------------------------------------------
@@ -29,13 +29,19 @@ author = "Caroline Malin-Mayor, Jeff Rhoades, Marwan Zouinkhi, William Patton, D
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "nbsphinx",
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx_autodoc_typehints",
     "autoapi.extension",  # autobuild api docs
     "sphinx_click",  # auto document cli
-    "myst_parser",  # include md files in rst files
+    # "myst_parser",  # include md files in rst files
+    "myst_nb",  # integrate ipynb
 ]
+
+nbsphinx_custom_formats = {
+    ".py": ["jupytext.reads", {"fmt", "py:percent"}],
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

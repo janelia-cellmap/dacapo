@@ -1,7 +1,7 @@
 from .predictor import Predictor
 from dacapo.experiments import Model
 from dacapo.experiments.arraytypes import EmbeddingArray
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+from dacapo.tmp import np_to_funlib_array
 
 import numpy as np
 import torch
@@ -50,7 +50,7 @@ class DummyPredictor(Predictor):
             >>> model = predictor.create_model(architecture)
         """
         head = torch.nn.Conv3d(
-            architecture.num_out_channels, self.embedding_dims, kernel_size=3
+            architecture.num_out_channels, self.embedding_dims, kernel_size=1
         )
 
         return Model(architecture, head)
@@ -69,11 +69,10 @@ class DummyPredictor(Predictor):
             >>> predictor.create_target(gt)
         """
         # zeros
-        return NumpyArray.from_np_array(
+        return np_to_funlib_array(
             np.zeros((self.embedding_dims,) + gt.data.shape[-gt.dims :]),
-            gt.roi,
+            gt.roi.offset,
             gt.voxel_size,
-            ["c"] + gt.axes,
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
@@ -94,11 +93,10 @@ class DummyPredictor(Predictor):
         """
         # ones
         return (
-            NumpyArray.from_np_array(
+            np_to_funlib_array(
                 np.ones(target.data.shape),
-                target.roi,
+                target.roi.offset,
                 target.voxel_size,
-                target.axes,
             ),
             None,
         )

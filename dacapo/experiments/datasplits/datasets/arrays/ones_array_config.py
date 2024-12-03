@@ -1,7 +1,8 @@
 import attr
 
 from .array_config import ArrayConfig
-from .ones_array import OnesArray
+import dask.array as da
+from funlib.persistence import Array
 
 
 @attr.s
@@ -21,8 +22,16 @@ class OnesArrayConfig(ArrayConfig):
         This class is a subclass of ArrayConfig.
     """
 
-    array_type = OnesArray
-
     source_array_config: ArrayConfig = attr.ib(
         metadata={"help_text": "The Array that you want to copy and fill with ones."}
     )
+
+    def array(self, mode: str = "r") -> Array:
+        source_array = self.source_array_config.array(mode)
+        return Array(
+            data=da.ones(source_array.shape, dtype=source_array.dtype),
+            offset=source_array.offset,
+            voxel_size=source_array.voxel_size,
+            axis_names=source_array.axis_names,
+            units=source_array.units,
+        )

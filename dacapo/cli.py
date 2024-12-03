@@ -2,11 +2,12 @@ from upath import UPath as Path
 from typing import Optional
 
 import numpy as np
-
+import yaml
 import dacapo
 import click
 import logging
 from funlib.geometry import Roi, Coordinate
+from funlib.persistence import Array
 from dacapo.experiments.datasplits.datasets.dataset import Dataset
 from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
     PostProcessorParameters,
@@ -16,7 +17,10 @@ from dacapo.blockwise import (
     segment_blockwise as _segment_blockwise,
 )
 from dacapo.store.local_array_store import LocalArrayIdentifier
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+from dacapo.tmp import open_from_identifier, create_from_identifier
+
+from dacapo.options import DaCapoConfig
+import os
 
 
 @click.group()
@@ -74,8 +78,19 @@ logger = logging.getLogger(__name__)
 @click.option(
     "-r", "--run-name", required=True, type=str, help="The NAME of the run to train."
 )
-def train(run_name):
-    dacapo.train(run_name)  # TODO: run with compute_context
+@click.option(
+    "--no-validation", is_flag=True, help="Disable validation after training."
+)
+def train(run_name, no_validation):
+    """
+    Train a model with the specified run name.
+
+    Args:
+        run_name (str): The name of the run to train.
+        no_validation (bool): Flag to disable validation after training.
+    """
+    do_validate = not no_validation
+    dacapo.train(run_name, do_validate=do_validate)
 
 
 @cli.command()
@@ -92,8 +107,8 @@ def train(run_name):
 @click.option("-w", "--num_workers", type=int, default=30)
 @click.option("-dt", "--output_dtype", type=str, default="uint8")
 @click.option("-ow", "--overwrite", is_flag=True)
-def validate(run_name, iteration):
-    dacapo.validate(run_name, iteration)
+def validate(run_name, iteration, num_workers, output_dtype, overwrite):
+    dacapo.validate_run(run_name, iteration, num_workers, output_dtype, overwrite)
 
 
 @cli.command()
@@ -461,7 +476,7 @@ def run_blockwise(
     parameters = unpack_ctx(ctx)
 
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+    input_array = open_from_identifier(input_array_identifier)
 
     _total_roi, read_roi, write_roi, _ = get_rois(
         total_roi, read_roi_size, write_roi_size, input_array
@@ -472,9 +487,9 @@ def run_blockwise(
         Path(output_container), output_dataset
     )
 
-    ZarrArray.create_from_array_identifier(
+    create_from_identifier(
         output_array_identifier,
-        input_array.axes,
+        input_array.axis_names,
         _total_roi,
         channels_out,
         input_array.voxel_size,
@@ -639,7 +654,7 @@ def segment_blockwise(
     parameters = unpack_ctx(ctx)
 
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+    input_array = open_from_identifier(input_array_identifier)
 
     _total_roi, read_roi, write_roi, _context = get_rois(
         total_roi, read_roi_size, write_roi_size, input_array
@@ -655,9 +670,9 @@ def segment_blockwise(
         Path(output_container), output_dataset
     )
 
-    ZarrArray.create_from_array_identifier(
+    create_from_identifier(
         output_array_identifier,
-        input_array.axes,
+        input_array.axis_names,
         _total_roi,
         channels_out,
         input_array.voxel_size,
@@ -684,6 +699,124 @@ def segment_blockwise(
         *args,
         **kwargs,
     )
+
+
+def prompt_with_choices(prompt_text, choices, default_index=0):
+    """
+    Prompts the user with a list of choices and returns the selected choice.
+
+    Args:
+        prompt_text (str): The prompt text to display to the user.
+        choices (list): The list of choices to present.
+        default_index (int): The index of the default choice (0-based).
+
+    Returns:
+        str: The selected choice.
+    """
+    while True:
+        click.echo(prompt_text)
+        for i, choice in enumerate(choices, 1):
+            click.echo(f"{i} - {choice}")
+
+        # If the default_index is out of range, set to 0
+        default_index = max(0, min(default_index, len(choices) - 1))
+
+        try:
+            # Prompt the user for input
+            choice_num = click.prompt(
+                f"Enter your choice (default: {choices[default_index]})",
+                default=default_index + 1,
+                type=int,
+            )
+
+            # Check if the provided number is valid
+            if 1 <= choice_num <= len(choices):
+                return choices[choice_num - 1]
+            else:
+                click.echo("Invalid choice number. Please try again.")
+        except click.BadParameter:
+            click.echo("Invalid input. Please enter a number.")
+
+
+@cli.command()
+def config():
+    if os.path.exists("dacapo.yaml"):
+        overwrite = click.confirm(
+            "dacapo.yaml already exists. Do you want to overwrite it?", default=False
+        )
+        if not overwrite:
+            click.echo("Aborting configuration creation.")
+            return
+    runs_base_dir = click.prompt("Enter the base directory for runs", type=str)
+    storage_type = prompt_with_choices("Enter the type of storage:", ["files", "mongo"])
+    mongo_db_name = None
+    mongo_db_host = None
+    if storage_type == "mongo":
+        mongo_db_name = click.prompt("Enter the name of the MongoDB database", type=str)
+        mongo_db_host = click.prompt("Enter the MongoDB host URI", type=str)
+
+    compute_type = prompt_with_choices(
+        "Enter the type of compute context:", ["LocalTorch", "Bsub"]
+    )
+    if compute_type == "Bsub":
+        queue = click.prompt("Enter the queue for compute context", type=str)
+        num_gpus = click.prompt("Enter the number of GPUs", type=int)
+        num_cpus = click.prompt("Enter the number of CPUs", type=int)
+        billing = click.prompt("Enter the billing account", type=str)
+        compute_context = {
+            "type": compute_type,
+            "config": {
+                "queue": queue,
+                "num_gpus": num_gpus,
+                "num_cpus": num_cpus,
+                "billing": billing,
+            },
+        }
+    else:
+        compute_context = {"type": compute_type}
+
+    try:
+        generate_config(
+            runs_base_dir,
+            storage_type,
+            compute_type,
+            compute_context,
+            mongo_db_name,
+            mongo_db_host,
+        )
+    except ValueError as e:
+        logger.error(str(e))
+
+
+def generate_dacapo_yaml(config):
+    with open("dacapo.yaml", "w") as f:
+        yaml.dump(config.serialize(), f, default_flow_style=False)
+    print("dacapo.yaml has been created.")
+
+
+def generate_config(
+    runs_base_dir,
+    storage_type,
+    compute_type,
+    compute_context,
+    mongo_db_name=None,
+    mongo_db_host=None,
+):
+    config = DaCapoConfig(
+        type=storage_type,
+        runs_base_dir=Path(runs_base_dir).expanduser(),
+        compute_context=compute_context,
+    )
+
+    if storage_type == "mongo":
+        if not mongo_db_name or not mongo_db_host:
+            raise ValueError(
+                "--mongo_db_name and --mongo_db_host are required when type is 'mongo'"
+            )
+        config.mongo_db_name = mongo_db_name
+        config.mongo_db_host = mongo_db_host
+
+    generate_dacapo_yaml(config)
 
 
 def unpack_ctx(ctx):
@@ -714,7 +847,7 @@ def unpack_ctx(ctx):
     return kwargs
 
 
-def get_rois(total_roi, read_roi_size, write_roi_size, input_array):
+def get_rois(total_roi, read_roi_size, write_roi_size, input_array: Array):
     """
     Get the ROIs for processing.
 
@@ -722,7 +855,7 @@ def get_rois(total_roi, read_roi_size, write_roi_size, input_array):
         total_roi (str): The total ROI to be processed.
         read_roi_size (str): The size of the ROI to be read for each block.
         write_roi_size (str): The size of the ROI to be written for each block.
-        input_array (ZarrArray): The input array.
+        input_array: The input array.
     Returns:
         tuple: A tuple containing the total ROI, read ROI, write ROI, and context.
     Raises:

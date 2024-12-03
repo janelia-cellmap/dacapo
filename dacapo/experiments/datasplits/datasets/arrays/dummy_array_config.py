@@ -1,9 +1,10 @@
 import attr
 
 from .array_config import ArrayConfig
-from .dummy_array import DummyArray
 
 from typing import Tuple
+from funlib.persistence import Array
+import numpy as np
 
 
 @attr.s
@@ -21,7 +22,8 @@ class DummyArrayConfig(ArrayConfig):
 
     """
 
-    array_type = DummyArray
+    def array(self, mode: str = "r") -> Array:
+        return Array(np.zeros((100, 50, 50)))
 
     def verify(self) -> Tuple[bool, str]:
         """

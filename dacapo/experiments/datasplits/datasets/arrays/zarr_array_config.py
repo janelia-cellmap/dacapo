@@ -1,9 +1,9 @@
 import attr
 
 from .array_config import ArrayConfig
-from .zarr_array import ZarrArray
 
 from funlib.geometry import Coordinate
+from funlib.persistence import open_ds
 
 from upath import UPath as Path
 
@@ -28,15 +28,13 @@ class ZarrArrayConfig(ArrayConfig):
         snap_to_grid: Optional[Coordinate]
             If you need to make sure your ROI's align with a specific voxel_size
         _axes: Optional[List[str]]
-            The axes of your data!
+            The axis_names of your data!
     Methods:
         verify() -> Tuple[bool, str]
             Check whether this is a valid Array
     Note:
         This class is a subclass of ArrayConfig.
     """
-
-    array_type = ZarrArray
 
     file_name: Path = attr.ib(
         metadata={"help_text": "The file name of the zarr container."}
@@ -53,11 +51,14 @@ class ZarrArrayConfig(ArrayConfig):
         },
     )
     _axes: Optional[List[str]] = attr.ib(
-        default=None, metadata={"help_text": "The axes of your data!"}
+        default=None, metadata={"help_text": "The axis_names of your data!"}
     )
     mode: Optional[str] = attr.ib(
         default="a", metadata={"help_text": "The access mode!"}
     )
+
+    def array(self, mode="r"):
+        return open_ds(f"{self.file_name}/{self.dataset}", mode=mode)
 
     def verify(self) -> Tuple[bool, str]:
         """

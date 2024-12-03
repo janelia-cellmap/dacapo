@@ -50,7 +50,7 @@ def segment_function(input_array, block, **parameters):
 
     Args:
         input_array (np.ndarray): The 3D array to segment.
-        block (dask.array.core.Block): The block object.
+        block (daisy.Block): The block object.
         **parameters: Parameters for the empanada-napari segmenter.
     Returns:
         np.ndarray: The segmented 3D array.
@@ -374,7 +374,7 @@ def empanada_segmenter(
     assert image.ndim in [3, 4], "Only 3D and 4D input images can be handled!"
     if image.ndim == 4:
         # channel dimensions are commonly 1, 3 and 4
-        # check for dimensions on zeroeth and last axes
+        # check for dimensions on zeroeth and last axis_names
         shape = image.shape
         if shape[0] in [1, 3, 4]:
             image = image[0]

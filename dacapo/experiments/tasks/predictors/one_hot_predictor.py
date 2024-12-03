@@ -1,7 +1,8 @@
 from .predictor import Predictor
 from dacapo.experiments import Model
 from dacapo.experiments.arraytypes import ProbabilityArray
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+from dacapo.tmp import np_to_funlib_array
+from funlib.persistence import Array
 
 import numpy as np
 import torch
@@ -29,7 +30,7 @@ class OneHotPredictor(Predictor):
         This is a subclass of Predictor.
     """
 
-    def __init__(self, classes: List[str]):
+    def __init__(self, classes: List[str], kernel_size: int):
         """
         Initialize the OneHotPredictor.
 
@@ -41,6 +42,7 @@ class OneHotPredictor(Predictor):
             >>> predictor = OneHotPredictor(classes)
         """
         self.classes = classes
+        self.kernel_size = kernel_size
 
     @property
     def embedding_dims(self):
@@ -69,32 +71,35 @@ class OneHotPredictor(Predictor):
         Examples:
             >>> model = predictor.create_model(architecture)
         """
-        head = torch.nn.Conv3d(
-            architecture.num_out_channels, self.embedding_dims, kernel_size=3
+
+        if architecture.dims == 3:
+            conv_layer = torch.nn.Conv3d
+        elif architecture.dims == 2:
+            conv_layer = torch.nn.Conv2d
+        else:
+            raise Exception(f"Unsupported number of dimensions: {architecture.dims}")
+        head = conv_layer(
+            architecture.num_out_channels,
+            self.embedding_dims,
+            kernel_size=self.kernel_size,
         )
 
         return Model(architecture, head)
 
-    def create_target(self, gt):
+    def create_target(self, gt: Array):
         """
-        Create the target array for training.
-
-        Args:
-            gt: The ground truth array.
-        Returns:
-            NumpyArray: The created target array.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> target = predictor.create_target(gt)
-
+        Turn labels into a one hot encoding
         """
-        one_hots = self.process(gt.data)
-        return NumpyArray.from_np_array(
+        label_data = gt[:]
+        if gt.channel_dims == 0:
+            label_data = label_data[np.newaxis]
+        elif gt.channel_dims > 1:
+            raise ValueError(f"Cannot handle multiple channel dims: {gt.channel_dims}")
+        one_hots = self.process(label_data)
+        return np_to_funlib_array(
             one_hots,
-            gt.roi,
+            gt.roi.offset,
             gt.voxel_size,
-            gt.axes,
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
@@ -115,11 +120,10 @@ class OneHotPredictor(Predictor):
 
         """
         return (
-            NumpyArray.from_np_array(
+            np_to_funlib_array(
                 np.ones(target.data.shape),
-                target.roi,
+                target.roi.offset,
                 target.voxel_size,
-                target.axes,
             ),
             None,
         )
