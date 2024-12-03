@@ -4,8 +4,8 @@ dacapo.plot
 .. py:module:: dacapo.plot
 
 
-Attributes
-----------
+Classes
+-------
 
 .. autoapisummary::
 
@@ -26,7 +26,36 @@ Functions
 Module Contents
 ---------------
 
-.. py:data:: RunInfo
+.. py:class:: RunInfo
+
+
+
+   .. py:attribute:: name
+
+
+   .. py:attribute:: task
+
+
+   .. py:attribute:: architecture
+
+
+   .. py:attribute:: trainer
+
+
+   .. py:attribute:: datasplit
+
+
+   .. py:attribute:: training_stats
+
+
+   .. py:attribute:: validation_scores
+
+
+   .. py:attribute:: validation_score_name
+
+
+   .. py:attribute:: plot_loss
+
 
 .. py:function:: smooth_values(a, n, stride=1)
 

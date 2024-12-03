@@ -458,6 +458,8 @@ Module Contents
 
 
    .. py:attribute:: num_heads
+      :value: 1
+
 
 
    .. py:attribute:: in_channels
@@ -470,15 +472,23 @@ Module Contents
 
 
    .. py:attribute:: use_attention
+      :value: False
+
 
 
    .. py:attribute:: batch_norm
+      :value: True
+
 
 
    .. py:attribute:: kernel_size_down
+      :value: None
+
 
 
    .. py:attribute:: kernel_size_up
+      :value: None
+
 
 
    .. py:attribute:: l_conv
@@ -716,9 +726,13 @@ Module Contents
 
 
    .. py:attribute:: crop_factor
+      :value: None
+
 
 
    .. py:attribute:: next_conv_kernel_sizes
+      :value: None
+
 
 
    .. py:attribute:: dims
@@ -881,6 +895,8 @@ Module Contents
 
 
    .. py:attribute:: batch_norm
+      :value: True
+
 
 
    .. py:attribute:: W_g

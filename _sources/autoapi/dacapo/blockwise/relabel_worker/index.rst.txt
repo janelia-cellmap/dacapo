@@ -48,6 +48,8 @@ Module Contents
 
 
 .. py:data:: path
+   :value: '/home/runner/work/dacapo/dacapo/dacapo/blockwise/relabel_worker.py'
+
 
 .. py:function:: start_worker(output_container, output_dataset, tmpdir, return_io_loop=False)
 

@@ -263,9 +263,13 @@ Package Contents
 
 
    .. py:attribute:: clipmin
+      :value: 0.05
+
 
 
    .. py:attribute:: clipmax
+      :value: 0.95
+
 
 
    .. py:property:: embedding_dims
@@ -853,27 +857,43 @@ Package Contents
 
 
    .. py:attribute:: lsds
+      :value: True
+
 
 
    .. py:attribute:: num_voxels
+      :value: 20
+
 
 
    .. py:attribute:: grow_boundary_iterations
+      :value: 0
+
 
 
    .. py:attribute:: affs_weight_clipmin
+      :value: 0.05
+
 
 
    .. py:attribute:: affs_weight_clipmax
+      :value: 0.95
+
 
 
    .. py:attribute:: lsd_weight_clipmin
+      :value: 0.05
+
 
 
    .. py:attribute:: lsd_weight_clipmax
+      :value: 0.95
+
 
 
    .. py:attribute:: background_as_object
+      :value: False
+
 
 
    .. py:method:: extractor(voxel_size)

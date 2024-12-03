@@ -116,8 +116,8 @@
              
   <section id="module-dacapo.plot">
 <span id="dacapo-plot"></span><h1>dacapo.plot<a class="headerlink" href="#module-dacapo.plot" title="Link to this heading"></a></h1>
-<section id="attributes">
-<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#dacapo.plot.RunInfo" title="dacapo.plot.RunInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RunInfo</span></code></a></p></td>
@@ -147,10 +147,55 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
-<dl class="py data">
+<dl class="py class">
 <dt class="sig sig-object py" id="dacapo.plot.RunInfo">
-<span class="sig-prename descclassname"><span class="pre">dacapo.plot.</span></span><span class="sig-name descname"><span class="pre">RunInfo</span></span><a class="headerlink" href="#dacapo.plot.RunInfo" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dacapo.plot.</span></span><span class="sig-name descname"><span class="pre">RunInfo</span></span><a class="headerlink" href="#dacapo.plot.RunInfo" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.plot.RunInfo.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#dacapo.plot.RunInfo.name" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.plot.RunInfo.task">
+<span class="sig-name descname"><span class="pre">task</span></span><a class="headerlink" href="#dacapo.plot.RunInfo.task" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.plot.RunInfo.architecture">
+<span class="sig-name descname"><span class="pre">architecture</span></span><a class="headerlink" href="#dacapo.plot.RunInfo.architecture" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.plot.RunInfo.trainer">
+<span class="sig-name descname"><span class="pre">trainer</span></span><a class="headerlink" href="#dacapo.plot.RunInfo.trainer" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.plot.RunInfo.datasplit">
+<span class="sig-name descname"><span class="pre">datasplit</span></span><a class="headerlink" href="#dacapo.plot.RunInfo.datasplit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.plot.RunInfo.training_stats">
+<span class="sig-name descname"><span class="pre">training_stats</span></span><a class="headerlink" href="#dacapo.plot.RunInfo.training_stats" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.plot.RunInfo.validation_scores">
+<span class="sig-name descname"><span class="pre">validation_scores</span></span><a class="headerlink" href="#dacapo.plot.RunInfo.validation_scores" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.plot.RunInfo.validation_score_name">
+<span class="sig-name descname"><span class="pre">validation_score_name</span></span><a class="headerlink" href="#dacapo.plot.RunInfo.validation_score_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dacapo.plot.RunInfo.plot_loss">
+<span class="sig-name descname"><span class="pre">plot_loss</span></span><a class="headerlink" href="#dacapo.plot.RunInfo.plot_loss" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.plot.smooth_values">
@@ -183,7 +228,7 @@ s: standard deviation of the smoothed values</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dacapo.plot.get_runs_info">
-<span class="sig-prename descclassname"><span class="pre">dacapo.plot.</span></span><span class="sig-name descname"><span class="pre">get_runs_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_score_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_losses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">RunInfo</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.plot.get_runs_info" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">dacapo.plot.</span></span><span class="sig-name descname"><span class="pre">get_runs_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_config_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_score_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_losses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#dacapo.plot.RunInfo" title="dacapo.plot.RunInfo"><span class="pre">RunInfo</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#dacapo.plot.get_runs_info" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">

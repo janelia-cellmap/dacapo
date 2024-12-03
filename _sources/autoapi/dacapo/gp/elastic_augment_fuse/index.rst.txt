@@ -74,12 +74,18 @@ Module Contents
 
 
    .. py:attribute:: subsample
+      :value: 1
+
 
 
    .. py:attribute:: augmentation_probability
+      :value: 1.0
+
 
 
    .. py:attribute:: uniform_3d_rotation
+      :value: False
+
 
 
    .. py:attribute:: do_augment

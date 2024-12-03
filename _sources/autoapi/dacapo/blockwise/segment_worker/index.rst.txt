@@ -48,6 +48,8 @@ Module Contents
 
 
 .. py:data:: path
+   :value: '/home/runner/work/dacapo/dacapo/dacapo/blockwise/segment_worker.py'
+
 
 .. py:function:: start_worker(input_container: str | upath.UPath, input_dataset: str, output_container: str | upath.UPath, output_dataset: str, tmpdir: str | upath.UPath, function_path: str | upath.UPath, return_io_loop: bool = False)
 

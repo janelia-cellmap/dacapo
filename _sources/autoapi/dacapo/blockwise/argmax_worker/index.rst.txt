@@ -42,6 +42,8 @@ Module Contents
 
 
 .. py:data:: path
+   :value: '/home/runner/work/dacapo/dacapo/dacapo/blockwise/argmax_worker.py'
+
 
 .. py:function:: cli(log_level)
 

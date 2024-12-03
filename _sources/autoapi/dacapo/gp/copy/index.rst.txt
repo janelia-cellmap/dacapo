@@ -64,6 +64,8 @@ Module Contents
 
 
    .. py:attribute:: drop_channels
+      :value: False
+
 
 
    .. py:method:: setup()

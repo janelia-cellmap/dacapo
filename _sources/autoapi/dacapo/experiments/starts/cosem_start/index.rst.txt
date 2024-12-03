@@ -125,6 +125,8 @@ Module Contents
 
 
    .. py:attribute:: name
+      :value: 'Uninferable/Uninferable'
+
 
 
    .. py:attribute:: channels

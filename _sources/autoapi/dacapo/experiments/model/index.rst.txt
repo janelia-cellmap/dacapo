@@ -123,6 +123,8 @@ Module Contents
 
 
    .. py:attribute:: eval_activation
+      :value: None
+
 
 
    .. py:method:: forward(x)

@@ -76,12 +76,18 @@ Module Contents
 
 
    .. py:attribute:: target_key
+      :value: None
+
 
 
    .. py:attribute:: weights_key
+      :value: None
+
 
 
    .. py:attribute:: mask_key
+      :value: None
+
 
 
    .. py:attribute:: moving_counts

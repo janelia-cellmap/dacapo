@@ -180,6 +180,8 @@ Module Contents
 
    .. py:attribute:: score
       :type:  float
+      :value: -1
+
 
 
    .. py:attribute:: iteration
@@ -352,6 +354,8 @@ Module Contents
 
 
    .. py:attribute:: embedded
+      :value: False
+
 
 
    .. py:method:: updated_neuroglancer_layer(layer_name, ds)

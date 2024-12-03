@@ -1081,12 +1081,18 @@ Module Contents
 
 
    .. py:attribute:: sampling
+      :value: (1, 1, 1)
+
 
 
    .. py:attribute:: clip_distance
+      :value: 200
+
 
 
    .. py:attribute:: tol_distance
+      :value: 40
+
 
 
    .. py:method:: test_mask()

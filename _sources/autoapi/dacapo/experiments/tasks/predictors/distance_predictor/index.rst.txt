@@ -144,9 +144,13 @@ Module Contents
 
 
    .. py:attribute:: clipmin
+      :value: 0.05
+
 
 
    .. py:attribute:: clipmax
+      :value: 0.95
+
 
 
    .. py:property:: embedding_dims

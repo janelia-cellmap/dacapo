@@ -49,9 +49,13 @@ Module Contents
 
 
    .. py:attribute:: gt
+      :value: None
+
 
 
    .. py:attribute:: p
+      :value: 0.5
+
 
 
    .. py:attribute:: background

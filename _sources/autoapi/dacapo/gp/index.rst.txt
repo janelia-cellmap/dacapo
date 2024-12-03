@@ -97,12 +97,18 @@ Package Contents
 
 
    .. py:attribute:: target_key
+      :value: None
+
 
 
    .. py:attribute:: weights_key
+      :value: None
+
 
 
    .. py:attribute:: mask_key
+      :value: None
+
 
 
    .. py:attribute:: moving_counts
@@ -285,12 +291,18 @@ Package Contents
 
 
    .. py:attribute:: subsample
+      :value: 1
+
 
 
    .. py:attribute:: augmentation_probability
+      :value: 1.0
+
 
 
    .. py:attribute:: uniform_3d_rotation
+      :value: False
+
 
 
    .. py:attribute:: do_augment
@@ -390,9 +402,13 @@ Package Contents
 
 
    .. py:attribute:: gt
+      :value: None
+
 
 
    .. py:attribute:: p
+      :value: 0.5
+
 
 
    .. py:attribute:: background
@@ -479,6 +495,8 @@ Package Contents
 
 
    .. py:attribute:: drop_channels
+      :value: False
+
 
 
    .. py:method:: setup()

@@ -463,48 +463,78 @@ Package Contents
 
 
    .. py:attribute:: targets
+      :value: None
+
 
 
    .. py:attribute:: segmentation_type
+      :value: 'semantic'
+
 
 
    .. py:attribute:: max_gt_downsample
+      :value: 32
+
 
 
    .. py:attribute:: max_gt_upsample
+      :value: 4
+
 
 
    .. py:attribute:: max_raw_training_downsample
+      :value: 16
+
 
 
    .. py:attribute:: max_raw_training_upsample
+      :value: 2
+
 
 
    .. py:attribute:: max_raw_validation_downsample
+      :value: 8
+
 
 
    .. py:attribute:: max_raw_validation_upsample
+      :value: 2
+
 
 
    .. py:attribute:: min_training_volume_size
+      :value: 8000
+
 
 
    .. py:attribute:: raw_min
+      :value: 0
+
 
 
    .. py:attribute:: raw_max
+      :value: 255
+
 
 
    .. py:attribute:: classes_separator_character
+      :value: '&'
+
 
 
    .. py:attribute:: use_negative_class
+      :value: False
+
 
 
    .. py:attribute:: max_validation_volume_size
+      :value: None
+
 
 
    .. py:attribute:: binarize_gt
+      :value: False
+
 
 
    .. py:property:: class_name
