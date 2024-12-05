@@ -4,7 +4,6 @@ from .array_config import ArrayConfig
 
 from typing import List, Dict, Optional
 from funlib.persistence import Array
-import numpy as np
 import dask.array as da
 
 
@@ -45,18 +44,15 @@ class ConcatArrayConfig(ArrayConfig):
     def array(self, mode: str = "r") -> Array:
         arrays = [config.array(mode) for _, config in self.source_array_configs.items()]
 
+        out_data = da.stack([array.data for array in arrays], axis=0)
         out_array = Array(
-            da.zeros(len(arrays), *arrays[0].physical_shape, dtype=arrays[0].dtype),
+            out_data,
             offset=arrays[0].offset,
             voxel_size=arrays[0].voxel_size,
             axis_names=["c^"] + arrays[0].axis_names,
             units=arrays[0].units,
         )
 
-        def set_channels(data):
-            for i, array in enumerate(arrays):
-                data[i] = array.data[:]
-            return data
-
-        out_array.lazy_op(set_channels)
+        # callable lazy op so funlib.persistence doesn't try to recoginize this data as writable
+        out_array.lazy_op(lambda data: data)
         return out_array
