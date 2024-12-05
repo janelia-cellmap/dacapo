@@ -59,6 +59,7 @@ dependencies = [
         "upath",
         "boto3",
         "matplotlib",
+        "xarray-multiscale",
         ]
 
 # extras
