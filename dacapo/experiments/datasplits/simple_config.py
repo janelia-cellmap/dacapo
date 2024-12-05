@@ -45,7 +45,7 @@ class SimpleDataSplitConfig(DataSplitConfig):
             ), f"Found raw data at {level_1} and {level_2}"
             return [Path(x).parent for x in level_1_matches]
         elif len(level_2_matches) > 0:
-            return [Path(x) for x in level_2_matches]
+            return [Path(x).parent for x in level_2_matches]
 
         raise Exception(f"No raw data found at {level_0} or {level_1} or {level_2}")
 
