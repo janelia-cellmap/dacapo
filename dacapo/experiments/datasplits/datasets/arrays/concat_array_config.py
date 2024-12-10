@@ -1,9 +1,10 @@
 import attr
 
 from .array_config import ArrayConfig
-from .concat_array import ConcatArray
 
 from typing import List, Dict, Optional
+from funlib.persistence import Array
+import dask.array as da
 
 
 @attr.s
@@ -23,8 +24,6 @@ class ConcatArrayConfig(ArrayConfig):
         The source array is a dictionary with the key being the channel and the value being the array.
     """
 
-    array_type = ConcatArray
-
     channels: List[str] = attr.ib(
         metadata={"help_text": "An ordering for the source_arrays."}
     )
@@ -41,3 +40,19 @@ class ConcatArrayConfig(ArrayConfig):
             "not provided, missing channels will simply be filled with 0s"
         },
     )
+
+    def array(self, mode: str = "r") -> Array:
+        arrays = [config.array(mode) for _, config in self.source_array_configs.items()]
+
+        out_data = da.stack([array.data for array in arrays], axis=0)
+        out_array = Array(
+            out_data,
+            offset=arrays[0].offset,
+            voxel_size=arrays[0].voxel_size,
+            axis_names=["c^"] + arrays[0].axis_names,
+            units=arrays[0].units,
+        )
+
+        # callable lazy op so funlib.persistence doesn't try to recoginize this data as writable
+        out_array.lazy_op(lambda data: data)
+        return out_array

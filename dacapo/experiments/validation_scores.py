@@ -234,7 +234,7 @@ class ValidationScores:
                 "iterations": [
                     iteration_score.iteration for iteration_score in self.scores
                 ],
-                "datasets": self.datasets,
+                "datasets": [d.name for d in self.datasets],
                 "parameters": self.parameters,
                 "criteria": self.criteria,
             },

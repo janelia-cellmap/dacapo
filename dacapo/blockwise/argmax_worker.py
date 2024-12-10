@@ -1,8 +1,9 @@
 from upath import UPath as Path
 import sys
-from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
+
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.compute_context import create_compute_context
+from dacapo.tmp import open_from_identifier
 
 import daisy
 
@@ -55,6 +56,22 @@ def start_worker(
     output_dataset: str,
     return_io_loop: bool = False,
 ):
+    return start_worker_fn(
+        input_container=input_container,
+        input_dataset=input_dataset,
+        output_container=output_container,
+        output_dataset=output_dataset,
+        return_io_loop=return_io_loop,
+    )
+
+
+def start_worker_fn(
+    input_container: Path | str,
+    input_dataset: str,
+    output_container: Path | str,
+    output_dataset: str,
+    return_io_loop: bool = False,
+):
     """
     Start the threshold worker.
 
@@ -66,12 +83,12 @@ def start_worker(
     """
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+    input_array = open_from_identifier(input_array_identifier)
 
     output_array_identifier = LocalArrayIdentifier(
         Path(output_container), output_dataset
     )
-    output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
+    output_array = open_from_identifier(output_array_identifier)
 
     def io_loop():
         # wait for blocks to run pipeline
@@ -86,7 +103,7 @@ def start_worker(
                 # write to output array
                 output_array[block.write_roi] = np.argmax(
                     input_array[block.write_roi],
-                    axis=input_array.axes.index("c"),
+                    axis=input_array.axis_names.index("c^"),
                 )
 
     if return_io_loop:
@@ -111,7 +128,7 @@ def spawn_worker(
     """
     compute_context = create_compute_context()
     if not compute_context.distribute_workers:
-        return start_worker(
+        return start_worker_fn(
             input_array_identifier.container,
             input_array_identifier.dataset,
             output_array_identifier.container,

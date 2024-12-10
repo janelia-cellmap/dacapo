@@ -10,7 +10,8 @@ from funlib.persistence import Array
 import numpy as np
 import yaml
 from dacapo.compute_context import create_compute_context
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
+from dacapo.tmp import open_from_identifier
+
 
 from dacapo.store.array_store import LocalArrayIdentifier
 
@@ -48,12 +49,32 @@ path = __file__
 @click.option("--tmpdir", type=str, help="Temporary directory")
 @click.option("--function_path", type=str, help="Path to the segment function")
 def start_worker(
-    input_container: str,
+    input_container: str | Path,
     input_dataset: str,
-    output_container: str,
+    output_container: str | Path,
     output_dataset: str,
-    tmpdir: str,
-    function_path: str,
+    tmpdir: str | Path,
+    function_path: str | Path,
+    return_io_loop: bool = False,
+):
+    return start_worker_fn(
+        input_container=input_container,
+        input_dataset=input_dataset,
+        output_container=output_container,
+        output_dataset=output_dataset,
+        tmpdir=tmpdir,
+        function_path=function_path,
+        return_io_loop=return_io_loop,
+    )
+
+
+def start_worker_fn(
+    input_container: str | Path,
+    input_dataset: str,
+    output_container: str | Path,
+    output_dataset: str,
+    tmpdir: str | Path,
+    function_path: str | Path,
     return_io_loop: bool = False,
 ):
     """
@@ -73,13 +94,13 @@ def start_worker(
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
     print(f"Opening input array {input_array_identifier}")
-    input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+    input_array = open_from_identifier(input_array_identifier)
 
     output_array_identifier = LocalArrayIdentifier(
         Path(output_container), output_dataset
     )
     print(f"Opening output array {output_array_identifier}")
-    output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
+    output_array = open_from_identifier(output_array_identifier)
 
     # Load segment function
     function_name = Path(function_path).stem
@@ -211,7 +232,7 @@ def spawn_worker(
     """
     compute_context = create_compute_context()
     if not compute_context.distribute_workers:
-        return start_worker(
+        return start_worker_fn(
             input_array_identifier.container,
             input_array_identifier.dataset,
             output_array_identifier.container,

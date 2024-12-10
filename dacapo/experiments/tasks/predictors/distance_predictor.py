@@ -1,10 +1,11 @@
 from .predictor import Predictor
 from dacapo.experiments import Model
 from dacapo.experiments.arraytypes import DistanceArray
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
 from dacapo.utils.balance_weights import balance_weights
+from dacapo.tmp import np_to_funlib_array
 
 from funlib.geometry import Coordinate
+from funlib.persistence import Array
 
 from scipy.ndimage.morphology import distance_transform_edt
 import numpy as np
@@ -125,28 +126,15 @@ class DistancePredictor(Predictor):
 
         return Model(architecture, head)
 
-    def create_target(self, gt):
+    def create_target(self, gt: Array):
         """
-        Create the target array for training.
-
-        Args:
-            gt: The ground-truth array.
-        Returns:
-            NumpyArray: The created target array.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.create_target(gt)
-
+        Turn the ground truth labels into a distance transform.
         """
-        distances = self.process(
-            gt.data, gt.voxel_size, self.norm, self.dt_scale_factor
-        )
-        return NumpyArray.from_np_array(
+        distances = self.process(gt[:], gt.voxel_size, self.norm, self.dt_scale_factor)
+        return np_to_funlib_array(
             distances,
-            gt.roi,
+            gt.roi.offset,
             gt.voxel_size,
-            gt.axes,
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
@@ -181,18 +169,17 @@ class DistancePredictor(Predictor):
         weights, moving_class_counts = balance_weights(
             gt[target.roi],
             2,
-            slab=tuple(1 if c == "c" else -1 for c in gt.axes),
+            slab=tuple(1 if c == "c^" else -1 for c in gt.axis_names),
             masks=[mask[target.roi], distance_mask],
             moving_counts=moving_class_counts,
             clipmin=self.clipmin,
             clipmax=self.clipmax,
         )
         return (
-            NumpyArray.from_np_array(
+            np_to_funlib_array(
                 weights,
-                gt.roi,
+                gt.roi.offset,
                 gt.voxel_size,
-                gt.axes,
             ),
             moving_class_counts,
         )
@@ -236,6 +223,10 @@ class DistancePredictor(Predictor):
             >>> predictor.create_distance_mask(distances, mask, voxel_size, normalize, normalize_args)
 
         """
+        no_channel_dim = len(mask.shape) == len(distances.shape) - 1
+        if no_channel_dim:
+            mask = mask[np.newaxis]
+
         mask_output = mask.copy()
         for i, (channel_distance, channel_mask) in enumerate(zip(distances, mask)):
             tmp = np.zeros(
@@ -244,9 +235,11 @@ class DistancePredictor(Predictor):
             )
             slices = tmp.ndim * (slice(1, -1),)
             tmp[slices] = channel_mask
+            sampling = tuple(float(v) / 2 for v in voxel_size)
+            sampling = sampling[-len(tmp.shape) :]
             boundary_distance = distance_transform_edt(
                 tmp,
-                sampling=voxel_size,
+                sampling=sampling,
             )
             if self.epsilon is None:
                 add = 0
@@ -286,6 +279,8 @@ class DistancePredictor(Predictor):
                     np.sum(channel_mask_output)
                 )
             )
+        if no_channel_dim:
+            mask_output = mask_output[0]
         return mask_output
 
     def process(
@@ -311,7 +306,20 @@ class DistancePredictor(Predictor):
             >>> predictor.process(labels, voxel_size, normalize, normalize_args)
 
         """
+
+        num_dims = len(labels.shape)
+        if num_dims == voxel_size.dims:
+            channel_dim = False
+        elif num_dims == voxel_size.dims + 1:
+            channel_dim = True
+        else:
+            raise ValueError("Cannot handle multiple channel dims")
+
+        if not channel_dim:
+            labels = labels[np.newaxis]
+
         all_distances = np.zeros(labels.shape, dtype=np.float32) - 1
+
         for ii, channel in enumerate(labels):
             boundaries = self.__find_boundaries(channel)
 
@@ -328,13 +336,15 @@ class DistancePredictor(Predictor):
                     distances = np.ones(channel.shape, dtype=np.float32) * max_distance
             else:
                 # get distances (voxel_size/2 because image is doubled)
-                distances = distance_transform_edt(
-                    boundaries, sampling=tuple(float(v) / 2 for v in voxel_size)
-                )
+                sampling = tuple(float(v) / 2 for v in voxel_size)
+                # fixing the sampling for 2D images
+                if len(boundaries.shape) < len(sampling):
+                    sampling = sampling[-len(boundaries.shape) :]
+                distances = distance_transform_edt(boundaries, sampling=sampling)
                 distances = distances.astype(np.float32)
 
                 # restore original shape
-                downsample = (slice(None, None, 2),) * len(voxel_size)
+                downsample = (slice(None, None, 2),) * distances.ndim
                 distances = distances[downsample]
 
                 # todo: inverted distance
@@ -347,7 +357,7 @@ class DistancePredictor(Predictor):
 
         return all_distances
 
-    def __find_boundaries(self, labels):
+    def __find_boundaries(self, labels: np.ndarray):
         """
         Find the boundaries in the labels.
 
@@ -365,6 +375,10 @@ class DistancePredictor(Predictor):
         # shift :   1 1 1 1 0 0 2 2 2 2 3       n - 1
         # diff  :   0 0 0 1 0 1 0 0 0 1 0       n - 1
         # bound.: 00000001000100000001000      2n - 1
+
+        if labels.dtype == bool:
+            # raise ValueError("Labels should not be bools")
+            labels = labels.astype(np.uint8)
 
         logger.debug(f"computing boundaries for {labels.shape}")
 

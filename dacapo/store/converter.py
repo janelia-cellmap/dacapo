@@ -121,10 +121,11 @@ class TypedConverter(Converter):
             cls = cls_fn(obj_data["__type__"])
             structure_fn = make_dict_structure_fn(cls, self)
             return structure_fn(obj_data, cls)
-        except:
+        except Exception as e:
             print(
                 f"Could not structure object of type {obj_data}. will try unstructured data. attr __type__ can be missing because of old version of the data."
             )
+            print(e)
             return obj_data
 
 

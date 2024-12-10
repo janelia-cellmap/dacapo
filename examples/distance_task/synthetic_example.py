@@ -157,12 +157,23 @@ from pathlib import Path
 from dacapo.experiments.datasplits import DataSplitGenerator
 from funlib.geometry import Coordinate
 
+csv_path = Path(runs_base_dir, "synthetic_example.csv")
+if not csv_path.exists():
+    # Create a csv file with the paths to the zarr files
+    with open(csv_path, "w") as f:
+        f.write(
+            f"train,{train_data_path},raw,{train_data_path},[labels]\n"
+            f"val,{validate_data_path},raw,{validate_data_path},[labels]\n"
+            # f"test,{test_data_path},raw,{test_data_path},[labels]\n"
+        )
+
 input_resolution = Coordinate(8, 8, 8)
 output_resolution = Coordinate(8, 8, 8)
 datasplit_config = DataSplitGenerator.generate_from_csv(
-    "/misc/public/dacapo_learnathon/datasplit_csvs/synthetic_example.csv",
+    csv_path,
     input_resolution,
     output_resolution,
+    binarize_gt=True,  # Binarize the ground truth data to convert from instance segmentation to semantic segmentation
 ).compute()
 
 datasplit = datasplit_config.datasplit_type(datasplit_config)
@@ -389,6 +400,20 @@ from dacapo.utils.view import NeuroglancerRunViewer
 
 config_store = create_config_store()
 run = Run(config_store.retrieve_run_config(run_config.name))
+
+# First visualize all the steps in the data preprocessing pipeline
+from dacapo.store.create_store import create_array_store
+
+array_store = create_array_store()
+run.trainer.build_batch_provider(
+    run.datasplit.train,
+    run.model,
+    run.task,
+    array_store.snapshot_container(run.name),
+)
+run.trainer.visualize_pipeline()
+
+# %% Now let's train!
 
 # Visualize as we go
 run_viewer = NeuroglancerRunViewer(run)

@@ -1,8 +1,8 @@
 import logging
 from typing import Optional
 from funlib.geometry import Roi, Coordinate
+from funlib.persistence import open_ds
 import numpy as np
-from dacapo.experiments.datasplits.datasets.arrays.array import Array
 from dacapo.experiments.datasplits.datasets.dataset import Dataset
 from dacapo.experiments.run import Run
 
@@ -12,7 +12,6 @@ from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
 import dacapo.experiments.tasks.post_processors as post_processors
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.predict import predict
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
 from dacapo.store.create_store import (
     create_config_store,
     create_weights_store,
@@ -164,7 +163,9 @@ def apply(
 
     # make array identifiers for input, predictions and outputs
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+    input_array = open_ds(
+        f"{input_array_identifier.container}/{input_array_identifier.dataset}"
+    )
     if roi is None:
         _roi = input_array.roi
     else:
@@ -226,7 +227,7 @@ def apply_run(
         output_dtype (np.dtype | str, optional): The output data type. Defaults to np.uint8.
         overwrite (bool, optional): Whether to overwrite existing output. Defaults to True.
     Raises:
-        ValueError: If the input array is not a ZarrArray.
+        ValueError: If the input array is not a zarr array.
     Examples:
         >>> apply_run(
         ...     run=run,

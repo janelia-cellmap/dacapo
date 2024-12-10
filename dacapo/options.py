@@ -73,7 +73,8 @@ class DaCapoConfig:
             {'type': 'files', 'runs_base_dir': '/home/user/dacapo', 'compute_context': {'type': 'LocalTorch', 'config': {}}, 'mongo_db_host': None, 'mongo_db_name': None}
         """
         converter = Converter()
-        return converter.unstructure(self)
+        data = converter.unstructure(self)
+        return {k: v for k, v in data.items() if v is not None}
 
 
 class Options:
@@ -132,8 +133,8 @@ class Options:
             PosixPath('/home/user/.config/dacapo/dacapo.yaml')
         """
         env_dict = dict(os.environ)
-        if "OPTIONS_FILE" in env_dict:
-            options_files = [Path(env_dict["OPTIONS_FILE"])]
+        if "DACAPO_OPTIONS_FILE" in env_dict:
+            options_files = [Path(env_dict["DACAPO_OPTIONS_FILE"])]
         else:
             options_files = []
 
@@ -146,6 +147,7 @@ class Options:
         ]
         for path in options_files:
             if path.exists():
+                os.environ["DACAPO_OPTIONS_FILE"] = str(path)
                 return path
         return None
 

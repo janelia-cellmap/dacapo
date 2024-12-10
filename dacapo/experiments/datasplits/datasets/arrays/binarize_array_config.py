@@ -1,9 +1,13 @@
 import attr
 
 from .array_config import ArrayConfig
-from .binarize_array import BinarizeArray
+from funlib.persistence import Array
 
 from typing import List, Tuple
+from dacapo.tmp import num_channels_from_array
+
+import dask.array as da
+import numpy as np
 
 
 @attr.s
@@ -23,8 +27,6 @@ class BinarizeArrayConfig(ArrayConfig):
         Each class will be binarized into a separate channel.
 
     """
-
-    array_type = BinarizeArray
 
     source_array_config: ArrayConfig = attr.ib(
         metadata={
@@ -46,3 +48,32 @@ class BinarizeArrayConfig(ArrayConfig):
             "help_text": "The id considered background. Will never be binarized to 1, defaults to 0."
         },
     )
+
+    def array(self, mode="r") -> Array:
+        array = self.source_array_config.array(mode)
+        num_channels = num_channels_from_array(array)
+        assert num_channels is None, "Input labels cannot have a channel dimension"
+
+        def group_array(data):
+            groups = [
+                da.isin(data, group_ids)
+                if len(group_ids) > 0
+                else data != self.background
+                for _, group_ids in self.groupings
+            ]
+            out = da.stack(groups, axis=0)
+            return out
+
+        data = group_array(array.data)
+        out_array = Array(
+            data,
+            array.offset,
+            array.voxel_size,
+            ["c^"] + list(array.axis_names),
+            units=array.units,
+        )
+
+        # callable lazy op so funlib.persistence doesn't try to recoginize this data as writable
+        out_array.lazy_op(lambda data: data)
+
+        return out_array

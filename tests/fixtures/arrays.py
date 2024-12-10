@@ -28,7 +28,7 @@ def zarr_array(tmp_path):
     )
     dataset.attrs["offset"] = (12, 12, 12)
     dataset.attrs["resolution"] = (1, 2, 4)
-    dataset.attrs["axes"] = ["zyx"]
+    dataset.attrs["axis_names"] = ["z", "y", "x"]
     yield zarr_array_config
 
 
@@ -46,7 +46,7 @@ def cellmap_array(tmp_path):
     )
     dataset.attrs["offset"] = (12, 12, 12)
     dataset.attrs["resolution"] = (1, 2, 4)
-    dataset.attrs["axes"] = ["z", "y", "x"]
+    dataset.attrs["axis_names"] = ["z", "y", "x"]
 
     cellmap_array_config = BinarizeArrayConfig(
         name="cellmap_zarr_array",

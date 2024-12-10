@@ -2,6 +2,7 @@ from .datasplit import DataSplit
 from .datasets import Dataset
 
 from typing import List
+import warnings
 
 
 class DummyDataSplit(DataSplit):
@@ -41,6 +42,10 @@ class DummyDataSplit(DataSplit):
             This function is called by the DummyDataSplit class to initialize the DummyDataSplit class with specified config to split the data into training and validation datasets.
         """
         super().__init__()
+        warnings.warn(
+            "TrainValidateDataSplit is deprecated. Use SimpleDataSplitConfig instead.",
+            DeprecationWarning,
+        )
 
         self.train = [
             datasplit_config.train_config.dataset_type(datasplit_config.train_config)

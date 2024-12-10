@@ -1,20 +1,20 @@
 from ..training_iteration_stats import TrainingIterationStats
 from .trainer import Trainer
+from dacapo.tmp import (
+    create_from_identifier,
+    open_from_identifier,
+    gp_to_funlib_array,
+    np_to_funlib_array,
+)
 
 from dacapo.gp import (
-    DaCapoArraySource,
     GraphSource,
     DaCapoTargetFilter,
     CopyMask,
-    Product,
-)
-from dacapo.experiments.datasplits.datasets.arrays import (
-    NumpyArray,
-    ZarrArray,
-    OnesArray,
 )
 
 from funlib.geometry import Coordinate
+from funlib.persistence import Array
 import gunpowder as gp
 
 import zarr
@@ -91,6 +91,7 @@ class GunpowderTrainer(Trainer):
         self.augments = trainer_config.augments
         self.mask_integral_downsample_factor = 4
         self.clip_raw = trainer_config.clip_raw
+        self.gt_min_reject = trainer_config.gt_min_reject
 
         self.scheduler = None
 
@@ -171,12 +172,14 @@ class GunpowderTrainer(Trainer):
             weights.append(dataset.weight)
             assert isinstance(dataset.weight, int), dataset
 
-            raw_source = DaCapoArraySource(dataset.raw, raw_key)
+            raw_source = gp.ArraySource(raw_key, dataset.raw)
+            if dataset.raw.channel_dims == 0:
+                raw_source += gp.Unsqueeze([raw_key], axis=0)
             if self.clip_raw:
                 raw_source += gp.Crop(
                     raw_key, dataset.gt.roi.snap_to_grid(dataset.raw.voxel_size)
                 )
-            gt_source = DaCapoArraySource(dataset.gt, gt_key)
+            gt_source = gp.ArraySource(gt_key, dataset.gt)
             sample_points = dataset.sample_points
             points_source = None
             if sample_points is not None:
@@ -187,14 +190,23 @@ class GunpowderTrainer(Trainer):
                 )
                 points_source = GraphSource(sample_points_key, graph)
             if dataset.mask is not None:
-                mask_source = DaCapoArraySource(dataset.mask, mask_key)
+                mask_source = gp.ArraySource(mask_key, dataset.mask)
             else:
                 # Always provide a mask. By default it is simply an array
                 # of ones with the same shape/roi as gt. Avoids making us
                 # specially handle no mask case and allows padding of the
                 # ground truth without worrying about training on incorrect
                 # data.
-                mask_source = DaCapoArraySource(OnesArray.like(dataset.gt), mask_key)
+                mask_source = gp.ArraySource(
+                    mask_key,
+                    Array(
+                        np.ones(dataset.gt.data.shape, dtype=dataset.gt.data.dtype),
+                        offset=dataset.gt.roi.offset,
+                        voxel_size=dataset.gt.voxel_size,
+                        axis_names=dataset.gt.axis_names,
+                        units=dataset.gt.units,
+                    ),
+                )
             array_sources = [raw_source, gt_source, mask_source] + (
                 [points_source] if points_source is not None else []
             )
@@ -221,6 +233,8 @@ class GunpowderTrainer(Trainer):
             )
 
             dataset_source += gp.Reject(mask_placeholder, 1e-6)
+            if self.gt_min_reject is not None:
+                dataset_source += gp.Reject(gt_key, self.gt_min_reject)
 
             for augment in self.augments:
                 dataset_source += augment.node(raw_key, gt_key, mask_key)
@@ -254,13 +268,13 @@ class GunpowderTrainer(Trainer):
         request.add(weight_key, output_size)
         request.add(
             mask_placeholder,
-            prediction_voxel_size * self.mask_integral_downsample_factor,
+            prediction_voxel_size,
         )
         # request additional keys for snapshots
         request.add(gt_key, output_size)
         request.add(mask_key, output_size)
         request[mask_placeholder].roi = request[mask_placeholder].roi.snap_to_grid(
-            prediction_voxel_size * self.mask_integral_downsample_factor
+            prediction_voxel_size
         )
 
         self._request = request
@@ -294,7 +308,7 @@ class GunpowderTrainer(Trainer):
         """
         t_start_fetch = time.time()
 
-        print("Starting iteration!")
+        logger.debug("Starting iteration!")
 
         for iteration in range(self.iteration, self.iteration + num_iterations):
             raw, gt, target, weight, mask = self.next()
@@ -306,12 +320,12 @@ class GunpowderTrainer(Trainer):
                 param.grad = None
 
             t_start_prediction = time.time()
-            predicted = model.forward(torch.as_tensor(raw[raw.roi]).to(device).float())
+            predicted = model.forward(torch.as_tensor(raw[raw.roi]).float().to(device))
             predicted.retain_grad()
             loss = self._loss.compute(
                 predicted,
-                torch.as_tensor(target[target.roi]).to(device).float(),
-                torch.as_tensor(weight[weight.roi]).to(device).float(),
+                torch.as_tensor(target[target.roi]).float().to(device),
+                torch.as_tensor(weight[weight.roi]).float().to(device),
             )
             loss.backward()
             optimizer.step()
@@ -321,22 +335,29 @@ class GunpowderTrainer(Trainer):
                 and iteration % self.snapshot_iteration == 0
             ):
                 snapshot_zarr = zarr.open(self.snapshot_container.container, "a")
+                # remove batch dim from all snapshot arrays
                 snapshot_arrays = {
-                    "volumes/raw": raw,
-                    "volumes/gt": gt,
-                    "volumes/target": target,
-                    "volumes/weight": weight,
-                    "volumes/prediction": NumpyArray.from_np_array(
-                        predicted.detach().cpu().numpy(),
-                        target.roi,
-                        target.voxel_size,
-                        target.axes,
+                    "volumes/raw": np_to_funlib_array(
+                        raw[0], offset=raw.offset, voxel_size=raw.voxel_size
                     ),
-                    "volumes/gradients": NumpyArray.from_np_array(
-                        predicted.grad.detach().cpu().numpy(),
-                        target.roi,
-                        target.voxel_size,
-                        target.axes,
+                    "volumes/gt": np_to_funlib_array(
+                        gt[0], offset=gt.offset, voxel_size=gt.voxel_size
+                    ),
+                    "volumes/target": np_to_funlib_array(
+                        target[0], offset=target.offset, voxel_size=target.voxel_size
+                    ),
+                    "volumes/weight": np_to_funlib_array(
+                        weight[0], offset=weight.offset, voxel_size=weight.voxel_size
+                    ),
+                    "volumes/prediction": np_to_funlib_array(
+                        predicted.detach().cpu().numpy()[0],
+                        offset=target.roi.offset,
+                        voxel_size=target.voxel_size,
+                    ),
+                    "volumes/gradients": np_to_funlib_array(
+                        predicted.grad.detach().cpu().numpy()[0],
+                        offset=target.roi.offset,
+                        voxel_size=target.voxel_size,
                     ),
                 }
                 if mask is not None:
@@ -347,39 +368,40 @@ class GunpowderTrainer(Trainer):
                 )
                 for k, v in snapshot_arrays.items():
                     k = f"{iteration}/{k}"
+                    snapshot_array_identifier = (
+                        self.snapshot_container.array_identifier(k)
+                    )
                     if k not in snapshot_zarr:
-                        snapshot_array_identifier = (
-                            self.snapshot_container.array_identifier(k)
-                        )
-                        ZarrArray.create_from_array_identifier(
+                        array = create_from_identifier(
                             snapshot_array_identifier,
-                            v.axes,
+                            v.axis_names,
                             v.roi,
-                            v.num_channels,
+                            (
+                                v.shape[0]
+                                if (v.channel_dims == 1 and v.shape[0] > 1)
+                                else None
+                            ),
                             v.voxel_size,
                             v.dtype if not v.dtype == bool else np.float32,
                             model.output_shape * v.voxel_size,
+                            overwrite=True,
                         )
-                        dataset = snapshot_zarr[k]
                     else:
-                        dataset = snapshot_zarr[k]
-                    # remove batch dimension. Everything has a batch
-                    # and channel dim because of torch.
+                        array = open_from_identifier(
+                            snapshot_array_identifier, mode="a"
+                        )
+
+                    # neuroglancer doesn't allow bools
                     if not v.dtype == bool:
-                        data = v[v.roi][0]
+                        data = v[:]
                     else:
-                        data = v[v.roi][0].astype(np.float32)
-                    if v.num_channels is None or v.num_channels == 1:
-                        # remove channel dimension
-                        assert data.shape[0] == 1, (
-                            f"Data for array {k} should not have channels but has shape: "
-                            f"{v.shape}. The first dimension is channels"
-                        )
+                        data = v[:].astype(np.float32)
+
+                    # remove channel dim if there is only 1 channel
+                    if v.channel_dims == 1 and v.shape[0] == 1:
                         data = data[0]
-                    dataset[:] = data
-                    dataset.attrs["offset"] = v.roi.offset
-                    dataset.attrs["resolution"] = v.voxel_size
-                    dataset.attrs["axes"] = v.axes
+
+                    array[:] = data
 
             logger.debug(
                 f"Trainer step took {time.time() - t_start_prediction} seconds"
@@ -418,7 +440,7 @@ class GunpowderTrainer(Trainer):
         Fetches the next batch of data.
 
         Returns:
-            Tuple[NumpyArray, NumpyArray, NumpyArray, NumpyArray, NumpyArray]: A tuple containing the raw data, ground truth data, target data, weight data, and mask data.
+            Tuple[Array, Array, Array, Array, Array]: A tuple containing the raw data, ground truth data, target data, weight data, and mask data.
         Raises:
             NotImplementedError: If the method is not implemented by the subclass.
         Examples:
@@ -428,12 +450,14 @@ class GunpowderTrainer(Trainer):
         batch = next(self._iter)
         self._iter.send(False)
         return (
-            NumpyArray.from_gp_array(batch[self._raw_key]),
-            NumpyArray.from_gp_array(batch[self._gt_key]),
-            NumpyArray.from_gp_array(batch[self._target_key]),
-            NumpyArray.from_gp_array(batch[self._weight_key]),
+            gp_to_funlib_array(
+                batch[self._raw_key],
+            ),
+            gp_to_funlib_array(batch[self._gt_key]),
+            gp_to_funlib_array(batch[self._target_key]),
+            gp_to_funlib_array(batch[self._weight_key]),
             (
-                NumpyArray.from_gp_array(batch[self._mask_key])
+                gp_to_funlib_array(batch[self._mask_key])
                 if self._mask_key is not None
                 else None
             ),
@@ -489,3 +513,102 @@ class GunpowderTrainer(Trainer):
 
         """
         return all([dataset.gt is not None for dataset in datasets])
+
+    def visualize_pipeline(self, bind_address="0.0.0.0", bind_port=0):
+        """
+        Visualizes the pipeline for the run, including all produced arrays.
+
+        Args:
+            bind_address : str
+                Bind address for Neuroglancer webserver
+            bind_port : int
+                Bind port for Neuroglancer webserver
+        """
+
+        if self._pipeline is None:
+            raise ValueError("Pipeline not initialized!")
+
+        import neuroglancer
+
+        # self.iteration = 0
+
+        pipeline = self._pipeline.children[0].children[0].copy()
+        if self.num_data_fetchers > 1:
+            pipeline = pipeline.children[0]
+
+        pipeline += gp.Stack(1)
+
+        request = self._request
+        # raise Exception(request)
+
+        def batch_generator():
+            with gp.build(pipeline):
+                while True:
+                    yield pipeline.request_batch(request)
+
+        batch_gen = batch_generator()
+
+        def load_batch(event):
+            print("fetching_batch")
+            batch = next(batch_gen)
+
+            with viewer.txn() as s:
+                while len(s.layers) > 0:
+                    del s.layers[0]
+
+                # reverse order for raw so we can set opacity to 1, this
+                # way higher res raw replaces low res when available
+                for name, array in batch.arrays.items():
+                    print(name)
+                    data = array.data[0]
+
+                    channel_dims = len(data.shape) - len(array.spec.voxel_size)
+                    assert channel_dims <= 1
+
+                    dims = neuroglancer.CoordinateSpace(
+                        names=["c^", "z", "y", "x"][-len(data.shape) :],
+                        units="nm",
+                        scales=tuple([1] * channel_dims) + tuple(array.spec.voxel_size),
+                    )
+
+                    local_vol = neuroglancer.LocalVolume(
+                        data=data,
+                        voxel_offset=tuple([0] * channel_dims)
+                        + tuple((-array.spec.roi.shape / 2) / array.spec.voxel_size),
+                        dimensions=dims,
+                    )
+
+                    if name == self._gt_key:
+                        s.layers[str(name)] = neuroglancer.SegmentationLayer(
+                            source=local_vol
+                        )
+                    else:
+                        s.layers[str(name)] = neuroglancer.ImageLayer(source=local_vol)
+
+                s.layout = neuroglancer.row_layout(
+                    [
+                        neuroglancer.column_layout(
+                            [
+                                neuroglancer.LayerGroupViewer(
+                                    layers=[str(k) for k, v in batch.items()]
+                                ),
+                            ]
+                        )
+                    ]
+                )
+
+        neuroglancer.set_server_bind_address(
+            bind_address=bind_address, bind_port=bind_port
+        )
+
+        viewer = neuroglancer.Viewer()
+
+        viewer.actions.add("load_batch", load_batch)
+
+        with viewer.config_state.txn() as s:
+            s.input_event_bindings.data_view["keyt"] = "load_batch"
+
+        print(viewer)
+        load_batch(None)
+
+        input("Enter to quit!")
