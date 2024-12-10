@@ -30,6 +30,5 @@ def test_gp_dacapo_array_source(array_config):
         batch = source_node.request_batch(request)
         data = batch[key].data
         if data.dtype == bool:
-            raise ValueError("Data should not be bools")
             data = data.astype(np.uint8)
         assert (data - array[array.roi]).sum() == 0

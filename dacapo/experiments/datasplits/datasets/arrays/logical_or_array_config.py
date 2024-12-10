@@ -30,14 +30,14 @@ class LogicalOrArrayConfig(ArrayConfig):
         assert num_channels_from_array(array) is not None
 
         out_array = Array(
-            da.zeros(*array.physical_shape, dtype=array.dtype),
+            da.zeros(array.physical_shape, dtype=array.dtype),
             offset=array.offset,
             voxel_size=array.voxel_size,
             axis_names=array.axis_names[1:],
             units=array.units,
         )
 
-        out_array.data = da.maximum(array.data, axis=0)
+        out_array.data = da.max(array.data, axis=0)
 
         # mark data as non-writable
         out_array.lazy_op(lambda data: data)

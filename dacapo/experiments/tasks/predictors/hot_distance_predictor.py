@@ -1,7 +1,6 @@
 from dacapo.experiments.arraytypes.probabilities import ProbabilityArray
 from .predictor import Predictor
 from dacapo.experiments import Model
-from dacapo.experiments.arraytypes import DistanceArray
 from dacapo.tmp import np_to_funlib_array
 from dacapo.utils.balance_weights import balance_weights
 
@@ -394,6 +393,7 @@ class HotDistancePredictor(Predictor):
         # bound.: 00000001000100000001000      2n - 1
 
         logger.debug(f"computing boundaries for {labels.shape}")
+        labels = labels.astype(np.uint8)
 
         dims = len(labels.shape)
         in_shape = labels.shape
