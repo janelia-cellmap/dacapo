@@ -12,8 +12,22 @@ Classes
    dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.ResampledArrayConfig
 
 
+Functions
+---------
+
+.. autoapisummary::
+
+   dacapo.experiments.datasplits.datasets.arrays.resampled_array_config.adjust_shape
+
+
 Module Contents
 ---------------
+
+.. py:function:: adjust_shape(array: dask.array.Array, scale_factors: Sequence[int]) -> dask.array.Array
+
+   Crop array to a shape that is a multiple of the scale factors.
+   This allows for clean downsampling.
+
 
 .. py:class:: ResampledArrayConfig
 
@@ -68,8 +82,12 @@ Module Contents
       :type:  bool
 
 
-   .. py:method:: array(mode: str = 'r') -> funlib.persistence.Array
-      :abstractmethod:
+   .. py:method:: preprocess(array: funlib.persistence.Array) -> funlib.persistence.Array
 
+      Preprocess an array by resampling it to the desired voxel size.
+
+
+
+   .. py:method:: array(mode: str = 'r') -> funlib.persistence.Array
 
 

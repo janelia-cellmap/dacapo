@@ -42,6 +42,8 @@ Functions
 
    dacapo.apply
    dacapo.train
+   dacapo.validate
+   dacapo.validate_run
    dacapo.predict
 
 
@@ -166,6 +168,21 @@ Package Contents
    .. rubric:: Examples
 
    >>> train("run_name")
+
+
+.. py:function:: validate(run_name: str, iteration: int = 0, datasets_config=None)
+
+   Validate a run at a given iteration. Loads the weights from a previously
+   stored checkpoint. Returns the best parameters and scores for this
+   iteration.
+
+
+.. py:function:: validate_run(run: dacapo.experiments.Run, iteration: int, datasets_config=None)
+
+   Validate an already loaded run at the given iteration. This does not
+   load the weights of that iteration, it is assumed that the model is already
+   loaded correctly. Returns the best parameters and scores for this
+   iteration.
 
 
 .. py:function:: predict(run_name: str | dacapo.experiments.Run, iteration: int | None, input_container: upath.UPath | str, input_dataset: str, output_path: dacapo.store.local_array_store.LocalArrayIdentifier | upath.UPath | str, output_roi: Optional[funlib.geometry.Roi | str] = None, num_workers: int = 1, output_dtype: numpy.dtype | str = np.uint8, overwrite: bool = True)

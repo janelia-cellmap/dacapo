@@ -340,9 +340,13 @@ Package Contents
       :type:  bool
 
 
-   .. py:method:: array(mode: str = 'r') -> funlib.persistence.Array
-      :abstractmethod:
+   .. py:method:: preprocess(array: funlib.persistence.Array) -> funlib.persistence.Array
 
+      Preprocess an array by resampling it to the desired voxel size.
+
+
+
+   .. py:method:: array(mode: str = 'r') -> funlib.persistence.Array
 
 
 .. py:class:: IntensitiesArrayConfig
