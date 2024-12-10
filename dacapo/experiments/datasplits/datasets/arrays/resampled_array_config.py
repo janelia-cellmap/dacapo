@@ -5,6 +5,26 @@ from .array_config import ArrayConfig
 from funlib.geometry import Coordinate
 from funlib.persistence import Array
 
+from xarray_multiscale.multiscale import downscale_dask
+from xarray_multiscale import windowed_mean
+import numpy as np
+import dask.array as da
+
+from typing import Sequence
+
+
+def adjust_shape(array: da.Array, scale_factors: Sequence[int]) -> da.Array:
+    """
+    Crop array to a shape that is a multiple of the scale factors.
+    This allows for clean downsampling.
+    """
+    misalignment = np.any(np.mod(array.shape, scale_factors))
+    if misalignment:
+        new_shape = np.subtract(array.shape, np.mod(array.shape, scale_factors))
+        slices = tuple(slice(0, s) for s in new_shape)
+        array = array[slices]
+    return array
+
 
 @attr.s
 class ResampledArrayConfig(ArrayConfig):
@@ -37,7 +57,27 @@ class ResampledArrayConfig(ArrayConfig):
         metadata={"help_text": "The order of the interpolation!"}
     )
 
+    def preprocess(self, array: Array) -> Array:
+        """
+        Preprocess an array by resampling it to the desired voxel size.
+        """
+        if self.downsample is not None:
+            downsample = Coordinate(self.downsample)
+            return Array(
+                data=downscale_dask(
+                    adjust_shape(array.data, downsample),
+                    windowed_mean,
+                    scale_factors=downsample,
+                ),
+                offset=array.offset,
+                voxel_size=array.voxel_size * downsample,
+                axis_names=array.axis_names,
+                units=array.units,
+            )
+        elif self.upsample is not None:
+            raise NotImplementedError("Upsampling not yet implemented")
+
     def array(self, mode: str = "r") -> Array:
-        # This is non trivial. We want to upsample or downsample the source
-        # array lazily. Not entirely sure how to do this with dask arrays.
-        raise NotImplementedError()
+        source_array = self.source_array_config.array(mode)
+
+        return self.preprocess(source_array)
