@@ -128,6 +128,6 @@ class CNNectomeUNetConfig(ArchitectureConfig):
         },
     )
     batch_norm: bool = attr.ib(
-        default=True,
+        default=False,
         metadata={"help_text": "Whether to use batch normalization."},
     )

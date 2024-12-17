@@ -18,6 +18,9 @@ from dacapo.tmp import (
 from funlib.persistence import Array
 
 from typing import Iterable
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ThresholdPostProcessor(PostProcessor):
@@ -108,13 +111,15 @@ class ThresholdPostProcessor(PostProcessor):
         if self.prediction_array._source_data.chunks is not None:
             block_size = self.prediction_array._source_data.chunks
 
-        write_size = [
-            b * v
-            for b, v in zip(
-                block_size[-self.prediction_array.dims :],
-                self.prediction_array.voxel_size,
-            )
-        ]
+        write_size = Coordinate(
+            [
+                b * v
+                for b, v in zip(
+                    block_size[-self.prediction_array.dims :],
+                    self.prediction_array.voxel_size,
+                )
+            ]
+        )
         output_array = create_from_identifier(
             output_array_identifier,
             self.prediction_array.axis_names,
@@ -125,7 +130,7 @@ class ThresholdPostProcessor(PostProcessor):
             overwrite=True,
         )
 
-        read_roi = Roi((0, 0, 0), write_size[-self.prediction_array.dims :])
+        read_roi = Roi(write_size * 0, write_size)
         input_array = open_ds(
             f"{self.prediction_array_identifier.container.path}/{self.prediction_array_identifier.dataset}"
         )
@@ -135,7 +140,7 @@ class ThresholdPostProcessor(PostProcessor):
             data = input_array[write_roi] > parameters.threshold
             data = data.astype(np.uint8)
             if int(data.max()) == 0:
-                print("No data in block", write_roi)
+                logger.debug("No data in block", write_roi)
                 return
             output_array[write_roi] = data
 

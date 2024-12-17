@@ -10,10 +10,13 @@
    overview
    install
    notebooks/minimal_tutorial
+   data
+   unet_architectures
    tutorial
    docker
    aws
    cosem_starter
+   roadmap
    autoapi/index
    cli
 

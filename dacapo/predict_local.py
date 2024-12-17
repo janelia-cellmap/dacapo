@@ -44,10 +44,12 @@ def predict(
     else:
         input_roi = output_roi.grow(context, context)
 
-    read_roi = Roi((0, 0, 0), input_size)
+    read_roi = Roi((0,) * input_size.dims, input_size)
     write_roi = read_roi.grow(-context, -context)
 
-    axes = ["c^", "z", "y", "x"]
+    axes = raw_array.axis_names
+    if "c^" not in axes:
+        axes = ["c^"] + axes
 
     num_channels = model.num_out_channels
 
@@ -70,6 +72,12 @@ def predict(
     )
     compute_context = create_compute_context()
     device = compute_context.device
+
+    model_device = str(next(model.parameters()).device).split(":")[0]
+
+    assert model_device == str(
+        device
+    ), f"Model is not on the right device, Model: {model_device}, Compute device: {device}"
 
     def predict_fn(block):
         raw_input = raw_array.to_ndarray(block.read_roi)
@@ -97,7 +105,7 @@ def predict(
             predictions = Array(
                 predictions,
                 block.write_roi.offset,
-                raw_array.voxel_size,
+                output_voxel_size,
                 axis_names,
                 raw_array.units,
             )
@@ -114,7 +122,7 @@ def predict(
     task = daisy.Task(
         f"predict_{out_container}_{out_dataset}",
         total_roi=input_roi,
-        read_roi=Roi((0, 0, 0), input_size),
+        read_roi=Roi((0,) * input_size.dims, input_size),
         write_roi=Roi(context, output_size),
         process_function=predict_fn,
         check_function=None,

@@ -1,6 +1,8 @@
 from .dataset import Dataset
 from funlib.persistence import Array
 
+import warnings
+
 
 class DummyDataset(Dataset):
     """
@@ -34,5 +36,11 @@ class DummyDataset(Dataset):
             This method is used to initialize the dataset.
         """
         super().__init__()
+
+        warnings.warn(
+            "DummyDataset is deprecated. Use SimpleDataset instead.",
+            DeprecationWarning,
+        )
+
         self.name = dataset_config.name
         self.raw = dataset_config.raw_config.array()

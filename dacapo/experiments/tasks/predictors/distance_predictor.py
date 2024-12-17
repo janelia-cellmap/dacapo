@@ -223,6 +223,10 @@ class DistancePredictor(Predictor):
             >>> predictor.create_distance_mask(distances, mask, voxel_size, normalize, normalize_args)
 
         """
+        no_channel_dim = len(mask.shape) == len(distances.shape) - 1
+        if no_channel_dim:
+            mask = mask[np.newaxis]
+
         mask_output = mask.copy()
         for i, (channel_distance, channel_mask) in enumerate(zip(distances, mask)):
             tmp = np.zeros(
@@ -231,9 +235,11 @@ class DistancePredictor(Predictor):
             )
             slices = tmp.ndim * (slice(1, -1),)
             tmp[slices] = channel_mask
+            sampling = tuple(float(v) / 2 for v in voxel_size)
+            sampling = sampling[-len(tmp.shape) :]
             boundary_distance = distance_transform_edt(
                 tmp,
-                sampling=voxel_size,
+                sampling=sampling,
             )
             if self.epsilon is None:
                 add = 0
@@ -273,6 +279,8 @@ class DistancePredictor(Predictor):
                     np.sum(channel_mask_output)
                 )
             )
+        if no_channel_dim:
+            mask_output = mask_output[0]
         return mask_output
 
     def process(
@@ -298,7 +306,20 @@ class DistancePredictor(Predictor):
             >>> predictor.process(labels, voxel_size, normalize, normalize_args)
 
         """
+
+        num_dims = len(labels.shape)
+        if num_dims == voxel_size.dims:
+            channel_dim = False
+        elif num_dims == voxel_size.dims + 1:
+            channel_dim = True
+        else:
+            raise ValueError("Cannot handle multiple channel dims")
+
+        if not channel_dim:
+            labels = labels[np.newaxis]
+
         all_distances = np.zeros(labels.shape, dtype=np.float32) - 1
+
         for ii, channel in enumerate(labels):
             boundaries = self.__find_boundaries(channel)
 
@@ -315,13 +336,15 @@ class DistancePredictor(Predictor):
                     distances = np.ones(channel.shape, dtype=np.float32) * max_distance
             else:
                 # get distances (voxel_size/2 because image is doubled)
-                distances = distance_transform_edt(
-                    boundaries, sampling=tuple(float(v) / 2 for v in voxel_size)
-                )
+                sampling = tuple(float(v) / 2 for v in voxel_size)
+                # fixing the sampling for 2D images
+                if len(boundaries.shape) < len(sampling):
+                    sampling = sampling[-len(boundaries.shape) :]
+                distances = distance_transform_edt(boundaries, sampling=sampling)
                 distances = distances.astype(np.float32)
 
                 # restore original shape
-                downsample = (slice(None, None, 2),) * len(voxel_size)
+                downsample = (slice(None, None, 2),) * distances.ndim
                 distances = distances[downsample]
 
                 # todo: inverted distance
@@ -354,7 +377,7 @@ class DistancePredictor(Predictor):
         # bound.: 00000001000100000001000      2n - 1
 
         if labels.dtype == bool:
-            raise ValueError("Labels should not be bools")
+            # raise ValueError("Labels should not be bools")
             labels = labels.astype(np.uint8)
 
         logger.debug(f"computing boundaries for {labels.shape}")

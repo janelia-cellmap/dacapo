@@ -55,12 +55,13 @@ class BinarizeArrayConfig(ArrayConfig):
         assert num_channels is None, "Input labels cannot have a channel dimension"
 
         def group_array(data):
-            out = da.zeros((len(self.groupings), *array.physical_shape), dtype=np.uint8)
-            for i, (_, group_ids) in enumerate(self.groupings):
-                if len(group_ids) == 0:
-                    out[i] = data != self.background
-                else:
-                    out[i] = da.isin(data, group_ids)
+            groups = [
+                da.isin(data, group_ids)
+                if len(group_ids) > 0
+                else data != self.background
+                for _, group_ids in self.groupings
+            ]
+            out = da.stack(groups, axis=0)
             return out
 
         data = group_array(array.data)

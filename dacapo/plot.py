@@ -427,7 +427,7 @@ def plot_runs(
             )
             colors_val = itertools.cycle(plt.cm.tab20.colors)
             for dataset in run.validation_scores.datasets:
-                dataset_data = validation_score_data.sel(datasets=dataset)
+                dataset_data = validation_score_data.sel(datasets=dataset.name)
                 include_validation_figure = True
                 x = [score.iteration for score in run.validation_scores.scores]
                 for i, cc in zip(range(dataset_data.data.shape[1]), colors_val):
