@@ -1,6 +1,6 @@
 from .datasplits import DataSplit
 from .tasks.task import Task
-from .architectures import Architecture
+from .architectures import ArchitectureConfig
 from .trainers import Trainer, GunpowderTrainer
 from .training_stats import TrainingStats
 from .validation_scores import ValidationScores
@@ -47,7 +47,7 @@ class Run:
     validation_interval: int
 
     task: Task
-    architecture: Architecture
+    architecture: ArchitectureConfig
     trainer: Trainer
     _datasplit: Optional[DataSplit]
 
@@ -60,38 +60,6 @@ class Run:
     def __init__(self, run_config, load_starter_model: bool = True):
         """
         Initializes a Run object.
-
-        Args:
-            run_config: The configuration for the run.
-        Raises:
-            AssertionError: If the task, architecture, trainer, or datasplit types are not specified in the run_config.
-        Examples:
-            >>> run = Run(run_config)
-            >>> run.name
-            'run_name'
-            >>> run.train_until
-            100
-            >>> run.validation_interval
-            10
-            >>> run.task
-            Task object
-            >>> run.architecture
-            Architecture object
-            >>> run.trainer
-            Trainer object
-            >>> run.datasplit
-            DataSplit object
-            >>> run.model
-            Model object
-            >>> run.optimizer
-            Optimizer object
-            >>> run.training_stats
-            TrainingStats object
-            >>> run.validation_scores
-            ValidationScores object
-            >>> run.start
-            Start object
-
         """
         self.name = run_config.name
         self._config = run_config
@@ -100,13 +68,12 @@ class Run:
 
         # config types
         task_type = run_config.task_config.task_type
-        architecture_type = run_config.architecture_config.architecture_type
         trainer_type = run_config.trainer_config.trainer_type
         datasplit_type = run_config.datasplit_config.datasplit_type
 
         # run components
         self.task = task_type(run_config.task_config)
-        self.architecture = architecture_type(run_config.architecture_config)
+        self.architecture = run_config.architecture_config
         self.trainer = trainer_type(run_config.trainer_config)
 
         # lazy load datasplit

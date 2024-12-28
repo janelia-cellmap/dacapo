@@ -72,12 +72,12 @@ class OneHotPredictor(Predictor):
             >>> model = predictor.create_model(architecture)
         """
 
-        if architecture.dims == 3:
+        if architecture.input_shape.dims == 3:
             conv_layer = torch.nn.Conv3d
-        elif architecture.dims == 2:
+        elif architecture.input_shape.dims == 2:
             conv_layer = torch.nn.Conv2d
         else:
-            raise Exception(f"Unsupported number of dimensions: {architecture.dims}")
+            raise Exception(f"Unsupported number of dimensions: {architecture.input_shape.dims}")
         head = conv_layer(
             architecture.num_out_channels,
             self.embedding_dims,
