@@ -9,7 +9,7 @@ import pytest
 @pytest.fixture()
 def dummy_architecture():
     yield DummyArchitectureConfig(
-        name="dummy_architecture", num_in_channels=1, num_out_channels=12
+        name="dummy_architecture", num_channels_in=1, num_channels_out=12
     )
 
 
@@ -17,7 +17,7 @@ def dummy_architecture():
 def unet_architecture():
     yield CNNectomeUNetConfig(
         name="tmp_unet_architecture",
-        input_shape=(1, 132, 132),
+        input_shape_=(1, 132, 132),
         eval_shape_increase=(1, 32, 32),
         fmaps_in=1,
         num_fmaps=8,
@@ -35,7 +35,7 @@ def unet_architecture():
 def unet_3d_architecture():
     yield CNNectomeUNetConfig(
         name="tmp_unet_3d_architecture",
-        input_shape=(188, 188, 188),
+        input_shape_=(188, 188, 188),
         eval_shape_increase=(72, 72, 72),
         fmaps_in=1,
         num_fmaps=6,
