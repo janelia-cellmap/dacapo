@@ -109,11 +109,11 @@ class ResampledArrayConfig(ArrayConfig):
                 axis_names=array.axis_names,
                 units=array.units,
             )
-        
+
     @property
     def upsample(self) -> Coordinate:
         return Coordinate(self._upsample)
-    
+
     @property
     def downsample(self) -> Coordinate:
         return Coordinate(self._downsample)
