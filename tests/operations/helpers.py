@@ -2,6 +2,7 @@ import numpy as np
 from funlib.persistence import prepare_ds
 from funlib.geometry import Coordinate
 
+from dacapo.experiments.trainers import GunpowderTrainerConfig
 from dacapo.experiments.datasplits import SimpleDataSplitConfig
 from dacapo.experiments.tasks import (
     DistanceTaskConfig,
@@ -11,6 +12,19 @@ from dacapo.experiments.tasks import (
 from dacapo.experiments.architectures import CNNectomeUNetConfig
 
 from pathlib import Path
+
+
+def build_test_train_config(multiprocessing: bool):
+    """
+    Builds the simplest possible trainer given the parameters.
+    """
+    return GunpowderTrainerConfig(
+        name="test_trainer",
+        batch_size=1,
+        learning_rate=0.0001,
+        num_data_fetchers=1 + multiprocessing,
+        snapshot_interval=1,
+    )
 
 
 def build_test_data_config(
@@ -104,9 +118,7 @@ def build_test_architecture_config(
     data_dims: int,
     architecture_dims: int,
     channels: bool,
-    batch_norm: bool,
     upsample: bool,
-    use_attention: bool,
     padding: str,
 ):
     """
@@ -160,7 +172,5 @@ def build_test_architecture_config(
         kernel_size_up=kernel_size_up,
         constant_upsample=True,
         upsample_factors=upsample_factors,
-        batch_norm=batch_norm,
-        use_attention=use_attention,
         padding=padding,
     )

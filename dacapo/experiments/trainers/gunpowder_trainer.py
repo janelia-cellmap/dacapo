@@ -361,7 +361,9 @@ class GunpowderTrainer(Trainer):
                     ),
                 }
                 if mask is not None:
-                    snapshot_arrays["volumes/mask"] = mask
+                    snapshot_arrays["volumes/mask"] = np_to_funlib_array(
+                        mask[0], offset=target.offset, voxel_size=target.voxel_size
+                    )
                 logger.warning(
                     f"Saving Snapshot. Iteration: {iteration}, "
                     f"Loss: {loss.detach().cpu().numpy().item()}!"
