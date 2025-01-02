@@ -207,6 +207,7 @@ class CNNectomeUNetConfig(ArchitectureConfig):
         """
         Scale the voxel size according to the upsampling factors.
         """
-        for upsample_factor in self.upsample_factors:
-            voxel_size = voxel_size / Coordinate(upsample_factor)
+        if self.upsample_factors is not None:
+            for upsample_factor in self.upsample_factors:
+                voxel_size = voxel_size / Coordinate(upsample_factor)
         return voxel_size
