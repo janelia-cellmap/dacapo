@@ -44,11 +44,15 @@ class ArchitectureConfig(ABC):
         pass
 
     @property
+    def dims(self) -> int:
+        return self.input_shape.dims
+
+    @property
     def eval_shape_increase(self) -> Coordinate:
         """
         Provides information about how much to increase the input shape during prediction.
         """
-        return Coordinate((0,) * self.input_shape.dims)
+        return Coordinate((0,) * self.dims)
 
     @property
     @abstractmethod

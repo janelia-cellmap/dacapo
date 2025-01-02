@@ -12,9 +12,9 @@ class DummyArchitectureConfig(ArchitectureConfig):
     A dummy architecture configuration class used for testing purposes.
     """
 
-    num_channels_in: int = attr.ib(metadata={"help_text": "Dummy attribute."})
+    _num_in_channels: int = attr.ib(metadata={"help_text": "Dummy attribute."})
 
-    num_channels_out: int = attr.ib(metadata={"help_text": "Dummy attribute."})
+    _num_out_channels: int = attr.ib(metadata={"help_text": "Dummy attribute."})
 
     def module(self) -> torch.nn.Module:
         return torch.nn.Conv3d(
@@ -27,8 +27,8 @@ class DummyArchitectureConfig(ArchitectureConfig):
 
     @property
     def num_in_channels(self):
-        return self.num_channels_in
+        return self._num_in_channels
 
     @property
     def num_out_channels(self):
-        return self.num_channels_out
+        return self._num_out_channels
