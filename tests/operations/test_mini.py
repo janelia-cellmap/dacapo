@@ -62,9 +62,7 @@ def test_mini(
         data_dims,
         architecture_dims,
         channels,
-        batch_norm,
         upsample,
-        use_attention,
         padding,
     )
 
