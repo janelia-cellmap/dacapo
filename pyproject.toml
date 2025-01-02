@@ -202,6 +202,7 @@ module = [
     "napari.*",
     "empanada.*",
     "IPython.*",
+    "xarray_multiscale.*"
 ]
 ignore_missing_imports = true
 
