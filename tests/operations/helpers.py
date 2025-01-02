@@ -104,9 +104,7 @@ def build_test_architecture_config(
     data_dims: int,
     architecture_dims: int,
     channels: bool,
-    batch_norm: bool,
     upsample: bool,
-    use_attention: bool,
     padding: str,
 ):
     """
@@ -160,7 +158,5 @@ def build_test_architecture_config(
         kernel_size_up=kernel_size_up,
         constant_upsample=True,
         upsample_factors=upsample_factors,
-        batch_norm=batch_norm,
-        use_attention=use_attention,
         padding=padding,
     )
