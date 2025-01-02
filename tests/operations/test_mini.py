@@ -95,4 +95,3 @@ def test_mini(
         )
     elif func == "validate":
         validate_run(run, 1)
-
