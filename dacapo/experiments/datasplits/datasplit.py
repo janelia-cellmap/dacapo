@@ -27,13 +27,17 @@ class DataSplit(ABC):
     train: List[Dataset]
     validate: Optional[List[Dataset]]
 
-    def _neuroglancer(self, embedded=False):
+    def _neuroglancer(self, embedded=False, bind_address="0.0.0.0", bind_port=0):
         """
         A method to visualize the data in Neuroglancer. It creates a Neuroglancer viewer and adds the layers of the training and validation datasets to it.
 
         Args:
             embedded : bool
                 A boolean flag to indicate if the Neuroglancer viewer is to be embedded in the notebook.
+            bind_address : str
+                Bind address for Neuroglancer webserver
+            bind_port : int
+                Bind port for Neuroglancer webserver
         Returns:
             viewer : obj
                 The Neuroglancer viewer object.
@@ -47,7 +51,9 @@ class DataSplit(ABC):
             It creates a Neuroglancer viewer and adds the layers of the training and validation datasets to it.
             Neuroglancer is a powerful tool for visualizing large-scale volumetric data.
         """
-        neuroglancer.set_server_bind_address("0.0.0.0")
+        neuroglancer.set_server_bind_address(
+            bind_address=bind_address, bind_port=bind_port
+        )
         viewer = neuroglancer.Viewer()
         with viewer.txn() as s:
             train_layers = {}

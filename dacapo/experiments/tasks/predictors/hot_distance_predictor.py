@@ -1,8 +1,7 @@
 from dacapo.experiments.arraytypes.probabilities import ProbabilityArray
 from .predictor import Predictor
 from dacapo.experiments import Model
-from dacapo.experiments.arraytypes import DistanceArray
-from dacapo.experiments.datasplits.datasets.arrays import NumpyArray
+from dacapo.tmp import np_to_funlib_array
 from dacapo.utils.balance_weights import balance_weights
 
 from funlib.geometry import Coordinate
@@ -49,7 +48,13 @@ class HotDistancePredictor(Predictor):
         This is a subclass of Predictor.
     """
 
-    def __init__(self, channels: List[str], scale_factor: float, mask_distances: bool):
+    def __init__(
+        self,
+        channels: List[str],
+        scale_factor: float,
+        mask_distances: bool,
+        kernel_size: int,
+    ):
         """
         Initializes the HotDistancePredictor.
 
@@ -64,6 +69,7 @@ class HotDistancePredictor(Predictor):
         Note:
             The channels argument is a list of strings, each string is the name of a class that is being segmented.
         """
+        self.kernel_size = kernel_size
         self.channels = (
             channels * 2
         )  # one hot + distance (TODO: add hot/distance to channel names)
@@ -119,11 +125,11 @@ class HotDistancePredictor(Predictor):
         """
         if architecture.dims == 2:
             head = torch.nn.Conv2d(
-                architecture.num_out_channels, self.embedding_dims, kernel_size=3
+                architecture.num_out_channels, self.embedding_dims, self.kernel_size
             )
         elif architecture.dims == 3:
             head = torch.nn.Conv3d(
-                architecture.num_out_channels, self.embedding_dims, kernel_size=3
+                architecture.num_out_channels, self.embedding_dims, self.kernel_size
             )
 
         return Model(architecture, head)
@@ -141,12 +147,11 @@ class HotDistancePredictor(Predictor):
         Examples:
             >>> target = predictor.create_target(gt)
         """
-        target = self.process(gt.data, gt.voxel_size, self.norm, self.dt_scale_factor)
-        return NumpyArray.from_np_array(
+        target = self.process(gt[:], gt.voxel_size, self.norm, self.dt_scale_factor)
+        return np_to_funlib_array(
             target,
-            gt.roi,
+            gt.roi.offset,
             gt.voxel_size,
-            gt.axes,
         )
 
     def create_weight(self, gt, target, mask, moving_class_counts=None):
@@ -170,7 +175,7 @@ class HotDistancePredictor(Predictor):
         one_hot_weights, one_hot_moving_class_counts = balance_weights(
             gt[target.roi],
             2,
-            slab=tuple(1 if c == "c" else -1 for c in gt.axes),
+            slab=tuple(1 if c == "c^" else -1 for c in gt.axis_names),
             masks=[mask[target.roi]],
             moving_counts=(
                 None
@@ -193,7 +198,7 @@ class HotDistancePredictor(Predictor):
         distance_weights, distance_moving_class_counts = balance_weights(
             gt[target.roi],
             2,
-            slab=tuple(1 if c == "c" else -1 for c in gt.axes),
+            slab=tuple(1 if c == "c^" else -1 for c in gt.axis_names),
             masks=[mask[target.roi], distance_mask],
             moving_counts=(
                 None
@@ -207,11 +212,10 @@ class HotDistancePredictor(Predictor):
             (one_hot_moving_class_counts, distance_moving_class_counts)
         )
         return (
-            NumpyArray.from_np_array(
+            np_to_funlib_array(
                 weights,
-                gt.roi,
+                gt.roi.offset,
                 gt.voxel_size,
-                gt.axes,
             ),
             moving_class_counts,
         )
@@ -389,6 +393,7 @@ class HotDistancePredictor(Predictor):
         # bound.: 00000001000100000001000      2n - 1
 
         logger.debug(f"computing boundaries for {labels.shape}")
+        labels = labels.astype(np.uint8)
 
         dims = len(labels.shape)
         in_shape = labels.shape

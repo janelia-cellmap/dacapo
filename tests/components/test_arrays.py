@@ -1,9 +1,11 @@
 from ..fixtures import *
 
 from dacapo.store.create_store import create_config_store
+from dacapo.tmp import num_channels_from_array
 
 import pytest
 from pytest_lazy_fixtures import lf
+from funlib.persistence import Array
 
 
 @pytest.mark.parametrize(
@@ -24,23 +26,23 @@ def test_array_api(options, array_config):
     assert fetched_array_config == array_config
 
     # Create Array from config
-    array = array_config.array_type(array_config)
+    array: Array = array_config.array("r+")
 
     # Test API
-    # channels/axes
-    if "c" in array.axes:
-        assert array.num_channels is not None
+    # channels/axis_names
+    if "c^" in array.axis_names:
+        assert num_channels_from_array(array) is not None
     else:
-        assert array.num_channels is None
+        assert num_channels_from_array(array) is None
     # dims/voxel_size/roi
-    assert array.dims == array.voxel_size.dims
-    assert array.dims == array.roi.dims
+    assert array.spatial_dims == array.voxel_size.dims
+    assert array.spatial_dims == array.roi.dims
     # fetching data:
     expected_data_shape = array.roi.shape / array.voxel_size
-    assert array[array.roi].shape[-array.dims :] == expected_data_shape
+    assert array[array.roi].shape[-array.spatial_dims :] == expected_data_shape
     # setting data:
-    if array.writable:
-        data_slice = array.data[0].copy()
-        array.data[0] = data_slice + 1
+    if array.is_writeable:
+        data_slice = array[0]
+        array[0] = data_slice + 1
         assert data_slice.sum() == 0
-        assert (array.data[0] - data_slice).sum() == data_slice.size
+        assert (array[0] - data_slice).sum() == data_slice.size

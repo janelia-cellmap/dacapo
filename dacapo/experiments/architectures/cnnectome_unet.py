@@ -3,6 +3,8 @@ from .architecture import Architecture
 import torch
 import torch.nn as nn
 
+from funlib.geometry import Coordinate
+
 import math
 
 
@@ -130,6 +132,7 @@ class CNNectomeUNet(Architecture):
                 activation after the upsample operation.
                 - use_attention (optional): Whether or not to use an attention block
                 in the U-Net.
+                - batch_norm (optional): Whether to use batch normalization.
         Raises:
             ValueError: If the input shape is not given.
         Examples:
@@ -170,11 +173,12 @@ class CNNectomeUNet(Architecture):
             self.upsample_factors if self.upsample_factors is not None else []
         )
         self.use_attention = architecture_config.use_attention
+        self.batch_norm = architecture_config.batch_norm
 
         self.unet = self.module()
 
     @property
-    def eval_shape_increase(self):
+    def eval_shape_increase(self) -> Coordinate:
         """
         The increase in shape due to the U-Net.
 
@@ -190,7 +194,7 @@ class CNNectomeUNet(Architecture):
         """
         if self._eval_shape_increase is None:
             return super().eval_shape_increase
-        return self._eval_shape_increase
+        return Coordinate(self._eval_shape_increase)
 
     def module(self):
         """
@@ -233,16 +237,15 @@ class CNNectomeUNet(Architecture):
         """
         fmaps_in = self.fmaps_in
         levels = len(self.downsample_factors) + 1
-        dims = len(self.downsample_factors[0])
 
-        if hasattr(self, "kernel_size_down"):
+        if self.kernel_size_down is not None:
             kernel_size_down = self.kernel_size_down
         else:
-            kernel_size_down = [[(3,) * dims, (3,) * dims]] * levels
-        if hasattr(self, "kernel_size_up"):
+            kernel_size_down = [[(3,) * self.dims, (3,) * self.dims]] * levels
+        if self.kernel_size_up is not None:
             kernel_size_up = self.kernel_size_up
         else:
-            kernel_size_up = [[(3,) * dims, (3,) * dims]] * (levels - 1)
+            kernel_size_up = [[(3,) * self.dims, (3,) * self.dims]] * (levels - 1)
 
         # downsample factors has to be a list of tuples
         downsample_factors = [tuple(x) for x in self.downsample_factors]
@@ -261,6 +264,7 @@ class CNNectomeUNet(Architecture):
             upsample_channel_contraction=[False]
             + [True] * (len(downsample_factors) - 1),
             use_attention=self.use_attention,
+            batch_norm=self.batch_norm,
         )
         if len(self.upsample_factors) > 0:
             layers = [unet]
@@ -277,8 +281,9 @@ class CNNectomeUNet(Architecture):
                 conv = ConvPass(
                     self.fmaps_out,
                     self.fmaps_out,
-                    [(3,) * len(upsample_factor)] * 2,
+                    kernel_size_up[-1],
                     activation="ReLU",
+                    batch_norm=self.batch_norm,
                 )
                 layers.append(conv)
             unet = torch.nn.Sequential(*layers)
@@ -302,11 +307,11 @@ class CNNectomeUNet(Architecture):
             The voxel size should be given as a tuple ``(z, y, x)``.
         """
         for upsample_factor in self.upsample_factors:
-            voxel_size = voxel_size / upsample_factor
+            voxel_size = voxel_size / Coordinate(upsample_factor)
         return voxel_size
 
     @property
-    def input_shape(self):
+    def input_shape(self) -> Coordinate:
         """
         Return the input shape of the U-Net.
 
@@ -320,7 +325,7 @@ class CNNectomeUNet(Architecture):
         Note:
             The input shape should be given as a tuple ``(batch, channels, [length,] depth, height, width)``.
         """
-        return self._input_shape
+        return Coordinate(self._input_shape)
 
     @property
     def num_in_channels(self) -> int:
@@ -455,6 +460,7 @@ class CNNectomeUNetModule(torch.nn.Module):
         upsample_channel_contraction=False,
         activation_on_upsample=False,
         use_attention=False,
+        batch_norm=True,
     ):
         """
         Create a U-Net::
@@ -573,6 +579,7 @@ class CNNectomeUNetModule(torch.nn.Module):
 
         self.dims = len(downsample_factors[0])
         self.use_attention = use_attention
+        self.batch_norm = batch_norm
 
         # default arguments
 
@@ -611,6 +618,7 @@ class CNNectomeUNetModule(torch.nn.Module):
                     kernel_size_down[level],
                     activation=activation,
                     padding=padding,
+                    batch_norm=self.batch_norm,
                 )
                 for level in range(self.num_levels)
             ]
@@ -668,6 +676,7 @@ class CNNectomeUNetModule(torch.nn.Module):
                                 ),
                                 dims=self.dims,
                                 upsample_factor=downsample_factors[level],
+                                batch_norm=self.batch_norm,
                             )
                             for level in range(self.num_levels - 1)
                         ]
@@ -694,6 +703,7 @@ class CNNectomeUNetModule(torch.nn.Module):
                             kernel_size_up[level],
                             activation=activation,
                             padding=padding,
+                            batch_norm=self.batch_norm,
                         )
                         for level in range(self.num_levels - 1)
                     ]
@@ -827,7 +837,13 @@ class ConvPass(torch.nn.Module):
     """
 
     def __init__(
-        self, in_channels, out_channels, kernel_sizes, activation, padding="valid"
+        self,
+        in_channels,
+        out_channels,
+        kernel_sizes,
+        activation,
+        padding="valid",
+        batch_norm=True,
     ):
         """
         Convolutional pass module. This module performs a series of
@@ -869,6 +885,15 @@ class ConvPass(torch.nn.Module):
 
             try:
                 layers.append(conv(in_channels, out_channels, kernel_size, padding=pad))
+                if batch_norm:
+                    layers.append(
+                        {
+                            2: torch.nn.BatchNorm2d,
+                            3: torch.nn.BatchNorm3d,
+                        }[
+                            self.dims
+                        ](out_channels)
+                    )
             except KeyError:
                 raise RuntimeError("%dD convolution not implemented" % self.dims)
 
@@ -1283,7 +1308,7 @@ class AttentionBlockModule(nn.Module):
            The AttentionBlockModule is an instance of the ``torch.nn.Module`` class.
     """
 
-    def __init__(self, F_g, F_l, F_int, dims, upsample_factor=None):
+    def __init__(self, F_g, F_l, F_int, dims, upsample_factor=None, batch_norm=True):
         """
         Initialize the Attention Block Module.
 
@@ -1306,13 +1331,19 @@ class AttentionBlockModule(nn.Module):
         super(AttentionBlockModule, self).__init__()
         self.dims = dims
         self.kernel_sizes = [(1,) * self.dims, (1,) * self.dims]
+        self.batch_norm = batch_norm
         if upsample_factor is not None:
             self.upsample_factor = upsample_factor
         else:
             self.upsample_factor = (2,) * self.dims
 
         self.W_g = ConvPass(
-            F_g, F_int, kernel_sizes=self.kernel_sizes, activation=None, padding="same"
+            F_g,
+            F_int,
+            kernel_sizes=self.kernel_sizes,
+            activation=None,
+            padding="same",
+            batch_norm=self.batch_norm,
         )
 
         self.W_x = nn.Sequential(
@@ -1322,6 +1353,7 @@ class AttentionBlockModule(nn.Module):
                 kernel_sizes=self.kernel_sizes,
                 activation=None,
                 padding="same",
+                batch_norm=self.batch_norm,
             ),
             Downsample(upsample_factor),
         )
@@ -1332,6 +1364,7 @@ class AttentionBlockModule(nn.Module):
             kernel_sizes=self.kernel_sizes,
             activation="Sigmoid",
             padding="same",
+            batch_norm=self.batch_norm,
         )
 
         up_mode = {2: "bilinear", 3: "trilinear"}[self.dims]

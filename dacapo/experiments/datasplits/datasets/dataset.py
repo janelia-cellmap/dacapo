@@ -1,5 +1,5 @@
-from .arrays import Array
 from funlib.geometry import Coordinate
+from funlib.persistence import Array
 from abc import ABC
 from typing import Optional, Any, List
 
@@ -90,7 +90,7 @@ class Dataset(ABC):
         Notes:
             This method is used to return the official string representation of the dataset object.
         """
-        return f"Dataset({self.name})"
+        return f"ds_{self.name.replace('/', '_')}"
 
     def __str__(self) -> str:
         """
@@ -109,7 +109,7 @@ class Dataset(ABC):
         Notes:
             This method is used to return the string representation of the dataset object.
         """
-        return f"Dataset({self.name})"
+        return f"ds_{self.name.replace('/', '_')}"
 
     def _neuroglancer_layers(self, prefix="", exclude_layers=None):
         """

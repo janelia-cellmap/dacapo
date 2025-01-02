@@ -1,4 +1,5 @@
 from dacapo.experiments.tasks import TaskConfig
+from dacapo.experiments.datasplits.datasets.arrays import ArrayConfig
 from upath import UPath as Path
 from typing import List, Union, Optional, Sequence
 from enum import Enum, EnumMeta
@@ -6,19 +7,21 @@ from funlib.geometry import Coordinate
 
 import zarr
 from zarr.n5 import N5FSStore
+import numpy as np
 from dacapo.experiments.datasplits.datasets.arrays import (
-    ZarrArrayConfig,
-    ZarrArray,
     ResampledArrayConfig,
     BinarizeArrayConfig,
     IntensitiesArrayConfig,
     ConcatArrayConfig,
     LogicalOrArrayConfig,
     ConstantArrayConfig,
+    CropArrayConfig,
+    ZarrArrayConfig,
 )
 from dacapo.experiments.datasplits import TrainValidateDataSplitConfig
 from dacapo.experiments.datasplits.datasets import RawGTDatasetConfig
 import logging
+
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +75,7 @@ def resize_if_needed(
     Notes:
         This function is used to resize the array if needed.
     """
-    zarr_array = ZarrArray(array_config)
+    zarr_array = array_config.array()
     raw_voxel_size = zarr_array.voxel_size
 
     raw_upsample = raw_voxel_size / target_resolution
@@ -82,6 +85,9 @@ def resize_if_needed(
         f"have different dimensions {zarr_array.dims}"
     )
     if any([u > 1 or d > 1 for u, d in zip(raw_upsample, raw_downsample)]):
+        print(
+            f"dataset {array_config} needs resampling to {target_resolution}, upsample: {raw_upsample}, downsample: {raw_downsample}"
+        )
         return ResampledArrayConfig(
             name=f"{extra_str}_{array_config.name}_{array_config.dataset}_resampled",
             source_array_config=array_config,
@@ -90,7 +96,41 @@ def resize_if_needed(
             interp_order=False,
         )
     else:
+        # print(f"dataset {array_config.dataset} does not need resampling found {raw_voxel_size}=={target_resolution}")
         return array_config
+
+
+def limit_validation_crop_size(gt_config, mask_config, max_size):
+    gt_array = gt_config.array()
+    voxel_shape = gt_array.roi.shape / gt_array.voxel_size
+    crop = False
+    while np.prod(voxel_shape) > max_size:
+        crop = True
+        max_idx = np.argmax(voxel_shape)
+        voxel_shape = Coordinate(
+            s if i != max_idx else s // 2 for i, s in enumerate(voxel_shape)
+        )
+    if crop:
+        crop_roi_shape = voxel_shape * gt_array.voxel_size
+        context = (gt_array.roi.shape - crop_roi_shape) / 2
+        crop_roi = gt_array.roi.grow(-context, -context)
+        crop_roi = crop_roi.snap_to_grid(gt_array.voxel_size, mode="shrink")
+
+        logger.debug(
+            f"Cropped {gt_config.name}: original roi: {gt_array.roi}, new_roi: {crop_roi}"
+        )
+
+        gt_config = CropArrayConfig(
+            name=gt_config.name + "_cropped",
+            source_array_config=gt_config,
+            roi=crop_roi,
+        )
+        mask_config = CropArrayConfig(
+            name=mask_config.name + "_cropped",
+            source_array_config=gt_config,
+            roi=crop_roi,
+        )
+    return gt_config, mask_config
 
 
 def get_right_resolution_array_config(
@@ -132,7 +172,7 @@ def get_right_resolution_array_config(
         snap_to_grid=target_resolution,
         mode="r",
     )
-    zarr_array = ZarrArray(zarr_config)
+    zarr_array = zarr_config.array()
     while (
         all([z < t for (z, t) in zip(zarr_array.voxel_size, target_resolution)])
         and Path(container, Path(dataset, f"s{level+1}")).exists()
@@ -146,7 +186,7 @@ def get_right_resolution_array_config(
             mode="r",
         )
 
-        zarr_array = ZarrArray(zarr_config)
+        zarr_array = zarr_config.array()
     return resize_if_needed(zarr_config, target_resolution, extra_str)
 
 
@@ -439,10 +479,14 @@ class DataSplitGenerator:
             The minimum raw value.
         raw_max : int
             The maximum raw value.
-        classes_separator_caracter : str
+        classes_separator_character : str
             The classes separator character.
+        max_validation_volume_size : int
+            The maximum validation volume size. Default is None. If None, the validation volume size is not limited.
+            else, the validation volume size is limited to the specified value.
+            e.g. 600**3 for 600^3 voxels = 216_000_000 voxels.
     Methods:
-        __init__(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_caracter)
+        __init__(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_character)
             Initializes the DataSplitGenerator class with the specified name, datasets, input resolution, output resolution, targets, segmentation type, maximum ground truth downsample, maximum ground truth upsample, maximum raw training downsample, maximum raw training upsample, maximum raw validation downsample, maximum raw validation upsample, minimum training volume size, minimum raw value, maximum raw value, and classes separator character.
         __str__(self)
             A method to get the string representation of the class.
@@ -482,8 +526,10 @@ class DataSplitGenerator:
         min_training_volume_size=8_000,  # 20**3
         raw_min=0,
         raw_max=255,
-        classes_separator_caracter="&",
+        classes_separator_character="&",
         use_negative_class=False,
+        max_validation_volume_size=None,
+        binarize_gt=False,
     ):
         """
         Initializes the DataSplitGenerator class with the specified:
@@ -503,6 +549,8 @@ class DataSplitGenerator:
         - minimum raw value
         - maximum raw value
         - classes separator character
+        - use negative class
+        - binarize ground truth
 
         Args:
             name : str
@@ -535,15 +583,19 @@ class DataSplitGenerator:
                 The minimum raw value.
             raw_max : int
                 The maximum raw value.
-            classes_separator_caracter : str
+            classes_separator_character : str
                 The classes separator character.
+            use_negative_class : bool
+                Whether to use negative classes.
+            binarize_gt : bool
+                Whether to binarize the ground truth as part of preprocessing. Use this if you are doing semantic segmentation on instance labels (where each object has a unique ID).
         Returns:
             obj : The DataSplitGenerator class.
         Raises:
             ValueError
             If the class name is already set, a ValueError is raised.
         Examples:
-            >>> DataSplitGenerator(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_caracter)
+            >>> DataSplitGenerator(name, datasets, input_resolution, output_resolution, targets, segmentation_type, max_gt_downsample, max_gt_upsample, max_raw_training_downsample, max_raw_training_upsample, max_raw_validation_downsample, max_raw_validation_upsample, min_training_volume_size, raw_min, raw_max, classes_separator_character)
         Notes:
             This function is used to initialize the DataSplitGenerator class with the specified name, datasets, input resolution, output resolution, targets, segmentation type, maximum ground truth downsample, maximum ground truth upsample, maximum raw training downsample, maximum raw training upsample, maximum raw validation downsample, maximum raw validation upsample, minimum training volume size, minimum raw value, maximum raw value, and classes separator character.
 
@@ -571,8 +623,10 @@ class DataSplitGenerator:
         self.min_training_volume_size = min_training_volume_size
         self.raw_min = raw_min
         self.raw_max = raw_max
-        self.classes_separator_caracter = classes_separator_caracter
+        self.classes_separator_character = classes_separator_character
         self.use_negative_class = use_negative_class
+        self.max_validation_volume_size = max_validation_volume_size
+        self.binarize_gt = binarize_gt
         if use_negative_class:
             if targets is None:
                 raise ValueError(
@@ -616,6 +670,11 @@ class DataSplitGenerator:
         Notes:
             This function is used to get the class name.
         """
+        if self._class_name is None:
+            if self.targets is None:
+                logger.warning("Both targets and class name are None.")
+                return None
+            self._class_name = self.targets
         return self._class_name
 
     # Goal is to force class_name to be set only once, so we have the same classes for all datasets
@@ -666,7 +725,7 @@ class DataSplitGenerator:
 
         """
         datasets, classes = format_class_name(
-            class_name, self.classes_separator_caracter, self.targets
+            class_name, self.classes_separator_character, self.targets
         )
         if self.class_name is None:
             self.class_name = classes
@@ -730,28 +789,33 @@ class DataSplitGenerator:
                 gt_config,
                 mask_config,
             ) = self.__generate_semantic_seg_dataset_crop(dataset)
+            if type(self.class_name) == list:
+                classes = self.classes_separator_character.join(self.class_name)
+            else:
+                classes = self.class_name
             if dataset.dataset_type == DatasetType.train:
                 train_dataset_configs.append(
                     RawGTDatasetConfig(
-                        name=f"{dataset}_{self.class_name}_{self.output_resolution[0]}nm",
+                        name=f"{dataset}_{gt_config.name}_{classes}_{self.output_resolution[0]}nm",
                         raw_config=raw_config,
                         gt_config=gt_config,
                         mask_config=mask_config,
                     )
                 )
             else:
+                if self.max_validation_volume_size is not None:
+                    gt_config, mask_config = limit_validation_crop_size(
+                        gt_config, mask_config, self.max_validation_volume_size
+                    )
                 validation_dataset_configs.append(
                     RawGTDatasetConfig(
-                        name=f"{dataset}_{self.class_name}_{self.output_resolution[0]}nm",
+                        name=f"{dataset}_{gt_config.name}_{classes}_{self.output_resolution[0]}nm",
                         raw_config=raw_config,
                         gt_config=gt_config,
                         mask_config=mask_config,
                     )
                 )
-        if type(self.class_name) == list:
-            classes = self.classes_separator_caracter.join(self.class_name)
-        else:
-            classes = self.class_name
+
         return TrainValidateDataSplitConfig(
             name=f"{self.name}_{self.segmentation_type}_{classes}_{self.output_resolution[0]}nm",
             train_configs=train_dataset_configs,
@@ -815,7 +879,7 @@ class DataSplitGenerator:
         organelle_arrays = {}
         # classes_datasets, classes = self.check_class_name(gt_dataset)
         classes_datasets, classes = format_class_name(
-            gt_dataset, self.classes_separator_caracter
+            gt_dataset, self.classes_separator_character, self.targets
         )
         for current_class_dataset, current_class_name in zip(classes_datasets, classes):
             if not (gt_path / current_class_dataset).exists():
@@ -837,11 +901,12 @@ class DataSplitGenerator:
                     self.output_resolution,
                     "gt",
                 )
-            # gt_config = BinarizeArrayConfig(
-            #     f"{dataset}_{current_class_name}_{self.output_resolution[0]}nm_binarized",
-            #     source_array_config=gt_config,
-            #     groupings=[(current_class_name, [])],
-            # )
+            if self.binarize_gt:
+                gt_config = BinarizeArrayConfig(
+                    f"{dataset}_{current_class_name}_{self.output_resolution[0]}nm_binarized",
+                    source_array_config=gt_config,
+                    groupings=[(current_class_name, [])],
+                )
             organelle_arrays[current_class_name] = gt_config
 
         if self.targets is None:
@@ -851,8 +916,8 @@ class DataSplitGenerator:
             current_targets = self.targets
             targets_str = "_".join(self.targets)
 
-        target_images = {}
-        target_masks = {}
+        target_images = dict[str, ArrayConfig]()
+        target_masks = dict[str, ArrayConfig]()
 
         missing_classes = [c for c in current_targets if c not in classes]
         found_classes = [c for c in current_targets if c in classes]
@@ -898,23 +963,23 @@ class DataSplitGenerator:
                 constant=1,
             )
 
-        if len(target_images) > 1:
-            gt_config = ConcatArrayConfig(
-                name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_gt",
-                channels=[organelle for organelle in current_targets],
-                # source_array_configs={k: gt for k, gt in target_images.items()},
-                source_array_configs={k: target_images[k] for k in current_targets},
-            )
-            mask_config = ConcatArrayConfig(
-                name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_mask",
-                channels=[organelle for organelle in current_targets],
-                # source_array_configs={k: mask for k, mask in target_masks.items()},
-                # to be sure to have the same order
-                source_array_configs={k: target_masks[k] for k in current_targets},
-            )
-        else:
-            gt_config = list(target_images.values())[0]
-            mask_config = list(target_masks.values())[0]
+        # if len(target_images) > 1:
+        gt_config = ConcatArrayConfig(
+            name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_gt",
+            channels=[organelle for organelle in current_targets],
+            # source_array_configs={k: gt for k, gt in target_images.items()},
+            source_array_configs={k: target_images[k] for k in current_targets},
+        )
+        mask_config = ConcatArrayConfig(
+            name=f"{dataset}_{targets_str}_{self.output_resolution[0]}nm_mask",
+            channels=[organelle for organelle in current_targets],
+            # source_array_configs={k: mask for k, mask in target_masks.items()},
+            # to be sure to have the same order
+            source_array_configs={k: target_masks[k] for k in current_targets},
+        )
+        # else:
+        #     gt_config = list(target_images.values())[0]
+        #     mask_config = list(target_masks.values())[0]
 
         return raw_config, gt_config, mask_config
 

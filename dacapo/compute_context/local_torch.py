@@ -56,10 +56,16 @@ class LocalTorch(ComputeContext):
         if self._device is None:
             if torch.cuda.is_available():
                 # TODO: make this more sophisticated, for multiple GPUs for instance
-                free = torch.cuda.mem_get_info()[0] / 1024**3
-                if free < self.oom_limit:  # less than 1 GB free, decrease chance of OOM
-                    return torch.device("cpu")
+                # commented out code below is for checking free memory and falling back on CPU, whhen model in GPU and memory is low model get moved to CPU
+                # free = torch.cuda.mem_get_info()[0] / 1024**3
+                # if free < self.oom_limit:  # less than 1 GB free, decrease chance of OOM
+                #     return torch.device("cpu")
                 return torch.device("cuda")
+            # Multiple MPS ops are not available yet : https://github.com/pytorch/pytorch/issues/77764
+            # got error aten::max_pool3d_with_indices
+            # can be back when mps is fixed
+            # elif torch.backends.mps.is_available():
+            #     return torch.device("mps")
             else:
                 return torch.device("cpu")
         return torch.device(self._device)
