@@ -48,10 +48,10 @@ class ResampledArrayConfig(ArrayConfig):
         metadata={"help_text": "The Array that you want to upsample or downsample."}
     )
 
-    upsample: Coordinate = attr.ib(
+    _upsample: Coordinate = attr.ib(
         metadata={"help_text": "The amount by which to upsample!"}
     )
-    downsample: Coordinate = attr.ib(
+    _downsample: Coordinate = attr.ib(
         metadata={"help_text": "The amount by which to downsample!"}
     )
     interp_order: bool = attr.ib(
@@ -109,6 +109,14 @@ class ResampledArrayConfig(ArrayConfig):
                 axis_names=array.axis_names,
                 units=array.units,
             )
+        
+    @property
+    def upsample(self) -> Coordinate:
+        return Coordinate(self._upsample)
+    
+    @property
+    def downsample(self) -> Coordinate:
+        return Coordinate(self._downsample)
 
     def array(self, mode: str = "r") -> Array:
         source_array = self.source_array_config.array(mode)
