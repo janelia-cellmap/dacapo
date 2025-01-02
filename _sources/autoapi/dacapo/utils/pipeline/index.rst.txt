@@ -78,7 +78,7 @@ Module Contents
 
 
 
-.. py:class:: MakeRaw
+.. py:class:: MakeRaw(raw, labels, gaussian_noise_args: Iterable = (0.5, 0.1), gaussian_noise_lim: float = 0.3, gaussian_blur_args: Iterable = (0.5, 1.5), membrane_like=True, membrane_size=3, inside_value=0.5)
 
 
 
@@ -142,42 +142,39 @@ Module Contents
       
 
 
-   .. py:class:: Pipeline(raw, labels, gaussian_noise_args: Iterable = (0.5, 0.1), gaussian_noise_lim: float = 0.3, gaussian_blur_args: Iterable = (0.5, 1.5), membrane_like=True, membrane_size=3, inside_value=0.5)
-
-      .. py:attribute:: raw
+   .. py:attribute:: raw
 
 
-      .. py:attribute:: labels
+   .. py:attribute:: labels
 
 
-      .. py:attribute:: gaussian_noise_args
-         :value: (0.5, 0.1)
+   .. py:attribute:: gaussian_noise_args
+      :value: (0.5, 0.1)
 
 
 
-      .. py:attribute:: gaussian_noise_lim
-         :value: 0.3
+   .. py:attribute:: gaussian_noise_lim
+      :value: 0.3
 
 
 
-      .. py:attribute:: gaussian_blur_args
-         :value: (0.5, 1.5)
+   .. py:attribute:: gaussian_blur_args
+      :value: (0.5, 1.5)
 
 
 
-      .. py:attribute:: membrane_like
-         :value: True
+   .. py:attribute:: membrane_like
+      :value: True
 
 
 
-      .. py:attribute:: membrane_size
-         :value: 3
+   .. py:attribute:: membrane_size
+      :value: 3
 
 
 
-      .. py:attribute:: inside_value
-         :value: 0.5
-
+   .. py:attribute:: inside_value
+      :value: 0.5
 
 
 
