@@ -71,7 +71,7 @@ def create_from_identifier(
     return prepare_ds(
         out_path,
         shape=(*list_num_channels, *roi.shape / voxel_size),
-        offset=roi.offset / voxel_size,
+        offset=roi.offset,
         voxel_size=voxel_size,
         axis_names=axis_names,
         dtype=dtype,
