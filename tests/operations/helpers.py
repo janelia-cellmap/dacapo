@@ -161,7 +161,7 @@ def build_test_architecture_config(
 
     return CNNectomeUNetConfig(
         name="test_cnnectome_unet",
-        input_shape_=input_shape,
+        input_shape=input_shape,
         eval_shape_increase=eval_shape_increase,
         fmaps_in=1 + channels,
         num_fmaps=2,

@@ -12,7 +12,7 @@ class WrappedArchitectureConfig(ArchitectureConfig):
     A thin wrapper allowing users to pass in any architecture they want
     """
 
-    module_: torch.nn.Module = attr.ib(
+    _module: torch.nn.Module = attr.ib(
         metadata={"help_text": "The `torch.nn.Module` you would like to use"}
     )
 
@@ -26,14 +26,14 @@ class WrappedArchitectureConfig(ArchitectureConfig):
         }
     )
 
-    input_shape_: Coordinate = attr.ib(
+    _input_shape: Coordinate = attr.ib(
         metadata={
             "help_text": "The input shape spatial dimensions (t,z,y,x). "
             "Does not include batch or channel dimension shapes"
         }
     )
 
-    scale_: Coordinate | None = attr.ib(
+    _scale: Coordinate | None = attr.ib(
         default=None,
         metadata={
             "help_text": "The amount by which to scale each dimension in case of up or down scaling networks"
@@ -41,11 +41,11 @@ class WrappedArchitectureConfig(ArchitectureConfig):
     )
 
     def module(self) -> torch.nn.Module:
-        return self.module_
+        return self._module
 
     @property
     def input_shape(self):
-        return self.input_shape_
+        return Coordinate(self._input_shape)
 
     @property
     def num_in_channels(self):
@@ -56,7 +56,7 @@ class WrappedArchitectureConfig(ArchitectureConfig):
         return self.fmaps_out
 
     def scale(self, input_voxel_size: Coordinate) -> Coordinate:
-        if self.scale_ is not None:
-            return input_voxel_size // self.scale_
+        if self._scale is not None:
+            return input_voxel_size // self._scale
         else:
             return input_voxel_size

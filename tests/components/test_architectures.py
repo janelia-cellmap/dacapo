@@ -80,7 +80,7 @@ def build_test_architecture_config(
 
     cnnectom_unet_config = CNNectomeUNetConfig(
         name="test_cnnectome_unet",
-        input_shape_=input_shape,
+        input_shape=input_shape,
         eval_shape_increase=eval_shape_increase,
         fmaps_in=1 + channels,
         num_fmaps=2,
@@ -99,11 +99,11 @@ def build_test_architecture_config(
     if wrapped:
         return WrappedArchitectureConfig(
             name="test_wrapped",
-            module_=cnnectom_unet_config.module(),
+            module=cnnectom_unet_config.module(),
             fmaps_in=1 + channels,
             fmaps_out=2,
-            input_shape_=input_shape,
-            scale_=Coordinate(upsample_factors[0]) if upsample else None,
+            input_shape=input_shape,
+            scale=Coordinate(upsample_factors[0]) if upsample else None,
         )
     else:
         return cnnectom_unet_config
