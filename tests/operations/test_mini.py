@@ -78,21 +78,21 @@ def test_mini(
 
     if func == "train":
         train_run(run)
+        array_store = create_array_store()
+        snapshot_container = array_store.snapshot_container(run.name).container
+        assert snapshot_container.exists()
+        assert all(
+            x in zarr.open(snapshot_container)
+            for x in [
+                "0/volumes/raw",
+                "0/volumes/gt",
+                "0/volumes/target",
+                "0/volumes/weight",
+                "0/volumes/prediction",
+                "0/volumes/gradients",
+                "0/volumes/mask",
+            ]
+        )
     elif func == "validate":
         validate_run(run, 1)
 
-    array_store = create_array_store()
-    snapshot_container = array_store.snapshot_container(run.name).container
-    assert snapshot_container.exists()
-    assert all(
-        x in zarr.open(snapshot_container)
-        for x in [
-            "0/volumes/raw",
-            "0/volumes/gt",
-            "0/volumes/target",
-            "0/volumes/weight",
-            "0/volumes/prediction",
-            "0/volumes/gradients",
-            "0/volumes/mask",
-        ]
-    )
