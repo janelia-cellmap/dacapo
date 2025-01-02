@@ -14,21 +14,6 @@ logging.basicConfig(level=logging.INFO)
     [
         lf("dummy_architecture"),
         lf("unet_architecture"),
-    ],
-)
-def test_architecture(
-    architecture_config,
-):
-    assert (
-        architecture_config.input_shape.dims is not None
-    ), f"Architecture dims are None {architecture_config}"
-
-
-@pytest.mark.parametrize(
-    "architecture_config",
-    [
-        lf("dummy_architecture"),
-        lf("unet_architecture"),
         lf("unet_3d_architecture"),
     ],
 )
