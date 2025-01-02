@@ -36,7 +36,7 @@ def test_stored_architecture(
     architecture = retrieved_arch_config
 
     assert (
-        architecture.input_shape.dims is not None
+        architecture.dims is not None
     ), f"Architecture dims are None {architecture}"
 
 

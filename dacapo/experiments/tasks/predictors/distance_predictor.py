@@ -115,11 +115,11 @@ class DistancePredictor(Predictor):
         Examples:
             >>> model = predictor.create_model(architecture)
         """
-        if architecture.input_shape.dims == 2:
+        if architecture.dims == 2:
             head = torch.nn.Conv2d(
                 architecture.num_out_channels, self.embedding_dims, kernel_size=1
             )
-        elif architecture.input_shape.dims == 3:
+        elif architecture.dims == 3:
             head = torch.nn.Conv3d(
                 architecture.num_out_channels, self.embedding_dims, kernel_size=1
             )
