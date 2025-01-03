@@ -1,4 +1,4 @@
-from dacapo.experiments.architectures.architecture import Architecture
+from dacapo.experiments.architectures.architecture import ArchitectureConfig
 
 from funlib.geometry import Coordinate
 
@@ -43,7 +43,7 @@ class Model(torch.nn.Module):
 
     def __init__(
         self,
-        architecture: Architecture,
+        architecture: ArchitectureConfig,
         prediction_head: torch.nn.Module,
         eval_activation: torch.nn.Module | None = None,
     ):
@@ -87,7 +87,7 @@ class Model(torch.nn.Module):
 
         self.architecture = architecture
         self.prediction_head = prediction_head
-        self.chain = torch.nn.Sequential(architecture, prediction_head)
+        self.chain = torch.nn.Sequential(architecture.module(), prediction_head)
         self.num_in_channels = architecture.num_in_channels
 
         self.input_shape = architecture.input_shape
