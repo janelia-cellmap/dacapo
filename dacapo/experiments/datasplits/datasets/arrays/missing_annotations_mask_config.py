@@ -4,7 +4,7 @@ from .array_config import ArrayConfig
 
 from typing import List, Tuple
 from funlib.persistence import Array
-from fibsem_tools.metadata.groundtruth import LabelList
+from cellmap_schemas.annotation import LabelList
 
 import dask.array as da
 
