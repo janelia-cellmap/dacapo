@@ -130,6 +130,15 @@ class CNNectomeUNetConfig(ArchitectureConfig):
         default=False,
         metadata={"help_text": "Whether to use batch normalization."},
     )
+    @property
+    def input_shape(self) -> Coordinate:
+        return self._input_shape
+    @property
+    def input_shape(self) -> Coordinate:
+        return Coordinate(self._input_shape)
+    @input_shape.setter
+    def input_shape(self, value: Coordinate):
+        self._input_shape = value
 
     def module(self) -> torch.nn.Module:
         fmaps_in = self.fmaps_in
