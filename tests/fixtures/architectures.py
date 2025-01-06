@@ -9,7 +9,7 @@ import pytest
 @pytest.fixture()
 def dummy_architecture():
     yield DummyArchitectureConfig(
-        name="dummy_architecture", num_channels_in=1, num_channels_out=12
+        name="dummy_architecture", num_in_channels=1, num_out_channels=12
     )
 
 
