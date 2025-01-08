@@ -59,6 +59,7 @@ dependencies = [
         "boto3",
         "matplotlib",
         "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence.git@ome-ngff"
+        "xarray-multiscale",
         ]
 
 # extras
@@ -201,6 +202,7 @@ module = [
     "napari.*",
     "empanada.*",
     "IPython.*",
+    "xarray_multiscale.*"
 ]
 ignore_missing_imports = true
 
