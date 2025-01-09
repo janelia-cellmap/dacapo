@@ -59,9 +59,10 @@ def cellmap_array(tmp_path):
     )
 
     yield cellmap_array_config
+
     
-@pytest.fixture(scope="session")
-def metadata_ome_zarr():
+@pytest.fixture()
+def multiscale_zarr(tmp_path):
     zarr_metadata = {
         "multiscales": [
             {
@@ -81,8 +82,8 @@ def metadata_ome_zarr():
                         },
                         {
                         "coordinateTransformations": [
-                            {"type": "scale","scale": [8.4,14.8,11.2]},
-                            {"type": "translation","translation": [8.1,13.7,4.8]}
+                            {"type": "scale","scale": [1.0,2.0,4.0]},
+                            {"type": "translation","translation": [12.0, 12.0, 12.0]}
                         ],
                         "path": "s1"
                         }
@@ -92,15 +93,14 @@ def metadata_ome_zarr():
             }
         ]
     }
-    return zarr_metadata
-
+    ome_zarr_array_config = ZarrArrayConfig(
+        name="ome_zarr_array",
+        file_name=tmp_path / "ome_zarr_array.zarr",
+        dataset="multiscale_dataset/s1",
+        ome_metadata=True,
+    )
     
-@pytest.fixture(scope="session")
-def multiscale_dataset(tmp_path, metadata_ome_zarr):
-    path = tmp_path.mktemp("test", numbered=False)
-    test_zarr_path = path / "multiscale_zarr_dataset.zarr"
-    
-    store = zarr.DirectoryStore(test_zarr_path)
+    store = zarr.DirectoryStore(ome_zarr_array_config.file_name)
     multiscale_group = zarr.group(store=store, path="multiscale_dataset", overwrite=True)
 
     for level in [0,1]:
@@ -113,6 +113,6 @@ def multiscale_dataset(tmp_path, metadata_ome_zarr):
             compressor=Zstd(level=6),
         )
 
-    multiscale_group.attrs.update(metadata_ome_zarr)
+    multiscale_group.attrs.update(zarr_metadata)
 
-    yield multiscale_group
+    yield ome_zarr_array_config

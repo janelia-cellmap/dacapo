@@ -62,7 +62,9 @@ class ZarrArrayConfig(ArrayConfig):
 
     def array(self, mode="r"):
         if self.ome_metadata:
-            return open_ome_ds(f"{self.file_name}/{self.dataset}", mode=mode)
+            name = self.dataset.split("/")[-1]
+            dataset = self.dataset.replace(f"/{name}", "")
+            return open_ome_ds(f"{self.file_name}/{dataset}",name = name, mode=mode)
         else:
             return open_ds(f"{self.file_name}/{self.dataset}", mode=mode)
 
