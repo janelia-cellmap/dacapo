@@ -15,6 +15,7 @@ from dacapo.experiments.run import RunConfig
 from dacapo.train import train_run
 import zarr
 
+
 class TestDacapoPipeline(unittest.TestCase):
     def setUp(self):
         """Set up shared resources for tests."""
@@ -46,8 +47,12 @@ class TestDacapoPipeline(unittest.TestCase):
             voxel_size=self.voxel_size,
             dtype=np.uint8,
         )
-        cell_mask = np.clip(gaussian(self.cell_data[1] / 255.0, sigma=1), 0, 255) * 255 > 30
-        not_membrane_mask = np.clip(gaussian(self.cell_data[0] / 255.0, sigma=1), 0, 255) * 255 < 10
+        cell_mask = (
+            np.clip(gaussian(self.cell_data[1] / 255.0, sigma=1), 0, 255) * 255 > 30
+        )
+        not_membrane_mask = (
+            np.clip(gaussian(self.cell_data[0] / 255.0, sigma=1), 0, 255) * 255 < 10
+        )
         mask_array[mask_array.roi] = cell_mask * not_membrane_mask
         self.assertTrue(np.any(mask_array.to_ndarray(mask_array.roi)))
 
@@ -66,7 +71,9 @@ class TestDacapoPipeline(unittest.TestCase):
 
     def test_generate_affinities(self):
         """Test generating affinities."""
-        labels_array = np.random.randint(0, 5, size=self.cell_data.shape[1:], dtype=np.uint8)
+        labels_array = np.random.randint(
+            0, 5, size=self.cell_data.shape[1:], dtype=np.uint8
+        )
         affs_array = prepare_ds(
             "test_cells3d.zarr",
             "affs",
@@ -77,7 +84,11 @@ class TestDacapoPipeline(unittest.TestCase):
         )
         affs = seg_to_affgraph(
             labels_array,
-            neighborhood=[Coordinate(1, 0, 0), Coordinate(0, 1, 0), Coordinate(0, 0, 1)],
+            neighborhood=[
+                Coordinate(1, 0, 0),
+                Coordinate(0, 1, 0),
+                Coordinate(0, 0, 1),
+            ],
         )
         affs_array[affs_array.roi] = affs * 255
         self.assertEqual(affs_array.shape, (3, *self.cell_data.shape[1:]))
@@ -107,9 +118,13 @@ class TestDacapoPipeline(unittest.TestCase):
     def test_training(self):
         """Test training functionality."""
         datasplit_config = self.config_store.retrieve_datasplit_config("test_data")
-        affs_task_config = AffinitiesTaskConfig(name="test_affs", neighborhood=[(0, 1, 0), (0, 0, 1)])
+        affs_task_config = AffinitiesTaskConfig(
+            name="test_affs", neighborhood=[(0, 1, 0), (0, 0, 1)]
+        )
         self.config_store.store_task_config(affs_task_config)
-        architecture_config = CNNectomeUNetConfig(name="test_unet", input_shape=(2, 64, 64))
+        architecture_config = CNNectomeUNetConfig(
+            name="test_unet", input_shape=(2, 64, 64)
+        )
         trainer_config = GunpowderTrainerConfig(name="test_trainer", batch_size=2)
         run_config = RunConfig(
             name="test_run",
@@ -125,6 +140,7 @@ class TestDacapoPipeline(unittest.TestCase):
         stats_store = create_stats_store()
         training_stats = stats_store.retrieve_training_stats("test_run")
         self.assertIsNotNone(training_stats)
+
 
 if __name__ == "__main__":
     unittest.main()
