@@ -2,7 +2,7 @@ from .array import Array
 
 from funlib.geometry import Coordinate, Roi
 
-from fibsem_tools.metadata.groundtruth import LabelList
+from cellmap_schemas.annotation import LabelList
 
 import neuroglancer
 
