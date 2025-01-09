@@ -64,9 +64,9 @@ class ZarrArrayConfig(ArrayConfig):
         if self.ome_metadata:
             name = self.dataset.split("/")[-1]
             dataset = self.dataset.replace(f"/{name}", "")
-            return open_ome_ds(f"{self.file_name}/{dataset}",name = name, mode=mode)
+            return open_ome_ds(self.file_name / dataset, name=name, mode=mode)
         else:
-            return open_ds(f"{self.file_name}/{self.dataset}", mode=mode)
+            return open_ds(self.file_name / self.dataset, mode=mode)
 
     def verify(self) -> Tuple[bool, str]:
         """
