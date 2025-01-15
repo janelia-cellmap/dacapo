@@ -1,5 +1,9 @@
 import attr
+import tempfile
+import hashlib
+import numpy as np
 
+from dacapo.store.converter import converter
 from .architectures import ArchitectureConfig
 from .datasplits import DataSplitConfig, DataSplit
 from .tasks import TaskConfig, Task
@@ -8,9 +12,38 @@ from .starts import StartConfig
 from .training_stats import TrainingStats
 from .validation_scores import ValidationScores
 
+from bioimageio.core import test_model
+from bioimageio.spec import save_bioimageio_package
+from bioimageio.spec.model.v0_5 import (
+    ModelDescr,
+    WeightsDescr,
+    PytorchStateDictWeightsDescr,
+    Author,
+    CiteEntry,
+    LicenseId,
+    HttpUrl,
+    ArchitectureFromLibraryDescr,
+    OutputTensorDescr,
+    InputTensorDescr,
+    BatchAxis,
+    ChannelAxis,
+    SpaceInputAxis,
+    SpaceOutputAxis,
+    Identifier,
+    AxisId,
+    TensorId,
+    SizeReference,
+    FileDescr,
+    Doi,
+    IntervalOrRatioDataDescr,
+    ParameterizedSize,
+    Version,
+)
+
 import torch
 
 from typing import Optional
+from pathlib import Path
 
 
 @attr.s
@@ -156,7 +189,7 @@ class RunConfig:
                     self._model, None
                 )
         return self._model
-    
+
     @model.setter
     def model(self, value: torch.nn.Module):
         self._model = value
@@ -172,7 +205,7 @@ class RunConfig:
         if self._training_stats is None:
             self._training_stats = TrainingStats()
         return self._training_stats
-    
+
     @training_stats.setter
     def training_stats(self, value: TrainingStats):
         self._training_stats = value
@@ -270,3 +303,116 @@ class RunConfig:
                 array_store.snapshot_container(self.name),
             )
         self.trainer.visualize_pipeline(bind_address, bind_port)
+
+    def save_bioimage_io_model(
+        self,
+        path: Path,
+        authors: list[Author],
+        cite: list[CiteEntry] | None = None,
+        license: str = "MIT",
+        input_test_image_path: Path | None = None,
+        output_test_image_path: Path | None = None,
+    ):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            input_axes = [BatchAxis(), ChannelAxis(channel_names=[Identifier("raw")])]
+            input_shape = self.architecture.input_shape
+            input_axes += [
+                SpaceInputAxis(
+                    id=AxisId(f"d{i}"), size=ParameterizedSize(min=s, step=s)
+                ) for i, s in enumerate(input_shape)
+            ]
+            data_descr = IntervalOrRatioDataDescr(type="float32")
+
+            if input_test_image_path is None:
+                input_test_image_path = tmp / "input_test_image.npy"
+                test_image = np.random.random(
+                    (
+                        1,
+                        self.architecture.num_in_channels,
+                        *self.architecture.input_shape,
+                    )
+                ).astype(np.float32)
+                np.save(input_test_image_path, test_image)
+                print(input_test_image_path, input_test_image_path.exists())
+            input_descr = InputTensorDescr(
+                id=TensorId("raw"),
+                axes=input_axes,
+                test_tensor=FileDescr(source=input_test_image_path),
+                data=data_descr,
+            )
+
+            output_shape = self.model.compute_output_shape(input_shape)[1]
+            context = (input_shape - output_shape)
+            print(context)
+
+            output_axes = [
+                BatchAxis(),
+                ChannelAxis(channel_names=self.task.channels),
+            ]
+            output_axes += [
+                SpaceOutputAxis(
+                    id=AxisId(f"d{i}"),
+                    size=SizeReference(tensor_id=TensorId("raw"), axis_id=AxisId(f"d{i}"), offset=-c),
+                ) for i, c in enumerate(context)
+            ]
+            if output_test_image_path is None:
+                output_test_image_path = tmp / "output_test_image.npy"
+                test_image = (
+                    self.model(torch.from_numpy(test_image).float()).detach().numpy()
+                )
+                np.save(output_test_image_path, test_image)
+            output_descr = OutputTensorDescr(
+                id=TensorId(self.task.__class__.__name__.lower().replace("task", "")),
+                axes=output_axes,
+                test_tensor=FileDescr(source=output_test_image_path),
+            )
+
+            pytorch_architecture = ArchitectureFromLibraryDescr(
+                callable="from_yaml",
+                kwargs={"config_yaml":converter.unstructure(self)},
+                import_from="dacapo.experiments.run_config",
+            )
+            weights_path = tmp / "model.pt"
+            torch.save(self.model.state_dict(), weights_path)
+            with open(weights_path, "rb", buffering=0) as f:
+                weights_hash = hashlib.file_digest(f, "sha256").hexdigest()
+
+            my_model_descr = ModelDescr(
+                name=self.name,
+                description="A model trained with DaCapo",
+                authors=authors,  # change github_user to your GitHub account name
+                cite=[
+                    CiteEntry(
+                        text="for model training see my paper",
+                        doi=Doi("10.1234something"),
+                    )
+                ],
+                license=LicenseId(license),
+                documentation=HttpUrl("https://github.com/janelia-cellmap/dacapo/blob/main/README.md"),
+                git_repo=HttpUrl(
+                    "https://github.com/janelia-cellmap/dacapo"
+                ),  # change to repo where your model is developed
+                inputs=[input_descr],
+                outputs=[output_descr],
+                weights=WeightsDescr(
+                    pytorch_state_dict=PytorchStateDictWeightsDescr(
+                        source=weights_path,
+                        sha256=weights_hash,
+                        architecture=pytorch_architecture,
+                        pytorch_version=Version(torch.__version__),
+                    ),
+                ),
+            )
+
+            summary = test_model(my_model_descr)
+            summary.display()
+
+            print(
+                "package path:",
+                save_bioimageio_package(my_model_descr, output_path=path),
+            )
+
+def from_yaml(config_yaml: dict) -> torch.nn.Module:
+    run_config: RunConfig = converter.structure(config_yaml, RunConfig)
+    return run_config.model
