@@ -49,3 +49,9 @@ class DummyTask(Task):
         self.loss = DummyLoss()
         self.post_processor = DummyPostProcessor(task_config.detection_threshold)
         self.evaluator = DummyEvaluator()
+
+        self._channels = [f"e{x}" for x in range(task_config.embedding_dims)]
+
+    @property
+    def channels(self) -> list[str]:
+        return self._channels

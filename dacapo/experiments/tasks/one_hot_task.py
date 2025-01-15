@@ -46,3 +46,9 @@ class OneHotTask(Task):
         self.loss = DummyLoss()
         self.post_processor = ArgmaxPostProcessor()
         self.evaluator = DummyEvaluator()
+
+        self._classes = task_config.classes
+
+    @property
+    def channels(self) -> list[str]:
+        return self._classes
