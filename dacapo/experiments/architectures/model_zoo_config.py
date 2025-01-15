@@ -1,4 +1,5 @@
 import attr
+import re
 
 import torch
 from .architecture import ArchitectureConfig
@@ -10,8 +11,6 @@ from bioimageio.core.model_adapters._pytorch_model_adapter import PytorchModelAd
 from bioimageio.spec import InvalidDescr
 from bioimageio.spec.model.v0_5 import (
     ModelDescr,
-    WeightsDescr,
-    PytorchStateDictWeightsDescr,
     OutputTensorDescr,
     InputTensorDescr,
 )
@@ -33,23 +32,18 @@ class ModelZooConfig(ArchitectureConfig):
             "\t5) More options available, see: https://github.com/bioimage-io/spec-bioimage-io/tree/main"
         }
     )
+    trainable_layers: str | None = attr.ib(None)
 
     _model_description: ModelDescr | None = None
     _model_adapter: PytorchModelAdapter | None = None
-    strip_last_layer: bool = False
-    freeze_weights: bool = True
 
     def module(self) -> torch.nn.Module:
         module = self.model_adapter._network
-        if isinstance(module, torch.nn.Sequential) and self.strip_last_layer:
-            module = torch.nn.Sequential(module[:-1])
-        elif self.strip_last_layer:
-            raise NotImplementedError(
-                "Stripping last layer is only supported for Sequential models"
-            )
-        if self.freeze_weights:
-            for param in module.parameters():
-                param.requires_grad = False
+        for name, param in module.named_parameters():
+            if self.trainable_layers is not None and re.match(self.trainable_layers, name):
+                param.requires_grad = True
+            else:
+                False
         return module
 
     @property
