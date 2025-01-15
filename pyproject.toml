@@ -60,6 +60,8 @@ dependencies = [
         "boto3",
         "matplotlib",
         "xarray-multiscale",
+        "bioimageio.core[pytorch] >= 0.7",
+        "iohub @ git+https://github.com/czbiohub-sf/iohub.git",
         ]
 
 # extras
