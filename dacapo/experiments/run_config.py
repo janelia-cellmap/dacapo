@@ -312,7 +312,14 @@ class RunConfig:
         license: str = "MIT",
         input_test_image_path: Path | None = None,
         output_test_image_path: Path | None = None,
+        checkpoint: int | str | None = "latest",
     ):
+        # TODO: Fix this import. Importing here due to circular imports.
+        # The weights store takes a Run to figure out where weights are saved,
+        # but Run needs to import the weights store to load the weights.
+        from dacapo.store.create_store import create_weights_store
+
+
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             input_axes = [BatchAxis(), ChannelAxis(channel_names=[Identifier("raw")])]
@@ -320,7 +327,8 @@ class RunConfig:
             input_axes += [
                 SpaceInputAxis(
                     id=AxisId(f"d{i}"), size=ParameterizedSize(min=s, step=s)
-                ) for i, s in enumerate(input_shape)
+                )
+                for i, s in enumerate(input_shape)
             ]
             data_descr = IntervalOrRatioDataDescr(type="float32")
 
@@ -343,7 +351,7 @@ class RunConfig:
             )
 
             output_shape = self.model.compute_output_shape(input_shape)[1]
-            context = (input_shape - output_shape)
+            context = input_shape - output_shape
             print(context)
 
             output_axes = [
@@ -353,8 +361,11 @@ class RunConfig:
             output_axes += [
                 SpaceOutputAxis(
                     id=AxisId(f"d{i}"),
-                    size=SizeReference(tensor_id=TensorId("raw"), axis_id=AxisId(f"d{i}"), offset=-c),
-                ) for i, c in enumerate(context)
+                    size=SizeReference(
+                        tensor_id=TensorId("raw"), axis_id=AxisId(f"d{i}"), offset=-c
+                    ),
+                )
+                for i, c in enumerate(context)
             ]
             if output_test_image_path is None:
                 output_test_image_path = tmp / "output_test_image.npy"
@@ -370,10 +381,16 @@ class RunConfig:
 
             pytorch_architecture = ArchitectureFromLibraryDescr(
                 callable="from_yaml",
-                kwargs={"config_yaml":converter.unstructure(self)},
+                kwargs={"config_yaml": converter.unstructure(self)},
                 import_from="dacapo.experiments.run_config",
             )
             weights_path = tmp / "model.pt"
+            weights_store = create_weights_store()
+            if checkpoint == "latest":
+                checkpoint = weights_store.latest_iteration(self)
+            if checkpoint is not None:
+                weights_store.load_weights(self, checkpoint)
+
             torch.save(self.model.state_dict(), weights_path)
             with open(weights_path, "rb", buffering=0) as f:
                 weights_hash = hashlib.file_digest(f, "sha256").hexdigest()
@@ -389,7 +406,9 @@ class RunConfig:
                     )
                 ],
                 license=LicenseId(license),
-                documentation=HttpUrl("https://github.com/janelia-cellmap/dacapo/blob/main/README.md"),
+                documentation=HttpUrl(
+                    "https://github.com/janelia-cellmap/dacapo/blob/main/README.md"
+                ),
                 git_repo=HttpUrl(
                     "https://github.com/janelia-cellmap/dacapo"
                 ),  # change to repo where your model is developed
@@ -412,6 +431,7 @@ class RunConfig:
                 "package path:",
                 save_bioimageio_package(my_model_descr, output_path=path),
             )
+
 
 def from_yaml(config_yaml: dict) -> torch.nn.Module:
     run_config: RunConfig = converter.structure(config_yaml, RunConfig)
