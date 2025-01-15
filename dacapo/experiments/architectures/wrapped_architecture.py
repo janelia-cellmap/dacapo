@@ -1,9 +1,12 @@
 import attr
+import re
 
 import torch
 from .architecture import ArchitectureConfig
 
 from funlib.geometry import Coordinate
+
+from pathlib import Path
 
 
 @attr.s
@@ -12,8 +15,11 @@ class WrappedArchitectureConfig(ArchitectureConfig):
     A thin wrapper allowing users to pass in any architecture they want
     """
 
-    _module: torch.nn.Module = attr.ib(
-        metadata={"help_text": "The `torch.nn.Module` you would like to use"}
+    _module: torch.nn.Module | Path = attr.ib(
+        metadata={
+            "help_text": "The `torch.nn.Module` you would like to use, or a path to a "
+            "pickled or jit-compiled module"
+        }
     )
 
     fmaps_in: int = attr.ib(
@@ -40,8 +46,21 @@ class WrappedArchitectureConfig(ArchitectureConfig):
         },
     )
 
+    trainable_parameters: str | None = attr.ib(default=None)
+
     def module(self) -> torch.nn.Module:
-        return self._module
+        if isinstance(self._module, torch.nn.Module):
+            module = self._module
+        else:
+            module = torch.load(self._module)
+
+        for name, param in module.named_parameters():
+            if self.trainable_parameters is not None and re.match(
+                self.trainable_parameters, name
+            ):
+                param.requires_grad = True
+            else:
+                param.requires_grad = False
 
     @property
     def input_shape(self):
