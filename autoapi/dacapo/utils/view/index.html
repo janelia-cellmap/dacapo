@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>dacapo.utils.view &mdash; DaCapo  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -174,9 +174,9 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">neuroglancer</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">get_viewer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">neuroglancer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_viewer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">arrays</span> <span class="o">=</span> <span class="p">{</span>
 <span class="gp">... </span>    <span class="s2">&quot;raw&quot;</span><span class="p">:</span> <span class="p">{</span>
 <span class="gp">... </span>        <span class="s2">&quot;array&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
@@ -211,9 +211,9 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">neuroglancer</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">add_seg_layer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">neuroglancer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_seg_layer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">neuroglancer</span><span class="o">.</span><span class="n">ViewerState</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">voxel_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
@@ -240,9 +240,9 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">neuroglancer</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">add_scalar_layer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">neuroglancer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_scalar_layer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">neuroglancer</span><span class="o">.</span><span class="n">ViewerState</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">voxel_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
@@ -386,8 +386,8 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">BestScore</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">BestScore</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">best_score</span> <span class="o">=</span> <span class="n">BestScore</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">iteration</span> <span class="o">=</span> <span class="mi">0</span>
@@ -413,8 +413,8 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">BestScore</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">BestScore</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">best_score</span> <span class="o">=</span> <span class="n">BestScore</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">new_best_exists</span> <span class="o">=</span> <span class="n">best_score</span><span class="o">.</span><span class="n">does_new_best_exist</span><span class="p">()</span>
@@ -606,8 +606,8 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">layer_name</span> <span class="o">=</span> <span class="s2">&quot;prediction&quot;</span>
@@ -633,8 +633,8 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">deprecated_start_neuroglancer</span><span class="p">()</span>
@@ -664,8 +664,8 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">start_neuroglancer</span><span class="p">()</span>
@@ -689,8 +689,8 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
@@ -714,8 +714,8 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">array_identifier</span> <span class="o">=</span> <span class="n">viewer</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">datasplit</span><span class="o">.</span><span class="n">validate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">_source_array</span>
@@ -740,8 +740,8 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">get_datasets</span><span class="p">()</span>
@@ -768,8 +768,8 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">update_best_info</span><span class="p">()</span>
@@ -790,8 +790,8 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">update_neuroglancer</span><span class="p">()</span>
@@ -818,8 +818,8 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">update_best_layer</span><span class="p">()</span>
@@ -846,8 +846,8 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">new_validation_checker</span><span class="p">()</span>
@@ -874,8 +874,8 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">update_with_new_validation_if_possible</span><span class="p">()</span>
@@ -902,8 +902,8 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dacapo.utils.view</span> <span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.utils.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">NeuroglancerRunViewer</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">run</span> <span class="o">=</span> <span class="n">Run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span> <span class="o">=</span> <span class="n">NeuroglancerRunViewer</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">viewer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>

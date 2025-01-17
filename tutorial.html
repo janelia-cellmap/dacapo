@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tutorial: A Simple Experiment in Python &mdash; DaCapo  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
       <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -198,8 +198,8 @@ This can all be done in python. There is also a web based gui: the
 <span class="xref std std-ref">Simple Experiment using the Dashboard</span>
 for a tutorial stepping through the use of the dashboard.</p>
 <p>First lets handle some basics, importing, setting logging, etc.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dacapo</span>
-<span class="kn">import</span> <span class="nn">logging</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dacapo</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 </pre></div>
@@ -213,7 +213,7 @@ for a tutorial stepping through the use of the dashboard.</p>
 </div>
 </li>
 <li><p>Architecture</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.architectures</span> <span class="kn">import</span> <span class="n">CNNectomeUNetConfig</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.architectures</span><span class="w"> </span><span class="kn">import</span> <span class="n">CNNectomeUNetConfig</span>
 <span class="n">architecture_config</span> <span class="o">=</span> <span class="n">CNNectomeUNetConfig</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;small_unet&quot;</span><span class="p">,</span>
     <span class="n">input_shape</span><span class="o">=</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">212</span><span class="p">,</span> <span class="mi">212</span><span class="p">,</span> <span class="mi">212</span><span class="p">),</span>
@@ -229,7 +229,7 @@ for a tutorial stepping through the use of the dashboard.</p>
 </div>
 </li>
 <li><p>Task</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.tasks</span> <span class="kn">import</span> <span class="n">AffinitiesTaskConfig</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.tasks</span><span class="w"> </span><span class="kn">import</span> <span class="n">AffinitiesTaskConfig</span>
 
 <span class="n">task_config</span> <span class="o">=</span> <span class="n">AffinitiesTaskConfig</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;AffinitiesPrediction&quot;</span><span class="p">,</span>
@@ -239,8 +239,8 @@ for a tutorial stepping through the use of the dashboard.</p>
 </div>
 </li>
 <li><p>Trainer</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.trainers</span> <span class="kn">import</span> <span class="n">GunpowderTrainerConfig</span>
-<span class="kn">from</span> <span class="nn">dacapo.experiments.trainers.gp_augments</span> <span class="kn">import</span> <span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.trainers</span><span class="w"> </span><span class="kn">import</span> <span class="n">GunpowderTrainerConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.trainers.gp_augments</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">SimpleAugmentConfig</span><span class="p">,</span>
     <span class="n">ElasticAugmentConfig</span><span class="p">,</span>
     <span class="n">IntensityAugmentConfig</span><span class="p">,</span>
@@ -281,11 +281,11 @@ for a tutorial stepping through the use of the dashboard.</p>
 combine them into a run and start training.</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Create a run</span><a class="headerlink" href="#id1" title="Link to this code"></a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>  <span class="kn">from</span> <span class="nn">funlib.geometry</span> <span class="kn">import</span> <span class="n">Coordinate</span>
-  <span class="kn">from</span> <span class="nn">dacapo.experiments.run_config</span> <span class="kn">import</span> <span class="n">RunConfig</span>
-  <span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>  <span class="kn">from</span><span class="w"> </span><span class="nn">funlib.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
+  <span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunConfig</span>
+  <span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
 
-  <span class="kn">from</span> <span class="nn">torchsummary</span> <span class="kn">import</span> <span class="n">summary</span>
+  <span class="kn">from</span><span class="w"> </span><span class="nn">torchsummary</span><span class="w"> </span><span class="kn">import</span> <span class="n">summary</span>
 
 
   <span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
@@ -312,7 +312,7 @@ combine them into a run and start training.</p>
 <p>You have 2 options for starting the run:</p>
 <ol class="arabic">
 <li><p>Simple case:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.train</span> <span class="kn">import</span> <span class="n">train_run</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.train</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_run</span>
 
 <span class="n">train_run</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 </pre></div>
@@ -322,8 +322,8 @@ it may be difficult to reproduce your work without copy pasting everything
 you’ve written so far.</p>
 </li>
 <li><p>Store your configs</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.store.create_store</span> <span class="kn">import</span> <span class="n">create_config_store</span>
-<span class="kn">from</span> <span class="nn">dacapo.train</span> <span class="kn">import</span> <span class="n">train</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.store.create_store</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_config_store</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.train</span><span class="w"> </span><span class="kn">import</span> <span class="n">train</span>
 
 <span class="n">config_store</span> <span class="o">=</span> <span class="n">create_config_store</span><span class="p">()</span>
 
@@ -354,21 +354,21 @@ provided here:</p>
 </pre></div>
 </div>
 <p><cite>train.py</cite>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dacapo</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">dacapo.experiments.architectures</span> <span class="kn">import</span> <span class="n">CNNectomeUNetConfig</span>
-<span class="kn">from</span> <span class="nn">dacapo.experiments.tasks</span> <span class="kn">import</span> <span class="n">AffinitiesTaskConfig</span>
-<span class="kn">from</span> <span class="nn">dacapo.experiments.trainers</span> <span class="kn">import</span> <span class="n">GunpowderTrainerConfig</span>
-<span class="kn">from</span> <span class="nn">dacapo.experiments.trainers.gp_augments</span> <span class="kn">import</span> <span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dacapo</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.architectures</span><span class="w"> </span><span class="kn">import</span> <span class="n">CNNectomeUNetConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.tasks</span><span class="w"> </span><span class="kn">import</span> <span class="n">AffinitiesTaskConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.trainers</span><span class="w"> </span><span class="kn">import</span> <span class="n">GunpowderTrainerConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.trainers.gp_augments</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">SimpleAugmentConfig</span><span class="p">,</span>
     <span class="n">ElasticAugmentConfig</span><span class="p">,</span>
     <span class="n">IntensityAugmentConfig</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">funlib.geometry</span> <span class="kn">import</span> <span class="n">Coordinate</span>
-<span class="kn">from</span> <span class="nn">dacapo.experiments.run_config</span> <span class="kn">import</span> <span class="n">RunConfig</span>
-<span class="kn">from</span> <span class="nn">dacapo.experiments.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="kn">from</span> <span class="nn">dacapo.store.create_store</span> <span class="kn">import</span> <span class="n">create_config_store</span>
-<span class="kn">from</span> <span class="nn">dacapo.train</span> <span class="kn">import</span> <span class="n">train</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">funlib.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.store.create_store</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_config_store</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.train</span><span class="w"> </span><span class="kn">import</span> <span class="n">train</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
 

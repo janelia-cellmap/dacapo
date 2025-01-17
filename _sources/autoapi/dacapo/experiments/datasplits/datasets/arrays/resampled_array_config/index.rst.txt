@@ -70,14 +70,6 @@ Module Contents
       :type:  dacapo.experiments.datasplits.datasets.arrays.array_config.ArrayConfig
 
 
-   .. py:attribute:: upsample
-      :type:  funlib.geometry.Coordinate
-
-
-   .. py:attribute:: downsample
-      :type:  funlib.geometry.Coordinate
-
-
    .. py:attribute:: interp_order
       :type:  bool
 
@@ -85,6 +77,16 @@ Module Contents
    .. py:method:: preprocess(array: funlib.persistence.Array) -> funlib.persistence.Array
 
       Preprocess an array by resampling it to the desired voxel size.
+
+
+
+   .. py:property:: upsample
+      :type: funlib.geometry.Coordinate
+
+
+
+   .. py:property:: downsample
+      :type: funlib.geometry.Coordinate
 
 
 

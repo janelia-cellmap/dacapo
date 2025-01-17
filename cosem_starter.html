@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fine-Tune Cosem Starter &mdash; DaCapo  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
       <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -105,7 +105,7 @@
 <section id="step-1-import-the-cosemstartconfig">
 <h2>Step 1: Import the CosemStartConfig<a class="headerlink" href="#step-1-import-the-cosemstartconfig" title="Link to this heading"></a></h2>
 <p>To get started, you need to import <cite>CosemStartConfig</cite> from <cite>dacapo.experiments.starts</cite>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.starts</span> <span class="kn">import</span> <span class="n">CosemStartConfig</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.starts</span><span class="w"> </span><span class="kn">import</span> <span class="n">CosemStartConfig</span>
 </pre></div>
 </div>
 </section>
@@ -129,7 +129,7 @@
 <h2>Step 3: Create a Run with <cite>start_config</cite><a class="headerlink" href="#step-3-create-a-run-with-start-config" title="Link to this heading"></a></h2>
 <p>To start from the pretrained model, add <cite>start_config</cite> to your <cite>RunConfig</cite>. The <cite>RunConfig</cite> initializes the run and allows fine-tuning from the pretrained COSEM model.</p>
 <p>Example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.runs</span> <span class="kn">import</span> <span class="n">RunConfig</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.runs</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunConfig</span>
 
 <span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
     <span class="c1"># other parameters...</span>
@@ -141,8 +141,8 @@
 <section id="full-example">
 <h2>Full Example<a class="headerlink" href="#full-example" title="Link to this heading"></a></h2>
 <p>Here’s how the complete setup looks:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dacapo.experiments.starts</span> <span class="kn">import</span> <span class="n">CosemStartConfig</span>
-<span class="kn">from</span> <span class="nn">dacapo.experiments.runs</span> <span class="kn">import</span> <span class="n">RunConfig</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.starts</span><span class="w"> </span><span class="kn">import</span> <span class="n">CosemStartConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dacapo.experiments.runs</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunConfig</span>
 
 <span class="c1"># Define the start configuration to load the pretrained COSEM model</span>
 <span class="n">start_config</span> <span class="o">=</span> <span class="n">CosemStartConfig</span><span class="p">(</span><span class="s2">&quot;setup04&quot;</span><span class="p">,</span> <span class="s2">&quot;1820500&quot;</span><span class="p">)</span>
