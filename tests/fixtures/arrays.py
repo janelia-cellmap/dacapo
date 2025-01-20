@@ -60,7 +60,7 @@ def cellmap_array(tmp_path):
 
     yield cellmap_array_config
 
-    
+
 @pytest.fixture()
 def multiscale_zarr(tmp_path):
     zarr_metadata = {
@@ -73,20 +73,20 @@ def multiscale_zarr(tmp_path):
                 ],
                 "coordinateTransformations": [],
                 "datasets": [
-                        {
+                    {
                         "coordinateTransformations": [
-                            {"scale": [4.2,7.4,5.6], "type": "scale"},
-                            {"translation": [6.0,10.0,2.0],"type": "translation"}
+                            {"scale": [4.2, 7.4, 5.6], "type": "scale"},
+                            {"translation": [6.0, 10.0, 2.0], "type": "translation"},
                         ],
-                        "path": "s0"
-                        },
-                        {
+                        "path": "s0",
+                    },
+                    {
                         "coordinateTransformations": [
-                            {"type": "scale","scale": [1.0,2.0,4.0]},
-                            {"type": "translation","translation": [12.0, 12.0, 12.0]}
+                            {"type": "scale", "scale": [1.0, 2.0, 4.0]},
+                            {"type": "translation", "translation": [12.0, 12.0, 12.0]},
                         ],
-                        "path": "s1"
-                        }
+                        "path": "s1",
+                    },
                 ],
                 "name": "multiscale_dataset",
                 "version": "0.4",
@@ -104,15 +104,17 @@ def multiscale_zarr(tmp_path):
         dataset="multiscale_dataset/s1",
         ome_metadata=True,
     )
-    
-    store = zarr.DirectoryStore(ome_zarr_array_config.file_name)
-    multiscale_group = zarr.group(store=store, path="multiscale_dataset", overwrite=True)
 
-    for level in [0,1]:
+    store = zarr.DirectoryStore(ome_zarr_array_config.file_name)
+    multiscale_group = zarr.group(
+        store=store, path="multiscale_dataset", overwrite=True
+    )
+
+    for level in [0, 1]:
         scaling = pow(2, level)
         multiscale_group.require_dataset(
-            name=f's{level}',
-            shape=(100/scaling, 80/scaling, 60/scaling),
+            name=f"s{level}",
+            shape=(100 / scaling, 80 / scaling, 60 / scaling),
             chunks=10,
             dtype=np.float32,
             compressor=Zstd(level=6),
