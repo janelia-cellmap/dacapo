@@ -91,7 +91,12 @@ def multiscale_zarr(tmp_path):
                 "name": "multiscale_dataset",
                 "version": "0.4",
             }
-        ]
+        ],
+        "omero": {
+            "id": 1,
+            "name": "test_image",
+            "channels": [],
+        },
     }
     ome_zarr_array_config = ZarrArrayConfig(
         name="ome_zarr_array",
