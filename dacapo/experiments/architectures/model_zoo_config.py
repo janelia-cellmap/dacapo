@@ -23,10 +23,18 @@ import numpy as np
 @attr.s
 class ModelZooConfig(ArchitectureConfig):
     """
-    A thin wrapper allowing users to pass in any model zoo model
+    A thin wrapper allowing users to pass in any model zoo model.
+
+    Support is currently limited to models saved with the `PytorchStateDictWeightsDescr`.
+    See more info here: https://bioimage-io.github.io/spec-bioimage-io/bioimageio/spec/model/v0_5.html#PytorchStateDictWeightsDescr
+
+    We try to support all model_id formats that are supported by the `bioimageio.core` `load_description_and_test` function.
+    However there seem to be some cases that fail. You may receive an `InvalidDescr` error when trying to load a model from
+    a downloaded rdf file. In this case downloading the zipped model, or using the models name e.g. "affable-shark"
+    should work.
     """
 
-    model_id: str = attr.ib(
+    model_id: str | Path = attr.ib(
         metadata={
             "help_text": "The model id from the model zoo to use. Can be any of:\n"
             '\t1) Url to a model zoo model (e.g. "https://.../rdf.yaml")\n'
