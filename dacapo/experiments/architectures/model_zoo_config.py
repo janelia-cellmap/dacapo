@@ -15,6 +15,10 @@ from bioimageio.spec.model.v0_5 import (
     InputTensorDescr,
 )
 
+from pathlib import Path
+import zipfile
+import numpy as np
+
 
 @attr.s
 class ModelZooConfig(ArchitectureConfig):
@@ -65,10 +69,16 @@ class ModelZooConfig(ArchitectureConfig):
     @property
     def model_description(self) -> ModelDescr:
         if self._model_description is None:
-            self._model_description = load_description_and_test(self.model_id)
+            if isinstance(self.model_id, Path) and self.model_id.suffix == ".zip":
+                with zipfile.ZipFile(self.model_id, "r") as zip_ref:
+                    zip_ref.extractall(Path(f"{self.model_id}.unzip"))
+                self._model_description = load_description_and_test(
+                    Path(f"{self.model_id}.unzip")
+                )
+            else:
+                self._model_description = load_description_and_test(self.model_id)
             if isinstance(self._model_description, InvalidDescr):
                 raise Exception("Invalid model description")
-                self._model_description = self._model_description
         return self._model_description
 
     @property
