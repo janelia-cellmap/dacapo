@@ -151,6 +151,7 @@ class RunConfig:
     _optimizer: Optional[torch.optim.Optimizer] = None
     _model: Optional[torch.nn.Module] = None
     _datasplit: Optional[DataSplitConfig] = None
+    _task: Optional[Task] = None
     _trainer: Optional[Trainer] = None
     _training_stats: Optional[TrainingStats] = None
     _validation_scores: Optional[ValidationScores] = None
@@ -160,8 +161,10 @@ class RunConfig:
         return self.num_iterations
 
     @property
-    def task(self) -> Task:
-        return self.task_config.task_type(self.task_config)
+    def task(self) -> Task | None:
+        if self._task is None and self.task_config is not None:
+            self._task = self.task_config.task_type(self.task_config)
+        return self._task
 
     @property
     def architecture(self) -> ArchitectureConfig:
