@@ -87,14 +87,6 @@ class RunConfig:
         A starting point for continued training. It is optional and can be left out.
     """
 
-    task_config: TaskConfig = attr.ib(
-        metadata={
-            "help_text": "A config defining the Task to run. The task defines the output "
-            "of your model. Do you want semantic segmentations, instance segmentations, "
-            "or something else? The task also lets you choose from different methods of "
-            "achieving each of these goals."
-        }
-    )
     architecture_config: ArchitectureConfig = attr.ib(
         metadata={
             "help_text": "A config defining the Architecture to train. The architecture defines "
@@ -104,6 +96,15 @@ class RunConfig:
             "on the chosen task, additional layers will be appended to make sure "
             "the output conforms to the expected format."
         }
+    )
+    task_config: TaskConfig | None = attr.ib(
+        default=None,
+        metadata={
+            "help_text": "A config defining the Task to run. The task defines the output "
+            "of your model. Do you want semantic segmentations, instance segmentations, "
+            "or something else? The task also lets you choose from different methods of "
+            "achieving each of these goals."
+        },
     )
     trainer_config: TrainerConfig | None = attr.ib(
         default=None,
