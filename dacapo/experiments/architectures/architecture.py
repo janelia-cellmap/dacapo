@@ -31,6 +31,10 @@ class ArchitectureConfig(ABC):
 
     @abstractmethod
     def module(self) -> torch.nn.Module:
+        """
+        Returns the `torch.nn.Module` object for a given architecture such that it may be
+        trained or used for prediction.
+        """
         pass
 
 
