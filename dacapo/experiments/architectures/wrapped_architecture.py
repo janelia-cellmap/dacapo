@@ -61,6 +61,7 @@ class WrappedArchitectureConfig(ArchitectureConfig):
                 param.requires_grad = True
             else:
                 param.requires_grad = False
+        return module
 
     @property
     def input_shape(self):
