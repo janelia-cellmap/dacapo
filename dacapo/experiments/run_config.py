@@ -326,6 +326,11 @@ class RunConfig:
         # but Run needs to import the weights store to load the weights.
         from dacapo.store.create_store import create_weights_store
 
+        weights_store = create_weights_store()
+        if checkpoint == "latest":
+            checkpoint = weights_store.latest_iteration(self)
+        if checkpoint is not None:
+            weights_store.load_weights(self, checkpoint)
 
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
@@ -391,13 +396,8 @@ class RunConfig:
                 kwargs={"config_yaml": converter.unstructure(self)},
                 import_from="dacapo.experiments.run_config",
             )
-            weights_path = tmp / "model.pt"
-            weights_store = create_weights_store()
-            if checkpoint == "latest":
-                checkpoint = weights_store.latest_iteration(self)
-            if checkpoint is not None:
-                weights_store.load_weights(self, checkpoint)
 
+            weights_path = tmp / "model.pth"
             torch.save(self.model.state_dict(), weights_path)
             with open(weights_path, "rb", buffering=0) as f:
                 weights_hash = hashlib.file_digest(f, "sha256").hexdigest()
