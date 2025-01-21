@@ -322,7 +322,7 @@ class RunConfig:
         license: str = "MIT",
         input_test_image_path: Path | None = None,
         output_test_image_path: Path | None = None,
-        checkpoint: int | str | None = "latest",
+        checkpoint: int | str | None = None,
         in_voxel_size: Coordinate | None = None,
     ):
         # TODO: Fix this import. Importing here due to circular imports.
