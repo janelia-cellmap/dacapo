@@ -91,16 +91,16 @@ class ModelZooConfig(ArchitectureConfig):
 
     @property
     def input_desc(self) -> InputTensorDescr:
-        assert len(self.model_description.inputs) == 1, (
-            f"Only models with one input are supported, found {self.model_description.inputs}"
-        )
+        assert (
+            len(self.model_description.inputs) == 1
+        ), f"Only models with one input are supported, found {self.model_description.inputs}"
         return self.model_description.inputs[0]
 
     @property
     def output_desc(self) -> OutputTensorDescr:
-        assert len(self.model_description.outputs) == 1, (
-            f"Only models with one output are supported, found {self.model_description.outputs}"
-        )
+        assert (
+            len(self.model_description.outputs) == 1
+        ), f"Only models with one output are supported, found {self.model_description.outputs}"
         return self.model_description.outputs[0]
 
     @property
@@ -115,9 +115,9 @@ class ModelZooConfig(ArchitectureConfig):
     @property
     def num_in_channels(self) -> int:
         channel_axes = [axis for axis in self.input_desc.axes if axis.type == "channel"]
-        assert len(channel_axes) == 1, (
-            f"Only models with one input channel axis are supported, found {channel_axes}"
-        )
+        assert (
+            len(channel_axes) == 1
+        ), f"Only models with one input channel axis are supported, found {channel_axes}"
         return channel_axes[0].size
 
     @property
@@ -125,9 +125,9 @@ class ModelZooConfig(ArchitectureConfig):
         channel_axes = [
             axis for axis in self.output_desc.axes if axis.type == "channel"
         ]
-        assert len(channel_axes) == 1, (
-            f"Only models with one output channel axis are supported, found {channel_axes}"
-        )
+        assert (
+            len(channel_axes) == 1
+        ), f"Only models with one output channel axis are supported, found {channel_axes}"
         return channel_axes[0].size
 
     def scale(self, input_voxel_size: Coordinate) -> Coordinate:

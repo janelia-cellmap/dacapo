@@ -37,7 +37,6 @@ class ArchitectureConfig(ABC):
         """
         pass
 
-
     @property
     @abstractmethod
     def input_shape(self) -> Coordinate:

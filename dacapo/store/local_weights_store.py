@@ -72,7 +72,11 @@ class LocalWeightsStore(WeightsStore):
         if not trace_file.parent.exists():
             trace_file.parent.mkdir(parents=True, exist_ok=True)
         if not trace_file.exists():
-            in_shape = (1, run.architecture.num_in_channels, *run.architecture.input_shape)
+            in_shape = (
+                1,
+                run.architecture.num_in_channels,
+                *run.architecture.input_shape,
+            )
             in_data = torch.randn(in_shape)
             try:
                 torch.jit.save(
@@ -82,7 +86,6 @@ class LocalWeightsStore(WeightsStore):
             except SystemError as e:
                 print(f"Error saving trace: {e}, this model will not be traced")
                 trace_file.touch()
-                
 
     def latest_iteration(self, run: str) -> Optional[int]:
         """
