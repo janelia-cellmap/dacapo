@@ -3,6 +3,8 @@ import tempfile
 import hashlib
 import numpy as np
 
+from funlib.geometry import Coordinate
+
 from dacapo.store.converter import converter
 from .architectures import ArchitectureConfig
 from .datasplits import DataSplitConfig, DataSplit
@@ -11,6 +13,7 @@ from .trainers import TrainerConfig, Trainer, GunpowderTrainer
 from .starts import StartConfig
 from .training_stats import TrainingStats
 from .validation_scores import ValidationScores
+from .model import Model
 
 from bioimageio.core import test_model
 from bioimageio.spec import save_bioimageio_package
@@ -320,6 +323,7 @@ class RunConfig:
         input_test_image_path: Path | None = None,
         output_test_image_path: Path | None = None,
         checkpoint: int | str | None = "latest",
+        in_voxel_size: Coordinate | None = None,
     ):
         # TODO: Fix this import. Importing here due to circular imports.
         # The weights store takes a Run to figure out where weights are saved,
@@ -334,13 +338,29 @@ class RunConfig:
 
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
-            input_axes = [BatchAxis(), ChannelAxis(channel_names=[Identifier("raw")])]
+            input_axes = [
+                BatchAxis(),
+                ChannelAxis(
+                    channel_names=[
+                        Identifier(f"in_c{i}")
+                        for i in range(self.architecture.num_in_channels)
+                    ]
+                ),
+            ]
             input_shape = self.architecture.input_shape
+            in_voxel_size = (
+                np.array(in_voxel_size)
+                if in_voxel_size is not None
+                else np.array((1,) * input_shape.dims)
+            )
+
             input_axes += [
                 SpaceInputAxis(
-                    id=AxisId(f"d{i}"), size=ParameterizedSize(min=s, step=s)
+                    id=AxisId(f"d{i}"),
+                    size=ParameterizedSize(min=s, step=s),
+                    scale=scale,
                 )
-                for i, s in enumerate(input_shape)
+                for i, (s, scale) in enumerate(zip(input_shape, in_voxel_size))
             ]
             data_descr = IntervalOrRatioDataDescr(type="float32")
 
@@ -354,41 +374,61 @@ class RunConfig:
                     )
                 ).astype(np.float32)
                 np.save(input_test_image_path, test_image)
-                print(input_test_image_path, input_test_image_path.exists())
+
             input_descr = InputTensorDescr(
                 id=TensorId("raw"),
                 axes=input_axes,
-                test_tensor=FileDescr(source=input_test_image_path),
+                test_tensor=FileDescr(source=str(input_test_image_path)),
                 data=data_descr,
             )
 
             output_shape = self.model.compute_output_shape(input_shape)[1]
-            context = input_shape - output_shape
-            print(context)
+            out_voxel_size = self.model.scale(in_voxel_size)
+            context_units = Coordinate(
+                np.array(input_shape) * in_voxel_size
+            ) - Coordinate(np.array(output_shape) * out_voxel_size)
+            context_out_voxels = Coordinate(np.array(context_units) / out_voxel_size)
 
             output_axes = [
                 BatchAxis(),
-                ChannelAxis(channel_names=self.task.channels),
+                ChannelAxis(
+                    channel_names=(
+                        self.task.channels
+                        if self.task is not None
+                        else [
+                            f"c{i}" for i in range(self.architecture.num_out_channels)
+                        ]
+                    )
+                ),
             ]
             output_axes += [
                 SpaceOutputAxis(
                     id=AxisId(f"d{i}"),
                     size=SizeReference(
-                        tensor_id=TensorId("raw"), axis_id=AxisId(f"d{i}"), offset=-c
+                        tensor_id=TensorId("raw"),
+                        axis_id=AxisId(f"d{i}"),
+                        offset=-c,
                     ),
+                    scale=s,
                 )
-                for i, c in enumerate(context)
+                for i, (c, s) in enumerate(zip(context_out_voxels, out_voxel_size))
             ]
             if output_test_image_path is None:
                 output_test_image_path = tmp / "output_test_image.npy"
-                test_image = (
-                    self.model(torch.from_numpy(test_image).float()).detach().numpy()
+                test_out_image = (
+                    self.model.eval()(torch.from_numpy(test_image).float())
+                    .detach()
+                    .numpy()
                 )
-                np.save(output_test_image_path, test_image)
+                np.save(output_test_image_path, test_out_image)
             output_descr = OutputTensorDescr(
-                id=TensorId(self.task.__class__.__name__.lower().replace("task", "")),
+                id=TensorId(
+                    self.task.__class__.__name__.lower().replace("task", "")
+                    if self.task is not None
+                    else self.architecture_config.name
+                ),
                 axes=output_axes,
-                test_tensor=FileDescr(source=output_test_image_path),
+                test_tensor=FileDescr(source=str(output_test_image_path)),
             )
 
             pytorch_architecture = ArchitectureFromLibraryDescr(
@@ -405,10 +445,10 @@ class RunConfig:
             my_model_descr = ModelDescr(
                 name=self.name,
                 description="A model trained with DaCapo",
-                authors=authors,  # change github_user to your GitHub account name
+                authors=authors,
                 cite=[
                     CiteEntry(
-                        text="for model training see my paper",
+                        text="paper",
                         doi=Doi("10.1234something"),
                     )
                 ],
@@ -416,9 +456,7 @@ class RunConfig:
                 documentation=HttpUrl(
                     "https://github.com/janelia-cellmap/dacapo/blob/main/README.md"
                 ),
-                git_repo=HttpUrl(
-                    "https://github.com/janelia-cellmap/dacapo"
-                ),  # change to repo where your model is developed
+                git_repo=HttpUrl("https://github.com/janelia-cellmap/dacapo"),
                 inputs=[input_descr],
                 outputs=[output_descr],
                 weights=WeightsDescr(
