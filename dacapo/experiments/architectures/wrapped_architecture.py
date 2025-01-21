@@ -12,7 +12,9 @@ from pathlib import Path
 @attr.s
 class WrappedArchitectureConfig(ArchitectureConfig):
     """
-    A thin wrapper allowing users to pass in any architecture they want
+    A thin wrapper around user provided `torch.nn.Module` instances. It can be provided
+    via a python object, or a file path that can be loaded with `torch.load`. This includes
+    pickled modules or jit-compiled modules.
     """
 
     _module: torch.nn.Module | Path = attr.ib(
