@@ -130,12 +130,15 @@ class CNNectomeUNetConfig(ArchitectureConfig):
         default=False,
         metadata={"help_text": "Whether to use batch normalization."},
     )
+
     @property
     def input_shape(self) -> Coordinate:
         return self._input_shape
+
     @property
     def input_shape(self) -> Coordinate:
         return Coordinate(self._input_shape)
+
     @input_shape.setter
     def input_shape(self, value: Coordinate):
         self._input_shape = value
@@ -147,15 +150,11 @@ class CNNectomeUNetConfig(ArchitectureConfig):
         if self.kernel_size_down is not None:
             kernel_size_down = self.kernel_size_down
         else:
-            kernel_size_down = [
-                [(3,) * self.dims, (3,) * self.dims]
-            ] * levels
+            kernel_size_down = [[(3,) * self.dims, (3,) * self.dims]] * levels
         if self.kernel_size_up is not None:
             kernel_size_up = self.kernel_size_up
         else:
-            kernel_size_up = [
-                [(3,) * self.dims, (3,) * self.dims]
-            ] * (levels - 1)
+            kernel_size_up = [[(3,) * self.dims, (3,) * self.dims]] * (levels - 1)
 
         # downsample factors has to be a list of tuples
         downsample_factors = [tuple(x) for x in self.downsample_factors]

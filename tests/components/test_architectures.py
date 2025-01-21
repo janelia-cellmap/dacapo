@@ -120,13 +120,15 @@ def build_test_architecture_config(
             tmp_path / "dacapo_modelzoo_test.zip", authors=[Author(name="Test")]
         )
         return ModelZooConfig(
-            model_id = tmp_path / "dacapo_modelzoo_test.zip", name="test_model_zoo"
+            model_id=tmp_path / "dacapo_modelzoo_test.zip", name="test_model_zoo"
         )
 
 
 # TODO: Move unet parameters that don't affect interaction with other modules
 # to a separate architcture test
-@pytest.mark.filterwarnings("ignore::FutureWarning")  # pytest treats this as an error but we don't care for now
+@pytest.mark.filterwarnings(
+    "ignore::FutureWarning"
+)  # pytest treats this as an error but we don't care for now
 @pytest.mark.parametrize("data_dims", [2, 3])
 @pytest.mark.parametrize("channels", [True, False])
 @pytest.mark.parametrize("architecture_dims", [2, 3])
@@ -155,7 +157,7 @@ def test_architectures(
         use_attention,
         padding,
         source,
-        tmp_path
+        tmp_path,
     )
 
     in_data = torch.rand(

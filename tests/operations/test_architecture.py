@@ -35,9 +35,7 @@ def test_stored_architecture(
 
     architecture = retrieved_arch_config
 
-    assert (
-        architecture.dims is not None
-    ), f"Architecture dims are None {architecture}"
+    assert architecture.dims is not None, f"Architecture dims are None {architecture}"
 
 
 @pytest.mark.parametrize(

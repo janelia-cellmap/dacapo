@@ -3,6 +3,7 @@ import torch.nn as nn
 
 import math
 
+
 class CNNectomeUNetModule(torch.nn.Module):
     """
     A U-Net module for 3D or 4D data. The U-Net expects 3D or 4D tensors shaped

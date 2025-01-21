@@ -23,7 +23,7 @@ class Task(ABC):
 
     def create_model(self, architecture):
         return self.predictor.create_model(architecture=architecture)
-    
+
     @property
     @abstractmethod
     def channels(self) -> list[str]:
