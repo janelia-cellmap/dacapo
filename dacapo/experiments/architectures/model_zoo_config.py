@@ -123,5 +123,27 @@ class ModelZooConfig(ArchitectureConfig):
         return channel_axes[0].size
 
     def scale(self, input_voxel_size: Coordinate) -> Coordinate:
-        # TODO: Implement scaling for model zoo models
-        return input_voxel_size
+        input_axes = [
+            axis
+            for axis in self.input_desc.axes
+            if axis.type not in ["batch", "channel", "index"]
+        ]
+        output_axes = [
+            axis
+            for axis in self.output_desc.axes
+            if axis.type not in ["batch", "channel", "index"]
+        ]
+        assert all(
+            [
+                in_axis.id == out_axis.id
+                for in_axis, out_axis in zip(input_axes, output_axes)
+            ]
+        )
+        scale = np.array(
+            [
+                in_axis.scale / out_axis.scale
+                for in_axis, out_axis in zip(input_axes, output_axes)
+            ]
+        )
+        output_voxel_size = Coordinate(np.array(input_voxel_size) / scale)
+        return output_voxel_size
