@@ -187,7 +187,10 @@ class RunConfig:
     @property
     def model(self) -> torch.nn.Module:
         if self._model is None:
-            self._model = self.task.create_model(self.architecture)
+            if self.task is not None:
+                self._model = self.task.create_model(self.architecture)
+            else:
+                self._model = Model(self.architecture, torch.nn.Identity(), None)
             if self.start_config is not None:
                 self.start_config.start_type(self.start_config).initialize_weights(
                     self._model, None
@@ -216,7 +219,7 @@ class RunConfig:
 
     @property
     def validation_scores(self):
-        if self._validation_scores is None:
+        if self._validation_scores is None and self.task is not None:
             self._validation_scores = ValidationScores(
                 self.task.parameters,
                 self.datasplit.validate,
