@@ -32,7 +32,9 @@ class ModelZooConfig(ArchitectureConfig):
             "\t5) More options available, see: https://github.com/bioimage-io/spec-bioimage-io/tree/main"
         }
     )
-    trainable_layers: str | None = attr.ib(None)
+    trainable_layers: str | None = attr.ib(
+        default=None, metadata={"help_text": "Regex pattern for trainable layers"}
+    )
 
     _model_description: ModelDescr | None = None
     _model_adapter: PytorchModelAdapter | None = None
@@ -40,10 +42,12 @@ class ModelZooConfig(ArchitectureConfig):
     def module(self) -> torch.nn.Module:
         module = self.model_adapter._network
         for name, param in module.named_parameters():
-            if self.trainable_layers is not None and re.match(self.trainable_layers, name):
+            if self.trainable_layers is not None and re.match(
+                self.trainable_layers, name
+            ):
                 param.requires_grad = True
             else:
-                False
+                param.requires_grad = False
         return module
 
     @property
