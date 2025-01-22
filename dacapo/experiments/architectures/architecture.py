@@ -3,7 +3,13 @@ import attr
 from funlib.geometry import Coordinate
 import torch
 
+from pathlib import Path
 from abc import ABC, abstractmethod
+
+from bioimageio.spec.model.v0_5 import (
+    Author,
+    CiteEntry,
+)
 
 
 @attr.s
@@ -78,3 +84,27 @@ class ArchitectureConfig(ABC):
         Method to scale the input voxel size as required by the architecture.
         """
         return input_voxel_size
+
+    def save_bioimage_io_model(
+        self,
+        path: Path,
+        authors: list[Author],
+        cite: list[CiteEntry] | None = None,
+        license: str = "MIT",
+        input_test_image_path: Path | None = None,
+        output_test_image_path: Path | None = None,
+        checkpoint: int | str | None = None,
+        in_voxel_size: Coordinate | None = None,
+    ):
+        from dacapo.experiments.run_config import RunConfig
+        run = RunConfig(name=f"{self.name}-bioimage-io", architecture_config=self)
+        run.save_bioimage_io_model(
+            path,
+            authors=authors,
+            cite=cite,
+            license=license,
+            input_test_image_path=input_test_image_path,
+            output_test_image_path=output_test_image_path,
+            checkpoint=checkpoint,
+            in_voxel_size=in_voxel_size,
+        )
