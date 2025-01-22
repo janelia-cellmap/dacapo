@@ -49,3 +49,11 @@ class AffinitiesTask(Task):
         )
         self.post_processor = WatershedPostProcessor(offsets=task_config.neighborhood)
         self.evaluator = InstanceEvaluator()
+
+        self._channels = [
+            f"aff_{'.'.join(map(str, n))}" for n in task_config.neighborhood
+        ]
+
+    @property
+    def channels(self) -> list[str]:
+        return self._channels

@@ -53,3 +53,9 @@ class DistanceTask(Task):
             tol_distance=task_config.tol_distance,
             channels=task_config.channels,
         )
+
+        self._channels = task_config.channels
+
+    @property
+    def channels(self) -> list[str]:
+        return self._channels

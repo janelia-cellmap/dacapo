@@ -38,7 +38,7 @@ dependencies = [
         "lazy-property",
         "neuroglancer",
         "torch",
-        "fibsem_tools >= 6.0, <=6.3",
+    "cellmap-schemas>=0.8",
         "attrs",
         "bokeh",
         "numpy-indexed>=0.3.7",
@@ -47,7 +47,7 @@ dependencies = [
         "funlib.geometry>=0.2",
         "mwatershed>=0.5.2",
         "cellmap-models",
-        "funlib.persistence>=0.5.3",
+        "funlib.persistence>=0.5.4",
         "gunpowder>=1.4",
         "lsds",
         "xarray",
@@ -60,6 +60,8 @@ dependencies = [
         "boto3",
         "matplotlib",
         "xarray-multiscale",
+        "bioimageio.core[pytorch] >= 0.7",
+        "iohub @ git+https://github.com/czbiohub-sf/iohub.git",
         ]
 
 # extras
@@ -183,7 +185,7 @@ module = [
     "daisy.*",
     "lazy_property.*",
     "skimage.*",
-    "fibsem_tools.*",
+    "cellmap_schemas.*",
     "neuroglancer.*",
     "tqdm.*",
     "zarr.*",
