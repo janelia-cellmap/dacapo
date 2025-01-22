@@ -97,6 +97,7 @@ class ArchitectureConfig(ABC):
         in_voxel_size: Coordinate | None = None,
     ):
         from dacapo.experiments.run_config import RunConfig
+
         run = RunConfig(name=f"{self.name}-bioimage-io", architecture_config=self)
         run.save_bioimage_io_model(
             path,
