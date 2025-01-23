@@ -46,7 +46,6 @@ dependencies = [
         "funlib.geometry>=0.2",
         "mwatershed>=0.5.2",
         "cellmap-models",
-        "funlib.persistence>=0.5.3",
         "gunpowder>=1.4",
         "lsds",
         "xarray",
@@ -58,8 +57,8 @@ dependencies = [
         "upath",
         "boto3",
         "matplotlib",
-        "xarray-multiscale",
         "cellmap-schemas",
+        "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence.git@ome-ngff"
         ]
 
 # extras

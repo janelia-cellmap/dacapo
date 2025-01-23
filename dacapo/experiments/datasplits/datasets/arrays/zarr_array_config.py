@@ -3,7 +3,7 @@ import attr
 from .array_config import ArrayConfig
 
 from funlib.geometry import Coordinate
-from funlib.persistence import open_ds
+from funlib.persistence import open_ds, open_ome_ds
 
 from upath import UPath as Path
 
@@ -56,9 +56,17 @@ class ZarrArrayConfig(ArrayConfig):
     mode: Optional[str] = attr.ib(
         default="a", metadata={"help_text": "The access mode!"}
     )
+    ome_metadata: bool = attr.ib(
+        default=False, metadata={"help_text": "Whether to expect OME metadata"}
+    )
 
     def array(self, mode="r"):
-        return open_ds(f"{self.file_name}/{self.dataset}", mode=mode)
+        if self.ome_metadata:
+            name = self.dataset.split("/")[-1]
+            dataset = self.dataset.replace(f"/{name}", "")
+            return open_ome_ds(self.file_name / dataset, name=name, mode=mode)
+        else:
+            return open_ds(self.file_name / self.dataset, mode=mode)
 
     def verify(self) -> Tuple[bool, str]:
         """
