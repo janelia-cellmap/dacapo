@@ -59,6 +59,7 @@ dependencies = [
         "boto3",
         "matplotlib",
         "xarray-multiscale",
+        "cellmap-schemas",
         ]
 
 # extras
@@ -200,7 +201,8 @@ module = [
     "napari.*",
     "empanada.*",
     "IPython.*",
-    "xarray_multiscale.*"
+    "xarray_multiscale.*",
+    "cellmap_schemas.*",
 ]
 ignore_missing_imports = true
 
