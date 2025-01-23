@@ -38,7 +38,6 @@ dependencies = [
         "lazy-property",
         "neuroglancer",
         "torch",
-        "fibsem_tools >= 6.0, <=6.3",
         "attrs",
         "bokeh",
         "numpy-indexed>=0.3.7",
@@ -58,6 +57,7 @@ dependencies = [
         "upath",
         "boto3",
         "matplotlib",
+        "cellmap-schemas",
         "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence.git@ome-ngff"
         ]
 
@@ -182,7 +182,6 @@ module = [
     "daisy.*",
     "lazy_property.*",
     "skimage.*",
-    "fibsem_tools.*",
     "neuroglancer.*",
     "tqdm.*",
     "zarr.*",
@@ -201,7 +200,7 @@ module = [
     "napari.*",
     "empanada.*",
     "IPython.*",
-    "xarray_multiscale.*"
+    "cellmap_schemas.*",
 ]
 ignore_missing_imports = true
 
