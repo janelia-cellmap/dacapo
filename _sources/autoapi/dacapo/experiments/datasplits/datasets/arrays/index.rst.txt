@@ -211,6 +211,10 @@ Package Contents
       :type:  Optional[str]
 
 
+   .. py:attribute:: ome_metadata
+      :type:  bool
+
+
    .. py:method:: array(mode='r')
 
 
