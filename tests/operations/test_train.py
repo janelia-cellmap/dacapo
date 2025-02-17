@@ -2,7 +2,7 @@ import numpy as np
 from dacapo.store.create_store import create_stats_store
 from ..fixtures import *
 
-from dacapo.experiments import Run
+from dacapo.experiments import RunConfig
 from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.train import train_run
 
@@ -26,7 +26,7 @@ import pytest
 )
 def test_large(
     options,
-    run_config,
+    run_config: RunConfig,
 ):
     # create a store
 
@@ -37,21 +37,32 @@ def test_large(
     # store the configs
 
     store.store_run_config(run_config)
-    run = Run(run_config)
+    run = run_config
 
     # -------------------------------------
 
     # train
 
     weights_store.store_weights(run, 0)
-    train_run(run)
+    train_run(run, validate=False)
 
     init_weights = weights_store.retrieve_weights(run.name, 0)
     final_weights = weights_store.retrieve_weights(run.name, run.train_until)
 
+    weight_diffs = []
     for name, weight in init_weights.model.items():
         weight_diff = (weight - final_weights.model[name]).sum()
-        assert abs(weight_diff) > np.finfo(weight_diff.numpy().dtype).eps, weight_diff
+        weight_diffs.append((name, weight_diff))
+
+    # test that some weights have changed instead of all weights have changed
+    # depending on the design of the task and the model, some weights might
+    # not get updated (dummy run for example)
+    assert any(
+        [
+            abs(weight_diff) > np.finfo(weight_diff.numpy().dtype).eps
+            for _, weight_diff in weight_diffs
+        ]
+    ), weight_diffs
 
     # assert train_stats and validation_scores are available
 
