@@ -109,7 +109,7 @@ def train_run(run: RunConfig, validate: bool = True, save_snapshots: bool = Fals
             # save snapshot. We save the snapshot at the start of every
             # {snapshot_interval} iterations. This is for debugging
             # purposes so you get snapshots quickly.
-            run.save_snapshot(batch, batch_out, snapshot_container)
+            run.save_snapshot(i, batch, batch_out, snapshot_container)
 
         if i % run.validation_interval == run.validation_interval - 1 or i == run.num_iterations - 1:
             # run "end of epoch steps" such as stepping the learning rate
@@ -122,7 +122,7 @@ def train_run(run: RunConfig, validate: bool = True, save_snapshots: bool = Fals
                 logger.warning(w)
                 pass
 
-            # Store epoch checkpoint and training stats
+            # Store checkpoint and training stats
             stats_store.store_training_stats(run.name, run.training_stats)
             weights_store.store_weights(run, i + 1)
 

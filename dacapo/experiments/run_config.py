@@ -244,7 +244,7 @@ class RunConfig:
                 self.optimizer,
                 start_factor=0.01,
                 end_factor=1.0,
-                total_iters=10,
+                total_iters=self.num_iterations // self.validation_interval,
                 last_epoch=-1,
             )
         return self._lr_scheduler
@@ -597,7 +597,7 @@ class RunConfig:
 
             # perfectly in sync. We can continue training
             elif latest_weights_iteration == trained_until:
-                print(f"Resuming training from epoch {trained_until}")
+                print(f"Resuming training from iteration {trained_until}")
 
                 weights = weights_store.retrieve_weights(
                     self, iteration=trained_until
@@ -645,6 +645,7 @@ class RunConfig:
 
     def save_snapshot(
         self,
+        iteration: int,
         batch: dict[str, torch.Tensor],
         batch_out: dict[str, torch.Tensor],
         snapshot_container: LocalContainerIdentifier,
@@ -696,7 +697,7 @@ class RunConfig:
                     shape=(0, *v.shape),
                     offset=v.roi.offset,
                     voxel_size=v.voxel_size,
-                    axis_names=("epoch^", *v.axis_names),
+                    axis_names=("iteration^", *v.axis_names),
                     dtype=v.dtype if v.dtype != bool else np.uint8,
                     mode="w",
                 )
@@ -711,6 +712,8 @@ class RunConfig:
 
             # add an extra dimension so that the shapes match
             array._source_data.append(data[None, :])
+            iterations = array.attrs.setdefault("iterations", list())
+            iterations.append(iteration)
 
 
 def from_yaml(config_yaml: dict) -> torch.nn.Module:
