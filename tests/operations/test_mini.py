@@ -72,7 +72,7 @@ def test_mini(
         trainer_config=trainer_config,
         datasplit_config=data_config,
         repetition=0,
-        num_iterations=1,
+        num_iterations=2,
         snapshot_interval=1,
         batch_size=2,
         num_workers=int(multiprocessing),
@@ -99,5 +99,9 @@ def test_mini(
                 "volumes/mask",
             ]
         )
+        iterations_list = zarr.open(snapshot_container)["volumes/raw"].attrs[
+            "iterations"
+        ]
+        assert iterations_list == [0, 1], iterations_list
     elif func == "validate":
         validate_run(run, 1)

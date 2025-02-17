@@ -591,17 +591,13 @@ class RunConfig:
                 trained_until = latest_weights_iteration
                 self.training_stats.delete_after(trained_until)
                 self.validation_scores.delete_after(trained_until)
-                weights = weights_store.retrieve_weights(
-                    self, iteration=trained_until
-                )
+                weights = weights_store.retrieve_weights(self, iteration=trained_until)
 
             # perfectly in sync. We can continue training
             elif latest_weights_iteration == trained_until:
                 logger.info(f"Resuming training from iteration {trained_until}")
 
-                weights = weights_store.retrieve_weights(
-                    self, iteration=trained_until
-                )
+                weights = weights_store.retrieve_weights(self, iteration=trained_until)
 
             # weights are stored past the stored training stats, log this inconsistency
             # but keep training
@@ -693,7 +689,7 @@ class RunConfig:
                     shape=(0, *v.shape),
                     offset=v.roi.offset,
                     voxel_size=v.voxel_size,
-                    axis_names=("iteration^", *v.axis_names),
+                    axis_names=("iterations^", *v.axis_names),
                     dtype=v.dtype if v.dtype != bool else np.uint8,
                     mode="w",
                 )
@@ -708,8 +704,10 @@ class RunConfig:
 
             # add an extra dimension so that the shapes match
             array._source_data.append(data[None, :])
-            iterations = array.attrs.setdefault("iterations", list())
-            iterations.append(iteration)
+            if "iterations" not in array.attrs:
+                print(f"No iterations found in array at iteration {iteration}")
+                array.attrs["iterations"] = list()
+            array.attrs["iterations"] = array.attrs["iterations"] + [iteration]
 
 
 def from_yaml(config_yaml: dict) -> torch.nn.Module:
