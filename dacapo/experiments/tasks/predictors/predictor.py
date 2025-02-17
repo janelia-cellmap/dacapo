@@ -31,19 +31,9 @@ class Predictor(ABC):
     def create_model(self, architecture: "Architecture") -> "Model":
         """
         Given a training architecture, create a model for this predictor.
-        This is usually done by appending extra layers to the output of the
+        This is usually done by appending a single final conv layer to the output of the
         architecture to get the output tensor of the architecture into the
         right shape for this predictor.
-
-        Args:
-            architecture: The training architecture.
-        Returns:
-            The model.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.create_model(architecture)
-
         """
         pass
 
@@ -58,7 +48,7 @@ class Predictor(ABC):
         compared to the prediction (i.e., the output of the model). Depending
         on the predictor, the target can therefore be different from the
         ground-truth (e.g., an instance segmentation ground-truth would have to
-        be converted into boundaries, if the model is predicting boundaries).
+        be converted into affinities, if the model is predicting affinities).
 
         By default, it is assumed that the spatial dimensions of ground-truth
         and target are the same.
@@ -67,16 +57,6 @@ class Predictor(ABC):
         (e.g., because it predicts the distance to a boundary, up to a certain
         threshold), you can request a larger ground-truth region. See method
         ``gt_region_for_roi``.
-
-        Args:
-            gt: The ground-truth array.
-        Returns:
-            The target array.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.create_target(gt)
-
         """
         pass
 
@@ -119,31 +99,11 @@ class Predictor(ABC):
 
         Overwrite this method to request ground-truth in a larger ROI, as
         needed.
-
-        Args:
-            target_spec: The ROI for which the target is requested.
-        Returns:
-            The ROI for which the ground-truth is requested.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.gt_region_for_roi(target_spec)
-
-
         """
         return target_spec
 
     def padding(self, gt_voxel_size: Coordinate) -> Coordinate:
         """
         Return the padding needed for the ground-truth array.
-
-        Args:
-            gt_voxel_size: The voxel size of the ground-truth array.
-        Returns:
-            The padding needed for the ground-truth array.
-        Raises:
-            NotImplementedError: This method is not implemented.
-        Examples:
-            >>> predictor.padding(gt_voxel_size)
         """
         return Coordinate((0,) * gt_voxel_size.dims)
