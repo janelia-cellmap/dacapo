@@ -1,25 +1,24 @@
 import attr
 
-from typing import Tuple
+from abc import ABC, abstractmethod
+
+from funlib.geometry import Coordinate
+from dacapo.experiments.datasplits.datasets import Dataset
+from dacapo.experiments.tasks.predictors import Predictor
+
+import torch
 
 
 @attr.s
-class TrainerConfig:
+class TrainerConfig(ABC):
     """
-    A class to represent the Trainer Configurations.
-
-    It is the base class for trainer configurations. Each subclass of a `Trainer`
-    should have a specific config class derived from `TrainerConfig`.
-
-    Attributes:
-        name (str): A unique name for this trainer.
-        batch_size (int): The batch size to be used during training.
-        learning_rate (float): The learning rate of the optimizer.
-    Methods:
-        verify() -> Tuple[bool, str]:
-            Verify whether this TrainerConfig is valid or not.
-    Note:
-        The TrainerConfig class is an abstract class that cannot be instantiated directly. It is meant to be subclassed.
+    A class that defines how the pipeline should be built. I.e. do you want to use gunpowder
+    or pytorch lightning or something else?
+    Regardless of what tool is used, you should be able to return an iterator that yields
+    torch tensors that can be used to train a model. There must also be a simple integer
+    attribute that defines the number of workers to use in the case of parallelization
+    with a default of None for no multiprocessing (1 may mean a single subprocess worker
+    providing the data)
     """
 
     name: str = attr.ib(
@@ -30,34 +29,16 @@ class TrainerConfig:
         }
     )
 
-    batch_size: int = attr.ib(
-        metadata={
-            "help_text": "The batch size to be used during training. Larger batch "
-            "sizes will consume more memory per training iteration."
-        },
-    )
-
-    learning_rate: float = attr.ib(
-        metadata={"help_text": "The learning rate of the optimizer."},
-    )
-
-    def verify(self) -> Tuple[bool, str]:
+    @abstractmethod
+    def iterable_dataset(
+        self,
+        datasets: list[Dataset],
+        input_size: Coordinate,
+        output_size: Coordinate,
+        predictor: Predictor | None = None,
+    ) -> torch.utils.data.IterableDataset:
         """
-        Verify whether this TrainerConfig is valid or not.
-        A TrainerConfig is considered valid if it has a valid batch size and learning rate.
-
-        Returns:
-            tuple: A tuple containing a boolean indicating whether the
-            TrainerConfig is valid and a message explaining why.
-        Raises:
-            NotImplementedError: If the method is not implemented by the subclass.
-        Examples:
-            >>> valid, message = trainer_config.verify()
-            >>> valid
-            True
-            >>> message
-            "No validation for this Trainer"
-        Note:
-            This method must be implemented by the subclass.
+        Returns an pytorch compatible IterableDataset.
+        See https://pytorch.org/docs/stable/data.html#torch.utils.data.IterableDataset for more info
         """
-        return True, "No validation for this Trainer"
+        pass
