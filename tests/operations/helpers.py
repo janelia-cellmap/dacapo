@@ -14,16 +14,12 @@ from dacapo.experiments.architectures import CNNectomeUNetConfig
 from pathlib import Path
 
 
-def build_test_train_config(multiprocessing: bool):
+def build_test_train_config():
     """
     Builds the simplest possible trainer given the parameters.
     """
     return GunpowderTrainerConfig(
         name="test_trainer",
-        batch_size=1,
-        learning_rate=0.0001,
-        num_data_fetchers=1 + multiprocessing,
-        snapshot_interval=1,
     )
 
 
