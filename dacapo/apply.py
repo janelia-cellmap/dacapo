@@ -91,7 +91,7 @@ def apply(
     ), "Either validation_dataset and criterion, or iteration must be provided."
 
     # retrieving run
-    print(f"Loading run {run_name}")
+    logger.info(f"Loading run {run_name}")
     config_store = create_config_store()
     run_config = config_store.retrieve_run_config(run_name)
     run = Run(run_config)
@@ -102,7 +102,7 @@ def apply(
     # load weights
     if iteration is None:
         iteration = weights_store.retrieve_best(run_name, validation_dataset, criterion)  # type: ignore
-    print(f"Loading weights for iteration {iteration}")
+    logger.info(f"Loading weights for iteration {iteration}")
     weights_store.retrieve_weights(run_name, iteration)
 
     if parameters is None:
@@ -121,7 +121,7 @@ def apply(
             raise ValueError(
                 "validation_dataset must be a dataset name or a Dataset object, or parameters must be provided explicitly."
             )
-        print(f"Finding best parameters for validation dataset {_validation_dataset}")
+        logger.info(f"Finding best parameters for validation dataset {_validation_dataset}")
         parameters = run.task.evaluator.get_overall_best_parameters(
             _validation_dataset, criterion
         )
@@ -183,7 +183,7 @@ def apply(
         output_container, f"output_{run_name}_{iteration}_{parameters}"
     )
 
-    print(
+    logger.info(
         f"Applying best results from run {run.name} at iteration {iteration} to dataset {Path(input_container, input_dataset)}"
     )
     return apply_run(
@@ -243,7 +243,7 @@ def apply_run(
         ... )
     """
     # render prediction dataset
-    print(f"Predicting on dataset {prediction_array_identifier}")
+    logger.info(f"Predicting on dataset {prediction_array_identifier}")
     predict(
         run.name,
         iteration,
@@ -257,7 +257,7 @@ def apply_run(
     )
 
     # post-process the output
-    print(
+    logger.info(
         f"Post-processing output to dataset {output_array_identifier}",
         output_array_identifier,
     )
@@ -265,5 +265,5 @@ def apply_run(
     post_processor.set_prediction(prediction_array_identifier)
     post_processor.process(parameters, output_array_identifier, num_workers=num_workers)
 
-    print("Done")
+    logger.info("Done")
     return

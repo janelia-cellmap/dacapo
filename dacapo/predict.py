@@ -120,9 +120,9 @@ def predict(
     if isinstance(output_dtype, str):
         output_dtype = np.dtype(output_dtype)
 
-    print(f"Predicting with input size {input_size}, output size {output_size}")
+    logger.info(f"Predicting with input size {input_size}, output size {output_size}")
 
-    print(f"Total input ROI: {_input_roi}, output ROI: {output_roi}")
+    logger.info(f"Total input ROI: {_input_roi}, output ROI: {output_roi}")
 
     # prepare prediction dataset
     if raw_array.channel_dims == 0:
@@ -147,7 +147,7 @@ def predict(
 
     # run blockwise prediction
     worker_file = str(Path(Path(dacapo.blockwise.__file__).parent, "predict_worker.py"))
-    print("Running blockwise prediction with worker_file: ", worker_file)
+    logger.info("Running blockwise prediction with worker_file: ", worker_file)
     success = run_blockwise(
         worker_file=worker_file,
         total_roi=_input_roi,
@@ -162,5 +162,5 @@ def predict(
         input_array_identifier=input_array_identifier,
         output_array_identifier=output_array_identifier,
     )
-    print("Done predicting.")
+    logger.info("Done predicting.")
     return success

@@ -1,5 +1,6 @@
 import attr
 import random
+import logging
 
 from .gp_augments import AugmentConfig
 from .trainer_config import TrainerConfig
@@ -15,6 +16,8 @@ from dacapo.experiments.datasplits.datasets import Dataset
 from dacapo.experiments.tasks.predictors import Predictor
 
 import torch
+
+logger = logging.getLogger(__name__)
 
 
 def pipeline_generator(
@@ -298,7 +301,7 @@ class GunpowderTrainerConfig(TrainerConfig):
         batch_gen = batch_generator()
 
         def load_batch(event):
-            print("fetching_batch")
+            logger.info("fetching_batch")
             batch = next(batch_gen)
 
             with viewer.txn() as s:
@@ -308,7 +311,7 @@ class GunpowderTrainerConfig(TrainerConfig):
                 # reverse order for raw so we can set opacity to 1, this
                 # way higher res raw replaces low res when available
                 for name, array in batch.arrays.items():
-                    print(name)
+                    logger.info(name)
                     data = array.data[0]
 
                     channel_dims = len(data.shape) - len(array.spec.voxel_size)
@@ -357,7 +360,7 @@ class GunpowderTrainerConfig(TrainerConfig):
         with viewer.config_state.txn() as s:
             s.input_event_bindings.data_view["keyt"] = "load_batch"
 
-        print(viewer)
+        logger.info(viewer)
         load_batch(None)
 
         input("Enter to quit!")

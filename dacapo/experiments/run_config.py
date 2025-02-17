@@ -489,7 +489,7 @@ class RunConfig:
                 summary = test_model(my_model_descr)
                 summary.display()
 
-            print(
+            logger.info(
                 "package path:",
                 save_bioimageio_package(my_model_descr, output_path=path),
             )
@@ -551,14 +551,14 @@ class RunConfig:
 
         # remove validation past existing training stats
         if validated_until > trained_until:
-            print(
+            logger.info(
                 f"Trained until {trained_until}, but validated until {validated_until}! "
                 "Deleting extra validation stats"
             )
             self.validation_scores.delete_after(trained_until)
 
-        # print current training state
-        print(f"Current state: trained {trained_until}/{self.num_iterations}")
+        # logger.info current training state
+        logger.info(f"Current state: trained {trained_until}/{self.num_iterations}")
 
         # read weights of the latest iteration
         latest_weights_iteration = weights_store.latest_iteration(self)
@@ -597,7 +597,7 @@ class RunConfig:
 
             # perfectly in sync. We can continue training
             elif latest_weights_iteration == trained_until:
-                print(f"Resuming training from iteration {trained_until}")
+                logger.info(f"Resuming training from iteration {trained_until}")
 
                 weights = weights_store.retrieve_weights(
                     self, iteration=trained_until
@@ -623,12 +623,8 @@ class RunConfig:
     def train_step(self, raw: torch.Tensor, target: torch.Tensor, weight: torch.Tensor):
         self.optimizer.zero_grad()
 
-        print(raw.min(), raw.max(), target.min(), target.max())
-
         predicted = self.model.forward(raw.float().to(self.device))
 
-        print(predicted.min(), predicted.max())
-        print(weight.min(), weight.max())
         predicted.retain_grad()
         loss = self.task.loss.compute(
             predicted,

@@ -47,7 +47,7 @@ class FileStatsStore(StatsStore):
             >>> store = FileStatsStore("store")
 
         """
-        print(f"Creating FileStatsStore:\n\tpath    : {path}")
+        logger.info(f"Creating FileStatsStore:\n\tpath    : {path}")
 
         self.path = Path(path)
 
@@ -137,7 +137,7 @@ class FileStatsStore(StatsStore):
             self.__delete_validation_iteration_scores(run_name)
 
         if store_from_iteration > 0:
-            print(
+            logger.info(
                 f"Updating validation scores of run {run_name} after iteration {store_from_iteration}"
             )
 

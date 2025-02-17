@@ -37,7 +37,7 @@ def train(run_name: str, validate=True):
     #     # we are done here.
     #     return
 
-    print(f"Training run {run_name}")
+    logger.info(f"Training run {run_name}")
 
     # create run
 
@@ -57,7 +57,7 @@ def train_run(run: RunConfig, validate: bool = True, save_snapshots: bool = Fals
         ValueError: If run_name is not found in config store
 
     """
-    print(f"Starting/resuming training for run {run.name}...")
+    logger.info(f"Starting/resuming training for run {run.name}...")
 
     stats_store = create_stats_store()
     weights_store = create_weights_store()
