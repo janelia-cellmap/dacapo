@@ -55,7 +55,7 @@ dependencies = [
         "pyyaml",
         "scipy",
         "upath",
-        "boto3",
+        "boto3==1.35.81",
         "matplotlib",
         "cellmap-schemas",
         "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence.git@ome-ngff",
