@@ -3,7 +3,7 @@ from .losses import Loss
 from .evaluators import Evaluator, EvaluationScores
 from .post_processors import PostProcessor, PostProcessorParameters
 
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Iterable
 
 
@@ -23,3 +23,8 @@ class Task(ABC):
 
     def create_model(self, architecture):
         return self.predictor.create_model(architecture=architecture)
+
+    @property
+    @abstractmethod
+    def channels(self) -> list[str]:
+        pass

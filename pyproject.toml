@@ -38,6 +38,7 @@ dependencies = [
         "lazy-property",
         "neuroglancer",
         "torch",
+    "cellmap-schemas>=0.8",
         "attrs",
         "bokeh",
         "numpy-indexed>=0.3.7",
@@ -57,9 +58,10 @@ dependencies = [
         "upath",
         "boto3==1.35.81",
         "matplotlib",
-        "cellmap-schemas",
         "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence.git@ome-ngff",
         "xarray-multiscale",
+        "bioimageio.core[pytorch] >= 0.7",
+        "iohub @ git+https://github.com/czbiohub-sf/iohub.git",
         ]
 
 # extras
@@ -183,6 +185,7 @@ module = [
     "daisy.*",
     "lazy_property.*",
     "skimage.*",
+    "cellmap_schemas.*",
     "neuroglancer.*",
     "tqdm.*",
     "zarr.*",
