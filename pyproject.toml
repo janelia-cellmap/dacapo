@@ -47,7 +47,6 @@ dependencies = [
         "funlib.geometry>=0.2",
         "mwatershed>=0.5.2",
         "cellmap-models",
-        "funlib.persistence>=0.5.4",
         "gunpowder>=1.4",
         "lsds",
         "xarray",
@@ -57,8 +56,9 @@ dependencies = [
         "pyyaml",
         "scipy",
         "upath",
-        "boto3",
+        "boto3==1.35.81",
         "matplotlib",
+        "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence.git@ome-ngff",
         "xarray-multiscale",
         "bioimageio.core[pytorch] >= 0.7",
         "iohub @ git+https://github.com/czbiohub-sf/iohub.git",
@@ -204,7 +204,7 @@ module = [
     "napari.*",
     "empanada.*",
     "IPython.*",
-    "xarray_multiscale.*"
+    "cellmap_schemas.*",
 ]
 ignore_missing_imports = true
 

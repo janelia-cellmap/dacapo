@@ -56,9 +56,11 @@ class BinarizeArrayConfig(ArrayConfig):
 
         def group_array(data):
             groups = [
-                da.isin(data, group_ids)
-                if len(group_ids) > 0
-                else data != self.background
+                (
+                    da.isin(data, group_ids)
+                    if len(group_ids) > 0
+                    else data != self.background
+                )
                 for _, group_ids in self.groupings
             ]
             out = da.stack(groups, axis=0)

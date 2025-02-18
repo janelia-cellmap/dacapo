@@ -10,7 +10,7 @@ from dacapo.store.create_store import create_array_store
 from dacapo.experiments import Run
 from dacapo.train import train_run
 from dacapo.validate import validate_run
-
+from dacapo.compute_context import create_compute_context
 import zarr
 
 import pytest
@@ -75,6 +75,9 @@ def test_mini(
         num_iterations=1,
     )
     run = Run(run_config)
+    compute_context = create_compute_context()
+    device = compute_context.device
+    run.model.to(device)
 
     if func == "train":
         train_run(run)
