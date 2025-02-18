@@ -58,7 +58,8 @@ dependencies = [
         "boto3",
         "matplotlib",
         "cellmap-schemas",
-        "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence.git@ome-ngff"
+        "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence.git@ome-ngff",
+        "xarray-multiscale",
         ]
 
 # extras
