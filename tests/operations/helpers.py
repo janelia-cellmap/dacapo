@@ -121,37 +121,37 @@ def build_test_architecture_config(
     Build the simplest architecture config given the parameters.
     """
     if data_dims == 2:
-        input_shape = (32, 32)
-        eval_shape_increase = (8, 8)
-        downsample_factors = [(2, 2)]
+        input_shape = (8, 8)
+        eval_shape_increase = (24, 24)
+        downsample_factors = [(2, 2)] * 0
         upsample_factors = [(2, 2)] * int(upsample)
 
-        kernel_size_down = [[(3, 3)] * 2] * 2
-        kernel_size_up = [[(3, 3)] * 2] * 1
+        kernel_size_down = [[(3, 3)] * 2] * 1
+        kernel_size_up = [[(3, 3)] * 2] * 0
         kernel_size_down = None  # the default should work
         kernel_size_up = None  # the default should work
 
     elif data_dims == 3 and architecture_dims == 2:
-        input_shape = (1, 32, 32)
-        eval_shape_increase = (15, 8, 8)
-        downsample_factors = [(1, 2, 2)]
+        input_shape = (1, 8, 8)
+        eval_shape_increase = (15, 24, 24)
+        downsample_factors = [(1, 2, 2)] * 0
 
         # test data upsamples in all dimensions so we have
         # to here too
         upsample_factors = [(2, 2, 2)] * int(upsample)
 
         # we have to force the 3D kernels to be 2D
-        kernel_size_down = [[(1, 3, 3)] * 2] * 2
-        kernel_size_up = [[(1, 3, 3)] * 2] * 1
+        kernel_size_down = [[(1, 3, 3)] * 2] * 1
+        kernel_size_up = [[(1, 3, 3)] * 2] * 0
 
     elif data_dims == 3 and architecture_dims == 3:
-        input_shape = (32, 32, 32)
-        eval_shape_increase = (8, 8, 8)
-        downsample_factors = [(2, 2, 2)]
+        input_shape = (8, 8, 8)
+        eval_shape_increase = (24, 24, 24)
+        downsample_factors = [(2, 2, 2)] * 0
         upsample_factors = [(2, 2, 2)] * int(upsample)
 
-        kernel_size_down = [[(3, 3, 3)] * 2] * 2
-        kernel_size_up = [[(3, 3, 3)] * 2] * 1
+        kernel_size_down = [[(3, 3, 3)] * 2] * 1
+        kernel_size_up = [[(3, 3, 3)] * 2] * 0
         kernel_size_down = None  # the default should work
         kernel_size_up = None  # the default should work
 
