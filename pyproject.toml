@@ -61,7 +61,6 @@ dependencies = [
         "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence.git@ome-ngff",
         "xarray-multiscale",
         "bioimageio.core[pytorch] >= 0.7",
-        "iohub @ git+https://github.com/czbiohub-sf/iohub.git",
         ]
 
 # extras
