@@ -458,7 +458,7 @@ class RunConfig:
             weights_path = tmp / "model.pth"
             torch.save(self.model.state_dict(), weights_path)
             if sys.version_info[1] < 11:
-                raise RuntimeError(
+                raise NotImplementedError(
                     "Saving to bioimageio modelzoo format is not implemented for Python versions < 3.11"
                 )
             with open(weights_path, "rb", buffering=0) as f:
