@@ -17,6 +17,8 @@ from .training_stats import TrainingStats
 from .validation_scores import ValidationScores
 from .model import Model
 
+import sys
+
 from bioimageio.core import test_model
 from bioimageio.spec import save_bioimageio_package
 from bioimageio.spec.model.v0_5 import (
@@ -455,6 +457,10 @@ class RunConfig:
 
             weights_path = tmp / "model.pth"
             torch.save(self.model.state_dict(), weights_path)
+            if sys.version_info[1] < 11:
+                raise RuntimeError(
+                    "Saving to bioimageio modelzoo format is not implemented for Python versions < 3.11"
+                )
             with open(weights_path, "rb", buffering=0) as f:
                 weights_hash = hashlib.file_digest(f, "sha256").hexdigest()
 
