@@ -366,7 +366,6 @@ class GunpowderTrainerConfig(TrainerConfig):
         input("Enter to quit!")
 
 
-
 # ## Example
 # config = GunpowderTrainerConfig(name="gunpowder")
 

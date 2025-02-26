@@ -121,7 +121,9 @@ def apply(
             raise ValueError(
                 "validation_dataset must be a dataset name or a Dataset object, or parameters must be provided explicitly."
             )
-        logger.info(f"Finding best parameters for validation dataset {_validation_dataset}")
+        logger.info(
+            f"Finding best parameters for validation dataset {_validation_dataset}"
+        )
         parameters = run.task.evaluator.get_overall_best_parameters(
             _validation_dataset, criterion
         )

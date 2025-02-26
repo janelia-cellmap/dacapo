@@ -111,7 +111,10 @@ def train_run(run: RunConfig, validate: bool = True, save_snapshots: bool = Fals
             # purposes so you get snapshots quickly.
             run.save_snapshot(i, batch, batch_out, snapshot_container)
 
-        if i % run.validation_interval == run.validation_interval - 1 or i == run.num_iterations - 1:
+        if (
+            i % run.validation_interval == run.validation_interval - 1
+            or i == run.num_iterations - 1
+        ):
             # run "end of epoch steps" such as stepping the learning rate
             # scheduler, storing stats, and writing out weights.
             try:

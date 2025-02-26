@@ -9,6 +9,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class DataSplit(ABC):
     """
     A class for creating a simple train dataset and no validation dataset. It is derived from `DataSplit` class.
