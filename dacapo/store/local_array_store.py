@@ -212,7 +212,7 @@ class LocalArrayStore(ArrayStore):
                 f"Asked to remove dataset {dataset} in container {container}, but it is not a directory. Will not delete."
             )
             return
-        print(f"Removing dataset {dataset} in container {container}")
+        logger.info(f"Removing dataset {dataset} in container {container}")
 
         shutil.rmtree(path)
 

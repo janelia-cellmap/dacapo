@@ -5,6 +5,9 @@ from typing import List, Optional
 import json
 import itertools
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class DataSplit(ABC):
     """
@@ -84,7 +87,7 @@ class DataSplit(ABC):
                     neuroglancer.LayerGroupViewer(layers=list(validate_layers.keys())),
                 ]
             )
-        print(f"Neuroglancer link: {viewer}")
+        logger.info(f"Neuroglancer link: {viewer}")
         if embedded:
             from IPython.display import IFrame
 

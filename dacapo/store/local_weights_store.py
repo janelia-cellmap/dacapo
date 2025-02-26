@@ -1,6 +1,6 @@
 from dacapo.experiments.datasplits.datasets.dataset import Dataset
 from .weights_store import WeightsStore, Weights
-from dacapo.experiments.run import Run
+from dacapo.experiments.run import Run, RunConfig
 
 import torch
 
@@ -63,9 +63,29 @@ class LocalWeightsStore(WeightsStore):
             The directory is created if it does not exist.
 
         """
-        print(f"Creating local weights store in directory {basedir}")
+        logger.info(f"Creating local weights store in directory {basedir}")
 
         self.basedir = basedir
+
+    def save_trace(self, run: RunConfig):
+        trace_file = Path(f"{self.__get_weights_dir(run)}/trace.pt")
+        if not trace_file.parent.exists():
+            trace_file.parent.mkdir(parents=True, exist_ok=True)
+        if not trace_file.exists():
+            in_shape = (
+                1,
+                run.architecture.num_in_channels,
+                *run.architecture.input_shape,
+            )
+            in_data = torch.randn(in_shape)
+            try:
+                torch.jit.save(
+                    torch.jit.trace(run.model.cpu(), in_data),
+                    trace_file,
+                )
+            except SystemError as e:
+                logger.info(f"Error saving trace: {e}, this model will not be traced")
+                trace_file.touch()
 
     def latest_iteration(self, run: str) -> Optional[int]:
         """
@@ -108,6 +128,7 @@ class LocalWeightsStore(WeightsStore):
         Note:
             The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
         """
+        self.save_trace(run)
 
         logger.warning(f"Storing weights for run {run}, iteration {iteration}")
 
@@ -138,7 +159,7 @@ class LocalWeightsStore(WeightsStore):
             The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
         """
 
-        print(f"Retrieving weights for run {run}, iteration {iteration}")
+        logger.info(f"Retrieving weights for run {run}, iteration {iteration}")
 
         weights_name = self.__get_weights_dir(run) / "iterations" / str(iteration)
 
@@ -251,7 +272,7 @@ class LocalWeightsStore(WeightsStore):
         Note:
             The best weights are stored in a json file that contains the iteration number.
         """
-        print(f"Retrieving weights for run {run}, criterion {criterion}")
+        logger.info(f"Retrieving weights for run {run}, criterion {criterion}")
 
         with (self.__get_weights_dir(run) / criterion / f"{dataset}.json").open(
             "r"
@@ -272,7 +293,7 @@ class LocalWeightsStore(WeightsStore):
         Note:
             This method is used internally by the store to load the best weights for a given run and criterion.
         """
-        print(f"Retrieving weights for run {run}, criterion {criterion}")
+        logger.info(f"Retrieving weights for run {run}, criterion {criterion}")
 
         weights_name = self.__get_weights_dir(run) / f"{criterion}"
 

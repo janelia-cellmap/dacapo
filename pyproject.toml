@@ -38,8 +38,8 @@ dependencies = [
         "lazy-property",
         "neuroglancer",
         "torch",
+        "cellmap-schemas>=0.8",
         "attrs",
-        "bokeh",
         "numpy-indexed>=0.3.7",
         "daisy",
         "funlib.math>=0.1",
@@ -56,16 +56,15 @@ dependencies = [
         "scipy",
         "upath",
         "boto3==1.35.81",
-        "matplotlib",
-        "cellmap-schemas",
         "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence.git@ome-ngff",
         "xarray-multiscale",
+        "bioimageio.core[pytorch] >= 0.7",
         ]
 
 # extras
 # https://peps.python.org/pep-0621/#dependencies-optional-dependencies
 [project.optional-dependencies]
-test = ["pytest", "pytest-cov", "pytest-lazy-fixtures"]
+test = ["pytest", "pytest-xdist", "pytest-cov", "pytest-lazy-fixtures"]
 dev = [
     "black",
     "mypy",
@@ -183,6 +182,7 @@ module = [
     "daisy.*",
     "lazy_property.*",
     "skimage.*",
+    "cellmap_schemas.*",
     "neuroglancer.*",
     "tqdm.*",
     "zarr.*",
@@ -190,7 +190,6 @@ module = [
     "bson.*",
     "affogato.*",
     "SimpleITK.*",
-    "bokeh.*",
     "lsd.*",
     "yaml.*",
     "pytest_lazyfixture.*",

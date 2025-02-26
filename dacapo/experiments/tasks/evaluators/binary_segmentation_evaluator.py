@@ -131,7 +131,7 @@ class BinarySegmentationEvaluator(Evaluator):
         # removed the .squeeze() because it was used for batch size and now we are feeding 4d c, z, y, x
         evaluation_data = evaluation_array[evaluation_array.roi]
         output_data = output_array[output_array.roi]
-        print(
+        logger.info(
             f"Evaluating binary segmentations on evaluation_data of shape: {evaluation_data.shape}"
         )
         assert (
