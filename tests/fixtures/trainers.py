@@ -5,9 +5,7 @@ import pytest
 
 @pytest.fixture()
 def dummy_trainer():
-    yield DummyTrainerConfig(
-        name="dummy_trainer", dummy_attr=True
-    )
+    yield DummyTrainerConfig(name="dummy_trainer", dummy_attr=True)
 
 
 @pytest.fixture()
