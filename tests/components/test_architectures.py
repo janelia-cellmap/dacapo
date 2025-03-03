@@ -32,6 +32,8 @@ from dacapo.experiments.run_config import RunConfig
 
 import pytest
 
+import sys
+
 
 def build_test_architecture_config(
     data_dims: int,
@@ -136,7 +138,17 @@ def build_test_architecture_config(
 @pytest.mark.parametrize("batch_norm", [True, False])
 @pytest.mark.parametrize("use_attention", [True, False])
 @pytest.mark.parametrize("padding", ["valid", "same"])
-@pytest.mark.parametrize("source", ["config", "module", "bioimage_modelzoo"])
+@pytest.mark.parametrize(
+    "source",
+    [
+        "config",
+        "module",
+        pytest.param(
+            "bioimage_modelzoo",
+            marks=pytest.mark.skipif(sys.version_info[1] < 11, reason="skip this one"),
+        ),
+    ],
+)
 def test_architectures(
     data_dims,
     channels,

@@ -174,6 +174,7 @@ class CNNectomeUNetConfig(ArchitectureConfig):
             + [True] * (len(downsample_factors) - 1),
             use_attention=self.use_attention,
             batch_norm=self.batch_norm,
+            dims=self.dims,
         )
         if self.upsample_factors is not None and len(self.upsample_factors) > 0:
             layers = [unet]
@@ -190,7 +191,7 @@ class CNNectomeUNetConfig(ArchitectureConfig):
                 conv = ConvPass(
                     self.fmaps_out,
                     self.fmaps_out,
-                    kernel_size_up[-1],
+                    kernel_size_down[-1],
                     activation="ReLU",
                     batch_norm=self.batch_norm,
                 )

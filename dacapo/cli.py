@@ -680,7 +680,7 @@ def segment_blockwise(
         overwrite=overwrite,
         write_size=write_roi.shape,
     )
-    print(
+    logger.info(
         f"Created output array {output_array_identifier.container}:{output_array_identifier.dataset} with ROI {_total_roi}."
     )
 
@@ -791,7 +791,7 @@ def config():
 def generate_dacapo_yaml(config):
     with open("dacapo.yaml", "w") as f:
         yaml.dump(config.serialize(), f, default_flow_style=False)
-    print("dacapo.yaml has been created.")
+    logger.info("dacapo.yaml has been created.")
 
 
 def generate_config(
@@ -832,7 +832,7 @@ def unpack_ctx(ctx):
     Example:
         >>> ctx = ...
         >>> kwargs = unpack_ctx(ctx)
-        >>> print(kwargs)
+        >>> logger.info(kwargs)
         {'arg1': value1, 'arg2': value2, ...}
     """
     kwargs = {
@@ -843,7 +843,7 @@ def unpack_ctx(ctx):
             kwargs[k] = int(v)
         elif v.replace(".", "").isnumeric():
             kwargs[k] = float(v)
-        print(f"{k}: {kwargs[k]}")
+        logger.info(f"{k}: {kwargs[k]}")
     return kwargs
 
 

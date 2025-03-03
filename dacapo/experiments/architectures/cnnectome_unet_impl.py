@@ -84,6 +84,7 @@ class CNNectomeUNetModule(torch.nn.Module):
         activation_on_upsample=False,
         use_attention=False,
         batch_norm=True,
+        dims: int | None = None,
     ):
         """
         Create a U-Net::
@@ -200,7 +201,10 @@ class CNNectomeUNetModule(torch.nn.Module):
             else upsample_channel_contraction
         )
 
-        self.dims = len(downsample_factors[0])
+        if dims is None:
+            self.dims = len(downsample_factors[0])
+        else:
+            self.dims = dims
         self.use_attention = use_attention
         self.batch_norm = batch_norm
 

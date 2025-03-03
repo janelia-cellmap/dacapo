@@ -2,6 +2,10 @@ from cattr import Converter
 from cattr.gen import make_dict_unstructure_fn, make_dict_structure_fn
 from .conversion_hooks import register_hooks
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class TypedConverter(Converter):
     """A converter that stores and retrieves type information for selected
@@ -122,10 +126,10 @@ class TypedConverter(Converter):
             structure_fn = make_dict_structure_fn(cls, self)
             return structure_fn(obj_data, cls)
         except Exception as e:
-            print(
+            logger.error(
                 f"Could not structure object of type {obj_data}. will try unstructured data. attr __type__ can be missing because of old version of the data."
             )
-            print(e)
+            logger.error(e)
             return obj_data
 
 

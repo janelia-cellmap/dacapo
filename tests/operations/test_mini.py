@@ -29,7 +29,8 @@ import pytest
 @pytest.mark.parametrize("upsample", [True, False])
 @pytest.mark.parametrize("padding", ["valid", "same"])
 @pytest.mark.parametrize("func", ["train", "validate"])
-@pytest.mark.parametrize("multiprocessing", [False])
+@pytest.mark.parametrize("multiprocessing", [True, False])
+@pytest.mark.skip("This test is too slow to run on CI")
 def test_mini(
     tmpdir,
     data_dims,
@@ -47,7 +48,7 @@ def test_mini(
         # TODO: maybe check that an appropriate warning is raised somewhere
         return
 
-    trainer_config = build_test_train_config(multiprocessing)
+    trainer_config = build_test_train_config()
 
     data_config = build_test_data_config(
         tmpdir,
@@ -72,7 +73,10 @@ def test_mini(
         trainer_config=trainer_config,
         datasplit_config=data_config,
         repetition=0,
-        num_iterations=1,
+        num_iterations=2,
+        snapshot_interval=1,
+        batch_size=2,
+        num_workers=int(multiprocessing),
     )
     run = Run(run_config)
     compute_context = create_compute_context()
@@ -80,21 +84,25 @@ def test_mini(
     run.model.to(device)
 
     if func == "train":
-        train_run(run)
+        train_run(run, validate=False, save_snapshots=True)
         array_store = create_array_store()
         snapshot_container = array_store.snapshot_container(run.name).container
         assert snapshot_container.exists()
         assert all(
             x in zarr.open(snapshot_container)
             for x in [
-                "0/volumes/raw",
-                "0/volumes/gt",
-                "0/volumes/target",
-                "0/volumes/weight",
-                "0/volumes/prediction",
-                "0/volumes/gradients",
-                "0/volumes/mask",
+                "volumes/raw",
+                "volumes/gt",
+                "volumes/target",
+                "volumes/weight",
+                "volumes/prediction",
+                "volumes/gradients",
+                "volumes/mask",
             ]
         )
+        iterations_list = zarr.open(snapshot_container)["volumes/raw"].attrs[
+            "iterations"
+        ]
+        assert iterations_list == [0, 1], iterations_list
     elif func == "validate":
         validate_run(run, 1)

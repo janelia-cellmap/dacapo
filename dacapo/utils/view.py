@@ -13,6 +13,9 @@ import time
 import copy
 import json
 from typing import Optional
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_viewer(
@@ -394,7 +397,7 @@ class NeuroglancerRunViewer:
             bind_address=bind_address, bind_port=bind_port
         )
         self.viewer = neuroglancer.Viewer()
-        print(f"Neuroglancer viewer: {self.viewer}")
+        logger.info(f"Neuroglancer viewer: {self.viewer}")
         with self.viewer.txn() as state:
             state.showSlices = False
 
@@ -589,7 +592,7 @@ class NeuroglancerRunViewer:
             time.sleep(10)
             new_best_exists = self.best_score.does_new_best_exist()
             if new_best_exists:
-                print(
+                logger.info(
                     f"New best f1 score of {self.best_score.score} at iteration {self.best_score.iteration} and parameter {self.best_score.parameter}"
                 )
                 self.update_best_layer()

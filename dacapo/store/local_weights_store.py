@@ -63,7 +63,7 @@ class LocalWeightsStore(WeightsStore):
             The directory is created if it does not exist.
 
         """
-        print(f"Creating local weights store in directory {basedir}")
+        logger.info(f"Creating local weights store in directory {basedir}")
 
         self.basedir = basedir
 
@@ -84,7 +84,7 @@ class LocalWeightsStore(WeightsStore):
                     trace_file,
                 )
             except SystemError as e:
-                print(f"Error saving trace: {e}, this model will not be traced")
+                logger.info(f"Error saving trace: {e}, this model will not be traced")
                 trace_file.touch()
 
     def latest_iteration(self, run: str) -> Optional[int]:
@@ -159,7 +159,7 @@ class LocalWeightsStore(WeightsStore):
             The weights are stored in the format of a Weights object, which is a simple container for the model and optimizer state dicts.
         """
 
-        print(f"Retrieving weights for run {run}, iteration {iteration}")
+        logger.info(f"Retrieving weights for run {run}, iteration {iteration}")
 
         weights_name = self.__get_weights_dir(run) / "iterations" / str(iteration)
 
@@ -272,7 +272,7 @@ class LocalWeightsStore(WeightsStore):
         Note:
             The best weights are stored in a json file that contains the iteration number.
         """
-        print(f"Retrieving weights for run {run}, criterion {criterion}")
+        logger.info(f"Retrieving weights for run {run}, criterion {criterion}")
 
         with (self.__get_weights_dir(run) / criterion / f"{dataset}.json").open(
             "r"
@@ -293,7 +293,7 @@ class LocalWeightsStore(WeightsStore):
         Note:
             This method is used internally by the store to load the best weights for a given run and criterion.
         """
-        print(f"Retrieving weights for run {run}, criterion {criterion}")
+        logger.info(f"Retrieving weights for run {run}, criterion {criterion}")
 
         weights_name = self.__get_weights_dir(run) / f"{criterion}"
 

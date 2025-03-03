@@ -6,7 +6,7 @@ from .architecture import ArchitectureConfig
 
 from funlib.geometry import Coordinate
 
-from bioimageio.core import load_description_and_test
+from bioimageio.core import load_description
 from bioimageio.core.model_adapters._pytorch_model_adapter import PytorchModelAdapter
 from bioimageio.spec import InvalidDescr
 from bioimageio.spec.model.v0_5 import (
@@ -28,7 +28,7 @@ class ModelZooConfig(ArchitectureConfig):
     Support is currently limited to models saved with the `PytorchStateDictWeightsDescr`.
     See more info here: https://bioimage-io.github.io/spec-bioimage-io/bioimageio/spec/model/v0_5.html#PytorchStateDictWeightsDescr
 
-    We try to support all model_id formats that are supported by the `bioimageio.core` `load_description_and_test` function.
+    We try to support all model_id formats that are supported by the `bioimageio.core` `load_description` function.
     However there seem to be some cases that fail. You may receive an `InvalidDescr` error when trying to load a model from
     a downloaded rdf file. In this case downloading the zipped model, or using the models name e.g. "affable-shark"
     should work.
@@ -80,11 +80,11 @@ class ModelZooConfig(ArchitectureConfig):
             if isinstance(self.model_id, Path) and self.model_id.suffix == ".zip":
                 with zipfile.ZipFile(self.model_id, "r") as zip_ref:
                     zip_ref.extractall(Path(f"{self.model_id}.unzip"))
-                self._model_description = load_description_and_test(
+                self._model_description = load_description(
                     Path(f"{self.model_id}.unzip")
                 )
             else:
-                self._model_description = load_description_and_test(self.model_id)
+                self._model_description = load_description(self.model_id)
             if isinstance(self._model_description, InvalidDescr):
                 raise Exception("Invalid model description")
         return self._model_description

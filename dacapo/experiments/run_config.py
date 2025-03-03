@@ -4,16 +4,20 @@ import hashlib
 import numpy as np
 
 from funlib.geometry import Coordinate
+from funlib.persistence import prepare_ds, open_ds
 
+from dacapo.store.array_store import LocalContainerIdentifier
 from dacapo.store.converter import converter
 from .architectures import ArchitectureConfig
 from .datasplits import DataSplitConfig, DataSplit
 from .tasks import TaskConfig, Task
-from .trainers import TrainerConfig, Trainer, GunpowderTrainer
+from .trainers import TrainerConfig, Trainer, GunpowderTrainerConfig
 from .starts import StartConfig
 from .training_stats import TrainingStats
 from .validation_scores import ValidationScores
 from .model import Model
+
+import sys
 
 from bioimageio.core import test_model
 from bioimageio.spec import save_bioimageio_package
@@ -44,9 +48,15 @@ from bioimageio.spec.model.v0_5 import (
 )
 
 import torch
+import zarr
+
+from dacapo.tmp import np_to_funlib_array
 
 from typing import Optional
 from pathlib import Path
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @attr.s
@@ -142,22 +152,39 @@ class RunConfig:
     num_iterations: int | None = attr.ib(
         default=None, metadata={"help_text": "The number of iterations to train for."}
     )
+    batch_size: int = attr.ib(
+        default=1, metadata={"help_text": "The batch size for the training."}
+    )
+    num_workers: int = attr.ib(
+        default=0,
+        metadata={"help_text": "The number of workers for the DataLoader."},
+    )
 
     validation_interval: int = attr.ib(
         default=1000, metadata={"help_text": "How often to perform validation."}
+    )
+    snapshot_interval: int | None = attr.ib(
+        default=None, metadata={"help_text": "How often to save snapshots."}
     )
 
     start_config: Optional[StartConfig] = attr.ib(
         default=None, metadata={"help_text": "A starting point for continued training."}
     )
 
-    _optimizer: Optional[torch.optim.Optimizer] = None
-    _model: Optional[torch.nn.Module] = None
-    _datasplit: Optional[DataSplitConfig] = None
-    _task: Optional[Task] = None
-    _trainer: Optional[Trainer] = None
-    _training_stats: Optional[TrainingStats] = None
-    _validation_scores: Optional[ValidationScores] = None
+    learning_rate: float = attr.ib(
+        default=1e-3,
+        metadata={"help_text": "The learning rate for the optimizer (RAdam)."},
+    )
+
+    _device: torch.device | None = None
+    _optimizer: torch.optim.Optimizer | None = None
+    _lr_scheduler: torch.optim.lr_scheduler.LRScheduler | None = None
+    _model: torch.nn.Module | None = None
+    _datasplit: DataSplitConfig | None = None
+    _task: Task | None = None
+    _trainer: Trainer | None = None
+    _training_stats: TrainingStats | None = None
+    _validation_scores: ValidationScores | None = None
 
     @property
     def train_until(self) -> int:
@@ -174,10 +201,8 @@ class RunConfig:
         return self.architecture_config
 
     @property
-    def trainer(self) -> Trainer:
-        if self._trainer is None:
-            self._trainer = self.trainer_config.trainer_type(self.trainer_config)
-        return self._trainer
+    def trainer(self) -> TrainerConfig:
+        return self.trainer_config
 
     @property
     def datasplit(self) -> DataSplit:
@@ -188,7 +213,11 @@ class RunConfig:
         return self._datasplit
 
     @property
-    def model(self) -> torch.nn.Module:
+    def device(self) -> torch.device:
+        return self._device
+
+    @property
+    def model(self) -> Model:
         if self._model is None:
             if self.task is not None:
                 self._model = self.task.create_model(self.architecture)
@@ -200,15 +229,27 @@ class RunConfig:
                 )
         return self._model
 
-    @model.setter
-    def model(self, value: torch.nn.Module):
-        self._model = value
-
     @property
     def optimizer(self) -> torch.optim.Optimizer:
         if self._optimizer is None:
-            self._optimizer = self.trainer.create_optimizer(self.model)
+            self._optimizer = torch.optim.RAdam(
+                lr=self.learning_rate,
+                params=self.model.parameters(),
+                decoupled_weight_decay=True,
+            )
         return self._optimizer
+
+    @property
+    def lr_scheduler(self) -> torch.optim.lr_scheduler.LRScheduler:
+        if self._lr_scheduler is None:
+            self._lr_scheduler = torch.optim.lr_scheduler.LinearLR(
+                self.optimizer,
+                start_factor=0.01,
+                end_factor=1.0,
+                total_iters=self.num_iterations // self.validation_interval,
+                last_epoch=-1,
+            )
+        return self._lr_scheduler
 
     @property
     def training_stats(self):
@@ -257,30 +298,6 @@ class RunConfig:
             task.parameters, datasplit.validate, task.evaluation_scores
         )
 
-    def move_optimizer(
-        self, device: torch.device, empty_cuda_cache: bool = False
-    ) -> None:
-        """
-        Moves the optimizer to the specified device.
-
-        Args:
-            device: The device to move the optimizer to.
-            empty_cuda_cache: Whether to empty the CUDA cache after moving the optimizer.
-        Raises:
-            AssertionError: If the optimizer state is not a dictionary.
-        Examples:
-            >>> run.move_optimizer(device)
-            >>> run.optimizer
-            Optimizer object
-
-        """
-        for state in self.optimizer.state.values():
-            for k, v in state.items():
-                if torch.is_tensor(v):
-                    state[k] = v.to(device)
-        if empty_cuda_cache:
-            torch.cuda.empty_cache()
-
     def __str__(self):
         return self.name
 
@@ -298,9 +315,9 @@ class RunConfig:
             >>> run.visualize_pipeline()
 
         """
-        if not isinstance(self.trainer, GunpowderTrainer):
+        if not isinstance(self.trainer, GunpowderTrainerConfig):
             raise NotImplementedError(
-                "Only GunpowderTrainer is supported for visualization"
+                "Only GunpowderTrainerConfig is supported for visualization"
             )
         if not hasattr(self.trainer, "_pipeline"):
             from ..store.create_store import create_array_store
@@ -324,6 +341,7 @@ class RunConfig:
         output_test_image_path: Path | None = None,
         checkpoint: int | str | None = None,
         in_voxel_size: Coordinate | None = None,
+        test_saved_model: bool = False,
     ):
         # TODO: Fix this import. Importing here due to circular imports.
         # The weights store takes a Run to figure out where weights are saved,
@@ -439,6 +457,10 @@ class RunConfig:
 
             weights_path = tmp / "model.pth"
             torch.save(self.model.state_dict(), weights_path)
+            if sys.version_info[1] < 11:
+                raise NotImplementedError(
+                    "Saving to bioimageio modelzoo format is not implemented for Python versions < 3.11"
+                )
             with open(weights_path, "rb", buffering=0) as f:
                 weights_hash = hashlib.file_digest(f, "sha256").hexdigest()
 
@@ -469,13 +491,229 @@ class RunConfig:
                 ),
             )
 
-            summary = test_model(my_model_descr)
-            summary.display()
+            if test_saved_model:
+                summary = test_model(my_model_descr)
+                summary.display()
 
-            print(
+            logger.info(
                 "package path:",
                 save_bioimageio_package(my_model_descr, output_path=path),
             )
+
+    def data_loader(self) -> torch.utils.data.DataLoader:
+        dataset = self.trainer.iterable_dataset(
+            self.datasplit.train,
+            self.model.input_shape,
+            self.model.output_shape,
+            self.task.predictor,
+        )
+        return torch.utils.data.DataLoader(
+            dataset,
+            batch_size=self.batch_size,
+            num_workers=self.num_workers,
+            persistent_workers=True if self.num_workers > 0 else False,
+        )
+
+    def to(self, device: torch.device):
+        self._device = device
+        self._model = self.model.to(self.device)
+        # TODO: investigate a simple `.to(self.device)` alternative
+        self.move_optimizer(self.device)
+
+    def move_optimizer(
+        self, device: torch.device, empty_cuda_cache: bool = False
+    ) -> None:
+        """
+        Moves the optimizer to the specified device.
+
+        Args:
+            device: The device to move the optimizer to.
+            empty_cuda_cache: Whether to empty the CUDA cache after moving the optimizer.
+        Raises:
+            AssertionError: If the optimizer state is not a dictionary.
+        Examples:
+            >>> run.move_optimizer(device)
+            >>> run.optimizer
+            Optimizer object
+
+        """
+        for state in self.optimizer.state.values():
+            for k, v in state.items():
+                if torch.is_tensor(v):
+                    state[k] = v.to(device)
+        if empty_cuda_cache:
+            torch.cuda.empty_cache()
+
+    def resume_training(self, stats_store, weights_store) -> int:
+        # Parse existing stats
+        self.training_stats = stats_store.retrieve_training_stats(self.name)
+        self.validation_scores.scores = (
+            stats_store.retrieve_validation_iteration_scores(self.name)
+        )
+
+        # how far have we trained and validated?
+        trained_until = self.training_stats.trained_until()
+        validated_until = self.validation_scores.validated_until()
+
+        # remove validation past existing training stats
+        if validated_until > trained_until:
+            logger.info(
+                f"Trained until {trained_until}, but validated until {validated_until}! "
+                "Deleting extra validation stats"
+            )
+            self.validation_scores.delete_after(trained_until)
+
+        # logger.info current training state
+        logger.info(f"Current state: trained {trained_until}/{self.num_iterations}")
+
+        # read weights of the latest iteration
+        latest_weights_iteration = weights_store.latest_iteration(self)
+        latest_weights_iteration = (
+            0 if latest_weights_iteration is None else latest_weights_iteration
+        )
+        weights = None
+
+        # check if existing weights are consistent with existing training stats
+        if trained_until > 0:
+            # no weights are stored, training stats are inconsistent, delete them
+            if latest_weights_iteration is None:
+                logger.warning(
+                    f"Run {self.name} was previously trained until {trained_until}, but no weights are "
+                    "stored. Will restart training from scratch."
+                )
+
+                trained_until = 0
+                self.training_stats.delete_after(0)
+                self.validation_scores.delete_after(0)
+
+            # weights are stored, but not enough so some stats are inconsistent, delete the inconsistent ones
+            elif latest_weights_iteration < trained_until:
+                logger.warning(
+                    f"Run {self.name} was previously trained until {trained_until}, but the latest "
+                    f"weights are stored for iteration {latest_weights_iteration}. Will resume training "
+                    f"from {latest_weights_iteration}."
+                )
+
+                trained_until = latest_weights_iteration
+                self.training_stats.delete_after(trained_until)
+                self.validation_scores.delete_after(trained_until)
+                weights = weights_store.retrieve_weights(self, iteration=trained_until)
+
+            # perfectly in sync. We can continue training
+            elif latest_weights_iteration == trained_until:
+                logger.info(f"Resuming training from iteration {trained_until}")
+
+                weights = weights_store.retrieve_weights(self, iteration=trained_until)
+
+            # weights are stored past the stored training stats, log this inconsistency
+            # but keep training
+            elif latest_weights_iteration > trained_until:
+                weights = weights_store.retrieve_weights(
+                    self, iteration=latest_weights_iteration
+                )
+                logger.error(
+                    f"Found weights for iteration {latest_weights_iteration}, but "
+                    f"self {self.name} was only trained until {trained_until}. "
+                )
+
+            # load the weights that we want to resume training from
+            if weights is not None:
+                self.model.load_state_dict(weights.model)
+                self.optimizer.load_state_dict(weights.optimizer)
+        return trained_until
+
+    def train_step(self, raw: torch.Tensor, target: torch.Tensor, weight: torch.Tensor):
+        self.optimizer.zero_grad()
+
+        predicted = self.model.forward(raw.float().to(self.device))
+
+        predicted.retain_grad()
+        loss = self.task.loss.compute(
+            predicted,
+            target.float().to(self.device),
+            weight.float().to(self.device),
+        )
+        loss.backward()
+        self.optimizer.step()
+
+        return loss.detach().cpu().item(), {
+            "prediction": predicted.detach(),
+            "gradients": predicted.grad.detach(),
+        }
+
+    def save_snapshot(
+        self,
+        iteration: int,
+        batch: dict[str, torch.Tensor],
+        batch_out: dict[str, torch.Tensor],
+        snapshot_container: LocalContainerIdentifier,
+    ):
+        snapshot_zarr = zarr.open(snapshot_container.container, "a")
+        # remove batch dim from all snapshot arrays
+
+        raw = batch["raw"]
+        gt = batch["target"]
+        target = batch["target"]
+        weight = batch["weight"]
+        mask = batch["mask"]
+        prediction = batch_out["prediction"]
+        gradients = batch_out["gradients"]
+
+        in_voxel_size = self.datasplit.train[0].raw.voxel_size
+        out_voxel_size = self.datasplit.train[0].gt.voxel_size
+        ndims = in_voxel_size.dims
+        input_shape = Coordinate(raw.shape[-ndims:])
+        output_shape = Coordinate(gt.shape[-ndims:])
+        context = (input_shape * in_voxel_size - output_shape * out_voxel_size) / 2
+        in_shift = context * 0
+        out_shift = context
+
+        (raw,) = [
+            np_to_funlib_array(in_array.cpu().numpy(), in_shift, in_voxel_size)
+            for in_array in [raw]
+        ]
+        (gt, target, weight, mask, prediction, gradients) = [
+            np_to_funlib_array(out_array.cpu().numpy(), out_shift, out_voxel_size)
+            for out_array in [gt, target, weight, mask, prediction, gradients]
+        ]
+
+        snapshot_arrays = {
+            "volumes/raw": raw,
+            "volumes/gt": gt,
+            "volumes/target": target,
+            "volumes/weight": weight,
+            "volumes/mask": mask,
+            "volumes/prediction": prediction,
+            "volumes/gradients": gradients,
+        }
+        for k, v in snapshot_arrays.items():
+            snapshot_array_identifier = snapshot_container.array_identifier(k)
+            array_name = f"{snapshot_array_identifier.container}/{snapshot_array_identifier.dataset}"
+            if k not in snapshot_zarr:
+                array = prepare_ds(
+                    array_name,
+                    shape=(0, *v.shape),
+                    offset=v.roi.offset,
+                    voxel_size=v.voxel_size,
+                    axis_names=("iterations^", *v.axis_names),
+                    dtype=v.dtype if v.dtype != bool else np.uint8,
+                    mode="w",
+                )
+            else:
+                array = open_ds(array_name, mode="r+")
+
+            # neuroglancer doesn't allow bools
+            if not v.dtype == bool:
+                data = v[:]
+            else:
+                data = v[:].astype(np.uint8) * 255
+
+            # add an extra dimension so that the shapes match
+            array._source_data.append(data[None, :])
+            if "iterations" not in array.attrs:
+                print(f"No iterations found in array at iteration {iteration}")
+                array.attrs["iterations"] = list()
+            array.attrs["iterations"] = array.attrs["iterations"] + [iteration]
 
 
 def from_yaml(config_yaml: dict) -> torch.nn.Module:
