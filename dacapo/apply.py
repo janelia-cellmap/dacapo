@@ -4,7 +4,7 @@ from funlib.geometry import Roi, Coordinate
 from funlib.persistence import open_ds
 import numpy as np
 from dacapo.experiments.datasplits.datasets.dataset import Dataset
-from dacapo.experiments.run import Run
+from dacapo.experiments.run import RunConfig
 
 from dacapo.experiments.tasks.post_processors.post_processor_parameters import (
     PostProcessorParameters,
@@ -203,7 +203,7 @@ def apply(
 
 
 def apply_run(
-    run: Run,
+    run: RunConfig,
     iteration: int,
     parameters: PostProcessorParameters,
     input_array_identifier: "LocalArrayIdentifier",

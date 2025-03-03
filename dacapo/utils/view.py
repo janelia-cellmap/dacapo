@@ -6,7 +6,7 @@ import threading
 import neuroglancer
 from neuroglancer.viewer_state import ViewerState
 import os
-from dacapo.experiments.run import Run
+from dacapo.experiments.run import RunConfig
 from dacapo.store.create_store import create_array_store, create_stats_store
 from IPython.display import IFrame
 import time
@@ -178,7 +178,7 @@ class BestScore:
         does_new_best_exist(): Checks if a new best score exists.
     """
 
-    def __init__(self, run: Run):
+    def __init__(self, run: RunConfig):
         """
         Initializes a new instance of the BestScore class.
 
@@ -190,7 +190,7 @@ class BestScore:
             >>> run = Run()
             >>> best_score = BestScore(run)
         """
-        self.run: Run = run
+        self.run: RunConfig = run
         self.score: float = -1
         self.iteration: int = 0
         self.parameter: Optional[str] = None
@@ -297,7 +297,7 @@ class NeuroglancerRunViewer:
         stop(): Stop the viewer.
     """
 
-    def __init__(self, run: Run, embedded=False):
+    def __init__(self, run: RunConfig, embedded=False):
         """
         Initialize a View object.
 
@@ -314,7 +314,7 @@ class NeuroglancerRunViewer:
             >>> run = Run()
             >>> viewer = NeuroglancerRunViewer(run)
         """
-        self.run: Run = run
+        self.run: RunConfig = run
         self.best_score = BestScore(run)
         self.embedded = embedded
 

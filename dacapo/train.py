@@ -52,7 +52,7 @@ def train_run(run: RunConfig, validate: bool = True, save_snapshots: bool = Fals
     Train a run
 
     Args:
-        run: Run object to train
+        run: RunConfig object to train
     Raises:
         ValueError: If run_name is not found in config store
 
