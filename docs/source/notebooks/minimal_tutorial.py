@@ -325,10 +325,6 @@ from dacapo.experiments.trainers import GunpowderTrainerConfig
 
 trainer_config = GunpowderTrainerConfig(
     name="example",
-    batch_size=10,
-    learning_rate=0.0001,
-    num_data_fetchers=1,
-    snapshot_interval=1000,
     min_masked=0.05,
     clip_raw=False,
 )
@@ -355,6 +351,9 @@ run_config = RunConfig(
     num_iterations=iterations,
     validation_interval=validation_interval,
     repetition=0,
+    learning_rate=0.0001,
+    num_workers=1,
+    snapshot_interval=1000,
 )
 config_store.store_run_config(run_config)
 
