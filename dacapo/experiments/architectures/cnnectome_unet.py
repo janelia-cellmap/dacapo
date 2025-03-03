@@ -133,15 +133,18 @@ class CNNectomeUNetConfig(ArchitectureConfig):
 
     @property
     def input_shape(self) -> Coordinate:
-        return self._input_shape
-
-    @property
-    def input_shape(self) -> Coordinate:
         return Coordinate(self._input_shape)
 
     @input_shape.setter
     def input_shape(self, value: Coordinate):
         self._input_shape = value
+
+    @property
+    def eval_shape_increase(self) -> Coordinate:
+        if self._eval_shape_increase is None:
+            return Coordinate((0,) * self.input_shape.dims)
+        else:
+            return Coordinate(self._eval_shape_increase)
 
     def module(self) -> torch.nn.Module:
         fmaps_in = self.fmaps_in
@@ -199,10 +202,6 @@ class CNNectomeUNetConfig(ArchitectureConfig):
             unet = torch.nn.Sequential(*layers)
 
         return unet
-
-    @property
-    def input_shape(self) -> Coordinate:
-        return Coordinate(self._input_shape)
 
     @property
     def num_in_channels(self) -> int:
