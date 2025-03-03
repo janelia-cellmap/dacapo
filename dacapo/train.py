@@ -89,6 +89,10 @@ def train_run(run: RunConfig, validate: bool = True, save_snapshots: bool = Fals
             postfix={"loss": None},
         )
     ):
+        if i >= run.num_iterations:
+            break
+
+
         t_train_step = time.time()
         loss, batch_out = run.train_step(batch["raw"], batch["target"], batch["weight"])
 
@@ -138,6 +142,3 @@ def train_run(run: RunConfig, validate: bool = True, save_snapshots: bool = Fals
                 stats_store.store_validation_iteration_scores(
                     run.name, run.validation_scores
                 )
-
-        if i == run.num_iterations - 1:
-            break

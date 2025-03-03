@@ -111,9 +111,9 @@ def validate_run(
         ]
 
     for validation_dataset in datasets:
-        assert (
-            validation_dataset.gt is not None
-        ), "We do not yet support validating on datasets without ground truth"
+        assert validation_dataset.gt is not None, (
+            "We do not yet support validating on datasets without ground truth"
+        )
         logger.info(
             "Validating run %s on dataset %s", run.name, validation_dataset.name
         )

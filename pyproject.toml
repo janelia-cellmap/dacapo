@@ -86,6 +86,7 @@ docs = [
     "jupytext",
     "ipykernel",
     "myst_nb",
+    "bokeh",
 ]
 examples = [
     "ipython",

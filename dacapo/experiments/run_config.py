@@ -711,7 +711,6 @@ class RunConfig:
             # add an extra dimension so that the shapes match
             array._source_data.append(data[None, :])
             if "iterations" not in array.attrs:
-                print(f"No iterations found in array at iteration {iteration}")
                 array.attrs["iterations"] = list()
             array.attrs["iterations"] = array.attrs["iterations"] + [iteration]
 
