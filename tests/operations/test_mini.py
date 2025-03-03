@@ -30,7 +30,7 @@ import pytest
 @pytest.mark.parametrize("padding", ["valid", "same"])
 @pytest.mark.parametrize("func", ["train", "validate"])
 @pytest.mark.parametrize("multiprocessing", [True, False])
-@pytest.mark.skip("This test is too slow to run on CI")
+@pytest.mark.slow
 def test_mini(
     tmpdir,
     data_dims,

@@ -154,6 +154,10 @@ filterwarnings = [
     "error",
     "ignore::DeprecationWarning",
     ]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')"
+]
+
     
 # https://mypy.readthedocs.io/en/stable/config_file.html
 [tool.mypy]
