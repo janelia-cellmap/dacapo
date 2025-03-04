@@ -92,7 +92,6 @@ def train_run(run: RunConfig, validate: bool = True, save_snapshots: bool = Fals
         if i >= run.num_iterations:
             break
 
-
         t_train_step = time.time()
         loss, batch_out = run.train_step(batch["raw"], batch["target"], batch["weight"])
 
