@@ -114,7 +114,7 @@ class LocalWeightsStore(WeightsStore):
 
         return iterations[-1]
 
-    def store_weights(self, run: Run, iteration: int):
+    def store_weights(self, run: RunConfig, iteration: int):
         """
         Store the network weights of the given run.
 
@@ -281,7 +281,7 @@ class LocalWeightsStore(WeightsStore):
 
         return weights_info["iteration"]
 
-    def _load_best(self, run: Run, criterion: str):
+    def _load_best(self, run: RunConfig, criterion: str):
         """
         Load the best weights for a given run and criterion.
 

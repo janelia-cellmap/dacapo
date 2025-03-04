@@ -37,7 +37,7 @@ class ZarrArrayConfig(ArrayConfig):
     """
 
     file_name: Path = attr.ib(
-        metadata={"help_text": "The file name of the zarr container."}
+        metadata={"help_text": "The file name of the zarr container."}, converter=Path
     )
     dataset: str = attr.ib(
         metadata={
