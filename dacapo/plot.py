@@ -1,7 +1,7 @@
 import json
 from bokeh.embed.standalone import json_item
 from dacapo.store.create_store import create_config_store, create_stats_store
-from dacapo.experiments.run import Run
+from dacapo.experiments.run import RunConfig
 
 from bokeh.palettes import Category20 as palette
 import bokeh.layouts
@@ -99,7 +99,7 @@ def get_runs_info(
         run_config_names, validation_score_names, plot_losses
     ):
         run_config = config_store.retrieve_run_config(run_config_name)
-        validation_scores = Run.get_validation_scores(run_config)
+        validation_scores = RunConfig.get_validation_scores(run_config)
         validation_scores.scores = stats_store.retrieve_validation_iteration_scores(
             run_config_name
         )

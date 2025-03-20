@@ -298,7 +298,7 @@ from dacapo.experiments.architectures import CNNectomeUNetConfig
 # all with 1s in z meaning no downsampling or convolving in the z direction.
 architecture_config = CNNectomeUNetConfig(
     name="example_unet",
-    input_shape=(2, 132, 132),
+    input_shape=(2, 196, 196),
     eval_shape_increase=(8, 32, 32),
     fmaps_in=2,
     num_fmaps=8,
@@ -325,10 +325,6 @@ from dacapo.experiments.trainers import GunpowderTrainerConfig
 
 trainer_config = GunpowderTrainerConfig(
     name="example",
-    batch_size=10,
-    learning_rate=0.0001,
-    num_data_fetchers=1,
-    snapshot_interval=1000,
     min_masked=0.05,
     clip_raw=False,
 )
@@ -344,8 +340,9 @@ config_store.store_trainer_config(trainer_config)
 from dacapo.experiments import RunConfig
 from dacapo.experiments.run import Run
 
-iterations = 2000
+iterations = 200
 validation_interval = iterations // 4
+snapshot_interval = iterations // 10
 run_config = RunConfig(
     name="example_run",
     datasplit_config=datasplit_config,
@@ -355,6 +352,10 @@ run_config = RunConfig(
     num_iterations=iterations,
     validation_interval=validation_interval,
     repetition=0,
+    learning_rate=0.0001,
+    num_workers=1,
+    snapshot_interval=snapshot_interval,
+    batch_size=2,
 )
 config_store.store_run_config(run_config)
 
@@ -407,7 +408,7 @@ config_store = create_config_store()
 
 run = Run(config_store.retrieve_run_config("example_run"))
 if __name__ == "__main__":
-    train_run(run)
+    train_run(run, save_snapshots=True)
     pass
 
 # %% [markdown]
@@ -455,7 +456,7 @@ label_cmap = ListedColormap(colors)
 run_path = config_store.path.parent / run_config.name
 
 # BROWSER = False
-num_snapshots = run_config.num_iterations // run_config.trainer_config.snapshot_interval
+num_snapshots = run_config.num_iterations // run_config.snapshot_interval
 
 if num_snapshots > 0:
     fig, ax = plt.subplots(num_snapshots, 3, figsize=(10, 2 * num_snapshots))
@@ -466,13 +467,16 @@ if num_snapshots > 0:
         ax[0, col].set_title(column_titles[col])
 
     for snapshot in range(num_snapshots):
-        snapshot_it = snapshot * run_config.trainer_config.snapshot_interval
+        snapshot_it = snapshot * run_config.snapshot_interval
         # break
-        raw = zarr.open(f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/raw")[:]
-        target = zarr.open(f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/target")[0]
-        prediction = zarr.open(
-            f"{run_path}/snapshot.zarr/{snapshot_it}/volumes/prediction"
-        )[0]
+
+        # arrays have shape (num_snapshots, batch_size, channels, z, y, x)
+        raw = zarr.open(f"{run_path}/snapshot.zarr/volumes/raw")[snapshot, 0]
+        target = zarr.open(f"{run_path}/snapshot.zarr/volumes/target")[snapshot, 0, 0]
+        prediction = zarr.open(f"{run_path}/snapshot.zarr/volumes/prediction")[
+            snapshot, 0, 0
+        ]
+
         c = (raw.shape[2] - target.shape[1]) // 2
         ax[snapshot, 0].imshow(raw[1, raw.shape[0] // 2, c:-c, c:-c])
         ax[snapshot, 1].imshow(target[target.shape[0] // 2])

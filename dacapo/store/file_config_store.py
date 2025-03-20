@@ -58,7 +58,7 @@ class FileConfigStore(ConfigStore):
         Examples:
             >>> store = FileConfigStore("path/to/configs")
         """
-        print(f"Creating FileConfigStore:\n\tpath: {path}")
+        logger.info(f"Creating FileConfigStore:\n\tpath: {path}")
 
         self.path = Path(path)
 

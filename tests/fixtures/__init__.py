@@ -4,7 +4,7 @@ from .architectures import (
     unet_architecture,
     unet_3d_architecture,
 )
-from .arrays import dummy_array, zarr_array, cellmap_array
+from .arrays import dummy_array, zarr_array, cellmap_array, multiscale_zarr
 from .datasplits import (
     dummy_datasplit,
     twelve_class_datasplit,

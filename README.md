@@ -68,7 +68,7 @@ A minimal example tutorial can be found in the examples directory and opened in 
     - OME-Zarr: a cloud-optimized bioimaging file format with international community support (doi: [10.1101/2023.02.17.528834](https://pubmed.ncbi.nlm.nih.gov/36865282/))
     - Videos about N5 and Fiji can be found in [this playlist](https://www.youtube.com/playlist?list=PLmZHHIZ9Gz-IJA7HtW8quZcuLViz9Em6e). For other questions, join the discussion on the [Image.sc forum](https://forum.image.sc/tag/n5).
     - Read about chunked storage plugins in Fiji in this blog: [N5 plugins for Fiji](https://openorganelle.janelia.org/news/2023-02-06-n5-plugins-for-fiji)
-    - Script for converting tif to zarr can be found [here](https://github.com/yuriyzubov/tif-to-zarr) 
+    - Script for converting tiff to zarr can be found [here](https://github.com/yuriyzubov/tiff-to-zarr) 
  - Segmentations
     - A description of local shape descriptors used for affinities task. Read the blog [here](https://localshapedescriptors.github.io/). Example image from the blog showing the difference between segmentations:
     - ![](https://localshapedescriptors.github.io/assets/img/detection_vs_segmentation_neurons.jpeg)

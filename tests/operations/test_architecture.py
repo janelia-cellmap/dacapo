@@ -14,20 +14,6 @@ logging.basicConfig(level=logging.INFO)
     [
         lf("dummy_architecture"),
         lf("unet_architecture"),
-    ],
-)
-def test_architecture(
-    architecture_config,
-):
-    architecture = architecture_config.architecture_type(architecture_config)
-    assert architecture.dims is not None, f"Architecture dims are None {architecture}"
-
-
-@pytest.mark.parametrize(
-    "architecture_config",
-    [
-        lf("dummy_architecture"),
-        lf("unet_architecture"),
         lf("unet_3d_architecture"),
     ],
 )
@@ -47,7 +33,7 @@ def test_stored_architecture(
         architecture_config.name
     )
 
-    architecture = retrieved_arch_config.architecture_type(retrieved_arch_config)
+    architecture = retrieved_arch_config
 
     assert architecture.dims is not None, f"Architecture dims are None {architecture}"
 
@@ -62,7 +48,7 @@ def test_stored_architecture(
 def test_conv_dims(
     architecture_config,
 ):
-    architecture = architecture_config.architecture_type(architecture_config)
+    architecture = architecture_config.module()
     for name, module in architecture.named_modules():
         if isinstance(module, nn.Conv2d):
             raise ValueError(f"Conv2d found in 3d unet {name}")

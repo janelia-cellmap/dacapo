@@ -2,6 +2,7 @@ import numpy as np
 from funlib.persistence import prepare_ds
 from funlib.geometry import Coordinate
 
+from dacapo.experiments.trainers import GunpowderTrainerConfig
 from dacapo.experiments.datasplits import SimpleDataSplitConfig
 from dacapo.experiments.tasks import (
     DistanceTaskConfig,
@@ -11,6 +12,15 @@ from dacapo.experiments.tasks import (
 from dacapo.experiments.architectures import CNNectomeUNetConfig
 
 from pathlib import Path
+
+
+def build_test_train_config():
+    """
+    Builds the simplest possible trainer given the parameters.
+    """
+    return GunpowderTrainerConfig(
+        name="test_trainer",
+    )
 
 
 def build_test_data_config(
@@ -104,46 +114,44 @@ def build_test_architecture_config(
     data_dims: int,
     architecture_dims: int,
     channels: bool,
-    batch_norm: bool,
     upsample: bool,
-    use_attention: bool,
     padding: str,
 ):
     """
     Build the simplest architecture config given the parameters.
     """
     if data_dims == 2:
-        input_shape = (32, 32)
-        eval_shape_increase = (8, 8)
-        downsample_factors = [(2, 2)]
+        input_shape = (8, 8)
+        eval_shape_increase = (24, 24)
+        downsample_factors = [(2, 2)] * 0
         upsample_factors = [(2, 2)] * int(upsample)
 
-        kernel_size_down = [[(3, 3)] * 2] * 2
-        kernel_size_up = [[(3, 3)] * 2] * 1
+        kernel_size_down = [[(3, 3)] * 2] * 1
+        kernel_size_up = [[(3, 3)] * 2] * 0
         kernel_size_down = None  # the default should work
         kernel_size_up = None  # the default should work
 
     elif data_dims == 3 and architecture_dims == 2:
-        input_shape = (1, 32, 32)
-        eval_shape_increase = (15, 8, 8)
-        downsample_factors = [(1, 2, 2)]
+        input_shape = (1, 8, 8)
+        eval_shape_increase = (15, 24, 24)
+        downsample_factors = [(1, 2, 2)] * 0
 
         # test data upsamples in all dimensions so we have
         # to here too
         upsample_factors = [(2, 2, 2)] * int(upsample)
 
         # we have to force the 3D kernels to be 2D
-        kernel_size_down = [[(1, 3, 3)] * 2] * 2
-        kernel_size_up = [[(1, 3, 3)] * 2] * 1
+        kernel_size_down = [[(1, 3, 3)] * 2] * 1
+        kernel_size_up = [[(1, 3, 3)] * 2] * 0
 
     elif data_dims == 3 and architecture_dims == 3:
-        input_shape = (32, 32, 32)
-        eval_shape_increase = (8, 8, 8)
-        downsample_factors = [(2, 2, 2)]
+        input_shape = (8, 8, 8)
+        eval_shape_increase = (24, 24, 24)
+        downsample_factors = [(2, 2, 2)] * 0
         upsample_factors = [(2, 2, 2)] * int(upsample)
 
-        kernel_size_down = [[(3, 3, 3)] * 2] * 2
-        kernel_size_up = [[(3, 3, 3)] * 2] * 1
+        kernel_size_down = [[(3, 3, 3)] * 2] * 1
+        kernel_size_up = [[(3, 3, 3)] * 2] * 0
         kernel_size_down = None  # the default should work
         kernel_size_up = None  # the default should work
 
@@ -160,7 +168,5 @@ def build_test_architecture_config(
         kernel_size_up=kernel_size_up,
         constant_upsample=True,
         upsample_factors=upsample_factors,
-        batch_norm=batch_norm,
-        use_attention=use_attention,
         padding=padding,
     )
