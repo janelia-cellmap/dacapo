@@ -73,7 +73,7 @@ def predict(
     compute_context = create_compute_context()
     device = compute_context.device
 
-    model_device = str(next(model.parameters()).device).split(":")[0]
+    model_device = str(model.get_device()).split(":")[0]
 
     assert model_device == str(
         device
