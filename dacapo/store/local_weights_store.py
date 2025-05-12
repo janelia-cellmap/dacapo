@@ -79,10 +79,14 @@ class LocalWeightsStore(WeightsStore):
             )
             in_data = torch.randn(in_shape)
             try:
+                model_device = run.model.get_device()
                 torch.jit.save(
                     torch.jit.trace(run.model.cpu(), in_data),
                     trace_file,
                 )
+                if str(model_device) != "cpu":
+                    # move back to original device
+                    run.model.to(model_device)
             except SystemError as e:
                 logger.info(f"Error saving trace: {e}, this model will not be traced")
                 trace_file.touch()
