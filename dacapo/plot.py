@@ -1,7 +1,7 @@
 import json
 from bokeh.embed.standalone import json_item
 from dacapo.store.create_store import create_config_store, create_stats_store
-from dacapo.experiments.run import Run
+from dacapo.experiments.run import RunConfig
 
 from bokeh.palettes import Category20 as palette
 import bokeh.layouts
@@ -99,7 +99,7 @@ def get_runs_info(
         run_config_names, validation_score_names, plot_losses
     ):
         run_config = config_store.retrieve_run_config(run_config_name)
-        validation_scores = Run.get_validation_scores(run_config)
+        validation_scores = RunConfig.get_validation_scores(run_config)
         validation_scores.scores = stats_store.retrieve_validation_iteration_scores(
             run_config_name
         )
@@ -148,9 +148,7 @@ def bokeh_plot_runs(
         >>> plot_runs(["run_name"], 100, None, None, [True])
 
     """
-    print("PLOTTING RUNS")
     runs = get_runs_info(run_config_base_names, validation_scores, plot_losses)
-    print("GOT RUNS INFO")
 
     colors = itertools.cycle(palette[20])
     loss_tooltips = [
@@ -213,8 +211,6 @@ def bokeh_plot_runs(
             validation_figure.background_fill_color = "#efefef"
             validation_figures[dataset.name] = validation_figure
 
-    print("VALIDATION SCORES TOOLTIP MADE")
-
     summary_tooltips = [
         ("run", "@run"),
         ("task", "@task"),
@@ -246,16 +242,11 @@ def bokeh_plot_runs(
             iterations = [stat.iteration for stat in run.training_stats.iteration_stats]
             losses = [stat.loss for stat in run.training_stats.iteration_stats]
 
-            print(f"Run {run.name} has {len(losses)} iterations")
-
             if run.plot_loss:
                 include_loss_figure = True
                 smooth = int(np.maximum(len(iterations) / 2500, 1))
-                print(f"smoothing: {smooth}")
                 x, _ = smooth_values(iterations, smooth, stride=smooth)
                 y, s = smooth_values(losses, smooth, stride=smooth)
-                print(x, y)
-                print(f"plotting {(len(x), len(y))} points")
                 source = bokeh.plotting.ColumnDataSource(
                     {
                         "iteration": x,
@@ -283,8 +274,6 @@ def bokeh_plot_runs(
                     color=color,
                     alpha=0.3,
                 )
-
-        print("LOSS PLOTTED")
 
         if run.validation_score_name and run.validation_scores.validated_until() > 0:
             validation_score_data = run.validation_scores.to_xarray().sel(
@@ -331,7 +320,6 @@ def bokeh_plot_runs(
                     color=color,
                     alpha=0.7,
                 )
-        print("VALIDATION PLOTTED")
 
     # Styling
     # training
@@ -383,7 +371,6 @@ def bokeh_plot_runs(
     plot = bokeh.layouts.column(*figures)
     plot.sizing_mode = "scale_width"
 
-    print("PLOTTING DONE")
     if return_json:
         print("Returning JSON")
         return json.dumps(json_item(plot, "myplot"))
@@ -410,17 +397,15 @@ def plot_runs(
     Returns:
         None
     """
-    print("PLOTTING RUNS")
     runs = get_runs_info(run_config_base_names, validation_scores, plot_losses)
-    print("GOT RUNS INFO")
 
     colors = itertools.cycle(plt.cm.tab20.colors)
     include_validation_figure = False
     include_loss_figure = False
 
-    fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
-    loss_ax = axes[0]
-    validation_ax = axes[1]
+    fig, axis_names = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
+    loss_ax = axis_names[0]
+    validation_ax = axis_names[1]
 
     for run, color in zip(runs, colors):
         name = run.name
@@ -429,41 +414,31 @@ def plot_runs(
             iterations = [stat.iteration for stat in run.training_stats.iteration_stats]
             losses = [stat.loss for stat in run.training_stats.iteration_stats]
 
-            print(f"Run {run.name} has {len(losses)} iterations")
-
             if run.plot_loss:
                 include_loss_figure = True
                 smooth = int(np.maximum(len(iterations) / 2500, 1))
-                print(f"smoothing: {smooth}")
                 x, _ = smooth_values(iterations, smooth, stride=smooth)
                 y, s = smooth_values(losses, smooth, stride=smooth)
-                print(x, y)
-                print(f"plotting {(len(x), len(y))} points")
                 loss_ax.plot(x, y, label=name, color=color)
-        print("LOSS PLOTTED")
 
         if run.validation_score_name and run.validation_scores.validated_until() > 0:
             validation_score_data = run.validation_scores.to_xarray().sel(
                 criteria=run.validation_score_name
             )
             colors_val = itertools.cycle(plt.cm.tab20.colors)
-            for dataset, color_v in zip(run.validation_scores.datasets, colors_val):
-                dataset_data = validation_score_data.sel(datasets=dataset)
+            for dataset in run.validation_scores.datasets:
+                dataset_data = validation_score_data.sel(datasets=dataset.name)
                 include_validation_figure = True
                 x = [score.iteration for score in run.validation_scores.scores]
-                cc = next(colors_val)
-                for i in range(dataset_data.data.shape[1]):
-                    current_name = (
-                        f"{i}_{dataset.name}_{name}_{run.validation_score_name}"
-                    )
+                for i, cc in zip(range(dataset_data.data.shape[1]), colors_val):
+                    current_name = f"{i}_{dataset.name}"
                     validation_ax.plot(
                         x,
                         dataset_data.data[:, i],
                         label=current_name,
                         color=cc,
-                        alpha=0.5 + 0.2 * i,
+                        # alpha=0.5 + 0.2 * i,
                     )
-        print("VALIDATION PLOTTED")
 
     if include_loss_figure:
         loss_ax.set_title("Training")

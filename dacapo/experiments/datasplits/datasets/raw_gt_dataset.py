@@ -1,9 +1,10 @@
 from .dataset import Dataset
-from .arrays import Array
+from funlib.persistence import Array
 
 from funlib.geometry import Coordinate
 
 from typing import Optional, List
+import warnings
 
 
 class RawGTDataset(Dataset):
@@ -48,11 +49,17 @@ class RawGTDataset(Dataset):
         Notes:
             This method is used to initialize the dataset.
         """
+
+        warnings.warn(
+            "RawGTDataset is deprecated. Use SimpleDataset instead.",
+            DeprecationWarning,
+        )
+
         self.name = dataset_config.name
-        self.raw = dataset_config.raw_config.array_type(dataset_config.raw_config)
-        self.gt = dataset_config.gt_config.array_type(dataset_config.gt_config)
+        self.raw = dataset_config.raw_config.array()
+        self.gt = dataset_config.gt_config.array()
         self.mask = (
-            dataset_config.mask_config.array_type(dataset_config.mask_config)
+            dataset_config.mask_config.array()
             if dataset_config.mask_config is not None
             else None
         )

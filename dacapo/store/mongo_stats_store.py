@@ -45,7 +45,7 @@ class MongoStatsStore(StatsStore):
             The MongoStatsStore will connect to the MongoDB database at the given host.
 
         """
-        print(
+        logger.info(
             f"Creating MongoStatsStore:\n\thost    : {db_host}\n\tdatabase: {db_name}"
         )
 
@@ -84,7 +84,7 @@ class MongoStatsStore(StatsStore):
                 if stats.trained_until() > existing_stats.trained_until():
                     # current stats go further than the one in DB
                     store_from_iteration = existing_stats.trained_until()
-                    print(
+                    logger.debug(
                         f"Updating training stats of run {run_name} after iteration {store_from_iteration}"
                     )
                 else:
@@ -149,7 +149,7 @@ class MongoStatsStore(StatsStore):
             self.__delete_validation_scores(run_name)
 
         if store_from_iteration > 0:
-            print(
+            logger.info(
                 f"Updating validation scores of run {run_name} after iteration {store_from_iteration}"
             )
 

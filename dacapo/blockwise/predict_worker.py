@@ -3,12 +3,12 @@ from upath import UPath as Path
 from typing import Optional
 
 import torch
-from dacapo.experiments.datasplits.datasets.arrays import ZarrArray
-from dacapo.gp import DaCapoArraySource
+
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo.experiments import Run
 from dacapo.compute_context import create_compute_context
+from dacapo.tmp import open_from_identifier
 import gunpowder as gp
 import gunpowder.torch as gp_torch
 
@@ -17,7 +17,6 @@ import daisy
 
 import numpy as np
 import click
-from dacapo.blockwise import global_vars
 
 import logging
 
@@ -26,20 +25,6 @@ logger = logging.getLogger(__file__)
 read_write_conflict: bool = False
 fit: str = "valid"
 path = __file__
-
-
-def is_global_run_set(run_name) -> bool:
-    if global_vars.current_run is not None:
-        if global_vars.current_run.name == run_name:
-            return True
-        else:
-            logger.error(
-                f"Found global run {global_vars.current_run.name} but looking for {run_name}"
-            )
-            return False
-    else:
-        logger.error("No global run is set.")
-        return False
 
 
 @click.group()
@@ -131,14 +116,10 @@ def start_worker_fn(
         compute_context = create_compute_context()
         device = compute_context.device
 
-        if is_global_run_set(run_name):
-            logger.warning("Using global run variable")
-            run = global_vars.current_run
-        else:
-            logger.warning("initiating local run in predict_worker")
-            config_store = create_config_store()
-            run_config = config_store.retrieve_run_config(run_name)
-            run = Run(run_config)
+        logger.warning("initiating local run in predict_worker")
+        config_store = create_config_store()
+        run_config = config_store.retrieve_run_config(run_name)
+        run = Run(run_config)
 
         if iteration is not None and compute_context.distribute_workers:
             # create weights store
@@ -153,12 +134,12 @@ def start_worker_fn(
         input_array_identifier = LocalArrayIdentifier(
             Path(input_container), input_dataset
         )
-        raw_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+        raw_array = open_from_identifier(input_array_identifier)
 
         output_array_identifier = LocalArrayIdentifier(
             Path(output_container), output_dataset
         )
-        output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
+        output_array = open_from_identifier(output_array_identifier)
 
         # set benchmark flag to True for performance
         torch.backends.cudnn.benchmark = True
@@ -182,7 +163,7 @@ def start_worker_fn(
         # assemble prediction pipeline
 
         # prepare data source
-        pipeline = DaCapoArraySource(raw_array, raw)
+        pipeline = gp.ArraySource(raw, raw_array)
         # raw: (c, d, h, w)
         pipeline += gp.Pad(raw, None)
         # raw: (c, d, h, w)

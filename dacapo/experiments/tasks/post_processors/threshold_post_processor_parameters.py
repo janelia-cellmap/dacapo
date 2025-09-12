@@ -19,3 +19,6 @@ class ThresholdPostProcessorParameters(PostProcessorParameters):
     """
 
     threshold: float = attr.ib(default=0.0)
+
+    def __str__(self):
+        return f"threshold_{self.threshold}"

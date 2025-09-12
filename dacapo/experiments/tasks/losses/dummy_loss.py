@@ -44,4 +44,4 @@ class DummyLoss(Loss):
             It is used to test the training loop and the loss calculation.
         """
 
-        return abs(prediction - target).sum()
+        return abs(prediction - target).mean()

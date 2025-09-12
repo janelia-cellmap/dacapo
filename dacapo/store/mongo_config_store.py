@@ -75,7 +75,7 @@ class MongoConfigStore(ConfigStore):
         Examples:
             >>> store = MongoConfigStore('localhost', 'dacapo')
         """
-        print(
+        logger.info(
             f"Creating MongoConfigStore:\n\thost    : {db_host}\n\tdatabase: {db_name}"
         )
 

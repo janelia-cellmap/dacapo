@@ -69,6 +69,9 @@ def balance_weights(
             scale_slab *= np.take(w, labels_slab)
     """
 
+    if label_data.dtype == bool:
+        label_data = label_data.astype(np.uint8)
+
     if moving_counts is None:
         moving_counts = []
     unique_labels = np.unique(label_data)

@@ -4,7 +4,7 @@ import pymongo
 import pytest
 
 import os
-from pathlib import Path
+from upath import UPath as Path
 import yaml
 
 

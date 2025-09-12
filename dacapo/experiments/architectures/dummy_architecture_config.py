@@ -1,55 +1,34 @@
 import attr
 
-from .dummy_architecture import DummyArchitecture
-from .architecture_config import ArchitectureConfig
+import torch
+from .architecture import ArchitectureConfig
 
-from typing import Tuple
+from funlib.geometry import Coordinate
 
 
 @attr.s
 class DummyArchitectureConfig(ArchitectureConfig):
     """
     A dummy architecture configuration class used for testing purposes.
-
-    It extends the base class "ArchitectureConfig". This class contains dummy attributes and always
-    returns that the configuration is invalid when verified.
-
-    Attributes:
-        architecture_type (:obj:`DummyArchitecture`): A class attribute assigning
-            the DummyArchitecture class to this configuration.
-        num_in_channels (int): The number of input channels. This is a dummy attribute and has no real
-            functionality or meaning.
-        num_out_channels (int): The number of output channels. This is also a dummy attribute and
-            has no real functionality or meaning.
-    Methods:
-        verify(self) -> Tuple[bool, str]: This method is used to check whether this is a valid architecture configuration.
-    Note:
-        This class is used to represent a DummyArchitectureConfig object in the system.
     """
 
-    architecture_type = DummyArchitecture
+    _num_in_channels: int = attr.ib(metadata={"help_text": "Dummy attribute."})
 
-    num_in_channels: int = attr.ib(metadata={"help_text": "Dummy attribute."})
+    _num_out_channels: int = attr.ib(metadata={"help_text": "Dummy attribute."})
 
-    num_out_channels: int = attr.ib(metadata={"help_text": "Dummy attribute."})
+    def module(self) -> torch.nn.Module:
+        return torch.nn.Conv3d(
+            self.num_in_channels, self.num_out_channels, kernel_size=3
+        )
 
-    def verify(self) -> Tuple[bool, str]:
-        """
-        Verifies the configuration validity.
+    @property
+    def input_shape(self):
+        return Coordinate(40, 20, 20)
 
-        Since this is a dummy configuration for testing purposes, this method always returns False
-        indicating that the configuration is invalid.
+    @property
+    def num_in_channels(self):
+        return self._num_in_channels
 
-        Returns:
-            tuple: A tuple containing a boolean validity flag and a reason message string.
-        Raises:
-            NotImplementedError: This method is not implemented in this class.
-        Examples:
-            >>> dummy_architecture_config = DummyArchitectureConfig(num_in_channels=1, num_out_channels=1)
-            >>> dummy_architecture_config.verify()
-            (False, "This is a DummyArchitectureConfig and is never valid")
-        Note:
-            This method is used to check whether this is a valid architecture configuration.
-        """
-
-        return False, "This is a DummyArchitectureConfig and is never valid"
+    @property
+    def num_out_channels(self):
+        return self._num_out_channels

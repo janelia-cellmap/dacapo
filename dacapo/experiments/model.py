@@ -1,4 +1,4 @@
-from dacapo.experiments.architectures.architecture import Architecture
+from dacapo.experiments.architectures.architecture import ArchitectureConfig
 
 from funlib.geometry import Coordinate
 
@@ -43,7 +43,7 @@ class Model(torch.nn.Module):
 
     def __init__(
         self,
-        architecture: Architecture,
+        architecture: ArchitectureConfig,
         prediction_head: torch.nn.Module,
         eval_activation: torch.nn.Module | None = None,
     ):
@@ -87,7 +87,7 @@ class Model(torch.nn.Module):
 
         self.architecture = architecture
         self.prediction_head = prediction_head
-        self.chain = torch.nn.Sequential(architecture, prediction_head)
+        self.chain = torch.nn.Sequential(architecture.module(), prediction_head)
         self.num_in_channels = architecture.num_in_channels
 
         self.input_shape = architecture.input_shape
@@ -103,6 +103,21 @@ class Model(torch.nn.Module):
         for _name, layer in self.named_modules():
             if isinstance(layer, torch.nn.modules.conv._ConvNd):
                 torch.nn.init.kaiming_normal_(layer.weight, nonlinearity="relu")
+
+    def get_device(self) -> torch.device:
+        """
+        Get the device of the model.
+
+        Returns:
+            torch.device: The device of the model.
+        Examples:
+            >>> model = Model(architecture, prediction_head)
+            >>> model.get_device()
+            torch.device('cuda:0')
+        Note:
+            This method is useful for checking the device of the model.
+        """
+        return next(self.parameters()).device
 
     def forward(self, x):
         """
@@ -170,12 +185,7 @@ class Model(torch.nn.Module):
             The output shape is the spatial shape of the model, i.e., not accounting for channels and batch dimensions.
 
         """
-        device = torch.device("cpu")
-        for parameter in self.parameters():
-            device = parameter.device
-            break
-
-        dummy_data = torch.zeros((1, in_channels) + input_shape, device=device)
+        dummy_data = torch.zeros((1, in_channels) + input_shape, device=self.get_device())
         with torch.no_grad():
             out = self.forward(dummy_data)
         return out.shape[1], Coordinate(out.shape[2:])

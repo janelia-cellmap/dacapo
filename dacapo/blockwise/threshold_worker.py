@@ -1,8 +1,9 @@
 from upath import UPath as Path
 import sys
-from dacapo.experiments.datasplits.datasets.arrays.zarr_array import ZarrArray
+
 from dacapo.store.array_store import LocalArrayIdentifier
 from dacapo.compute_context import create_compute_context
+from dacapo.tmp import open_from_identifier
 
 import daisy
 
@@ -82,12 +83,12 @@ def start_worker_fn(
     """
     # get arrays
     input_array_identifier = LocalArrayIdentifier(Path(input_container), input_dataset)
-    input_array = ZarrArray.open_from_array_identifier(input_array_identifier)
+    input_array = open_from_identifier(input_array_identifier)
 
     output_array_identifier = LocalArrayIdentifier(
         Path(output_container), output_dataset
     )
-    output_array = ZarrArray.open_from_array_identifier(output_array_identifier)
+    output_array = open_from_identifier(output_array_identifier)
 
     def io_loop():
         # wait for blocks to run pipeline

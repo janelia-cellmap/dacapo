@@ -6,17 +6,25 @@ import threading
 import neuroglancer
 from neuroglancer.viewer_state import ViewerState
 import os
-from dacapo.experiments.run import Run
+from dacapo.experiments.run import RunConfig
 from dacapo.store.create_store import create_array_store, create_stats_store
 from IPython.display import IFrame
 import time
 import copy
 import json
 from typing import Optional
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_viewer(
-    arrays: dict, width: int = 1500, height: int = 600, headless: bool = True
+    arrays: dict,
+    width: int = 1500,
+    height: int = 600,
+    headless: bool = True,
+    bind_address: str = "0.0.0.0",
+    bind_port: int = 0,
 ) -> neuroglancer.Viewer | IFrame:
     """
     Creates a neuroglancer viewer to visualize arrays.
@@ -26,6 +34,8 @@ def get_viewer(
         width (int, optional): The width of the viewer window in pixels. Defaults to 1500.
         height (int, optional): The height of the viewer window in pixels. Defaults to 600.
         headless (bool, optional): If True, returns the viewer object. If False, returns an IFrame object embedding the viewer. Defaults to True.
+        bind_address (str, optional): Bind address for Neuroglancer webserver.
+        bind_port (int, optional): Bind port for Neuroglancer webserver.
     Returns:
         neuroglancer.Viewer | IFrame: The neuroglancer viewer object or an IFrame object embedding the viewer.
     Raises:
@@ -58,7 +68,7 @@ def get_viewer(
         else:
             arrays[name]["voxel_sizes"] = array.spec.voxel_size
 
-    neuroglancer.set_server_bind_address("0.0.0.0")
+    neuroglancer.set_server_bind_address(bind_address=bind_address, bind_port=bind_port)
     viewer = neuroglancer.Viewer()
     with viewer.txn() as state:
         state.showSlices = False
@@ -168,7 +178,7 @@ class BestScore:
         does_new_best_exist(): Checks if a new best score exists.
     """
 
-    def __init__(self, run: Run):
+    def __init__(self, run: RunConfig):
         """
         Initializes a new instance of the BestScore class.
 
@@ -180,7 +190,7 @@ class BestScore:
             >>> run = Run()
             >>> best_score = BestScore(run)
         """
-        self.run: Run = run
+        self.run: RunConfig = run
         self.score: float = -1
         self.iteration: int = 0
         self.parameter: Optional[str] = None
@@ -287,7 +297,7 @@ class NeuroglancerRunViewer:
         stop(): Stop the viewer.
     """
 
-    def __init__(self, run: Run, embedded=False):
+    def __init__(self, run: RunConfig, embedded=False):
         """
         Initialize a View object.
 
@@ -304,7 +314,7 @@ class NeuroglancerRunViewer:
             >>> run = Run()
             >>> viewer = NeuroglancerRunViewer(run)
         """
-        self.run: Run = run
+        self.run: RunConfig = run
         self.best_score = BestScore(run)
         self.embedded = embedded
 
@@ -365,10 +375,13 @@ class NeuroglancerRunViewer:
         neuroglancer.set_server_bind_address("0.0.0.0")
         self.viewer = neuroglancer.Viewer()
 
-    def start_neuroglancer(self):
+    def start_neuroglancer(self, bind_address="0.0.0.0", bind_port=None):
         """
         Start the neuroglancer viewer.
 
+        Args:
+            bind_address (str, optional): Bind address for Neuroglancer webserver.
+            bind_port (int, optional): Bind port for Neuroglancer webserver.
         Returns:
             IFrame: The embedded viewer.
         Raises:
@@ -380,9 +393,11 @@ class NeuroglancerRunViewer:
             >>> viewer = NeuroglancerRunViewer(run)
             >>> viewer.start_neuroglancer()
         """
-        neuroglancer.set_server_bind_address("0.0.0.0")
+        neuroglancer.set_server_bind_address(
+            bind_address=bind_address, bind_port=bind_port
+        )
         self.viewer = neuroglancer.Viewer()
-        print(f"Neuroglancer viewer: {self.viewer}")
+        logger.info(f"Neuroglancer viewer: {self.viewer}")
         with self.viewer.txn() as state:
             state.showSlices = False
 
@@ -440,7 +455,9 @@ class NeuroglancerRunViewer:
             >>> ds = viewer.open_from_array_identitifier(array_identifier)
         """
         if os.path.exists(array_identifier.container / array_identifier.dataset):
-            return open_ds(str(array_identifier.container), array_identifier.dataset)
+            return open_ds(
+                str(array_identifier.container.path), array_identifier.dataset
+            )
         else:
             return None
 
@@ -575,7 +592,7 @@ class NeuroglancerRunViewer:
             time.sleep(10)
             new_best_exists = self.best_score.does_new_best_exist()
             if new_best_exists:
-                print(
+                logger.info(
                     f"New best f1 score of {self.best_score.score} at iteration {self.best_score.iteration} and parameter {self.best_score.parameter}"
                 )
                 self.update_best_layer()

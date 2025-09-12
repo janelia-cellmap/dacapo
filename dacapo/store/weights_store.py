@@ -1,4 +1,4 @@
-from dacapo.experiments.run import Run
+from dacapo.experiments.run import RunConfig
 
 import torch
 
@@ -51,11 +51,11 @@ class WeightsStore(ABC):
         retrieve_best(run, dataset, criterion): Retrieve the best weights for the given run, dataset, and criterion.
     """
 
-    def load_weights(self, run: Run, iteration: int) -> None:
+    def load_weights(self, run: RunConfig, iteration: int) -> None:
         """
         Load this iterations weights into the given run.
         Args:
-            run (Run): The run to load the weights into.
+            run (RunConfig): The run to load the weights into.
             iteration (int): The iteration to load the weights from.
         Raises:
             ValueError: If the iteration is not available.
@@ -69,12 +69,12 @@ class WeightsStore(ABC):
         run.model.load_state_dict(weights.model)
         run.optimizer.load_state_dict(weights.optimizer)
 
-    def load_best(self, run: Run, dataset: str, criterion: str) -> None:
+    def load_best(self, run: RunConfig, dataset: str, criterion: str) -> None:
         """
         Load the best weights for this Run,dataset,criterion into Run.model
 
         Args:
-            run (Run): The run to load the weights into.
+            run (RunConfig): The run to load the weights into.
             dataset (str): The dataset to load the weights from.
             criterion (str): The criterion to load the weights from.
         Raises:
@@ -110,12 +110,12 @@ class WeightsStore(ABC):
         pass
 
     @abstractmethod
-    def store_weights(self, run: Run, iteration: int) -> None:
+    def store_weights(self, run: RunConfig, iteration: int) -> None:
         """
         Store the network weights of the given run.
 
         Args:
-            run (Run): The run to store the weights of.
+            run (RunConfig): The run to store the weights of.
             iteration (int): The iteration to store the weights for.
         Raises:
             ValueError: If the iteration is already stored.

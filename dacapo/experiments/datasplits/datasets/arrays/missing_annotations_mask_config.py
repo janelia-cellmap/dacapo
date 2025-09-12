@@ -1,9 +1,12 @@
 import attr
 
 from .array_config import ArrayConfig
-from .missing_annotations_mask import MissingAnnotationsMask
 
 from typing import List, Tuple
+from funlib.persistence import Array
+from cellmap_schemas.annotation import LabelList
+
+import dask.array as da
 
 
 @attr.s
@@ -23,8 +26,6 @@ class MissingAnnotationsMaskConfig(ArrayConfig):
         Each channel will be a binary mask of the ids in the groupings list.
     """
 
-    array_type = MissingAnnotationsMask
-
     source_array_config: ArrayConfig = attr.ib(
         metadata={
             "help_text": "The Array from which to pull annotated data. Is expected to contain a volume with uint64 voxels and no channel dimension"
@@ -37,3 +38,25 @@ class MissingAnnotationsMaskConfig(ArrayConfig):
             "Group i found in groupings[i] will be binarized and placed in channel i."
         }
     )
+
+    def array(self, mode: str = "r") -> Array:
+        labels = self.source_array_config.array(mode)
+        grouped = da.ones((len(self.groupings), *labels.shape), dtype=bool)
+        grouped[:] = labels.data > 0
+        labels_list = LabelList.parse_obj(
+            {"labels": labels._source_data.attrs["labels"]}
+        ).labels
+        present_not_annotated = set(
+            [
+                label.value
+                for label in labels_list
+                if label.annotationState.present and not label.annotationState.annotated
+            ]
+        )
+        for i, (_, ids) in enumerate(self.groupings):
+            if any([id in present_not_annotated for id in ids]):
+                grouped[i] = 0
+
+        return Array(
+            grouped, labels.offset, labels.voxel_size, labels.axis_names, labels.units
+        )
