@@ -185,7 +185,9 @@ class Model(torch.nn.Module):
             The output shape is the spatial shape of the model, i.e., not accounting for channels and batch dimensions.
 
         """
-        dummy_data = torch.zeros((1, in_channels) + input_shape, device=self.get_device())
+        dummy_data = torch.zeros(
+            (1, in_channels) + input_shape, device=self.get_device()
+        )
         with torch.no_grad():
             out = self.forward(dummy_data)
         return out.shape[1], Coordinate(out.shape[2:])
