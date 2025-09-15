@@ -9,7 +9,7 @@ from dacapo.experiments.trainers import TrainerConfig
 
 import logging
 import yaml
-from upath import UPath as Path
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 

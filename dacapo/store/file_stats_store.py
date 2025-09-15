@@ -6,7 +6,7 @@ from typing import List
 
 import logging
 import pickle
-from upath import UPath as Path
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 

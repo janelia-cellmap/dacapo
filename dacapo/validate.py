@@ -13,7 +13,7 @@ from .store.create_store import (
 )
 import torch
 
-from upath import UPath as Path
+from pathlib import Path
 import logging
 from dacapo.compute_context import create_compute_context
 
