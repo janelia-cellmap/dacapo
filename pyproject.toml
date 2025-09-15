@@ -56,7 +56,7 @@ dependencies = [
         "scipy",
         "upath",
         "boto3==1.35.81",
-        "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence.git@ome-ngff",
+        "funlib.persistence @ git+https://github.com/funkelab/funlib.persistence.git@main",
         "xarray-multiscale",
         "bioimageio.core[pytorch] >= 0.7",
         ]

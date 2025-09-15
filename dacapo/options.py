@@ -2,7 +2,7 @@ import os
 import yaml
 import logging
 from os.path import expanduser
-from upath import UPath as Path
+from pathlib import Path
 
 import attr
 from cattr import Converter
