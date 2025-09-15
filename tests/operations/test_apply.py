@@ -3,7 +3,6 @@ from upath import UPath as Path
 import shutil
 from ..fixtures import *
 
-from dacapo.experiments import Run
 from dacapo.store.create_store import create_config_store, create_weights_store
 from dacapo import apply
 
@@ -47,7 +46,8 @@ def test_apply(options, run_config, zarr_array, tmp_path):
     store.store_run_config(run_config)
 
     run_config = store.retrieve_run_config(run_config.name)
-    run = Run(run_config)
+    # Note: Run class is deprecated, use run_config directly
+    run = run_config
 
     # -------------------------------------
 

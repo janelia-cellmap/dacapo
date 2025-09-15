@@ -1,6 +1,6 @@
 from .array_store import ArrayStore, LocalArrayIdentifier, LocalContainerIdentifier
 
-from upath import UPath as Path
+from pathlib import Path
 import logging
 import shutil
 from typing import Optional, Tuple

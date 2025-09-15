@@ -1,4 +1,4 @@
-from upath import UPath as Path
+from pathlib import Path
 from typing import Optional
 
 import numpy as np

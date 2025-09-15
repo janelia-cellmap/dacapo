@@ -1,5 +1,9 @@
-from cattr import Converter
-from cattr.gen import make_dict_unstructure_fn, make_dict_structure_fn
+try:
+    from cattrs import Converter
+    from cattrs.gen import make_dict_unstructure_fn, make_dict_structure_fn
+except ImportError:
+    from cattr import Converter
+    from cattr.gen import make_dict_unstructure_fn, make_dict_structure_fn
 from .conversion_hooks import register_hooks
 
 import logging

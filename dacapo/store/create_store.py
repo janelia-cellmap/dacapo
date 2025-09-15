@@ -6,7 +6,7 @@ from .mongo_stats_store import MongoStatsStore
 from .file_stats_store import FileStatsStore
 from dacapo import Options
 
-from upath import UPath as Path
+from pathlib import Path
 
 
 def create_config_store():

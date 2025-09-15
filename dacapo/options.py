@@ -2,10 +2,29 @@ import os
 import yaml
 import logging
 from os.path import expanduser
-from upath import UPath as Path
+from pathlib import Path
 
 import attr
-from cattr import Converter
+try:
+    from cattrs import Converter
+except ImportError:
+    try:
+        from cattr import Converter
+    except ImportError:
+        # Minimal fallback implementation for development
+        import logging
+        logging.warning("Neither cattrs nor cattr available, using minimal fallback")
+        
+        class Converter:
+            def unstructure(self, obj):
+                if hasattr(obj, '__dict__'):
+                    return obj.__dict__.copy()
+                return obj
+            
+            def structure(self, data, cls):
+                if isinstance(data, dict):
+                    return cls(**data)
+                return data
 
 from typing import Optional
 
