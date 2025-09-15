@@ -5,7 +5,7 @@ from dacapo.experiments.run import Run, RunConfig
 import torch
 
 import json
-from upath import UPath as Path
+from pathlib import Path
 import logging
 from typing import Optional, Union
 

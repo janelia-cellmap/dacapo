@@ -5,7 +5,7 @@ import attr
 from abc import ABC, abstractmethod
 import itertools
 import json
-from upath import UPath as Path
+from pathlib import Path
 from typing import Optional, Tuple
 
 
