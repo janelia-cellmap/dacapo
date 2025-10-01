@@ -343,7 +343,7 @@ class NeuroglancerRunViewer:
                 units=["nm", "nm", "nm"],
                 scales=list(ds.voxel_size),
             ),
-            voxel_offset=list(ds.roi.offset),
+            voxel_offset=list(ds.roi.offset / ds.voxel_size),
         )
         new_state = copy.deepcopy(self.viewer.state)
         if len(new_state.layers) == 1:
@@ -409,7 +409,7 @@ class NeuroglancerRunViewer:
                         units=["nm", "nm", "nm"],
                         scales=self.raw.voxel_size,
                     ),
-                    voxel_offset=self.raw.roi.offset,
+                    voxel_offset=list(self.raw.roi.offset / self.raw.voxel_size),
                 ),
             )
         if self.embedded:
