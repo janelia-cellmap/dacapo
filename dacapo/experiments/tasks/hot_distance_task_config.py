@@ -60,3 +60,22 @@ class HotDistanceTaskConfig(TaskConfig):
     kernel_size: int | None = attr.ib(
         default=None,
     )
+
+    epsilon: float = attr.ib(
+        default=5e-2,
+        metadata={
+            "help_text": "A small additive offset applied to the absolute distance when "
+            "computing the distance mask boundary. Prevents voxels exactly on the "
+            "theoretical boundary from being masked out due to floating-point equality. "
+            "Set to None to disable the offset."
+        },
+    )
+
+    threshold: float = attr.ib(
+        default=0.8,
+        metadata={
+            "help_text": "The upper clamp value when comparing abs(distance) + epsilon "
+            "against the boundary distance during distance mask creation. Voxels where "
+            "the clamped value exceeds the boundary distance are masked out."
+        },
+    )

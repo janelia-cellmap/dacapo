@@ -54,6 +54,8 @@ class HotDistancePredictor(Predictor):
         scale_factor: float,
         mask_distances: bool,
         kernel_size: int,
+        epsilon: float = 5e-2,
+        threshold: float = 0.8,
     ):
         """
         Initializes the HotDistancePredictor.
@@ -62,10 +64,17 @@ class HotDistancePredictor(Predictor):
             channels (List[str]): The list of class labels.
             scale_factor (float): The scale factor for the distance transform.
             mask_distances (bool): Whether to mask distances based on the distance to the boundary.
+            kernel_size (int): The kernel size for the convolutional head.
+            epsilon (float): Small offset added to abs(distance) when computing the
+                distance mask. Prevents boundary voxels from being masked due to
+                floating-point equality. Set to None to disable. Defaults to 5e-2.
+            threshold (float): Upper clamp value for the distance mask comparison.
+                Voxels where clip(abs(distance) + epsilon, 0, threshold) exceeds the
+                boundary distance are masked out. Defaults to 0.8.
         Raises:
             NotImplementedError: This method is not implemented.
         Examples:
-            >>> predictor = HotDistancePredictor(channels, scale_factor, mask_distances)
+            >>> predictor = HotDistancePredictor(channels, scale_factor, mask_distances, kernel_size)
         Note:
             The channels argument is a list of strings, each string is the name of a class that is being segmented.
         """
@@ -78,8 +87,8 @@ class HotDistancePredictor(Predictor):
         self.mask_distances = mask_distances
 
         self.max_distance = 1 * scale_factor
-        self.epsilon = 5e-2  # TODO: should be a config parameter
-        self.threshold = 0.8  # TODO: should be a config parameter
+        self.epsilon = epsilon
+        self.threshold = threshold
 
     @property
     def embedding_dims(self):

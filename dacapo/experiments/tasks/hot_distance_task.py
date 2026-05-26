@@ -49,6 +49,8 @@ class HotDistanceTask(Task):
             scale_factor=task_config.scale_factor,
             mask_distances=task_config.mask_distances,
             kernel_size=task_config.kernel_size,
+            epsilon=task_config.epsilon,
+            threshold=task_config.threshold,
         )
         self.loss = HotDistanceLoss()
         self.post_processor = ThresholdPostProcessor()

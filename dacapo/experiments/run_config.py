@@ -495,10 +495,8 @@ class RunConfig:
                 summary = test_model(my_model_descr)
                 summary.display()
 
-            logger.info(
-                "package path:",
-                save_bioimageio_package(my_model_descr, output_path=path),
-            )
+            saved_path = save_bioimageio_package(my_model_descr, output_path=path)
+            logger.info(f"package path: {saved_path}")
 
     def data_loader(self) -> torch.utils.data.DataLoader:
         dataset = self.trainer.iterable_dataset(
