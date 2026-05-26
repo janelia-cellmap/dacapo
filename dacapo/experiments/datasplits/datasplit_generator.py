@@ -633,7 +633,9 @@ class DataSplitGenerator:
 
         """
         if not isinstance(input_resolution, Coordinate):
-            input_resolution = _validate_resolution(input_resolution, "input_resolution")
+            input_resolution = _validate_resolution(
+                input_resolution, "input_resolution"
+            )
         if not isinstance(output_resolution, Coordinate):
             output_resolution = _validate_resolution(
                 output_resolution, "output_resolution"
